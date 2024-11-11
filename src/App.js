@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Frame4556 from './images/Frame4556.png';
-import Frame4561 from './images/Frame4561.png';
-import locker from './images/locker.png';
-import leaderboard from './images/leaderboard.png';
+import MainView from './MainView';
+
+import HomeIcon_selected from './images/Home_selected.png';
+import HomeIcon_normal from './images/Home_normal.png';
+
+import Task_normal from './images/Task_normal.png';
+import Task_selected from './images/Task_selected.png';
+
+import Friends_normal from './images/Friends_normal.png';
+import Friends_selected from './images/Friends_selected.png';
+
+import Market_normal from './images/Market_normal.png';
+import Market_selected from './images/Market_selected.png';
+
+import ID_normal from './images/ID_normal.png';
+import ID_selected from './images/ID_selected.png';
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams } from '@telegram-apps/sdk';
 
@@ -17,9 +29,6 @@ function App() {
 
   useEffect(() => {
     console.log('App useEffect called');
-    // WebApp.ready();
-    // WebApp.expand();
-    
     init();
     miniApp.ready();
     miniApp.mount();
@@ -27,27 +36,10 @@ function App() {
 
     closingBehavior.mount();
     closingBehavior.enableConfirmation();
-    // swipeBehavior.mount();
-    // swipeBehavior.disableVertical();
 
-    // document.addEventListener('touchstart', function(event) {
-    //     if (event.touches.length > 1) {
-    //         event.preventDefault();
-    //     }
-    // }, { passive: false });
-    
-    // document.addEventListener('touchmove', function(event) {
-    //     if (event.scale !== 1) {
-    //         event.preventDefault();
-    //     }
-    // }, { passive: false });
+    swipeBehavior.mount();        
+    swipeBehavior.disableVertical();
 
-    // tg.ready();
-    // tg.expand();   
-    
-    // Get user info when the app loads
-    // const user = tg.initDataUnsafe.user;
-    // const temp = WebApp.initDataUnsafe.user;
     initData.restore();
     const temp = initData.user();
     console.log('User:', temp);
@@ -55,94 +47,47 @@ function App() {
     setUser(temp);
   }, []);
 
+  const renderActiveView = () => {
+    switch (activeTab) {
+      case 'home':
+        return <MainView 
+          user={user}           
+        />;      
+      default:
+        return <MainView 
+          user={user} 
+        />;
+    }
+  };
+
   return (
     <div className="App">
       <div className="app-container">
-        {/* Header with stats */}
-        <header className="stats-header">
-          <div className="profile-pic">
-            <img src="/profile-placeholder.png" alt="Profile" />
-          </div>
-          <div className="stats">
-            <div className="stat-item">
-              <span>3</span>
-              <img src="/stat-icon-1.svg" alt="Stat 1" />
-            </div>
-            <div className="stat-item">
-              <span>24.4</span>
-              <img src="/stat-icon-2.svg" alt="Stat 2" />
-            </div>
-            <div className="stat-item">
-              <span>75</span>
-              <img src="/stat-icon-3.svg" alt="Stat 3" />
-            </div>
-          </div>
-        </header>
-
-        {/* Scrollable Content */}
-        <div className="scrollable-content">
-          {/* Tickets Section */}
-          <section className="tickets-section">
-            <button className="ticket-card">
-              <img 
-                src={Frame4556}
-                alt="My Tickets" 
-                className="ticket-card-image"
-              />
-              
-            </button>
-          </section>
-
-          {/* Locked Sections */}
-          <section className="locked-sections">
-            <button className="locked-card">
-              <img 
-                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`} 
-                src={Frame4561}
-                alt="LFGO Coming Soon" 
-                className="locked-card-image"
-              />
-              <img 
-                src={locker}
-                alt="Locker" 
-                className="locker-icon"
-              />
-            </button>
-
-            <button className="locked-card">
-              <img 
-                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`} 
-                src={leaderboard}
-                alt="Leaderboard Coming Soon" 
-                className="locked-card-image"
-              />
-              <img 
-                src={locker}
-                alt="Locker" 
-                className="locker-icon"
-              />
-            </button>
-          </section>
-
-          {/* Raffle Section */}
-          <section className="raffle-section">
-            <div className="raffle-card">
-              <h2>SNOOP DOGG RAFFLE <span className="new-tag">NEW!</span></h2>
-              <p>BLENDING WITH YOUR SHOES FOR BETTER RESULTS</p>
-              <button className="purple-button">Check out</button>
-            </div>
-          </section>
-        </div>
-
-        {/* Navigation Bar */}
-        <nav className="bottom-nav">
-          <button className="nav-item">🏠</button>
-          <button className="nav-item">📝</button>
-          <button className="nav-item">👥</button>
-          <button className="nav-item">🛒</button>
-          <button className="nav-item">ℹ️</button>
-        </nav>
+        
+      {renderActiveView()}
       </div>
+
+
+        
+        <nav className="bottom-nav">
+          <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'active' : ''}>
+            <img src={activeTab === 'home' ? HomeIcon_selected : HomeIcon_normal} alt="Home" />
+          </button>
+          <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
+            <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
+          </button>
+
+          <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
+            <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
+          </button>
+
+          <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+            <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
+          </button>
+          <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
+            <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
+          </button>
+          </nav>
     </div>
   );
 }

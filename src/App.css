@@ -115,7 +115,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0,0,0,0.8);
+  background: #414141;
   display: flex;
   justify-content: space-around;
   padding: 15px 0;
@@ -149,4 +149,25 @@ p {
   color: #9CA3AF;
   font-size: 14px;
   margin: 5px 0;
+}
+
+.bottom-nav button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-nav button img {
+  width: 24px;
+  height: 24px;
+}
+
+.bottom-nav button.active {
+  color: #8B5CF6;
 }
