@@ -105,37 +105,33 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .events-carousel {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
     display: flex;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
     gap: 16px;
     padding: 0 16px;
 }
 
-.events-carousel::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
-}
-
 .event-card {
     scroll-snap-align: start;
-    flex: 0 0 auto;
+    flex: 0 0 100%;
     width: 100%;
     background: none;
     border: none;
     padding: 0;
 }
 
-.event-card img {
+.event-card-image {
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 16px;
     background: transparent;
 }
 

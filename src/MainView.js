@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Frame4556 from './images/Frame4556.png';
 import Frame4561 from './images/Frame4561.png';
 import locker from './images/locker.png';
@@ -13,6 +13,34 @@ import my_ticket from './images/my_ticket.svg';
 import LFGO from './images/LFGO.svg';
 
 const MainView = ({ iser }) => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const carouselRef = useRef(null);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (carouselRef.current) {
+                const slides = carouselRef.current.children;
+                if (currentSlide < slides.length - 1) {
+                    setCurrentSlide(currentSlide + 1);
+                    slides[currentSlide + 1].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'start'
+                    });
+                } else {
+                    setCurrentSlide(0);
+                    slides[0].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'start'
+                    });
+                }
+            }
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [currentSlide]);
+
     return (
         <>
             <header className="stats-header">
@@ -79,36 +107,42 @@ const MainView = ({ iser }) => {
                 </section>
 
                 <section className="events-section">
-                    <div className="events-carousel">
+                    <div className="events-carousel" ref={carouselRef}>
                         <button className="event-card">
                             <img
                                 src={eventSnoopDogg}
                                 alt="Events"
-                                className="ticket-card-image"
+                                className="event-card-image"
                             />
                         </button>
                         <button className="event-card">
                             <img
                                 src={eventSnoopDogg}
                                 alt="Events"
-                                className="ticket-card-image"
+                                className="event-card-image"
                             />
                         </button>
                         <button className="event-card">
                             <img
                                 src={eventSnoopDogg}
                                 alt="Events"
-                                className="ticket-card-image"
+                                className="event-card-image"
                             />
                         </button>
                         <button className="event-card">
                             <img
                                 src={eventSnoopDogg}
                                 alt="Events"
-                                className="ticket-card-image"
+                                className="event-card-image"
                             />
                         </button>
-                        {/* ... repeat for other ticket cards ... */}
+                        <button className="event-card">
+                            <img
+                                src={eventSnoopDogg}
+                                alt="Events"
+                                className="event-card-image"
+                            />
+                        </button>
                     </div>
                 </section>
             </div>
