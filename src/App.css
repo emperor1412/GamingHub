@@ -21,93 +21,14 @@
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
-/* Header Styles */
-.stats-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-}
 
-.profile-pic img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
 
-.stats {
-  display: flex;
-  gap: 20px;
-}
 
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 
-/* Card Styles */
-.ticket-card {
-  width: 100%;
-  padding: 0;
-  margin: 15px 0;
-  border: none;
-  cursor: pointer;
-  background: none;
-  position: relative;
-}
 
-.ticket-card-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 16px;
-}
 
-.locker-icon {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 43px;
-  height: 47px;
-  z-index: 1;
-}
 
-/* Locked Sections */
-.locked-sections {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
 
-.locked-card {
-  width: 100%;
-  padding: 0;
-  border: none;
-  cursor: pointer;
-  background: none;
-  position: relative;  /* Add this line */
-
-}
-
-.locked-card-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 16px;
-}
-
-/* Buttons */
-.purple-button {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 100%);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
 
 /* Bottom Navigation */
 .bottom-nav {
@@ -118,7 +39,7 @@
   background: #414141;
   display: flex;
   justify-content: space-around;
-  padding: 15px 0;
+  padding: 10px 0;
   backdrop-filter: blur(10px);
 }
 
@@ -130,14 +51,7 @@
   cursor: pointer;
 }
 
-/* New Tag */
-.new-tag {
-  background: #22C55E;
-  padding: 2px 8px;
-  border-radius: 15px;
-  font-size: 12px;
-  margin-left: 10px;
-}
+
 
 /* Typography */
 h2 {
@@ -164,8 +78,8 @@ p {
 }
 
 .bottom-nav button img {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
 }
 
 .bottom-nav button.active {

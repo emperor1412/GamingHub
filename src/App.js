@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import MainView from './MainView';
 
-import HomeIcon_selected from './images/Home_selected.png';
-import HomeIcon_normal from './images/Home_normal.png';
+import HomeIcon_selected from './images/Home_selected.svg';
+import HomeIcon_normal from './images/Home_normal.svg';
 
-import Task_normal from './images/Task_normal.png';
-import Task_selected from './images/Task_selected.png';
+import Task_normal from './images/Task_normal.svg';
+import Task_selected from './images/Task_selected.svg';
 
-import Friends_normal from './images/Friends_normal.png';
-import Friends_selected from './images/Friends_selected.png';
+import Friends_normal from './images/Friends_normal.svg';
+import Friends_selected from './images/Friends_selected.svg';
 
-import Market_normal from './images/Market_normal.png';
-import Market_selected from './images/Market_selected.png';
+import Market_normal from './images/Market_normal.svg';
+import Market_selected from './images/Market_selected.svg';
 
-import ID_normal from './images/ID_normal.png';
-import ID_selected from './images/ID_selected.png';
+import ID_normal from './images/ID_normal.svg';
+import ID_selected from './images/ID_selected.svg';
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams } from '@telegram-apps/sdk';
 
