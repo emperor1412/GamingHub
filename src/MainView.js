@@ -12,7 +12,7 @@ import './MainView.css';
 import my_ticket from './images/my_ticket.svg';
 import LFGO from './images/LFGO.svg';
 
-const MainView = ({ iser }) => {
+const MainView = ({ user, loginData }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const carouselRef = useRef(null);
 
