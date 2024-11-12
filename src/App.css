@@ -1,8 +1,19 @@
+@font-face {
+  font-family: 'PPNeueMachina';
+  src: url('./fonts/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 .App {
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.75);
   min-height: 100vh;
-  color: white;
+  color: rgb(255, 255, 255);
   touch-action: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'PPNeueMachina', sans-serif;
 }
 
 .app-container {
@@ -103,4 +114,19 @@ p {
 
 .retry-button:hover {
   background-color: #0056b3;
+}
+
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+}
+
+.background-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

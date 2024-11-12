@@ -17,7 +17,7 @@
     width: 100%;
     max-width: 430px;
     z-index: 100;
-    background: #000;
+    /* background: #000; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,6 +28,7 @@
 .stats {
     display: flex;
     gap: 20px;
+    padding-right: 10px;
 }
 
 .stat-item {

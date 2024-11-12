@@ -17,6 +17,8 @@ import Market_selected from './images/Market_selected.svg';
 import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
+import background from './images/background.svg';
+
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
 function App() {
@@ -168,6 +170,9 @@ function App() {
 
   return (
     <div className="App">
+      <div className="background-container">
+        <img src={background} alt="background" />
+      </div>
       {isLoading ? (
         <div className="loading">Loading...</div>
       ) : !isLoggedIn ? (
