@@ -14,6 +14,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 10px;
+    touch-action: none;
 }
 
 .stats {
@@ -135,19 +136,10 @@
     background: transparent;
 }
 
-.pagination-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #ccc;
-}
-
-.dot.active {
-    background-color: #000; /* Or your preferred active color */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+    margin-bottom: 70px;
+    -webkit-overflow-scrolling: touch;
 }

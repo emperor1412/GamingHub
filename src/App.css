@@ -2,6 +2,7 @@
   background-color: #000;
   min-height: 100vh;
   color: white;
+  touch-action: none;
 }
 
 .app-container {
@@ -11,24 +12,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  touch-action: none;
 }
-
-.scrollable-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 20px;
-  margin-bottom: 70px; /* Space for bottom nav */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-}
-
-
-
-
-
-
-
-
-
 
 /* Bottom Navigation */
 .bottom-nav {
@@ -41,6 +26,7 @@
   justify-content: space-around;
   padding: 10px 0;
   backdrop-filter: blur(10px);
+  touch-action: none;
 }
 
 .nav-item {
@@ -50,8 +36,6 @@
   font-size: 24px;
   cursor: pointer;
 }
-
-
 
 /* Typography */
 h2 {
