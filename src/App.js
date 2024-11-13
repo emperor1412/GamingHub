@@ -71,6 +71,9 @@ function App() {
 
           console.log('Response:', response);
 
+          // setLoginData("");
+          // setIsLoggedIn(true);
+          
           if (response.ok) {
             const data = await response.json();
             console.log('Login data:', data);
@@ -113,6 +116,7 @@ function App() {
             console.error('Login failed');
             setIsLoggedIn(false);
           }
+          
 
           initRef.current = false;  // Reset on error
           
