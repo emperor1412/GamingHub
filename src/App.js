@@ -17,7 +17,8 @@ import Market_selected from './images/Market_selected.svg';
 import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
-import background from './images/background.svg';
+// import background from './images/background.svg';
+import background from './images/background.png';
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 

@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Frame4556 from './images/Frame4556.png';
-import Frame4561 from './images/Frame4561.png';
+// import Frame4556 from './images/Frame4556.png';
 import locker from './images/locker.png';
-import leaderboard from './images/leaderboard.svg';
+// import leaderboard from './images/leaderboard.svg';
+import leaderboard from './images/leaderboard.png';
 import ticket from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
-import avatar from './images/avatar.svg';
-import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
+// import avatar from './images/avatar.svg';
+import avatar from './images/avatar.png';
+// import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
+import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
 import my_ticket from './images/my_ticket.svg';
-import LFGO from './images/LFGO.svg';
+// import LFGO from './images/LFGO.svg';
+import LFGO from './images/LFGO.png';
 
 const MainView = ({ user, loginData }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,9 +23,15 @@ const MainView = ({ user, loginData }) => {
         const interval = setInterval(() => {
             if (carouselRef.current) {
                 const slides = carouselRef.current.children;
-                if (currentSlide < slides.length - 1) {
-                    setCurrentSlide(currentSlide + 1);
-                    slides[currentSlide + 1].scrollIntoView({
+                const visibleSlideIndex = Array.from(slides).findIndex(slide => {
+                    const rect = slide.getBoundingClientRect();
+                    return rect.left >= 0 && rect.right <= window.innerWidth;
+                });
+
+                if (visibleSlideIndex < slides.length - 1) {
+                    
+                    setCurrentSlide(visibleSlideIndex);
+                    slides[visibleSlideIndex + 1].scrollIntoView({
                         behavior: 'smooth',
                         block: 'nearest',
                         inline: 'start'
