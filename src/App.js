@@ -26,7 +26,7 @@ import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retr
 function App() {
   
   const { initDataRaw } = retrieveLaunchParams();
-  console.log("initDataRaw: ", initDataRaw);
+  // console.log("initDataRaw: ", initDataRaw);
 
   const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState(null);
@@ -38,6 +38,42 @@ function App() {
 
   // Add a ref to track initialization
   const initRef = useRef(false);
+
+  const checkIn = async (loginData) => {
+    const now = new Date();
+    console.log(`Checking in ........: ${now.toLocaleString()}`)
+    const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    console.log('CheckIn Response:', response);
+    const data = await response.json();
+    console.log('CheckIn Data:', data);
+    let time = new Date(data.data.lastTime);
+
+    // if (popup.open.isAvailable()) {
+      // popup.isOpened() -> false
+      const promise = popup.open({
+        title: 'Checkin success ?',
+        message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
+        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+      });
+      // popup.isOpened() -> true
+      const buttonId = await promise;
+      // popup.isOpened() -> false
+    // }
+
+    if(data.data.isCheckIn) {
+      console.log('Redirect to checkIn screen')
+    }
+    else {
+      
+      console.log(`False: last checkin time: ${time.toLocaleString()}`)
+    }
+  };
 
   const login = async () => {
     // Check if already initialized
@@ -70,7 +106,7 @@ function App() {
             body: params
           });
 
-          console.log('Response:', response);
+          console.log('Login Response:', response);
 
           // setLoginData("");
           // setIsLoggedIn(true);
@@ -109,6 +145,7 @@ function App() {
                 });
                 // popup.isOpened() -> true
                 const buttonId = await promise;
+                checkIn(data.data);
                 // popup.isOpened() -> false
               }
             }
@@ -155,6 +192,7 @@ function App() {
     console.log('User:', userData);
     setUser(userData);
 
+    console.log("initDataRaw: ", initDataRaw);
     login();
     
   }, []);

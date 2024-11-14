@@ -15,9 +15,46 @@ import my_ticket from './images/my_ticket.svg';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
 
+import { popup } from '@telegram-apps/sdk';
+
 const MainView = ({ user, loginData }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const carouselRef = useRef(null);
+
+    const checkIn = async () => {
+        const now = new Date();
+        console.log(`Checking in ........: ${now.toLocaleString()}`)
+        const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+    
+        console.log('CheckIn Response:', response);
+        const data = await response.json();
+        console.log('CheckIn Data:', data);
+        let time = new Date(data.data.lastTime);
+
+        // if (popup.open.isAvailable()) {
+            // popup.isOpened() -> false
+            const promise = popup.open({
+              title: 'Checkin success ?',
+              message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
+              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            // popup.isOpened() -> true
+            const buttonId = await promise;
+            // popup.isOpened() -> false
+        //   }
+
+        if(data.data.isCheckIn) {
+          console.log('Redirect to checkIn screen')
+        }
+        else {
+          console.log(`False: last checkin time: ${time.toLocaleString()}`)
+        }
+      };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -74,7 +111,7 @@ const MainView = ({ user, loginData }) => {
 
             <div className="scrollable-content">
                 <section className="tickets-section">
-                    <button className="ticket-card">
+                    <button className="ticket-card" onClick={() => checkIn()}>
                         <img
                             // src={Frame4556}
                             src = {my_ticket}
