@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import MainView from './MainView';
+import Tasks from './Tasks';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -165,6 +166,8 @@ function App() {
           user={user}           
           loginData={loginData}
         />;      
+      case 'tasks':
+        return <Tasks />;      
       default:
         return <MainView 
           user={user} 
