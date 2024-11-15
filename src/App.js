@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import MainView from './MainView';
 import Tasks from './Tasks';
+import CheckIn from './CheckIn';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -20,6 +21,7 @@ import ID_selected from './images/ID_selected.svg';
 
 // import background from './images/background.svg';
 import background from './images/background.png';
+import checkInAnimation from './images/checkIn_animation.png';
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
@@ -35,6 +37,8 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showCheckInAnimation, setShowCheckInAnimation] = useState(false);
+  const [showCheckInView, setShowCheckInView] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -66,12 +70,20 @@ function App() {
       // popup.isOpened() -> false
     // }
 
+    setShowCheckInAnimation(true);
+
     if(data.data.isCheckIn) {
       console.log('Redirect to checkIn screen')
+      // setShowCheckInAnimation(true);
+
+    //   setTimeout(() => {
+    //     setShowCheckInAnimation(false);
+    //     setActiveTab('checkin');
+      
+    // }, 3000);
     }
     else {
-      
-      console.log(`False: last checkin time: ${time.toLocaleString()}`)
+      console.log(`False\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
     }
   };
 
@@ -206,6 +218,8 @@ function App() {
         />;      
       case 'tasks':
         return <Tasks />;      
+      // case 'checkin':
+      //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
         return <MainView 
           user={user} 
@@ -221,38 +235,57 @@ function App() {
       </div>
       {isLoading ? (
         <div className="loading">Loading...</div>
-      ) : !isLoggedIn ? (
+      ) 
+      : !isLoggedIn ? (
         <div className="login-error">
           <div>Unable to log in. Please try again.</div>
           <button className="retry-button" onClick={login}>
             Retry
           </button>
         </div>
-      ) : (
+      ) 
+      : showCheckInAnimation ? (
+        <button className="checkin-animation-button" onClick={() => {
+          setShowCheckInAnimation(false);
+          setShowCheckInView(true);
+          // setActiveTab('checkin');
+        }}>
+          <img src={checkInAnimation} alt="Home" />
+        </button>
+      )
+      : showCheckInView ?
+      (
+        <CheckIn onClose={() => {
+          setShowCheckInView(false);
+          setActiveTab('home');
+        }}/>
+      )
+      : (
         <div className="app-container">
           {renderActiveView()}
+
+          <nav className="bottom-nav">
+            <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'active' : ''}>
+              <img src={activeTab === 'home' ? HomeIcon_selected : HomeIcon_normal} alt="Home" />
+            </button>
+            <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
+              <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
+            </button>
+
+            <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
+              <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
+            </button>
+
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
+            </button>
+            <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
+              <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
+            </button>
+          </nav>
         </div>
       )}
 
-      <nav className="bottom-nav">
-        <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'active' : ''}>
-          <img src={activeTab === 'home' ? HomeIcon_selected : HomeIcon_normal} alt="Home" />
-        </button>
-        <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
-          <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
-        </button>
-
-        <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
-          <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
-        </button>
-
-        <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
-          <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
-        </button>
-        <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
-          <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
-        </button>
-      </nav>
     </div>
   );
 }

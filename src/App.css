@@ -130,3 +130,17 @@ p {
   height: 100%;
   object-fit: cover;
 }
+
+.checkin-animation-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.checkin-animation-button img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}

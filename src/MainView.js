@@ -14,6 +14,7 @@ import './MainView.css';
 import my_ticket from './images/my_ticket.svg';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
+import morchigame from './images/morchigame.png';
 
 import { popup } from '@telegram-apps/sdk';
 
@@ -52,7 +53,7 @@ const MainView = ({ user, loginData }) => {
           console.log('Redirect to checkIn screen')
         }
         else {
-          console.log(`False: last checkin time: ${time.toLocaleString()}`)
+          console.log(`False\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
         }
       };
 
@@ -126,8 +127,8 @@ const MainView = ({ user, loginData }) => {
                         <img
                             // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                             // src={Frame4561}
-                            src={LFGO}
-                            alt="LFGO Coming Soon"
+                            src={morchigame}
+                            alt="Morchi Game Coming Soon"
                             className="locked-card-image"
                         />
                         <img

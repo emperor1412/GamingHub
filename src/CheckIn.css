@@ -1,0 +1,209 @@
+.checkin-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 0px;
+  overflow-y: auto;
+}
+
+.checkin-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: 12px;
+  gap: 16px;
+}
+
+.avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 0;
+  background: linear-gradient(45deg, #FF9A9E, #FAD0C4);
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 120px;
+}
+
+.streak-info {
+  text-align: left;
+  margin-bottom: 0;  
+}
+
+.streak-text {
+  font-size: 12px;
+  color: #ffffff;
+  margin: 0;
+  opacity: 0.8;
+  text-transform: uppercase;
+  width: 200px;
+  font-style: italic;
+}
+
+.streak-days {
+  font-size: 24px;
+  margin: 4px 0;
+  color: #ffffff;
+  font-style: italic;
+}
+
+.stats-container {
+  display: flex;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat img {
+  width: 20px;
+  height: 20px;
+}
+
+.stat span {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 100px;
+  padding: 0 4px;
+  max-width: 100%;
+}
+
+.days-grid > div:last-child {
+  grid-column: 2;
+}
+
+.day-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.day-card.active {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.day-card.inactive {
+  opacity: 0.5;
+}
+
+.day-number {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.number-group {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  font-style: italic;
+}
+
+.suffix {
+  font-size: 12px;
+  color: #ffffff;
+  margin-left: 2px;
+  font-style: italic;
+}
+
+.label {
+  font-size: 12px;
+  opacity: 0.8;
+  color: #ffffff;
+  margin-left: auto;
+  font-style: italic;
+}
+
+.rewards {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.reward {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-style: italic;
+}
+
+.reward img {
+  width: 16px;
+  height: 16px;
+}
+
+.okay-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: #8B5CF6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  z-index: 1000;
+}
+
+.okay-button:hover {
+  background: #7C3AED;
+}
+
+.checkmark-icon {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  z-index: 1;
+}
