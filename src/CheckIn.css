@@ -20,8 +20,8 @@
 }
 
 .avatar-container {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 0;
@@ -59,10 +59,15 @@
 }
 
 .streak-days {
-  font-size: 24px;
+  font-size: 34px;
   margin: 4px 0;
   color: #ffffff;
   font-style: italic;
+}
+
+.days-text {
+  font-size: 13px;
+  margin-left: 4px;
 }
 
 .stats-container {
@@ -116,6 +121,7 @@
 
 .day-card.active {
   background: rgba(139, 92, 246, 0.2);
+  border: 1px solid #8B5CF6;
 }
 
 .day-card.inactive {
@@ -206,4 +212,19 @@
   width: 100px;
   height: 100px;
   z-index: 1;
+}
+
+.last-active .checkmark-icon {
+  animation: checkmarkAppear 3.0s ease-out forwards;
+}
+
+@keyframes checkmarkAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
 }

@@ -32,6 +32,7 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState(null);
+  const [checkInData, setCheckInData] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
   // const swipeBehavior = useSwipeBehavior();
 
@@ -58,32 +59,28 @@ function App() {
     console.log('CheckIn Data:', data);
     let time = new Date(data.data.lastTime);
 
-    // if (popup.open.isAvailable()) {
-      // popup.isOpened() -> false
-      const promise = popup.open({
-        title: 'Checkin success ?',
-        message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
-        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-      });
-      // popup.isOpened() -> true
-      const buttonId = await promise;
-      // popup.isOpened() -> false
-    // }
+    
+    // const promise = popup.open({
+    //   title: 'Checkin success ?',
+    //   message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
+    //   buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+    // });
+    // const buttonId = await promise;
+    
 
-    setShowCheckInAnimation(true);
+    // setShowCheckInAnimation(true);
 
+    console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
     if(data.data.isCheckIn) {
       console.log('Redirect to checkIn screen')
-      // setShowCheckInAnimation(true);
+      setCheckInData(data.data);
+      setShowCheckInAnimation(true);
 
     //   setTimeout(() => {
     //     setShowCheckInAnimation(false);
     //     setActiveTab('checkin');
       
     // }, 3000);
-    }
-    else {
-      console.log(`False\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
     }
   };
 
@@ -245,17 +242,42 @@ function App() {
         </div>
       ) 
       : showCheckInAnimation ? (
-        <button className="checkin-animation-button" onClick={() => {
-          setShowCheckInAnimation(false);
-          setShowCheckInView(true);
-          // setActiveTab('checkin');
-        }}>
-          <img src={checkInAnimation} alt="Home" />
-        </button>
+        <div>
+          <div className="app-container">
+            {renderActiveView()}
+
+            <nav className="bottom-nav">
+              <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'active' : ''}>
+                <img src={activeTab === 'home' ? HomeIcon_selected : HomeIcon_normal} alt="Home" />
+              </button>
+              <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
+                <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
+              </button>
+
+              <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
+                <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
+              </button>
+
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+                <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
+              </button>
+              <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
+                <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
+              </button>
+            </nav>
+          </div>
+
+          <button className="checkin-animation-button" onClick={() => {
+            setShowCheckInAnimation(false);
+            setShowCheckInView(true);
+          }}>
+            <img src={checkInAnimation} alt="Home" />
+          </button>
+        </div>
       )
       : showCheckInView ?
       (
-        <CheckIn onClose={() => {
+        <CheckIn checkInData={checkInData} onClose={() => {
           setShowCheckInView(false);
           setActiveTab('home');
         }}/>
