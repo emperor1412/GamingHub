@@ -165,8 +165,10 @@ p {
   color: white;
   font-family: 'PPNeueMachina', sans-serif;
   font-style: italic;
-  margin-top: 20px;
+  margin-top: -70px;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .checkin-text .days {
