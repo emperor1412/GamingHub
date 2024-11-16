@@ -104,9 +104,9 @@
   max-width: 100%;
 }
 
-.days-grid > div:last-child {
+/* .days-grid > div:last-child {
   grid-column: 2;
-}
+} */
 
 .day-card {
   background: rgba(255, 255, 255, 0.1);
@@ -120,8 +120,8 @@
 }
 
 .day-card.active {
-  background: rgba(139, 92, 246, 0.2);
-  border: 1px solid #8B5CF6;
+  background: rgba(85, 85, 85, 0.61);
+  border: 1px solid #C07BFF;
 }
 
 .day-card.inactive {
@@ -187,8 +187,8 @@
   bottom: 20px;
   left: 20px;
   right: 20px;
-  background: #8B5CF6;
-  color: white;
+  background: #C07BFF;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 8px;
   padding: 16px;

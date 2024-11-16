@@ -271,7 +271,15 @@ function App() {
             setShowCheckInAnimation(false);
             setShowCheckInView(true);
           }}>
-            <img src={checkInAnimation} alt="Home" />
+            <div className="checkin-content">
+              <img src={checkInAnimation} alt="Check In Animation" />
+              <div className="checkin-text">
+                <div>CHECK IN FOR</div>
+                <div className="days">
+                  {checkInData.streakDay} <span className="days-text">DAYS</span>
+                </div>
+              </div>
+            </div>
           </button>
         </div>
       )
