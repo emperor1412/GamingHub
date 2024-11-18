@@ -23,7 +23,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
   touch-action: none;
 }
 
@@ -35,13 +35,15 @@
   transform: translateX(-50%);
   width: 100%;
   max-width: 430px;
-  background: #414141;
+  background: rgba(65, 65, 65, 0.9);
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
   backdrop-filter: blur(10px);
   touch-action: none;
-  z-index: 100;
+  z-index: 1000;
+  height: 60px;
+  pointer-events: auto;
 }
 
 .nav-item {
@@ -123,12 +125,17 @@ p {
   width: 100%;
   height: 100vh;
   z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .background-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .checkin-animation-button {
