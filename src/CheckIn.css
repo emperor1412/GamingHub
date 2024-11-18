@@ -215,7 +215,7 @@
 }
 
 .last-active .checkmark-icon {
-  animation: checkmarkAppear 3.0s ease-out forwards;
+  animation: checkmarkAppear 2.5s ease-out forwards;
 }
 
 @keyframes checkmarkAppear {

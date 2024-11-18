@@ -54,33 +54,21 @@ function App() {
       }
     });
 
-    console.log('CheckIn Response:', response);
-    const data = await response.json();
-    console.log('CheckIn Data:', data);
-    let time = new Date(data.data.lastTime);
-
-    
-    // const promise = popup.open({
-    //   title: 'Checkin success ?',
-    //   message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
-    //   buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-    // });
-    // const buttonId = await promise;
-    
-
-    // setShowCheckInAnimation(true);
-
-    console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
-    if(data.data.isCheckIn) {
-      console.log('Redirect to checkIn screen')
-      setCheckInData(data.data);
-      setShowCheckInAnimation(true);
-
-    //   setTimeout(() => {
-    //     setShowCheckInAnimation(false);
-    //     setActiveTab('checkin');
-      
-    // }, 3000);
+    try {
+      console.log('CheckIn Response:', response);
+      const data = await response.json();
+      console.log('CheckIn Data:', data);
+      let time = new Date(data.data.lastTime);
+  
+      console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
+      if(data.data.isCheckIn) {
+        console.log('Redirect to checkIn screen')
+        setCheckInData(data.data);
+        setShowCheckInAnimation(true);
+      }
+    }
+    catch (error) {
+      console.error('CheckIn error:', error);
     }
   };
 
