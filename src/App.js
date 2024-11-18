@@ -200,6 +200,7 @@ function App() {
         return <MainView 
           user={user}           
           loginData={loginData}
+          checkInData={checkInData}
         />;      
       case 'tasks':
         return <Tasks />;      
@@ -209,6 +210,7 @@ function App() {
         return <MainView 
           user={user} 
           loginData={loginData}
+          checkInData={checkInData}
         />;
     }
   };

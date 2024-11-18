@@ -18,7 +18,7 @@ import morchigame from './images/morchigame.png';
 
 import { popup } from '@telegram-apps/sdk';
 
-const MainView = ({ user, loginData }) => {
+const MainView = ({ user, loginData, checkInData }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const carouselRef = useRef(null);
 
@@ -105,7 +105,7 @@ const MainView = ({ user, loginData }) => {
                     </div>
                     <div className="stat-item">
                         <img src={calendar} alt="Stat 1" />
-                        <span>75</span>
+                        <span>{checkInData.streakDay}</span>
                     </div>
                 </div>
             </header>
