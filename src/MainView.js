@@ -105,7 +105,7 @@ const MainView = ({ user, loginData, checkInData }) => {
                     </div>
                     <div className="stat-item">
                         <img src={calendar} alt="Stat 1" />
-                        <span>{checkInData.streakDay}</span>
+                        <span>{checkInData != null ? checkInData.streakDay : "0"}</span>
                     </div>
                 </div>
             </header>
