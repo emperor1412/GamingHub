@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/GamingHub/static/css/main.f96efab8.css",
-    "main.js": "/GamingHub/static/js/main.9f564a38.js",
+    "main.js": "/GamingHub/static/js/main.7289d269.js",
     "static/js/453.e5051890.chunk.js": "/GamingHub/static/js/453.e5051890.chunk.js",
     "static/media/snoop_dogg_raffle.svg": "/GamingHub/static/media/snoop_dogg_raffle.06a15f869141ad35633361c8af16aabe.svg",
     "static/media/morchigame.svg": "/GamingHub/static/media/morchigame.ba97c4e8e5e5a542d031648b47fc5263.svg",
@@ -12,7 +12,7 @@
     "static/media/PPNeueMachina-InktrapBold.ttf": "/GamingHub/static/media/PPNeueMachina-InktrapBold.fd8a7d34e5a50091e953.ttf",
     "static/media/checkIn_animation.png": "/GamingHub/static/media/checkIn_animation.f833a05ee933b0660b57.png",
     "static/media/LFGO.png": "/GamingHub/static/media/LFGO.364707930addb09f1e2a.png",
-    "static/media/calendar.svg": "/GamingHub/static/media/calendar.af80a2cb8c65aa124eefb0db392bb508.svg",
+    "static/media/calendar.svg": "/GamingHub/static/media/calendar.924f1ada22f9d00801f483383cceded7.svg",
     "static/media/Task_normal.svg": "/GamingHub/static/media/Task_normal.77c75f99f9d95e77e144d33eaeb3e51e.svg",
     "static/media/Task_selected.svg": "/GamingHub/static/media/Task_selected.39c29c48d1f73647c10386486ac41ec3.svg",
     "static/media/calendar_before_checkin.svg": "/GamingHub/static/media/calendar_before_checkin.2515821cb882b3ee9a209c43c7a0695e.svg",
@@ -29,11 +29,11 @@
     "index.html": "/GamingHub/index.html",
     "static/media/checkmark.svg": "/GamingHub/static/media/checkmark.7de0cb5cb020fec2fa737ef74baf144c.svg",
     "main.f96efab8.css.map": "/GamingHub/static/css/main.f96efab8.css.map",
-    "main.9f564a38.js.map": "/GamingHub/static/js/main.9f564a38.js.map",
+    "main.7289d269.js.map": "/GamingHub/static/js/main.7289d269.js.map",
     "453.e5051890.chunk.js.map": "/GamingHub/static/js/453.e5051890.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f96efab8.css",
-    "static/js/main.9f564a38.js"
+    "static/js/main.7289d269.js"
   ]
 }
