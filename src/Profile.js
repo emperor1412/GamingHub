@@ -7,12 +7,19 @@ import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
 import arrowIcon from './images/arrow.svg';
 
+import avatar1 from './images/avatar1.svg';
+import avatar2 from './images/avatar2.svg';
+import avatar3 from './images/avatar3.svg';
+
 const Profile = ({ onClose,  user, loginData }) => {
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   
   const avatars = [
     // Add your avatar image imports here
     // Example: { id: 1, src: avatar1 }
+    { id: 1, src: avatar1 },
+    { id: 2, src: avatar2 },
+    { id: 3, src: avatar3 }
   ];
 
   const profileItems = [
@@ -34,12 +41,14 @@ const Profile = ({ onClose,  user, loginData }) => {
               src={avatars[0]?.src} 
               alt="Avatar" 
               className="profile-avatar"
-              onClick={() => setShowAvatarSelector(true)}
             />
             <div>
               <div className="profile-username">RUNNER</div>
               <div className="profile-id">4CH4H9W2...AaCFChF</div>
             </div>
+            <button className="profile-user-arrow" onClick={() => setShowAvatarSelector(true)}>
+              <img src={arrowIcon} alt="Open Avatar Selector" />
+            </button>
           </div>
         </div>
 
@@ -51,10 +60,10 @@ const Profile = ({ onClose,  user, loginData }) => {
                 <span className="profile-item-text">{item.text}</span>
               </div>
               <div className="profile-item-right">
-                <span className="profile-item-value">{item.value}</span>
                 {item.showClaim && (
                   <button className="profile-claim">Claim</button>
                 )}
+                <span className="profile-item-value">{item.value}</span>
               </div>
               {item.showArrow && (
                 <img src={arrowIcon} alt="" className="profile-item-arrow" />
