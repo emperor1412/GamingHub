@@ -5,6 +5,7 @@ import accountIcon from './images/account.svg';
 import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
+import arrowIcon from './images/arrow.svg';
 
 const Profile = ({ onClose,  user, loginData }) => {
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
@@ -18,7 +19,7 @@ const Profile = ({ onClose,  user, loginData }) => {
     { icon: accountIcon, text: 'Account Level', value: '3' },
     { icon: ticketIcon, text: 'Tickets', value: '3' },
     { icon: kmIcon, text: 'KM', value: '3' },
-    { icon: gmtIcon, text: 'GMT', value: '3', showClaim: true },
+    { icon: gmtIcon, text: 'GMT', value: '3', showClaim: true, showArrow: true },
   ];
 
   return (
@@ -52,9 +53,12 @@ const Profile = ({ onClose,  user, loginData }) => {
               <div className="profile-item-right">
                 <span className="profile-item-value">{item.value}</span>
                 {item.showClaim && (
-                  <button className="profile-claim">CLAIM</button>
+                  <button className="profile-claim">Claim</button>
                 )}
               </div>
+              {item.showArrow && (
+                <img src={arrowIcon} alt="" className="profile-item-arrow" />
+              )}
             </div>
           ))}
         </div>

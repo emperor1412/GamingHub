@@ -70,7 +70,8 @@
 .profile-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  margin: 0 20px;
   margin-top: 20px;
 }
 
@@ -79,8 +80,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0);
   border-radius: 12px;
+  position: relative;
 }
 
 .profile-item-left {
@@ -96,22 +98,40 @@
 
 .profile-item-text {
   font-style: italic;
-  color: white;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.profile-item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .profile-item-value {
   font-style: italic;
   color: white;
+  font-size: 16px;
 }
 
 .profile-claim {
-  background: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 100%);
+  background: rgba(138, 92, 246, 0);
+  border: 1px solid #8B5CF6;
   border-radius: 4px;
   padding: 4px 12px;
-  color: white;
-  border: none;
+  color: #8B5CF6;
   font-size: 12px;
   cursor: pointer;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.profile-item-arrow {
+  position: absolute;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
 }
 
 .avatar-selector {
