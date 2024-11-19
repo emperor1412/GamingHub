@@ -7,6 +7,15 @@
 .profile-pic {
     margin-left: 10px;
     flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.profile-pic:hover {
+    opacity: 0.8;
 }
 
 /* Header Styles */
@@ -44,6 +53,25 @@
     gap: 4px;
     min-width: fit-content;
     font-style: italic;
+    background: none;
+    border: none;
+    padding: 0;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.stat-item:hover {
+    opacity: 0.8;
+}
+
+.stat-item img {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-item span {
+    font-family: 'PPNeueMachina', sans-serif;
 }
 
 /* Card Styles */

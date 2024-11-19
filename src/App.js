@@ -3,6 +3,7 @@ import './App.css';
 import MainView from './MainView';
 import Tasks from './Tasks';
 import CheckIn from './CheckIn';
+import Profile from './Profile';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -40,6 +41,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [showCheckInAnimation, setShowCheckInAnimation] = useState(false);
   const [showCheckInView, setShowCheckInView] = useState(false);
+  const [showProfileView, setShowProfileView] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -222,6 +224,7 @@ function App() {
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
+          setShowProfileView={setShowProfileView}
         />;      
       case 'tasks':
         return <Tasks />;      
@@ -235,6 +238,7 @@ function App() {
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
+          setShowProfileView={setShowProfileView}
         />;
     }
   };
@@ -303,6 +307,15 @@ function App() {
           setShowCheckInView(false);
           setActiveTab('home');
         }}/>
+      )
+      : showProfileView ?
+      (
+        <Profile onClose={() => {
+            setShowProfileView(false);
+            setActiveTab('home');
+          }}
+          user={user} 
+          loginData={loginData}/>
       )
       : (
         <div className="app-container">

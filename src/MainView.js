@@ -21,7 +21,7 @@ import morchigame from './images/morchigame.svg';
 
 import { popup } from '@telegram-apps/sdk';
 
-const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView}) => {
+const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const carouselRef = useRef(null);
@@ -104,18 +104,27 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
     return (
         <>
             <header className="stats-header">
-                <div className="profile-pic">
+                <button 
+                    className="profile-pic"
+                    onClick={() => setShowProfileView(true)}
+                >
                     <img src={avatar} alt="Profile" />
-                </div>
+                </button>
                 <div className="stats">
-                    <div className="stat-item">
+                    <button 
+                        className="stat-item"
+                        onClick={() => setShowProfileView(true)}
+                    >
                         <img src={ticket} alt="Stat 1" />
                         <span>3</span>
-                    </div>
-                    <div className="stat-item">
+                    </button>
+                    <button 
+                        className="stat-item"
+                        onClick={() => setShowProfileView(true)}
+                    >
                         <img src={km} alt="Stat 1" />
                         <span>24.4</span>
-                    </div>
+                    </button>
                     <div className="stat-item">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Stat 1" />
