@@ -5,10 +5,7 @@
   background: rgba(0, 0, 0, 0);
   height: 100vh;
   position: relative;
-  padding-bottom: 80px;
-  overflow-y: auto;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -68,12 +65,27 @@
   opacity: 0.8;
 }
 
+.profile-content-wrapper {
+  flex: 1;
+  /* overflow-y: auto; */
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 90px;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  height: calc(100vh - 280px);
+  margin-top: 0;
+  overscroll-behavior: none;
+}
+
 .profile-content {
+  min-height: calc(100vh - 280px);
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 0 20px;
   margin-top: 20px;
+  padding-bottom: 20px;
 }
 
 .profile-item {

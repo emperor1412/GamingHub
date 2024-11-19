@@ -32,7 +32,7 @@ const Profile = ({ onClose,  user, loginData }) => {
   ];
 
   return (
-    <>
+    <div className="app-container">
       <div className="profile-container">
         <div className="profile-header">
           <button className="profile-back" onClick={onClose}>
@@ -54,24 +54,26 @@ const Profile = ({ onClose,  user, loginData }) => {
           </div>
         </div>
 
-        <div className="profile-content">
-          {profileItems.map((item, index) => (
-            <div key={index} className="profile-item">
-              <div className="profile-item-left">
-                <img src={item.icon} alt="" className="profile-item-icon" />
-                <span className="profile-item-text">{item.text}</span>
-              </div>
-              <div className="profile-item-right">
-                {item.showClaim && (
-                  <button className="profile-claim">Claim</button>
+        <div className="profile-content-wrapper">
+          <div className="profile-content">
+            {profileItems.map((item, index) => (
+              <div key={index} className="profile-item">
+                <div className="profile-item-left">
+                  <img src={item.icon} alt="" className="profile-item-icon" />
+                  <span className="profile-item-text">{item.text}</span>
+                </div>
+                <div className="profile-item-right">
+                  {item.showClaim && (
+                    <button className="profile-claim">Claim</button>
+                  )}
+                  <span className="profile-item-value">{item.value}</span>
+                </div>
+                {item.showArrow && (
+                  <img src={arrowIcon} alt="" className="profile-item-arrow" />
                 )}
-                <span className="profile-item-value">{item.value}</span>
               </div>
-              {item.showArrow && (
-                <img src={arrowIcon} alt="" className="profile-item-arrow" />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
@@ -79,13 +81,12 @@ const Profile = ({ onClose,  user, loginData }) => {
         <ProfileAvatarSelector 
           onClose={() => setShowAvatarSelector(false)}
           onSelect={(avatar) => {
-            // Handle avatar selection
             console.log('Selected avatar:', avatar);
           }}
           user={user}
         />
       )}
-    </>
+    </div>
   );
 };
 
