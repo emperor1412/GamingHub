@@ -28,7 +28,12 @@ const Profile = ({ onClose,  user, loginData }) => {
     { icon: accountIcon, text: 'Account Level', value: '3' },
     { icon: ticketIcon, text: 'Tickets', value: '3' },
     { icon: kmIcon, text: 'KM', value: '3' },
-    { icon: gmtIcon, text: 'GMT', value: '3', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'Daily check-in', value: '3', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'GMT', value: '30', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'GMT', value: '300', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'GMT', value: '3000', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'GMT', value: '30000', showClaim: true, showArrow: true },
+    { icon: gmtIcon, text: 'GMT', value: '300000', showClaim: true, showArrow: true },
   ];
 
   return (

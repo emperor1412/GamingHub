@@ -74,8 +74,8 @@
 
 .profile-content-wrapper {
   flex: 1;
-  /* overflow-y: auto; */
-  overflow: hidden;
+  overflow-y: auto;
+  /* overflow: hidden; */
   padding-top: 0;
   padding-bottom: 90px;
   -webkit-overflow-scrolling: touch;
@@ -99,17 +99,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 16px 0;
+  padding: 16px 24px 16px 0;
   background: rgba(255, 255, 255, 0);
   border-radius: 12px;
   position: relative;
-  padding-right: 48px;
+  min-height: 56px;
 }
 
 .profile-item-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  max-width: 145px;
 }
 
 .profile-item-icon {
@@ -126,10 +127,15 @@
 .profile-item-right {
   display: flex;
   align-items: center;
-  gap: 70px;
+  gap: 14px;
+  margin-right: 10px;
+  min-width: 100px;
+  justify-content: flex-end;
 }
 
 .profile-item-value {
+  min-width: 80px;
+  text-align: right;
   font-style: italic;
   color: white;
   font-size: 16px;
@@ -150,7 +156,7 @@
 
 .profile-item-arrow {
   position: absolute;
-  right: 16px;
+  right: 0px;
   top: 50%;
   transform: translateY(-50%);
   width: 20px;
