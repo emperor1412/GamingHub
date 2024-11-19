@@ -11,6 +11,8 @@ import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
 import avatar3 from './images/avatar3.svg';
 
+import ProfileAvatarSelector from './ProfileAvatarSelector';
+
 const Profile = ({ onClose,  user, loginData }) => {
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   
@@ -74,33 +76,14 @@ const Profile = ({ onClose,  user, loginData }) => {
       </div>
 
       {showAvatarSelector && (
-        <div className="avatar-selector">
-          <h2 className="avatar-selector-header">Select Avatar</h2>
-          <div className="avatar-grid">
-            {avatars.map((avatar) => (
-              <button 
-                key={avatar.id} 
-                className="avatar-option"
-                onClick={() => {
-                  // Handle avatar selection
-                  setShowAvatarSelector(false);
-                }}
-              >
-                <img src={avatar.src} alt="Avatar option" />
-              </button>
-            ))}
-          </div>
-          <div className="avatar-footer">
-            <button className="terms-button">Terms and Conditions</button>
-            <button className="privacy-button">Privacy Policy</button>
-            <button 
-              className="okay-button"
-              onClick={() => setShowAvatarSelector(false)}
-            >
-              Okay
-            </button>
-          </div>
-        </div>
+        <ProfileAvatarSelector 
+          onClose={() => setShowAvatarSelector(false)}
+          onSelect={(avatar) => {
+            // Handle avatar selection
+            console.log('Selected avatar:', avatar);
+          }}
+          user={user}
+        />
       )}
     </>
   );
