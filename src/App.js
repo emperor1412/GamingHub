@@ -57,16 +57,17 @@ function App() {
     let retVal = false;
     console.log('CheckIn Response:', response);
     const data = await response.json();
-    
+
     try {
       console.log('CheckIn Data:', data);
       let time = new Date(data.data.lastTime);
   
       console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
+      setCheckInData(data.data);
+      
       if(data.data.isCheckIn) {
         console.log('Redirect to checkIn screen')
         retVal = true;
-        setCheckInData(data.data);
         setShowCheckInAnimation(true);
       }
     }

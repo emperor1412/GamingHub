@@ -70,7 +70,7 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
     }, []);
 
     useEffect(() => {
-        console.log('MainView useEffect:');
+        console.log('MainView useEffect, checkInData: ' + checkInData);
         let myTimeout;
         try {
             let lastTime = new Date(checkInData.lastTime);
@@ -92,7 +92,7 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
             
         }
         catch (e) {
-            console.log('MainView useEffect: error');
+            console.log(e);
         }
 
         return () => clearTimeout(myTimeout);
