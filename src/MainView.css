@@ -6,6 +6,7 @@
 
 .profile-pic {
     margin-left: 10px;
+    flex-shrink: 0;
 }
 
 /* Header Styles */
@@ -30,14 +31,18 @@
 
 .stats {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
     padding-right: 10px;
+    flex: 1;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+    min-width: fit-content;
 }
 
 /* Card Styles */
@@ -160,4 +165,42 @@
     height: calc(100vh - 120px);
     margin-top: 0;
     overscroll-behavior: none;
+}
+
+.stat-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+}
+
+.stat-button img {
+    margin-right: 2px;
+}
+
+.stat-button:hover {
+    opacity: 0.8;
+}
+
+.check-in-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+    text-align: left;
+    margin-left: 2px;
+    font-style: italic;
+}
+
+.check-in-text span {
+    font-size: 12px;
+}
+
+.check-in-text span:last-child {
+    font-size: 12px;
 }

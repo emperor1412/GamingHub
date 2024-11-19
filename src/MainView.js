@@ -6,6 +6,7 @@ import leaderboard from './images/leaderboard.png';
 import ticket from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar_before_checkin.svg';
 // import avatar from './images/avatar.svg';
 import avatar from './images/avatar.png';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
@@ -18,44 +19,22 @@ import morchigame from './images/morchigame.png';
 
 import { popup } from '@telegram-apps/sdk';
 
-const MainView = ({ user, loginData, checkInData }) => {
+const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const carouselRef = useRef(null);
 
-    // const checkIn = async () => {
-    //     const now = new Date();
-    //     console.log(`Checking in ........: ${now.toLocaleString()}`)
-    //     const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
-    //       method: 'GET',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       }
-    //     });
-    
-    //     console.log('CheckIn Response:', response);
-    //     const data = await response.json();
-    //     console.log('CheckIn Data:', data);
-    //     let time = new Date(data.data.lastTime);
-
-    //     // if (popup.open.isAvailable()) {
-    //         // popup.isOpened() -> false
-    //         const promise = popup.open({
-    //           title: 'Checkin success ?',
-    //           message: `${data.data.isCheckIn ? "Yes" : "No"}\ncalls: ${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime:${time.toLocaleString()}`,
-    //           buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-    //         });
-    //         // popup.isOpened() -> true
-    //         const buttonId = await promise;
-    //         // popup.isOpened() -> false
-    //     //   }
-
-    //     if(data.data.isCheckIn) {
-    //       console.log('Redirect to checkIn screen')
-    //     }
-    //     else {
-    //       console.log(`False\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
-    //     }
-    //   };
+    const onClickCheckIn = async () => {
+        console.log('onClickCheckIn');
+        const success = await checkIn(loginData);
+        if(success) {
+            setShowCheckInAnimation(true);
+        }
+        else {
+            setShowCheckInAnimation(false);
+            setShowCheckInView(true);
+        }
+    }
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -86,7 +65,36 @@ const MainView = ({ user, loginData, checkInData }) => {
         }, 10000);
 
         return () => clearInterval(interval);
-    }, [currentSlide]);
+    }, []);
+
+    useEffect(() => {
+        console.log('MainView useEffect:');
+        let myTimeout;
+        try {
+            let lastTime = new Date(checkInData.lastTime);
+            
+            const now = new Date();
+            const timeDifference = now - lastTime;
+            const twoMinutes = 2 * 60 * 1000;
+            const remaining = twoMinutes - timeDifference;
+
+            if(remaining > 0) {
+                console.log('MainView useEffect: after check-in state, remaining: ' + remaining);
+                setShowTextCheckIn(false);
+                myTimeout = setTimeout(() => setShowTextCheckIn(true), remaining);
+            }
+            else {
+                console.log('MainView useEffect: before check-in state, remaining: ' + remaining);
+                setShowTextCheckIn(true);
+            }
+            
+        }
+        catch (e) {
+            console.log('MainView useEffect: error');
+        }
+
+        return () => clearTimeout(myTimeout);
+    }, []);
 
     return (
         <>
@@ -104,8 +112,19 @@ const MainView = ({ user, loginData, checkInData }) => {
                         <span>24.4</span>
                     </div>
                     <div className="stat-item">
-                        <img src={calendar} alt="Stat 1" />
-                        <span>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                        <button className="stat-button" onClick={() => onClickCheckIn()}>
+                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Stat 1" />
+                            <div className="check-in-text">
+                                {showTextCheckIn ? (
+                                    <>
+                                        <span>CHECK-IN</span>
+                                        <span>TODAY</span>
+                                    </>
+                                ) : (
+                                    checkInData != null ? checkInData.streakDay : "0"
+                                )}
+                            </div>
+                        </button>
                     </div>
                 </div>
             </header>

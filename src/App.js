@@ -54,6 +54,7 @@ function App() {
       }
     });
 
+    let retVal = false;
     try {
       console.log('CheckIn Response:', response);
       const data = await response.json();
@@ -63,6 +64,7 @@ function App() {
       console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
       if(data.data.isCheckIn) {
         console.log('Redirect to checkIn screen')
+        retVal = true;
         setCheckInData(data.data);
         setShowCheckInAnimation(true);
       }
@@ -70,6 +72,8 @@ function App() {
     catch (error) {
       console.error('CheckIn error:', error);
     }
+
+    return retVal;
   };
 
   const login = async () => {
@@ -201,6 +205,9 @@ function App() {
           user={user}           
           loginData={loginData}
           checkInData={checkInData}
+          setShowCheckInAnimation={setShowCheckInAnimation}
+          checkIn={checkIn}
+          setShowCheckInView={setShowCheckInView}
         />;      
       case 'tasks':
         return <Tasks />;      
@@ -211,6 +218,9 @@ function App() {
           user={user} 
           loginData={loginData}
           checkInData={checkInData}
+          setShowCheckInAnimation={setShowCheckInAnimation}
+          checkIn={checkIn}
+          setShowCheckInView={setShowCheckInView}
         />;
     }
   };

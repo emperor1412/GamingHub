@@ -59,18 +59,75 @@ const CheckIn = ({ checkInData, onClose }) => {
     }
         */
 
+    let days = [];
+    try {
+        const daySuffixes = ['ST', 'ND', 'RD', 'TH', 'TH', 'TH', 'TH'];
+        days = checkInData.dayRewards.map((reward, index) => {
+            const isActive = index + 1 <= checkInData.checkInDay;
+            return {
+                day: reward.day,
+                label: daySuffixes[index],
+                status: isActive ? 'active' : 'inactive',
+                kmPoint: reward.kmPoint,
+                ticket: reward.ticket
+            };
+        });
+    }
+    catch (error) {
+        console.error(error);
+        days = [
+            {
+                day: 1,
+                label: 'ST',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 2,
+                label: 'ND',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 3,
+                label: 'RD',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 4,
+                label: 'TH',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 5,
+                label: 'TH',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 6,
+                label: 'TH',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 1
+            },
+            {
+                day: 7,
+                label: 'TH',
+                status: 'inactive',
+                kmPoint: 50,
+                ticket: 2
+            }
+        ]
+    }
 
-    const daySuffixes = ['ST', 'ND', 'RD', 'TH', 'TH', 'TH', 'TH'];
-    const days = checkInData.dayRewards.map((reward, index) => {
-        const isActive = index + 1 <= checkInData.checkInDay;
-        return {
-            day: reward.day,
-            label: daySuffixes[index],
-            status: isActive ? 'active' : 'inactive',
-            kmPoint: reward.kmPoint,
-            ticket: reward.ticket
-        };
-    });
 
     return (
         <div className="checkin-container">
