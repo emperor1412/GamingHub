@@ -28,13 +28,16 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
 
     const onClickCheckIn = async () => {
         console.log('onClickCheckIn');
-        const success = await checkIn(loginData);
-        if(success) {
+        const result = await checkIn(loginData);
+        if(result == 1) {
             setShowCheckInAnimation(true);
         }
-        else {
+        else if(result == 0) {
             setShowCheckInAnimation(false);
             setShowCheckInView(true);
+        }
+        else {
+
         }
     }
 
@@ -70,7 +73,7 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
     }, []);
 
     useEffect(() => {
-        console.log('MainView useEffect, checkInData: ' + checkInData);
+        // console.log('MainView useEffect, checkInData: ' + checkInData);
         let myTimeout;
         try {
             let lastTime = new Date(checkInData.lastTime);

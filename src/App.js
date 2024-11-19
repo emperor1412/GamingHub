@@ -54,7 +54,7 @@ function App() {
       }
     });
 
-    let retVal = false;
+    let retVal = 0;
     console.log('CheckIn Response:', response);
     const data = await response.json();
 
@@ -64,22 +64,27 @@ function App() {
   
       console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
       setCheckInData(data.data);
-      
+
       if(data.data.isCheckIn) {
         console.log('Redirect to checkIn screen')
-        retVal = true;
+        retVal = 1;
         setShowCheckInAnimation(true);
       }
     }
     catch (error) {
       console.error('CheckIn error:', error);
-      const promise = popup.open({
-        title: 'Error Checking-in',
-        message: `Error code:${JSON.stringify(data)}`,
-        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-      });
-      // popup.isOpened() -> true
-      const buttonId = await promise;
+      retVal = 2;
+      if(data.code === 102001) {
+        login();
+      }
+      else {
+        const promise = popup.open({
+          title: 'Error Checking-in',
+          message: `Error code:${JSON.stringify(data)}`,
+          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+        });
+        const buttonId = await promise;
+      }
     }
 
     return retVal;
