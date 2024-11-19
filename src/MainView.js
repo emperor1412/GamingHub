@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 // import Frame4556 from './images/Frame4556.png';
 import locker from './images/locker.png';
-// import leaderboard from './images/leaderboard.svg';
-import leaderboard from './images/leaderboard.png';
+// import locker from './images/locker.svg';
+import leaderboard from './images/leaderboard.svg';
+// import leaderboard from './images/leaderboard.png';
 import ticket from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
 // import avatar from './images/avatar.svg';
 import avatar from './images/avatar.png';
-// import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
-import eventSnoopDogg from './images/snoop_dogg_raffle.png';
+import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
+// import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
 import my_ticket from './images/my_ticket.svg';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
-import morchigame from './images/morchigame.png';
+// import morchigame from './images/morchigame.png';
+import morchigame from './images/morchigame.svg';
 
 import { popup } from '@telegram-apps/sdk';
 
@@ -121,7 +123,7 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    checkInData != null ? checkInData.streakDay : "0"
+                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>

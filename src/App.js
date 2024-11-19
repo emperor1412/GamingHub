@@ -55,9 +55,10 @@ function App() {
     });
 
     let retVal = false;
+    console.log('CheckIn Response:', response);
+    const data = await response.json();
+    
     try {
-      console.log('CheckIn Response:', response);
-      const data = await response.json();
       console.log('CheckIn Data:', data);
       let time = new Date(data.data.lastTime);
   
@@ -71,6 +72,13 @@ function App() {
     }
     catch (error) {
       console.error('CheckIn error:', error);
+      const promise = popup.open({
+        title: 'Error Checking-in',
+        message: `Error code:${JSON.stringify(data)}`,
+        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+      });
+      // popup.isOpened() -> true
+      const buttonId = await promise;
     }
 
     return retVal;
