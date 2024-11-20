@@ -45,7 +45,6 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
               className="avatar-option"
               onClick={() => {
                 onSelect(avatars[index % 3]);
-                onClose();
               }}
             >
               <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} />
@@ -61,8 +60,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
             Privacy Policy
           </button>
           <button 
-            className="footer-button okay-button"
-            onClick={onClose}
+            className="footer-button okay-button"            
           >
             Okay
           </button>
