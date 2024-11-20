@@ -38,22 +38,27 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
       </div>
 
       <div className="avatar-selector-container">
-        <div className="avatar-selector-header">
-          Select Avatar
-        </div>
         
-        <div className="avatar-grid">
-          {[...Array(12)].map((_, index) => (
-            <button 
-              key={index} 
-              className="avatar-option"
-              onClick={() => {
-                onSelect(avatars[index % 3]);
-              }}
-            >
-              <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} />
-            </button>
-          ))}
+        <div className="avatar-grid-container">
+            <div className="avatar-selector-header">
+            Select Avatar
+            </div>
+          <div className="avatar-grid">
+            {[...Array(12)].map((_, index) => (
+              <button 
+                key={index} 
+                className="avatar-option"
+                onClick={() => {
+                  onSelect(avatars[index % 3]);
+                }}
+              >
+                <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} />
+              </button>
+            ))}
+          </div>
+          <button className="okay-button-profile" onClick={onClose}>
+            Okay
+          </button>
         </div>
 
         <div className="avatar-footer">
@@ -62,11 +67,6 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
           </button>
           <button className="footer-button privacy-button">
             Privacy Policy
-          </button>
-          <button 
-            className="footer-button okay-button"            
-          >
-            Okay
           </button>
         </div>
       </div>
