@@ -154,10 +154,10 @@ function App() {
 
   const login = async () => {
     // Check if already initialized
-    if (initRef.current) {
-      console.log('App already initialized');
-      return;
-    }
+    // if (initRef.current) {
+    //   console.log('App already initialized');
+    //   return;
+    // }
     
     try {
       setIsLoading(true);

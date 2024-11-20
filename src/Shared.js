@@ -43,7 +43,7 @@ const shared = {
         20020: 'GMT',
         30010: 'StepN GO code',
         30020: 'MOOAR Membership',
-        40010: ',StepN GO Shoe'
+        40010: 'StepN GO Shoe'
     },
     profileItems : [],
     userProfile : null,
