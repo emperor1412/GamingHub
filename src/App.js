@@ -24,9 +24,28 @@ import ID_selected from './images/ID_selected.svg';
 import background from './images/background.png';
 import checkInAnimation from './images/checkIn_animation.png';
 
+import avatar1 from './images/avatar1.svg';
+import avatar2 from './images/avatar2.svg';
+import avatar3 from './images/avatar3.svg';
+
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
 function App() {
+
+  const avatars = [
+    { id: 0, src: avatar1 },
+    { id: 1, src: avatar2 },
+    { id: 2, src: avatar3 },
+    { id: 3, src: avatar1 },
+    { id: 4, src: avatar2 },
+    { id: 5, src: avatar3 },
+    { id: 6, src: avatar1 },
+    { id: 7, src: avatar2 },
+    { id: 8, src: avatar3 },
+    { id: 9, src: avatar1 },
+    { id: 10, src: avatar2 },
+    { id: 11, src: avatar3 },
+];
   
   const { initDataRaw } = retrieveLaunchParams();
   // console.log("initDataRaw: ", initDataRaw);

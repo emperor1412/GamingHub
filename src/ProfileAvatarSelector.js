@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfileAvatarSelector.css';
 import backIcon from './images/back.svg';
 
@@ -9,123 +9,69 @@ import avatar3 from './images/avatar3.svg';
 import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
+import { popup } from '@telegram-apps/sdk';
 
-const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile }) => {
-    
-    /*
-    userProfile: {
-        "tUserId": "5000076292",
-        "tName": "Kaka Lala",
-        "tUserName": "",
-        "fslId": 0,
-        "pictureIndex": 0,
-        "link": 21201,
-        "claimRecord": [
-            {
-                "id": 7,
-                "uid": 21201,
-                "type": 20010,
-                "state": 1,
-                "num": 4000,
-                "ctime": 1731661421159,
-                "ltime": 1731661420158
-            },
-            {
-                "id": 6,
-                "uid": 21201,
-                "type": 30010,
-                "state": 0,
-                "num": 1,
-                "ctime": 1731661773099,
-                "ltime": 1731661773095
-            },
-            {
-                "id": 5,
-                "uid": 21201,
-                "type": 40010,
-                "state": 0,
-                "num": 1,
-                "ctime": 1731661773098,
-                "ltime": 1731661773095
-            },
-            {
-                "id": 4,
-                "uid": 21201,
-                "type": 30020,
-                "state": 0,
-                "num": 1,
-                "ctime": 1731661773097,
-                "ltime": 1731661773095
-            },
-            {
-                "id": 3,
-                "uid": 21201,
-                "type": 30010,
-                "state": 0,
-                "num": 1,
-                "ctime": 1731661773096,
-                "ltime": 1731661773095
-            },
-            {
-                "id": 2,
-                "uid": 21201,
-                "type": 30020,
-                "state": 0,
-                "num": 1,
-                "ctime": 1731661773095,
-                "ltime": 1731661773095
-            },
-            {
-                "id": 1,
-                "uid": 21201,
-                "type": 20020,
-                "state": 1,
-                "num": 9000,
-                "ctime": 1731661420158,
-                "ltime": 1731661420158
-            }
-        ],
-        "UserToken": [
-            {
-                "uid": 21201,
-                "prop_id": 10010,
-                "chain": 0,
-                "num": 173,
-                "lock_num": 0,
-                "ableNum": 173
-            },
-            {
-                "uid": 21201,
-                "prop_id": 10020,
-                "chain": 0,
-                "num": 8450,
-                "lock_num": 0,
-                "ableNum": 8450
-            },
-            {
-                "uid": 21201,
-                "prop_id": 20010,
-                "chain": 0,
-                "num": 50000,
-                "lock_num": 0,
-                "ableNum": 50000
-            },
-            {
-                "uid": 21201,
-                "prop_id": 20020,
-                "chain": 0,
-                "num": 100000,
-                "lock_num": 0,
-                "ableNum": 100000
-            }
-        ]
-    } */
+const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile, loginData, getProfileData }) => {
+  const [selectedAvatar, setSelectedAvatar] = useState(userProfile.pictureIndex);
+  const [hasChanged, setHasChanged] = useState(false);
 
   const avatars = [
     { id: 0, src: avatar1 },
     { id: 1, src: avatar2 },
-    { id: 2, src: avatar3 }
+    { id: 2, src: avatar3 },
+    { id: 3, src: avatar1 },
+    { id: 4, src: avatar2 },
+    { id: 5, src: avatar3 },
+    { id: 6, src: avatar1 },
+    { id: 7, src: avatar2 },
+    { id: 8, src: avatar3 },
+    { id: 9, src: avatar1 },
+    { id: 10, src: avatar2 },
+    { id: 11, src: avatar3 },
   ];
+
+  const handleAvatarSelect = (index) => {
+    setSelectedAvatar(index);
+    setHasChanged(index !== userProfile.pictureIndex);
+    onSelect(avatars[index % 3]);
+  };
+
+  const handleOkayClick = async () => {
+    if (hasChanged) {
+    //   onClose();
+        console.log('ChangePicture:', selectedAvatar);
+        const response = await fetch(`https://gm14.joysteps.io/api/app/changePicture?token=${loginData.token}&index=${selectedAvatar}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        console.log('ChangePicture Response:', response);
+        const data = await response.json();
+
+        try {
+            console.log('ChangePicture Data:', data);
+            userProfile = await getProfileData();
+            console.log('Update new userProfile:', userProfile);
+            setHasChanged(false);
+        }
+        catch (error) {
+            console.error('CheckIn error:', error);
+            if (data.code === 102001) {
+                // login();
+            }
+            else {
+                const promise = popup.open({
+                    title: 'Error Getting Profile Data',
+                    message: `Error code:${JSON.stringify(data)}`,
+                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                });
+                const buttonId = await promise;
+            }
+        }
+    }
+  };
 
   return (
     <div className="avatar-selector-overlay">
@@ -135,7 +81,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile }) => {
         </button>
         <div className="profile-user">
           <img 
-            src={avatars[0]?.src} 
+            src={avatars[userProfile.pictureIndex]?.src} 
             alt="Avatar" 
             className="profile-avatar"
           />
@@ -159,12 +105,10 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile }) => {
             {[...Array(12)].map((_, index) => (
               <button 
                 key={index} 
-                className={`avatar-option ${index === userProfile.pictureIndex ? 'selected' : ''}`}
-                onClick={() => {
-                  onSelect(avatars[index % 3]);
-                }}
+                className={`avatar-option ${index === selectedAvatar ? 'selected' : ''}`}
+                onClick={() => handleAvatarSelect(index)}
               >
-                {index === userProfile.pictureIndex && (
+                {index === selectedAvatar && (
                   <div className="avatar-selection-indicators">
                     <img src={circle} alt="Selection circle" className="selection-circle" />
                     <img src={selected_avatar} alt="Selected" className="selection-mark" />
@@ -174,7 +118,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile }) => {
               </button>
             ))}
           </div>
-          <button className="okay-button-profile" onClick={onClose}>
+          <button 
+            className={`okay-button-profile ${!hasChanged ? 'inactive' : ''}`}
+            onClick={handleOkayClick}
+            disabled={!hasChanged}
+          >
             Okay
           </button>
         </div>

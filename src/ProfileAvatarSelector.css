@@ -123,6 +123,18 @@
   font-family: 'PPNeueMachina', sans-serif;
   font-style: italic;
   font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.3s, background-color 0.3s;
+}
+
+.okay-button-profile.inactive {
+  background: #bf7bff80;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.okay-button-profile:not(.inactive):hover {
+  opacity: 0.9;
 }
 
 .footer-button:active {

@@ -25,12 +25,20 @@ const Profile = ({ onClose, user, loginData, login }) => {
     const [profileItems, setProfileItems] = useState([]);
 
     const avatars = [
-        // Add your avatar image imports here
-        // Example: { id: 1, src: avatar1 }
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
-        { id: 2, src: avatar3 }
+        { id: 2, src: avatar3 },
+        { id: 3, src: avatar1 },
+        { id: 4, src: avatar2 },
+        { id: 5, src: avatar3 },
+        { id: 6, src: avatar1 },
+        { id: 7, src: avatar2 },
+        { id: 8, src: avatar3 },
+        { id: 9, src: avatar1 },
+        { id: 10, src: avatar2 },
+        { id: 11, src: avatar3 },
     ];
+
     const mappingIcon = {
         10010: ticketIcon,
         10020: kmIcon,
@@ -48,7 +56,7 @@ const Profile = ({ onClose, user, loginData, login }) => {
         20010: 'SUT',
         20020: 'GMT',
         30010: 'StepN GO code',
-        30020: 'MOOAR MemberShip',
+        30020: 'MOOAR Membership',
         40010: 'StepN GO Shoe'
     };
 
@@ -63,9 +71,9 @@ const Profile = ({ onClose, user, loginData, login }) => {
         console.log('UserProfile Response:', response);
         const data = await response.json();
 
+        console.log('UserProfile Data:', data);
+        let userProfileData = data.data;
         try {
-            console.log('UserProfile Data:', data);
-            let userProfileData = data.data;
             setUserProfile(userProfileData);
             let profileItems = userProfileData.UserToken.map(record => ({
                 icon: mappingIcon[record.prop_id],
@@ -99,116 +107,7 @@ const Profile = ({ onClose, user, loginData, login }) => {
             }
         }
 
-        /*
-        userProfile: {
-            "tUserId": "5000076292",
-            "tName": "Kaka Lala",
-            "tUserName": "",
-            "fslId": 0,
-            "pictureIndex": 0,
-            "link": 21201,
-            "claimRecord": [
-                {
-                    "id": 7,
-                    "uid": 21201,
-                    "type": 20010,
-                    "state": 1,
-                    "num": 4000,
-                    "ctime": 1731661421159,
-                    "ltime": 1731661420158
-                },
-                {
-                    "id": 6,
-                    "uid": 21201,
-                    "type": 30010,
-                    "state": 0,
-                    "num": 1,
-                    "ctime": 1731661773099,
-                    "ltime": 1731661773095
-                },
-                {
-                    "id": 5,
-                    "uid": 21201,
-                    "type": 40010,
-                    "state": 0,
-                    "num": 1,
-                    "ctime": 1731661773098,
-                    "ltime": 1731661773095
-                },
-                {
-                    "id": 4,
-                    "uid": 21201,
-                    "type": 30020,
-                    "state": 0,
-                    "num": 1,
-                    "ctime": 1731661773097,
-                    "ltime": 1731661773095
-                },
-                {
-                    "id": 3,
-                    "uid": 21201,
-                    "type": 30010,
-                    "state": 0,
-                    "num": 1,
-                    "ctime": 1731661773096,
-                    "ltime": 1731661773095
-                },
-                {
-                    "id": 2,
-                    "uid": 21201,
-                    "type": 30020,
-                    "state": 0,
-                    "num": 1,
-                    "ctime": 1731661773095,
-                    "ltime": 1731661773095
-                },
-                {
-                    "id": 1,
-                    "uid": 21201,
-                    "type": 20020,
-                    "state": 1,
-                    "num": 9000,
-                    "ctime": 1731661420158,
-                    "ltime": 1731661420158
-                }
-            ],
-            "UserToken": [
-                {
-                    "uid": 21201,
-                    "prop_id": 10010,
-                    "chain": 0,
-                    "num": 173,
-                    "lock_num": 0,
-                    "ableNum": 173
-                },
-                {
-                    "uid": 21201,
-                    "prop_id": 10020,
-                    "chain": 0,
-                    "num": 8450,
-                    "lock_num": 0,
-                    "ableNum": 8450
-                },
-                {
-                    "uid": 21201,
-                    "prop_id": 20010,
-                    "chain": 0,
-                    "num": 50000,
-                    "lock_num": 0,
-                    "ableNum": 50000
-                },
-                {
-                    "uid": 21201,
-                    "prop_id": 20020,
-                    "chain": 0,
-                    "num": 100000,
-                    "lock_num": 0,
-                    "ableNum": 100000
-                }
-            ]
-        } */
-
-        
+        return userProfileData;
     };
 
     useEffect(() => {
@@ -227,6 +126,8 @@ const Profile = ({ onClose, user, loginData, login }) => {
                         }}
                         user={user}
                         userProfile={userProfile}
+                        loginData={loginData}
+                        getProfileData={getProfileData}
                     />
                 )
                     : <div className="profile-container">
@@ -236,7 +137,7 @@ const Profile = ({ onClose, user, loginData, login }) => {
                             </button>
                             <div className="profile-user">
                                 <img
-                                    src={avatars[0]?.src}
+                                    src={avatars[userProfile ? userProfile.pictureIndex : 0]?.src} 
                                     alt="Avatar"
                                     className="profile-avatar"
                                 />
