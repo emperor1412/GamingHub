@@ -6,6 +6,8 @@ import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
 import arrowIcon from './images/arrow.svg';
+// import ID_normal from './images/ID_normal.svg';
+import ID_selected from './images/ID_selected.svg';
 
 import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
@@ -63,7 +65,10 @@ const Profile = ({ onClose,  user, loginData }) => {
          />
          <div>
            <div className="profile-username">RUNNER</div>
-           <div className="profile-id">4CH4H9W2...AaCFChF</div>
+           <div className="profile-id">
+             <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
+             4CH4H9W2...AaCFChF
+           </div>
          </div>
          <button className="profile-user-arrow" onClick={() => setShowAvatarSelector(true)}>
            <img src={arrowIcon} alt="Open Avatar Selector" />

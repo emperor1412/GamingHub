@@ -67,8 +67,17 @@
 }
 
 .profile-id {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: #8B5CF6;
   font-size: 12px;
+  opacity: 0.8;
+}
+
+.profile-id-icon {
+  width: 20px;
+  height: 20px;
   opacity: 0.8;
 }
 

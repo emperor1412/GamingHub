@@ -6,6 +6,7 @@ import backIcon from './images/back.svg';
 import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
 import avatar3 from './images/avatar3.svg';
+import ID_selected from './images/ID_selected.svg';
 
 const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
   const avatars = [
@@ -28,7 +29,10 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
           />
           <div>
             <div className="profile-username">RUNNER</div>
-            <div className="profile-id">4CFaH8W2...AafCHfcF</div>
+            <div className="profile-id">
+             <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
+             4CH4H9W2...AaCFChF
+           </div>
           </div>
         </div>
       </div>
