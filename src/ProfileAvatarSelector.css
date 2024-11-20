@@ -55,13 +55,14 @@
 }
 
 .avatar-option {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
   border: none;
   padding: 0;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
   transition: transform 0.2s;
 }
@@ -70,7 +71,7 @@
   transform: scale(0.95);
 }
 
-.avatar-option img {
+.avatar-option-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -126,4 +127,31 @@
 
 .footer-button:active {
   opacity: 0.8;
+}
+
+.avatar-selection-indicators {
+  position: absolute;
+  top: -7px;
+  left: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  pointer-events: none;
+}
+
+.selection-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.selection-mark {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 24px;
+  height: 24px;
+  z-index: 2;
 }

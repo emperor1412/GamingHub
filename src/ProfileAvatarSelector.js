@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProfileAvatarSelector.css';
 import backIcon from './images/back.svg';
 
@@ -7,12 +7,124 @@ import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
 import avatar3 from './images/avatar3.svg';
 import ID_selected from './images/ID_selected.svg';
+import circle from './images/circle.svg';
+import selected_avatar from './images/selected_avatar.svg';
 
-const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
+const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile }) => {
+    
+    /*
+    userProfile: {
+        "tUserId": "5000076292",
+        "tName": "Kaka Lala",
+        "tUserName": "",
+        "fslId": 0,
+        "pictureIndex": 0,
+        "link": 21201,
+        "claimRecord": [
+            {
+                "id": 7,
+                "uid": 21201,
+                "type": 20010,
+                "state": 1,
+                "num": 4000,
+                "ctime": 1731661421159,
+                "ltime": 1731661420158
+            },
+            {
+                "id": 6,
+                "uid": 21201,
+                "type": 30010,
+                "state": 0,
+                "num": 1,
+                "ctime": 1731661773099,
+                "ltime": 1731661773095
+            },
+            {
+                "id": 5,
+                "uid": 21201,
+                "type": 40010,
+                "state": 0,
+                "num": 1,
+                "ctime": 1731661773098,
+                "ltime": 1731661773095
+            },
+            {
+                "id": 4,
+                "uid": 21201,
+                "type": 30020,
+                "state": 0,
+                "num": 1,
+                "ctime": 1731661773097,
+                "ltime": 1731661773095
+            },
+            {
+                "id": 3,
+                "uid": 21201,
+                "type": 30010,
+                "state": 0,
+                "num": 1,
+                "ctime": 1731661773096,
+                "ltime": 1731661773095
+            },
+            {
+                "id": 2,
+                "uid": 21201,
+                "type": 30020,
+                "state": 0,
+                "num": 1,
+                "ctime": 1731661773095,
+                "ltime": 1731661773095
+            },
+            {
+                "id": 1,
+                "uid": 21201,
+                "type": 20020,
+                "state": 1,
+                "num": 9000,
+                "ctime": 1731661420158,
+                "ltime": 1731661420158
+            }
+        ],
+        "UserToken": [
+            {
+                "uid": 21201,
+                "prop_id": 10010,
+                "chain": 0,
+                "num": 173,
+                "lock_num": 0,
+                "ableNum": 173
+            },
+            {
+                "uid": 21201,
+                "prop_id": 10020,
+                "chain": 0,
+                "num": 8450,
+                "lock_num": 0,
+                "ableNum": 8450
+            },
+            {
+                "uid": 21201,
+                "prop_id": 20010,
+                "chain": 0,
+                "num": 50000,
+                "lock_num": 0,
+                "ableNum": 50000
+            },
+            {
+                "uid": 21201,
+                "prop_id": 20020,
+                "chain": 0,
+                "num": 100000,
+                "lock_num": 0,
+                "ableNum": 100000
+            }
+        ]
+    } */
+
   const avatars = [
-    { id: 1, src: avatar1 },
-    { id: 2, src: avatar2 },
-    { id: 3, src: avatar3 }
+    { id: 0, src: avatar1 },
+    { id: 1, src: avatar2 },
+    { id: 2, src: avatar3 }
   ];
 
   return (
@@ -47,12 +159,18 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user }) => {
             {[...Array(12)].map((_, index) => (
               <button 
                 key={index} 
-                className="avatar-option"
+                className={`avatar-option ${index === userProfile.pictureIndex ? 'selected' : ''}`}
                 onClick={() => {
                   onSelect(avatars[index % 3]);
                 }}
               >
-                <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} />
+                {index === userProfile.pictureIndex && (
+                  <div className="avatar-selection-indicators">
+                    <img src={circle} alt="Selection circle" className="selection-circle" />
+                    <img src={selected_avatar} alt="Selected" className="selection-mark" />
+                  </div>
+                )}
+                <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
               </button>
             ))}
           </div>

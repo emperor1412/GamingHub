@@ -315,7 +315,8 @@ function App() {
             setActiveTab('home');
           }}
           user={user} 
-          loginData={loginData}/>
+          loginData={loginData}
+          login = {login}/>
       )
       : (
         <div className="app-container">
