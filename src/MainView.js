@@ -8,8 +8,7 @@ import ticket from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
-// import avatar from './images/avatar.svg';
-import avatar from './images/avatar.png';
+
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
@@ -20,6 +19,8 @@ import LFGO from './images/LFGO.png';
 import morchigame from './images/morchigame.svg';
 
 import { popup } from '@telegram-apps/sdk';
+
+import shared from './Shared';
 
 const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -108,7 +109,9 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
                     className="profile-pic"
                     onClick={() => setShowProfileView(true)}
                 >
-                    <img src={avatar} alt="Profile" />
+                    <img 
+                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                    alt="Profile" />
                 </button>
                 <div className="stats">
                     <button 

@@ -2,8 +2,9 @@ import React from 'react';
 import './CheckIn.css';
 import ticket from './images/ticket.svg';
 import km from './images/km.svg';
-import avatar from './images/avatar_big.svg';
 import checkmark from './images/checkmark.svg';
+
+import shared from './Shared';
 
 const CheckIn = ({ checkInData, onClose }) => {
 
@@ -133,7 +134,9 @@ const CheckIn = ({ checkInData, onClose }) => {
         <div className="checkin-container">
             <div className="checkin-header">
                 <div className="avatar-container">
-                    <img src={avatar} alt="User avatar" className="avatar" />
+                    <img src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+
+                    alt="User avatar" className="avatar" />
                 </div>
                 <div className="content-container">
                     <div className="streak-info">

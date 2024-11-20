@@ -24,28 +24,11 @@ import ID_selected from './images/ID_selected.svg';
 import background from './images/background.png';
 import checkInAnimation from './images/checkIn_animation.png';
 
-import avatar1 from './images/avatar1.svg';
-import avatar2 from './images/avatar2.svg';
-import avatar3 from './images/avatar3.svg';
+import shared from './Shared';
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
 function App() {
-
-  const avatars = [
-    { id: 0, src: avatar1 },
-    { id: 1, src: avatar2 },
-    { id: 2, src: avatar3 },
-    { id: 3, src: avatar1 },
-    { id: 4, src: avatar2 },
-    { id: 5, src: avatar3 },
-    { id: 6, src: avatar1 },
-    { id: 7, src: avatar2 },
-    { id: 8, src: avatar3 },
-    { id: 9, src: avatar1 },
-    { id: 10, src: avatar2 },
-    { id: 11, src: avatar3 },
-];
   
   const { initDataRaw } = retrieveLaunchParams();
   // console.log("initDataRaw: ", initDataRaw);
@@ -54,6 +37,8 @@ function App() {
   const [loginData, setLoginData] = useState(null);
   const [checkInData, setCheckInData] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
+  const [userProfile, setUserProfile] = useState(null);
+  const [profileItems, setProfileItems] = useState([]);
   // const swipeBehavior = useSwipeBehavior();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -110,6 +95,62 @@ function App() {
 
     return retVal;
   };
+
+  const getProfileData = async (loginDataParam) => {
+    const dataToUse = loginDataParam || loginData;
+    
+    const response = await fetch(`https://gm14.joysteps.io/api/app/userData?token=${dataToUse.token}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    console.log('UserProfile Response:', response);
+    const data = await response.json();
+
+    console.log('UserProfile Data:', data);
+    let userProfileData = data.data;
+    try {
+        shared.userProfile = userProfileData;
+        setUserProfile(userProfileData);
+        let profileItems = userProfileData.UserToken.map(record => ({
+            icon: shared.mappingIcon[record.prop_id],
+            text: shared.mappingText[record.prop_id],
+            value: record.num,
+            showClaim: false,
+            showArrow: false
+        }));
+
+        profileItems = profileItems.concat(userProfileData.claimRecord.map(record => ({
+            icon: shared.mappingIcon[record.type],
+            text: shared.mappingText[record.type],
+            value: record.num,
+            showClaim: true,
+            showArrow: true
+        })));
+
+        shared.profileItems = profileItems;
+        setProfileItems(profileItems);
+    }
+    catch (error) {
+        console.error('CheckIn error:', error);
+        if (data.code === 102001) {
+            // login();
+        }
+        else {
+            const promise = popup.open({
+                title: 'Error Getting Profile Data',
+                message: `Error code:${JSON.stringify(data)}`,
+                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            const buttonId = await promise;
+        }
+    }
+
+    return [userProfileData, profileItems];
+};
+
 
   const login = async () => {
     // Check if already initialized
@@ -169,20 +210,21 @@ function App() {
 
             }
             else {                
-              setLoginData(data.data);
+              const loginDataValue = data.data;  // Store value in local variable
+              shared.loginData = loginDataValue;  // Store value in shared object
+
+              setLoginData(loginDataValue);
               setIsLoggedIn(true);
 
               if (popup.open.isAvailable()) {
-                // popup.isOpened() -> false
                 const promise = popup.open({
                   title: 'Success',
                   message: "Login Success",
                   buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
                 });
-                // popup.isOpened() -> true
                 const buttonId = await promise;
-                checkIn(data.data);
-                // popup.isOpened() -> false
+                checkIn(loginDataValue);  // Use local variable
+                await getProfileData(loginDataValue);  // Pass login data directly
               }
             }
 
@@ -226,6 +268,7 @@ function App() {
     initData.restore();
     const userData = initData.user();
     console.log('User:', userData);
+    shared.user = userData;
     setUser(userData);
 
     console.log("initDataRaw: ", initDataRaw);
@@ -333,9 +376,7 @@ function App() {
             setShowProfileView(false);
             setActiveTab('home');
           }}
-          user={user} 
-          loginData={loginData}
-          login = {login}/>
+          getProfileData={getProfileData}/>
       )
       : (
         <div className="app-container">

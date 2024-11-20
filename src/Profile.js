@@ -1,117 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Profile.css';
 import backIcon from './images/back.svg';
-import accountIcon from './images/account.svg';
-import ticketIcon from './images/ticket.svg';
-import kmIcon from './images/km.svg';
-import gmtIcon from './images/gmt.svg';
+
 import arrowIcon from './images/arrow.svg';
-import SUT from './images/SUT.png';
-import energy from './images/energy.png';
+
 // import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
-import avatar1 from './images/avatar1.svg';
-import avatar2 from './images/avatar2.svg';
-import avatar3 from './images/avatar3.svg';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 
 import { popup } from '@telegram-apps/sdk';
 
-const Profile = ({ onClose, user, loginData, login }) => {
+import shared from './Shared';
+
+const Profile = ({ onClose, getProfileData }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
-    const [userProfile, setUserProfile] = useState(null);
-    const [profileItems, setProfileItems] = useState([]);
-
-    const avatars = [
-        { id: 0, src: avatar1 },
-        { id: 1, src: avatar2 },
-        { id: 2, src: avatar3 },
-        { id: 3, src: avatar1 },
-        { id: 4, src: avatar2 },
-        { id: 5, src: avatar3 },
-        { id: 6, src: avatar1 },
-        { id: 7, src: avatar2 },
-        { id: 8, src: avatar3 },
-        { id: 9, src: avatar1 },
-        { id: 10, src: avatar2 },
-        { id: 11, src: avatar3 },
-    ];
-
-    const mappingIcon = {
-        10010: ticketIcon,
-        10020: kmIcon,
-        10030: energy,
-        20010: SUT,
-        20020: gmtIcon,
-        30010: gmtIcon,
-        30020: gmtIcon,
-        40010: gmtIcon
-    };
-    const mappingText = {
-        10010: 'Ticket',
-        10020: 'KM Point',
-        10030: 'Energy',
-        20010: 'SUT',
-        20020: 'GMT',
-        30010: 'StepN GO code',
-        30020: 'MOOAR Membership',
-        40010: 'StepN GO Shoe'
-    };
-
-    const getProfileData = async () => {
-        const response = await fetch(`https://gm14.joysteps.io/api/app/userData?token=${loginData.token}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        console.log('UserProfile Response:', response);
-        const data = await response.json();
-
-        console.log('UserProfile Data:', data);
-        let userProfileData = data.data;
-        try {
-            setUserProfile(userProfileData);
-            let profileItems = userProfileData.UserToken.map(record => ({
-                icon: mappingIcon[record.prop_id],
-                text: mappingText[record.prop_id],
-                value: record.num,
-                showClaim: false,
-                showArrow: false
-            }));
-
-            profileItems = profileItems.concat(userProfileData.claimRecord.map(record => ({
-                icon: mappingIcon[record.type],
-                text: mappingText[record.type],
-                value: record.num,
-                showClaim: true,
-                showArrow: true
-            })));
-            setProfileItems(profileItems);
-        }
-        catch (error) {
-            console.error('CheckIn error:', error);
-            if (data.code === 102001) {
-                login();
-            }
-            else {
-                const promise = popup.open({
-                    title: 'Error Getting Profile Data',
-                    message: `Error code:${JSON.stringify(data)}`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                const buttonId = await promise;
-            }
-        }
-
-        return userProfileData;
-    };
-
+    
     useEffect(() => {
-        getProfileData();
+        // getProfileData();
     }, []);
 
     return (
@@ -124,9 +31,6 @@ const Profile = ({ onClose, user, loginData, login }) => {
                         onSelect={(avatar) => {
                             console.log('Selected avatar:', avatar);
                         }}
-                        user={user}
-                        userProfile={userProfile}
-                        loginData={loginData}
                         getProfileData={getProfileData}
                     />
                 )
@@ -137,7 +41,7 @@ const Profile = ({ onClose, user, loginData, login }) => {
                             </button>
                             <div className="profile-user">
                                 <img
-                                    src={avatars[userProfile ? userProfile.pictureIndex : 0]?.src} 
+                                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                                     alt="Avatar"
                                     className="profile-avatar"
                                 />
@@ -156,7 +60,7 @@ const Profile = ({ onClose, user, loginData, login }) => {
 
                         <div className="profile-content-wrapper">
                             <div className="profile-content">
-                                {profileItems.map((item, index) => (
+                                {shared.profileItems.map((item, index) => (
                                     <div key={index} className="profile-item">
                                         <div className="profile-item-left">
                                             <img src={item.icon} alt="" className="profile-item-icon" />

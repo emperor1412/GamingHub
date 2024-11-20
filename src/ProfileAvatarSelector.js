@@ -2,45 +2,29 @@ import React, { useState, useEffect } from 'react';
 import './ProfileAvatarSelector.css';
 import backIcon from './images/back.svg';
 
-// Import your avatar images
-import avatar1 from './images/avatar1.svg';
-import avatar2 from './images/avatar2.svg';
-import avatar3 from './images/avatar3.svg';
 import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
 import { popup } from '@telegram-apps/sdk';
 
-const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile, loginData, getProfileData }) => {
-  const [selectedAvatar, setSelectedAvatar] = useState(userProfile.pictureIndex);
+import shared from './Shared';
+
+const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
+  const [selectedAvatar, setSelectedAvatar] = useState(shared.userProfile ? shared.userProfile.pictureIndex : 0);
   const [hasChanged, setHasChanged] = useState(false);
 
-  const avatars = [
-    { id: 0, src: avatar1 },
-    { id: 1, src: avatar2 },
-    { id: 2, src: avatar3 },
-    { id: 3, src: avatar1 },
-    { id: 4, src: avatar2 },
-    { id: 5, src: avatar3 },
-    { id: 6, src: avatar1 },
-    { id: 7, src: avatar2 },
-    { id: 8, src: avatar3 },
-    { id: 9, src: avatar1 },
-    { id: 10, src: avatar2 },
-    { id: 11, src: avatar3 },
-  ];
 
   const handleAvatarSelect = (index) => {
     setSelectedAvatar(index);
-    setHasChanged(index !== userProfile.pictureIndex);
-    onSelect(avatars[index % 3]);
+    setHasChanged(index !== shared.userProfile.pictureIndex);
+    onSelect(shared.avatars[index % 3]);
   };
 
   const handleOkayClick = async () => {
     if (hasChanged) {
     //   onClose();
         console.log('ChangePicture:', selectedAvatar);
-        const response = await fetch(`https://gm14.joysteps.io/api/app/changePicture?token=${loginData.token}&index=${selectedAvatar}`, {
+        const response = await fetch(`https://gm14.joysteps.io/api/app/changePicture?token=${shared.loginData.token}&index=${selectedAvatar}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,8 +36,8 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile, loginData
 
         try {
             console.log('ChangePicture Data:', data);
-            userProfile = await getProfileData();
-            console.log('Update new userProfile:', userProfile);
+            await getProfileData();
+            console.log('Update new userProfile:', shared.userProfile);
             setHasChanged(false);
         }
         catch (error) {
@@ -81,7 +65,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile, loginData
         </button>
         <div className="profile-user">
           <img 
-            src={avatars[userProfile.pictureIndex]?.src} 
+            src={shared.avatars[shared.userProfile.pictureIndex]?.src} 
             alt="Avatar" 
             className="profile-avatar"
           />
@@ -114,7 +98,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, user, userProfile, loginData
                     <img src={selected_avatar} alt="Selected" className="selection-mark" />
                   </div>
                 )}
-                <img src={avatars[index % 3].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
+                <img src={shared.avatars[index % 3].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
               </button>
             ))}
           </div>
