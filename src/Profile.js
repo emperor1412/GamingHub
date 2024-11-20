@@ -92,6 +92,9 @@ const Profile = ({ onClose,  user, loginData }) => {
          ))}
        </div>
      </div>
+    <div className="profile-info-box">
+        Earn extra rewards by inviting frens or by completing daily tasks. The more you engage, the more rewards you'll unlock.
+    </div>
    </div> 
      }
     </div>
