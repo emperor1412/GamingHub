@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.db8de982.css",
+    "main.css": "/GamingHub/static/css/main.c92805f7.css",
     "main.js": "/GamingHub/static/js/main.c9d8c274.js",
     "static/js/453.e5051890.chunk.js": "/GamingHub/static/js/453.e5051890.chunk.js",
     "static/media/avatar2.svg": "/GamingHub/static/media/avatar2.75632a601ed5de05197f05a3bcfe0465.svg",
@@ -36,12 +36,12 @@
     "static/media/back.svg": "/GamingHub/static/media/back.4da4cb710ea609b39249af327e92892a.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.c7d87fce602708dc1de6bc453cfc6555.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.020cba5c4013ab28dbe7b18890613c58.svg",
-    "main.db8de982.css.map": "/GamingHub/static/css/main.db8de982.css.map",
+    "main.c92805f7.css.map": "/GamingHub/static/css/main.c92805f7.css.map",
     "main.c9d8c274.js.map": "/GamingHub/static/js/main.c9d8c274.js.map",
     "453.e5051890.chunk.js.map": "/GamingHub/static/js/453.e5051890.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.db8de982.css",
+    "static/css/main.c92805f7.css",
     "static/js/main.c9d8c274.js"
   ]
 }
