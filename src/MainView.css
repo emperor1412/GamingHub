@@ -25,7 +25,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 430px;
+    /* max-width: 430px; */
     z-index: 1000;
     display: flex;
     justify-content: space-between;

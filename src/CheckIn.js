@@ -131,7 +131,9 @@ const CheckIn = ({ checkInData, onClose }) => {
 
 
     return (
-        <div className="checkin-container">
+        <div className='outside-content'>
+            <div className='inside-content'>
+        {/* <div className="checkin-container"> */}
             <div className="checkin-header">
                 <div className="avatar-container">
                     <img src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
@@ -176,10 +178,11 @@ const CheckIn = ({ checkInData, onClose }) => {
                     );
                 })}
             </div>
-
             <button className="okay-button" onClick={onClose}>
                 Okay
             </button>
+        {/* </div> */}
+        </div>
         </div>
     );
 };
