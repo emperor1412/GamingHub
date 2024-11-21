@@ -187,8 +187,6 @@
     padding-right: 20px;
     -webkit-overflow-scrolling: touch;
     position: relative;
-    height: calc(100vh - 120px);
-    margin-top: 0;
     overscroll-behavior: none;
 }
 
