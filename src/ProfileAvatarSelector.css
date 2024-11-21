@@ -54,10 +54,12 @@
   font-style: italic;
   margin-bottom: 20px;
   margin-top: 0px;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-grid-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: #292929;
   border: 2px solid #C07BFF;
   border-radius: 16px;
   padding: 20px;
@@ -65,7 +67,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   min-height: auto;
   padding-bottom: 40px;
 }
@@ -76,6 +78,8 @@
   gap: 16px;
   padding: 0 10px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-option {
@@ -191,4 +195,15 @@
   width: 24px;
   height: 24px;
   z-index: 2;
+}
+
+.background-avatar-selection {
+  position: absolute;
+  bottom: 40px;
+  left: 25%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+  z-index: 0;
 }

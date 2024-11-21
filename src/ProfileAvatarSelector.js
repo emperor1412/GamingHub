@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileAvatarSelector.css';
 import backIcon from './images/back.svg';
-
+import background_avatar_selection from './images/background_avatar_selection.svg';
 import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
@@ -82,6 +82,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       <div className="avatar-selector-container">
         
         <div className="avatar-grid-container">
+            <img src={background_avatar_selection} alt="Background" className="background-avatar-selection" />
             <div className="avatar-selector-header">
             Select Avatar
             </div>
