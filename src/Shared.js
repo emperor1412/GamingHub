@@ -101,6 +101,114 @@ const shared = {
                 data: null
             };
         }
+    },
+
+    checkIn: async (loginData) => {
+        try {
+            const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('CheckIn Response:', response);
+            const data = await response.json();
+
+            if (data.code === 0) {
+                console.log('CheckIn Data:', data);
+                return {
+                    success: true,
+                    data: data.data,
+                    isCheckIn: data.data.isCheckIn
+                };
+            } else if (data.code === 102001 || data.code === 102002) {
+                return {
+                    success: false,
+                    error: 'Token expired',
+                    needRelogin: true,
+                    data: data
+                };
+            } else {
+                return {
+                    success: false,
+                    error: data.msg || 'Check-in failed',
+                    data: data
+                };
+            }
+        } catch (error) {
+            console.error('CheckIn error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
+        }
+    },
+
+    getProfileData: async (loginData) => {
+        try {
+            const response = await fetch(`https://gm14.joysteps.io/api/app/userData?token=${loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('UserProfile Response:', response);
+            const data = await response.json();
+
+            if (data.code === 0) {
+                console.log('UserProfile Data:', data);
+                const userProfileData = data.data;
+                shared.userProfile = userProfileData;
+
+                const profileItems = [
+                    ...userProfileData.UserToken.map(record => ({
+                        icon: shared.mappingIcon[record.prop_id],
+                        text: shared.mappingText[record.prop_id],
+                        value: record.num,
+                        showClaim: false,
+                        showArrow: false
+                    })),
+                    ...userProfileData.claimRecord.map(record => ({
+                        icon: shared.mappingIcon[record.type],
+                        text: shared.mappingText[record.type],
+                        value: record.num,
+                        showClaim: true,
+                        showArrow: true
+                    }))
+                ];
+
+                shared.profileItems = profileItems;
+                return {
+                    success: true,
+                    userProfile: userProfileData,
+                    profileItems: profileItems,
+                    data: data
+                };
+            } else if (data.code === 102001 || data.code === 102002) {
+                return {
+                    success: false,
+                    error: 'Token expired',
+                    needRelogin: true,
+                    data: data
+                };
+            } else {
+                return {
+                    success: false,
+                    error: data.msg || 'Failed to get profile data',
+                    data: data
+                };
+            }
+        } catch (error) {
+            console.error('GetProfileData error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
+        }
     }
 };
 

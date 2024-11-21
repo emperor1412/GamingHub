@@ -52,125 +52,69 @@ function App() {
 
   const checkIn = async (loginData) => {
     const now = new Date();
-    console.log(`Checking in ........: ${now.toLocaleString()}`)
-    const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    let retVal = 0;
-    console.log('CheckIn Response:', response);
-    const data = await response.json();
-
-    try {
-      console.log('CheckIn Data:', data);
-      let time = new Date(data.data.lastTime);
-  
-      console.log(`${data.data.isCheckIn}\nCalls:${data.data.calls}\ncallTime:${now.toLocaleString()}\nlastTime: ${time.toLocaleString()}`)
-      setCheckInData(data.data);
-
-      if(data.data.isCheckIn) {
-        console.log('Redirect to checkIn screen')
-        retVal = 1;
-        setShowCheckInAnimation(true);
-      }
-    }
-    catch (error) {
-      console.error('CheckIn error:', error);
-      retVal = 2;
-      if(data.code === 102001 || data.code === 102002) {
-        const loginResult = await shared.login(initDataRaw);
-
-        if (loginResult.success) {
-          await checkIn(loginResult.loginData);
-
-        } else {
-          console.log('User is not logged in');
-          setIsLoggedIn(false);
-          const promise = popup.open({
-            title: 'Error Checking-in',
-            message: `Error code:${JSON.stringify(data)}`,
-            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-          });
-          const buttonId = await promise;
+    console.log(`Checking in ........: ${now.toLocaleString()}`);
+    
+    const checkInResult = await shared.checkIn(loginData);
+    
+    if (checkInResult.success) {
+        setCheckInData(checkInResult.data);
+        
+        if (checkInResult.isCheckIn) {
+            console.log('Redirect to checkIn screen');
+            return 1;
         }
-      }
-      else {
-        const promise = popup.open({
-          title: 'Error Checking-in',
-          message: `Error code:${JSON.stringify(data)}`,
-          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-        });
-        const buttonId = await promise;
-      }
+        return 0;
+    } else {
+        if (checkInResult.needRelogin) {
+            const loginResult = await shared.login(initDataRaw);
+            if (loginResult.success) {
+                return await checkIn(loginResult.loginData);
+            }
+        }
+        
+        if (popup.open.isAvailable()) {
+            const promise = popup.open({
+                title: 'Error Checking-in',
+                message: `Error: ${checkInResult.error}`,
+                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+        }
+        return 2;
     }
-
-    return retVal;
-  };
+};
 
   const getProfileData = async (loginDataParam) => {
     const dataToUse = loginDataParam || loginData;
+    const profileResult = await shared.getProfileData(dataToUse);
     
-    const response = await fetch(`https://gm14.joysteps.io/api/app/userData?token=${dataToUse.token}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
+    if (profileResult.success) {
+        setUserProfile(profileResult.userProfile);
+        setProfileItems(profileResult.profileItems);
+        return [profileResult.userProfile, profileResult.profileItems];
+    } else {
+        if (profileResult.needRelogin) {
+            const loginResult = await shared.login(initDataRaw);
+            if (loginResult.success) {
+                setLoginData(loginResult.loginData);
+                setIsLoggedIn(true);
+                return await getProfileData(loginResult.loginData);
+            } else {
+                console.log('User is not logged in');
+                setIsLoggedIn(false);
+            }
+        } else {
+            if (popup.open.isAvailable()) {
+                const promise = popup.open({
+                    title: 'Error Getting Profile Data',
+                    message: `Error: ${profileResult.error}`,
+                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                });
+                await promise;
+            }
         }
-    });
-
-    console.log('UserProfile Response:', response);
-    const data = await response.json();
-
-    console.log('UserProfile Data:', data);
-    let userProfileData = data.data;
-    try {
-        shared.userProfile = userProfileData;
-        setUserProfile(userProfileData);
-        let profileItems = userProfileData.UserToken.map(record => ({
-            icon: shared.mappingIcon[record.prop_id],
-            text: shared.mappingText[record.prop_id],
-            value: record.num,
-            showClaim: false,
-            showArrow: false
-        }));
-
-        profileItems = profileItems.concat(userProfileData.claimRecord.map(record => ({
-            icon: shared.mappingIcon[record.type],
-            text: shared.mappingText[record.type],
-            value: record.num,
-            showClaim: true,
-            showArrow: true
-        })));
-
-        shared.profileItems = profileItems;
-        setProfileItems(profileItems);
+        return [null, []];
     }
-    catch (error) {
-        console.error('CheckIn error:', error);
-        if (data.code === 102001 || data.code === 102002) {
-          const loginResult = await shared.login(initDataRaw);
-          if (loginResult.success) {
-              setLoginData(loginResult.loginData);
-              setIsLoggedIn(true);
-              await getProfileData(loginResult.loginData);
-          } else {
-              console.log('User is not logged in');
-              setIsLoggedIn(false);
-          }
-        }
-        else {
-            const promise = popup.open({
-                title: 'Error Getting Profile Data',
-                message: `Error code:${JSON.stringify(data)}`,
-                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-            });
-            const buttonId = await promise;
-        }
-    }
-
-    return [userProfileData, profileItems];
 };
 
 
@@ -188,6 +132,8 @@ function App() {
                 setLoginData(loginResult.loginData);
                 setIsLoggedIn(true);
 
+                await getProfileData(loginResult.loginData);
+
                 if (popup.open.isAvailable()) {
                     const promise = popup.open({
                         title: 'Success',
@@ -195,8 +141,11 @@ function App() {
                         buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
                     });
                     const buttonId = await promise;
-                    checkIn(loginResult.loginData);
-                    await getProfileData(loginResult.loginData);
+                    
+                    const result = await checkIn(loginResult.loginData);
+                    if(result == 1) {
+                        setShowCheckInAnimation(true);
+                    }
                 }
             } else {
                 console.log('User is not logged in');
@@ -214,7 +163,7 @@ function App() {
         }
     } catch (error) {
         console.error('Initialization error:', error);
-        setIsLoggedIn(false);
+        // setIsLoggedIn(false);
     } finally {
         setIsLoading(false);
         initRef.current = false;
