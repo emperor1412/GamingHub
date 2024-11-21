@@ -202,13 +202,12 @@ function App() {
     switch (activeTab) {
       case 'home':
         return <MainView 
-          user={user}           
-          loginData={loginData}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
+          getProfileData={getProfileData}
         />;      
       case 'tasks':
         return <Tasks />;      
@@ -216,13 +215,12 @@ function App() {
       //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
         return <MainView 
-          user={user} 
-          loginData={loginData}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
+          getProfileData={getProfileData}
         />;
     }
   };

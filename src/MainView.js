@@ -4,7 +4,7 @@ import locker from './images/locker.png';
 // import locker from './images/locker.svg';
 import leaderboard from './images/leaderboard.svg';
 // import leaderboard from './images/leaderboard.png';
-import ticket from './images/ticket.svg';
+import ticketIcon from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
@@ -22,14 +22,128 @@ import { popup } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 
-const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
+    const [kmpoint, setKmpoint] = useState(0);
+    const [ticket, setTicket] = useState(0);
+
     const carouselRef = useRef(null);
+
+    /*
+userProfile : {
+    "tUserId": "5000076292",
+    "tName": "Kaka Lala",
+    "tUserName": "",
+    "fslId": 0,
+    "pictureIndex": 3,
+    "link": 21201,
+    "claimRecord": [
+        {
+            "id": 7,
+            "uid": 21201,
+            "type": 20010,
+            "state": 1,
+            "num": 4000,
+            "ctime": 1731661421159,
+            "ltime": 1731661420158
+        },
+        {
+            "id": 6,
+            "uid": 21201,
+            "type": 30010,
+            "state": 0,
+            "num": 1,
+            "ctime": 1731661773099,
+            "ltime": 1731661773095
+        },
+        {
+            "id": 5,
+            "uid": 21201,
+            "type": 40010,
+            "state": 0,
+            "num": 1,
+            "ctime": 1731661773098,
+            "ltime": 1731661773095
+        },
+        {
+            "id": 4,
+            "uid": 21201,
+            "type": 30020,
+            "state": 0,
+            "num": 1,
+            "ctime": 1731661773097,
+            "ltime": 1731661773095
+        },
+        {
+            "id": 3,
+            "uid": 21201,
+            "type": 30010,
+            "state": 0,
+            "num": 1,
+            "ctime": 1731661773096,
+            "ltime": 1731661773095
+        },
+        {
+            "id": 2,
+            "uid": 21201,
+            "type": 30020,
+            "state": 0,
+            "num": 1,
+            "ctime": 1731661773095,
+            "ltime": 1731661773095
+        },
+        {
+            "id": 1,
+            "uid": 21201,
+            "type": 20020,
+            "state": 1,
+            "num": 9000,
+            "ctime": 1731661420158,
+            "ltime": 1731661420158
+        }
+    ],
+    "UserToken": [
+        {
+            "uid": 21201,
+            "prop_id": 10010,
+            "chain": 0,
+            "num": 251,
+            "lock_num": 0,
+            "ableNum": 251
+        },
+        {
+            "uid": 21201,
+            "prop_id": 10020,
+            "chain": 0,
+            "num": 12200,
+            "lock_num": 0,
+            "ableNum": 12200
+        },
+        {
+            "uid": 21201,
+            "prop_id": 20010,
+            "chain": 0,
+            "num": 50000,
+            "lock_num": 0,
+            "ableNum": 50000
+        },
+        {
+            "uid": 21201,
+            "prop_id": 20020,
+            "chain": 0,
+            "num": 100000,
+            "lock_num": 0,
+            "ableNum": 100000
+        }
+    ]
+}
+    */
+
 
     const onClickCheckIn = async () => {
         console.log('onClickCheckIn');
-        const result = await checkIn(loginData);
+        const result = await checkIn(shared.loginData);
         if(result == 1) {
             setShowCheckInAnimation(true);
         }
@@ -41,6 +155,23 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
 
         }
     }
+
+    const setupProfileData = async () => {
+        await getProfileData();
+        const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userKMPoint) {
+            setKmpoint(userKMPoint.num);
+        }
+
+        const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+        if (userTicket) {
+            setTicket(userTicket.num);
+        }
+    };
+
+    useEffect(() => {
+        setupProfileData();
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -118,15 +249,15 @@ const MainView = ({ user, loginData, checkInData, setShowCheckInAnimation, check
                         className="stat-item"
                         onClick={() => setShowProfileView(true)}
                     >
-                        <img src={ticket} alt="Stat 1" />
-                        <span>3</span>
+                        <img src={ticketIcon} alt="Stat 1" />
+                        <span>{ticket}</span>
                     </button>
                     <button 
                         className="stat-item"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={km} alt="Stat 1" />
-                        <span>24.4</span>
+                        <span>{kmpoint}</span>
                     </button>
                     <div className="stat-item">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>

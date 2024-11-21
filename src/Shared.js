@@ -154,11 +154,10 @@ const shared = {
                 }
             });
 
-            console.log('UserProfile Response:', response);
             const data = await response.json();
+            console.log('UserProfile Response:', data);
 
             if (data.code === 0) {
-                console.log('UserProfile Data:', data);
                 const userProfileData = data.data;
                 shared.userProfile = userProfileData;
 
