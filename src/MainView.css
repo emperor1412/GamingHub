@@ -14,10 +14,6 @@
     transition: opacity 0.2s;
 }
 
-.profile-pic:hover {
-    opacity: 0.8;
-}
-
 /* Header Styles */
 .stats-header {
     position: fixed;
