@@ -108,7 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px 16px 0;
+  padding: 16px 12px 16px 0;
   background: rgba(255, 255, 255, 0);
   border-radius: 12px;
   position: relative;
@@ -139,7 +139,8 @@
   gap: 14px;
   margin-right: 10px;
   min-width: 100px;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
 }
 
 .profile-item-value {
@@ -148,6 +149,7 @@
   font-style: italic;
   color: white;
   font-size: 16px;
+  order: 2;
 }
 
 .profile-claim {
@@ -161,6 +163,7 @@
   text-transform: uppercase;
   font-style: italic;
   font-family: 'PPNeueMachina', sans-serif;
+  order: 1;
 }
 
 .profile-item-arrow {
