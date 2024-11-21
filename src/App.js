@@ -272,7 +272,7 @@ function App() {
             setShowCheckInView(true);
           }}>
             <div className="checkin-content">
-              <img src={checkInAnimation} alt="Check In Animation" />
+              <img src={checkInAnimation} alt="Check In Animation" className="checkin-animation-img"/>
               <div className="checkin-text">
                 <div>CHECK IN FOR</div>
                 <div className="days">

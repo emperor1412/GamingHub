@@ -182,21 +182,28 @@ p {
   height: 100%;
 }
 
-.checkin-animation-button img {
-  width: 100%;
-  /* max-width: 430px; */
+.checkin-animation-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+  width: 80%;
   height: auto;
   object-fit: contain;
+  max-height: 70vh;
 }
 
 .checkin-text {
   color: white;
   font-family: 'PPNeueMachina', sans-serif;
   font-style: italic;
-  margin-top: -70px;
   text-align: center;
-  position: relative;
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
+  width: 100%;
 }
 
 .checkin-text .days {
