@@ -8,7 +8,7 @@
 .outside-content {
   overflow-y: auto;
   flex: 1;
-  height: calc(90vh);
+  height: calc(99vh);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   position: relative;
@@ -17,7 +17,7 @@
 
 .inside-content {
   /* max-width: 100%; */
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
