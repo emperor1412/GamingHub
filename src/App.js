@@ -68,6 +68,8 @@ function App() {
         if (checkInResult.needRelogin) {
             const loginResult = await shared.login(initDataRaw);
             if (loginResult.success) {
+                setLoginData(loginResult.loginData);
+                setIsLoggedIn(true);
                 return await checkIn(loginResult.loginData);
             }
         }

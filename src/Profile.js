@@ -18,7 +18,7 @@ const Profile = ({ onClose, getProfileData }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
     
     useEffect(() => {
-        // getProfileData();
+        getProfileData();
     }, []);
 
     return (

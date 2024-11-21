@@ -112,11 +112,10 @@ const shared = {
                 }
             });
 
-            console.log('CheckIn Response:', response);
             const data = await response.json();
+            console.log('CheckIn Response:', data);
 
             if (data.code === 0) {
-                console.log('CheckIn Data:', data);
                 return {
                     success: true,
                     data: data.data,
