@@ -80,8 +80,22 @@ function App() {
     catch (error) {
       console.error('CheckIn error:', error);
       retVal = 2;
-      if(data.code === 102001) {
-        login();
+      if(data.code === 102001 || data.code === 102002) {
+        const loginResult = await shared.login(initDataRaw);
+
+        if (loginResult.success) {
+          await checkIn(loginResult.loginData);
+
+        } else {
+          console.log('User is not logged in');
+          setIsLoggedIn(false);
+          const promise = popup.open({
+            title: 'Error Checking-in',
+            message: `Error code:${JSON.stringify(data)}`,
+            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+          });
+          const buttonId = await promise;
+        }
       }
       else {
         const promise = popup.open({
@@ -135,8 +149,16 @@ function App() {
     }
     catch (error) {
         console.error('CheckIn error:', error);
-        if (data.code === 102001) {
-            // login();
+        if (data.code === 102001 || data.code === 102002) {
+          const loginResult = await shared.login(initDataRaw);
+          if (loginResult.success) {
+              setLoginData(loginResult.loginData);
+              setIsLoggedIn(true);
+              await getProfileData(loginResult.loginData);
+          } else {
+              console.log('User is not logged in');
+              setIsLoggedIn(false);
+          }
         }
         else {
             const promise = popup.open({
@@ -153,102 +175,51 @@ function App() {
 
 
   const login = async () => {
-    // Check if already initialized
-    // if (initRef.current) {
-    //   console.log('App already initialized');
-    //   return;
-    // }
-    
     try {
-      setIsLoading(true);
-      initRef.current = true;  // Mark as initialized
-      
-      console.log('Initializing app...');            
+        setIsLoading(true);
+        initRef.current = true;
 
-      if (initDataRaw) {
-        // Here you can make an API call to your backend to verify/login the user
-        try {
-          let params = JSON.stringify({
-            link: '1',
-            initData: initDataRaw
-          });
-          console.log('Login params:', params);
+        console.log('Initializing app...');            
 
-          // Example API call (replace with your actual API endpoint)
-          const response = await fetch('https://gm14.joysteps.io/api/app/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: params
-          });
+        if (initDataRaw) {
+            const loginResult = await shared.login(initDataRaw);
+            
+            if (loginResult.success) {
+                setLoginData(loginResult.loginData);
+                setIsLoggedIn(true);
 
-          console.log('Login Response:', response);
+                if (popup.open.isAvailable()) {
+                    const promise = popup.open({
+                        title: 'Success',
+                        message: "Login Success",
+                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                    });
+                    const buttonId = await promise;
+                    checkIn(loginResult.loginData);
+                    await getProfileData(loginResult.loginData);
+                }
+            } else {
+                console.log('User is not logged in');
+                setIsLoggedIn(false);
 
-          // setLoginData("");
-          // setIsLoggedIn(true);
-          
-          if (response.ok) {
-            const data = await response.json();
-            console.log('Login data:', data);
-
-            if(data.code !== 0) {
-              console.log('User is not logged in');
-              setIsLoggedIn(false);
-
-              if (popup.open.isAvailable()) {
-                // popup.isOpened() -> false
-                const promise = popup.open({
-                  title: 'Error',
-                  message: data.msg,
-                  buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                // popup.isOpened() -> true
-                const buttonId = await promise;
-                // popup.isOpened() -> false
-              }
-
+                if (popup.open.isAvailable()) {
+                    const promise = popup.open({
+                        title: 'Error',
+                        message: loginResult.error,
+                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                    });
+                    const buttonId = await promise;
+                }
             }
-            else {                
-              const loginDataValue = data.data;  // Store value in local variable
-              shared.loginData = loginDataValue;  // Store value in shared object
-
-              setLoginData(loginDataValue);
-              setIsLoggedIn(true);
-
-              if (popup.open.isAvailable()) {
-                const promise = popup.open({
-                  title: 'Success',
-                  message: "Login Success",
-                  buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                const buttonId = await promise;
-                checkIn(loginDataValue);  // Use local variable
-                await getProfileData(loginDataValue);  // Pass login data directly
-              }
-            }
-
-          } else {
-            console.error('Login failed');
-            setIsLoggedIn(false);
-          }
-          
-
-          initRef.current = false;  // Reset on error
-          
-        } catch (error) {
-          console.error('Login error:', error);
-          setIsLoggedIn(false);
         }
-      }
     } catch (error) {
-      console.error('Initialization error:', error);
-      setIsLoggedIn(false);
-      initRef.current = false;  // Reset on error
+        console.error('Initialization error:', error);
+        setIsLoggedIn(false);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
+        initRef.current = false;
     }
-  };
+};
 
   useEffect(() => {
     console.log('App useEffect called');

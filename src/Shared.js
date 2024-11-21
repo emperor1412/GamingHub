@@ -1,4 +1,3 @@
-
 import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
@@ -49,6 +48,60 @@ const shared = {
     userProfile : null,
     loginData : null,
     user : null,
-}
+
+    login: async (initDataRaw) => {
+        try {
+            let params = JSON.stringify({
+                link: '1',
+                initData: initDataRaw
+            });
+            console.log('Login params:', params);
+
+            const response = await fetch('https://gm14.joysteps.io/api/app/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: params
+            });
+
+            console.log('Login Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login data:', data);
+                
+                if (data.code === 0) {
+                    const loginDataValue = data.data;
+                    shared.loginData = loginDataValue;
+                    return {
+                        success: true,
+                        loginData: loginDataValue,
+                        data: data
+                    };
+                } else {
+                    return {
+                        success: false,
+                        error: data.msg,
+                        data: data
+                    };
+                }
+            } else {
+                return {
+                    success: false,
+                    error: 'Login failed',
+                    data: null
+                };
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
+        }
+    }
+};
 
 export default shared;
