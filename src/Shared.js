@@ -167,14 +167,16 @@ const shared = {
                         text: shared.mappingText[record.prop_id],
                         value: record.num,
                         showClaim: false,
-                        showArrow: false
+                        showArrow: false,
+                        record: record
                     })),
                     ...userProfileData.claimRecord.map(record => ({
                         icon: shared.mappingIcon[record.type],
                         text: shared.mappingText[record.type],
                         value: record.num,
                         showClaim: true,
-                        showArrow: true
+                        showArrow: true,
+                        record: record
                     }))
                 ];
 
