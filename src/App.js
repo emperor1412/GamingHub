@@ -5,6 +5,7 @@ import Tasks from './Tasks';
 import CheckIn from './CheckIn';
 import Profile from './Profile';
 import FSLIDTest from './FSLIDTest';
+import Frens from './Frens';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -214,6 +215,8 @@ function App() {
         return <Tasks />;
       case 'fslid':
         return <FSLIDTest />;
+      case 'frens':
+        return <Frens />;
       // case 'checkin':
       //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
