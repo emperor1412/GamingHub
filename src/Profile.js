@@ -10,13 +10,70 @@ import ID_selected from './images/ID_selected.svg';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 
-import { popup } from '@telegram-apps/sdk';
+import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
+import FSLAuthorization from 'fsl-authorization';
 
 const Profile = ({ onClose, getProfileData }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+    console.log('Current Window URL:', window.location.href);    
+    const onClickClaim = (item) => {
+        console.log('Claim:', item);
+
+        const FSL_ID_URL = 'https://gm3.joysteps.io/login'; // 'https://id.fsl.com/login'
+
+        // const REDIRECT_URL = 'https://t.me/TestFSL_bot/';
+        const REDIRECT_URL = 'http://192.168.1.33:3000';
+        // const REDIRECT_URL = window.location.href; 
+
+
+        const fslAuthorization = FSLAuthorization.init({
+            responseType: 'code', // 'code' or 'token'
+            appKey: 'MiniGame',
+            redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+            scope: 'basic%20wallet', // Grant Scope
+            state: 'test',
+            usePopup: true // Popup a window instead of jump to
+        });
+        fslAuthorization.signIn().then((code) => {
+            if (code) {
+              // Implement your code here
+                console.log('FSL Login, Code:', code);
+            }
+        });
+        
+        /*
+        // Construct login URL with necessary parameters
+        const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
+            client_id: 'MiniGame',
+            redirect_uri: REDIRECT_URL,
+            response_type: 'code',
+            state: 'test', // Generate random state for security verification
+        })
+
+        // Use Telegram Mini App API to open built-in browser
+        // openLink(loginUrl, {
+        //     tryBrowser: 'chrome',
+        //     tryInstantView: true,
+        // })
+
+        // // Alternative way 1: Using window.open
+        // window.open(loginUrl, '_blank');
+
+        // Alternative way 2: Using location.href
+        window.location.href = loginUrl;
+
+        // Alternative way 3: Using an anchor element
+        // const anchor = document.createElement('a');
+        // anchor.href = loginUrl;
+        // anchor.target = '_self';
+        // anchor.click();
+        */
+    }
+
     
+
     useEffect(() => {
         getProfileData(shared.loginData);
     }, []);
@@ -68,7 +125,7 @@ const Profile = ({ onClose, getProfileData }) => {
                                         </div>
                                         <div className="profile-item-right">
                                             {item.showClaim && (
-                                                <button className="profile-claim">Claim</button>
+                                                <button className="profile-claim" onClick={() => onClickClaim(item)}>Claim</button>
                                             )}
                                             <span className="profile-item-value">{item.value}</span>
                                         </div>

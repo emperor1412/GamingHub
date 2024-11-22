@@ -4,6 +4,7 @@ import MainView from './MainView';
 import Tasks from './Tasks';
 import CheckIn from './CheckIn';
 import Profile from './Profile';
+import FSLIDTest from './FSLIDTest';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -210,7 +211,9 @@ function App() {
           getProfileData={getProfileData}
         />;      
       case 'tasks':
-        return <Tasks />;      
+        return <Tasks />;
+      case 'fslid':
+        return <FSLIDTest />;
       // case 'checkin':
       //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
@@ -317,7 +320,10 @@ function App() {
             <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
               <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
-            <button onClick={() => setShowProfileView(true)} className={activeTab === 'fslid' ? 'active' : ''}>
+            {/* <button onClick={() => setShowProfileView(true)} className={activeTab === 'fslid' ? 'active' : ''}>
+              <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
+            </button> */}
+            <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
             </button>
           </nav>

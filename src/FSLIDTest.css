@@ -1,0 +1,54 @@
+.fslid-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  overflow: auto;
+  padding-bottom: 100px;
+}
+
+.fslid-container span {
+  color: white;
+  font-family: 'PPNeueMachina', sans-serif;
+  font-style: italic;
+  font-size: 16px;
+}
+
+.fslid-container pre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  color: #C07BFF;
+  font-size: 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+
+.fslid-button {
+  background: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 12px 24px;
+  font-family: 'PPNeueMachina', sans-serif;
+  font-style: italic;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+  max-width: 200px;
+}
+
+.fslid-button:hover {
+  opacity: 0.9;
+}
+
+.fslid-button:active {
+  transform: scale(0.98);
+}
+
+.fslid-button.secondary {
+  background: transparent;
+  border: 2px solid #8B5CF6;
+  color: #C07BFF;
+}
