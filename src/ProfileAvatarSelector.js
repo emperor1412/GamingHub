@@ -70,7 +70,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             className="profile-avatar"
           />
           <div>
-            <div className="profile-username">RUNNER</div>
+            <div className="profile-username">{shared.user.firstName}</div>
             <div className="profile-id">
              <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
              4CH4H9W2...AaCFChF
