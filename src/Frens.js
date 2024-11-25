@@ -11,6 +11,8 @@ import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/link.svg';
 import particle from './images/particle.svg';
+import lock_trophy from './images/lock_trophy.png';
+import close from './images/close.svg';
 
 const Frens = () => {
   const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
@@ -297,7 +299,7 @@ const Frens = () => {
                   />
                 </div>
                 <div className="trophy-overlay-lock-content">
-                  <img src={locker} alt="Lock" className="trophy-overlay-lock" />
+                  <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
                   <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
                   <p className="trophy-overlay-description">
                     REFER <span className="bold-text">{selectedTrophy.min} FRIENDS</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!

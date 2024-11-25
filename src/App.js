@@ -6,6 +6,7 @@ import CheckIn from './CheckIn';
 import Profile from './Profile';
 import FSLIDTest from './FSLIDTest';
 import Frens from './Frens';
+import ScratchTest from './ScratchTest';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -217,6 +218,8 @@ function App() {
         return <FSLIDTest />;
       case 'frens':
         return <Frens />;
+      case 'market':
+        return <ScratchTest />;
       // case 'checkin':
       //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
