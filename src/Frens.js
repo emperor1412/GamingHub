@@ -18,8 +18,8 @@ const Frens = () => {
   const [showOverlay, setShowOverlay] = useState(false);
 
   const mockFriends = [
-    { id: 1, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 2, name: 'Chonky', tickets: 3, points: 267 },
+    // { id: 1, name: 'Chonky', tickets: 3, points: 267 },
+    // { id: 2, name: 'Chonky', tickets: 3, points: 267 },
     // { id: 3, name: 'Chonky', tickets: 3, points: 267 },
     // { id: 4, name: 'Chonky', tickets: 3, points: 267 },
     // { id: 5, name: 'Chonky', tickets: 3, points: 267 },
@@ -150,6 +150,35 @@ const Frens = () => {
     setSelectedTrophy(null);
   };
 
+  const renderFriendsList = () => {
+    return (
+      <div className="friends-list-content">
+        {mockFriends.map(friend => (
+          <div key={friend.id} className="friend-item">
+            <img 
+              src={shared.avatars[0].src}
+              alt="Avatar" 
+              className="friend-avatar" 
+            />
+            <div className="friend-info">
+              <span className="friend-name">{friend.name}</span>
+              <div className="friend-stats">
+                <div className="friend-stat">
+                  <img src={ticketIcon} alt="Tickets" className="stat-icon" />
+                  <span>{friend.tickets}</span>
+                </div>
+                <div className="friend-stat">
+                  <img src={gmtIcon} alt="GMT" className="stat-icon" />
+                  <span>{friend.points}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="frens-content">
       <div className="frens-inner-content">
@@ -187,28 +216,7 @@ const Frens = () => {
               </button>
             </div>
             <div className="friends-list">
-              {mockFriends.map(friend => (
-                <div key={friend.id} className="friend-item">
-                  <img 
-                    src={shared.avatars[0].src}
-                    alt="Avatar" 
-                    className="friend-avatar" 
-                  />
-                  <div className="friend-info">
-                    <span className="friend-name">{friend.name}</span>
-                    <div className="friend-stats">
-                      <div className="friend-stat">
-                      <img src={ticketIcon} alt="Tickets" className="stat-icon" />
-                        <span>{friend.tickets}</span>
-                      </div>
-                      <div className="friend-stat">
-                      <img src={gmtIcon} alt="GMT" className="stat-icon" />
-                        <span>{friend.points}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {renderFriendsList()}
             </div>
             <div className="invite-button-container">
               <button className="invite-button">
