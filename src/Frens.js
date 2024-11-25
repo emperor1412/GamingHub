@@ -18,12 +18,12 @@ const Frens = () => {
   const [showOverlay, setShowOverlay] = useState(false);
 
   const mockFriends = [
-    // { id: 1, name: 'Chonky', tickets: 3, points: 267 },
-    // { id: 2, name: 'Chonky', tickets: 3, points: 267 },
-    // { id: 3, name: 'Chonky', tickets: 3, points: 267 },
-    // { id: 4, name: 'Chonky', tickets: 3, points: 267 },
-    // { id: 5, name: 'Chonky', tickets: 3, points: 267 },
-    // { id: 6, name: 'Chonky', tickets: 3, points: 267 }
+    { id: 1, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 2, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 3, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 4, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 5, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 6, name: 'Chonky', tickets: 3, points: 267 }
   ];
 
   /*
@@ -116,6 +116,10 @@ const Frens = () => {
     // { id: 8, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
     // { id: 9, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
   ];
+
+  const onClickShareStory = () => {
+    console.log('Share story');
+  };
 
   const handleTrophyClick = (trophy) => {
     setSelectedTrophy(trophy);
@@ -249,13 +253,13 @@ const Frens = () => {
                     className={`trophy-item ${trophy.status}`}
                     onClick={() => handleTrophyClick(trophy)}
                   >
+                      {(trophy.status === 'locked' || trophy.status === 'ready') && (
+                        <div className="trophy-overlay"></div>
+                      )}
                     <div className="trophy-content">
                       <span className="trophy-icon">
                         <img src={trophy.icon} alt="Trophy" />
                       </span>
-                      {(trophy.status === 'locked' || trophy.status === 'ready') && (
-                        <div className="trophy-overlay"></div>
-                      )}
                       {trophy.status === 'locked' && (
                         <img src={locker} alt="Locked" className="trophy-status-icon" />
                       )}
@@ -318,9 +322,13 @@ const Frens = () => {
                 <p className="trophy-overlay-description">
                   GREAT JOB! YOU'RE ARE AN INFLUENTIAL MEMBER OF THE COMMUNITY!
                 </p>
-                <button className="share-story-button">
+                <button className="share-story-button" onClick={onClickShareStory}>
                   SHARE A STORY
                 </button>
+                <div className="trophy-reward">
+                  <img src={gmtIcon} alt="GMT" className="stat-icon" />
+                  <span>267</span>
+                </div>
               </>
             ) : (
               <>

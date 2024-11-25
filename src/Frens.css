@@ -228,8 +228,8 @@
 
 .trophy-item {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1;
+  width: 100px;
+  height: 100px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   text-align: center;
@@ -240,10 +240,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 100px;
   margin-left: auto;
   margin-right: auto;
-  border: none;
+  border: 1px solid transparent;
   padding: 0;
   cursor: pointer;
 }
@@ -258,8 +257,7 @@
 } */
 
 .trophy-item.unlocked {
-  /* background: rgba(85, 85, 85, 0.61); */
-  border: 1px solid #C07BFF;
+  border-color: #C07BFF;
 }
 
 .trophy-item.ready {
@@ -284,7 +282,7 @@
 .trophy-content {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -359,7 +357,7 @@
 .trophy-overlay {
   position: absolute;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -402,6 +400,8 @@
   overflow: visible;
   background: rgba(0, 0, 0, 0.9);
   border-radius: 16px;
+  max-height: 90vh;
+  justify-content: center;
 }
 
 .trophy-overlay-lock-content {
@@ -425,14 +425,15 @@
   font-style: italic;
   font-family: 'PPNeueMachina', sans-serif;
   text-transform: uppercase;
+  margin: 8px 0;
 }
 
 .trophy-overlay-description {
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
-  margin-top: 8px;
+  margin: 8px 0 16px;
   max-width: 280px;
   text-transform: uppercase;
   font-style: italic;
@@ -456,17 +457,19 @@
 }
 
 .share-story-button {
-  background: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 100%);
-  border: none;
+  background: var(--color-primary);
+  border: 1px solid #C07BFF;
   border-radius: 8px;
-  padding: 16px 32px;
-  color: white;
+  padding: 16px;
+  width: 100%;
+  color: #C07BFF;
   font-size: 14px;
   cursor: pointer;
   text-transform: uppercase;
   font-style: italic;
   font-family: 'PPNeueMachina', sans-serif;
-  margin-top: 16px;
+  margin: 8px 0;
+  max-width: 100%;
 }
 
 .trophy-overlay-requirement {
@@ -482,17 +485,17 @@
 .trophy-overlay-icon-container {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin: 10px 0;
   overflow: visible;
 }
 
 .trophy-overlay-icon {
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   position: relative;
   z-index: 1;
@@ -513,9 +516,9 @@
 
 .trophy-overlay-promotion {
   color: white;
-  font-size: 16px;
+  font-size: 12px;
   text-align: center;
-  margin-bottom: 16px;
+  margin: 8px 0;
   font-style: italic;
   font-family: 'PPNeueMachina', sans-serif;
   text-transform: uppercase;
@@ -549,4 +552,25 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+}
+
+.trophy-reward {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0px;
+  color: white;
+  font-size: 14px;
+  font-family: 'PPNeueMachina', sans-serif;
+  width: 100%;
+  max-width: 280px;
+  padding: 0px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.trophy-reward .stat-icon {
+  width: 20px;
+  height: 20px;
 }
