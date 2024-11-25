@@ -23,7 +23,12 @@ const Frens = () => {
     { id: 3, name: 'Chonky', tickets: 3, points: 267 },
     { id: 4, name: 'Chonky', tickets: 3, points: 267 },
     { id: 5, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 6, name: 'Chonky', tickets: 3, points: 267 }
+    { id: 6, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 7, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 8, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 9, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 10, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 11, name: 'Chonky', tickets: 3, points: 267 },
   ];
 
   /*
@@ -179,6 +184,8 @@ const Frens = () => {
             </div>
           </div>
         ))}
+        <div className="friend-item placeholder">
+        </div>
       </div>
     );
   };

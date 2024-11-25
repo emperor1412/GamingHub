@@ -32,6 +32,7 @@
   height: fit-content;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 40px; /* Tăng padding-bottom để tránh item cuối bị cut off */
 }
 
 .friends-list-content {
@@ -185,6 +186,8 @@
   height: 32px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 0 0 12px 12px;
+  z-index: 2; /* Thêm z-index để đảm bảo button luôn hiển thị trên cùng */
+
 }
 
 .invite-button {
