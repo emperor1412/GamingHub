@@ -10,9 +10,12 @@ import trophy_3 from './images/trophy_3.svg';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/link.svg';
+import particle from './images/particle.svg';
 
 const Frens = () => {
   const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
+  const [selectedTrophy, setSelectedTrophy] = useState(null);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const mockFriends = [
     { id: 1, name: 'Chonky', tickets: 3, points: 267 },
@@ -24,18 +27,33 @@ const Frens = () => {
   ];
 
   const trophies = [
-    { id: 1, name: 'Rookie', status: 'unlocked', icon: trophy_1 },
-    { id: 2, name: 'Rookie', status: 'unlocked', icon: trophy_2 },
-    { id: 3, name: 'Rookie', status: 'unlocked', icon: trophy_3 },
-    { id: 4, name: 'Rookie', status: 'ready', icon: trophy_1 },
-    { id: 5, name: 'Unlock', status: 'ready', icon: trophy_2 },
-    { id: 6, name: 'Locked', status: 'locked', icon: trophy_3 },
+    { id: 1, name: 'Rookie Recruiter', status: 'unlocked', icon: trophy_1, description: "You're just starting out. Keep sharing to climb the ranks!"},
+    { id: 2, name: 'Junior Ambassador', status: 'unlocked', icon: trophy_2, description: "Great job! You're becoming an influential member of the community"},
+    { id: 3, name: 'Senior Ambassador', status: 'unlocked', icon: trophy_3, description: "Impressive! Your efforts are making a significant impact" },
+    { id: 4, name: 'Master Connector', status: 'ready', icon: trophy_1, description: "Outstanding work! You're a key player in growing our community" },
+    { id: 5, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
+    { id: 6, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
     // { id: 7, name: 'Rookie', status: 'unlocked', icon: '🏆' },
     // { id: 8, name: 'Unlock', status: 'ready', icon: '🏆' },
     // { id: 9, name: 'Locked', status: 'locked', icon: '🏆' },
     // { id: 10, name: 'Locked', status: 'locked', icon: '🏆' },
     // { id: 11, name: 'Locked', status: 'locked', icon: '🏆' }
   ];
+
+  const handleTrophyClick = (trophy) => {
+    // if (trophy.status === 'ready') {
+      // Handle trophy claim
+      console.log('Claiming trophy:', trophy.id);
+    // } else {
+      setSelectedTrophy(trophy);
+      setShowOverlay(true);
+    // }
+  };
+
+  const closeOverlay = () => {
+    setShowOverlay(false);
+    setSelectedTrophy(null);
+  };
 
   return (
     <div className="frens-content">
@@ -126,12 +144,7 @@ const Frens = () => {
                   <button 
                     key={trophy.id} 
                     className={`trophy-item ${trophy.status}`}
-                    onClick={() => {
-                      if (trophy.status === 'ready') {
-                        // Handle trophy claim
-                        console.log('Claiming trophy:', trophy.id);
-                      }
-                    }}
+                    onClick={() => handleTrophyClick(trophy)}
                   >
                     <div className="trophy-content">
                       <span className="trophy-icon">
@@ -155,6 +168,37 @@ const Frens = () => {
             </div>
           </div>
         )}
+
+        {showOverlay && selectedTrophy && (
+          <div className="trophy-overlay-container" onClick={closeOverlay}>
+            <div className="trophy-overlay-content" onClick={closeOverlay}>
+              {/* <button className="trophy-overlay-close" onClick={closeOverlay}>×</button> */}
+              
+              <div className="trophy-overlay-requirement">
+                {selectedTrophy.status === 'locked' ? '1-4 INVITES' : '5-9 INVITES'}
+              </div>
+
+              <div className="trophy-overlay-icon-container">
+                <img 
+                  src={selectedTrophy.icon} 
+                  alt={selectedTrophy.name} 
+                  className="trophy-overlay-icon"
+                />
+                <img 
+                  src={particle} 
+                  alt="Particle" 
+                  className="trophy-overlay-particle" 
+                />
+              </div>
+
+              <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+              <p className="trophy-overlay-description">
+                {selectedTrophy.description}
+              </p>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

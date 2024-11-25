@@ -289,7 +289,7 @@
 .trophy-name {
   font-size: 12px;
   position: absolute;
-  bottom: -24px;
+  bottom: -32px;
   left: 0;
   width: 100%;
   text-align: center;
@@ -353,4 +353,102 @@
   width: 40px;
   height: 40px;
   z-index: 3;
+}
+
+.trophy-overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.trophy-overlay-content {
+  padding: 40px;
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: visible;
+}
+
+.trophy-overlay-requirement {
+  color: white;
+  font-size: 16px;
+  font-style: italic;
+  margin-bottom: 24px;
+  font-family: 'PPNeueMachina', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.trophy-overlay-icon-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 60px 0;
+  overflow: visible;
+}
+
+.trophy-overlay-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+
+.trophy-overlay-icon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.trophy-overlay-title {
+  font-size: 28px;
+  color: white;
+  text-align: center;
+  margin-bottom: 16px;
+  font-style: italic;
+  font-family: 'PPNeueMachina', sans-serif;
+  text-transform: uppercase;
+}
+
+.trophy-overlay-description {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 0;
+  max-width: 350px;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.trophy-overlay-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
 }
