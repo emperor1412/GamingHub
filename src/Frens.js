@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { shareStory } from '@telegram-apps/sdk';
+
 import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
@@ -19,6 +21,7 @@ const Frens = () => {
   const [selectedTrophy, setSelectedTrophy] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [trophies, setTrophies] = useState([]);
+  const [friendsData, setFriendsData] = useState([]);
 
   
 
@@ -147,7 +150,7 @@ const Frens = () => {
       const data = await response.json();
       console.log('Unlock trophy data:', data);
       if(data.code === 0) {
-        console.log('Trophy unlocked:', data.msg);
+        console.log('Trophy unlocked success');
         getTrophyData();
       }
       else if (data.code === 102002 || data.code === 102001) {
@@ -165,23 +168,174 @@ const Frens = () => {
     }
   };
 
-  const mockFriends = [
-    { id: 1, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 2, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 3, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 4, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 5, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 6, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 7, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 8, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 9, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 10, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 11, name: 'Chonky', tickets: 3, points: 267 },
-  ];  
+  /*
+
+  friends data from server:
+  {
+  url: /app/frensData
+
+    "code": 0,
+    "data": {
+        "pageSize": 10,
+        "pageNo": 10,
+        "totalPages": 10,
+        "totalRecords": 99,
+        "list": [
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            },
+            {
+                "name": "t_name",
+                "ticket": 0,
+                "kmPoint": 0,
+                "pictureIndex": 11
+            }
+        ],
+        "prePageNo": 9,
+        "nextPageNo": 10,
+        "prePage": true,
+        "nextPage": false
+    }
+}
+
+  */
+  
+  const getFriendsData = async (depth = 0) => {
+    if (depth > 3) {
+      console.error('Get friends data failed after 3 attempts');
+      return;
+    }
+
+    const response = await fetch(`${shared.server_url}/api/app/frensData?token=${shared.loginData.token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Friends data:', data);
+      if(data.code === 0) {
+        const friendsData = data.data.list.map(friend => ({
+          name: friend.name,
+          ticket: friend.ticket,
+          kmPoint: friend.kmPoint,
+          pictureIndex: friend.pictureIndex
+        }));
+
+        setFriendsData(friendsData);
+      }
+      else if (data.code === 102002 || data.code === 102001) {
+        console.error('Friends data error:', data.msg);
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          getFriendsData(depth + 1);
+        }
+        else {
+          console.error('Login failed:', result.error);
+        }
+      }
+    } else {
+      console.error('Friends data error:', response);
+    }
+  };
+
+  // url: /app/sharingTrophy
+
+  const shareStoryAPI = async (trophyId, depth = 0) => {
+    if (depth > 3) {
+      console.error('Share story API failed after 3 attempts');
+      return;
+    }
+    const response = await fetch(`${shared.server_url}/api/app/sharingTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Share story API data:', data);
+      if(data.code === 0) {
+        console.log('Story shared API called success');
+      }
+      else if (data.code === 102002 || data.code === 102001) {
+        console.error('Share story data error:', data.msg);
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          shareStoryAPI(trophyId, depth + 1);
+        }
+        else {
+          console.error('Login failed:', result.error);
+        }
+      }
+    } else {
+      console.error('Share story API data error:', response);
+    }
+  };
 
   const onClickShareStory = () => {
     console.log('Share story');
     closeOverlay();
+
+    if (shareStory.isSupported()) {
+        shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a', 
+          {
+            text: 'Yay! I just unlocked a trophy on FSL! 🏆',
+            widgetLink: {
+              url:'https://t.me/TestFSL_bot/fslhub/',
+              name: 'FSL Hub'
+            }
+          });
+        shareStoryAPI(selectedTrophy.id);
+    }
   };
 
   const handleTrophyClick = (trophy) => {
@@ -191,29 +345,6 @@ const Frens = () => {
     if (trophy.status === 'ready') {
       console.log('Unlocked trophy:', trophy.name);
       unlockTrophy(trophy.id);
-    }
-  };
-
-  const getTrophyContent = (trophy) => {
-    if (trophy.status === 'locked') {
-      return {
-        requirement: ``,
-        description: (
-          <>
-            REFER <span className="bold-text">{trophy.min} FRIENDS</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
-          </>
-        )
-      };
-    } else if (trophy.status === 'ready') {
-      return {
-        requirement: `${trophy.min}-${trophy.max} INVITES`,
-        description: trophy.description
-      };
-    } else {
-      return {
-        requirement: `${trophy.min}-${trophy.max} INVITES`,
-        description: trophy.description
-      };
     }
   };
 
@@ -260,17 +391,34 @@ const Frens = () => {
       // { id: 9, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
     ]);
     */
+   
+  /*
+  setFriendsData([
+    { pictureIndex: 1, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 2, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 3, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 4, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 5, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 6, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 7, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 8, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 9, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 10, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    { pictureIndex: 11, name: 'Chonky', ticket: 3, kmPoint: 267 },
+  ]);  
+  */
 
     getTrophyData();
+    getFriendsData();
   }, []);
 
   const renderFriendsList = () => {
     return (
       <div className="friends-list-content">
-        {mockFriends.map(friend => (
-          <div key={friend.id} className="friend-item">
+        {friendsData.map(friend => (
+          <div className="friend-item">
             <img 
-              src={shared.avatars[0].src}
+              src={shared.avatars[friend.pictureIndex].src}
               alt="Avatar" 
               className="friend-avatar" 
             />
@@ -279,11 +427,11 @@ const Frens = () => {
               <div className="friend-stats">
                 <div className="friend-stat">
                   <img src={ticketIcon} alt="Tickets" className="stat-icon" />
-                  <span>{friend.tickets}</span>
+                  <span>{friend.ticket}</span>
                 </div>
                 <div className="friend-stat">
                   <img src={gmtIcon} alt="GMT" className="stat-icon" />
-                  <span>{friend.points}</span>
+                  <span>{friend.kmPoint}</span>
                 </div>
               </div>
             </div>
