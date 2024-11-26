@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
@@ -18,22 +18,11 @@ const Frens = () => {
   const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
   const [selectedTrophy, setSelectedTrophy] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [trophies, setTrophies] = useState([]);
 
-  const mockFriends = [
-    { id: 1, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 2, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 3, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 4, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 5, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 6, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 7, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 8, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 9, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 10, name: 'Chonky', tickets: 3, points: 267 },
-    { id: 11, name: 'Chonky', tickets: 3, points: 267 },
-  ];
+  
 
-  /*
+/*
   state: 0 = locked, 1 = ready, 2 = unlocked
 
   trophiesDataFromServer: [
@@ -88,41 +77,107 @@ const Frens = () => {
     ]
         */
 
-  const trophies = [
-    { 
-      id: 1, 
-      name: 'ROOKIE RECRUITER', 
-      status: 'unlocked', 
-      icon: trophy_1,
-      min: 1,
-      max: 4,
-      description: "GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!"
-    },
-    { 
-      id: 2, 
-      name: 'JUNIOR AMBASSADOR', 
-      status: 'ready', 
-      icon: trophy_2,
-      min: 5,
-      max: 9,
-      description: "CONGRATULATIONS! YOU'VE BEEN PROMOTED!"
-    },
-    { 
-      id: 3, 
-      name: 'SENIOR AMBASSADOR', 
-      status: 'locked', 
-      icon: trophy_3,
-      min: 10,
-      max: 19,
-      description: "TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!"
-    },
-    { id: 4, name: 'Master Connector', status: 'ready', icon: trophy_1, description: "Outstanding work! You're a key player in growing our community" },
-    { id: 5, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
-    { id: 6, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
-    // { id: 7, name: 'Master Connector', status: 'ready', icon: trophy_1, description: "Outstanding work! You're a key player in growing our community" },
-    // { id: 8, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
-    // { id: 9, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
-  ];
+  const trophyIcon = {
+    1: trophy_1,
+    2: trophy_2,
+    3: trophy_3,
+    4: trophy_1,
+    5: trophy_2,
+    6: trophy_3,
+  }
+
+  const getTrophyData = async (depth = 0) => {
+    if (depth > 3) {
+      console.error('Get trophy data failed after 3 attempts');
+      return;
+    }
+
+    const response = await fetch(`${shared.server_url}/api/app/trophiesData?token=${shared.loginData.token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Trophies data:', data);
+      if(data.code === 0) {
+        const trophiesData = data.data.map(trophy => ({
+          id: trophy.id,
+          name: trophy.name,
+          description: trophy.description,
+          min: trophy.min,
+          max: trophy.max,
+          state: trophy.state,
+          status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
+          icon: trophyIcon[trophy.id]
+        }));
+
+        setTrophies(trophiesData);
+      }
+      else if (data.code === 102002 || data.code === 102001) {
+        console.error('Trophies data error:', data.msg);
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          getTrophyData(depth + 1);
+        }
+        else {
+          console.error('Login failed:', result.error);
+        }
+      }
+    } else {
+      console.error('Trophies data error:', response);
+    }
+  };
+
+  const unlockTrophy = async (trophyId, depth = 0) => {
+    if (depth > 3) {
+      console.error('Unlock trophy failed after 3 attempts');
+      return;
+    }
+    const response = await fetch(`${shared.server_url}/api/app/unlockTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Unlock trophy data:', data);
+      if(data.code === 0) {
+        console.log('Trophy unlocked:', data.msg);
+        getTrophyData();
+      }
+      else if (data.code === 102002 || data.code === 102001) {
+        console.error('Unlock trophy data error:', data.msg);
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          unlockTrophy(trophyId, depth + 1);
+        }
+        else {
+          console.error('Login failed:', result.error);
+        }
+      }
+    } else {
+      console.error('Unlock trophy data error:', response);
+    }
+  };
+
+  const mockFriends = [
+    { id: 1, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 2, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 3, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 4, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 5, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 6, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 7, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 8, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 9, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 10, name: 'Chonky', tickets: 3, points: 267 },
+    { id: 11, name: 'Chonky', tickets: 3, points: 267 },
+  ];  
 
   const onClickShareStory = () => {
     console.log('Share story');
@@ -132,6 +187,11 @@ const Frens = () => {
   const handleTrophyClick = (trophy) => {
     setSelectedTrophy(trophy);
     setShowOverlay(true);
+
+    if (trophy.status === 'ready') {
+      console.log('Unlocked trophy:', trophy.name);
+      unlockTrophy(trophy.id);
+    }
   };
 
   const getTrophyContent = (trophy) => {
@@ -147,12 +207,12 @@ const Frens = () => {
     } else if (trophy.status === 'ready') {
       return {
         requirement: `${trophy.min}-${trophy.max} INVITES`,
-        description: `CONGRATULATIONS! YOU'VE BEEN PROMOTED!`
+        description: trophy.description
       };
     } else {
       return {
         requirement: `${trophy.min}-${trophy.max} INVITES`,
-        description: `GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!`
+        description: trophy.description
       };
     }
   };
@@ -161,6 +221,48 @@ const Frens = () => {
     setShowOverlay(false);
     setSelectedTrophy(null);
   };
+
+  useEffect(() => {
+    /*
+    setTrophies([
+      { 
+        id: 1, 
+        name: 'ROOKIE RECRUITER', 
+        status: 'unlocked', 
+        icon: trophy_1,
+        min: 1,
+        max: 4,
+        description: "GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!"
+      },
+      { 
+        id: 2, 
+        name: 'JUNIOR AMBASSADOR', 
+        status: 'ready', 
+        icon: trophy_2,
+        min: 5,
+        max: 9,
+        description: "CONGRATULATIONS! YOU'VE BEEN PROMOTED!"
+      },
+      { 
+        id: 3, 
+        name: 'SENIOR AMBASSADOR', 
+        status: 'locked', 
+        icon: trophy_3,
+        min: 10,
+        max: 19,
+        description: "TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!"
+      },
+      { id: 4, name: 'Master Connector', status: 'ready', icon: trophy_1, description: "Outstanding work! You're a key player in growing our community" },
+      { id: 5, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
+      { id: 6, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
+      // { id: 7, name: 'Master Connector', status: 'ready', icon: trophy_1, description: "Outstanding work! You're a key player in growing our community" },
+      // { id: 8, name: 'Elite Influencer', status: 'ready', icon: trophy_2, description: "Exceptional! You're among the top contributors" },
+      // { id: 9, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
+    ]);
+    */
+
+    getTrophyData();
+  }, []);
 
   const renderFriendsList = () => {
     return (
@@ -333,7 +435,7 @@ const Frens = () => {
                   </div>
                   <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
                   <p className="trophy-overlay-description">
-                    GREAT JOB! YOU'RE ARE AN INFLUENTIAL MEMBER OF THE COMMUNITY!
+                    {selectedTrophy.description}
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     SHARE A STORY
@@ -362,7 +464,7 @@ const Frens = () => {
                   </div>
                   <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
                   <p className="trophy-overlay-description">
-                    GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!
+                    {selectedTrophy.description}
                   </p>
                 </>
               )}
