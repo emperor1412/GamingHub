@@ -24,7 +24,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
     if (hasChanged) {
     //   onClose();
         console.log('ChangePicture:', selectedAvatar);
-        const response = await fetch(`https://gm14.joysteps.io/api/app/changePicture?token=${shared.loginData.token}&index=${selectedAvatar}`, {
+        const response = await fetch(`${shared.server_url}/api/app/changePicture?token=${shared.loginData.token}&index=${selectedAvatar}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

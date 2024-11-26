@@ -9,6 +9,7 @@ import avatar2 from './images/avatar2.svg';
 import avatar3 from './images/avatar3.svg';
 
 const shared = {
+    server_url: 'https://gm14.joysteps.io',
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -57,7 +58,7 @@ const shared = {
             });
             console.log('Login params:', params);
 
-            const response = await fetch('https://gm14.joysteps.io/api/app/login', {
+            const response = await fetch(`${shared.server_url}/api/app/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ const shared = {
 
     checkIn: async (loginData) => {
         try {
-            const response = await fetch(`https://gm14.joysteps.io/api/app/checkIn?token=${loginData.token}`, {
+            const response = await fetch(`${shared.server_url}/api/app/checkIn?token=${loginData.token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ const shared = {
 
     getProfileData: async (loginData) => {
         try {
-            const response = await fetch(`https://gm14.joysteps.io/api/app/userData?token=${loginData.token}`, {
+            const response = await fetch(`${shared.server_url}/api/app/userData?token=${loginData.token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
