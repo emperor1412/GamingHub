@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { shareStory } from '@telegram-apps/sdk';
+import { shareStory, shareURL } from '@telegram-apps/sdk';
 
 import './Frens.css';
 import shared from './Shared';
@@ -22,6 +22,9 @@ const Frens = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [trophies, setTrophies] = useState([]);
   const [friendsData, setFriendsData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePages, setHasMorePages] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   
 
@@ -245,13 +248,16 @@ const Frens = () => {
 
   */
   
-  const getFriendsData = async (depth = 0) => {
+  const getFriendsData = async (page = 1, depth = 0) => {
     if (depth > 3) {
       console.error('Get friends data failed after 3 attempts');
       return;
     }
 
-    const response = await fetch(`${shared.server_url}/api/app/frensData?token=${shared.loginData.token}`, {
+    setIsLoading(true);
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const response = await fetch(`${shared.server_url}/api/app/frensData?token=${shared.loginData.token}&page=${page}&pageSize=10`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -262,20 +268,22 @@ const Frens = () => {
       const data = await response.json();
       console.log('Friends data:', data);
       if(data.code === 0) {
-        const friendsData = data.data.list.map(friend => ({
+        const newFriendsData = data.data.list.map(friend => ({
           name: friend.name,
           ticket: friend.ticket,
           kmPoint: friend.kmPoint,
           pictureIndex: friend.pictureIndex
         }));
 
-        setFriendsData(friendsData);
+        setFriendsData(prev => page === 1 ? newFriendsData : [...prev, ...newFriendsData]);
+        setHasMorePages(data.data.nextPage);
+        setCurrentPage(page);
       }
       else if (data.code === 102002 || data.code === 102001) {
         console.error('Friends data error:', data.msg);
         const result = await shared.login(shared.initData);
         if (result.success) {
-          getFriendsData(depth + 1);
+          getFriendsData(page, depth + 1);
         }
         else {
           console.error('Login failed:', result.error);
@@ -284,6 +292,7 @@ const Frens = () => {
     } else {
       console.error('Friends data error:', response);
     }
+    setIsLoading(false);
   };
 
   // url: /app/sharingTrophy
@@ -336,6 +345,13 @@ const Frens = () => {
           });
         shareStoryAPI(selectedTrophy.id);
     }
+  };
+
+  const onClickInviteFriends = () => {
+    console.log('Invite friends');
+    const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
+    console.log('Invite friends URL:', url);
+    shareURL(url);
   };
 
   const handleTrophyClick = (trophy) => {
@@ -412,11 +428,19 @@ const Frens = () => {
     getFriendsData();
   }, []);
 
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    
+    if (scrollHeight - scrollTop <= clientHeight + 100 && !isLoading && hasMorePages) {
+      getFriendsData(currentPage + 1);
+    }
+  };
+
   const renderFriendsList = () => {
     return (
       <div className="friends-list-content">
-        {friendsData.map(friend => (
-          <div className="friend-item">
+        {friendsData.map((friend, index) => (
+          <div key={index} className="friend-item">
             <img 
               src={shared.avatars[friend.pictureIndex].src}
               alt="Avatar" 
@@ -437,8 +461,14 @@ const Frens = () => {
             </div>
           </div>
         ))}
-        <div className="friend-item placeholder">
+        {isLoading && (
+        <div className="friend-item loading" style={{
+          height: friendsData.length === 0 ? '100%' : 'auto'
+        }}>
+          Loading...
         </div>
+        )}
+        <div className="friend-item placeholder"></div>
       </div>
     );
   };
@@ -479,11 +509,11 @@ const Frens = () => {
                 Trophies
               </button>
             </div>
-            <div className="friends-list">
+            <div className="friends-list" onScroll={handleScroll}>
               {renderFriendsList()}
             </div>
             <div className="invite-button-container">
-              <button className="invite-button">
+              <button className="invite-button" onClick={onClickInviteFriends}>
                 invite friends
                 <img src={link} alt="Link" className="stat-icon" />
               </button>

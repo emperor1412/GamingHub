@@ -49,13 +49,14 @@ const shared = {
     profileItems : [],
     userProfile : null,
     loginData : null,
+    inviteCode: 0,
     initData : null,
     user : null,
 
     login: async (initDataRaw) => {
         try {
             let params = JSON.stringify({
-                link: '1',
+                link: `${shared.inviteCode}`,
                 initData: initDataRaw
             });
             console.log('Login params:', params);

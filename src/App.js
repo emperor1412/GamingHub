@@ -32,10 +32,14 @@ import shared from './Shared';
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
 function App() {
-  
   const { initDataRaw } = retrieveLaunchParams();
-  shared.initData = initDataRaw;
-  // console.log("initDataRaw: ", initDataRaw);
+  
+
+  // const hash = window.location.hash.slice(1);
+  // const hash = window.location.hash;
+  // const params = new URLSearchParams(hash);
+  // const tgWebAppStartParam = params.get('tgWebAppStartParam');
+  // console.log('tgWebAppStartParam:', tgWebAppStartParam); // "6.2"
 
   const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState(null);
@@ -178,6 +182,42 @@ function App() {
 
   useEffect(() => {
     console.log('App useEffect called');
+    shared.initData = initDataRaw;
+    // console.log("initDataRaw: ", initDataRaw);
+
+  // Get the hash without the # symbol
+    const hash = window.location.hash.substring(1);
+
+    // Create URLSearchParams object from the hash
+    const params = new URLSearchParams(hash);
+
+    // Get tgWebAppData parameter and decode it
+    const tgWebAppData = params.get('tgWebAppData');
+    const decodedData = decodeURIComponent(tgWebAppData);
+
+    // Create URLSearchParams object from the decoded data
+    const webAppParams = new URLSearchParams(decodedData);
+
+    // Get start_param
+    const startParam = webAppParams.get('start_param');
+    console.log('hash:', hash);
+    console.log('startParam:', startParam); // Will output: "invite_21201"
+
+    // get invite code from the start param
+    // sample param: "invite_21201__referral_1234__otherParam_5678"
+    let inviteCode = null;
+    if (startParam) {
+        const paramsArray = startParam.split('__');
+        for (const param of paramsArray) {
+            if (param.startsWith('invite_')) {
+                inviteCode = param.split('_')[1];
+                break;
+            }
+        }
+    }
+    console.log('Invite Code:', inviteCode);
+    shared.inviteCode = inviteCode;
+
     // Initialize Telegram Mini App
     init();
     miniApp.ready();
