@@ -126,6 +126,7 @@ const Frens = () => {
 
   const onClickShareStory = () => {
     console.log('Share story');
+    closeOverlay();
   };
 
   const handleTrophyClick = (trophy) => {
@@ -287,81 +288,84 @@ const Frens = () => {
 
         {showOverlay && selectedTrophy && (
           <div className="trophy-overlay-container" onClick={closeOverlay}>
-            <div className="trophy-overlay-content" onClick={closeOverlay}>
-            {selectedTrophy.status === 'locked' ? (
-              <>
-                
-                <div className="trophy-overlay-icon-container">
-                  <img 
-                    src={selectedTrophy.icon} 
-                    alt={selectedTrophy.name} 
-                    className="trophy-overlay-icon"
-                  />
-                </div>
-                <div className="trophy-overlay-lock-content">
-                  <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
-                  <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
+            <button className="trophy-overlay-close" onClick={closeOverlay}>
+              <img src={close} alt="Close" />
+            </button>
+            <div className="trophy-overlay-content" onClick={e => e.stopPropagation()}>
+              {selectedTrophy.status === 'locked' ? (
+                <>
+                  
+                  <div className="trophy-overlay-icon-container">
+                    <img 
+                      src={selectedTrophy.icon} 
+                      alt={selectedTrophy.name} 
+                      className="trophy-overlay-icon"
+                    />
+                  </div>
+                  <div className="trophy-overlay-lock-content">
+                    <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
+                    <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
+                    <p className="trophy-overlay-description">
+                      REFER <span className="bold-text">{selectedTrophy.min} FRIENDS</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
+                    </p>
+                  </div>
+                </>
+              ) : selectedTrophy.status === 'ready' ? (
+                <>
+                  <div className="trophy-overlay-requirement">
+                    {selectedTrophy.min}-{selectedTrophy.max} INVITES
+                  </div>
+                  <div className="trophy-overlay-icon-container">
+                    <img 
+                      src={selectedTrophy.icon} 
+                      alt={selectedTrophy.name} 
+                      className="trophy-overlay-icon"
+                    />
+                    <img 
+                      src={particle} 
+                      alt="Particle" 
+                      className="trophy-overlay-particle" 
+                    />
+                  </div>
+                  <div className="trophy-overlay-promotion">
+                    CONGRATULATIONS!<br />
+                    YOU'VE BEEN PROMOTED!
+                  </div>
+                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
                   <p className="trophy-overlay-description">
-                    REFER <span className="bold-text">{selectedTrophy.min} FRIENDS</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
+                    GREAT JOB! YOU'RE ARE AN INFLUENTIAL MEMBER OF THE COMMUNITY!
                   </p>
-                </div>
-              </>
-            ) : selectedTrophy.status === 'ready' ? (
-              <>
-                <div className="trophy-overlay-requirement">
-                  {selectedTrophy.min}-{selectedTrophy.max} INVITES
-                </div>
-                <div className="trophy-overlay-icon-container">
-                  <img 
-                    src={selectedTrophy.icon} 
-                    alt={selectedTrophy.name} 
-                    className="trophy-overlay-icon"
-                  />
-                  <img 
-                    src={particle} 
-                    alt="Particle" 
-                    className="trophy-overlay-particle" 
-                  />
-                </div>
-                <div className="trophy-overlay-promotion">
-                  CONGRATULATIONS!<br />
-                  YOU'VE BEEN PROMOTED!
-                </div>
-                <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
-                <p className="trophy-overlay-description">
-                  GREAT JOB! YOU'RE ARE AN INFLUENTIAL MEMBER OF THE COMMUNITY!
-                </p>
-                <button className="share-story-button" onClick={onClickShareStory}>
-                  SHARE A STORY
-                </button>
-                <div className="trophy-reward">
-                  <img src={gmtIcon} alt="GMT" className="stat-icon" />
-                  <span>267</span>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="trophy-overlay-requirement">
-                  {selectedTrophy.min}-{selectedTrophy.max} INVITES
-                </div>
-                <div className="trophy-overlay-icon-container">
-                  <img 
-                    src={selectedTrophy.icon} 
-                    alt={selectedTrophy.name} 
-                    className="trophy-overlay-icon"
-                  />
-                  <img 
-                    src={particle} 
-                    alt="Particle" 
-                    className="trophy-overlay-particle" 
-                  />
-                </div>
-                <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
-                <p className="trophy-overlay-description">
-                  GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!
-                </p>
-              </>
-            )}
+                  <button className="share-story-button" onClick={onClickShareStory}>
+                    SHARE A STORY
+                  </button>
+                  <div className="trophy-reward">
+                    <img src={gmtIcon} alt="GMT" className="stat-icon" />
+                    <span>267</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="trophy-overlay-requirement">
+                    {selectedTrophy.min}-{selectedTrophy.max} INVITES
+                  </div>
+                  <div className="trophy-overlay-icon-container">
+                    <img 
+                      src={selectedTrophy.icon} 
+                      alt={selectedTrophy.name} 
+                      className="trophy-overlay-icon"
+                    />
+                    <img 
+                      src={particle} 
+                      alt="Particle" 
+                      className="trophy-overlay-particle" 
+                    />
+                  </div>
+                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+                  <p className="trophy-overlay-description">
+                    GREAT JOB! YOU'VE JUST STARTED OUT, KEEP SHARING TO CLIMB THE RANKS!
+                  </p>
+                </>
+              )}
             </div>
           </div>
         )}

@@ -32,7 +32,7 @@
   height: fit-content;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 40px; /* Tăng padding-bottom để tránh item cuối bị cut off */
+  padding-bottom: 50px; /* Tăng padding-bottom để tránh item cuối bị cut off */
 }
 
 .friends-list-content {
@@ -93,10 +93,10 @@
 .tabs {
   display: flex;
   gap: 16px;
-  padding: 16px;
+  padding: 0px;
   flex-shrink: 0;
   width: 100%;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
   margin-bottom: 0;
 }
 
@@ -218,6 +218,7 @@
   height: fit-content;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 50px;
 }
 
 .trophies-grid {
@@ -370,7 +371,7 @@
 
 .trophy-status-icon {
   position: absolute;
-  top: -10px;
+  top: 0px;
   right: -10px;
   width: 40px;
   height: 40px;
@@ -448,10 +449,20 @@
   right: 16px;
   background: none;
   border: none;
-  color: white;
-  font-size: 24px;
+  padding: 8px;
   cursor: pointer;
-  padding: 4px;
+  z-index: 10;
+}
+
+.trophy-overlay-close img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.trophy-overlay-close:hover img {
+  opacity: 1;
 }
 
 .bold-text {
@@ -540,16 +551,6 @@
   display: flex;
   flex-direction: column;
 }
-
-.tabs {
-  flex-shrink: 0;
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  z-index: 1;
-}
-
-
 
 .bottom-navigation {
   flex-shrink: 0;
