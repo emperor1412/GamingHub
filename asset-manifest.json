@@ -1,10 +1,12 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.e9929d88.css",
-    "main.js": "/GamingHub/static/js/main.c08d4432.js",
+    "main.css": "/GamingHub/static/css/main.343e1c14.css",
+    "main.js": "/GamingHub/static/js/main.63d3c5b1.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
+    "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
     "static/media/avatar2.svg": "/GamingHub/static/media/avatar2.75632a601ed5de05197f05a3bcfe0465.svg",
     "static/media/snoop_dogg_raffle.svg": "/GamingHub/static/media/snoop_dogg_raffle.06a15f869141ad35633361c8af16aabe.svg",
+    "static/media/FSL Games Scratch Animation-02.png": "/GamingHub/static/media/FSL Games Scratch Animation-02.569a807f3e9afe1601dc.png",
     "static/media/avatar3.svg": "/GamingHub/static/media/avatar3.8a5c0ab3990234ac7955a5132805ba76.svg",
     "static/media/avatar1.svg": "/GamingHub/static/media/avatar1.fd11e5d20fcca79877c1d065948ef7ea.svg",
     "static/media/trophy_3.svg": "/GamingHub/static/media/trophy_3.92c38e56ad226fbe3352206c57fdbb8d.svg",
@@ -43,12 +45,12 @@
     "static/media/back.svg": "/GamingHub/static/media/back.4da4cb710ea609b39249af327e92892a.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.c7d87fce602708dc1de6bc453cfc6555.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.020cba5c4013ab28dbe7b18890613c58.svg",
-    "main.e9929d88.css.map": "/GamingHub/static/css/main.e9929d88.css.map",
-    "main.c08d4432.js.map": "/GamingHub/static/js/main.c08d4432.js.map",
+    "main.343e1c14.css.map": "/GamingHub/static/css/main.343e1c14.css.map",
+    "main.63d3c5b1.js.map": "/GamingHub/static/js/main.63d3c5b1.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e9929d88.css",
-    "static/js/main.c08d4432.js"
+    "static/css/main.343e1c14.css",
+    "static/js/main.63d3c5b1.js"
   ]
 }
