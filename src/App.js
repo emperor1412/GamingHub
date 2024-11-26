@@ -34,6 +34,7 @@ import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retr
 function App() {
   
   const { initDataRaw } = retrieveLaunchParams();
+  shared.initData = initDataRaw;
   // console.log("initDataRaw: ", initDataRaw);
 
   const [user, setUser] = useState(null);

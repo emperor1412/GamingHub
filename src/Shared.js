@@ -7,6 +7,7 @@ import energy from './images/energy.png';
 import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
 import avatar3 from './images/avatar3.svg';
+import { initData } from '@telegram-apps/sdk';
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
@@ -48,6 +49,7 @@ const shared = {
     profileItems : [],
     userProfile : null,
     loginData : null,
+    initData : null,
     user : null,
 
     login: async (initDataRaw) => {
