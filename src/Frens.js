@@ -327,7 +327,7 @@ const Frens = () => {
       }
     } else {
       console.error('Share story API data error:', response);
-    }
+    }   
   };
 
   const onClickShareStory = () => {
@@ -335,14 +335,20 @@ const Frens = () => {
     closeOverlay();
 
     if (shareStory.isSupported()) {
+
+      // only premium users can share stories with links
+      /*
+        const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
         shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a', 
           {
             text: 'Yay! I just unlocked a trophy on FSL! 🏆',
             widgetLink: {
-              url:'https://t.me/TestFSL_bot/fslhub/',
+              url:url,
               name: 'FSL Hub'
             }
           });
+          */
+        shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a');
         shareStoryAPI(selectedTrophy.id);
     }
   };
