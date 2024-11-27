@@ -5,7 +5,7 @@ import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import friendsIcon from './images/Friends_selected.svg';
-import gmtIcon from './images/gmt.svg';
+import kmIcon from './images/km.svg';
 import trophy_1 from './images/trophy_1.svg';
 import trophy_2 from './images/trophy_2.svg';
 import trophy_3 from './images/trophy_3.svg';
@@ -25,6 +25,7 @@ const Frens = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMorePages, setHasMorePages] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalFriends, setTotalFriends] = useState(0);
 
   
 
@@ -275,6 +276,7 @@ const Frens = () => {
           pictureIndex: friend.pictureIndex
         }));
 
+        setTotalFriends(data.data.totalRecords);
         setFriendsData(prev => page === 1 ? newFriendsData : [...prev, ...newFriendsData]);
         setHasMorePages(data.data.nextPage);
         setCurrentPage(page);
@@ -460,7 +462,7 @@ const Frens = () => {
                   <span>{friend.ticket}</span>
                 </div>
                 <div className="friend-stat">
-                  <img src={gmtIcon} alt="GMT" className="stat-icon" />
+                  <img src={kmIcon} alt="GMT" className="stat-icon" />
                   <span>{friend.kmPoint}</span>
                 </div>
               </div>
@@ -490,7 +492,7 @@ const Frens = () => {
           <div className="stat-item-frens">
             <img src={friendsIcon} alt="Friends" className="stat-icon" />
             <span className="stat-label">Friends</span>
-            <span className="stat-value">3</span>
+            <span className="stat-value">{totalFriends}</span>
           </div>
           <div className="stat-item-frens">
             <img src={ticketIcon} alt="Tickets" className="stat-icon" />
@@ -625,7 +627,7 @@ const Frens = () => {
                     SHARE A STORY
                   </button>
                   <div className="trophy-reward">
-                    <img src={gmtIcon} alt="GMT" className="stat-icon" />
+                    <img src={kmIcon} alt="GMT" className="stat-icon" />
                     <span>267</span>
                   </div>
                 </>
