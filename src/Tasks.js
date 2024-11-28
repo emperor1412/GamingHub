@@ -277,7 +277,7 @@ const Tasks = ({
 
     return (
         <>
-            <header className="stats-header">
+        <header className="stats-header">
                 <button 
                     className="profile-pic"
                     onClick={() => setShowProfileView(true)}
@@ -319,26 +319,7 @@ const Tasks = ({
                     </div>
                 </div>
             </header>
-
-            <div className="tasks-content">
-                <div className="tasks-inner-content">
-                    <section className="tasks-section">
-                        <h2 className="section-title">TIME-LIMITED TASKS <span className="arrow">›</span></h2>
-                        {tasksTimeLimited
-                            .filter(task => task.endTime)
-                            .map(task => renderTaskCard(task))}
-                    </section>
-
-                    <section className="tasks-section">
-                        <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
-                        {tasksTimeLimited
-                            .filter(task => !task.endTime)
-                            .map(task => renderTaskCard(task))}
-                    </section>
-                </div>
-            </div>
-
-            {showLearnTask && (
+            {showLearnTask ? (
                 <TasksLearn
                     task={showLearnTask}
                     onClose={() => setShowLearnTask(null)}
@@ -347,6 +328,26 @@ const Tasks = ({
                         fetchTasks();
                     }}
                 />
+            ) : (
+                <>
+                <div className="tasks-content">
+                    <div className="tasks-inner-content">
+                        <section className="tasks-section">
+                            <h2 className="section-title">TIME-LIMITED TASKS <span className="arrow">›</span></h2>
+                            {tasksTimeLimited
+                                .filter(task => task.endTime)
+                                .map(task => renderTaskCard(task))}
+                        </section>
+
+                        <section className="tasks-section">
+                            <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
+                            {tasksTimeLimited
+                                .filter(task => !task.endTime)
+                                .map(task => renderTaskCard(task))}
+                        </section>
+                    </div>
+                </div>
+                </>
             )}
         </>
     );

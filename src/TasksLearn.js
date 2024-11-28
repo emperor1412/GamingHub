@@ -122,8 +122,8 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
     };
 
     return (
-        <div className="learn-task-overlay">
-            <div className="learn-task-content">
+        <div className="tasks-content">
+            <div className="tasks-inner-content">
                 {renderContent()}
             </div>
         </div>
