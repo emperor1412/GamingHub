@@ -86,14 +86,14 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             )}
                         </>
                     ) : (
-                        <div className="result-container">
-                            <div className="result-icon">
-                                <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
-                            </div>
-                            {isCorrect ? (
-                                <>
-                                <h3>BINGO</h3>
-                                <p style={{ fontSize: '11px' }}>YOU'VE COMPLETED THE CRYPTO SLANG QUIZ!</p>
+                        isCorrect ? (
+                            <div className="result-container">
+                                <div className="result-icon">
+                                    <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
+                                </div>
+                                <div className="success-content">
+                                    <h3>BINGO</h3>
+                                    <p style={{ fontSize: '11px' }}>YOU'VE COMPLETED THE CRYPTO SLANG QUIZ!</p>
                                     <div className="reward-earned">
                                         <p>YOU'VE EARNED</p>
                                         <div className="reward-amount">
@@ -101,11 +101,18 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                             <span>{task.rewardList[0]?.amount || 0}</span>
                                         </div>
                                     </div>
-                                    <button className="tasks-okay-button" onClick={onClose}>
-                                        OKAY
-                                    </button>
-                                </>
-                            ) : (
+                                </div>
+                                <button className="tasks-okay-button" onClick={onClose}>
+                                    OKAY
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="result-container">
+                                <div className="fail-content">
+                                    <div className="result-icon">
+                                        <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
+                                    </div>
+                                </div>
                                 <button className="try-again-button" onClick={() => {
                                     setShowResult(false);
                                     setSelectedAnswer(null);
@@ -113,8 +120,8 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 }}>
                                     TRY AGAIN
                                 </button>
-                            )}
-                        </div>
+                            </div>
+                        )
                     )}
                 </div>
             );

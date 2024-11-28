@@ -89,11 +89,67 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     height: 100%;
     padding: 24px;
     box-sizing: border-box;
-    overflow-y: auto;
+    position: relative;    
+}
+
+.success-content
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+}
+
+.fail-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    min-height: 55vh;
+    justify-content: space-between;
+}
+
+.try-again-button {
+    background: #C07BFF;
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    padding: 8px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    margin-top: 16px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tasks-okay-button {
+    background: #C07BFF;
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    padding: 8px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    margin-top: 16px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .reward-earned {
@@ -129,22 +185,6 @@
 
 .reward-amount span {
     color: #ffffff;
-}
-
-.tasks-okay-button {
-    background: #C07BFF;
-    border: none;
-    border-radius: 8px;
-    color: rgb(255, 255, 255);
-    padding: 16px 32px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    margin: 0 auto;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    margin-top: 16px;
 }
 
 .next-button {
@@ -191,23 +231,7 @@
     object-fit: contain;
 }
 
-.try-again-button {
-    background: #C07BFF;
-    border: none;
-    border-radius: 8px;
-    color: rgb(255, 255, 255);
-    padding: 16px 32px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    max-width: 200px;
-    margin: 24px auto 0;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    max-width: 200px;
-    margin-top: 16px;
-}
+
 
 .result-container h3 {
     font-size: 24px;
