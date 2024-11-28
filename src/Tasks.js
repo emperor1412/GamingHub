@@ -6,7 +6,6 @@ import ticketIcon from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
-import kmIcon from './images/km.svg';
 import TasksLearn from './TasksLearn';
 
 /*
@@ -254,7 +253,7 @@ const Tasks = ({
                     <h3 className="task-title">{task.name}</h3>
                     <div className="task-bottom-left">
                         <div className="task-reward">
-                            <img src={kmIcon} alt="KM" className="reward-icon" />
+                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
                             <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
                         </div>
                         <div className="task-deadline">ENDS {formattedDate}</div>
@@ -341,7 +340,7 @@ const Tasks = ({
 
                         <section className="tasks-section">
                             <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
-                            {tasksTimeLimited
+                            {tasksStandard
                                 .filter(task => !task.endTime)
                                 .map(task => renderTaskCard(task))}
                         </section>
