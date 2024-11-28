@@ -25,7 +25,7 @@ import ID_selected from './images/ID_selected.svg';
 
 // import background from './images/background.svg';
 import background from './images/background.png';
-import checkInAnimation from './images/checkIn_animation.png';
+import checkInAnimation from './images/check_in_animation_540.gif';
 
 import shared from './Shared';
 

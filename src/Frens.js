@@ -26,63 +26,64 @@ const Frens = () => {
   const [hasMorePages, setHasMorePages] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [totalFriends, setTotalFriends] = useState(0);
+  const [earnedTickets, setEarnedTickets] = useState(0);
 
+
+
+  /*
+    state: 0 = locked, 1 = ready, 2 = unlocked
   
-
-/*
-  state: 0 = locked, 1 = ready, 2 = unlocked
-
-  trophiesDataFromServer: [
-        {
-            "id": 1,
-            "min": 1,
-            "max": 4,
-            "state": 0,
-            "description": "You're just starting out. Keep sharing to climb the ranks!",
-            "name": "Rookie Recruiter"
-        },
-        {
-            "id": 2,
-            "min": 5,
-            "max": 9,
-            "state": 0,
-            "description": "Great job! You're becoming an influential member of the community",
-            "name": "Junior Ambassador"
-        },
-        {
-            "id": 3,
-            "min": 10,
-            "max": 19,
-            "state": 0,
-            "description": "Impressive! Your efforts are making a significant impact",
-            "name": "Senior Ambassador"
-        },
-        {
-            "id": 4,
-            "min": 20,
-            "max": 49,
-            "state": 0,
-            "description": "Outstanding work! You're a key player in growing our community",
-            "name": "Master Connector"
-        },
-        {
-            "id": 5,
-            "min": 50,
-            "max": 99,
-            "state": 0,
-            "description": "Exceptional! You're among the top contributors",
-            "name": "Elite Influencer"
-        },
-        {
-            "id": 6,
-            "min": 100,
-            "max": -1,
-            "state": 0,
-            "description": "Legendary status achieved! You're a cornerstone of our growth",
-            "name": "Legendary Luminary"
-        }
-    ]
-        */
+    trophiesDataFromServer: [
+          {
+              "id": 1,
+              "min": 1,
+              "max": 4,
+              "state": 0,
+              "description": "You're just starting out. Keep sharing to climb the ranks!",
+              "name": "Rookie Recruiter"
+          },
+          {
+              "id": 2,
+              "min": 5,
+              "max": 9,
+              "state": 0,
+              "description": "Great job! You're becoming an influential member of the community",
+              "name": "Junior Ambassador"
+          },
+          {
+              "id": 3,
+              "min": 10,
+              "max": 19,
+              "state": 0,
+              "description": "Impressive! Your efforts are making a significant impact",
+              "name": "Senior Ambassador"
+          },
+          {
+              "id": 4,
+              "min": 20,
+              "max": 49,
+              "state": 0,
+              "description": "Outstanding work! You're a key player in growing our community",
+              "name": "Master Connector"
+          },
+          {
+              "id": 5,
+              "min": 50,
+              "max": 99,
+              "state": 0,
+              "description": "Exceptional! You're among the top contributors",
+              "name": "Elite Influencer"
+          },
+          {
+              "id": 6,
+              "min": 100,
+              "max": -1,
+              "state": 0,
+              "description": "Legendary status achieved! You're a cornerstone of our growth",
+              "name": "Legendary Luminary"
+          }
+      ]
+          */
 
   const trophyIcon = {
     1: trophy_1,
@@ -109,7 +110,7 @@ const Frens = () => {
     if (response.ok) {
       const data = await response.json();
       console.log('Trophies data:', data);
-      if(data.code === 0) {
+      if (data.code === 0) {
         const trophiesData = data.data.map(trophy => ({
           id: trophy.id,
           name: trophy.name,
@@ -153,7 +154,7 @@ const Frens = () => {
     if (response.ok) {
       const data = await response.json();
       console.log('Unlock trophy data:', data);
-      if(data.code === 0) {
+      if (data.code === 0) {
         console.log('Trophy unlocked success');
         getTrophyData();
       }
@@ -175,80 +176,90 @@ const Frens = () => {
   /*
 
   friends data from server:
-  {
   url: /app/frensData
 
+  {
     "code": 0,
     "data": {
-        "pageSize": 10,
-        "pageNo": 10,
-        "totalPages": 10,
-        "totalRecords": 99,
-        "list": [
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            },
-            {
-                "name": "t_name",
-                "ticket": 0,
-                "kmPoint": 0,
-                "pictureIndex": 11
-            }
-        ],
-        "prePageNo": 9,
-        "nextPageNo": 10,
-        "prePage": true,
-        "nextPage": false
+        "friends": 10,
+        "ticket": 0,
+        "page": {
+            "pageSize": 10,
+            "pageNo": 1,
+            "totalPages": 3,
+            "totalRecords": 30,
+            "list": [
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                },
+                {
+                    "name": "t_name",
+                    "ticket": 0,
+                    "kmPoint": 0,
+                    "pictureIndex": 6
+                }
+            ],
+            "prePage": false,
+            "nextPage": true,
+            "prePageNo": 1,
+            "nextPageNo": 2
+        }
     }
 }
 
   */
-  
+
   const getFriendsData = async (page = 1, depth = 0) => {
     if (depth > 3) {
       console.error('Get friends data failed after 3 attempts');
@@ -268,17 +279,18 @@ const Frens = () => {
     if (response.ok) {
       const data = await response.json();
       console.log('Friends data:', data);
-      if(data.code === 0) {
-        const newFriendsData = data.data.list.map(friend => ({
+      if (data.code === 0) {
+        const newFriendsData = data.data.page.list.map(friend => ({
           name: friend.name,
           ticket: friend.ticket,
           kmPoint: friend.kmPoint,
           pictureIndex: friend.pictureIndex
         }));
 
-        setTotalFriends(data.data.totalRecords);
+        setEarnedTickets(data.data.ticket);
+        setTotalFriends(data.data.page.totalRecords);
         setFriendsData(prev => page === 1 ? newFriendsData : [...prev, ...newFriendsData]);
-        setHasMorePages(data.data.nextPage);
+        setHasMorePages(data.data.page.nextPage);
         setCurrentPage(page);
       }
       else if (data.code === 102002 || data.code === 102001) {
@@ -314,7 +326,7 @@ const Frens = () => {
     if (response.ok) {
       const data = await response.json();
       console.log('Share story API data:', data);
-      if(data.code === 0) {
+      if (data.code === 0) {
         console.log('Story shared API called success');
       }
       else if (data.code === 102002 || data.code === 102001) {
@@ -329,7 +341,7 @@ const Frens = () => {
       }
     } else {
       console.error('Share story API data error:', response);
-    }   
+    }
   };
 
   const onClickShareStory = () => {
@@ -350,8 +362,8 @@ const Frens = () => {
             }
           });
           */
-        shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a');
-        shareStoryAPI(selectedTrophy.id);
+      shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a');
+      shareStoryAPI(selectedTrophy.id);
     }
   };
 
@@ -415,22 +427,22 @@ const Frens = () => {
       // { id: 9, name: 'Legendary Luminary', status: 'locked', icon: trophy_3, description: "Legendary status achieved! You're a cornerstone of our growth" },
     ]);
     */
-   
-  /*
-  setFriendsData([
-    { pictureIndex: 1, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 2, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 3, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 4, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 5, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 6, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 7, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 8, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 9, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 10, name: 'Chonky', ticket: 3, kmPoint: 267 },
-    { pictureIndex: 11, name: 'Chonky', ticket: 3, kmPoint: 267 },
-  ]);  
-  */
+
+    /*
+    setFriendsData([
+      { pictureIndex: 1, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 2, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 3, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 4, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 5, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 6, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 7, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 8, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 9, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 10, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 11, name: 'Chonky', ticket: 3, kmPoint: 267 },
+    ]);  
+    */
 
     getTrophyData();
     getFriendsData();
@@ -438,7 +450,7 @@ const Frens = () => {
 
   const handleScroll = (e) => {
     const { scrollTop, clientHeight, scrollHeight } = e.target;
-    
+
     if (scrollHeight - scrollTop <= clientHeight + 100 && !isLoading && hasMorePages) {
       getFriendsData(currentPage + 1);
     }
@@ -449,10 +461,10 @@ const Frens = () => {
       <div className="friends-list-content">
         {friendsData.map((friend, index) => (
           <div key={index} className="friend-item">
-            <img 
+            <img
               src={shared.avatars[friend.pictureIndex].src}
-              alt="Avatar" 
-              className="friend-avatar" 
+              alt="Avatar"
+              className="friend-avatar"
             />
             <div className="friend-info">
               <span className="friend-name">{friend.name}</span>
@@ -470,11 +482,11 @@ const Frens = () => {
           </div>
         ))}
         {isLoading && (
-        <div className="friend-item loading" style={{
-          height: friendsData.length === 0 ? '100%' : 'auto'
-        }}>
-          Loading...
-        </div>
+          <div className="friend-item loading" style={{
+            height: friendsData.length === 0 ? '100%' : 'auto'
+          }}>
+            Loading...
+          </div>
         )}
         <div className="friend-item placeholder"></div>
       </div>
@@ -496,21 +508,21 @@ const Frens = () => {
           </div>
           <div className="stat-item-frens">
             <img src={ticketIcon} alt="Tickets" className="stat-icon" />
-            <span className="stat-label">Tickets</span>
-            <span className="stat-value">92</span>
+            <span className="stat-label">Earned</span>
+            <span className="stat-value">{earnedTickets}</span>
           </div>
         </div>
 
         {activeTab === 'friends' ? (
           <div className="friends-container">
             <div className="tabs">
-              <button 
+              <button
                 className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
                 onClick={() => setActiveTab('friends')}
               >
                 Friends
               </button>
-              <button 
+              <button
                 className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
                 onClick={() => setActiveTab('trophies')}
               >
@@ -530,13 +542,13 @@ const Frens = () => {
         ) : (
           <div className="friends-container">
             <div className="tabs">
-              <button 
+              <button
                 className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
                 onClick={() => setActiveTab('friends')}
               >
                 Friends
               </button>
-              <button 
+              <button
                 className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
                 onClick={() => setActiveTab('trophies')}
               >
@@ -546,14 +558,14 @@ const Frens = () => {
             <div className="trophies-list">
               <div className="trophies-grid">
                 {trophies.map(trophy => (
-                  <button 
-                    key={trophy.id} 
+                  <button
+                    key={trophy.id}
                     className={`trophy-item ${trophy.status}`}
                     onClick={() => handleTrophyClick(trophy)}
                   >
-                      {(trophy.status === 'locked' || trophy.status === 'ready') && (
-                        <div className="trophy-overlay"></div>
-                      )}
+                    {(trophy.status === 'locked' || trophy.status === 'ready') && (
+                      <div className="trophy-overlay"></div>
+                    )}
                     <div className="trophy-content">
                       <span className="trophy-icon">
                         <img src={trophy.icon} alt="Trophy" />
@@ -582,11 +594,11 @@ const Frens = () => {
             <div className="trophy-overlay-content" onClick={e => e.stopPropagation()}>
               {selectedTrophy.status === 'locked' ? (
                 <>
-                  
+
                   <div className="trophy-overlay-icon-container">
-                    <img 
-                      src={selectedTrophy.icon} 
-                      alt={selectedTrophy.name} 
+                    <img
+                      src={selectedTrophy.icon}
+                      alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
                   </div>
@@ -604,15 +616,15 @@ const Frens = () => {
                     {selectedTrophy.min}-{selectedTrophy.max} INVITES
                   </div>
                   <div className="trophy-overlay-icon-container">
-                    <img 
-                      src={selectedTrophy.icon} 
-                      alt={selectedTrophy.name} 
+                    <img
+                      src={selectedTrophy.icon}
+                      alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    <img 
-                      src={particle} 
-                      alt="Particle" 
-                      className="trophy-overlay-particle" 
+                    <img
+                      src={particle}
+                      alt="Particle"
+                      className="trophy-overlay-particle"
                     />
                   </div>
                   <div className="trophy-overlay-promotion">
@@ -637,15 +649,15 @@ const Frens = () => {
                     {selectedTrophy.min}-{selectedTrophy.max} INVITES
                   </div>
                   <div className="trophy-overlay-icon-container">
-                    <img 
-                      src={selectedTrophy.icon} 
-                      alt={selectedTrophy.name} 
+                    <img
+                      src={selectedTrophy.icon}
+                      alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    <img 
-                      src={particle} 
-                      alt="Particle" 
-                      className="trophy-overlay-particle" 
+                    <img
+                      src={particle}
+                      alt="Particle"
+                      className="trophy-overlay-particle"
                     />
                   </div>
                   <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
