@@ -2,7 +2,7 @@ import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
 import SUT from './images/SUT.png';
-import energy from './images/energy.png';
+import energy from './images/energy.svg';
 
 import avatar1 from './images/avatar1.svg';
 import avatar2 from './images/avatar2.svg';
