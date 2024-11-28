@@ -7,6 +7,116 @@ import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import kmIcon from './images/km.svg';
+import TasksLearn from './TasksLearn';
+
+/*
+url: /app/taskList
+Request:
+	
+Response:
+	type: 1.click url 2.learn
+	weight Can be used to sort
+	endTime Expiration time
+	state 0.Unfinished 1.Finish
+{
+    "code": 0,
+    "data": [
+        {
+            "id": 280771,
+            "name": "task1",
+            "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
+            "img": "http://dummyimage.com/400x400",
+            "type": 1,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 5
+                }
+            ],
+            "state": 0
+        },
+        {
+            "id": 284811,
+            "name": "FSL Points",
+            "img": "http://dummyimage.com/400x400",
+            "type": 2,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 10
+                }
+            ],
+            "state": 0
+        }
+    ]
+}
+
+url: /app/taskData
+Request:
+	id long taskId
+Response:
+	type: 1.click url 2.learn
+	weight Can be used to sort
+	endTime Expiration time
+	state 0.Unfinished 1.Finish
+{
+    "code": 0,
+    "data": {
+        "id": 284811,
+        "name": "FSL Points",
+        "img": "http://dummyimage.com/400x400",
+        "type": 2,
+        "state": 0,
+        "weight": 0,
+        "endTime": 1831661420158,
+        "rewardList": [
+            {
+                "type": 10030,
+                "amount": 10
+            }
+        ],
+        "contentList": [
+            {
+                "taskId": 284811,
+                "pos": 0,
+                "title": "Introduction to FSL Points",
+                "content": "FSL Points are the reward currency of the FSL ecosystem, designed to give back to the community\nUsers can earn FSL Points by engaging with various FSL products, such as STEPN, MOOAR, Gas Hero, and more\nThese points are earned as part of FSL’s commitment to rewarding community members, giving back a share of revenue to the community."
+            },
+            {
+                "taskId": 284811,
+                "pos": 1,
+                "title": "How to Earn FSL Points",
+                "content": "You can earn FSL Points through activities like buying and selling NFTs on MOOAR and  Gas Hero, or being active in STEPN.\nFSL Points are distributed based on user activity: for example, when a trade is made on MOOAR, the points are split between buyer and seller (80% for the seller, 20% for the buyer).\nConnecting your FSL ID to different FSL products also helps integrate your activities and maximize the points you earn."
+            }
+        ],
+        "question": {
+            "question": "What can FSL Points be used for?",
+            "answers": [
+                "Buying sneakers.",
+                "Swapping for GMT, purchasing raffle tickets, and redeeming for merch.",
+                "Playing games."
+            ],
+            "answerIndex": 1
+        }
+    }
+}
+
+url: /app/taskComplete
+Request:
+	id long taskId
+	answerIndex int //learn task Need to be transmitted
+Response:
+{
+    "code": 0,
+    "data": true //learn task：Is the answer correct
+}
+
+    */
+
 
 const Tasks = ({ 
     checkInData, 
@@ -87,14 +197,16 @@ const Tasks = ({
     };
 
     const fetchTaskDataAndShow = async (task, depth = 0) => {
-        const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}`, {
+        console.log('fetchTaskDataAndShow:', task);
+        const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
             method: 'POST',
             body: JSON.stringify({ id: task.id })
         });
 
         if(response.ok) {
             try {
-               const data = await response.json();
+                const data = await response.json();
+                console.log('Task data:', data);
                 if (data.code === 0) {
                     setShowLearnTask(data.data);
                 }
@@ -225,6 +337,17 @@ const Tasks = ({
                     </section>
                 </div>
             </div>
+
+            {showLearnTask && (
+                <TasksLearn
+                    task={showLearnTask}
+                    onClose={() => setShowLearnTask(null)}
+                    onComplete={() => {
+                        setShowLearnTask(null);
+                        fetchTasks();
+                    }}
+                />
+            )}
         </>
     );
 };
