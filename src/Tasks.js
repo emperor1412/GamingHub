@@ -1,23 +1,231 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Tasks.css";
+import xIcon from './images/x-icon.svg';
+import shared from './Shared';
+import ticketIcon from './images/ticket.svg';
+import km from './images/km.svg';
+import calendar from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar_before_checkin.svg';
+import kmIcon from './images/km.svg';
 
-const Tasks = () => {
-    return (
-        <div className="tasks-content">
-            <div className="tasks-inner-content">
+const Tasks = ({ 
+    checkInData, 
+    setShowCheckInAnimation, 
+    checkIn, 
+    setShowCheckInView, 
+    setShowProfileView, 
+    getProfileData 
+}) => {
+    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
+    const [kmpoint, setKmpoint] = useState(0);
+    const [ticket, setTicket] = useState(0);
+    const [tasksTimeLimited, setTasksTimelimited] = useState([]);
+    const [tasksStandard, setTasksStandard] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showLearnTask, setShowLearnTask] = useState(null);
 
-                <h1>My Embedded Image</h1>
-                <p>This is an example of HTML content with embedded image data.</p>
+    const setupProfileData = async () => {
+        const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userKMPoint) {
+            setKmpoint(userKMPoint.num);
+        }
 
-                    <img 
-                        src="https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a"
-                        alt="Sample Image" 
-                        style={{minWidth: '337px', width: '100%'}}
-                    />
+        const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+        if (userTicket) {
+            setTicket(userTicket.num);
+        }
+    };
 
-                <p>More text content goes here.</p>
+    const onClickCheckIn = async () => {
+        console.log('onClickCheckIn');
+        const result = await checkIn(shared.loginData);
+        if(result == 1) {
+            setShowCheckInAnimation(true);
+        }
+        else if(result == 0) {
+            setShowCheckInAnimation(false);
+            setShowCheckInView(true);
+        }
+        else {
+
+        }
+    }
+
+    const fetchTasks = async (depth = 0) => {
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Tasks data:', data);
+
+                if (data.code === 0) {
+                    const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
+                    setTasksTimelimited(sortedTasks);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Get Task list error:', data)
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        fetchTasks(depth + 1);
+                    }
+                    else {
+                        console.error('Error fetching tasks:', result.error);
+                    }
+                }
+                else {
+                    console.log('Get Task list error:', data)
+                }
+            }
+            else {
+                console.error('Error fetching tasks:', response);
+            }
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchTaskDataAndShow = async (task, depth = 0) => {
+        const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}`, {
+            method: 'POST',
+            body: JSON.stringify({ id: task.id })
+        });
+
+        if(response.ok) {
+            try {
+               const data = await response.json();
+                if (data.code === 0) {
+                    setShowLearnTask(data.data);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Get Task data error:', data)
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        fetchTaskDataAndShow(task, depth + 1);
+                    }
+                    else {
+                        console.error('Error fetching task data:', result.error);
+                    }
+                }
+                else {
+                    console.log('Get Task data error:', data)
+                }
+            } catch (error) {
+                console.error('Error fetching task data:', error);
+            }
+        }
+        else {
+            console.error('Error fetching task data:', response);
+        }
+    };
+
+    const handleStartTask = async (task) => {
+        if (task.type === 1) {
+            window.open(task.url, '_blank');
+        } else if (task.type === 2) {
+            fetchTaskDataAndShow(task);
+        }
+    };
+
+    const renderTaskCard = (task) => {
+        const isDone = task.state === 1;
+        const formattedDate = new Date(task.endTime).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+
+        return (
+            <div className="task-card" key={task.id}>
+                <img src={xIcon} alt="X/Twitter" className="platform-icon" />
+                <div className="task-content">
+                    <h3 className="task-title">{task.name}</h3>
+                    <div className="task-bottom-left">
+                        <div className="task-reward">
+                            <img src={kmIcon} alt="KM" className="reward-icon" />
+                            <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
+                        </div>
+                        <div className="task-deadline">ENDS {formattedDate}</div>
+                    </div>
                 </div>
-        </div>
+                <button 
+                    className={`start-button ${isDone ? 'done' : ''}`}
+                    onClick={() => !isDone && handleStartTask(task)}
+                >
+                    {isDone ? 'DONE' : 'START'}
+                </button>
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        setupProfileData();
+        fetchTasks();
+    }, []);
+
+    return (
+        <>
+            <header className="stats-header">
+                <button 
+                    className="profile-pic"
+                    onClick={() => setShowProfileView(true)}
+                >
+                    <img 
+                        src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                        alt="Profile" 
+                    />
+                </button>
+                <div className="stats">
+                    <button 
+                        className="stat-item"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img src={ticketIcon} alt="Tickets" />
+                        <span>{ticket}</span>
+                    </button>
+                    <button 
+                        className="stat-item"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img src={km} alt="KM" />
+                        <span>{kmpoint}</span>
+                    </button>
+                    <div className="stat-item">
+                        <button className="stat-button" onClick={() => onClickCheckIn()}>
+                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Check-in" />
+                            <div className="check-in-text">
+                                {showTextCheckIn ? (
+                                    <>
+                                        <span>CHECK-IN</span>
+                                        <span>TODAY</span>
+                                    </>
+                                ) : (
+                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                )}
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div className="tasks-content">
+                <div className="tasks-inner-content">
+                    <section className="tasks-section">
+                        <h2 className="section-title">TIME-LIMITED TASKS <span className="arrow">›</span></h2>
+                        {tasksTimeLimited
+                            .filter(task => task.endTime)
+                            .map(task => renderTaskCard(task))}
+                    </section>
+
+                    <section className="tasks-section">
+                        <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
+                        {tasksTimeLimited
+                            .filter(task => !task.endTime)
+                            .map(task => renderTaskCard(task))}
+                    </section>
+                </div>
+            </div>
+        </>
     );
 };
 

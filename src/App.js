@@ -254,7 +254,14 @@ function App() {
           getProfileData={getProfileData}
         />;      
       case 'tasks':
-        return <Tasks />;
+        return <Tasks 
+            checkInData={checkInData}
+            setShowCheckInAnimation={setShowCheckInAnimation}
+            checkIn={checkIn}
+            setShowCheckInView={setShowCheckInView}
+            setShowProfileView={setShowProfileView}
+            getProfileData={getProfileData}
+        />;
       case 'fslid':
         return <FSLIDTest />;
       case 'frens':
