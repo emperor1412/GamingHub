@@ -180,6 +180,8 @@
 
 .reward-icon {
     opacity: 1;
+    width: 24px;
+    height: 24px;
 }
 
 .reward-icon.done {
