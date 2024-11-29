@@ -169,7 +169,8 @@ const Tasks = ({
 
                 if (data.code === 0) {
                     const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
-                    setTasksTimelimited(sortedTasks);
+                    setTasksTimelimited(sortedTasks.filter(task => task.category === 1));
+                    setTasksStandard(sortedTasks.filter(task => task.category === 0));
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task list error:', data)
@@ -334,14 +335,14 @@ const Tasks = ({
                         <section className="tasks-section">
                             <h2 className="section-title">TIME-LIMITED TASKS <span className="arrow">›</span></h2>
                             {tasksTimeLimited
-                                .filter(task => task.endTime)
+                                // .filter(task => task.endTime)
                                 .map(task => renderTaskCard(task))}
                         </section>
 
                         <section className="tasks-section">
                             <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
                             {tasksStandard
-                                .filter(task => !task.endTime)
+                                // .filter(task => !task.endTime)
                                 .map(task => renderTaskCard(task))}
                         </section>
                     </div>
