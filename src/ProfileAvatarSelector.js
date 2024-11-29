@@ -99,7 +99,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                     <img src={selected_avatar} alt="Selected" className="selection-mark" />
                   </div>
                 )}
-                <img src={shared.avatars[index % 3].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
+                <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
               </button>
             ))}
           </div>

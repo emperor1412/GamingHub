@@ -7,7 +7,7 @@ import km from './images/km.svg';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import TasksLearn from './TasksLearn';
-
+import { openLink } from '@telegram-apps/sdk';
 /*
 url: /app/taskList
 Request:
@@ -160,23 +160,23 @@ const Tasks = ({
         }
     }
 
-    const fetchTasks = async (depth = 0) => {
+    const fetchTaskList = async (depth = 0) => {
         try {
             const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
             if (response.ok) {
                 const data = await response.json();
-                console.log('Tasks data:', data);
+                console.log('Tasks List:', data);
 
                 if (data.code === 0) {
                     const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
-                    setTasksTimelimited(sortedTasks.filter(task => task.category === 1));
-                    setTasksStandard(sortedTasks.filter(task => task.category === 0));
+                    setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
+                    setTasksStandard(sortedTasks.filter(task => task.category === 1));
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task list error:', data)
                     const result = await shared.login(shared.initData);
                     if (result.success) {
-                        fetchTasks(depth + 1);
+                        fetchTaskList(depth + 1);
                     }
                     else {
                         console.error('Error fetching tasks:', result.error);
@@ -196,11 +196,63 @@ const Tasks = ({
         }
     };
 
+    const completeTask = async (taskId, answerIndex, depth = 0) => { 
+        if (depth > 3) {
+            console.error('Complete task api failed after 3 attempts');
+            return;
+        }
+
+        console.log(`Will call Complete task:${taskId} - answerIndex: ${answerIndex}`);
+
+        let retVal;
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskId}&answerIndex=${answerIndex}`, {
+                method: 'GET',
+                // body: JSON.stringify({ id: taskId })
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task complete:', data);
+                if (data.code === 0) {
+                    retVal = data.data.rewardList;
+                    fetchTaskList();
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Complete Task error:', data)
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        completeTask(taskId, depth + 1);
+                    }
+                    else {
+                        console.error('Error completing task:', result.error);
+                    }
+                }
+                else {
+                    console.log('Complete Task error:', data)
+                }
+            }
+            else {
+                console.error('Error completing task:', response);
+            }
+        } catch (error) {
+            console.error('Error completing task:', error);
+        }
+
+        return retVal;
+    }
+
     const fetchTaskDataAndShow = async (task, depth = 0) => {
         console.log('fetchTaskDataAndShow:', task);
         const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
-            method: 'POST',
-            body: JSON.stringify({ id: task.id })
+            method: 'GET',
+            // body: JSON.stringify({ id: task.id })
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         if(response.ok) {
@@ -234,7 +286,20 @@ const Tasks = ({
 
     const handleStartTask = async (task) => {
         if (task.type === 1) {
-            window.open(task.url, '_blank');
+            
+
+            if (openLink.isAvailable()) {
+                openLink(task.url, {
+                    tryBrowser: 'chrome',
+                    tryInstantView: true,
+                });
+            }
+            else {
+                window.open(task.url, '_blank');
+            }
+
+            completeTask(task.id, 0);
+
         } else if (task.type === 2) {
             fetchTaskDataAndShow(task);
         }
@@ -249,7 +314,7 @@ const Tasks = ({
 
         return (
             <div className="task-card" key={task.id}>
-                <img src={xIcon} alt="X/Twitter" className="platform-icon" />
+                <img src={task.img} alt="task icon" className="platform-icon" />
                 <div className="task-content">
                     <h3 className="task-title">{task.name}</h3>
                     <div className="task-bottom-left">
@@ -272,7 +337,7 @@ const Tasks = ({
 
     useEffect(() => {
         setupProfileData();
-        fetchTasks();
+        fetchTaskList();
     }, []);
 
     return (
@@ -323,9 +388,10 @@ const Tasks = ({
                 <TasksLearn
                     task={showLearnTask}
                     onClose={() => setShowLearnTask(null)}
-                    onComplete={() => {
-                        setShowLearnTask(null);
-                        fetchTasks();
+                    onComplete={async (task, answerIndex) => {
+                        // setShowLearnTask(null);
+                        const reward = await completeTask(task.id, answerIndex);
+                        return reward;
                     }}
                 />
             ) : (

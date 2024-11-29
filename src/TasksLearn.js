@@ -27,23 +27,15 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
     const handleNextAnswer = async () => {
         if (selectedAnswer === null) return;
         
-        const correct = task.question.answerIndex == selectedAnswer;
+        console.log('Selected answer:', selectedAnswer, '\tCorrect answer:', task.question.answerIndex);
+        const correct = task.question.answerIndex === selectedAnswer;
         setIsCorrect(correct);
         setShowResult(true);
         
         console.log('Correct:', correct);
         if(correct) {
-            // try {
-            //     await fetch(`${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}`, {
-            //         method: 'POST',
-            //         body: JSON.stringify({ 
-            //             id: task.id,
-            //             answerIndex: selectedAnswer 
-            //         })
-            //     });
-            // } catch (error) {
-            //     console.error('Error submitting answer:', error);
-            // }
+            const reward = await onComplete(task, selectedAnswer);
+            console.log('Reward:', reward);
         }
     };
 
@@ -66,6 +58,9 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                 <div className="quiz-content">
                     {!showResult ? (
                         <>
+                            <div className="quiz-heading">
+                                TEST YOUR KNOWLEDGE OF POPULAR CRYPTO SLANG TERMS! SELECT THE CORRECT MEANING FOR EACH TERM BELOW.
+                            </div>
                             <h2>{task.question.question}</h2>
                             <div className="answers-container">
                                 {task.question.answers.map((answer, index) => (
@@ -97,12 +92,17 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     <div className="reward-earned">
                                         <p>YOU'VE EARNED</p>
                                         <div className="reward-amount">
-                                            <img src={kmIcon} alt="KM" />
+                                        <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
                                             <span>{task.rewardList[0]?.amount || 0}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <button className="tasks-okay-button" onClick={onClose}>
+                                <button className="tasks-okay-button" onClick={() => {
+                                        // if (isCorrect) {
+                                        //     onComplete(task.id);
+                                        // }
+                                        onClose();
+                                    }}>
                                     OKAY
                                 </button>
                             </div>

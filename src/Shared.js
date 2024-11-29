@@ -4,9 +4,21 @@ import gmtIcon from './images/gmt.svg';
 import SUT from './images/SUT.png';
 import energy from './images/energy.svg';
 
-import avatar1 from './images/avatar1.svg';
-import avatar2 from './images/avatar2.svg';
-import avatar3 from './images/avatar3.svg';
+import avatar1 from './images/avatar_1_Dino_300px.png';
+import avatar2 from './images/avatar_2_Chef_Cat_300px.png';
+import avatar3 from './images/avatar_3_Bunny_300px.png';
+import avatar4 from './images/avatar_4_Marty_300px.png';
+import avatar5 from './images/avatar_5_Frog_Knight_300px.png';
+import avatar6 from './images/avatar_6_Fox_300px.png';
+import avatar7 from './images/avatar_7_Druid_300px.png';
+import avatar8 from './images/avatar_8_Mooarty_300px.png';
+import avatar9 from './images/avatar_9_Mog_300px.png';
+import avatar10 from './images/avatar_10_Mochi_300px.png';
+import avatar11 from './images/avatar_11_Miffy_300px.png';
+import avatar12 from './images/avatar_12_Rogue_300px.png';
+import avatar13 from './images/avatar_13_Squirrel_300px.png';
+import avatar14 from './images/avatar_14_Robot_300px.png';
+import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import { initData } from '@telegram-apps/sdk';
 
 const shared = {
@@ -15,15 +27,15 @@ const shared = {
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
         { id: 2, src: avatar3 },
-        { id: 3, src: avatar1 },
-        { id: 4, src: avatar2 },
-        { id: 5, src: avatar3 },
-        { id: 6, src: avatar1 },
-        { id: 7, src: avatar2 },
-        { id: 8, src: avatar3 },
-        { id: 9, src: avatar1 },
-        { id: 10, src: avatar2 },
-        { id: 11, src: avatar3 },
+        { id: 3, src: avatar4 },
+        { id: 4, src: avatar5 },
+        { id: 5, src: avatar6 },
+        { id: 6, src: avatar7 },
+        { id: 7, src: avatar8 },
+        { id: 8, src: avatar9 },
+        { id: 9, src: avatar10 },
+        { id: 10, src: avatar11 },
+        { id: 11, src: avatar12 },
     ],
 
     mappingIcon : {
