@@ -436,6 +436,7 @@ const Tasks = ({
 
     const renderTaskCard = (task) => {
         const isDone = task.state === 1;
+        const isTimeLimited = task.category === 0;
         const formattedDate = new Date(task.endTime).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric'
@@ -451,7 +452,7 @@ const Tasks = ({
                             <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className={`reward-icon ${isDone ? 'done' : ''}`} />
                             <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
                         </div>
-                        <div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>
+                        {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
                     </div>
                 </div>
 
