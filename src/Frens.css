@@ -1,6 +1,6 @@
 .frens-content {
   flex: 1;
-  overflow: hidden;
+  overflow-x: hidden;
   padding-top: 10px;
   padding-bottom: 91px;
   -webkit-overflow-scrolling: touch;
@@ -8,6 +8,8 @@
   height: 100vh;
   margin-top: 0;
   overscroll-behavior: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .friends-container {
@@ -49,9 +51,10 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
-  overflow: hidden;
+  padding: 0 10px;
+  overflow-x: hidden;
   overscroll-behavior: none;
+  box-sizing: border-box;
 }
 
 .info-box {
@@ -223,17 +226,19 @@
 
 .trophies-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   width: 100%;
   margin-bottom: 16px;
   min-height: calc(100vh - 400px);
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .trophy-item {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  aspect-ratio: 1;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   text-align: center;
@@ -244,8 +249,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
   border: 1px solid transparent;
   padding: 0;
   cursor: pointer;
@@ -291,7 +294,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 8px;
+  padding: 4px;
   border-radius: 12px;
   overflow: visible;
 }
@@ -350,12 +353,20 @@
 .trophy-icon {
   position: relative;
   z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .trophy-icon img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  padding: 0;
+  box-sizing: border-box;
+  transform: scale(1.4);
 }
 
 .trophy-overlay {

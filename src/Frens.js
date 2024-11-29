@@ -6,9 +6,12 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import friendsIcon from './images/Friends_selected.svg';
 import kmIcon from './images/km.svg';
-import trophy_1 from './images/trophy_1.svg';
-import trophy_2 from './images/trophy_2.svg';
-import trophy_3 from './images/trophy_3.svg';
+import trophy_1 from './images/trophy_1_200px.png';
+import trophy_2 from './images/trophy_2_200px.png';
+import trophy_3 from './images/trophy_3_200px.png';
+import trophy_4 from './images/trophy_4_200px.png';
+import trophy_5 from './images/trophy_5_200px.png';
+import trophy_6 from './images/trophy_6_200px.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/link.svg';
@@ -89,9 +92,9 @@ const Frens = () => {
     1: trophy_1,
     2: trophy_2,
     3: trophy_3,
-    4: trophy_1,
-    5: trophy_2,
-    6: trophy_3,
+    4: trophy_4,
+    5: trophy_5,
+    6: trophy_6,
   }
 
   const getTrophyData = async (depth = 0) => {
