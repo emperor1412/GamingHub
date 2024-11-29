@@ -6,7 +6,7 @@ import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
 import { popup } from '@telegram-apps/sdk';
-
+import lock_icon from "./images/lock_trophy.png";
 import shared from './Shared';
 
 const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
@@ -15,9 +15,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
 
 
   const handleAvatarSelect = (index) => {
-    setSelectedAvatar(index);
-    setHasChanged(index !== shared.userProfile.pictureIndex);
-    onSelect(shared.avatars[index % 3]);
+    if (index < 5) {
+      setSelectedAvatar(index);
+      setHasChanged(index !== shared.userProfile.pictureIndex);
+      onSelect(shared.avatars[index % 3]);
+    }
   };
 
   const handleOkayClick = async () => {
@@ -90,8 +92,9 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             {[...Array(12)].map((_, index) => (
               <button 
                 key={index} 
-                className={`avatar-option ${index === selectedAvatar ? 'selected' : ''}`}
+                className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${index >= 4 ? 'locked' : ''}`}
                 onClick={() => handleAvatarSelect(index)}
+                disabled={index >= 4}
               >
                 {index === selectedAvatar && (
                   <div className="avatar-selection-indicators">
@@ -100,6 +103,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                   </div>
                 )}
                 <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
+                {index >= 4 && (
+                  <div className="lock-overlay">
+                    <img src={lock_icon} alt="Locked" className="lock-icon" />
+                  </div>
+                )}
               </button>
             ))}
           </div>
