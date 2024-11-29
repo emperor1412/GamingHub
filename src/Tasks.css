@@ -91,10 +91,31 @@
     font-style: italic;
     font-size: 16px;
     margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .arrow {
-    color: #ffffff;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+.arrow.expanded {
+    transform: rotate(90deg);
+}
+
+.tasks-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.tasks-list.expanded {
+    max-height: 80vh;
 }
 
 .task-card {

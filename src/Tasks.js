@@ -9,7 +9,7 @@ import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
-
+import arrow_2 from './images/arrow_2.svg';
 /*
 url: /app/taskList
 Request:
@@ -259,6 +259,8 @@ const Tasks = ({
     const [tasksStandard, setTasksStandard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLearnTask, setShowLearnTask] = useState(null);
+    const [timeLimitedExpanded, setTimeLimitedExpanded] = useState(true);
+    const [standardTasksExpanded, setStandardTasksExpanded] = useState(true);
 
     const setupProfileData = async () => {
         const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
@@ -533,17 +535,27 @@ const Tasks = ({
                 <div className="tasks-content">
                     <div className="tasks-inner-content">
                         <section className="tasks-section">
-                            <h2 className="section-title">TIME-LIMITED TASKS <span className="arrow">›</span></h2>
-                            {tasksTimeLimited
-                                // .filter(task => task.endTime)
-                                .map(task => renderTaskCard(task))}
+                            <h2 
+                                className="section-title" 
+                                onClick={() => setTimeLimitedExpanded(!timeLimitedExpanded)}
+                            >
+                                TIME-LIMITED TASKS <img src={arrow_2} className={`arrow ${timeLimitedExpanded ? 'expanded' : ''}`} alt="arrow" />
+                            </h2>
+                            <div className={`tasks-list ${timeLimitedExpanded ? 'expanded' : ''}`}>
+                                {tasksTimeLimited.map(task => renderTaskCard(task))}
+                            </div>
                         </section>
 
                         <section className="tasks-section">
-                            <h2 className="section-title">STANDARD TASKS <span className="arrow">›</span></h2>
-                            {tasksStandard
-                                // .filter(task => !task.endTime)
-                                .map(task => renderTaskCard(task))}
+                            <h2 
+                                className="section-title" 
+                                onClick={() => setStandardTasksExpanded(!standardTasksExpanded)}
+                            >
+                                STANDARD TASKS <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                            </h2>
+                            <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
+                                {tasksStandard.map(task => renderTaskCard(task))}
+                            </div>
                         </section>
                     </div>
                 </div>
