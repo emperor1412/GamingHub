@@ -35,7 +35,17 @@
     gap: 24px;
 }
 
-.learn-content h2,
+.learn-content h2 {
+    font-size: 16px;
+    margin-bottom: 0px;
+    font-style: italic;
+    text-transform: uppercase;
+    min-height: 60px;  /* or any fixed height that works for your design */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .quiz-content h2 {
     font-size: 20px;
     margin-bottom: 24px;
@@ -57,9 +67,12 @@
     flex-direction: column;
     gap: 12px;
     margin-top: 24px;
-    background: rgba(41, 41, 41, 0.8);
+    background: rgba(41, 41, 41, 1);
     padding: 16px;
     border-radius: 12px;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .answer-button {
@@ -212,10 +225,10 @@
 .next-button {
     background: #C07BFF;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     color: white;
-    padding: 10px 12px;
-    font-size: 16px;
+    padding: 2px 8px;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
     font-family: 'PPNeueMachina', sans-serif;
@@ -279,7 +292,7 @@
     font-size: 12px;
     text-align: center;
     font-style: italic;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     text-transform: uppercase;
     font-family: 'PPNeueMachina', sans-serif;
     padding: 4px 0px;
@@ -287,6 +300,7 @@
     border-radius: 12px;
     border: #C07BFF 1px solid;
     line-height: 1.5;
+    min-height: 40px;
 }
 
 .quiz-content h2 {
@@ -297,9 +311,4 @@
     margin-top: 24px;
 }
 
-.answers-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 24px;
-}
+

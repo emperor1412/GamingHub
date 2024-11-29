@@ -8,6 +8,8 @@ import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
+import done_icon from './images/done_icon.svg';
+
 /*
 url: /app/taskList
 Request:
@@ -21,11 +23,79 @@ Response:
     "code": 0,
     "data": [
         {
+            "id": 280772,
+            "name": "task2",
+            "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
+            "img": "http://dummyimage.com/400x400",
+            "type": 1,
+            "category": 0,
+            "weight": 1,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 5
+                }
+            ],
+            "state": 1
+        },
+        {
+            "id": 59581,
+            "name": "task3",
+            "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
+            "img": "http://dummyimage.com/400x400",
+            "type": 1,
+            "category": 0,
+            "weight": 1,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 7
+                }
+            ],
+            "state": 0
+        },
+        {
+            "id": 59582,
+            "name": "task4",
+            "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
+            "img": "http://dummyimage.com/400x400",
+            "type": 1,
+            "category": 0,
+            "weight": 1,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 9
+                }
+            ],
+            "state": 0
+        },
+        {
+            "id": 61601,
+            "name": "Introduction to DOOAR",
+            "img": "http://dummyimage.com/400x400",
+            "type": 2,
+            "category": 1,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 20
+                }
+            ],
+            "state": 1
+        },
+        {
             "id": 280771,
             "name": "task1",
             "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
             "img": "http://dummyimage.com/400x400",
             "type": 1,
+            "category": 0,
             "weight": 0,
             "endTime": 1831661420158,
             "rewardList": [
@@ -37,10 +107,59 @@ Response:
             "state": 0
         },
         {
+            "id": 64631,
+            "name": "FSL ID",
+            "img": "http://dummyimage.com/400x400",
+            "type": 2,
+            "category": 1,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 20
+                }
+            ],
+            "state": 0
+        },
+        {
+            "id": 66651,
+            "name": "GMT",
+            "img": "http://dummyimage.com/400x400",
+            "type": 2,
+            "category": 1,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 20
+                }
+            ],
+            "state": 1
+        },
+        {
+            "id": 68671,
+            "name": "STEPN GO ",
+            "img": "http://dummyimage.com/400x400",
+            "type": 2,
+            "category": 1,
+            "weight": 0,
+            "endTime": 1831661420158,
+            "rewardList": [
+                {
+                    "type": 10030,
+                    "amount": 20
+                }
+            ],
+            "state": 1
+        },
+        {
             "id": 284811,
             "name": "FSL Points",
             "img": "http://dummyimage.com/400x400",
             "type": 2,
+            "category": 1,
             "weight": 0,
             "endTime": 1831661420158,
             "rewardList": [
@@ -49,7 +168,7 @@ Response:
                     "amount": 10
                 }
             ],
-            "state": 0
+            "state": 1
         }
     ]
 }
@@ -65,39 +184,47 @@ Response:
 {
     "code": 0,
     "data": {
-        "id": 284811,
-        "name": "FSL Points",
+        "id": 61601,
+        "name": "Introduction to DOOAR",
         "img": "http://dummyimage.com/400x400",
         "type": 2,
+        "category": 1,
         "state": 0,
         "weight": 0,
         "endTime": 1831661420158,
         "rewardList": [
             {
                 "type": 10030,
-                "amount": 10
+                "amount": 20
             }
         ],
         "contentList": [
             {
-                "taskId": 284811,
+                "taskId": 61601,
                 "pos": 0,
-                "title": "Introduction to FSL Points",
-                "content": "FSL Points are the reward currency of the FSL ecosystem, designed to give back to the community\nUsers can earn FSL Points by engaging with various FSL products, such as STEPN, MOOAR, Gas Hero, and more\nThese points are earned as part of FSL’s commitment to rewarding community members, giving back a share of revenue to the community."
+                "title": "Introduction to DOOAR",
+                "content": "DOOAR is a decentralized exchange (DEX) launched by FSL that allows users to trade digital assets like tokens directly with each other.\nIt uses smart contracts on the Solana, Ethereum, and Binance blockchains to facilitate secure and transparent transactions.\nAs part of the FSL ecosystem, DOOAR empowers users to manage their assets without intermediaries."
             },
             {
-                "taskId": 284811,
+                "taskId": 61601,
                 "pos": 1,
-                "title": "How to Earn FSL Points",
-                "content": "You can earn FSL Points through activities like buying and selling NFTs on MOOAR and  Gas Hero, or being active in STEPN.\nFSL Points are distributed based on user activity: for example, when a trade is made on MOOAR, the points are split between buyer and seller (80% for the seller, 20% for the buyer).\nConnecting your FSL ID to different FSL products also helps integrate your activities and maximize the points you earn."
+                "title": "How DOOAR Works",
+                "content": "DOOAR operates through liquidity pools, where users can provide liquidity in exchange for a share of the transaction fees.\nUsers can swap tokens directly using smart contracts, ensuring transparency and eliminating the need for a middleman.\nThe DEX is cross-chain compatible, allowing trades across Solana, Ethereum, and Binance blockchains for increased flexibility."
+            },
+            {
+                "taskId": 61601,
+                "pos": 2,
+                "title": "Benefits of DOOAR",
+                "content": "User Control: All transactions are user-controlled, with no central authority overseeing trades.\nTransparency: Every trade occurs through smart contracts, which are visible on the blockchain for full transparency.\n"
             }
         ],
         "question": {
-            "question": "What can FSL Points be used for?",
+            "heading": "Test your knowledge of popular crypto slang terms! Select the correct meaning for each term below.",
+            "question": "What can users do on DOOAR",
             "answers": [
-                "Buying sneakers.",
-                "Swapping for GMT, purchasing raffle tickets, and redeeming for merch.",
-                "Playing games."
+                "Stake tokens.",
+                "Swap tokens and provide liquidity.",
+                "Buy NFTs."
             ],
             "answerIndex": 1
         }
@@ -313,24 +440,31 @@ const Tasks = ({
         });
 
         return (
-            <div className="task-card" key={task.id}>
+            <div className={`task-card ${isDone ? 'done': ''}`} key={task.id}>
                 <img src={task.img} alt="task icon" className="platform-icon" />
                 <div className="task-content">
-                    <h3 className="task-title">{task.name}</h3>
+                    <h3 className={`task-title ${isDone ? 'done' : ''}`}>{task.name}</h3>
                     <div className="task-bottom-left">
                         <div className="task-reward">
-                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
+                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className={`reward-icon ${isDone ? 'done' : ''}`} />
                             <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
                         </div>
-                        <div className="task-deadline">ENDS {formattedDate}</div>
+                        <div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>
                     </div>
                 </div>
-                <button 
-                    className={`start-button ${isDone ? 'done' : ''}`}
-                    onClick={() => !isDone && handleStartTask(task)}
-                >
-                    {isDone ? 'DONE' : 'START'}
-                </button>
+
+                {!isDone ? (
+                    <button className={`start-button`}
+                            onClick={() => handleStartTask(task)}>
+                        START
+                    </button>
+                ) : (
+                    <button className="done-button">
+                        <img src={done_icon} alt="Done" />
+                        DONE
+                    </button>
+                )}
+                
             </div>
         );
     };

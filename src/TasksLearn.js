@@ -45,8 +45,12 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
             const content = task.contentList[currentStep];
             return (
                 <div className="learn-content">
-                    <h2>{content.title}</h2>
-                    <p>{content.content}</p>
+                    <div className='quiz-heading'>
+                        <h2>{content.title}</h2>
+                    </div>
+                    <div className='answers-container'>
+                        {content.content}
+                    </div>
                     <button className="next-button" onClick={handleNext}>
                         NEXT
                     </button>
@@ -59,7 +63,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                     {!showResult ? (
                         <>
                             <div className="quiz-heading">
-                                TEST YOUR KNOWLEDGE OF POPULAR CRYPTO SLANG TERMS! SELECT THE CORRECT MEANING FOR EACH TERM BELOW.
+                                {task.question.heading}
                             </div>
                             <h2>{task.question.question}</h2>
                             <div className="answers-container">
@@ -88,7 +92,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 </div>
                                 <div className="success-content">
                                     <h3>BINGO</h3>
-                                    <p style={{ fontSize: '11px' }}>YOU'VE COMPLETED THE CRYPTO SLANG QUIZ!</p>
+                                    <p style={{ fontSize: '11px' }}>YOU'VE COMPLETED THE QUIZ!</p>
                                     <div className="reward-earned">
                                         <p>YOU'VE EARNED</p>
                                         <div className="reward-amount">
