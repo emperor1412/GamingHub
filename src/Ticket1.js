@@ -1,56 +1,98 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
 import scratch_ticket from './images/ticket_scratch_icon.svg';
 import './Ticket1.css';
+import locker from './images/locker.png';
 
 const Ticket1 = ({ ticketCount, onClose }) => {
+    const [rowCount, setRowCount] = useState(0);
+    const [needsPadding, setNeedsPadding] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    useEffect(() => {
+        let row = Math.ceil(ticketCount / 3);
+        if (row < 3)
+            row = 3;
+        setRowCount(row);
+        setNeedsPadding(row < 4);
+    }, [ticketCount]);
+
+    const renderTicketRow = (startIndex) => (
+        <div className="scratch-grid-row" key={startIndex}>
+            {[0, 1, 2].map(offset => {
+                const index = startIndex + offset;
+                const isUnlocked = index < ticketCount;
+
+                return isUnlocked ? (
+                    <button 
+                        key={index} 
+                        className="scratch-item unlocked"
+                        onClick={() => setShowOverlay(true)}
+                    >
+                        <img src={scratch_ticket} alt="Scratch Ticket" />
+                    </button>
+                ) : (
+                    <div 
+                        key={index} 
+                        className="scratch-item locked"
+                    >
+                        <div className="lock-icon-ticket">
+                            <img src={locker} alt="Lock"/>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+
     return (
-        <div className="ticket-container">
-            <header className="ticket-header">
-                <button className="back-button" onClick={onClose}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                </button>
-                <div className="header-stats">
-                    <div className="stat-item">
-                        <img src={ticketIcon} alt="Tickets" />
-                        <span>{ticketCount}</span>
+        <>
+            <div className="ticket1-container">
+                <header className="ticket-header">
+                    <button className="back-button" onClick={onClose}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
+                    <div className="header-stats">
+                        <div className="stat-item">
+                            <img src={ticketIcon} alt="Tickets" />
+                            <span>{ticketCount}</span>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            <div className="scratch-content">
-                <div className="scratch-grid-container">
-                    <div className="scratch-header">
-                        SCRATCH
+                <div className="scratch-content">
+                    <div className="scratch-grid-container">
+                        <div className="scratch-header">
+                            SCRATCH
+                        </div>
+                        <div className="scratch-grid" style={needsPadding ? { paddingBottom: '10vh' } : {}}>
+                            {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
+                        </div>
                     </div>
-                    <div className="scratch-grid">
-                        {[...Array(9)].map((_, index) => (
-                            <button 
-                                key={index} 
-                                className={`scratch-item ${index < 3 ? 'unlocked' : 'locked'}`}
-                            >
-                                {index < 3 ? (
-                                    <img src={scratch_ticket} alt="Scratch Ticket" />
-                                ) : (
-                                    <div className="lock-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                            <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </div>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-                </div>
 
-                <div className="info-box-ticket">
-                    EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                    <div className="info-box-ticket">
+                        EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {showOverlay && (
+                <div className="overlay">
+                    <div className="overlay-content">
+                        <div className="overlay-header">
+                            <h2>Unlock More Tickets</h2>
+                            <button onClick={() => setShowOverlay(false)}>Close</button>
+                        </div>
+                        <div className="overlay-body">
+                            <p>Invite your frens to unlock more tickets!</p>
+                            <button>Invite Frens</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
