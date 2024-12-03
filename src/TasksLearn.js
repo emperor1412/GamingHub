@@ -49,8 +49,10 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                         <h2>{content.title}</h2>
                     </div>
                     <div className='answers-container'>
-                        {content.content}
+                        {/* {content.content} */}
+                        <div dangerouslySetInnerHTML={{ __html: content.content }} />
                     </div>
+                    {/* <img src="https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/SuI1Oopmz+UyFoxEtRyAsfKqTtAKiXqFHoekK9GzbKQ="></img> */}
                     <button className="next-button" onClick={handleNext}>
                         NEXT
                     </button>
@@ -64,7 +66,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                         <>
                             <div className="quiz-heading">
                                 {task.question.heading}
-                            </div>
+                            </div>                            
                             <h2>{task.question.question}</h2>
                             <div className="answers-container">
                                 {task.question.answers.map((answer, index) => (
