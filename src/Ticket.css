@@ -3,11 +3,9 @@
     width: 100%;
     margin: 0 auto;
     min-height: 100vh;
-    /* background: #000000; */
     position: relative;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
 }
 
 .ticket-header {
@@ -57,16 +55,28 @@
     font-style: italic;
 }
 
+.tickets-wrapper {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
 .tickets-content {
     padding: 80px 20px 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    height: calc(100vh - 80px);
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .ticket-card-item {

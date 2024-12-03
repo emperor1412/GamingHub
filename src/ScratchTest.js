@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScratchCard } from 'next-scratchcard';
-import rewardImage from './images/FSL Games Scratch Animation-02.png'; // Adjust path as needed
+// import rewardImage from './images/FSL Games Scratch Animation-02.png'; // Adjust path as needed
+import rewardImage from './images/scratch_ticket_background_full.png'; // Adjust path as needed
+
 import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; // Adjust path as needed
 import background from './images/background.png'; // Adjust path as needed
 
@@ -26,7 +28,7 @@ const ScratchTest = () => {
             alt="reward"
             className="reward-image"
           />
-          <span className="reward-text">5000</span>
+          {/* <span className="reward-text">5000</span> */}
         </div>
       </ScratchCard>
 

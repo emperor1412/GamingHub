@@ -140,3 +140,77 @@
     transform: translate(-50%, -50%);
     opacity: 0.5;
 }
+
+.overlay-ticket1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.overlay-content-ticket1 {
+    width: 100%;
+    max-width: 430px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+}
+
+.overlay-ticket1-img {
+    width: 200px;
+    height: 200px;
+    margin: 20px 0;
+}
+
+.overlay-text-ticket1 {
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.overlay-buttons-ticket1 {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.overlay-button-ticket1 {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.overlay-button-ticket1:active {
+    transform: scale(0.98);
+}
+
+.overlay-button-ticket1.primary {
+    background: #C07BFF;
+    color: white;
+}
+
+.overlay-button-ticket1.secondary {
+    background: rgba(192, 123, 255, 0.1);
+    border: 1px solid #C07BFF;
+    color: #C07BFF;
+}

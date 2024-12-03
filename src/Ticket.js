@@ -52,25 +52,27 @@ const Ticket = ({ onClose }) => {
                         </div>
                     </header>
 
-                    <div className="tickets-content">
-                        <button className="ticket-card-item active" onClick={()=> {
-                            setShowTicket1(true);
-                        }}>
-                            <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                        </button>
+                    <div className="tickets-wrapper">
+                        <div className="tickets-content">
+                            <button className="ticket-card-item active" onClick={()=> {
+                                setShowTicket1(true);
+                            }}>
+                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                            </button>
 
-                        <button className="ticket-card-item disabled">
-                            <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                            <div className="coming-soon">Coming Soon</div>
-                        </button>
+                            <button className="ticket-card-item disabled">
+                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                                <div className="coming-soon">Coming Soon</div>
+                            </button>
 
-                        <button className="ticket-card-item disabled">
-                            <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                            <div className="coming-soon">Coming Soon</div>
-                        </button>
+                            <button className="ticket-card-item disabled">
+                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                                <div className="coming-soon">Coming Soon</div>
+                            </button>
 
-                        <div className="info-box-ticket">
-                            STAY IN THE LOOP WITH THE LATEST CRYPTO LINGO! MASTER THE SLANG THAT EVERYONE'S TALKING ABOUT.
+                            <div className="info-box-ticket">
+                                STAY IN THE LOOP WITH THE LATEST CRYPTO LINGO! MASTER THE SLANG THAT EVERYONE'S TALKING ABOUT.
+                            </div>
                         </div>
                     </div>
                 </div>
