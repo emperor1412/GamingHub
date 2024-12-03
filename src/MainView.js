@@ -22,7 +22,7 @@ import { popup } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [kmpoint, setKmpoint] = useState(0);
@@ -280,7 +280,7 @@ userProfile : {
             <div className="scrollable-content">
                 <section className="tickets-section">
                     {/* <button className="ticket-card" onClick={() => checkIn()}> */}
-                    <button className="ticket-card">
+                    <button className="ticket-card" onClick={() => setShowTicketView(true)}>
                         <img
                             // src={Frame4556}
                             src = {my_ticket}

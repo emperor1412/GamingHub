@@ -1,0 +1,125 @@
+.ticket-container {
+    max-width: 430px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    /* background: #000000; */
+    position: relative;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.ticket-header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    height: 40px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.header-stats {
+    display: flex;
+    gap: 16px;
+    margin-right: 10px;
+}
+
+.stat-ticket {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-ticket img {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-ticket span {
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+}
+
+.tickets-content {
+    padding: 80px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+}
+
+.ticket-card-item {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.ticket-card-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+}
+
+/* .ticket-card-item.active {
+    transition: transform 0.2s;
+} */
+
+/* .ticket-card-item.active:hover {
+    transform: scale(1.02);
+} */
+
+.ticket-card-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.coming-soon {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+}
+
+.info-box-ticket {
+    background: rgba(192, 123, 255, 0.1);
+    border-radius: 12px;
+    border: #C07BFF 1px solid;
+    padding: 16px;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    margin-top: 20px;
+}

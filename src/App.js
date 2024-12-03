@@ -7,6 +7,7 @@ import Profile from './Profile';
 import FSLIDTest from './FSLIDTest';
 import Frens from './Frens';
 import ScratchTest from './ScratchTest';
+import Ticket from './Ticket';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -54,6 +55,7 @@ function App() {
   const [showCheckInAnimation, setShowCheckInAnimation] = useState(false);
   const [showCheckInView, setShowCheckInView] = useState(false);
   const [showProfileView, setShowProfileView] = useState(false);
+  const [showTicketView, setShowTicketView] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -251,6 +253,7 @@ function App() {
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
+          setShowTicketView={setShowTicketView}
           getProfileData={getProfileData}
         />;      
       case 'tasks':
@@ -277,6 +280,7 @@ function App() {
           checkIn={checkIn}
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
+          setShowTicketView={setShowTicketView}
           getProfileData={getProfileData}
         />;
     }
@@ -355,7 +359,16 @@ function App() {
           }}
           getProfileData={getProfileData}/>
       )
-      : (
+      : showTicketView ?
+      (
+        <Ticket onClose={() => {
+            setShowTicketView(false);
+            setActiveTab('home');
+          }}
+        />
+      )
+      : 
+      (
         <div className="app-container">
           {renderActiveView()}
 
