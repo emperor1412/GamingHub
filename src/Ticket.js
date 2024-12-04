@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import shared from './Shared';
 import './Ticket.css';
 import Ticket1 from './Ticket1';
-
+import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import scratch_ticket from './images/scratch_ticket.svg';
@@ -32,9 +32,7 @@ const Ticket = ({ onClose }) => {
                 <div className="ticket-container">
                     <header className="ticket-header">
                         <button className="back-button" onClick={onClose}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                            <img src={back} alt="Back" />
                         </button>
                         <div className="header-stats">
                             <div className="stat-item">

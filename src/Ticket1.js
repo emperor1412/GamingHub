@@ -4,6 +4,7 @@ import scratch_ticket from './images/ticket_scratch_icon.svg';
 import './Ticket1.css';
 import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
+import back from './images/back.svg';
 
 const Ticket1 = ({ ticketCount, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -62,9 +63,7 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                     <div className="ticket1-container">
                         <header className="ticket-header">
                             <button className="back-button" onClick={onClose}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
+                                <img src={back} alt="Back" />
                             </button>
                             <div className="header-stats">
                                 <div className="stat-item">
