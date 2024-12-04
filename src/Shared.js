@@ -23,6 +23,7 @@ import { initData } from '@telegram-apps/sdk';
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
+    app_link: 'https://t.me/TestFSL_bot/fslhub',
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },

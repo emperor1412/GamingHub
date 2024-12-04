@@ -70,7 +70,7 @@ const FSLIDTest = () => {
                 <pre>
                     {`
 
-const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
+const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=fslid_';
 const fslAuthorization = FSLAuthorization.init({
   responseType: 'code', // 'code' or 'token'
   appKey: 'MiniGame',

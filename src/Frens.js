@@ -352,7 +352,9 @@ const Frens = () => {
     closeOverlay();
 
     if (shareStory.isSupported()) {
-
+      const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
+      // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
+      
       // only premium users can share stories with links
       /*
         const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
@@ -365,14 +367,17 @@ const Frens = () => {
             }
           });
           */
-      shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a');
+      shareStory(url, 
+        {
+          text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
+        });
       shareStoryAPI(selectedTrophy.id);
     }
   };
 
   const onClickInviteFriends = () => {
     console.log('Invite friends');
-    const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
+    const url = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
     console.log('Invite friends URL:', url);
     shareURL(url);
   };
