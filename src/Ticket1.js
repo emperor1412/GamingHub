@@ -5,6 +5,7 @@ import './Ticket1.css';
 import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
 import back from './images/back.svg';
+import lock_icon from "./images/lock_trophy.png";
 
 const Ticket1 = ({ ticketCount, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -54,7 +55,7 @@ const Ticket1 = ({ ticketCount, onClose }) => {
     return (
         <>
             {showTicket2 ? (
-                <Ticket2 ticketCount={ticketCount} onClose={() => {
+                <Ticket2 ticketCount={1} onClose={() => {
                     setShowTicket2(false);
                     onClose();
                 }} />
@@ -100,8 +101,9 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                                     <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
                                         SCRATCH 1 TICKET
                                     </button>
-                                    <button className="overlay-button-ticket1 secondary">
+                                    <button className="overlay-button-ticket1 secondary" disabled='true'>
                                         SCRATCH ALL TICKETS
+                                        <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                     </button>
                                 </div>
                             </div>

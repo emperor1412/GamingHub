@@ -12,6 +12,9 @@ const Ticket = ({ onClose }) => {
     const [showTicket1, setShowTicket1] = useState(false);
 
     const setupProfileData = async () => {
+        if (!shared.userProfile || !shared.userProfile.UserToken) {
+            return;
+        }
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
         if (userTicket) {
             setTicket(userTicket.num);
