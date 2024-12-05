@@ -6,6 +6,7 @@ import { ScratchCard } from 'next-scratchcard';
 // import rewardImage from './images/FSL Games Scratch Animation-02.png'; // Adjust path as needed
 import scratchBackground from './images/scratch_ticket_background_full.png'; // Adjust path as needed
 import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; // Adjust path as needed
+import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
 import km from './images/km.svg';
 import { shareStory } from '@telegram-apps/sdk';
 
@@ -36,7 +37,60 @@ Response:
         }
     ]
 }
+
+url: /app/sharingTicket
+Request:
+Response:
+{
+    "code": 0,
+    "data": 200 //Reward granted
+}
 */
+    const claimRewardFromSharingStory = async (depth = 0) => {
+        if (depth > 3) {
+            console.error('claimRewardFromSharingStory failed after 3 attempts');
+            return;
+        }
+
+        console.log('Claiming reward from sharing story...');
+
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/sharingTicket?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Claim reward from sharing story data:', data);
+
+                if (data.code === 0) {
+                    console.log('Reward claimed successfully');
+                }
+                else if (data.code === 102002 || data.code === 102001) {
+                    console.error('Claim reward from sharing story error:', data.msg);
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        claimRewardFromSharingStory(depth + 1);
+                    }
+                    else {
+                        console.error('Login failed:', result.error);
+                    }
+                }
+                else {
+                    console.error('Claim reward from sharing story error:', response);
+                }
+            }
+            else {
+                console.error('Claim reward from sharing story error:', response);
+            }
+        }
+        catch (error) {
+            console.error('claimRewardFromSharingStory error:', error);
+        }
+    };
 
     const onClickShareStory = () => {
         console.log('Share story');
@@ -63,8 +117,9 @@ Response:
             });
 
             setShowShareStory(false);
+            claimRewardFromSharingStory();
         }
-    };
+    };   
 
     const requestTicketUse = async (amount, depth = 0) => {
         if (depth > 3) {
@@ -206,7 +261,7 @@ Response:
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM"/>
-                                        <span>24.4</span>
+                                        <span>200</span>
                                     </div>
                                 </button>
                             )}
@@ -228,16 +283,16 @@ Response:
                         >
                         <div className="reward-content">
                             <img
-                                src={scratchBackground}
+                                src={noReward ? nothing : scratchBackground}
                                 alt="reward"
-                                className="scratch-background"
+                                className= "scratch-background"
                             />
                             {
                             noReward 
                             ? (
                                 <div className="no-reward">
-                                    <h2>NO REWARD</h2>
-                                    <h2>Try again next time!</h2>
+                                    {/* <h2>NO REWARD</h2>
+                                    <h2>Try again next time!</h2> */}
                                 </div>
                             )
                             : (
