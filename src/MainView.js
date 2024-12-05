@@ -18,7 +18,7 @@ import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
 
-import { popup } from '@telegram-apps/sdk';
+import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 
@@ -27,7 +27,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [kmpoint, setKmpoint] = useState(0);
     const [ticket, setTicket] = useState(0);
-
+    const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
 
     /*
@@ -138,8 +138,81 @@ userProfile : {
         }
     ]
 }
+
+url: /app/getEvents
+Request:
+	
+Response:
+	weight //For sorting, the one with larger weight is at the front, and the one with larger id is at the front if the weight is the same.
+	state -1.delete 0.close 1.open
+{
+    "code": 0,
+    "data": [
+        {
+            "id": 333292,
+            "name": "eventName1",
+            "description": "eventDescription",
+            "url": "https://x.com/realDonaldTrump/status/1853995861497307624",
+            "img": "http://dummyimage.com/400x400",
+            "weight": 5,
+            "state": 1,
+            "time": 1733129996995
+        }
+    ]
+}
+
     */
 
+    const getEvents = async (depth = 0) => {
+        if (depth > 3) {
+            console.log('getEvents: too many retries');
+            return;
+        }
+        let retVal = [];
+        console.log('getEvents...');
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/getEvents?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getEvents Response:', response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getEvents Data:', data);                
+                
+                if (data.code === 0) {
+                    console.log('getEvents: success');
+                    retVal = data.data;
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getEvents: login again');                    
+                    const result = await shared.login();
+                    if (result) {
+                        retVal = getEvents(depth + 1);
+                    }
+                }
+                else {
+                    const promise = popup.open({
+                        title: 'Error Getting Events',
+                        message: `Error code:${JSON.stringify(data)}`,
+                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                    });
+                    const buttonId = await promise;
+                }
+            }
+            else {
+                console.log('getEvents Response not ok:', response);
+            }
+        }
+        catch (e) {
+            console.error('getEvents error:', e);
+        }        
+        return retVal;
+    }
 
     const onClickCheckIn = async () => {
         console.log('onClickCheckIn');
@@ -169,8 +242,15 @@ userProfile : {
         }
     };
 
+    const setupEvents = async () => {
+        const events = await getEvents();
+        console.log('setupEvents:', events);
+        setEventData(events);
+    };
+
     useEffect(() => {
         setupProfileData();
+        setupEvents();
     }, []);
 
     useEffect(() => {
@@ -323,41 +403,17 @@ userProfile : {
 
                 <section className="events-section">
                     <div className="events-carousel" ref={carouselRef}>
-                        <button className="event-card">
-                            <img
-                                src={eventSnoopDogg}
-                                alt="Events"
-                                className="event-card-image"
-                            />
-                        </button>
-                        <button className="event-card">
-                            <img
-                                src={eventSnoopDogg}
-                                alt="Events"
-                                className="event-card-image"
-                            />
-                        </button>
-                        <button className="event-card">
-                            <img
-                                src={eventSnoopDogg}
-                                alt="Events"
-                                className="event-card-image"
-                            />
-                        </button>
-                        <button className="event-card">
-                            <img
-                                src={eventSnoopDogg}
-                                alt="Events"
-                                className="event-card-image"
-                            />
-                        </button>
-                        <button className="event-card">
-                            <img
-                                src={eventSnoopDogg}
-                                alt="Events"
-                                className="event-card-image"
-                            />
-                        </button>
+                        {eventData.map((event, index) => (
+                            <button key={index} className="event-card" onClick={() => {
+                                openLink(event.url);
+                            }}>
+                                <img
+                                    src={event.img}
+                                    alt={event.name}
+                                    className="event-card-image"
+                                />
+                            </button>
+                        ))}
                     </div>
                 </section>
             </div>
