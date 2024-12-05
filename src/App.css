@@ -219,3 +219,12 @@ p {
 .checkin-text .days-text {
   font-size: 14px;
 }
+
+.lock-icon-market {
+  position: absolute;
+  top: 22px;
+  right: 97px;
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+}

@@ -29,6 +29,7 @@ import background from './images/background.png';
 import checkInAnimation from './images/check_in_animation_540.gif';
 
 import shared from './Shared';
+import lock_icon from "./images/lock_trophy.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
@@ -269,8 +270,8 @@ function App() {
         return <FSLIDTest />;
       case 'frens':
         return <Frens />;
-      case 'market':
-        return <ScratchTest />;
+      // case 'market':
+        // return <ScratchTest />;
       // case 'checkin':
       //   return <CheckIn onClose={() => setActiveTab('home')}/>;
       default:
@@ -319,8 +320,9 @@ function App() {
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
                 <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
+                <img src={lock_icon} alt="Market" className="lock-icon-market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
                 <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
@@ -384,8 +386,9 @@ function App() {
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
               <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
+              <img src={lock_icon} alt="Market" className="lock-icon-market" />
             </button>
             {/* <button onClick={() => setShowProfileView(true)} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />

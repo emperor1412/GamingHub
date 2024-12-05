@@ -97,7 +97,8 @@ Response:
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
+            // const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
+            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/hHinjx/xY6gECBXlMiE1Z95dGmuh/3Pqzg/tEcJ1P3s=.png';
             // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
 
         // only premium users can share stories with links
