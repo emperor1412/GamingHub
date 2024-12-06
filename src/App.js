@@ -20,6 +20,7 @@ import Friends_selected from './images/Friends_selected.svg';
 
 import Market_normal from './images/Market_normal.svg';
 import Market_selected from './images/Market_selected.svg';
+import market_locked from './images/market_locked.png';
 
 import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
@@ -321,8 +322,9 @@ function App() {
               </button>
 
               <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
-                <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
-                <img src={lock_icon} alt="Market" className="lock-icon-market" />
+                {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
+                {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
+                <img src={market_locked} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
                 <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
@@ -387,8 +389,9 @@ function App() {
             </button>
 
             <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
-              <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
-              <img src={lock_icon} alt="Market" className="lock-icon-market" />
+              {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
+              {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
+              <img src={market_locked} alt="Market" />
             </button>
             {/* <button onClick={() => setShowProfileView(true)} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
