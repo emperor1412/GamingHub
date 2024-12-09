@@ -366,12 +366,14 @@ const Frens = () => {
               name: 'FSL Hub'
             }
           });
-          */
-      shareStory(url, 
-        {
-          text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
-        });
-      shareStoryAPI(selectedTrophy.id);
+      */
+
+      // comment for internal testing
+      // shareStory(url, 
+      //   {
+      //     text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
+      //   });
+      // shareStoryAPI(selectedTrophy.id);
     }
   };
 
@@ -379,7 +381,7 @@ const Frens = () => {
     console.log('Invite friends');
     const url = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
     console.log('Invite friends URL:', url);
-    shareURL(url);
+    // shareURL(url);
   };
 
   const handleTrophyClick = (trophy) => {

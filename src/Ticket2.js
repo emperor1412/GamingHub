@@ -113,9 +113,11 @@ Response:
                 }
             });
             */
-            shareStory(url, {
-                text: `Yay! I just got a reward from scratching a ticket in FSL Gaming Hub! 🎉\n${inviteLink}`,
-            });
+
+            // comment for internal testing
+            // shareStory(url, {
+            //     text: `Yay! I just got a reward from scratching a ticket in FSL Gaming Hub! 🎉\n${inviteLink}`,
+            // });
 
             setShowShareStory(false);
             claimRewardFromSharingStory();
