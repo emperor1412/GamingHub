@@ -74,7 +74,7 @@ const Ticket = ({ onClose }) => {
                             </button>
 
                             <div className="info-box-ticket">
-                                STAY IN THE LOOP WITH THE LATEST CRYPTO LINGO! MASTER THE SLANG THAT EVERYONE'S TALKING ABOUT.
+                            EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
                             </div>
                         </div>
                     </div>
