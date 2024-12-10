@@ -223,7 +223,7 @@ Response:
         // Add any completion logic here
         setTimeout(() => {
             setShowResult(true);
-        }, 2000);
+        }, 3000);
     };
 
     const handleClaim = () => {

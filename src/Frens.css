@@ -30,7 +30,7 @@
     overflow: hidden;
     min-height: 300px;
     position: relative;
-    border: 2px solid #C07BFF;
+    border: 2px solid #0000FF;
     border-radius: 12px;
     background: #292929;
 }
@@ -62,7 +62,7 @@
 .info-box {
   background: rgba(255, 255, 255, 0);
   border-radius: 12px;
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
   padding: 16px;
   color: #83807F;
   font-size: 11px;
@@ -91,7 +91,7 @@
 }
 
 .stat-value {
-  color: #C07BFF;
+  color: #ffffff;
   font-weight: bold;
 }
 
@@ -131,7 +131,7 @@
   transform: translateX(-50%);
   width: 75%;
   height: 2px;
-  background: #C07BFF;
+  background: #0000FF;
 }
 
 
@@ -196,10 +196,10 @@
 }
 
 .invite-button {
-  background: #C07BFF;
+  background: #0000FF;
   border: none;
   border-radius: 0 0 8px 8px;
-  color: black;
+  color: rgb(255, 255, 255);
   padding: 12px;
   font-size: 16px;
   cursor: pointer;
@@ -265,7 +265,7 @@
 } */
 
 .trophy-item.unlocked {
-  border-color: #C07BFF;
+  border-color: #0000FF;
 }
 
 .trophy-item.ready {

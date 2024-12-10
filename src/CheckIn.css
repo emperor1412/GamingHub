@@ -130,7 +130,7 @@
 
 .day-card.active {
   background: rgba(85, 85, 85, 0.61);
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
 }
 
 .day-card.inactive {
@@ -192,8 +192,8 @@
 }
 
 .okay-button {
-  background: #C07BFF;
-  color: rgb(0, 0, 0);
+  background: #0000FF;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 8px;
   padding: 16px;
@@ -208,7 +208,7 @@
 }
 
 .okay-button:hover {
-  background: #7C3AED;
+  opacity: 0.9;
 }
 
 .checkmark-icon {

@@ -4,7 +4,7 @@ import { shareStory, shareURL } from '@telegram-apps/sdk';
 import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
-import friendsIcon from './images/Friends_selected.svg';
+import friendsIcon from './images/friends_icon.svg';
 import kmIcon from './images/km.svg';
 import trophy_1 from './images/trophy_1_200px.png';
 import trophy_2 from './images/trophy_2_200px.png';

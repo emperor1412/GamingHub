@@ -122,9 +122,9 @@
 }
 
 .info-box-ticket {
-    background: rgba(192, 123, 255, 0.1);
+    background: rgba(191, 123, 255, 0);
     border-radius: 12px;
-    border: #C07BFF 1px solid;
+    border: #0000FF 1px solid;
     padding: 16px;
     color: white;
     font-size: 14px;

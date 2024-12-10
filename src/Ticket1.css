@@ -22,7 +22,7 @@
     background: rgba(192, 123, 255, 0.15);
     padding: 16px;
     text-align: center;
-    color: #C07BFF;
+    color: #0000FF;
     font-family: 'PPNeueMachina', sans-serif;
     font-style: italic;
     font-size: 18px;
@@ -32,7 +32,7 @@
 }
 
 .scratch-grid-container {
-    border: 1px solid rgba(192, 123, 255, 0.3);
+    border: 1px solid #0000FF;
     border-radius: 16px;
     background: rgba(192, 123, 255, 0.05);
     padding: 16px;
@@ -101,7 +101,7 @@
 }
 
 
-.info-box-ticket {
+/* .info-box-ticket {
     background: rgba(192, 123, 255, 0.1);
     border-radius: 12px;
     border: #C07BFF 1px solid;
@@ -112,7 +112,7 @@
     font-family: 'PPNeueMachina', sans-serif;
     font-style: italic;
     margin-bottom: 20px;
-}
+} */
 
 .scratch-grid::-webkit-scrollbar {
     width: 4px;
@@ -205,14 +205,14 @@
 }
 
 .overlay-button-ticket1.primary {
-    background: #C07BFF;
+    background: #0000FF;
     color: white;
 }
 
 .overlay-button-ticket1.secondary {
     background: rgba(192, 123, 255, 0.1);
-    border: 1px solid #C07BFF;
-    color: #C07BFF;
+    border: 1px solid #0000FF;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;

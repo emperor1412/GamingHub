@@ -93,7 +93,7 @@
 }
 
 .reward-message {
-    font-size: 18px;
+    font-size: 14px;
     margin: 10px 0 30px;
     font-style: italic;
 }
@@ -114,7 +114,7 @@
 }
 
 .share-button {
-    background: #C07BFF;
+    background: #0000FF;
     color: white;
     position: relative;
     display: flex;
@@ -138,7 +138,7 @@
 .claim-button {
     background: transparent;
     color: white;
-    border: 2px solid #C07BFF;
+    border: 2px solid #0000FF;
 }
 
 .reward-details {

@@ -95,15 +95,15 @@
     content: '';
     width: 20px;
     height: 20px;
-    border: 1px solid #C07BFF;
+    border: 1px solid #0000FF;
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
 }
 
 .answer-button.selected::before {
-    background: #C07BFF;
-    border-color: #C07BFF;
+    background: #0000FF;
+    border-color: #0000FF;
 }
 
 .answer-button:hover {
@@ -150,7 +150,7 @@
 }
 
 .try-again-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 8px;
     color: rgb(255, 255, 255);
@@ -169,7 +169,7 @@
 }
 
 .tasks-okay-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 8px;
     color: rgb(255, 255, 255);
@@ -189,7 +189,7 @@
 
 .reward-earned {
     margin: 0px auto;
-    border: 1px solid #C07BFF;
+    border: 1px solid #0000FF;
     border-radius: 8px;
     width: 100%;
     max-width: 98%;
@@ -201,7 +201,7 @@
     margin: 0;
     font-style: italic;
     font-size: 16px;
-    color: #C07BFF;
+    color: #ffffff;
 }
 
 .reward-amount {
@@ -223,7 +223,7 @@
 }
 
 .next-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 4px;
     color: white;
@@ -298,7 +298,7 @@
     padding: 4px 0px;
     background: rgba(41, 41, 41, 0);
     border-radius: 12px;
-    border: #C07BFF 1px solid;
+    border: #0000FF 1px solid;
     line-height: 1.5;
     min-height: 40px;
 }

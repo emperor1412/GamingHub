@@ -60,7 +60,7 @@
 
 .avatar-grid-container {
   background: #292929;
-  border: 2px solid #C07BFF;
+  border: 2px solid #0000FF;
   border-radius: 16px;
   padding: 20px;
   margin: 20px 0;
@@ -118,7 +118,7 @@
 .footer-button {
   width: 100%;
   padding: 16px;
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
   border-radius: 8px;
   font-family: 'PPNeueMachina', sans-serif;
   font-style: italic;
@@ -130,7 +130,7 @@
 .terms-button,
 .privacy-button {
   background: transparent;
-  color: #C07BFF;
+  color: #ffffff;
   font-style: italic;
 }
 
@@ -139,7 +139,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #C07BFF;
+  background: #0000FF;
   color: rgb(0, 0, 0);
   margin: 0;
   padding: 8px;
@@ -157,7 +157,7 @@
 }
 
 .okay-button-profile.inactive {
-  background: #bf7bff80;
+  background: #0000FF;
   cursor: not-allowed;
   opacity: 0.5;
 }

@@ -7,7 +7,8 @@ import leaderboard from './images/leaderboard.svg';
 import ticketIcon from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar_before_checkin.svg';
+// import calendar_before_checkin from './images/calendar_before_checkin.svg';
+import calendar_before_checkin from './images/calendar.svg';
 
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
@@ -292,8 +293,8 @@ Response:
             
             const now = new Date();
             const timeDifference = now - lastTime;
-            const twoMinutes = 2 * 60 * 1000;
-            const remaining = twoMinutes - timeDifference;
+            const interval = 60 * 1000 * 60 * 24;  // 24 hours
+            const remaining = interval - timeDifference;
 
             if(remaining > 0) {
                 console.log('MainView useEffect: after check-in state, remaining: ' + remaining);
