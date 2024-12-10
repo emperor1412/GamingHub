@@ -6,6 +6,8 @@ import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import scratch_ticket from './images/scratch_ticket.svg';
+import bank_ticket from './images/bank_ticket.svg';
+import burn_ticket from './images/burn_ticket.svg';
 
 const Ticket = ({ onClose }) => {
     const [ticket, setTicket] = useState(0);
@@ -62,12 +64,12 @@ const Ticket = ({ onClose }) => {
                             </button>
 
                             <button className="ticket-card-item disabled">
-                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                                <img src={bank_ticket} alt="Scratch Ticket" className="ticket-card-image" />
                                 <div className="coming-soon">Coming Soon</div>
                             </button>
 
                             <button className="ticket-card-item disabled">
-                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                                <img src={burn_ticket} alt="Scratch Ticket" className="ticket-card-image" />
                                 <div className="coming-soon">Coming Soon</div>
                             </button>
 
