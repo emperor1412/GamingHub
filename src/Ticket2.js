@@ -6,7 +6,9 @@ import { ScratchCard } from 'next-scratchcard';
 // import rewardImage from './images/FSL Games Scratch Animation-02.png'; // Adjust path as needed
 import scratchBackground from './images/scratch_ticket_background_full.png'; // Adjust path as needed
 import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; // Adjust path as needed
-import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
+// import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
+import nothing from './images/background_no_reward.png'; // Adjust path as needed
+
 import km from './images/km.svg';
 import { shareStory } from '@telegram-apps/sdk';
 
@@ -19,6 +21,7 @@ const Ticket2 = ({ ticketCount, onClose }) => {
     const [rewardText, setRewardText] = useState('');
     const [noReward, setNoReward] = useState(false);
     const [showShareStory, setShowShareStory] = useState(true);
+    const [tryAgain, setTryAgain] = useState(false);
 /*
 url: /app/ticketUse
 Request:
@@ -113,9 +116,10 @@ Response:
                 }
             });
             */
-            shareStory(url, {
-                text: `Yay! I just got a reward from scratching a ticket in FSL Gaming Hub! 🎉\n${inviteLink}`,
-            });
+
+            // shareStory(url, {
+            //     text: `Yay! I just got a reward from scratching a ticket in FSL Gaming Hub! 🎉\n${inviteLink}`,
+            // });
 
             setShowShareStory(false);
             claimRewardFromSharingStory();
@@ -221,9 +225,17 @@ Response:
     const handleComplete = async () => {
         console.log('Scratch completed!');
         // Add any completion logic here
-        setTimeout(() => {
-            setShowResult(true);
-        }, 3000);
+
+        if(noReward) {
+            setTryAgain(true);
+        }
+        else {
+            setTimeout(() => {
+                setShowResult(true);
+            }, 2000);
+        }
+
+
     };
 
     const handleClaim = () => {
@@ -310,6 +322,18 @@ Response:
                             )}
                         </div>
                     </ScratchCard>
+
+                    {tryAgain && (
+                        
+                        <button 
+                            className="full-viewport-button"
+                            onClick={() => {
+                                setTryAgain(false);
+                                handleClaim();
+                            }}
+                        />
+                        
+                    )}
                 </div>
             )}
         </>

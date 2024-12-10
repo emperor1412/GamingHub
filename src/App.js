@@ -369,7 +369,8 @@ function App() {
         <Ticket onClose={() => {
             setShowTicketView(false);
             setActiveTab('home');
-          }}
+          }} 
+          getProfileData={getProfileData}
         />
       )
       : 

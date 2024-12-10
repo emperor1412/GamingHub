@@ -9,11 +9,14 @@ import scratch_ticket from './images/scratch_ticket.svg';
 import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
 
-const Ticket = ({ onClose }) => {
+const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
     const [showTicket1, setShowTicket1] = useState(false);
 
     const setupProfileData = async () => {
+
+        await getProfileData();
+
         if (!shared.userProfile || !shared.userProfile.UserToken) {
             return;
         }
@@ -25,7 +28,7 @@ const Ticket = ({ onClose }) => {
 
     useEffect(() => {
         setupProfileData();
-    }, []);
+    }, [showTicket1]);
 
     return (
         <>
@@ -65,12 +68,12 @@ const Ticket = ({ onClose }) => {
 
                             <button className="ticket-card-item disabled">
                                 <img src={bank_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                <div className="coming-soon">Coming Soon</div>
+                                {/* <div className="coming-soon">Coming Soon</div> */}
                             </button>
 
                             <button className="ticket-card-item disabled">
                                 <img src={burn_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                <div className="coming-soon">Coming Soon</div>
+                                {/* <div className="coming-soon">Coming Soon</div> */}
                             </button>
 
                             <div className="info-box-ticket">
