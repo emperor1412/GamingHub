@@ -10,7 +10,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  padding-bottom: 0px;
+  padding-bottom: 120px;
   overflow-y: auto;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
@@ -50,6 +50,19 @@
   justify-content: center;
   height: 120px;
 }
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 100%;
+  margin-bottom: 5px;
+  overscroll-behavior: none;
+}
+
+/* .days-grid > div:last-child {
+  grid-column: 2;
+} */
 
 .streak-info {
   text-align: left;
@@ -103,19 +116,6 @@
   color: #ffffff;
 }
 
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  max-width: 100%;
-  margin-bottom: 5px;
-  overscroll-behavior: none;
-}
-
-/* .days-grid > div:last-child {
-  grid-column: 2;
-} */
-
 .day-card {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
@@ -124,7 +124,7 @@
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   overflow: hidden;
 }
 
@@ -202,7 +202,9 @@
   cursor: pointer;
   width: 100%;
   max-width: 330px;
-  margin: 0 auto 20px auto;
+  margin: 10px auto 20px auto;
+  /* bottom: 2%; */
+  /* position:absolute; */
 }
 
 .okay-button:hover {
