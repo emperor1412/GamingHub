@@ -125,7 +125,7 @@
     padding: 4px 10px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
     margin-bottom: 8px;
 }
 
@@ -249,8 +249,8 @@
 }
 
 .done-button img {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     position: absolute;
     left: 10px;
     top: -30px;
