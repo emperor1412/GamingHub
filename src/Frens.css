@@ -485,11 +485,11 @@
 
 .share-story-button {
   background: var(--color-primary);
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
   border-radius: 8px;
   padding: 16px;
   width: 100%;
-  color: #C07BFF;
+  color: #ffffff;
   font-size: 14px;
   cursor: pointer;
   text-transform: uppercase;
