@@ -451,7 +451,7 @@ const Tasks = ({
                     <div className="task-bottom-left">
                         <div className="task-reward">
                             <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className={`reward-icon ${isDone ? 'done' : ''}`} />
-                            <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
+                            <span className="reward-amount-task">{task.rewardList[0]?.amount || 0}</span>
                         </div>
                         {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
                     </div>

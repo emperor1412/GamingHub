@@ -26,7 +26,8 @@ import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
 // import background from './images/background.svg';
-import background from './images/background.png';
+// import background from './images/background.png';
+import background from './images/background_2.png';
 import checkInAnimation from './images/check_in_animation_540.gif';
 
 import shared from './Shared';
