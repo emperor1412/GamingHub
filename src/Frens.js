@@ -648,7 +648,7 @@ const Frens = () => {
                   </button>
                   <div className="trophy-reward">
                     <img src={kmIcon} alt="GMT" className="stat-icon" />
-                    <span>267</span>
+                    <span>100</span>
                   </div>
                 </>
               ) : (

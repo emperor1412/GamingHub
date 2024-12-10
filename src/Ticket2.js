@@ -274,7 +274,7 @@ Response:
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM"/>
-                                        <span>200</span>
+                                        <span>100</span>
                                     </div>
                                 </button>
                             )}
