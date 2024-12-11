@@ -122,7 +122,7 @@
     /* background: rgba(41, 41, 41, 0.8); */
     border: #46413F 1px solid;
     border-radius: 12px;
-    padding: 10px 10px;
+    padding: 14px 10px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -180,8 +180,8 @@
 
 .reward-icon {
     opacity: 1;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .reward-icon.done {
@@ -192,6 +192,7 @@
     color: #ffffff;
     font-family: 'PPNeueMachina', sans-serif;
     font-style: italic;
+    font-size: 14px;
 }
 
 .task-deadline {

@@ -59,6 +59,7 @@ function App() {
   const [showCheckInView, setShowCheckInView] = useState(false);
   const [showProfileView, setShowProfileView] = useState(false);
   const [showTicketView, setShowTicketView] = useState(false);
+  const [resourcesLoaded, setResourcesLoaded] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -150,12 +151,12 @@ function App() {
                 await getProfileData(loginResult.loginData);
 
                 if (popup.open.isAvailable()) {
-                    const promise = popup.open({
-                        title: 'Success',
-                        message: "Login Success",
-                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    });
-                    const buttonId = await promise;
+                    // const promise = popup.open({
+                    //     title: 'Success',
+                    //     message: "Login Success",
+                    //     buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                    // });
+                    // const buttonId = await promise;
                     
                     const result = await checkIn(loginResult.loginData);
                     if(result == 1) {
@@ -184,6 +185,47 @@ function App() {
         initRef.current = false;
     }
 };
+
+  const preloadImages = (imageUrls) => {
+    const promises = imageUrls.map((url) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+    return Promise.all(promises);
+  };
+
+  useEffect(() => {
+    const imageUrls = [
+      HomeIcon_selected,
+      HomeIcon_normal,
+      Task_normal,
+      Task_selected,
+      Friends_normal,
+      Friends_selected,
+      Market_normal,
+      Market_selected,
+      market_locked,
+      ID_normal,
+      ID_selected,
+      background,
+      checkInAnimation,
+      lock_icon,
+      // Add any other images you need to preload
+    ];
+
+    preloadImages(imageUrls)
+      .then(() => {
+        setResourcesLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Error preloading images:', error);
+        setResourcesLoaded(true); // Proceed even if some images fail to load
+      });
+  }, []);
 
   useEffect(() => {
     console.log('App useEffect called');
@@ -294,7 +336,7 @@ function App() {
       <div className="background-container">
         <img src={background} alt="background" />
       </div>
-      {isLoading ? (
+      {isLoading || !resourcesLoaded ? (
         <div className="loading">Loading...</div>
       ) 
       : !isLoggedIn ? (

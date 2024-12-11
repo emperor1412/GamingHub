@@ -319,7 +319,7 @@ Response:
         <>
             <header className="stats-header">
                 <button 
-                    className="profile-pic"
+                    className="profile-pic-main"
                     onClick={() => setShowProfileView(true)}
                 >
                     <img 

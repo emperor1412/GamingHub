@@ -35,7 +35,7 @@
 .header-stats {
     display: flex;
     gap: 16px;
-    margin-right: 10px;
+    margin-right: 30px;
 }
 
 .stat-ticket {
@@ -106,7 +106,7 @@
 } */
 
 .ticket-card-item.disabled {
-    opacity: 0.6;
+    opacity: 1;
     cursor: not-allowed;
 }
 
