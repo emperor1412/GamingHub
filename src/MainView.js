@@ -413,6 +413,14 @@ Response:
                                     alt={event.name}
                                     className="event-card-image"
                                 />
+                                <div className="event-card-content">
+                                    {/* <h3 className="event-card-title">{event.name}</h3>
+                                    <p className="event-card-subtitle">{event.description}</p> */}
+                                    <div className="check-out-button">
+                                        Check out
+                                        <img src="/path-to-arrow-icon.svg" alt="Arrow" />
+                                    </div>
+                                </div>
                             </button>
                         ))}
                     </div>
