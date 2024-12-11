@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding-right: 20px;
+    padding-right: 12px;
     flex: 1;
 }
 
@@ -289,6 +289,24 @@
     -webkit-overflow-scrolling: touch;
     position: relative;
     overscroll-behavior: none;
+
+    /* Hide scrollbars while maintaining functionality */
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    overflow: -moz-scrollbars-none;
+    
+    /* Additional WebView-specific properties */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide WebKit scrollbars */
+.scrollable-content::-webkit-scrollbar,
+.scrollable-content::-webkit-scrollbar-thumb,
+.scrollable-content::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
 }
 
 .stat-button {

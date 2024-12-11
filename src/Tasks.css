@@ -38,7 +38,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding-right: 10px;
+    padding-right: 12px;
     flex: 1;
 }
 
@@ -68,20 +68,6 @@
 .stat-item img {
     width: 24px;
     height: 24px;
-}
-
-.tasks-content {
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 80px;
-    padding-bottom: 90px;
-    padding-left: 20px;
-    padding-right: 20px;
-    -webkit-overflow-scrolling: touch;
-    position: relative;
-    height: calc(100vh);
-    margin-top: 0;
-    overscroll-behavior: contain;
 }
 
 .tasks-inner-content {
