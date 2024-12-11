@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.8c985f6c.css",
-    "main.js": "/GamingHub/static/js/main.8397ad9d.js",
+    "main.css": "/GamingHub/static/css/main.3a8bb2ae.css",
+    "main.js": "/GamingHub/static/js/main.fc0c69c8.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.2827b4c5da87372172e9d5554579819a.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -32,7 +32,9 @@
     "static/media/avatar_15_Pirate_Parrot_300px.png": "/GamingHub/static/media/avatar_15_Pirate_Parrot_300px.80bc2183688ea14da58d.png",
     "static/media/avatar_14_Robot_300px.png": "/GamingHub/static/media/avatar_14_Robot_300px.64f3a597702cd717f8f9.png",
     "static/media/x-icon.svg": "/GamingHub/static/media/x-icon.7539f9ae02dcf359a921e0a2d5053e69.svg",
+    "static/media/PPNeueMachina-Regular.otf": "/GamingHub/static/media/PPNeueMachina-Regular.9dbd84d64fd4caf4c6d2.otf",
     "static/media/PPNeueMachina-Ultrabold.otf": "/GamingHub/static/media/PPNeueMachina-Ultrabold.39c2d3066c018681f83b.otf",
+    "static/media/PPNeueMachina-Light.otf": "/GamingHub/static/media/PPNeueMachina-Light.976bfe88032bf7e27259.otf",
     "static/media/calendar.svg": "/GamingHub/static/media/calendar.de80f55652e6787bccc4cabb05936235.svg",
     "static/media/trophy_4_200px.png": "/GamingHub/static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
     "static/media/trophy_5_200px.png": "/GamingHub/static/media/trophy_5_200px.964e7c89e15a2f054472.png",
@@ -66,19 +68,18 @@
     "index.html": "/GamingHub/index.html",
     "static/media/arrow_2.svg": "/GamingHub/static/media/arrow_2.55e338e1499e2cd2d9f8f4a766e668c4.svg",
     "static/media/arrow.svg": "/GamingHub/static/media/arrow.a91b1e66ab8cd93e8d6ee7de65888d92.svg",
-    "static/media/link.svg": "/GamingHub/static/media/link.723747a5534fe7eeaa5276c709ce70a1.svg",
     "static/media/checkout.svg": "/GamingHub/static/media/checkout.3d0a4fab3705ba8bec802ff84522aea1.svg",
     "static/media/close.svg": "/GamingHub/static/media/close.c6e8f4628eb2e353695e4ed4aedb6050.svg",
     "static/media/checkmark.svg": "/GamingHub/static/media/checkmark.7de0cb5cb020fec2fa737ef74baf144c.svg",
     "static/media/back.svg": "/GamingHub/static/media/back.4da4cb710ea609b39249af327e92892a.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.aeb40c8e6737d4d3b234ab808831bdc0.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.7f71aa69b2f2b0e26c757866e68e50ac.svg",
-    "main.8c985f6c.css.map": "/GamingHub/static/css/main.8c985f6c.css.map",
-    "main.8397ad9d.js.map": "/GamingHub/static/js/main.8397ad9d.js.map",
+    "main.3a8bb2ae.css.map": "/GamingHub/static/css/main.3a8bb2ae.css.map",
+    "main.fc0c69c8.js.map": "/GamingHub/static/js/main.fc0c69c8.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8c985f6c.css",
-    "static/js/main.8397ad9d.js"
+    "static/css/main.3a8bb2ae.css",
+    "static/js/main.fc0c69c8.js"
   ]
 }
