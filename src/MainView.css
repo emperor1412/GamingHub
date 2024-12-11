@@ -159,8 +159,36 @@
     display: flex;
     overflow-x: auto;
     width: 100%;
-    gap: 16px; /* Add space between cards */
-    padding: 0 0px; /* Optional: Add padding to the sides */
+    gap: 16px;
+    padding: 0 0px;
+    
+    /* Hide scrollbars while maintaining functionality */
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    overflow: -moz-scrollbars-none;
+    
+    /* Additional WebView-specific properties */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide WebKit scrollbars */
+.events-carousel::-webkit-scrollbar,
+.events-carousel::-webkit-scrollbar-thumb,
+.events-carousel::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
+}
+
+/* Ensure child elements also hide scrollbars */
+.events-carousel * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.events-carousel *::-webkit-scrollbar {
+    display: none !important;
 }
 
 .event-card {
