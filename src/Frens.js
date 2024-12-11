@@ -125,6 +125,7 @@ const Frens = () => {
           icon: trophyIcon[trophy.id]
         }));
 
+        // setTrophies(trophiesData.concat(trophiesData));
         setTrophies(trophiesData);
       }
       else if (data.code === 102002 || data.code === 102001) {

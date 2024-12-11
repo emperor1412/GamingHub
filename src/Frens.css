@@ -24,15 +24,73 @@
 }
 
 .friends-container {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 36vh); /* Thay đổi height thành fixed */
-    overflow: hidden;
-    min-height: 300px;
-    position: relative;
-    border: 2px solid #0000FF;
-    border-radius: 12px;
-    background: #292929;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 260px);
+  overflow: hidden;
+  min-height: 300px;
+  position: relative;
+  border: 2px solid #0000FF;
+  border-radius: 12px;
+  background: #292929;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+.trophies-list {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 50px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+  
+  /* Additional WebView-specific properties */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide WebKit scrollbars */
+.trophies-list::-webkit-scrollbar,
+.trophies-list::-webkit-scrollbar-thumb,
+.trophies-list::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
+}
+
+/* Ensure child elements also hide scrollbars */
+.trophies-list * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.trophies-list *::-webkit-scrollbar {
+  display: none !important;
+}
+
+.trophies-grid {
+  /* height: calc(100vh - 10px); */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-bottom: -40px;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 .friends-list {
@@ -258,47 +316,6 @@
   height: 16px;
 }
 
-.trophies-list {
-  flex: 1;
-  padding: 16px 16px 16px 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 50px;
-  height: auto;
-
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  overflow: -moz-scrollbars-none;
-  
-  /* Additional WebView-specific properties */
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Hide WebKit scrollbars */
-.trophies-list::-webkit-scrollbar,
-.trophies-list::-webkit-scrollbar-thumb,
-.trophies-list::-webkit-scrollbar-track {
-    width: 0 !important;
-    height: 0 !important;
-    background-color: transparent !important;
-    display: none !important;
-}
-
-.trophies-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  width: 100%;
-  margin-bottom: 16px;
-  min-height: min-content;
-  padding: 10px 10px;
-  box-sizing: border-box;
-}
-
 .trophy-item {
   position: relative;
   width: 100%;
@@ -316,6 +333,7 @@
   border: 1px solid transparent;
   padding: 0;
   cursor: pointer;
+  max-width: 100%;
 }
 
 .trophy-item:disabled {
