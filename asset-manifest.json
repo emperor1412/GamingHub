@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.c30b1ee4.css",
-    "main.js": "/GamingHub/static/js/main.9e50fa61.js",
+    "main.css": "/GamingHub/static/css/main.8ef02933.css",
+    "main.js": "/GamingHub/static/js/main.9afa29e8.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.2827b4c5da87372172e9d5554579819a.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -67,17 +67,18 @@
     "static/media/arrow_2.svg": "/GamingHub/static/media/arrow_2.55e338e1499e2cd2d9f8f4a766e668c4.svg",
     "static/media/arrow.svg": "/GamingHub/static/media/arrow.a91b1e66ab8cd93e8d6ee7de65888d92.svg",
     "static/media/link.svg": "/GamingHub/static/media/link.723747a5534fe7eeaa5276c709ce70a1.svg",
+    "static/media/checkout.svg": "/GamingHub/static/media/checkout.3d0a4fab3705ba8bec802ff84522aea1.svg",
     "static/media/close.svg": "/GamingHub/static/media/close.c6e8f4628eb2e353695e4ed4aedb6050.svg",
     "static/media/checkmark.svg": "/GamingHub/static/media/checkmark.7de0cb5cb020fec2fa737ef74baf144c.svg",
     "static/media/back.svg": "/GamingHub/static/media/back.4da4cb710ea609b39249af327e92892a.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.aeb40c8e6737d4d3b234ab808831bdc0.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.7f71aa69b2f2b0e26c757866e68e50ac.svg",
-    "main.c30b1ee4.css.map": "/GamingHub/static/css/main.c30b1ee4.css.map",
-    "main.9e50fa61.js.map": "/GamingHub/static/js/main.9e50fa61.js.map",
+    "main.8ef02933.css.map": "/GamingHub/static/css/main.8ef02933.css.map",
+    "main.9afa29e8.js.map": "/GamingHub/static/js/main.9afa29e8.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c30b1ee4.css",
-    "static/js/main.9e50fa61.js"
+    "static/css/main.8ef02933.css",
+    "static/js/main.9afa29e8.js"
   ]
 }
