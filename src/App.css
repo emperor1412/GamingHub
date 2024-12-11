@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'PPNeueMachina';
-  src: url('./fonts/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  src: url('./fonts/PPNeueMachina-Ultrabold.otf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
@@ -56,7 +56,7 @@
   transform: translateX(-50%);
   width: 100%;
   /* max-width: 430px; */
-  background: rgba(65, 65, 65, 0.9);
+  background: rgba(0, 0, 0, 0.509);
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
