@@ -47,15 +47,18 @@
 }
 
 .avatar-selector-header {
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  font-family: 'PPNeueMachina', sans-serif;
-  font-style: italic;
   margin-bottom: 20px;
   margin-top: 0px;
   position: relative;
   z-index: 1;
+  
+  color: #FFF;
+  text-align: center;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .avatar-grid-container {
@@ -120,18 +123,16 @@
   padding: 16px;
   border: 1px solid #0000FF;
   border-radius: 8px;
-  font-family: 'PPNeueMachina', sans-serif;
-  font-style: italic;
-  font-size: 16px;
   cursor: pointer;
   transition: opacity 0.2s;
-}
-
-.terms-button,
-.privacy-button {
   background: transparent;
-  color: #ffffff;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .okay-button-profile {

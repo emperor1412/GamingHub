@@ -21,14 +21,17 @@
 .scratch-header {
     background: #0000ffa4;
     padding: 16px;
-    text-align: center;
-    color: #ffffff;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    font-size: 18px;
-    letter-spacing: 1px;
-    border-radius: 12px;
     margin-bottom: 10px;
+    border-radius: 12px;
+
+    color: #FFF;
+    text-align: center;
+    font-family: "PP Neue Machina";
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .scratch-grid-container {
@@ -41,6 +44,24 @@
     display: flex;
     flex-direction: column;
     overscroll-behavior: contain;
+
+    /* Hide scrollbars while maintaining functionality */
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    overflow: -moz-scrollbars-none;
+    
+    /* Additional WebView-specific properties */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide WebKit scrollbars */
+.scratch-grid-container::-webkit-scrollbar,
+.scratch-grid-container::-webkit-scrollbar-thumb,
+.scratch-grid-container::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
 }
 
 .scratch-grid {
@@ -185,7 +206,7 @@
     flex-direction: column;
     gap: 12px;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
 }
 
 .overlay-button-ticket1 {
@@ -195,11 +216,16 @@
     align-items: center;
     border-radius: 8px;
     border: none;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    font-size: 16px;
     cursor: pointer;
     transition: transform 0.2s;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .overlay-button-ticket1:active {

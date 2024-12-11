@@ -121,10 +121,10 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
         </div>
 
         <div className="avatar-footer">
-          <button className="footer-button terms-button">
+          <button className="footer-button">
             Terms and Conditions
           </button>
-          <button className="footer-button privacy-button">
+          <button className="footer-button">
             Privacy Policy
           </button>
         </div>

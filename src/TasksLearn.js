@@ -67,7 +67,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             <div className="quiz-heading">
                                 {task.question.heading}
                             </div>                            
-                            <h2>{task.question.question}</h2>
+                            <div className='quiz-question'>{task.question.question}</div>
                             <div className="answers-container">
                                 {task.question.answers.map((answer, index) => (
                                     <button
@@ -93,13 +93,13 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
                                 </div>
                                 <div className="success-content">
-                                    <h3>BINGO</h3>
-                                    <p style={{ fontSize: '11px' }}>YOU'VE COMPLETED THE QUIZ!</p>
+                                    <div className='text-bingo'>BINGO</div>
+                                    <p className='text-complete-quiz'>YOU'VE COMPLETED THE QUIZ!</p>
                                     <div className="reward-earned">
-                                        <p>YOU'VE EARNED</p>
+                                        <p className='text-you-earn'>YOU'VE EARNED</p>
                                         <div className="reward-amount">
                                         <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
-                                            <span>{task.rewardList[0]?.amount || 0}</span>
+                                            <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
                                         </div>
                                     </div>
                                 </div>

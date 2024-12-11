@@ -70,25 +70,39 @@
 }
 
 .streak-text {
-  font-size: 12px;
-  color: #ffffff;
   margin: 0;
   opacity: 0.8;
-  text-transform: uppercase;
   width: 200px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .streak-days {
-  font-size: 34px;
   margin: 4px 0;
-  color: #ffffff;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 40px;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .days-text {
-  font-size: 13px;
   margin-left: 4px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .stats-container {
@@ -152,25 +166,35 @@
 }
 
 .number {
+  color: #FFF;
+  font-family: "PP Neue Machina";
   font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .suffix {
-  font-size: 12px;
-  color: #ffffff;
   margin-left: 2px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 11px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .label {
-  font-size: 12px;
-  opacity: 0.8;
-  color: #ffffff;
   margin-left: auto;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 11px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .rewards {
@@ -191,20 +215,32 @@
   height: 20px;
 }
 
-.okay-button {
+.reward-text-checkin {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.okay-button-checkin {
   background: #0000FF;
-  color: rgb(255, 255, 255);
   border: none;
   border-radius: 8px;
   padding: 16px;
-  font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
   width: 100%;
   max-width: 330px;
   margin: 10px auto 20px auto;
-  /* bottom: 2%; */
-  /* position:absolute; */
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .okay-button:hover {

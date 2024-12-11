@@ -67,9 +67,9 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                                 <img src={back} alt="Back" />
                             </button>
                             <div className="header-stats">
-                                <div className="stat-item">
+                                <div className="stat-item-main">
                                     <img src={ticketIcon} alt="Tickets" />
-                                    <span>{ticketCount}</span>
+                                    <span className='stat-item-main-text'>{ticketCount}</span>
                                 </div>
                             </div>
                         </header>

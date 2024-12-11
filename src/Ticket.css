@@ -126,10 +126,14 @@
     border-radius: 12px;
     border: #0000FF 1px solid;
     padding: 16px;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
     margin-top: 20px;
+    
+    color: #D4D3D3;
+    text-align: left;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
 }

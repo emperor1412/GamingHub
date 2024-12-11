@@ -43,9 +43,9 @@ const Ticket = ({ onClose, getProfileData }) => {
                             <img src={back} alt="Back" />
                         </button>
                         <div className="header-stats">
-                            <div className="stat-item">
+                            <div className="stat-item-main">
                                 <img src={ticketIcon} alt="Tickets" />
-                                <span>{ticket}</span>
+                                <span className='stat-item-main-text'>{ticket}</span>
                             </div>
                             {/* <div className="stat-item">
                                 <img src={kmIcon} alt="KM" />

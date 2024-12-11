@@ -329,22 +329,22 @@ Response:
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="stats">
+                <div className="stats-main">
                     <button 
-                        className="stat-item"
+                        className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={ticketIcon} alt="Stat 1" />
-                        <span>{ticket}</span>
+                        <span className='stat-item-main-text'>{ticket}</span>
                     </button>
                     <button 
-                        className="stat-item"
+                        className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={km} alt="Stat 1" />
-                        <span>{kmpoint}</span>
+                        <span className='stat-item-main-text'>{kmpoint}</span>
                     </button>
-                    <div className="stat-item">
+                    <div className="stat-item-main">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Stat 1" />
                             <div className="check-in-text">
@@ -354,7 +354,7 @@ Response:
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>

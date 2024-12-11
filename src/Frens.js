@@ -14,7 +14,7 @@ import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
-import link from './images/link.svg';
+import link from './images/checkout.svg';
 import particle from './images/particle.svg';
 import lock_trophy from './images/lock_trophy.png';
 import close from './images/close.svg';
@@ -543,7 +543,7 @@ const Frens = () => {
             <div className="invite-button-container">
               <button className="invite-button" onClick={onClickInviteFriends}>
                 invite friends
-                <img src={link} alt="Link" className="stat-icon" />
+                <img src={link} alt="Link" className="invite-icon" />
               </button>
             </div>
           </div>

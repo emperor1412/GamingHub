@@ -165,18 +165,18 @@ const CheckIn = ({ checkInData, onClose }) => {
                             <div className="rewards">
                                 <div className="reward">
                                     <img src={ticket} alt="Ticket" />
-                                    <span>{day.ticket}</span>
+                                    <span className='reward-text-checkin'>{day.ticket}</span>
                                 </div>
                                 <div className="reward">
                                     <img src={km} alt="Distance" />
-                                    <span>{day.kmPoint}</span>
+                                    <span className='reward-text-checkin'>{day.kmPoint}</span>
                                 </div>
                             </div>
                         </div>
                     );
                 })}
             </div>
-            <button className="okay-button" onClick={onClose}>
+            <button className="okay-button-checkin" onClick={onClose}>
                 Okay
             </button>
         </div>

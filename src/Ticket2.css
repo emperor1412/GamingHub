@@ -85,17 +85,27 @@
 }
 
 .congratulations {
-    font-size: 24px;
-    font-weight: bold;
     margin: 2px 0;
     padding-top: 100px;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
     font-style: italic;
+    font-weight: bold;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .reward-message {
-    font-size: 14px;
     margin: 10px 0 30px;
+    color: #D4D3D3;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
     font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .share-button,
@@ -107,20 +117,23 @@
     margin: 10px 0;
     border: none;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
     cursor: pointer;
-    font-style: italic;
 
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    align-items: center;
 }
 
 .share-button {
     background: #0000FF;
-    color: white;
     position: relative;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
 }
 
 .share-story-reward {
@@ -158,10 +171,15 @@
 }
 
 .reward-amount {
-    font-size: 32px;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+    color: #000000;
+    font-family: "PP Neue Machina";
+    font-size: 32px;
+    font-style: italic;
+    font-weight: bold;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .no-reward {

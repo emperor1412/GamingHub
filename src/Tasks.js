@@ -496,14 +496,14 @@ const Tasks = ({
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={ticketIcon} alt="Tickets" />
-                        <span>{ticket}</span>
+                        <span className="stat-item-text">{ticket}</span>
                     </button>
                     <button 
                         className="stat-item"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={km} alt="KM" />
-                        <span>{kmpoint}</span>
+                        <span className="stat-item-text">{kmpoint}</span>
                     </button>
                     <div className="stat-item">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
@@ -515,7 +515,7 @@ const Tasks = ({
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                    <span className="stat-item-text">{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>
