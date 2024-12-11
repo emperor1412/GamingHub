@@ -261,12 +261,15 @@ Response:
                 const slides = carouselRef.current.children;
                 const visibleSlideIndex = Array.from(slides).findIndex(slide => {
                     const rect = slide.getBoundingClientRect();
-                    return rect.left >= 0 && rect.right <= window.innerWidth;
+                    return rect.left > 0 && rect.left < (window.innerWidth / 2);
                 });
 
-                if (visibleSlideIndex < slides.length - 1) {
-                    
+                if (visibleSlideIndex !== -1) {
                     setCurrentSlide(visibleSlideIndex);
+                }
+
+                if (visibleSlideIndex < slides.length - 1) {
+                    setCurrentSlide(visibleSlideIndex + 1);
                     slides[visibleSlideIndex + 1].scrollIntoView({
                         behavior: 'smooth',
                         block: 'nearest',
@@ -423,6 +426,22 @@ Response:
                                     </div>
                                 </div>
                             </button>
+                        ))}
+                    </div>
+                    <div className="carousel-dots">
+                        {eventData.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}
+                                onClick={() => {
+                                    setCurrentSlide(index);
+                                    carouselRef.current.children[index].scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'nearest',
+                                        inline: 'start'
+                                    });
+                                }}
+                            />
                         ))}
                     </div>
                 </section>
