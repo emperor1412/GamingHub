@@ -18,6 +18,7 @@ import my_ticket from './images/my_ticket.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
+import checkout from './images/checkout.svg';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -418,7 +419,7 @@ Response:
                                     <p className="event-card-subtitle">{event.description}</p> */}
                                     <div className="check-out-button">
                                         Check out
-                                        <img src="/path-to-arrow-icon.svg" alt="Arrow" />
+                                        <img src={checkout} alt="Arrow" />
                                     </div>
                                 </div>
                             </button>
