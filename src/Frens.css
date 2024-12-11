@@ -215,7 +215,7 @@
 
 .trophies-list {
   flex: 1;
-  padding: 16px;
+  padding: 16px 16px 16px 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -223,6 +223,24 @@
   -webkit-overflow-scrolling: touch;
   padding-bottom: 50px;
   height: auto;
+
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+  
+  /* Additional WebView-specific properties */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide WebKit scrollbars */
+.trophies-list::-webkit-scrollbar,
+.trophies-list::-webkit-scrollbar-thumb,
+.trophies-list::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
 }
 
 .trophies-grid {
@@ -232,7 +250,7 @@
   width: 100%;
   margin-bottom: 16px;
   min-height: min-content;
-  padding: 0 10px;
+  padding: 10px 10px;
   box-sizing: border-box;
 }
 
@@ -316,12 +334,16 @@
 .trophy-name {
   font-size: 12px;
   position: absolute;
-  bottom: -32px;
+  bottom: -35px;
   left: 0;
   width: 100%;
   text-align: center;
   color: white;
   font-style: italic;
+  min-height: 30px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 @keyframes pulse {

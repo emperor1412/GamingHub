@@ -189,9 +189,11 @@
 }
 
 .overlay-button-ticket1 {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
+    height: 40px;
+    padding: 0 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
     border: none;
     font-family: 'PPNeueMachina', sans-serif;
     font-style: italic;
