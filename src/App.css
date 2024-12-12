@@ -221,18 +221,30 @@ p {
   width: 100%;
 }
 
-.checkin-text .days {
-  font-size: 36px;
-  font-weight: bold;
+.days {
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: 5px;
-  margin: 0px 0;
+  margin: 4px 0;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 40px;
+  font-style: italic;
+  font-weight: bold;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
-.checkin-text .days-text {
-  font-size: 14px;
+.days-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .lock-icon-market {
@@ -242,4 +254,18 @@ p {
   width: 40px;
   height: 40px;
   z-index: 10;
+}
+
+.checkin-for-text {
+  z-index: 1;
+  position: absolute;
+  bottom: 14vh;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
