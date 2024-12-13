@@ -107,6 +107,7 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                                 {/* <div className="overlay-text-ticket1">
                                     TEST YOUR KNOWLEDGE OF POPULAR CRYPTO SLANG TERMS! SELECT THE CORRECT MEANING FOR EACH TERM BELOW.
                                 </div> */}
+                                
                                 <img src={scratch_ticket_svg} alt="Scratch Ticket" className="overlay-ticket1-img" />
                                 <div className="overlay-buttons-ticket1">
                                     <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
