@@ -140,6 +140,8 @@
     width: 48px;
     height: 48px;
     flex-shrink: 0;
+    border-radius: 12px;
+    border: #46413F 2px solid;
 }
 
 .task-content {
