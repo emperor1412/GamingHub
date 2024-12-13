@@ -624,12 +624,16 @@
 .share-story-button {
   background: none;
   border: 1px solid #0000FF;
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 16px;
   width: 100%;
+  height: 44px;
   cursor: pointer;
   margin: 8px 0;
   max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   color: #FFF;
   font-family: "PP Neue Machina";
