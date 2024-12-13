@@ -24,6 +24,8 @@ import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 
+let isMouseDown = false;
+
 const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
@@ -31,6 +33,10 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [ticket, setTicket] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const intervalRef = useRef(null);
 
     /*
 userProfile : {
@@ -255,38 +261,50 @@ Response:
         setupEvents();
     }, []);
 
+    const startAutoScroll = () => {
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
+                if (carouselRef.current) {
+                    const slides = carouselRef.current.children;
+                    const visibleSlideIndex = Array.from(slides).findIndex(slide => {
+                        const rect = slide.getBoundingClientRect();
+                        return rect.left > 0 && rect.left < (window.innerWidth / 2);
+                    });
+
+                    if (visibleSlideIndex !== -1) {
+                        setCurrentSlide(visibleSlideIndex);
+                    }
+
+                    if (visibleSlideIndex < slides.length - 1) {
+                        setCurrentSlide(visibleSlideIndex + 1);
+                        slides[visibleSlideIndex + 1].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    } else {
+                        setCurrentSlide(0);
+                        slides[0].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    }
+                }
+            }, 10000);
+        }
+    };
+
+    const stopAutoScroll = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    };
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (carouselRef.current) {
-                const slides = carouselRef.current.children;
-                const visibleSlideIndex = Array.from(slides).findIndex(slide => {
-                    const rect = slide.getBoundingClientRect();
-                    return rect.left > 0 && rect.left < (window.innerWidth / 2);
-                });
-
-                if (visibleSlideIndex !== -1) {
-                    setCurrentSlide(visibleSlideIndex);
-                }
-
-                if (visibleSlideIndex < slides.length - 1) {
-                    setCurrentSlide(visibleSlideIndex + 1);
-                    slides[visibleSlideIndex + 1].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'start'
-                    });
-                } else {
-                    setCurrentSlide(0);
-                    slides[0].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'start'
-                    });
-                }
-            }
-        }, 10000);
-
-        return () => clearInterval(interval);
+        startAutoScroll();
+        return () => stopAutoScroll();
     }, []);
 
     useEffect(() => {
@@ -317,6 +335,92 @@ Response:
 
         return () => clearTimeout(myTimeout);
     }, []);
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        isMouseDown = true;
+        const carousel = carouselRef.current;
+        setStartX(e.pageX - carousel.offsetLeft);
+        setScrollLeft(carousel.scrollLeft);
+        stopAutoScroll();
+    };
+
+    const handleMouseMove = (e) => {
+        // if (!isDragging) return;
+        // console.log('handleMouseMove, isMouseDown:', isMouseDown);
+        if (!isMouseDown) return;
+
+        stopAutoScroll();
+        e.preventDefault();
+        const carousel = carouselRef.current;
+        const x = e.pageX - carousel.offsetLeft;
+        const distance = x - startX;
+        
+        // Smoother scrolling with requestAnimationFrame
+        requestAnimationFrame(() => {
+            carousel.scrollLeft = scrollLeft - distance;
+        });
+    };
+
+    const handleMouseUp = () => {        
+        setIsDragging(false);
+        isMouseDown = false;
+        
+        if (carouselRef.current) {
+
+            // console.log('handleMouseUp, isMouseDown:', isMouseDown);
+            const carousel = carouselRef.current;
+            const slides = carousel.children;
+            const currentScroll = carousel.scrollLeft;
+            const itemWidth = carousel.offsetWidth;
+            
+            // Calculate which card we're closest to
+            const targetCard = Math.round(currentScroll / itemWidth);
+            
+            // Ensure targetCard is within bounds
+            const safeTargetCard = Math.min(Math.max(targetCard, 0), slides.length - 1);
+            
+            setCurrentSlide(safeTargetCard);
+
+            requestAnimationFrame(() => {
+                // Scroll to the target card
+                slides[safeTargetCard].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'start'
+                });
+            });
+            
+        }
+        startAutoScroll();
+    };
+
+    const handleMouseLeave = () => {
+        // console.log('handleMouseLeave, isMouseDown:', isMouseDown);
+
+        if (isMouseDown) {
+            handleMouseUp();
+        }
+        else {
+            isMouseDown = false;
+            setIsDragging(false);
+            startAutoScroll();
+        }
+
+    };
+
+    const handleTouchStart = (e) => {
+        setIsDragging(true);
+        stopAutoScroll();
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;        
+    };
+
+    const handleTouchEnd = () => {
+        handleMouseUp();
+    };
 
     return (
         <>
@@ -364,14 +468,30 @@ Response:
 
             <div className="scrollable-content">
                 <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => checkIn()}> */}
-                    <button className="ticket-card" onClick={() => setShowTicketView(true)}>
+                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
                         <img
                             // src={Frame4556}
                             src = {my_ticket}
                             alt="My Tickets"
-                            className="ticket-card-image"
+                            className="ticket-card-image-main"
                         />
+                    </button> */}
+
+                    <button className="ticket-button" onClick={() => {
+                            setShowTicketView(true);
+                        }}>
+                        <img
+                            src={my_ticket}
+                            alt="My Tickets"
+                            className="ticket-button-image"
+                        />
+                        <div className="ticket-button-content">
+                            <h3 className="event-card-title">MY TICKETS</h3>
+                            <p className="event-card-subtitle">Scratch tickets to get rewards</p>
+                            <div className="check-out-button">
+                                Scratch Tickets
+                            </div>
+                        </div>
                     </button>
                 </section>
 
@@ -407,7 +527,17 @@ Response:
                 </section>
 
                 <section className="events-section">
-                    <div className="events-carousel" ref={carouselRef}>
+                    <div 
+                        className={`events-carousel ${isDragging ? 'dragging' : ''}`}
+                        ref={carouselRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseLeave}
+                        onMouseMove={handleMouseMove}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleMouseUp}
+                    >
                         {eventData.map((event, index) => (
                             <button key={index} className="event-card" onClick={() => {
                                 openLink(event.url);
