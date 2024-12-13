@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
+import './Share.css';
+
 import MainView from './MainView';
 import Tasks from './Tasks';
 import CheckIn from './CheckIn';

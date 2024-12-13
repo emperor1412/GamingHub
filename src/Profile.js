@@ -118,7 +118,8 @@ const Profile = ({ onClose, getProfileData }) => {
 
                         <div className="profile-content-wrapper">
                             <div className="profile-content">
-                                {shared.profileItems.map((item, index) => (
+                                {shared.profileItems.filter(item => item.type !== 10030) // Filter out items with type 10030
+                                                    .map((item, index) => (
                                     <div key={index} className="profile-item">
                                         <div className="profile-item-left">
                                             <img src={item.icon} alt="" className="profile-item-icon" />

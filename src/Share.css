@@ -1,4 +1,123 @@
-.back-button-alignment {        
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainThin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainUltralight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainUltralightItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainLightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainMediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainSemibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainSemiboldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainUltrabold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainUltraboldItalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainBlack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainBlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PP Neue Machina';
+    src: url('./fonts/PPNeueMachina-PlainBoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+.back-button-alignment {
     width: 32px;
     height: 32px;
     position: fixed;

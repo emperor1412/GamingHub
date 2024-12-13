@@ -3,6 +3,9 @@ import kmIcon from './images/km.svg';
 import gmtIcon from './images/gmt.svg';
 import SUT from './images/SUT.png';
 import energy from './images/energy.svg';
+import mooar from './images/Mooar.png';
+import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
+import stepn_go_code from './images/stepngo_code.png';
 
 import avatar1 from './images/avatar_1_Dino_300px.png';
 import avatar2 from './images/avatar_2_Chef_Cat_300px.png';
@@ -20,6 +23,7 @@ import avatar13 from './images/avatar_13_Squirrel_300px.png';
 import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import { initData } from '@telegram-apps/sdk';
+import { type } from '@testing-library/user-event/dist/type';
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
@@ -45,9 +49,9 @@ const shared = {
         10030: energy,
         20010: SUT,
         20020: gmtIcon,
-        30010: gmtIcon,
-        30020: gmtIcon,
-        40010: gmtIcon
+        30010: stepn_go_code,
+        30020: mooar,
+        40010: stepn_go_sneaker
     },
     mappingText : {
         10010: 'Ticket',
@@ -185,7 +189,8 @@ const shared = {
                         value: record.num,
                         showClaim: false,
                         showArrow: false,
-                        record: record
+                        record: record,
+                        type: record.prop_id
                     })),
                     ...userProfileData.claimRecord.map(record => ({
                         icon: shared.mappingIcon[record.type],
@@ -193,7 +198,8 @@ const shared = {
                         value: record.num,
                         showClaim: true,
                         showArrow: true,
-                        record: record
+                        record: record,
+                        type: record.type
                     }))
                 ];
 
