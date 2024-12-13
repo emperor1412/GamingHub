@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
-import scratch_ticket from './images/ticket_scratch_icon.svg';
+// import scratch_ticket from './images/ticket_scratch_icon.svg';
+import scratch_ticket from './images/ticket_scratch_icon.png';
 import './Ticket1.css';
 import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
