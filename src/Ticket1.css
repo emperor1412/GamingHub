@@ -16,6 +16,7 @@
     height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
+    
 }
 
 .scratch-header {
@@ -39,7 +40,8 @@
     border-radius: 16px;
     background: rgba(192, 123, 255, 0.05);
     padding: 16px;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: calc(100vh - 250px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -72,7 +74,7 @@
     height: 100%;    
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 4px;
+    padding-top: 20px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 
