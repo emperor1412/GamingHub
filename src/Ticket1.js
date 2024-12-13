@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
-// import scratch_ticket from './images/ticket_scratch_icon.svg';
+import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
 import './Ticket1.css';
 import locker from './images/locker.png';
@@ -107,7 +107,8 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                                 {/* <div className="overlay-text-ticket1">
                                     TEST YOUR KNOWLEDGE OF POPULAR CRYPTO SLANG TERMS! SELECT THE CORRECT MEANING FOR EACH TERM BELOW.
                                 </div> */}
-                                <img src={scratch_ticket} alt="Scratch Ticket" className="overlay-ticket1-img" />
+                                
+                                <img src={scratch_ticket_svg} alt="Scratch Ticket" className="overlay-ticket1-img" />
                                 <div className="overlay-buttons-ticket1">
                                     <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
                                         SCRATCH 1 TICKET
