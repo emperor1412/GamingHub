@@ -25,6 +25,10 @@ import { popup, openLink } from '@telegram-apps/sdk';
 import shared from './Shared';
 
 let isMouseDown = false;
+let startX;
+let startDragX;
+let startDragTime;
+let scrollLeft;
 
 const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -34,9 +38,12 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
     const intervalRef = useRef(null);
+
+    // const [scrollLeft, setScrollLeft] = useState(0);
+    // const [startX, setStartX] = useState(0);
+    // const [startDragX, setStartDragX] = useState(0);
+    // const [startDragTime, setStartDragTime] = useState(0);
 
     /*
 userProfile : {
@@ -337,14 +344,15 @@ Response:
     }, []);
 
     const handleMouseDown = (e) => {
-        // if(e.button !== 0) return;
-
         setIsDragging(true);
         isMouseDown = true;
         const carousel = carouselRef.current;
-        setStartX(e.pageX - carousel.offsetLeft);
-        setScrollLeft(carousel.scrollLeft);
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
         stopAutoScroll();
+
+        startDragX = e.pageX;
+        startDragTime = Date.now();
     };
 
     const handleMouseMove = (e) => {
@@ -364,37 +372,42 @@ Response:
         });
     };
 
-    const handleMouseUp = () => {        
-        setIsDragging(false);
-        isMouseDown = false;
-        
-        if (carouselRef.current) {
+    const handleMouseUp = (e) => {
+        try {
+            setIsDragging(false); 
+            isMouseDown = false;
 
-            // console.log('handleMouseUp, isMouseDown:', isMouseDown);
-            const carousel = carouselRef.current;
-            const slides = carousel.children;
-            const currentScroll = carousel.scrollLeft;
-            const itemWidth = carousel.offsetWidth;
-            
-            // Calculate which card we're closest to
-            const targetCard = Math.round(currentScroll / itemWidth);
-            
-            // Ensure targetCard is within bounds
-            const safeTargetCard = Math.min(Math.max(targetCard, 0), slides.length - 1);
-            
-            setCurrentSlide(safeTargetCard);
+            const moveDistance = Math.abs(e.pageX - startDragX);
+            const moveTime = Date.now() - startDragTime;
 
-            requestAnimationFrame(() => {
-                // Scroll to the target card
-                slides[safeTargetCard].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'start'
-                });
-            });
-            
+            const isClick = moveDistance < 5 && moveTime < 200;
+
+            if (carouselRef.current) {
+                const carousel = carouselRef.current;
+                const slides = carousel.children;
+                const currentScroll = carousel.scrollLeft;
+                const itemWidth = carousel.offsetWidth;
+                
+                const targetCard = Math.round(currentScroll / itemWidth);
+                const safeTargetCard = Math.min(Math.max(targetCard, 0), slides.length - 1);
+                
+                setCurrentSlide(safeTargetCard);
+
+                if (!isClick) {
+                    requestAnimationFrame(() => {
+                        slides[safeTargetCard].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    });
+                }
+            }
+            startAutoScroll();
         }
-        startAutoScroll();
+        catch (e) {
+            console.log(e);
+        }
     };
 
     const handleMouseLeave = () => {
@@ -559,9 +572,24 @@ Response:
                         onWheel={handleWheel}  // Add this handler
                     >
                         {eventData.map((event, index) => (
-                            <button key={index} className="event-card" onClick={() => {
-                                openLink(event.url);
-                            }}>
+                            <button 
+                                key={index} 
+                                className="event-card" 
+                                onClick={(e) => {
+
+                                    try {
+                                        const moveDistance = Math.abs(e.pageX - startDragX);
+                                        const moveTime = Date.now() - startDragTime;
+                                        
+                                        if (moveDistance < 2 && moveTime < 200) {
+                                            openLink(event.url);
+                                        }
+                                    }
+                                    catch (e) {
+                                        console.log(e);
+                                    }
+                                }}
+                            >
                                 <img
                                     src={event.img}
                                     alt={event.name}
