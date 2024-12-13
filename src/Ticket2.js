@@ -232,7 +232,7 @@ Response:
         else {
             setTimeout(() => {
                 setShowResult(true);
-            }, 2000);
+            }, 0);
         }
 
 
