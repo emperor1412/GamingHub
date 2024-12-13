@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.1c8f47ff.css",
+    "main.css": "/GamingHub/static/css/main.089fd052.css",
     "main.js": "/GamingHub/static/js/main.34bd2f33.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.2a625db4ee8c828da6aa43e8b478acf0.svg",
@@ -90,12 +90,12 @@
     "static/media/back.svg": "/GamingHub/static/media/back.4da4cb710ea609b39249af327e92892a.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.aeb40c8e6737d4d3b234ab808831bdc0.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.7f71aa69b2f2b0e26c757866e68e50ac.svg",
-    "main.1c8f47ff.css.map": "/GamingHub/static/css/main.1c8f47ff.css.map",
+    "main.089fd052.css.map": "/GamingHub/static/css/main.089fd052.css.map",
     "main.34bd2f33.js.map": "/GamingHub/static/js/main.34bd2f33.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1c8f47ff.css",
+    "static/css/main.089fd052.css",
     "static/js/main.34bd2f33.js"
   ]
 }
