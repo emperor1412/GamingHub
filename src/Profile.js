@@ -127,9 +127,9 @@ const Profile = ({ onClose, getProfileData }) => {
                                         </div>
                                         <div className="profile-item-right">
                                             {item.showClaim && (
-                                                <button className="profile-claim" onClick={() => onClickClaim(item)}>Claim</button>
+                                                <button className="profile-claim" onClick={() => onClickClaim(item)}>CLAIM</button>
                                             )}
-                                            <span className="profile-item-value">{item.value}</span>
+                                            <span className="profile-item-value">{(item.type === 20010 || item.type === 20020) ? item.value / 100 : item.value}</span>
                                         </div>
                                         {item.showArrow && (
                                             <img src={arrowIcon} alt="" className="profile-item-arrow" />

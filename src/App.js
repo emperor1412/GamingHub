@@ -386,7 +386,7 @@ function App() {
               <div className="checkin-for-text">
                 <div>CHECK IN FOR</div>
                 <div className="days">
-                  {checkInData.streakDay} <span className="days-text">DAYS</span>
+                  {checkInData.streakDay} <span className="days-text-app">DAYS</span>
                 </div>
               </div>
             </div>

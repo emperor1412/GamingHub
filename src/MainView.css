@@ -71,7 +71,7 @@
     font-family: "PP Neue Machina";
     font-size: 16px;
     font-style: italic;
-    font-weight: bold;
+    font-weight: 800;
     line-height: normal;
     text-transform: uppercase;
 }
@@ -109,7 +109,7 @@
 .locked-sections {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 14px;
 }
 
 .locked-card {
@@ -176,6 +176,8 @@
     overscroll-behavior: none;
     pointer-events: auto; 
 
+    /* Add mask gradient for soft scroll boundary */
+  
 }
 
 .events-carousel.dragging {
@@ -228,7 +230,7 @@
     border: 2px solid #0000FF;
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .ticket-button-image {
@@ -342,8 +344,8 @@
 }
 
 .check-out-button img {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     padding-left: 10px;
 }
 

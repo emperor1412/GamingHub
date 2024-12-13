@@ -16,13 +16,12 @@
     height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
-    
 }
 
 .scratch-header {
-    background: #0000ffa4;
+    background: #0000FF;
     padding: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     border-radius: 8px;
 
     color: #FFF;
@@ -36,16 +35,18 @@
 }
 
 .scratch-grid-container {
-    border: 1px solid #0000FF;
+    border: 2px solid #0000FF;
     border-radius: 16px;
-    background: rgba(192, 123, 255, 0.05);
-    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 16px 16px 0px;
     flex: 1 1 auto;
-    min-height: calc(100vh - 250px);
+    min-height: calc(100vh - 550px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     overscroll-behavior: contain;
+    box-sizing: border-box;  /* Added this */
+
 
     /* Hide scrollbars while maintaining functionality */
     scrollbar-width: none;  /* Firefox */
@@ -67,14 +68,24 @@
     display: none !important;
 }
 
+/* Ensure child elements also hide scrollbars */
+.scratch-grid-container * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scratch-grid-container *::-webkit-scrollbar {
+    display: none !important;
+}
+
 .scratch-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0px;
     height: 100%;    
     overflow-y: auto;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding: 20px 5px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 
@@ -100,88 +111,85 @@
 }
 
 .scratch-grid-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     width: 100%;
-    flex-shrink: 0;
-    min-height: min-content;
+    box-sizing: border-box;
 }
 
 .scratch-item {
-    flex: 1;
     position: relative;
     aspect-ratio: 1;
-    min-width: 90px;
-    min-height: 90px;
-    border: 1px solid rgba(191, 123, 255, 0.6);
-    background: rgba(0, 0, 0, 0.5);
+    border: none;  /*2px solid #0000FF;*/
+    background: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border-radius: 12px;
     overflow: hidden;
-}
-
-.scratch-item > * {
     width: 100%;
-    height: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
-.scratch-item.unlocked {
-    transition: transform 0.2s;
-}
-
-
-.scratch-item img {
-    width: 85%;
-    height: 85%;
-    object-fit: contain;
-}
-
-
-/* .info-box-ticket {
-    background: rgba(192, 123, 255, 0.1);
+.scratch-item-border {
+    background: #212121;
+    border: #0000FF 2px solid;
     border-radius: 12px;
-    border: #C07BFF 1px solid;
-    padding: 16px;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    margin-bottom: 20px;
-} */
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    box-sizing: border-box;
 
-.scratch-grid::-webkit-scrollbar {
-    width: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.scratch-grid::-webkit-scrollbar-track {
-    background: rgba(192, 123, 255, 0.05);
+.scratch-item-ticket-wrapper {
+    position: absolute;
+    bottom: 10px;
+    width: 80%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-.scratch-grid::-webkit-scrollbar-thumb {
-    background: rgba(192, 123, 255, 0.3);
-    border-radius: 2px;
+.scratch-item-ticket-icon {
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+    bottom: 10px;
+    position: absolute;
+    z-index: 10;      
+    /* image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges; */
+}
+
+.scratch-item-locked-icon {
+    width: 44px;
+    /* height: 60px; */
+    /* object-fit: contain; */
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.scratch-item.locked {
+    background: transparent;
 }
 
 .lock-icon-ticket {
-    width: 80%;
-    height: 80%;
+    width: 50%;
+    height: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     opacity: 0.5;
 }
 

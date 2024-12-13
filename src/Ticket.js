@@ -23,7 +23,8 @@ const Ticket = ({ onClose, getProfileData }) => {
         }
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
         if (userTicket) {
-            setTicket(userTicket.num);
+            // setTicket(userTicket.num);
+            setTicket(1);
         }
     };
 

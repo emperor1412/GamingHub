@@ -186,7 +186,7 @@ Response:
             console.log('Reward[0]:', JSON.stringify(reward, null, 2));
             setNoReward(reward.type === 10000);
             setRewardImage(shared.mappingIcon[reward.type]);
-            setRewardAmount(reward.amount);
+            setRewardAmount((reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount);
             setRewardText(shared.mappingText[reward.type]);
         }
         else {
@@ -274,7 +274,7 @@ Response:
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM"/>
-                                        <span>100</span>
+                                        <span className='share-story-reward-text'>100</span>
                                     </div>
                                 </button>
                             )}

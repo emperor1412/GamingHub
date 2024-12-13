@@ -503,7 +503,7 @@ Response:
                         />
                         <div className="ticket-button-content">
                             <h3 className="event-card-title">MY TICKETS</h3>
-                            <p className="event-card-subtitle">Scratch tickets to get rewards</p>
+                            <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
                             <div className="check-out-button">
                                 Scratch Tickets
                             </div>

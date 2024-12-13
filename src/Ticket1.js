@@ -5,7 +5,7 @@ import './Ticket1.css';
 import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
 import back from './images/back.svg';
-import lock_icon from "./images/lock_trophy.png";
+import lock_icon from "./images/ticket_lock_icon.svg";
 
 const Ticket1 = ({ ticketCount, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -36,16 +36,26 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                             setShowOverlay(true);
                         }}
                     >
-                        <img src={scratch_ticket} alt="Scratch Ticket" />
+                        <div className='scratch-item-border'>   </div>
+                        <img src={scratch_ticket} alt="Scratch Ticket" className='scratch-item-ticket-icon' />
+                        {/* <div className="scratch-item-ticket-wrapper">
+                            <img 
+                                src={scratch_ticket} 
+                                className="scratch-item-ticket-icon" 
+                                alt="ticket"
+                            />
+                        </div> */}
+
                     </button>
                 ) : (
                     <div 
                         key={index} 
                         className="scratch-item locked"
                     >
-                        <div className="lock-icon-ticket">
-                            <img src={locker} alt="Lock"/>
+                        <div className='scratch-item-border'>   
+                            <img src={locker} alt="Lock" className='scratch-item-locked-icon'/>
                         </div>
+                        
                     </div>
                 );
             })}
@@ -79,7 +89,7 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                                 <div className="scratch-header">
                                     SCRATCH
                                 </div>
-                                <div className="scratch-grid" style={needsPadding ? { paddingBottom: '10vh' } : {}}>
+                                <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
                                     {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
                                 </div>
                             </div>

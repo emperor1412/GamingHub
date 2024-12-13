@@ -216,7 +216,7 @@ p {
   text-transform: uppercase;
 }
 
-.days-text {
+.days-text-app {
   color: #FFF;
   font-family: "PP Neue Machina";
   font-size: 16px;
@@ -238,7 +238,7 @@ p {
 .checkin-for-text {
   z-index: 1;
   position: absolute;
-  bottom: 14vh;
+  bottom: 80px;
 
   color: #FFF;
   font-family: "PP Neue Machina";
