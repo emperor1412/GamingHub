@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import shared from './Shared';
 import './Ticket.css';
+import './Share.css';
 import Ticket1 from './Ticket1';
 import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
@@ -39,7 +40,7 @@ const Ticket = ({ onClose, getProfileData }) => {
             ) : (
                 <div className="ticket-container">
                     <header className="ticket-header">
-                        <button className="back-button" onClick={onClose}>
+                        <button className="back-button back-button-alignment" onClick={onClose}>
                             <img src={back} alt="Back" />
                         </button>
                         <div className="header-stats">

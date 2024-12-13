@@ -17,7 +17,7 @@
   position: relative;
 }
 
-.profile-back {
+/* .profile-back {
   position: absolute;
   top: 20%;
   transform: translateY(-50%);
@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 .profile-back img {
   width: 100%;

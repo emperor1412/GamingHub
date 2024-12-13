@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileAvatarSelector.css';
+import './Share.css';
 import backIcon from './images/back.svg';
 import background_avatar_selection from './images/background_avatar_selection.svg';
 import ID_selected from './images/ID_selected.svg';
@@ -62,7 +63,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   return (
     <div className="avatar-selector-overlay">
       <div className="profile-header">
-        <button className="profile-back" onClick={onClose}>
+        <button className="profile-back back-button-alignment" onClick={onClose}>
           <img src={backIcon} alt="Back" />
         </button>
         <div className="profile-user">

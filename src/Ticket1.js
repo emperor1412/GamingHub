@@ -63,7 +63,7 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                 <>
                     <div className="ticket1-container">
                         <header className="ticket-header">
-                            <button className="back-button" onClick={onClose}>
+                            <button className="back-button back-button-alignment" onClick={onClose}>
                                 <img src={back} alt="Back" />
                             </button>
                             <div className="header-stats">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Profile.css';
+import './Share.css';
 import backIcon from './images/back.svg';
 
 import arrowIcon from './images/arrow.svg';
@@ -93,7 +94,7 @@ const Profile = ({ onClose, getProfileData }) => {
                 )
                     : <div className="profile-container">
                         <div className="profile-header">
-                            <button className="profile-back" onClick={onClose}>
+                            <button className="profile-back back-button-alignment" onClick={onClose}>
                                 <img src={backIcon} alt="Back" />
                             </button>
                             <div className="profile-user">
