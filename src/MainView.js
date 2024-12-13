@@ -427,14 +427,17 @@ Response:
     // In MainView.js
     const handleWheel = (e) => {
         // If it's a vertical scroll (deltaY), let it propagate to parent
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-            return true;
-        }
         
-        e.preventDefault();
-        // Only handle horizontal scrolling
-        if (carouselRef.current) {
-            carouselRef.current.scrollLeft += e.deltaY;
+        // e.preventDefault();
+        
+        if (Math.abs(e.deltaY) > 0 || Math.abs(e.deltaX) > 0) {
+            // Only handle horizontal scrolling
+            if (carouselRef.current) {
+                carouselRef.current.scrollLeft += e.deltaY;
+            }
+        }
+        else {
+            // handleMouseUp();
         }
     };
 
