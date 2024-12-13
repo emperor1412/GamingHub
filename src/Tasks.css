@@ -1,4 +1,4 @@
-.stats-header {
+/* .stats-header {
     position: fixed;
     top: 0;
     left: 50%;
@@ -14,7 +14,7 @@
     height: 60px;
     pointer-events: auto;
     box-sizing: border-box;
-}
+} */
 
 .profile-pic {
     margin-left: 10px;

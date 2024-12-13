@@ -28,8 +28,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 1);
+    /* backdrop-filter: blur(10px); */
     height: 60px;
     pointer-events: auto;
     box-sizing: border-box;
@@ -172,8 +172,10 @@
     padding: 0 0px;
     cursor: grab;
     user-select: none;
-    touch-action: pan-x;
+    /* touch-action: pan-x pan-y;  */
     overscroll-behavior: none;
+    pointer-events: auto; 
+
 }
 
 .events-carousel.dragging {
@@ -348,8 +350,8 @@
 .scrollable-content {
     flex: 1;
     overflow-y: auto;
-    padding-top: 62px;
-    padding-bottom: 90px;
+    padding-top: 80px;
+    padding-bottom: 100px;
     padding-left: 20px;
     padding-right: 20px;
     -webkit-overflow-scrolling: touch;
@@ -363,6 +365,26 @@
     
     /* Additional WebView-specific properties */
     -webkit-overflow-scrolling: touch;
+
+    /* Add mask gradient for soft scroll boundary */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 8%,
+        black 12%,
+        black 88%,
+        rgba(0, 0, 0, 0.1) 92%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 8%,
+        black 12%,
+        black 88%,
+        rgba(0, 0, 0, 0.1) 92%,
+        transparent 100%
+    );
 }
 
 /* Hide WebKit scrollbars */

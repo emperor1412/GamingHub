@@ -49,11 +49,12 @@
   transform: translateX(-50%);
   width: 100%;
   /* max-width: 430px; */
-  background: rgba(0, 0, 0, 0.509);
+  /* background: rgba(0, 0, 0, 0.509); */
+  background: rgba(0, 0, 0, 1);
   display: flex;
   justify-content: space-around;
-  padding: 10px 0;
-  backdrop-filter: blur(10px);
+  padding: 0px 0;
+  /* backdrop-filter: blur(10px); */
   touch-action: none;
   z-index: 1000;
   height: 60px;

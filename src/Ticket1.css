@@ -22,7 +22,7 @@
     background: #0000ffa4;
     padding: 16px;
     margin-bottom: 10px;
-    border-radius: 12px;
+    border-radius: 8px;
 
     color: #FFF;
     text-align: center;
@@ -52,6 +52,7 @@
     
     /* Additional WebView-specific properties */
     -webkit-overflow-scrolling: touch;
+    
 }
 
 /* Hide WebKit scrollbars */
@@ -74,6 +75,26 @@
     padding-right: 4px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+
+    /* Add mask gradient for soft scroll boundary */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 3%,
+        black 5%,
+        black 95%,
+        rgba(0, 0, 0, 0.1) 98%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 3%,
+        black 5%,
+        black 95%,
+        rgba(0, 0, 0, 0.1) 98%,
+        transparent 100%
+    );
 }
 
 .scratch-grid-row {

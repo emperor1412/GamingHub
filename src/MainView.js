@@ -337,6 +337,8 @@ Response:
     }, []);
 
     const handleMouseDown = (e) => {
+        // if(e.button !== 0) return;
+
         setIsDragging(true);
         isMouseDown = true;
         const carousel = carouselRef.current;
@@ -420,6 +422,20 @@ Response:
 
     const handleTouchEnd = () => {
         handleMouseUp();
+    };
+
+    // In MainView.js
+    const handleWheel = (e) => {
+        // If it's a vertical scroll (deltaY), let it propagate to parent
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            return true;
+        }
+        
+        e.preventDefault();
+        // Only handle horizontal scrolling
+        if (carouselRef.current) {
+            carouselRef.current.scrollLeft += e.deltaY;
+        }
     };
 
     return (
@@ -537,6 +553,7 @@ Response:
                         onTouchStart={handleTouchStart}
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleMouseUp}
+                        onWheel={handleWheel}  // Add this handler
                     >
                         {eventData.map((event, index) => (
                             <button key={index} className="event-card" onClick={() => {

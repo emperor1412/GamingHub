@@ -131,7 +131,7 @@
 }
 
 .day-card {  
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 12px 8px;
   text-align: center;
   width: 100%;
@@ -231,12 +231,16 @@
 .okay-button-checkin {
   background: #0000FF;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 16px;
   cursor: pointer;
-  width: 100%;
+  width: 100%;  
   max-width: 330px;
-  margin: 10px auto 0px auto;
+  height: 44px;
+  margin: 10px auto 2px auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 
   color: #FFF;
   font-family: "PP Neue Machina";
