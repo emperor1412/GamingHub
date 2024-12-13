@@ -63,6 +63,22 @@ const FSLIDTest = () => {
         window.location.href = loginUrl;
     };
 
+    const onClick_Method_4 = () => {
+        console.log('Method 4');
+
+        const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
+        const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+
+        const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
+            client_id: 'MiniGame',
+            redirect_uri: REDIRECT_URL,
+            response_type: 'code',
+            state: 'test', // Generate random state for security verification
+        })
+
+        window.open(loginUrl, '_blank');
+    };
+
     return (
         <div className="fslid-container">
             <span>Method 1 using FSLAuthorization with use popup = true and telegram link of the app for the REDIRECT_URL</span>
@@ -149,6 +165,25 @@ window.location.href = loginUrl;`}
                 </pre>
             </span>
             <button className="fslid-button" onClick={() => onClick_Method_3()}>Method 3</button>
+
+            <br />
+            <span>Method 4 using login URL and window.open</span>
+            <span>
+                <pre>
+                    {`const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
+const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+
+const loginUrl = {FSL_ID_URL} + new URLSearchParams({
+  client_id: 'MiniGame',
+  redirect_uri: REDIRECT_URL,
+  response_type: 'code',
+  state: 'test', // Generate random state for security verification
+});
+
+window.open(loginUrl, '_blank');`}
+                </pre>
+            </span>
+            <button className="fslid-button" onClick={() => onClick_Method_4()}>Method 4</button>
         </div>
     );
 };

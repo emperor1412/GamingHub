@@ -4,7 +4,7 @@ import { shareStory, shareURL } from '@telegram-apps/sdk';
 import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
-import friendsIcon from './images/Friends_selected.svg';
+import friendsIcon from './images/friends_icon.svg';
 import kmIcon from './images/km.svg';
 import trophy_1 from './images/trophy_1_200px.png';
 import trophy_2 from './images/trophy_2_200px.png';
@@ -14,7 +14,7 @@ import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
-import link from './images/link.svg';
+import link from './images/checkout.svg';
 import particle from './images/particle.svg';
 import lock_trophy from './images/lock_trophy.png';
 import close from './images/close.svg';
@@ -125,6 +125,7 @@ const Frens = () => {
           icon: trophyIcon[trophy.id]
         }));
 
+        // setTrophies(trophiesData.concat(trophiesData));
         setTrophies(trophiesData);
       }
       else if (data.code === 102002 || data.code === 102001) {
@@ -545,7 +546,7 @@ const Frens = () => {
             <div className="invite-button-container">
               <button className="invite-button" onClick={onClickInviteFriends}>
                 invite friends
-                <img src={link} alt="Link" className="stat-icon" />
+                <img src={link} alt="Link" className="invite-icon" />
               </button>
             </div>
           </div>
@@ -650,7 +651,7 @@ const Frens = () => {
                   </button>
                   <div className="trophy-reward">
                     <img src={kmIcon} alt="GMT" className="stat-icon" />
-                    <span>267</span>
+                    <span>100</span>
                   </div>
                 </>
               ) : (

@@ -6,7 +6,9 @@ import { ScratchCard } from 'next-scratchcard';
 // import rewardImage from './images/FSL Games Scratch Animation-02.png'; // Adjust path as needed
 import scratchBackground from './images/scratch_ticket_background_full.png'; // Adjust path as needed
 import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; // Adjust path as needed
-import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
+// import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
+import nothing from './images/background_no_reward.png'; // Adjust path as needed
+
 import km from './images/km.svg';
 import { shareStory } from '@telegram-apps/sdk';
 
@@ -19,6 +21,7 @@ const Ticket2 = ({ ticketCount, onClose }) => {
     const [rewardText, setRewardText] = useState('');
     const [noReward, setNoReward] = useState(false);
     const [showShareStory, setShowShareStory] = useState(true);
+    const [tryAgain, setTryAgain] = useState(false);
 /*
 url: /app/ticketUse
 Request:
@@ -184,7 +187,7 @@ Response:
             console.log('Reward[0]:', JSON.stringify(reward, null, 2));
             setNoReward(reward.type === 10000);
             setRewardImage(shared.mappingIcon[reward.type]);
-            setRewardAmount(reward.amount);
+            setRewardAmount((reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount);
             setRewardText(shared.mappingText[reward.type]);
         }
         else {
@@ -223,9 +226,17 @@ Response:
     const handleComplete = async () => {
         console.log('Scratch completed!');
         // Add any completion logic here
-        setTimeout(() => {
-            setShowResult(true);
-        }, 2000);
+
+        if(noReward) {
+            setTryAgain(true);
+        }
+        else {
+            setTimeout(() => {
+                setShowResult(true);
+            }, 0);
+        }
+
+
     };
 
     const handleClaim = () => {
@@ -264,7 +275,7 @@ Response:
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM"/>
-                                        <span>200</span>
+                                        <span className='share-story-reward-text'>100</span>
                                     </div>
                                 </button>
                             )}
@@ -277,7 +288,7 @@ Response:
             (
                 <div className="scratch-container">
                     <ScratchCard 
-                        finishPercent={30} 
+                        finishPercent={50} 
                         brushSize={40} 
                         onComplete={handleComplete}
                         width={dimensions.width}
@@ -312,6 +323,18 @@ Response:
                             )}
                         </div>
                     </ScratchCard>
+
+                    {tryAgain && (
+                        
+                        <button 
+                            className="full-viewport-button"
+                            onClick={() => {
+                                setTryAgain(false);
+                                handleClaim();
+                            }}
+                        />
+                        
+                    )}
                 </div>
             )}
         </>

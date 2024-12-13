@@ -15,20 +15,19 @@
 }
 
 .profile-back {
-  position: absolute;
-  top: 20%;
-  transform: translateY(-50%);
-  left: 20px;
+  /* position: absolute; */
+  /* top: 30px;
+  left: 20px; */
+  /* left: 20px; */
+  /* width: 32px;
+  height: 32px; */
+  /* transform: translateY(-50%); */
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   z-index: 2;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
 }
 
 .profile-back img {
@@ -42,25 +41,48 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
-  padding: 20px;
+  padding: 10px;
   padding-bottom: 40px;
+
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 3%,
+    black 6%,
+    black 94%,
+    rgba(0, 0, 0, 0.1) 97%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 3%,
+    black 6%,
+    black 94%,
+    rgba(0, 0, 0, 0.1) 97%,
+      transparent 100%
+  );
 }
 
 .avatar-selector-header {
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  font-family: 'PPNeueMachina', sans-serif;
-  font-style: italic;
   margin-bottom: 20px;
   margin-top: 0px;
   position: relative;
   z-index: 1;
+  
+  color: #FFF;
+  text-align: center;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .avatar-grid-container {
   background: #292929;
-  border: 2px solid #C07BFF;
+  border: 2px solid #0000FF;
   border-radius: 16px;
   padding: 20px;
   margin: 20px 0;
@@ -118,20 +140,18 @@
 .footer-button {
   width: 100%;
   padding: 16px;
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
   border-radius: 8px;
-  font-family: 'PPNeueMachina', sans-serif;
-  font-style: italic;
-  font-size: 16px;
   cursor: pointer;
   transition: opacity 0.2s;
-}
-
-.terms-button,
-.privacy-button {
   background: transparent;
-  color: #C07BFF;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .okay-button-profile {
@@ -139,8 +159,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #C07BFF;
-  color: rgb(0, 0, 0);
+  background: #0000FF;
   margin: 0;
   padding: 8px;
   border-radius: 0 0 10px 10px;
@@ -148,16 +167,20 @@
   border: none;
   box-sizing: border-box;
   transform: translateX(0);
-  font-family: 'PPNeueMachina', sans-serif;
-  font-style: italic;
-  font-size: 14px;
   cursor: pointer;
   transition: opacity 0.3s, background-color 0.3s;
   z-index: 10;
+  
+  color: rgb(255, 255, 255);
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .okay-button-profile.inactive {
-  background: #bf7bff80;
+  background: #0000FF;
   cursor: not-allowed;
   opacity: 0.5;
 }

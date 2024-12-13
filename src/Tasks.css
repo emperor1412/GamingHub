@@ -1,4 +1,4 @@
-.stats-header {
+/* .stats-header {
     position: fixed;
     top: 0;
     left: 50%;
@@ -14,7 +14,7 @@
     height: 60px;
     pointer-events: auto;
     box-sizing: border-box;
-}
+} */
 
 .profile-pic {
     margin-left: 10px;
@@ -30,6 +30,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    border: #FF00F6 2px solid;
 }
 
 .stats {
@@ -37,7 +38,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding-right: 10px;
+    padding-right: 12px;
     flex: 1;
 }
 
@@ -47,27 +48,26 @@
     gap: 4px;
     min-width: fit-content;
     font-style: italic;
-    color: white;
-    font-family: 'PPNeueMachina', sans-serif;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.stat-item-text {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .stat-item img {
     width: 24px;
     height: 24px;
-}
-
-.tasks-content {
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 80px;
-    padding-bottom: 90px;
-    padding-left: 20px;
-    padding-right: 20px;
-    -webkit-overflow-scrolling: touch;
-    position: relative;
-    height: calc(100vh);
-    margin-top: 0;
-    overscroll-behavior: contain;
 }
 
 .tasks-inner-content {
@@ -87,12 +87,15 @@
 
 .section-title {
     color: white;
-    font-family: 'PPNeueMachina', sans-serif;
+    font-family: 'PP Neue Machina';
     font-style: italic;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 12px;
     cursor: pointer;
     user-select: none;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .arrow {
@@ -122,10 +125,10 @@
     /* background: rgba(41, 41, 41, 0.8); */
     border: #46413F 1px solid;
     border-radius: 12px;
-    padding: 4px 10px;
+    padding: 14px 10px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
     margin-bottom: 8px;
 }
 
@@ -137,6 +140,8 @@
     width: 48px;
     height: 48px;
     flex-shrink: 0;
+    border-radius: 12px;
+    border: #46413F 2px solid;
 }
 
 .task-content {
@@ -150,9 +155,12 @@
 
 .task-title {
     color: white;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
+    font-family: "PP Neue Machina";
     font-size: 14px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
     margin: 0;
 }
 
@@ -180,26 +188,41 @@
 
 .reward-icon {
     opacity: 1;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .reward-icon.done {
     opacity: 0.6;
 }
 
-.reward-amount {
-    color: #C07BFF;
-    font-family: 'PPNeueMachina', sans-serif;
+.reward-amount-task {
+    color: #83807F;
+    /* APP/Body/Strong/Body-M-Strong */
+    font-family: "PP Neue Machina";
+    font-size: 14px;
     font-style: italic;
+    font-weight: 600;
+    line-height: 22px;
 }
 
 .task-deadline {
-    color: rgba(255, 255, 255, 1);
+    /* color: rgba(255, 255, 255, 1);
     font-size: 12px;
     font-family: 'PPNeueMachina', sans-serif;
     font-style: italic;
+    font-weight: 400; */
+    
     margin-left: 12px;
+    color: #FFF;
+    
+    /* text-shadow: 0px 4px 4px rgba(39, 132, 102, 0.25); */
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .task-deadline.done {
@@ -207,18 +230,22 @@
 }
 
 .start-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 4px;
-    color: rgb(255, 255, 255);
     padding: 0px 10px;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
-    font-size: 14px;
     cursor: pointer;
     transition: opacity 0.2s;
     height: 30px;
     align-self: center;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .start-button:hover {
@@ -249,8 +276,8 @@
 }
 
 .done-button img {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     position: absolute;
     left: 10px;
     top: -30px;

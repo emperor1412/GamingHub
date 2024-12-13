@@ -26,7 +26,7 @@
 .scratch-background {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     /* Changed to contain */
     position: absolute;
     /* Made absolute to fill container */
@@ -85,41 +85,55 @@
 }
 
 .congratulations {
-    font-size: 24px;
-    font-weight: bold;
     margin: 2px 0;
     padding-top: 100px;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
     font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .reward-message {
-    font-size: 18px;
     margin: 10px 0 30px;
+    color: #D4D3D3;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
     font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .share-button,
 .claim-button {
     width: 100%;
     max-width: 324px;
-    padding: 15px;
+    height: 40px;
+    padding: 0 16px;
     margin: 10px 0;
     border: none;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
     cursor: pointer;
-    font-style: italic;
 
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    align-items: center;
 }
 
 .share-button {
-    background: #C07BFF;
-    color: white;
+    background: #0000FF;
     position: relative;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
 }
 
 .share-story-reward {
@@ -130,6 +144,17 @@
     justify-content: flex-end;
 }
 
+.share-story-reward-text {
+    margin-left: 5px;
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
 .points {
     position: absolute;
     /* right: 20px; */
@@ -138,7 +163,7 @@
 .claim-button {
     background: transparent;
     color: white;
-    border: 2px solid #C07BFF;
+    border: 2px solid #0000FF;
 }
 
 .reward-details {
@@ -157,13 +182,30 @@
 }
 
 .reward-amount {
-    font-size: 32px;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+    color: #000000;
+    font-family: "PP Neue Machina";
+    font-size: 32px;
+    font-style: italic;
+    font-weight: bold;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .no-reward {
     z-index: 2;
     color: black;
+}
+
+.full-viewport-button {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
 }

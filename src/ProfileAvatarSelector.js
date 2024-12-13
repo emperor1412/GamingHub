@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileAvatarSelector.css';
+import './Share.css';
 import backIcon from './images/back.svg';
 import background_avatar_selection from './images/background_avatar_selection.svg';
 import ID_selected from './images/ID_selected.svg';
@@ -62,7 +63,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   return (
     <div className="avatar-selector-overlay">
       <div className="profile-header">
-        <button className="profile-back" onClick={onClose}>
+        <button className="profile-back back-button-alignment" onClick={onClose}>
           <img src={backIcon} alt="Back" />
         </button>
         <div className="profile-user">
@@ -75,7 +76,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             <div className="profile-username">{shared.user.firstName}</div>
             <div className="profile-id">
              <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-             4CH4H9W2...AaCFChF
+             4CHH...@gmail.com
            </div>
           </div>
         </div>
@@ -121,10 +122,10 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
         </div>
 
         <div className="avatar-footer">
-          <button className="footer-button terms-button">
+          <button className="footer-button">
             Terms and Conditions
           </button>
-          <button className="footer-button privacy-button">
+          <button className="footer-button">
             Privacy Policy
           </button>
         </div>

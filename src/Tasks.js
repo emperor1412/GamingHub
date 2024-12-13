@@ -5,7 +5,8 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar_before_checkin.svg';
+// import calendar_before_checkin from './images/calendar_before_checkin.svg';
+import calendar_before_checkin from './images/calendar.svg';
 import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
@@ -450,7 +451,7 @@ const Tasks = ({
                     <div className="task-bottom-left">
                         <div className="task-reward">
                             <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className={`reward-icon ${isDone ? 'done' : ''}`} />
-                            <span className="reward-amount">{task.rewardList[0]?.amount || 0}</span>
+                            <span className="reward-amount-task">{task.rewardList[0]?.amount || 0}</span>
                         </div>
                         {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
                     </div>
@@ -495,14 +496,14 @@ const Tasks = ({
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={ticketIcon} alt="Tickets" />
-                        <span>{ticket}</span>
+                        <span className="stat-item-text">{ticket}</span>
                     </button>
                     <button 
                         className="stat-item"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={km} alt="KM" />
-                        <span>{kmpoint}</span>
+                        <span className="stat-item-text">{kmpoint}</span>
                     </button>
                     <div className="stat-item">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
@@ -514,7 +515,7 @@ const Tasks = ({
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                    <span className="stat-item-text">{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>

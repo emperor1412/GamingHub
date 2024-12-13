@@ -25,7 +25,45 @@
     height: calc(100vh);
     margin-top: 0;
     overscroll-behavior: contain;
-}
+
+     /* Hide scrollbars while maintaining functionality */
+     scrollbar-width: none;  /* Firefox */
+     -ms-overflow-style: none;  /* IE and Edge */
+     overflow: -moz-scrollbars-none;
+     
+     /* Additional WebView-specific properties */
+     -webkit-overflow-scrolling: touch;
+
+    /* Add mask gradient for soft scroll boundary */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 8%,
+        black 12%,
+        black 88%,
+        rgba(0, 0, 0, 0.1) 92%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.1) 8%,
+        black 12%,
+        black 88%,
+        rgba(0, 0, 0, 0.1) 92%,
+        transparent 100%
+    );
+ }
+ 
+ /* Hide WebKit scrollbars */
+ .tasks-content::-webkit-scrollbar,
+ .tasks-content::-webkit-scrollbar-thumb,
+ .tasks-content::-webkit-scrollbar-track {
+     width: 0 !important;
+     height: 0 !important;
+     background-color: transparent !important;
+     display: none !important;
+ }
 
 .tasks-inner-content {
     max-width: 100%;
@@ -70,40 +108,50 @@
     background: rgba(41, 41, 41, 1);
     padding: 16px;
     border-radius: 12px;
-    font-size: 14px;
+
+    color: var(--tokens-Text-text_med, #A9A7A7);
+    font-family: "PP Neue Machina";
+    font-size: 12px;
     font-style: italic;
-    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .answer-button {
     background: transparent;
     border: none;
     border-radius: 0;
-    color: white;
     padding: 0px 0px;
     text-align: left;
-    font-size: 14px;
     cursor: pointer;
-    font-family: 'PPNeueMachina', sans-serif;
     display: flex;
     align-items: center;
     gap: 12px;
     position: relative;
+
+    color: #D4D3D3;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .answer-button::before {
     content: '';
     width: 20px;
     height: 20px;
-    border: 1px solid #C07BFF;
+    border: 1px solid #0000FF;
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
 }
 
 .answer-button.selected::before {
-    background: #C07BFF;
-    border-color: #C07BFF;
+    background: #0000FF;
+    border-color: #0000FF;
 }
 
 .answer-button:hover {
@@ -139,6 +187,41 @@
     flex: 1;
 }
 
+.text-bingo {
+    margin-bottom: 5px;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.text-complete-quiz {
+    color: #D4D3D3;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.text-you-earn {
+    margin-top: 5px;
+    margin-bottom: 15px;
+
+    color: rgb(255, 255, 255);
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
 .fail-content {
     display: flex;
     flex-direction: column;
@@ -150,58 +233,57 @@
 }
 
 .try-again-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 8px;
-    color: rgb(255, 255, 255);
     padding: 8px 32px;
-    font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
     width: 100%;
     margin: 0 auto;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
     margin-top: 16px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .tasks-okay-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 8px;
-    color: rgb(255, 255, 255);
     padding: 8px 32px;
-    font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
     width: 100%;
     margin: 0 auto;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
     margin-top: 16px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'PP Neue Machina';
+    font-style: italic;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .reward-earned {
     margin: 0px auto;
-    border: 1px solid #C07BFF;
+    border: 1px solid #0000FF;
     border-radius: 8px;
     width: 100%;
     max-width: 98%;
     padding: 2px;
     text-align: center;
-}
-
-.reward-earned p {
-    margin: 0;
-    font-style: italic;
-    font-size: 16px;
-    color: #C07BFF;
 }
 
 .reward-amount {
@@ -218,26 +300,35 @@
     height: 24px;
 }
 
-.reward-amount span {
+.reward-amount-text {
     color: #ffffff;
+    font-family: "PP Neue Machina";
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .next-button {
-    background: #C07BFF;
+    background: #0000FF;
     border: none;
     border-radius: 4px;
-    color: white;
-    padding: 2px 8px;
-    font-size: 24px;
-    font-weight: bold;
+    padding: 8px 8px;
     cursor: pointer;
-    font-family: 'PPNeueMachina', sans-serif;
-    font-style: italic;
     position: absolute;
     bottom: 2vh;
     right: 0vw;
     width: auto;
     min-width: 80px;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .quiz-content .next-button {
@@ -268,17 +359,17 @@
 
 
 
-.result-container h3 {
+/* .result-container h3 {
     font-size: 24px;
     margin: 0 0 12px 0;
     font-style: italic;
-}
+} */
 
-.result-container p {
+/* .result-container p {
     font-size: 14px;
     margin: 0 0 16px 0;
     text-align: center;
-}
+} */
 
 .quiz-content {
     flex: 1;
@@ -288,19 +379,31 @@
 }
 
 .quiz-heading {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
     text-align: center;
-    font-style: italic;
     margin-bottom: 25px;
-    text-transform: uppercase;
-    font-family: 'PPNeueMachina', sans-serif;
     padding: 4px 0px;
     background: rgba(41, 41, 41, 0);
     border-radius: 12px;
-    border: #C07BFF 1px solid;
-    line-height: 1.5;
+    border: #0000FF 1px solid;
     min-height: 40px;
+
+    color: #D4D3D3;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.quiz-question {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
 .quiz-content h2 {

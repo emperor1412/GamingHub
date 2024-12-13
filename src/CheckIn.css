@@ -10,7 +10,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  padding-bottom: 0px;
+  padding-bottom: 120px;
   overflow-y: auto;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
@@ -20,7 +20,7 @@
 .checkin-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   background: rgba(0, 0, 0, 0);
   padding: 16px;
   border-radius: 12px;
@@ -28,12 +28,10 @@
 }
 
 .avatar-container {
-  width: 110px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  overflow: hidden;
   margin-bottom: 0;
-  background: linear-gradient(45deg, #FF9A9E, #FAD0C4);
   flex-shrink: 0;
 }
 
@@ -41,6 +39,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
 }
 
 .content-container {
@@ -51,31 +51,58 @@
   height: 120px;
 }
 
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 100%;
+  margin-bottom: 5px;
+  overscroll-behavior: none;
+}
+
+/* .days-grid > div:last-child {
+  grid-column: 2;
+} */
+
 .streak-info {
   text-align: left;
   margin-bottom: 0;  
 }
 
 .streak-text {
-  font-size: 12px;
-  color: #ffffff;
   margin: 0;
   opacity: 0.8;
-  text-transform: uppercase;
   width: 200px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .streak-days {
-  font-size: 34px;
   margin: 4px 0;
-  color: #ffffff;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 40px;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .days-text {
-  font-size: 13px;
-  margin-left: 4px;
+  margin-left: 0px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .stats-container {
@@ -103,38 +130,28 @@
   color: #ffffff;
 }
 
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  max-width: 100%;
-  margin-bottom: 5px;
-  overscroll-behavior: none;
-}
-
-/* .days-grid > div:last-child {
-  grid-column: 2;
-} */
-
-.day-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+.day-card {  
+  border-radius: 16px;
   padding: 12px 8px;
   text-align: center;
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   overflow: hidden;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #212121;
 }
 
 .day-card.active {
-  background: rgba(85, 85, 85, 0.61);
-  border: 1px solid #C07BFF;
+  border: 1px solid #0000FF;
 }
 
 .day-card.inactive {
-  opacity: 0.5;
+  opacity: 0.6;  
 }
 
 .day-number {
@@ -152,25 +169,35 @@
 }
 
 .number {
+  color: #FFF;
+  font-family: "PP Neue Machina";
   font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
   font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .suffix {
-  font-size: 12px;
-  color: #ffffff;
   margin-left: 2px;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 11px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .label {
-  font-size: 12px;
-  opacity: 0.8;
-  color: #ffffff;
   margin-left: auto;
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 11px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .rewards {
@@ -191,22 +218,40 @@
   height: 20px;
 }
 
-.okay-button {
-  background: #C07BFF;
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 8px;
-  padding: 16px;
+.reward-text-checkin {
+  color: #FFF;
+  font-family: "PP Neue Machina";
   font-size: 16px;
-  font-weight: bold;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.okay-button-checkin {
+  background: #0000FF;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
   cursor: pointer;
-  width: 100%;
+  width: 100%;  
   max-width: 330px;
-  margin: 0 auto 20px auto;
+  height: 44px;
+  margin: 10px auto 2px auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .okay-button:hover {
-  background: #7C3AED;
+  opacity: 0.9;
 }
 
 .checkmark-icon {

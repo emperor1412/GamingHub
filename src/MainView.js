@@ -7,7 +7,8 @@ import leaderboard from './images/leaderboard.svg';
 import ticketIcon from './images/ticket.svg';
 import km from './images/km.svg';
 import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar_before_checkin.svg';
+// import calendar_before_checkin from './images/calendar_before_checkin.svg';
+import calendar_before_checkin from './images/calendar.svg';
 
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
@@ -17,10 +18,13 @@ import my_ticket from './images/my_ticket.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
+import checkout from './images/checkout.svg';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
+
+let isMouseDown = false;
 
 const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,6 +33,10 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [ticket, setTicket] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const intervalRef = useRef(null);
 
     /*
 userProfile : {
@@ -253,35 +261,50 @@ Response:
         setupEvents();
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (carouselRef.current) {
-                const slides = carouselRef.current.children;
-                const visibleSlideIndex = Array.from(slides).findIndex(slide => {
-                    const rect = slide.getBoundingClientRect();
-                    return rect.left >= 0 && rect.right <= window.innerWidth;
-                });
+    const startAutoScroll = () => {
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
+                if (carouselRef.current) {
+                    const slides = carouselRef.current.children;
+                    const visibleSlideIndex = Array.from(slides).findIndex(slide => {
+                        const rect = slide.getBoundingClientRect();
+                        return rect.left > 0 && rect.left < (window.innerWidth / 2);
+                    });
 
-                if (visibleSlideIndex < slides.length - 1) {
-                    
-                    setCurrentSlide(visibleSlideIndex);
-                    slides[visibleSlideIndex + 1].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'start'
-                    });
-                } else {
-                    setCurrentSlide(0);
-                    slides[0].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'start'
-                    });
+                    if (visibleSlideIndex !== -1) {
+                        setCurrentSlide(visibleSlideIndex);
+                    }
+
+                    if (visibleSlideIndex < slides.length - 1) {
+                        setCurrentSlide(visibleSlideIndex + 1);
+                        slides[visibleSlideIndex + 1].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    } else {
+                        setCurrentSlide(0);
+                        slides[0].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    }
                 }
-            }
-        }, 10000);
+            }, 10000);
+        }
+    };
 
-        return () => clearInterval(interval);
+    const stopAutoScroll = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    };
+
+    useEffect(() => {
+        startAutoScroll();
+        return () => stopAutoScroll();
     }, []);
 
     useEffect(() => {
@@ -292,8 +315,8 @@ Response:
             
             const now = new Date();
             const timeDifference = now - lastTime;
-            const twoMinutes = 2 * 60 * 1000;
-            const remaining = twoMinutes - timeDifference;
+            const interval = 60 * 1000 * 60 * 24;  // 24 hours
+            const remaining = interval - timeDifference;
 
             if(remaining > 0) {
                 console.log('MainView useEffect: after check-in state, remaining: ' + remaining);
@@ -313,33 +336,135 @@ Response:
         return () => clearTimeout(myTimeout);
     }, []);
 
+    const handleMouseDown = (e) => {
+        // if(e.button !== 0) return;
+
+        setIsDragging(true);
+        isMouseDown = true;
+        const carousel = carouselRef.current;
+        setStartX(e.pageX - carousel.offsetLeft);
+        setScrollLeft(carousel.scrollLeft);
+        stopAutoScroll();
+    };
+
+    const handleMouseMove = (e) => {
+        // if (!isDragging) return;
+        // console.log('handleMouseMove, isMouseDown:', isMouseDown);
+        if (!isMouseDown) return;
+
+        stopAutoScroll();
+        e.preventDefault();
+        const carousel = carouselRef.current;
+        const x = e.pageX - carousel.offsetLeft;
+        const distance = x - startX;
+        
+        // Smoother scrolling with requestAnimationFrame
+        requestAnimationFrame(() => {
+            carousel.scrollLeft = scrollLeft - distance;
+        });
+    };
+
+    const handleMouseUp = () => {        
+        setIsDragging(false);
+        isMouseDown = false;
+        
+        if (carouselRef.current) {
+
+            // console.log('handleMouseUp, isMouseDown:', isMouseDown);
+            const carousel = carouselRef.current;
+            const slides = carousel.children;
+            const currentScroll = carousel.scrollLeft;
+            const itemWidth = carousel.offsetWidth;
+            
+            // Calculate which card we're closest to
+            const targetCard = Math.round(currentScroll / itemWidth);
+            
+            // Ensure targetCard is within bounds
+            const safeTargetCard = Math.min(Math.max(targetCard, 0), slides.length - 1);
+            
+            setCurrentSlide(safeTargetCard);
+
+            requestAnimationFrame(() => {
+                // Scroll to the target card
+                slides[safeTargetCard].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'start'
+                });
+            });
+            
+        }
+        startAutoScroll();
+    };
+
+    const handleMouseLeave = () => {
+        // console.log('handleMouseLeave, isMouseDown:', isMouseDown);
+
+        if (isMouseDown) {
+            handleMouseUp();
+        }
+        else {
+            isMouseDown = false;
+            setIsDragging(false);
+            startAutoScroll();
+        }
+
+    };
+
+    const handleTouchStart = (e) => {
+        setIsDragging(true);
+        stopAutoScroll();
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;        
+    };
+
+    const handleTouchEnd = () => {
+        handleMouseUp();
+    };
+
+    // In MainView.js
+    const handleWheel = (e) => {
+        // If it's a vertical scroll (deltaY), let it propagate to parent
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            return true;
+        }
+        
+        e.preventDefault();
+        // Only handle horizontal scrolling
+        if (carouselRef.current) {
+            carouselRef.current.scrollLeft += e.deltaY;
+        }
+    };
+
     return (
         <>
             <header className="stats-header">
                 <button 
-                    className="profile-pic"
+                    className="profile-pic-main"
                     onClick={() => setShowProfileView(true)}
                 >
                     <img 
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="stats">
+                <div className="stats-main">
                     <button 
-                        className="stat-item"
+                        className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={ticketIcon} alt="Stat 1" />
-                        <span>{ticket}</span>
+                        <span className='stat-item-main-text'>{ticket}</span>
                     </button>
                     <button 
-                        className="stat-item"
+                        className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
                         <img src={km} alt="Stat 1" />
-                        <span>{kmpoint}</span>
+                        <span className='stat-item-main-text'>{kmpoint}</span>
                     </button>
-                    <div className="stat-item">
+                    <div className="stat-item-main">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Stat 1" />
                             <div className="check-in-text">
@@ -349,7 +474,7 @@ Response:
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span style={{ fontSize: '16px' }}>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>
@@ -359,14 +484,30 @@ Response:
 
             <div className="scrollable-content">
                 <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => checkIn()}> */}
-                    <button className="ticket-card" onClick={() => setShowTicketView(true)}>
+                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
                         <img
                             // src={Frame4556}
                             src = {my_ticket}
                             alt="My Tickets"
-                            className="ticket-card-image"
+                            className="ticket-card-image-main"
                         />
+                    </button> */}
+
+                    <button className="ticket-button" onClick={() => {
+                            setShowTicketView(true);
+                        }}>
+                        <img
+                            src={my_ticket}
+                            alt="My Tickets"
+                            className="ticket-button-image"
+                        />
+                        <div className="ticket-button-content">
+                            <h3 className="event-card-title">MY TICKETS</h3>
+                            <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
+                            <div className="check-out-button">
+                                Scratch Tickets
+                            </div>
+                        </div>
                     </button>
                 </section>
 
@@ -402,7 +543,18 @@ Response:
                 </section>
 
                 <section className="events-section">
-                    <div className="events-carousel" ref={carouselRef}>
+                    <div 
+                        className={`events-carousel ${isDragging ? 'dragging' : ''}`}
+                        ref={carouselRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseLeave}
+                        onMouseMove={handleMouseMove}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleMouseUp}
+                        onWheel={handleWheel}  // Add this handler
+                    >
                         {eventData.map((event, index) => (
                             <button key={index} className="event-card" onClick={() => {
                                 openLink(event.url);
@@ -412,7 +564,31 @@ Response:
                                     alt={event.name}
                                     className="event-card-image"
                                 />
+                                <div className="event-card-content">
+                                    {/* <h3 className="event-card-title">{event.name}</h3>
+                                    <p className="event-card-subtitle">{event.description}</p> */}
+                                    <div className="check-out-button">
+                                        Check out
+                                        <img src={checkout} alt="Arrow" />
+                                    </div>
+                                </div>
                             </button>
+                        ))}
+                    </div>
+                    <div className="carousel-dots">
+                        {eventData.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}
+                                onClick={() => {
+                                    setCurrentSlide(index);
+                                    carouselRef.current.children[index].scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'nearest',
+                                        inline: 'start'
+                                    });
+                                }}
+                            />
                         ))}
                     </div>
                 </section>

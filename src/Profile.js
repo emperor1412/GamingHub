@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Profile.css';
+import './Share.css';
 import backIcon from './images/back.svg';
 
 import arrowIcon from './images/arrow.svg';
@@ -93,7 +94,7 @@ const Profile = ({ onClose, getProfileData }) => {
                 )
                     : <div className="profile-container">
                         <div className="profile-header">
-                            <button className="profile-back" onClick={onClose}>
+                            <button className="profile-back back-button-alignment" onClick={onClose}>
                                 <img src={backIcon} alt="Back" />
                             </button>
                             <div className="profile-user">
@@ -106,7 +107,7 @@ const Profile = ({ onClose, getProfileData }) => {
                                     <div className="profile-username">{shared.user.firstName}</div>
                                     <div className="profile-id">
                                         <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-                                        4CH4H9W2...AaCFChF
+                                        4CHH...@gmail.com
                                     </div>
                                 </div>
                                 <button className="profile-user-arrow" onClick={() => setShowAvatarSelector(true)}>
@@ -117,7 +118,8 @@ const Profile = ({ onClose, getProfileData }) => {
 
                         <div className="profile-content-wrapper">
                             <div className="profile-content">
-                                {shared.profileItems.map((item, index) => (
+                                {shared.profileItems.filter(item => item.type !== 10030) // Filter out items with type 10030
+                                                    .map((item, index) => (
                                     <div key={index} className="profile-item">
                                         <div className="profile-item-left">
                                             <img src={item.icon} alt="" className="profile-item-icon" />
@@ -125,9 +127,9 @@ const Profile = ({ onClose, getProfileData }) => {
                                         </div>
                                         <div className="profile-item-right">
                                             {item.showClaim && (
-                                                <button className="profile-claim" onClick={() => onClickClaim(item)}>Claim</button>
+                                                <button className="profile-claim" onClick={() => onClickClaim(item)}>CLAIM</button>
                                             )}
-                                            <span className="profile-item-value">{item.value}</span>
+                                            <span className="profile-item-value">{(item.type === 20010 || item.type === 20020) ? item.value / 100 : item.value}</span>
                                         </div>
                                         {item.showArrow && (
                                             <img src={arrowIcon} alt="" className="profile-item-arrow" />
