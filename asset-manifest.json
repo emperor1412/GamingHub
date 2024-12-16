@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.2c9f237b.css",
-    "main.js": "/GamingHub/static/js/main.78ae9bd1.js",
+    "main.css": "/GamingHub/static/css/main.1bbdecf6.css",
+    "main.js": "/GamingHub/static/js/main.44458d12.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.98b373172c6b9a763db2fe34548fe933.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -99,12 +99,12 @@
     "static/media/single_star_5.svg": "/GamingHub/static/media/single_star_5.e1b276c60fde78af97b47a184a6645cb.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.2c9f237b.css.map": "/GamingHub/static/css/main.2c9f237b.css.map",
-    "main.78ae9bd1.js.map": "/GamingHub/static/js/main.78ae9bd1.js.map",
+    "main.1bbdecf6.css.map": "/GamingHub/static/css/main.1bbdecf6.css.map",
+    "main.44458d12.js.map": "/GamingHub/static/js/main.44458d12.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2c9f237b.css",
-    "static/js/main.78ae9bd1.js"
+    "static/css/main.1bbdecf6.css",
+    "static/js/main.44458d12.js"
   ]
 }
