@@ -509,7 +509,7 @@ Response:
                         />
                     </button> */}
 
-                    <button className="ticket-button">
+                    <button className="ticket-button" onClick={() => setShowTicketView(true)}>
                         <div className='ticket-button-image-container'>
                             <img
                                 src={my_ticket}
