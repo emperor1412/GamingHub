@@ -509,20 +509,21 @@ Response:
                         />
                     </button> */}
 
-                    <button className="ticket-button" onClick={() => {
-                            setShowTicketView(true);
-                        }}>
-                        <img
-                            src={my_ticket}
-                            alt="My Tickets"
-                            className="ticket-button-image"
-                        />
-                        <div className="ticket-button-content">
-                            <h3 className="event-card-title">MY TICKETS</h3>
-                            <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
-                            <div className="check-out-button">
-                                Scratch Tickets
-                            </div>
+                    <button className="ticket-button">
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={my_ticket}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className="ticket-button-content"> */}
+                                <h3 className="event-card-title">MY TICKETS</h3>
+                                <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
+                                <div className="check-out-button">
+                                    Scratch Tickets
+                                </div>
+                            {/* </div> */}
                         </div>
                     </button>
                 </section>
