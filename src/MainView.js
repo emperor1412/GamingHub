@@ -540,7 +540,7 @@ Response:
                             /> 
                             <div className='locked-card-container-border'></div>
                             <div className='coming-soon-button'>Coming Soon</div>
-                            <div className='locked-card-text'>LFGO</div>
+                            <div className='locked-card-text'>Morchi Game</div>
                         </div>
                         <img
                             src={locker}
@@ -553,7 +553,7 @@ Response:
                     <div className='locked-card-image-container'>
                         <img
                             // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            src={morchigame}
+                            src={leaderboard}
                             alt="Leaderboard Coming Soon"
                             className="locked-card-image"
                         />
