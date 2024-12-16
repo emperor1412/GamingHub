@@ -342,7 +342,7 @@ Response:
             (
                 <div className="scratch-container">
                     <ScratchCard 
-                        finishPercent={50} 
+                        finishPercent={30} 
                         brushSize={40} 
                         onComplete={handleComplete}
                         width={dimensions.width}

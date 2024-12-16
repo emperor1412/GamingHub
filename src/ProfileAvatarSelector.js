@@ -83,7 +83,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       </div>
 
       <div className="avatar-selector-container">
-        
+      <div className="avatar-selector-inner">
         <div className="avatar-grid-container">
             <img src={background_avatar_selection} alt="Background" className="background-avatar-selection" />
             <div className="avatar-selector-header">
@@ -120,6 +120,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             Okay
           </button>
         </div>
+        </div>
 
         <div className="avatar-footer">
           <button className="footer-button">
@@ -129,6 +130,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             Privacy Policy
           </button>
         </div>
+
       </div>
     </div>
   );

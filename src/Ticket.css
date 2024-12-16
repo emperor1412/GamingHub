@@ -102,6 +102,16 @@
     );
 }
 
+.tickets-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  
+.tickets-content {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+  
+
 .ticket-card-item {
     width: 100%;
     box-sizing: border-box;

@@ -509,33 +509,39 @@ Response:
                         />
                     </button> */}
 
-                    <button className="ticket-button" onClick={() => {
-                            setShowTicketView(true);
-                        }}>
-                        <img
-                            src={my_ticket}
-                            alt="My Tickets"
-                            className="ticket-button-image"
-                        />
-                        <div className="ticket-button-content">
-                            <h3 className="event-card-title">MY TICKETS</h3>
-                            <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
-                            <div className="check-out-button">
-                                Scratch Tickets
-                            </div>
+                    <button className="ticket-button" onClick={() => setShowTicketView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={my_ticket}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className="ticket-button-content"> */}
+                                <h3 className="event-card-title">MY TICKETS</h3>
+                                <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
+                                <div className="check-out-button">
+                                    Scratch Tickets
+                                </div>
+                            {/* </div> */}
                         </div>
                     </button>
                 </section>
 
                 <section className="locked-sections">
                     <button className="locked-card">
-                        <img
-                            // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            // src={Frame4561}
-                            src={morchigame}
-                            alt="Morchi Game Coming Soon"
-                            className="locked-card-image"
-                        />
+                        <div className='locked-card-image-container'>
+                            <img
+                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
+                                // src={Frame4561}
+                                src={morchigame}
+                                alt="Morchi Game Coming Soon"
+                                className="locked-card-image"
+                            /> 
+                            <div className='locked-card-container-border'></div>
+                            <div className='coming-soon-button'>Coming Soon</div>
+                            <div className='locked-card-text'>LFGO</div>
+                        </div>
                         <img
                             src={locker}
                             alt="Locker"
@@ -544,12 +550,17 @@ Response:
                     </button>
 
                     <button className="locked-card">
+                    <div className='locked-card-image-container'>
                         <img
                             // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            src={leaderboard}
+                            src={morchigame}
                             alt="Leaderboard Coming Soon"
                             className="locked-card-image"
                         />
+                        <div className='locked-card-container-border'></div>
+                        <div className='coming-soon-button'>Coming Soon</div>
+                        <div className='locked-card-text'>Leaderboard</div>
+                        </div>
                         <img
                             src={locker}
                             alt="Locker"
