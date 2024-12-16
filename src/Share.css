@@ -137,15 +137,15 @@
 
 .stars {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
     top: 0;
     left: 0;
     z-index: 2;
   }
   
   .single-star {
-    position: absolute;
+    position: relative;
     width: 20px;
     height: 20px;
     background: none;
@@ -153,31 +153,31 @@
   }
   
   .single-star-1 {
-    left: 81px;
+    left: 108px;
     bottom: 0px;
     animation-delay: 0s;
   }
   
   .single-star-2 {
-    left: 201px;
-    bottom: 46px;
+    left: 216px;
+    bottom: 32px;
     animation-delay: 0.4s;
   }
 
   .single-star-3 {
-    left: 236px;
+    left: 250px;
     bottom: 164px;
     animation-delay: 0.8s;
   }
 
   .single-star-4 {
-    left: 40px;
+    left: -2px;
     bottom: 142px;
     animation-delay: 1.2s;
   }
 
   .single-star-5 {
-    left: 101px;
+    left: 61px;
     bottom: 185px;
     animation-delay: 1.6s;
   }

@@ -312,7 +312,7 @@ Response:
                                 {/* <img src={particle} className="particle" alt="" /> */}
                                 <div className='reward-details'>
                                     <img src={rewardImage} alt="reward type" className="reward-type-image" />
-                                    <div className='stars' style={{ top: 60, left: -80 }}>
+                                    <div className='stars' style={{ top: 158, left: -124 }}>
                                         <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                                         <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
                                         <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
