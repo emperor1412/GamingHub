@@ -99,9 +99,8 @@
 }
 
 .trophies-grid {
-  /* height: calc(100vh - 10px); */
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   width: 100%;
   margin-bottom: -40px;
@@ -355,7 +354,8 @@
 .trophy-item {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  height: 0;
+  padding-top: 100%;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   text-align: center;
@@ -363,13 +363,8 @@
   margin-bottom: 32px;
   overflow: visible;
   transition: transform 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 1px solid transparent;
-  padding: 0;
   cursor: pointer;
-  max-width: 100%;
 }
 
 .trophy-item:disabled {
@@ -405,7 +400,9 @@
 }
 
 .trophy-content {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -415,6 +412,7 @@
   padding: 4px;
   border-radius: 12px;
   overflow: visible;
+  box-sizing: border-box;
 }
 
 .lock-icon {
@@ -480,21 +478,17 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
 }
 
 .trophy-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 8px 8px;
-  box-sizing: border-box;
-  transform: scale(1.4);
+  transform: scale(1.2);
 }
 
 .trophy-overlay {
@@ -511,7 +505,7 @@
 .trophy-status-icon {
   position: absolute;
   top: -8px;
-  right: -10px;
+  right: -8px;
   width: 40px;
   height: 40px;
   z-index: 3;
@@ -751,4 +745,16 @@
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
   padding: 16px;
+}
+
+/* Thêm media query để đảm bảo kích thước phù hợp trên mobile */
+@media screen and (max-width: 480px) {
+  .trophies-grid {
+    gap: 20px;
+    padding: 12px;
+  }
+  
+  .trophy-item {
+    margin-bottom: 24px;
+  }
 }

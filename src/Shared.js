@@ -22,7 +22,7 @@ import avatar12 from './images/avatar_12_Rogue_300px.png';
 import avatar13 from './images/avatar_13_Squirrel_300px.png';
 import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
-import { initData } from '@telegram-apps/sdk';
+import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 
 const shared = {
@@ -101,6 +101,16 @@ const shared = {
                         data: data
                     };
                 } else {
+
+                    if (data.code === 102003) {
+                        const promise = popup.open({
+                            title: 'Login Fail',
+                            message: "Login failed",
+                            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                        });
+                        const buttonId = await promise;
+                    }
+
                     return {
                         success: false,
                         error: data.msg,
