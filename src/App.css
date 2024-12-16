@@ -50,11 +50,11 @@
   width: 100%;
   /* max-width: 430px; */
   /* background: rgba(0, 0, 0, 0.509); */
-  background: rgba(0, 0, 0, 1);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: space-around;
   padding: 0px 0;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   touch-action: none;
   z-index: 1000;
   height: 80px;

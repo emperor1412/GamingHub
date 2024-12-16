@@ -529,13 +529,18 @@ Response:
 
                 <section className="locked-sections">
                     <button className="locked-card">
-                        <img
-                            // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            // src={Frame4561}
-                            src={morchigame}
-                            alt="Morchi Game Coming Soon"
-                            className="locked-card-image"
-                        />
+                        <div className='locked-card-image-container'>
+                            <img
+                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
+                                // src={Frame4561}
+                                src={morchigame}
+                                alt="Morchi Game Coming Soon"
+                                className="locked-card-image"
+                            /> 
+                            <div className='locked-card-container-border'></div>
+                            <div className='coming-soon-button'>Coming Soon</div>
+                            <div className='locked-card-text'>LFGO</div>
+                        </div>
                         <img
                             src={locker}
                             alt="Locker"
@@ -544,12 +549,17 @@ Response:
                     </button>
 
                     <button className="locked-card">
+                    <div className='locked-card-image-container'>
                         <img
                             // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            src={leaderboard}
+                            src={morchigame}
                             alt="Leaderboard Coming Soon"
                             className="locked-card-image"
                         />
+                        <div className='locked-card-container-border'></div>
+                        <div className='coming-soon-button'>Coming Soon</div>
+                        <div className='locked-card-text'>Leaderboard</div>
+                        </div>
                         <img
                             src={locker}
                             alt="Locker"
