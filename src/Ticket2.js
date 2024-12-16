@@ -10,7 +10,15 @@ import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; //
 import nothing from './images/background_no_reward.png'; // Adjust path as needed
 
 import km from './images/km.svg';
+
+import fail_animation_frame_0 from './images/FSL Games UI 2-10.png';
+import fail_animation_frame_1 from './images/FSL Games UI 2-09.png';
+import fail_animation_frame_2 from './images/FSL Games UI 2-08.png';
+import fail_animation_frame_3 from './images/FSL Games UI 2-07.png';
+
 import { shareStory } from '@telegram-apps/sdk';
+
+let animationFrameIndex = 0;
 
 const Ticket2 = ({ ticketCount, onClose }) => {
     const [dimensions, setDimensions] = useState({ width: 400, height: 700 });
@@ -22,6 +30,14 @@ const Ticket2 = ({ ticketCount, onClose }) => {
     const [noReward, setNoReward] = useState(false);
     const [showShareStory, setShowShareStory] = useState(true);
     const [tryAgain, setTryAgain] = useState(false);
+    const [animationFrame, setAnimationFrame] = useState(0);
+
+    const animationFrames = [
+        fail_animation_frame_0,
+        fail_animation_frame_1,
+        fail_animation_frame_2,
+        fail_animation_frame_3,
+    ];
 /*
 url: /app/ticketUse
 Request:
@@ -186,6 +202,7 @@ Response:
             const reward = rewards[0];
             console.log('Reward[0]:', JSON.stringify(reward, null, 2));
             setNoReward(reward.type === 10000);
+            // setNoReward(true);
             setRewardImage(shared.mappingIcon[reward.type]);
             setRewardAmount((reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount);
             setRewardText(shared.mappingText[reward.type]);
@@ -226,9 +243,22 @@ Response:
     const handleComplete = async () => {
         console.log('Scratch completed!');
         // Add any completion logic here
-
+        animationFrameIndex = 0;
         if(noReward) {
-            setTryAgain(true);
+            // setTryAgain(true);
+            setAnimationFrame(animationFrameIndex);
+            setShowResult(true);
+            const interval = setInterval(() => {
+                if (animationFrameIndex >= animationFrames.length) {
+                    clearInterval(interval);
+                    setTryAgain(true);
+                }
+                else {
+                    setAnimationFrame(animationFrameIndex);
+                }
+                ++animationFrameIndex;
+
+            }, 500);
         }
         else {
             setTimeout(() => {
@@ -256,15 +286,39 @@ Response:
                 <div className="result-container-ticket2">
                     {noReward ?
                     (
-                        <button className="claim-button" onClick={handleClaim}>Done</button>
+                        <>
+                            {/* <button className="claim-button" onClick={handleClaim}>Done</button> */}
+                            <div className='fail-animation-container'>
+                                <img src={animationFrames[animationFrame]} alt="Fail animation" className='fail-animation'/>
+                            </div>
+
+                            {tryAgain && (
+                            
+                                <button 
+                                    className="full-viewport-button"
+                                    onClick={() => {
+                                        setTryAgain(false);
+                                        handleClaim();
+                                    }}
+                                />
+                                
+                            )}
+                        </>
                     )
                     : 
                     (
                         <>
                             <div className="coin-container">
-                                <img src={particle} className="particle" alt="" />
+                                {/* <img src={particle} className="particle" alt="" /> */}
                                 <div className='reward-details'>
                                     <img src={rewardImage} alt="reward type" className="reward-type-image" />
+                                    <div className='stars' style={{ top: 60, left: -80 }}>
+                                        <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                        <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                        <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                        <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                        <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                    </div>
                                 </div>
                             </div>
                             <h2 className="congratulations">CONGRATULATIONS</h2>
@@ -324,17 +378,7 @@ Response:
                         </div>
                     </ScratchCard>
 
-                    {tryAgain && (
-                        
-                        <button 
-                            className="full-viewport-button"
-                            onClick={() => {
-                                setTryAgain(false);
-                                handleClaim();
-                            }}
-                        />
-                        
-                    )}
+                    
                 </div>
             )}
         </>

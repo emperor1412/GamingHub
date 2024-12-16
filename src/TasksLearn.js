@@ -92,6 +92,13 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 <div className="result-icon">
                                     <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
                                 </div>
+                                <div className='stars' style={{ top: -203, left: 22 }}>
+                                        <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                        <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                        <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                        <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                        <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                    </div>
                                 <div className="success-content">
                                     <div className='text-bingo'>BINGO</div>
                                     <p className='text-complete-quiz'>YOU'VE COMPLETED THE QUIZ!</p>
@@ -117,6 +124,13 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 <div className="fail-content">
                                     <div className="result-icon">
                                         <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
+                                    </div>
+                                    <div className='stars' style={{ top: -238, left: 22 }}>
+                                        <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                        <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                        <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                        <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                        <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
                                     </div>
                                 </div>
                                 <button className="try-again-button" onClick={() => {
