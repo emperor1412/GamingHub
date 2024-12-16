@@ -636,7 +636,7 @@ const Frens = () => {
                       alt="Particle"
                       className="trophy-overlay-particle"
                     /> */}
-                    <div className='stars'>
+                    <div className='stars' style={{top: 176, left: -32}}>
                       <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                       <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
                       <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
@@ -677,7 +677,7 @@ const Frens = () => {
                       className="trophy-overlay-particle"
                     /> */}
 
-                    <div className='stars'>
+                    <div className='stars' style={{top: 176, left: -32}}>
                       <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                       <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
                       <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
