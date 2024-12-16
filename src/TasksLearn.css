@@ -223,13 +223,13 @@
 }
 
 .fail-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
     width: 100%;
-    flex: 1;
+    /* flex: 1; */
     min-height: 55vh;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .try-again-button {
@@ -348,13 +348,28 @@
 .result-icon {
     width: 200px;
     height: 200px;
-    margin: 0 auto 24px;
+    /* width: 200px;
+    height: 200px; */
+    /* margin: 0 auto 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; */
 }
 
-.result-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.result-icon .stars {
+    /* position: absolute; */
+    /* transform: scale(0.1); */
+}
+
+.result-icon-img {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* object-fit: contain; */
 }
 
 
