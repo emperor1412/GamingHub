@@ -185,16 +185,7 @@
     cursor: grabbing;
 }
 
-.event-card {
-    min-width: 100%;
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
-    user-select: none;
-    -webkit-user-drag: none;
-    touch-action: none;
-    pointer-events: none;
-}
+
 
 /* Hide WebKit scrollbars */
 .events-carousel::-webkit-scrollbar,
@@ -253,6 +244,17 @@
 }
 
 .event-card {
+    min-width: 100%;
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    user-select: none;
+    -webkit-user-drag: none;
+    /* touch-action: none; */
+    /* pointer-events: none; */
+}
+
+.event-card {
     position: relative;
     min-width: 100%;
     flex: 0 0 100%;
@@ -276,6 +278,7 @@
     border-radius: 16px 16px 0 0;
     margin: 0;
     padding-bottom: 30px;
+    pointer-events: none;
 }
 
 .event-card-content {
