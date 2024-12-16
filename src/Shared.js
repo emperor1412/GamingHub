@@ -25,6 +25,12 @@ import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 
+import single_star from './images/single_star.svg';
+import single_star_2 from './images/single_star_2.svg';
+import single_star_3 from './images/single_star_3.svg';
+import single_star_4 from './images/single_star_4.svg';
+import single_star_5 from './images/single_star_5.svg';
+
 const shared = {
     server_url: 'https://gm14.joysteps.io',
     app_link: 'https://t.me/TestFSL_bot/fslhub',
@@ -63,12 +69,22 @@ const shared = {
         30020: 'MOOAR Membership',
         40010: 'StepN GO Shoe'
     },
+    
     profileItems : [],
     userProfile : null,
     loginData : null,
     inviteCode: 0,
     initData : null,
     user : null,
+
+    // Add these to the shared object
+    starImages: {
+        star1: single_star,
+        star2: single_star_2,
+        star3: single_star_3,
+        star4: single_star_4,
+        star5: single_star_5
+    },
 
     login: async (initDataRaw) => {
         try {

@@ -19,6 +19,7 @@ import particle from './images/particle.svg';
 import lock_trophy from './images/lock_trophy.png';
 import close from './images/close.svg';
 
+
 const Frens = () => {
   const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
   const [selectedTrophy, setSelectedTrophy] = useState(null);
@@ -630,11 +631,18 @@ const Frens = () => {
                       alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    <img
+                    {/* <img
                       src={particle}
                       alt="Particle"
                       className="trophy-overlay-particle"
-                    />
+                    /> */}
+                    <div className='stars'>
+                      <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                      <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                      <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                      <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                      <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                    </div>
                   </div>
                   <div className="trophy-overlay-promotion">
                     CONGRATULATIONS!<br />
@@ -663,11 +671,19 @@ const Frens = () => {
                       alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    <img
+                    {/* <img
                       src={particle}
                       alt="Particle"
                       className="trophy-overlay-particle"
-                    />
+                    /> */}
+
+                    <div className='stars'>
+                      <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                      <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                      <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                      <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                      <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                    </div>
                   </div>
                   <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
                   <p className="trophy-overlay-description">
