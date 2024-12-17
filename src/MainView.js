@@ -577,9 +577,9 @@ Response:
                         onMouseUp={handleMouseUp}
                         onMouseLeave={handleMouseLeave}
                         onMouseMove={handleMouseMove}
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleMouseUp}
+                        // onTouchStart={handleTouchStart}
+                        // onTouchMove={handleTouchMove}
+                        // onTouchEnd={handleMouseUp}
                         onWheel={handleWheel}  // Add this handler
                     >
                         {eventData.map((event, index) => (
