@@ -224,9 +224,11 @@ Response:
             const viewportHeight = window.innerHeight;
             
             // Calculate dimensions (adjust these ratios as needed)
-            const width = Math.min(viewportWidth, 400); // 90% of viewport width, max 400px
-            const height = Math.min(viewportHeight, 700); // 70% of viewport height, max 700px
-            
+            const width = Math.min(viewportWidth, 1080); // 90% of viewport width, max 400px
+            const height = Math.min(viewportHeight, 1920); // 70% of viewport height, max 700px
+            // const height = width * 1920 / 1080;
+            // 1080 x 1920
+            console.log('Dimensions:', width, height);
             setDimensions({ width, height });
         };
 
@@ -342,12 +344,12 @@ Response:
             (
                 <div className="scratch-container">
                     <ScratchCard 
-                        finishPercent={30} 
+                        finishPercent={40} 
                         brushSize={40} 
                         onComplete={handleComplete}
                         width={dimensions.width}
                         height={dimensions.height}
-                        image={scratch_foreground}
+                        image={scratch_foreground}      
                         >
                         <div className="reward-content">
                             <img
