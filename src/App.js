@@ -35,6 +35,8 @@ import checkInAnimation from './images/check_in_animation_540.gif';
 import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
 
+import loading_background from "./images/GamesHubLoading.png";
+
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 
 function App() {
@@ -338,8 +340,11 @@ function App() {
       <div className="background-container">
         <img src={background} alt="background" />
       </div>
-      {isLoading || !resourcesLoaded ? (
-        <div className="loading">Loading...</div>
+      {(isLoading || !resourcesLoaded) ? (
+        <>
+          <img src={loading_background} alt="Loading" className="loading-background" />
+          {/* <div className="loading">Loading...</div> */}
+        </>
       ) 
       : !isLoggedIn ? (
         <div className="login-error">
