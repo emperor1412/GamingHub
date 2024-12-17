@@ -382,6 +382,7 @@ Response:
 
             const isClick = moveDistance < 5 && moveTime < 200;
 
+            /*
             if (carouselRef.current) {
                 const carousel = carouselRef.current;
                 const slides = carousel.children;
@@ -403,6 +404,7 @@ Response:
                     });
                 }
             }
+                */
             startAutoScroll();
         }
         catch (e) {
