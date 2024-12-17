@@ -60,8 +60,8 @@ const shared = {
         40010: stepn_go_sneaker
     },
     mappingText : {
-        10010: 'Ticket',
-        10020: 'KM Point',
+        10010: 'Tickets',
+        10020: 'KM Points',
         10030: 'Energy',
         20010: 'SUT',
         20020: 'GMT',
