@@ -6,23 +6,26 @@ const FSLIDTest = () => {
     const onClick_Method_1 = () => {
         console.log('Method 1');
 
-        const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
-        // const REDIRECT_URL = 'http://192.168.1.33:3000';
-        // const REDIRECT_URL = window.location.href; 
+        // const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
+        const REDIRECT_URL = '{code: 0, data: {message: "https://t.me/TestFSL_bot/fslhub?startapp=fslid_"}}';
 
         const fslAuthorization = FSLAuthorization.init({
             responseType: 'code', // 'code' or 'token'
             appKey: 'MiniGame',
             redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-            scope: 'basic%20wallet', // Grant Scope
+            scope: 'basic', // Grant Scope
             state: 'test',
-            usePopup: true // Popup a window instead of jump to
+            usePopup: true, // Popup a window instead of jump to
+            isApp: true
         });
-        fslAuthorization.signIn().then((code) => {
-            if (code) {
-                // Implement your code here
-                console.log('FSL Login, Code:', code);
+
+        fslAuthorization.signInV2().then((response) => {
+            if (response && response.code) {
+                // todo your code
+                console.log('FSL Login, Code:', response.code);
             }
+        }).catch((error) => {
+            console.error('Login error:', error);
         });
     };
 
@@ -35,15 +38,27 @@ const FSLIDTest = () => {
             responseType: 'code', // 'code' or 'token'
             appKey: 'MiniGame',
             redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-            scope: 'basic%20wallet', // Grant Scope
+            scope: 'basic', // Grant Scope
             state: 'test',
-            usePopup: false // Popup a window instead of jump to
+            usePopup: false, // Popup a window instead of jump to
+            isApp: true
         });
+        /*
         fslAuthorization.signIn().then((code) => {
             if (code) {
                 // Implement your code here
                 console.log('FSL Login, Code:', code);
             }
+        });
+        */
+
+        fslAuthorization.signInV2().then((response) => {
+            if (response && response.code) {
+                // todo your code
+                console.log('FSL Login, Code:', response.code);
+            }
+        }).catch((error) => {
+            console.error('Login error:', error);
         });
     };
 
@@ -86,20 +101,25 @@ const FSLIDTest = () => {
                 <pre>
                     {`
 
-const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=fslid_';
+const REDIRECT_URL = '{code: 0, data: {message: "https://t.me/TestFSL_bot/fslhub?startapp=fslid_"}}';
+
 const fslAuthorization = FSLAuthorization.init({
-  responseType: 'code', // 'code' or 'token'
-  appKey: 'MiniGame',
-  redirectUri: REDIRECT_URL,
-  scope: 'basic%20wallet', // Grant Scope
-  state: 'test',
-  usePopup: true // Popup a window instead of jump to
+    responseType: 'code', // 'code' or 'token'
+    appKey: 'MiniGame',
+    redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+    scope: 'basic', // Grant Scope
+    state: 'test',
+    usePopup: true, // Popup a window instead of jump to
+    isApp: true
 });
-fslAuthorization.signIn().then((code) => {
-  if (code) {
-    // Implement your code here
-    console.log('FSL Login, Code:', code);
-  }
+
+fslAuthorization.signInV2().then((response) => {
+    if (response && response.code) {
+        // todo your code
+        console.log('FSL Login, Code:', response.code);
+    }
+}).catch((error) => {
+    console.error('Login error:', error);
 });
           `}
                 </pre>
@@ -117,15 +137,18 @@ const fslAuthorization = FSLAuthorization.init({
     responseType: 'code', // 'code' or 'token'
     appKey: 'MiniGame',
     redirectUri: REDIRECT_URL,
-    scope: 'basic%20wallet', // Grant Scope
+    scope: 'basic', // Grant Scope
     state: 'test',
-    usePopup: false // Popup a window instead of jump to
+    usePopup: false, // Popup a window instead of jump to
+    isApp: true
 });
-fslAuthorization.signIn().then((code) => {
-    if (code) {
+fslAuthorization.signInV2().then((response) => {
+    if (response && response.code) {
         // Implement your code here
-        console.log('FSL Login, Code:', code);
+        console.log('FSL Login, Code:', response.code);
     }
+}).catch((error) => {
+    console.error('Login error:', error);
 });
 `}
                 </pre>
