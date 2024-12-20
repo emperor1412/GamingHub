@@ -321,9 +321,10 @@ Response:
             let lastTime = new Date(checkInData.lastTime);
             
             const now = new Date();
-            const timeDifference = now - lastTime;
-            const interval = 60 * 1000 * 60 * 24;  // 24 hours
-            const remaining = interval - timeDifference;
+            const nextCheckInTime = new Date(now);
+            nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
+            nextCheckInTime.setUTCHours(0, 0, 0, 0);
+            const remaining = nextCheckInTime - now;
 
             if(remaining > 0) {
                 console.log('MainView useEffect: after check-in state, remaining: ' + remaining);
