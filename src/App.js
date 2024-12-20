@@ -137,6 +137,24 @@ function App() {
     }
 };
 
+const bind_fslid = async () => {
+  /*
+  url: /app/fslBinding
+Request:
+	code string  //The token that calls the fslId callback
+	//For example
+	//https://gm3.joysteps.io/login/authorization?response_type=code&appkey=MiniGame&scope=basic&state=&use_popup=true
+Response:
+{
+    "code": 0
+}
+  */
+  const apiLink = `${shared.server_url}/api/app/fslBinding?token=${shared.loginData.token}&code=${shared.fsl_binding_code}`;
+  console.log('Calling FSL Binding API:', apiLink);
+  const response = await fetch(apiLink);
+  const data = await response.json();
+  console.log('FSL Binding finished:', data);
+}
 
   const login = async () => {
     try {
@@ -149,6 +167,10 @@ function App() {
             const loginResult = await shared.login(initDataRaw);
             
             if (loginResult.success) {
+                if (shared.fsl_binding_code) {
+                  await bind_fslid();
+                }
+
                 setLoginData(loginResult.loginData);
                 setIsLoggedIn(true);
 
@@ -256,18 +278,19 @@ function App() {
 
     // get invite code from the start param
     // sample param: "invite_21201__referral_1234__otherParam_5678"
-    let inviteCode = null;
     if (startParam) {
         const paramsArray = startParam.split('__');
         for (const param of paramsArray) {
             if (param.startsWith('invite_')) {
-                inviteCode = param.split('_')[1];
-                break;
+              shared.inviteCode = param.split('_')[1];
+              console.log('Invite Code:', shared.inviteCode);
+            }
+            else if(param.startsWith('fslid_')) {
+              shared.fsl_binding_code = param.split('_')[1];
+              console.log('FSL Binding Code:', shared.fsl_binding_code);
             }
         }
     }
-    console.log('Invite Code:', inviteCode);
-    shared.inviteCode = inviteCode;
 
     // Initialize Telegram Mini App
     init();
