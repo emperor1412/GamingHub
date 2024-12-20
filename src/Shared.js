@@ -67,7 +67,7 @@ const shared = {
         20010: 'SUT',
         20020: 'GMT',
         30010: 'StepN GO code',
-        30020: 'MOOAR Membership',
+        30020: 'MOOAR+ Membership',
         40010: 'StepN GO Shoe'
     },
     

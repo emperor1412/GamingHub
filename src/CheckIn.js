@@ -140,8 +140,8 @@ const CheckIn = ({ checkInData, onClose }) => {
                 </div>
                 <div className="content-container">
                     <div className="streak-info">
-                        <p className="streak-text">CHECKED IN CONTINUOUSLY</p>
-                        <h1 className="streak-days">{checkInData.streakDay} <span className="days-text">DAYS</span></h1>
+                        <p className="streak-text">LOG IN STREAK</p>
+                        <h1 className="streak-days">{checkInData.streakDay} <span className="days-text">{checkInData.streakDay === 1 ? 'DAY' : 'DAYS'}</span></h1>
                     </div>
                 </div>
             </div>
