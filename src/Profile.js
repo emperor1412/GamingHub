@@ -19,6 +19,8 @@ import FSLAuthorization from 'fsl-authorization';
 const Profile = ({ onClose, getProfileData }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
     console.log('Current Window URL:', window.location.href);    
+
+    
     const onClickClaim = (item) => {
         console.log('Claim:', item);
 

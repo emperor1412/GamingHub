@@ -1,25 +1,78 @@
 import React from 'react';
 import './FSLIDTest.css';
 import FSLAuthorization from 'fsl-authorization';
+import shared from './Shared';
 
 const FSLIDTest = () => {
     const onClick_Method_1 = () => {
         console.log('Method 1');
 
+        /*
+url: /app/randKey
+Request:
+	code string  //The token that calls the fslId callback
+
+Response:
+{
+    "code": 0,
+    "data": "h1nvi6zyg2b7nw0aqegso4eubqtb7hq1"//state
+}
+        */
+
+        const fetchKey = async () => {
+            const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
+            console.log('RandKey API:', randKeyApi);
+
+            fetch(randKeyApi, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => response.json()).then(async data => {
+                console.log('RandKey Response:', data);
+
+                if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, re-login');
+                    const loginResult = await shared.login(shared.initData);
+                    if (loginResult.success) {
+                        console.log('Login success, fetch key again');
+                        fetchKey();
+                    }
+                    return;
+                }
+                
+    
+                const state = data.data;
+                // return;
+                const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+    
+                console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
+    
+                const fslAuthorization = FSLAuthorization.init({
+                    responseType: 'code', // 'code' or 'token'
+                    appKey: 'MiniGame',
+                    redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+                    scope: 'basic', // Grant Scope
+                    state: state,
+                    usePopup: true, // Popup a window instead of jump to
+                    isApp: true,
+                    domain: 'https://gm3.joysteps.io/'
+                });
+    
+                fslAuthorization.signInV2();
+    
+            });
+        };
+
+        fetchKey();
+
+
         // const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
-        const REDIRECT_URL = '{code: 0, data: {message: "https://t.me/TestFSL_bot/fslhub?startapp=fslid_"}}';
-
-        const fslAuthorization = FSLAuthorization.init({
-            responseType: 'code', // 'code' or 'token'
-            appKey: 'MiniGame',
-            redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-            scope: 'basic', // Grant Scope
-            state: 'test',
-            usePopup: true, // Popup a window instead of jump to
-            isApp: true
-        });
-
-        fslAuthorization.signInV2().then((response) => {
+        // const REDIRECT_URL = '{code: 0, data: {message: "https://t.me/TestFSL_bot/fslhub?startapp=fslid_"}}';
+        
+        
+        /*
+        .then((response) => {
             if (response && response.code) {
                 // todo your code
                 console.log('FSL Login, Code:', response.code);
@@ -27,6 +80,7 @@ const FSLIDTest = () => {
         }).catch((error) => {
             console.error('Login error:', error);
         });
+        */
     };
 
     const onClick_Method_2 = () => {
@@ -101,7 +155,7 @@ const FSLIDTest = () => {
                 <pre>
                     {`
 
-const REDIRECT_URL = '{code: 0, data: {message: "https://t.me/TestFSL_bot/fslhub?startapp=fslid_"}}';
+const REDIRECT_URL = Shared.server_url + '/api/app/fslCallback';
 
 const fslAuthorization = FSLAuthorization.init({
     responseType: 'code', // 'code' or 'token'

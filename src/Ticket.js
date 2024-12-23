@@ -12,17 +12,20 @@ import burn_ticket from './images/burn_ticket.svg';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
+    const [kmPoint, setKmPoint] = useState(0);
     const [showTicket1, setShowTicket1] = useState(false);
 
     const setupProfileData = async () => {
 
-        await getProfileData();
+        // await getProfileData();
 
         if (!shared.userProfile || !shared.userProfile.UserToken) {
             return;
         }
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+        const userKmPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
         if (userTicket) {
+            setKmPoint(userKmPoint.num);
             setTicket(userTicket.num);
             // setTicket(1);
         }
@@ -35,7 +38,7 @@ const Ticket = ({ onClose, getProfileData }) => {
     return (
         <>
             {showTicket1 ? (
-                <Ticket1 ticketCount={ticket} onClose={() => {
+                <Ticket1 ticketCount={ticket} kmPointData={kmPoint} getProfileData={getProfileData} onClose={() => {
                     setShowTicket1(false);
                 }} />
             ) : (
@@ -49,10 +52,11 @@ const Ticket = ({ onClose, getProfileData }) => {
                                 <img src={ticketIcon} alt="Tickets" />
                                 <span className='stat-item-main-text'>{ticket}</span>
                             </div>
-                            {/* <div className="stat-item">
+                            <div className="stat-item-main">
                                 <img src={kmIcon} alt="KM" />
-                                <span>24.4</span>
+                                <span className='stat-item-main-text'>{kmPoint}</span>
                             </div>
+                            {/*
                             <div className="stat-item">
                                 <img src={ticketIcon} alt="Tickets" />
                                 <span>3</span>

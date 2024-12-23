@@ -24,6 +24,7 @@ import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
+import FSLAuthorization from 'fsl-authorization';
 
 import single_star from './images/single_star.svg';
 import single_star_2 from './images/single_star_2.svg';
@@ -66,7 +67,7 @@ const shared = {
         20010: 'SUT',
         20020: 'GMT',
         30010: 'StepN GO code',
-        30020: 'MOOAR Membership',
+        30020: 'MOOAR+ Membership',
         40010: 'StepN GO Shoe'
     },
     
@@ -76,6 +77,7 @@ const shared = {
     inviteCode: 0,
     initData : null,
     user : null,
+    fsl_binding_code : null,
 
     // Add these to the shared object
     starImages: {
@@ -258,6 +260,63 @@ const shared = {
                 data: null
             };
         }
+    },
+
+    signinFSL : async () => {
+        const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
+        console.log('RandKey API:', randKeyApi);
+
+        fetch(randKeyApi, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => response.json()).then(async data => {
+            console.log('RandKey Response:', data);
+
+            if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, re-login');
+                const loginResult = await shared.login(shared.initData);
+                if (loginResult.success) {
+                    console.log('Login success, fetch key again');
+                    shared.signinFSL();
+                }
+                else {
+                    console.error('Login failed:', loginResult.error);
+                    // show popup 
+                    // if (loginResult.error) {
+                        const promise = popup.open({
+                            title: 'bind FSL Fail',
+                            message: loginResult.error,
+                            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                        });
+                        // const buttonId = await promise;
+                    // }
+                }
+                return;
+            }
+            
+
+            const state = data.data;
+            // return;
+            const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+
+            console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
+
+            const fslAuthorization = FSLAuthorization.init({
+                responseType: 'code', // 'code' or 'token'
+                appKey: 'MiniGame',
+                redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+                scope: 'basic', // Grant Scope
+                state: state,
+                usePopup: true, // Popup a window instead of jump to
+                isApp: true,
+                domain: 'https://gm3.joysteps.io/'
+            });
+
+            fslAuthorization.signInV2();
+
+        });
     }
 };
 
