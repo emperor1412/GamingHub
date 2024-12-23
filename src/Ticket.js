@@ -17,7 +17,7 @@ const Ticket = ({ onClose, getProfileData }) => {
 
     const setupProfileData = async () => {
 
-        await getProfileData();
+        // await getProfileData();
 
         if (!shared.userProfile || !shared.userProfile.UserToken) {
             return;

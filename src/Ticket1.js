@@ -19,7 +19,7 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
     const [kmPoint, setKmPoint] = useState(0);
 
     const setupProfileData = async () => {
-
+        console.log('Ticket 1 setupProfileData');
         await getProfileData();
 
         if (!shared.userProfile || !shared.userProfile.UserToken) {
@@ -31,16 +31,15 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
             setKmPoint(userKmPoint.num);
             setTicket(userTicket.num);
             // setTicket(1);
-
             
         }
     };
 
     useEffect(() => {
+        console.log('Ticket 1 useEffect');
         setTicket(ticketCount);
         setKmPoint(kmPointData);
 
-        setupProfileData();
         
         let row = Math.ceil(ticketCount / 3);
         if (row < 3) {
@@ -49,7 +48,7 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
         setRowCount(row);
         setNeedsPadding(row < 4);
             
-    }, [ticket]);
+    }, []);
 
     const renderTicketRow = (startIndex) => (
         <div className="scratch-grid-row" key={startIndex}>
@@ -97,7 +96,9 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
             {showTicket2 ? (
                 <Ticket2 ticketCount={1} onClose={() => {
                     setShowTicket2(false);
-                    onClose();
+                    setShowOverlay(false);
+                    setupProfileData();
+                    // onClose();
                 }} />
             ) : (
                 <>
