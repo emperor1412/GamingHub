@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
+import kmIcon from './images/km.svg';
 import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
 import './Ticket1.css';
@@ -7,20 +8,48 @@ import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
 import back from './images/back.svg';
 import lock_icon from "./images/ticket_lock_icon.svg";
+import shared from './Shared';
 
-const Ticket1 = ({ ticketCount, onClose }) => {
+const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
     const [needsPadding, setNeedsPadding] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
     const [showTicket2, setShowTicket2] = useState(false);
+    const [ticket, setTicket] = useState(0);
+    const [kmPoint, setKmPoint] = useState(0);
+
+    const setupProfileData = async () => {
+
+        await getProfileData();
+
+        if (!shared.userProfile || !shared.userProfile.UserToken) {
+            return;
+        }
+        const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+        const userKmPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userTicket) {
+            setKmPoint(userKmPoint.num);
+            setTicket(userTicket.num);
+            // setTicket(1);
+
+            
+        }
+    };
 
     useEffect(() => {
+        setTicket(ticketCount);
+        setKmPoint(kmPointData);
+
+        setupProfileData();
+        
         let row = Math.ceil(ticketCount / 3);
-        if (row < 3)
+        if (row < 3) {
             row = 3;
+        }
         setRowCount(row);
         setNeedsPadding(row < 4);
-    }, [ticketCount]);
+            
+    }, [ticket]);
 
     const renderTicketRow = (startIndex) => (
         <div className="scratch-grid-row" key={startIndex}>
@@ -80,7 +109,11 @@ const Ticket1 = ({ ticketCount, onClose }) => {
                             <div className="header-stats">
                                 <div className="stat-item-main">
                                     <img src={ticketIcon} alt="Tickets" />
-                                    <span className='stat-item-main-text'>{ticketCount}</span>
+                                    <span className='stat-item-main-text'>{ticket}</span>
+                                </div>
+                                <div className="stat-item-main">
+                                    <img src={kmIcon} alt="KMPoints" />
+                                    <span className='stat-item-main-text'>{kmPoint}</span>
                                 </div>
                             </div>
                         </header>
