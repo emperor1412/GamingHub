@@ -65,6 +65,7 @@ function App() {
   const [showProfileView, setShowProfileView] = useState(false);
   const [showTicketView, setShowTicketView] = useState(false);
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
+  const [buildVersion, setBuildVersion] = useState('');
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -317,6 +318,13 @@ Response:
     
   }, []);
 
+  useEffect(() => {
+    fetch(`${process.env.PUBLIC_URL}/version.txt`)
+      .then(response => response.text())
+      .then(version => setBuildVersion(version))
+      .catch(error => console.error('Error loading version:', error));
+  }, []);
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
@@ -358,6 +366,15 @@ Response:
           getProfileData={getProfileData}
         />;
     }
+  };
+
+  const versionStyle = {
+    position: 'fixed',
+    bottom: '60px',
+    right: '10px',
+    fontSize: '10px',
+    color: 'rgba(255, 255, 255, 0.5)',
+    zIndex: 1000
   };
 
   return (
@@ -479,6 +496,7 @@ Response:
         </div>
       )}
 
+      <div style={versionStyle}>{buildVersion}</div>
     </div>
   );
 }
