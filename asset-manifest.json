@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.290070dd.css",
-    "main.js": "/GamingHub/static/js/main.13994db1.js",
+    "main.css": "/GamingHub/static/css/main.6e1399e1.css",
+    "main.js": "/GamingHub/static/js/main.aa52a74a.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.98b373172c6b9a763db2fe34548fe933.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -19,9 +19,7 @@
     "static/media/scratch_ticket.svg": "/GamingHub/static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
     "static/media/bank_ticket.svg": "/GamingHub/static/media/bank_ticket.59a113c097caac3a3d525cd39bb62511.svg",
     "static/media/burn_ticket.svg": "/GamingHub/static/media/burn_ticket.56e0ccb83c698133e4bf15727d9c254e.svg",
-    "static/media/SUT.png": "/GamingHub/static/media/SUT.4963ae816c2d97925708.png",
     "static/media/background.png": "/GamingHub/static/media/background.6167c630830d31ce4fe3.png",
-    "static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.png": "/GamingHub/static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.c5ca320b74e10f70ad06.png",
     "static/media/avatar_7_Druid_300px.png": "/GamingHub/static/media/avatar_7_Druid_300px.1bc7172a63a1c812ea9c.png",
     "static/media/avatar_13_Squirrel_300px.png": "/GamingHub/static/media/avatar_13_Squirrel_300px.e19181daba089ca00b9b.png",
     "static/media/avatar_3_Bunny_300px.png": "/GamingHub/static/media/avatar_3_Bunny_300px.600dfdedc5d568286209.png",
@@ -65,6 +63,8 @@
     "static/media/trophy_2_200px.png": "/GamingHub/static/media/trophy_2_200px.121e6ec8645f06825bbd.png",
     "static/media/trophy_3_200px.png": "/GamingHub/static/media/trophy_3_200px.d5ea6ef4daff09c97db3.png",
     "static/media/trophy_1_200px.png": "/GamingHub/static/media/trophy_1_200px.e4c9f6d5767024684519.png",
+    "static/media/SUT.png": "/GamingHub/static/media/SUT.eb751493923b41344517.png",
+    "static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.png": "/GamingHub/static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.68b7da73b317ad5ffdd6.png",
     "static/media/ticket_lock_icon.svg": "/GamingHub/static/media/ticket_lock_icon.9c2c199055bd6432e2b5235a0ab282a1.svg",
     "static/media/background_avatar_selection.svg": "/GamingHub/static/media/background_avatar_selection.4b03c1d56dd0d22f40d0714e1238cd7b.svg",
     "static/media/incorrect_answer.svg": "/GamingHub/static/media/incorrect_answer.4332fe220d5766da38132dc21a1b27bc.svg",
@@ -79,7 +79,6 @@
     "static/media/ticket.svg": "/GamingHub/static/media/ticket.d958c6a1d523460e61b109564c9bd1ac.svg",
     "static/media/Home_selected.svg": "/GamingHub/static/media/Home_selected.4e5b60e5d0a3e7386b437ec288372478.svg",
     "static/media/Home_normal.svg": "/GamingHub/static/media/Home_normal.e0f1c114b4a6c31626d845eab69a7770.svg",
-    "static/media/gmt.svg": "/GamingHub/static/media/gmt.52e896f9c861965389ec8a0cf3cd4682.svg",
     "static/media/friends_icon.svg": "/GamingHub/static/media/friends_icon.e276eafc660b63f844612d6eac25b0ad.svg",
     "static/media/particle.svg": "/GamingHub/static/media/particle.3662f767eb416dcc16a36913ee8a070a.svg",
     "static/media/km.svg": "/GamingHub/static/media/km.2652f9dda8b22b016e162b74e1f4fbfb.svg",
@@ -100,12 +99,12 @@
     "static/media/single_star_5.svg": "/GamingHub/static/media/single_star_5.e1b276c60fde78af97b47a184a6645cb.svg",
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.290070dd.css.map": "/GamingHub/static/css/main.290070dd.css.map",
-    "main.13994db1.js.map": "/GamingHub/static/js/main.13994db1.js.map",
+    "main.6e1399e1.css.map": "/GamingHub/static/css/main.6e1399e1.css.map",
+    "main.aa52a74a.js.map": "/GamingHub/static/js/main.aa52a74a.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.290070dd.css",
-    "static/js/main.13994db1.js"
+    "static/css/main.6e1399e1.css",
+    "static/js/main.aa52a74a.js"
   ]
 }
