@@ -1,0 +1,33 @@
+.fsl-id-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.fsl-id {
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 18px;
+    color: white;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-width: 100%;
+}
+
+.connect-fsl-button {
+    background: #007AFF;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.connect-fsl-button:hover {
+    background: #0056b3;
+}
