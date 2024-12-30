@@ -7,6 +7,7 @@ import Tasks from './Tasks';
 import CheckIn from './CheckIn';
 import Profile from './Profile';
 import FSLIDTest from './FSLIDTest';
+import FSLID from './FSLID';
 import Frens from './Frens';
 import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
@@ -338,7 +339,8 @@ Response:
             getProfileData={getProfileData}
         />;
       case 'fslid':
-        return <FSLIDTest />;
+        // return <FSLIDTest />;
+        return <FSLID />;
       case 'frens':
         return <Frens />;
       // case 'market':
