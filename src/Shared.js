@@ -1,6 +1,7 @@
 import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
-import gmtIcon from './images/gmt.svg';
+// import gmtIcon from './images/gmt.svg';
+import gmtIcon from './images/gmt.png';
 import SUT from './images/SUT.png';
 import energy from './images/energy.svg';
 import mooar from './images/Mooar.png';

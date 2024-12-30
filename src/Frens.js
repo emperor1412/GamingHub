@@ -544,7 +544,7 @@ const Frens = () => {
             </div>
             <div className="invite-button-container">
               <button className="invite-button" onClick={onClickInviteFriends}>
-                invite friends
+                Invite Friends
                 <img src={link} alt="Link" className="invite-icon" />
               </button>
             </div>
