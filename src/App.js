@@ -370,8 +370,8 @@ Response:
 
   const versionStyle = {
     position: 'fixed',
-    bottom: '60px',
-    right: '10px',
+    bottom: '6px',
+    right: '20px',
     fontSize: '10px',
     color: 'rgba(255, 255, 255, 0.5)',
     zIndex: 1000

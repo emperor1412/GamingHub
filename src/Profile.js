@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import LevelUp from './LevelUp';
 import './Profile.css';
 import './Share.css';
 import backIcon from './images/back.svg';
@@ -18,8 +19,14 @@ import FSLAuthorization from 'fsl-authorization';
 
 const Profile = ({ onClose, getProfileData }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+    const [showLevelUp, setShowLevelUp] = useState(false);
+
     console.log('Current Window URL:', window.location.href);    
 
+    const onClickLevel = () => {
+        console.log('Level clicked');
+        setShowLevelUp(!showLevelUp);
+    }
     
     const onClickClaim = (item) => {
         console.log('Claim:', item);
@@ -75,16 +82,16 @@ const Profile = ({ onClose, getProfileData }) => {
         */
     }
 
-    
-
     useEffect(() => {
         getProfileData(shared.loginData);
     }, []);
 
     return (
         <div className="app-container">
-
-            {
+            {showLevelUp ? (
+                <LevelUp onClose={() => setShowLevelUp(false)} />
+            ) :
+            (
                 showAvatarSelector ? (
                     <ProfileAvatarSelector
                         onClose={() => setShowAvatarSelector(false)}
@@ -106,7 +113,10 @@ const Profile = ({ onClose, getProfileData }) => {
                                     className="profile-avatar"
                                 />
                                 <div>
-                                    <div className="profile-username">{shared.user.firstName}</div>
+                                    <div className="profile-username">
+                                        {shared.user.firstName}
+                                        <button className="level-badge" onClick={() => onClickLevel()}>LV.{shared.userProfile.level || 0}</button>
+                                    </div>
                                     <div className="profile-id">
                                         {shared.userProfile.email && (
                                             <>
@@ -148,7 +158,7 @@ const Profile = ({ onClose, getProfileData }) => {
                             Earn extra rewards by inviting frens or by completing daily tasks. The more you engage, the more rewards you'll unlock.
                         </div>
                     </div>
-            }
+            )}
         </div>
     );
 };
