@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import iconMarty from './images/Meet Marty 1.png';
 import background from './images/background.png';
 import shadow from './images/shadow.png';
+import hinh_thang_vuong from './images/hinh_thang_vuong.svg';
 import backIcon from './images/back.svg';
 import './Share.css';
 import './LevelUp.css';
@@ -9,32 +10,128 @@ import { shareStory } from '@telegram-apps/sdk';
 import shared from './Shared';
 
 const LevelUp = ({ onClose }) => {
-    const progress = 0; // This could come from props or state
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
+    const [progress, setProgress] = useState(0);
 
-    const onClickLevelUp = () => {
+    const onClickLevelUp = async () => {
         console.log('Level up clicked');
-        setShowOverlay(true);
-    }
+
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/levelUp?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Level up response:', data);
+                
+                if (data.code === 0) {
+                    console.log('Level up successful');                    
+                    
+                    // Get updated profile data with retries
+                    const getProfileWithRetry = async (depth = 0) => {
+                        if (depth > 3) {
+                            console.error('Get profile data failed after 3 attempts');
+                            return;
+                        }
+
+                        const profileResult = await shared.getProfileData(shared.loginData);
+                        if (!profileResult.success) {
+                            if (profileResult.needRelogin) {
+                                console.log('Token expired while getting profile, attempting to re-login');
+                                const loginResult = await shared.login(shared.initData);
+                                if (loginResult.success) {
+                                    return getProfileWithRetry(depth + 1);
+                                } else {
+                                    console.error('Re-login failed while getting profile:', loginResult.error);
+                                }
+                            } else {
+                                console.error('Failed to get updated profile data:', profileResult.error);
+                            }
+                        }
+                    };
+
+                    await getProfileWithRetry();
+                    setShowOverlay(true);
+
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const loginResult = await shared.login(shared.initData);
+                    if (loginResult.success) {
+                        // Retry the level up call after successful re-login
+                        onClickLevelUp();
+                    } else {
+                        console.error('Re-login failed:', loginResult.error);
+                    }
+                } else {
+                    console.error('Level up failed:', data.msg);
+                }
+            } else {
+                console.error('Level up request failed:', response);
+            }
+        } catch (error) {
+            console.error('Error during level up:', error);
+        }
+    };
 
     const onClickShareStory = async () => {
         console.log('Share story clicked');
+        
         if (shareStory.isSupported()) {
             const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/hHinjx/xY6gECBXlMiE1Z95dGmuh/3Pqzg/tEcJ1P3s=.png';
             shareStory(url, {
                 text: 'ONLY LEGENDS REACH LEVEL 5! 🏆',
             });
             setShowOverlay(false);
+            
+            try {
+                const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Share story API response:', data);
+
+                    if (data.code === 0) {
+                        console.log('Story shared successfully');
+                    } else if (data.code === 102001 || data.code === 102002) {
+                        console.log('Token expired, attempting to re-login');
+                        const loginResult = await shared.login(shared.initData);
+                        if (loginResult.success) {
+                            // Retry the API call after successful re-login
+                            onClickShareStory();
+                        } else {
+                            console.error('Re-login failed:', loginResult.error);
+                        }
+                    } else {
+                        console.error('Share story failed:', data.msg);
+                    }
+                } else {
+                    console.error('Share story request failed:', response);
+                }
+            } catch (error) {
+                console.error('Error sharing story:', error);
+            }
         }
     };
 
     const setup = () => {
         const kmPoint = shared.getKMPoint();
         const currentRequired = shared.userProfile.levelPoint;
+        console.log('KM Point:', kmPoint, 'Current Required:', currentRequired);
+        setProgress(Math.min((kmPoint / currentRequired) * 100, 100));
+        console.log('Progress:', progress);
+
         if (kmPoint >= currentRequired) {
             setShowLevelUpButton(true);
-            progress = (kmPoint - currentRequired) * 100;
         }
     };
 
@@ -50,7 +147,7 @@ const LevelUp = ({ onClose }) => {
 
             <div className="level-up-scroll-container">
                 <div className="level-content">
-                    <h2 className="level-header">YOU NEED 9,000 KM POINTS TO REACH THE NEXT LEVEL.</h2>
+                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} KM POINTS TO REACH THE NEXT LEVEL.</h2>
           
                     <div className="marty-card-outer">
                         <div className='marty-gradient-layer'></div>
@@ -58,7 +155,7 @@ const LevelUp = ({ onClose }) => {
                             <img src={iconMarty} alt="Marty" className="marty-image" />
                             <img src={shadow} alt="Shadow" className="marty-shadow" />
                             <div className="level-info">
-                                <div className="level-label">LV 4</div>
+                                <div className="level-label">LV {shared.userProfile.level}</div>
                                 <div className="progress-bar">
                                     <div 
                                         className="progress" 
@@ -106,7 +203,7 @@ const LevelUp = ({ onClose }) => {
                     <div className="level-up-overlay-content" onClick={e => e.stopPropagation()}>
                         <div className="level-up-overlay-promotion">
                             CONGRATULATIONS!<br />
-                            ONLY LEGENDS REACH LEVEL 5!
+                            ONLY LEGENDS REACH LEVEL {shared.userProfile.level}!
                         </div>
 
                         <div className="level-up-overlay-icon-container">
