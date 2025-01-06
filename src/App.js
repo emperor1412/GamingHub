@@ -370,7 +370,7 @@ Response:
 
   const versionStyle = {
     position: 'fixed',
-    bottom: '6px',
+    bottom: '2px',
     right: '20px',
     fontSize: '10px',
     color: 'rgba(255, 255, 255, 0.5)',
