@@ -22,11 +22,12 @@ const Ticket = ({ onClose, getProfileData }) => {
         if (!shared.userProfile || !shared.userProfile.UserToken) {
             return;
         }
-        const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
-        const userKmPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        const userTicket = shared.getTicket();
+        const userKmPoint = shared.getKMPoint();
+
         if (userTicket) {
-            setKmPoint(userKmPoint.num);
-            setTicket(userTicket.num);
+            setKmPoint(userKmPoint);
+            setTicket(userTicket);
             // setTicket(1);
         }
     };
@@ -38,7 +39,7 @@ const Ticket = ({ onClose, getProfileData }) => {
     return (
         <>
             {showTicket1 ? (
-                <Ticket1 ticketCount={ticket} kmPointData={kmPoint} getProfileData={getProfileData} onClose={() => {
+                <Ticket1 kmPointData={kmPoint} getProfileData={getProfileData} onClose={() => {
                     setShowTicket1(false);
                 }} />
             ) : (

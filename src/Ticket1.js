@@ -10,7 +10,7 @@ import back from './images/back.svg';
 import lock_icon from "./images/ticket_lock_icon.svg";
 import shared from './Shared';
 
-const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
+const Ticket1 = ({ kmPointData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
     const [needsPadding, setNeedsPadding] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
@@ -37,11 +37,11 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
 
     useEffect(() => {
         console.log('Ticket 1 useEffect');
-        setTicket(ticketCount);
+        setTicket(shared.getTicket());
         setKmPoint(kmPointData);
 
         
-        let row = Math.ceil(ticketCount / 3);
+        let row = Math.ceil(shared.getTicket() / 3);
         if (row < 3) {
             row = 3;
         }
@@ -54,7 +54,7 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
         <div className="scratch-grid-row" key={startIndex}>
             {[0, 1, 2].map(offset => {
                 const index = startIndex + offset;
-                const isUnlocked = index < ticketCount;
+                const isUnlocked = index < shared.getTicket();
 
                 return isUnlocked ? (
                     <button 
@@ -94,7 +94,7 @@ const Ticket1 = ({ ticketCount, kmPointData, getProfileData, onClose }) => {
     return (
         <>
             {showTicket2 ? (
-                <Ticket2 ticketCount={1} onClose={() => {
+                <Ticket2 onClose={() => {
                     setShowTicket2(false);
                     setShowOverlay(false);
                     setupProfileData();

@@ -16,11 +16,11 @@ import fail_animation_frame_1 from './images/FSL Games UI 2-09.png';
 import fail_animation_frame_2 from './images/FSL Games UI 2-08.png';
 import fail_animation_frame_3 from './images/FSL Games UI 2-07.png';
 
-import { shareStory } from '@telegram-apps/sdk';
+import { shareStory, popup } from '@telegram-apps/sdk';
 
 let animationFrameIndex = 0;
 
-const Ticket2 = ({ ticketCount, onClose }) => {
+const Ticket2 = ({ onClose }) => {
     const [dimensions, setDimensions] = useState({ width: 400, height: 700 });
     const [showResult, setShowResult] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
@@ -74,7 +74,7 @@ Response:
         console.log('Claiming reward from sharing story...');
 
         try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingTicket?token=${shared.loginData.token}`, {
+            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -195,7 +195,7 @@ Response:
 
     const setupRewward = async () => {
         setShowLoading(true);
-        const rewards = await requestTicketUse(ticketCount);
+        const rewards = await requestTicketUse(1);
         if (rewards && rewards.length === 1) {
             // Process rewards
             const reward = rewards[0];
@@ -208,6 +208,14 @@ Response:
         }
         else {
             console.error('Ticket use failed');
+            if (popup.open.isAvailable()) {
+                const promise = popup.open({
+                    title: 'Ticket use failed',
+                    message: `Error: Ticket use failed`,
+                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                });
+                await promise;
+            }
             onClose();
         }
         setShowLoading(false);

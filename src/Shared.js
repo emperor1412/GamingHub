@@ -321,11 +321,13 @@ const shared = {
     },
 
     getKMPoint : () => {
-        return shared.userProfile.UserToken.find(item => item.prop_id === 10020)?.value || 0;
+        const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10020);
+        return retVal?.num || 0;
     },
 
     getTicket : () => {
-        return shared.userProfile.UserToken.find(item => item.prop_id === 10010)?.value || 0;
+        const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10010);
+        return retVal?.num || 0;
     }
 
 };
