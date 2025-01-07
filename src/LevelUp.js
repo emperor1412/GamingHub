@@ -33,29 +33,7 @@ const LevelUp = ({ onClose }) => {
                     console.log('Level up successful');                    
                     
                     // Get updated profile data with retries
-                    const getProfileWithRetry = async (depth = 0) => {
-                        if (depth > 3) {
-                            console.error('Get profile data failed after 3 attempts');
-                            return;
-                        }
-
-                        const profileResult = await shared.getProfileData(shared.loginData);
-                        if (!profileResult.success) {
-                            if (profileResult.needRelogin) {
-                                console.log('Token expired while getting profile, attempting to re-login');
-                                const loginResult = await shared.login(shared.initData);
-                                if (loginResult.success) {
-                                    return getProfileWithRetry(depth + 1);
-                                } else {
-                                    console.error('Re-login failed while getting profile:', loginResult.error);
-                                }
-                            } else {
-                                console.error('Failed to get updated profile data:', profileResult.error);
-                            }
-                        }
-                    };
-
-                    await getProfileWithRetry();
+                    await shared.getProfileWithRetry();
                     setShowOverlay(true);
 
                 } else if (data.code === 102001 || data.code === 102002) {
