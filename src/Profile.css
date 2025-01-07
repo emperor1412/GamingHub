@@ -267,3 +267,33 @@
   line-height: normal;
   text-transform: uppercase;
 }
+
+.level-badge {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 8px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    color:#D4D3D3;
+    text-align: center;
+
+    /* APP/Detail/Detail-Light */
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 16px; /* 160% */
+}
+
+.level-badge:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.level-badge:active {
+    background-color: rgba(255, 255, 255, 0.15);
+}

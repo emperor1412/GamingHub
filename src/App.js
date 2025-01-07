@@ -108,32 +108,21 @@ function App() {
 
   const getProfileData = async (loginDataParam) => {
     const dataToUse = loginDataParam || loginData;
-    const profileResult = await shared.getProfileData(dataToUse);
+    shared.loginData = dataToUse; // Ensure shared.loginData is set for getProfileWithRetry
+    const profileResult = await shared.getProfileWithRetry();
     
     if (profileResult.success) {
         setUserProfile(profileResult.userProfile);
         setProfileItems(profileResult.profileItems);
         return [profileResult.userProfile, profileResult.profileItems];
     } else {
-        if (profileResult.needRelogin) {
-            const loginResult = await shared.login(initDataRaw);
-            if (loginResult.success) {
-                setLoginData(loginResult.loginData);
-                setIsLoggedIn(true);
-                return await getProfileData(loginResult.loginData);
-            } else {
-                console.log('User is not logged in');
-                setIsLoggedIn(false);
-            }
-        } else {
-            if (popup.open.isAvailable()) {
-                const promise = popup.open({
-                    title: 'Error Getting Profile Data',
-                    message: `Error: ${profileResult.error}`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                await promise;
-            }
+        if (popup.open.isAvailable()) {
+            const promise = popup.open({
+                title: 'Error Getting Profile Data',
+                message: `Error: ${profileResult.error}`,
+                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
         }
         return [null, []];
     }
@@ -370,8 +359,8 @@ Response:
 
   const versionStyle = {
     position: 'fixed',
-    bottom: '60px',
-    right: '10px',
+    bottom: '2px',
+    right: '20px',
     fontSize: '10px',
     color: 'rgba(255, 255, 255, 0.5)',
     zIndex: 1000

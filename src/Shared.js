@@ -263,6 +263,37 @@ const shared = {
         }
     },
 
+    getProfileWithRetry: async (depth = 0) => {
+        if (depth > 3) {
+            console.error('Get profile data failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        const profileResult = await shared.getProfileData(shared.loginData);
+        if (!profileResult.success) {
+            if (profileResult.needRelogin) {
+                console.log('Token expired while getting profile, attempting to re-login');
+                const loginResult = await shared.login(shared.initData);
+                if (loginResult.success) {
+                    return shared.getProfileWithRetry(depth + 1);
+                } else {
+                    console.error('Re-login failed while getting profile:', loginResult.error);
+                    return {
+                        success: false,
+                        error: loginResult.error
+                    };
+                }
+            } else {
+                console.error('Failed to get updated profile data:', profileResult.error);
+                return profileResult;
+            }
+        }
+        return profileResult;
+    },
+
     signinFSL : async () => {
         const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
         console.log('RandKey API:', randKeyApi);
@@ -318,7 +349,18 @@ const shared = {
             fslAuthorization.signInV2();
 
         });
+    },
+
+    getKMPoint : () => {
+        const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10020);
+        return retVal?.num || 0;
+    },
+
+    getTicket : () => {
+        const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10010);
+        return retVal?.num || 0;
     }
+
 };
 
 export default shared;

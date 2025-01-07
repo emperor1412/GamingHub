@@ -75,8 +75,12 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
           <div>
             <div className="profile-username">{shared.user.firstName}</div>
             <div className="profile-id">
-             <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-             4CHH...@gmail.com
+            {shared.userProfile.email && (
+                <>
+                    <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
+                    {shared.userProfile.email}
+                </>
+            )}
            </div>
           </div>
         </div>
