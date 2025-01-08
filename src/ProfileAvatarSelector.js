@@ -6,7 +6,7 @@ import background_avatar_selection from './images/background_avatar_selection.sv
 import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
-import { popup } from '@telegram-apps/sdk';
+import { openLink, popup } from '@telegram-apps/sdk';
 import lock_icon from "./images/lock_trophy.png";
 import shared from './Shared';
 
@@ -129,10 +129,10 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
         </div>
 
         <div className="avatar-footer">
-          <button className="footer-button">
+          <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4")}>
             Terms and Conditions
           </button>
-          <button className="footer-button">
+          <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4")}>
             Privacy Policy
           </button>
         </div>
