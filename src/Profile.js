@@ -106,11 +106,15 @@ const Profile = ({ onClose, getProfileData }) => {
                             <button className="profile-back back-button-alignment" onClick={onClose}>
                                 <img src={backIcon} alt="Back" />
                             </button>
-                            <div className="profile-user">
+                            <div className="profile-user" onClick={() => onClickLevel()}>
                                 <img
                                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                                     alt="Avatar"
                                     className="profile-avatar"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowAvatarSelector(true);
+                                    }}
                                 />
                                 <div>
                                     <div className="profile-username">
@@ -126,9 +130,7 @@ const Profile = ({ onClose, getProfileData }) => {
                                         )}
                                     </div>
                                 </div>
-                                <button className="profile-user-arrow" onClick={() => setShowAvatarSelector(true)}>
-                                    <img src={arrowIcon} alt="Open Avatar Selector" />
-                                </button>
+                                <img src={arrowIcon} alt="Open Avatar Selector" className="profile-user-arrow"/>
                             </div>
                         </div>
 

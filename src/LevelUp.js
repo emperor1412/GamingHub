@@ -195,10 +195,16 @@ const LevelUp = ({ onClose }) => {
                             </div>
                         </div>
                         
-                        <button className="level-up-share-story-button" onClick={onClickShareStory}>
+                        <button className="level-up-share-story-button" onClick={() => {
+                                onClickShareStory();
+                                setup();
+                            }}>
                             Share To Story 200 KM Points
                         </button>
-                        <button className="level-up-okay-button" onClick={() => setShowOverlay(false)}>
+                        <button className="level-up-okay-button" onClick={() => {
+                            setShowOverlay(false);
+                            setup();
+                        }}>
                             Okay
                         </button>
                     </div>
