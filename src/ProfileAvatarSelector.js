@@ -73,7 +73,9 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             className="profile-avatar"
           />
           <div>
-            <div className="profile-username">{shared.user.firstName}</div>
+            <div className="profile-username">{shared.user.firstName}
+            <div className="level-badge">LV.{shared.userProfile.level || 0}</div>
+            </div>
             <div className="profile-id">
             {shared.userProfile.email && (
                 <>
