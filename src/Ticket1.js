@@ -131,7 +131,8 @@ Response:
         if (ticketSlotData) {
             setSlotNum(ticketSlotData.slotNum);
             setSlotUseNum(ticketSlotData.slotUseNum);
-            setTicket(ticketSlotData.slotNum - ticketSlotData.slotUseNum);
+            // setTicket( Math.min(ticketSlotData.slotNum - ticketSlotData.slotUseNum, shared.getTicket()));
+            setTicket(shared.getTicket());
             setKmPoint(kmPointData);
 
             
@@ -156,8 +157,8 @@ Response:
         <div className="scratch-grid-row" key={startIndex}>
             {[0, 1, 2].map(offset => {
                 const index = startIndex + offset;
-                const isUnlocked = index <= ticket;
-                const isScratched = index > (ticket - slotUseNum) && index <= ticket;
+                const isUnlocked = index < slotNum;
+                const isScratched = index >= ticket;
 
                 return isUnlocked ? (
                     isScratched ? (
