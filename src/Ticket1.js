@@ -3,7 +3,7 @@ import ticketIcon from './images/ticket.svg';
 import kmIcon from './images/km.svg';
 import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
-import ticket_scratched from './images/ticket_scratched.svg';
+import ticket_scratched from './images/ticket_scratched.png';
 import circle_dotted from './images/circle_dotted.svg';
 import './Ticket1.css';
 import locker from './images/locker.png';
@@ -229,7 +229,9 @@ Response:
                 return isUnlocked ? (
                     isScratched ? (
                         <div key={index} className="scratch-item unlocked" onClick={() => setShowTimer(true)}>
-                            <div className='scratch-item-border'>   </div>
+                            <div className='scratch-item-border'>   
+                                <div className='scratch-item-background'></div>
+                            </div>
                             <img src={ticket_scratched} alt="Lock" className='scratch-item-ticket-icon' />
                         </div>  
                     ) : (
@@ -241,13 +243,16 @@ Response:
                                 setShowOverlay(true);
                             }}
                         >
-                            <div className='scratch-item-border'>   </div>
+                            <div className='scratch-item-border'>   
+                                <div className='scratch-item-background'></div>
+                            </div>
                             <img src={scratch_ticket} alt="Scratch Ticket" className='scratch-item-ticket-icon' />
                         </button>
                     )
                 ) : (
                     <div key={index} className="scratch-item locked" onClick={() => setShowTimer(true)}>
                         <div className='scratch-item-border'>   
+                            <div className='scratch-item-background'></div>
                             <img src={locker} alt="Lock" className='scratch-item-locked-icon' onClick={() => setShowTimer(true)}/>
                         </div>
                     </div>
@@ -384,7 +389,12 @@ Response:
                                     <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
                                         {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
                                     </div>
+                                    <div className="scratch-status">
+                                        <div className="scratch-status-text"> <span className='scratch-status-text-count'>{slotUseNum}/{slotNum} </span> TICKETS SCRATCHED TODAY!</div>
+                                        <div className="scratch-status-subtext">UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!</div>
+                                    </div>
                                 </div>
+
 
                                 <div className="info-box-ticket">
                                     EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
