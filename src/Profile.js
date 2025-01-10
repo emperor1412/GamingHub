@@ -99,6 +99,10 @@ const Profile = ({ onClose, getProfileData }) => {
                             console.log('Selected avatar:', avatar);
                         }}
                         getProfileData={getProfileData}
+                        onLevelUp={() => {
+                            setShowAvatarSelector(false);
+                            setShowLevelUp(true);
+                        }}
                     />
                 )
                     : <div className="profile-container">
