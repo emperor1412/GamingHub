@@ -293,7 +293,7 @@
 }
 
 .lock-overlay-content {
-  padding: 24px;
+  padding: 0px;
   width: 100%;
   max-width: 320px;
   position: relative;
@@ -344,8 +344,8 @@
   height: 44px;
   background: #0000FF;
   border: none;
-  border-radius: 14px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 0px;
   cursor: pointer;
   position: relative;
   color: #FFF;
