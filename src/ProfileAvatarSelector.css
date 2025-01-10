@@ -256,7 +256,7 @@
 }
 
 .avatar-option.locked {
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
 }
 
 .lock-overlay {

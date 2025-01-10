@@ -16,7 +16,8 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
 
 
   const handleAvatarSelect = (index) => {
-    if (index < 5) {
+    console.log('Avatar selected:', index);
+    if (index < shared.userProfile.avatarNum) {
       setSelectedAvatar(index);
       setHasChanged(index !== shared.userProfile.pictureIndex);
       onSelect(shared.avatars[index % 3]);
@@ -99,9 +100,8 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             {[...Array(12)].map((_, index) => (
               <button 
                 key={index} 
-                className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${index >= 4 ? 'locked' : ''}`}
+                className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${index >= shared.userProfile.avatarNum ? 'locked' : ''}`}
                 onClick={() => handleAvatarSelect(index)}
-                disabled={index >= 4}
               >
                 {index === selectedAvatar && (
                   <div className="avatar-selection-indicators">
@@ -110,7 +110,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                   </div>
                 )}
                 <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
-                {index >= 4 && (
+                {index >= shared.userProfile.avatarNum && (
                   <div className="lock-overlay">
                     <img src={lock_icon} alt="Locked" className="lock-icon" />
                   </div>
