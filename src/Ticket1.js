@@ -4,6 +4,7 @@ import kmIcon from './images/km.svg';
 import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
 import ticket_scratched from './images/ticket_scratched.svg';
+import circle_dotted from './images/circle_dotted.svg';
 import './Ticket1.css';
 import locker from './images/locker.png';
 import Ticket2 from './Ticket2';
@@ -11,6 +12,7 @@ import back from './images/back.svg';
 import lock_icon from "./images/ticket_lock_icon.svg";
 import shared from './Shared';
 import { popup } from '@telegram-apps/sdk';
+import LevelUp from './LevelUp';
 
 const Ticket1 = ({ kmPointData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -21,6 +23,12 @@ const Ticket1 = ({ kmPointData, getProfileData, onClose }) => {
     const [kmPoint, setKmPoint] = useState(0);
     const [slotNum, setSlotNum] = useState(0);
     const [slotUseNum, setSlotUseNum] = useState(0);
+    const [showTimer, setShowTimer] = useState(false);
+    const [expireTime, setExpireTime] = useState(0);
+    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0, totalSeconds: 0 });
+    const [progress, setProgress] = useState(50);
+    const [showLevelUp, setShowLevelUp] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -129,11 +137,12 @@ Response:
     const setUp = async () => {
         const ticketSlotData = await getTicketSlotData();
         if (ticketSlotData) {
+            setExpireTime(ticketSlotData.time);
             setSlotNum(ticketSlotData.slotNum);
             setSlotUseNum(ticketSlotData.slotUseNum);
             // setTicket( Math.min(ticketSlotData.slotNum - ticketSlotData.slotUseNum, shared.getTicket()));
             setTicket(shared.getTicket());
-            setKmPoint(kmPointData);
+            setKmPoint(shared.getKMPoint());
 
             
             let row = Math.ceil(ticketSlotData.levelUpNum / 3);
@@ -153,18 +162,75 @@ Response:
         setUp();
     }, []);
 
+    useEffect(() => {
+        let intervalId;
+        if (showTimer && expireTime) {
+            const updateTimer = () => {
+                const now = Date.now();
+                const diff = Math.max(0, expireTime - now);
+                const totalSeconds = Math.floor(diff / 1000);
+                
+                // Update time display
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                setTimeLeft({
+                    hours,
+                    minutes,
+                    seconds,
+                    totalSeconds
+                });
+
+                // Calculate progress
+                const totalDuration = 24 * 60 * 60; // 24 hours in seconds
+                let remainingPercent = 1 - totalSeconds / totalDuration;                
+                // remainingPercent = 0.85;
+                const progress = remainingPercent * 360; // 0-360 degrees
+                
+                // console.log('angle:', progress, '\remainingPercent:', remainingPercent);
+
+                // Generate and apply clip-path
+                const clipPath = getCircularClipPath(progress);
+                const progressCircle = document.querySelector('.timer-progress-circle');
+                if (progressCircle) {
+                    progressCircle.style.setProperty('--clip-path', clipPath);
+                }
+
+                const timerDot = document.querySelector('.timer-dot');
+                if (timerDot) {
+                    timerDot.style.setProperty('--progress-angle', `${progress}deg`);
+                }
+
+                if (diff <= 0) {
+                    clearInterval(intervalId);
+                    setShowTimer(false);
+                }
+            };
+
+            updateTimer();
+            intervalId = setInterval(updateTimer, 1000);
+        }
+
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [showTimer, expireTime]);
+
     const renderTicketRow = (startIndex) => (
         <div className="scratch-grid-row" key={startIndex}>
             {[0, 1, 2].map(offset => {
                 const index = startIndex + offset;
                 const isUnlocked = index < slotNum;
-                const isScratched = index >= ticket;
+                const isScratched = index >= Math.min(ticket, slotNum - slotUseNum);
 
                 return isUnlocked ? (
                     isScratched ? (
-                        <div key={index} className="scratch-item unlocked">
+                        <div key={index} className="scratch-item unlocked" onClick={() => setShowTimer(true)}>
                             <div className='scratch-item-border'>   </div>
-                            <img src={ticket_scratched} alt="Lock" className='scratch-item-ticket-icon'/>
+                            <img src={ticket_scratched} alt="Lock" className='scratch-item-ticket-icon' />
                         </div>  
                     ) : (
                         <button 
@@ -180,9 +246,9 @@ Response:
                         </button>
                     )
                 ) : (
-                    <div key={index} className="scratch-item locked">
+                    <div key={index} className="scratch-item locked" onClick={() => setShowTimer(true)}>
                         <div className='scratch-item-border'>   
-                            <img src={locker} alt="Lock" className='scratch-item-locked-icon'/>
+                            <img src={locker} alt="Lock" className='scratch-item-locked-icon' onClick={() => setShowTimer(true)}/>
                         </div>
                     </div>
                 );
@@ -190,16 +256,61 @@ Response:
         </div>
     );
 
+    const getCircularClipPath = (progress) => {
+        // Normalize progress to 0-1 range
+        const normalizedProgress = Math.min(Math.max(progress / 360, 0), 1);
+        
+        // Always start from center
+        const points = ['50% 50%'];
+        
+        // Always include top center point
+        points.push('50% 0%');
+        
+        // Calculate intermediate points
+        const steps = 360; // Number of points to create smooth circle
+        const currentSteps = Math.ceil(normalizedProgress * steps);
+        
+        for (let i = 0; i <= currentSteps; i++) {
+            const angle = (i / steps) * 2 * Math.PI;
+            const x = 50 + 50 * Math.sin(angle);
+            const y = 50 - 50 * Math.cos(angle);
+            points.push(`${x}% ${y}%`);
+        }
+        
+        return `polygon(${points.join(', ')})`;
+    };
+
+    const onClickLevelUp = () => {
+        console.log('Level up clicked');
+        setShowLevelUp(true);
+    }
+
+    const onCloseLevelup = async () => {
+        await shared.getProfileWithRetry();
+        setShowLevelUp(false);
+        setUp();
+    }
+
     return (
+        // implement show loading here
+
         <>
+            {showLoading && (
+                <div className="loading-overlay">
+                    LOADING...
+                </div>
+            )}
             {showTicket2 ? (
-                <Ticket2 onClose={() => {
+                <Ticket2 onClose={async () => {                
                     setShowTicket2(false);
                     setShowOverlay(false);
-                    setupProfileData();
+                    setShowLoading(true);
+                    await setupProfileData();
                     setUp();
-                    // onClose();
+                    setShowLoading(false);
                 }} />
+            ) : showLevelUp ? (
+                <LevelUp onClose={() => onCloseLevelup()} />
             ) : (
                 <>
                     <div className="ticket1-container">
@@ -219,20 +330,67 @@ Response:
                             </div>
                         </header>
 
-                        <div className="scratch-content">
-                            <div className="scratch-grid-container">
-                                <div className="scratch-header">
-                                    SCRATCH
+                        {showTimer ? (
+                            <>
+                            
+                            <div className="timer-overlay">
+                                <div className="timer-message">
+                                    YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.
                                 </div>
-                                <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
-                                    {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
+                                <div className="timer-circle">
+                                    <img src={circle_dotted} alt="Timer Background" className="timer-circle-bg" />
+                                    <div className="timer-progress-circle" style={{ '--progress-angle': `${progress}deg` }}>
+                                        <div className="timer-dot" style={{ '--progress-angle': `${progress}deg` }}></div>
+                                    </div>
+                                    <div className="timer-content">
+                                        <div className="timer-text">
+                                            {String(timeLeft.hours).padStart(2, '0')}:
+                                            {String(timeLeft.minutes).padStart(2, '0')}:
+                                            {String(timeLeft.seconds).padStart(2, '0')}
+                                        </div>
+                                        <div className="timer-subtext">
+                                            TOTAL {timeLeft.totalSeconds} SECONDS
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="timer-buttons">
+                                    <button className="timer-button primary" onClick={() => onClickLevelUp()}>LEVEL UP</button>
+                                    <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
                                 </div>
                             </div>
+                            <header className="ticket-header">
+                                <button className="back-button back-button-alignment" onClick={() => setShowTimer(false)}>
+                                    <img src={back} alt="Back" />
+                                </button>
+                                <div className="header-stats">
+                                    <div className="stat-item-main">
+                                        <img src={ticketIcon} alt="Tickets" />
+                                        <span className='stat-item-main-text'>{ticket}</span>
+                                    </div>
+                                    <div className="stat-item-main">
+                                        <img src={kmIcon} alt="KMPoints" />
+                                        <span className='stat-item-main-text'>{kmPoint}</span>
+                                    </div>
+                                </div>
+                            </header>
+                        </>
+                        ) 
+                        : (
+                            <div className="scratch-content">
+                                <div className="scratch-grid-container">
+                                    <div className="scratch-header">
+                                        SCRATCH
+                                    </div>
+                                    <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
+                                        {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
+                                    </div>
+                                </div>
 
-                            <div className="info-box-ticket">
-                                EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                <div className="info-box-ticket">
+                                    EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {showOverlay && (

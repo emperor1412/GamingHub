@@ -108,9 +108,7 @@ const LevelUp = ({ onClose }) => {
         setProgress(Math.min((kmPoint / currentRequired) * 100, 100));
         console.log('Progress:', progress);
 
-        if (kmPoint >= currentRequired) {
-            setShowLevelUpButton(true);
-        }
+        setShowLevelUpButton(kmPoint >= currentRequired);
     };
 
     useEffect(() => {
