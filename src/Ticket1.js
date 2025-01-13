@@ -355,12 +355,15 @@ Response:
                                             {String(timeLeft.seconds).padStart(2, '0')}
                                         </div>
                                         <div className="timer-subtext">
-                                            TOTAL {timeLeft.totalSeconds} SECONDS
+                                            Time Remaining: {timeLeft.hours} {timeLeft.hours === 1 ? 'hour' : 'hours'}, {timeLeft.minutes} {timeLeft.minutes === 1 ? 'minute' : 'minutes'}, {timeLeft.seconds} {timeLeft.seconds === 1 ? 'second' : 'seconds'}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="timer-buttons">
                                     <button className="timer-button primary" onClick={() => onClickLevelUp()}>LEVEL UP</button>
+                                    <div className="level-up-description">
+                                        EARN MORE REWARDS AND FEATURES BY LEVELING UP!
+                                    </div>
                                     <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
                                 </div>
                             </div>
@@ -398,7 +401,7 @@ Response:
 
 
                                 <div className="info-box-ticket">
-                                    EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                    Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
                                 </div>
                             </div>
                         )}

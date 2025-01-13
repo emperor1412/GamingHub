@@ -508,7 +508,7 @@ const Frens = () => {
     <div className="frens-content">
       <div className="frens-inner-content">
         <div className="info-box">
-          EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+        Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
         </div>
 
         <div className="stats-row">

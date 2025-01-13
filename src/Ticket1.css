@@ -352,7 +352,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     margin-top: 40px;
 }
 
@@ -408,6 +408,20 @@
     transform-origin: center 124px;
     transform: translateX(-50%) rotate(calc(var(--progress-angle, 0deg)));
     transition: transform 1s linear;
+    box-shadow: 0 0 10px #FFFFFF, 0 0 20px rgba(255, 255, 255, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px #FFFFFF, 0 0 20px rgba(255, 255, 255, 0);
+    }
+    50% {
+        box-shadow: 0 0 15px #FFFFFF, 0 0 30px rgba(255, 255, 255, 0.9);
+    }
+    100% {
+        box-shadow: 0 0 10px #FFFFFF, 0 0 20px rgba(255, 255, 255, 0);
+    }
 }
 
 .timer-content {
@@ -433,6 +447,7 @@
     font-size: 12px;
     opacity: 0.6;
     text-align: center;
+    transform: scale(0.95);
 }
 .timer-overlay .timer-buttons {
     /* margin-top: auto; */
@@ -466,6 +481,16 @@
 .timer-button.primary {
     background: #0000FF;
     color: #FFFFFF;
+}
+
+.level-up-description {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: "PP Neue Machina";
+    font-size: 11px;
+    font-style: italic;
+    text-align: center;
+    margin-top: 0px;
+    padding: 0 0px;
 }
 
 .timer-button.secondary {

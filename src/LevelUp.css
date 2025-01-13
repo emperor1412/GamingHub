@@ -45,6 +45,9 @@
     flex-direction: column;
     gap: 16px;
     overflow: visible;
+
+    justify-content: center;
+    align-items: center;
 }
 
 /* Add this new style for gradient border */
@@ -214,6 +217,7 @@
 
 .level-up-button {
   position: relative;
+  width: 96%;  
   height: 44px;
   background: #0000FF;
   padding: 12px 24px;
@@ -261,7 +265,7 @@
 
 .points-text-content {
   
-    margin-bottom: 12px;
+    margin-bottom: 0px;
 
     color: #83807F;
     font-family: "PP Neue Machina";
@@ -383,9 +387,13 @@
     text-transform: uppercase;
 }
 
+.share-story-div {
+  padding: 0 20px;
+}
+
 .level-up-share-story-button {
     /* composes: level-up-button; */
-    padding: 12px 32px;
+    padding: 12px 36px;
     width: 100%;
     white-space: nowrap;
     position: relative;
@@ -442,6 +450,29 @@
     font-style: italic;
     font-weight: 800;
     line-height: normal;
+}
+
+.points-icon-levelup {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 8px;
+    /* display: block; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+.points-icon-text-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.points-icon-levelup {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 8px;
 }
 
 

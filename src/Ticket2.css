@@ -86,7 +86,7 @@
 
 .congratulations {
     margin: 2px 0;
-    padding-top: 100px;
+    padding-top: 150px;
 
     color: #FFF;
     font-family: "PP Neue Machina";
@@ -97,8 +97,23 @@
     text-transform: uppercase;
 }
 
+.won-amount {
+    margin: 2px 0;
+    padding-top: 100px;
+    top: 70px;
+    position: absolute;
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
 .reward-message {
-    margin: 10px 0 30px;
+    margin: 0px 0 15px;
     color: #D4D3D3;
     font-family: "PP Neue Machina";
     font-size: 12px;

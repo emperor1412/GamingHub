@@ -157,9 +157,9 @@ const LevelUp = ({ onClose }) => {
                     (
                         <div className="points-info">
                             <div className="points-text-content">PROCEED TO THE NEXT LEVEL TO:</div>
-                            <div><span className="points-text-content">• UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
-                            <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div>
-                            <div><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
+                            <div className="points-icon-text-container"><img src={shared.mappingIcon[10010]} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
+                            {/* <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div> */}
+                            <div className='points-icon-text-container'><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
                         </div>
                     )
                     :
@@ -193,12 +193,14 @@ const LevelUp = ({ onClose }) => {
                             </div>
                         </div>
                         
+                        <div className='share-story-div'>
                         <button className="level-up-share-story-button" onClick={() => {
                                 onClickShareStory();
                                 setup();
                             }}>
-                            Share To Story 200 KM Points
+                            Share To Story 200 Starlets
                         </button>
+                        </div>
                         <button className="level-up-okay-button" onClick={() => {
                             setShowOverlay(false);
                             setup();
