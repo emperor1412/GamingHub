@@ -221,15 +221,17 @@ const shared = {
                         record: record,
                         type: record.prop_id
                     })),
-                    ...userProfileData.claimRecord.map(record => ({
-                        icon: shared.mappingIcon[record.type],
-                        text: shared.mappingText[record.type],
-                        value: record.num,
-                        showClaim: true,
-                        showArrow: true,
-                        record: record,
-                        type: record.type
-                    }))
+                    ...userProfileData.claimRecord
+                        .filter(record => record !== null)
+                        .map(record => ({
+                            icon: shared.mappingIcon[record.type],
+                            text: shared.mappingText[record.type],
+                            value: record.num,
+                            showClaim: true,
+                            showArrow: true,
+                            record: record,
+                            type: record.type
+                        }))
                 ];
 
                 shared.profileItems = profileItems;
