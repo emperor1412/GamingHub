@@ -144,6 +144,12 @@
     justify-content: flex-end;
 }
 
+.share-story-reward-starlet {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
 .share-story-reward-text {
     margin-left: 5px;
     color: #FFF;

@@ -5,7 +5,8 @@ import locker from './images/locker.png';
 import leaderboard from './images/leaderboard.svg';
 // import leaderboard from './images/leaderboard.png';
 import ticketIcon from './images/ticket.svg';
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import km from './images/starlet.png';
 import calendar from './images/calendar.svg';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.svg';
@@ -523,7 +524,7 @@ Response:
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
                                 <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
+                                <p className="event-card-subtitle">Scratch Tickets and Unlock <br></br>Rewards!</p>
                                 <div className="check-out-button">
                                     Scratch Tickets
                                 </div>

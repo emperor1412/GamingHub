@@ -1,5 +1,6 @@
 import ticketIcon from './images/ticket.svg';
-import kmIcon from './images/km.svg';
+// import kmIcon from './images/km.svg';
+import kmIcon from './images/starlet.png';
 // import gmtIcon from './images/gmt.svg';
 import gmtIcon from './images/GMT_1.png';
 import SUT from './images/SUT.png';
@@ -63,7 +64,7 @@ const shared = {
     },
     mappingText : {
         10010: 'Tickets',
-        10020: 'KM Points',
+        10020: 'Starlets',
         10030: 'Energy',
         20010: 'SUT',
         20020: 'GMT',

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
-import kmIcon from './images/km.svg';
+// import kmIcon from './images/km.svg';
+import kmIcon from './images/starlet.png';
 import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
 import ticket_scratched from './images/ticket_scratched.png';

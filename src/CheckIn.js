@@ -1,7 +1,8 @@
 import React from 'react';
 import './CheckIn.css';
 import ticket from './images/ticket.svg';
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import km from './images/starlet.png';
 import checkmark from './images/checkmark.svg';
 
 import shared from './Shared';

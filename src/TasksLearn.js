@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import shared from './Shared';
-import kmIcon from './images/km.svg';
+// import kmIcon from './images/km.svg';
+import kmIcon from './images/starlet.png';
 import './TasksLearn.css';
 import correct_answer from './images/correct_answer.svg';
 import incorrect_answer from './images/incorrect_answer.svg';

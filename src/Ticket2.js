@@ -9,7 +9,8 @@ import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; //
 // import nothing from './images/FSL-Games-UI-2-nothing.png'; // Adjust path as needed
 import nothing from './images/background_no_reward.png'; // Adjust path as needed
 
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import km from './images/starlet.png';
 
 import fail_animation_frame_0 from './images/FSL Games UI 2-10.png';
 import fail_animation_frame_1 from './images/FSL Games UI 2-09.png';
@@ -338,7 +339,7 @@ Response:
                                 <button className="share-button" onClick={() => onClickShareStory()}>
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
-                                        <img src={km} alt="KM"/>
+                                        <img src={km} alt="KM" className='share-story-reward-starlet'/>
                                         <span className='share-story-reward-text'>100</span>
                                     </div>
                                 </button>
