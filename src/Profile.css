@@ -196,7 +196,7 @@
   cursor: pointer;
   order: 1;
   
-  color: #00F;
+  color: rgb(255, 255, 255);
   text-align: center;
   font-family: "PP Neue Machina";
   font-size: 14px;
