@@ -137,7 +137,7 @@ const LevelUp = ({ onClose }) => {
                                         className="progress" 
                                         style={{
                                             width: `${progress}%`,
-                                            '--progress-value': `"${progress}%"`
+                                            '--progress-value': `"${Math.floor(progress)}%"`
                                         }} 
                                     ></div>
                                 </div>
