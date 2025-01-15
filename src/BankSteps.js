@@ -4,8 +4,11 @@ import shared from './Shared';
 import backIcon from './images/back.svg';
 import sneaker_icon from './images/sneaker_icon.png';
 import bank_step_background from './images/bank_step_background.png';
+import checkmark from './images/checkmark_banksteps.png';
 
 const BankSteps = ({ showFSLIDScreen, onClose }) => {
+
+    const [canClaim, setCanClaim] = React.useState(false);
 
     const handleBack = () => {
         onClose();
@@ -21,9 +24,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     const handleFindOutMore = () => {
         // Handle find out more action
+        window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
     };
 
-    if (shared.userProfile.fslId === 0) {
+    if (shared.userProfile.fslId === 0 && false) {
         return (
             <>
                 <div className="bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
@@ -70,15 +74,16 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     return (
         <>
-            <div className="bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
-            <div className="bank-steps-container"> 
+            <div className="bank-steps-container-1" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
+            <div className="bank-steps-container-1"> 
                 <button className="back-button" onClick={handleBack}>
                     <img src={backIcon} alt="Back" />
                 </button>
 
-                <div className="bank-steps-content">
+                <div className="bank-steps-content-1">
                     <div className="starlets-received">
-                        STARLETS RECEIVED 172,8
+                        STARLETS RECEIVED
+                        <span className='starlets-received-amount'>172,8</span>
                     </div>
 
                     <img 
@@ -87,45 +92,60 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         className="stepn-nft"
                     />
 
-                    <div className="stats-container">
-                        <div className="stat-item">
-                            <div className="stat-value">4.02</div>
-                            <div className="stat-label">Km</div>
+                    <div className="bank-step-stats-container">
+                        <div className="bank-step-stat-item">
+                            <div className="bank-step-stat-value">4.02</div>
+                            <div className="bank-step-stat-label">Km</div>
                         </div>
-                        <div className="stat-item">
-                            <div className="stat-value">00:30:00</div>
-                            <div className="stat-label">Time</div>
+                        <div className="bank-step-stat-item">
+                            <div className="bank-step-stat-value">00:30:00</div>
+                            <div className="bank-step-stat-label">Time</div>
                         </div>
-                        <div className="stat-item">
-                            <div className="stat-value">24,978</div>
-                            <div className="stat-label">total steps</div>
+                        <div className="bank-step-stat-item">
+                            <div className="bank-step-stat-value">24,978</div>
+                            <div className="bank-step-stat-label">total steps</div>
                         </div>
                     </div>
 
-                    <div className="progress-bar">
-                        <div className="progress-point active">
-                            <span className="progress-value">100</span>
-                        </div>
-                        <div className="progress-point active">
-                            <span className="progress-value">200</span>
-                        </div>
-                        <div className="progress-point active">
-                            <span className="progress-value">300</span>
-                        </div>
-                        <div className="progress-point active">
-                            <span className="progress-value">400</span>
-                        </div>
-                        <div className="progress-point active">
-                            <span className="progress-value">500</span>
+                    <div className="bank-step-progress-container">
+                        <div className="bank-step-progress-box">
+                            <span className="bank-step-progress-label">STARLETS</span>
+                            {/* <span className="bank-step-progress-divider">|</span> */}
+                            <div className="bank-step-progress-value active">
+                                <span>100</span>
+                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                            </div>
+                            <span className="bank-step-progress-divider">|</span>
+                            <div className="bank-step-progress-value active">
+                                <span>200</span>
+                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                            </div>
+                            <span className="bank-step-progress-divider">|</span>
+                            <div className="bank-step-progress-value active">
+                                <span>300</span>
+                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                            </div>
+                            <span className="bank-step-progress-divider">|</span>
+                            <div className="bank-step-progress-value active">
+                                <span>400</span>
+                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                            </div>
+                            <span className="bank-step-progress-divider">|</span>
+                            <div className="bank-step-progress-value">500</div>
                         </div>
                     </div>
 
                     <div className="stepn-info">
-                        TURN YOUR STEPS INTO INSTANT REWARDS!
-                        EQUIP AND USE YOUR FIRST NFT SNEAKER, EARN GST AND GMT DAILY.
+                        TURN YOUR STEPS INTO INSTANT REWARDS! <br /><br />
+                        EQUIP AND USE YOUR FIRST NFT <br/> SNEAKER, EARN GST AND GMT DAILY.
                     </div>
 
-                    <button className="action-button" onClick={handleClaimStarlets}>
+                    <button 
+                        className="action-button" 
+                        onClick={handleClaimStarlets}
+                        disabled={!canClaim}
+                    >
+                        {/* {canClaim ? 'CLAIM STARLETS' : 'CLAIM UNAVAILABLE'} */}
                         CLAIM STARLETS
                     </button>
                     <button className="secondary-button" onClick={handleFindOutMore}>
