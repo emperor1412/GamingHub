@@ -407,4 +407,227 @@
     height: 30px;
     object-fit: contain;
     pointer-events: none;
+    z-index: 10;
+}
+
+.bank-step-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.bank-step-overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.bank-step-overlay-images {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.bank-step-overlay-coin {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    left: 35%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    animation: floatCoin 2s ease-in-out infinite;
+}
+
+.bank-step-overlay-sneaker {
+    position: absolute;
+    width: 180px;
+    height: 120px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: floatSneaker 2s ease-in-out infinite;
+}
+
+.bank-step-sparkle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #8B5CF6;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.bank-step-sparkle.top-left {
+    top: 20%;
+    left: 20%;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.bank-step-sparkle.top-right {
+    top: 20%;
+    right: 20%;
+    animation: sparkle 1.5s ease-in-out infinite 0.2s;
+}
+
+.bank-step-sparkle.bottom-left {
+    bottom: 20%;
+    left: 20%;
+    animation: sparkle 1.5s ease-in-out infinite 0.4s;
+}
+
+.bank-step-sparkle.bottom-right {
+    bottom: 20%;
+    right: 20%;
+    animation: sparkle 1.5s ease-in-out infinite 0.6s;
+}
+
+.bank-step-overlay-text {
+    color: white;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+.bank-step-overlay-button-amount {
+    margin-left: 8px;
+    font-weight: 800;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes floatCoin {
+    0%, 100% { transform: translate(-50%, -50%); }
+    50% { transform: translate(-50%, -60%); }
+}
+
+@keyframes floatSneaker {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); }
+    50% { transform: translate(-50%, -40%) rotate(5deg); }
+}
+
+@keyframes sparkle {
+    0%, 100% { 
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.bank-step-star {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+}
+
+.bank-step-star.star1 {
+    top: 0%;
+    left: 5%;
+    animation: starFloat 2s ease-in-out infinite 0.1s;
+}
+
+.bank-step-star.star2 {
+    top: 5%;
+    right: 5%;
+    width: 16px;
+    height: 16px;
+    animation: starFloat 2s ease-in-out infinite 0.3s;
+}
+
+.bank-step-star.star3 {
+    bottom: 15%;
+    left: 0%;
+    width: 20px;
+    height: 20px;
+    animation: starFloat 2s ease-in-out infinite 0.5s;
+}
+
+.bank-step-star.star4 {
+    bottom: 10%;
+    right: 0%;
+    width: 18px;
+    height: 18px;
+    animation: starFloat 2s ease-in-out infinite 0.7s;
+}
+
+.bank-step-star.star5 {
+    top: 40%;
+    right: -5%;
+    width: 22px;
+    height: 22px;
+    animation: starFloat 2s ease-in-out infinite 0.9s;
+}
+
+@keyframes starFloat {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-15px, -15px) rotate(180deg);
+        opacity: 0.8;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.share-story-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    gap: 12px;
+    width: 100%;
+}
+
+.bank-step-share-story-reward {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.share-story-reward-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.share-story-reward span {
+    font-size: 14px;
+    font-weight: 800;
 }
