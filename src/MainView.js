@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import locker from './images/locker.png';
 // import locker from './images/locker.svg';
 import leaderboard from './images/leaderboard.svg';
+import stepn_background from './images/stepn_background.png';
 // import leaderboard from './images/leaderboard.png';
 import ticketIcon from './images/ticket.svg';
 // import km from './images/km.svg';
@@ -31,7 +32,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [kmpoint, setKmpoint] = useState(0);
@@ -554,23 +555,23 @@ Response:
                         />
                     </button>
 
-                    <button className="locked-card">
-                    <div className='locked-card-image-container'>
-                        <img
-                            // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            src={leaderboard}
-                            alt="Leaderboard Coming Soon"
-                            className="locked-card-image"
-                        />
-                        <div className='locked-card-container-border'></div>
-                        <div className='coming-soon-button'>Coming Soon</div>
-                        <div className='locked-card-text'>Leaderboard</div>
+                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
+                                src={stepn_background}
+                                alt="Leaderboard Coming Soon"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            <div className='check-out-button'>Bank Steps</div>
+                            <div className='locked-card-text'>STEPN</div>
                         </div>
-                        <img
+                        {/* <img
                             src={locker}
                             alt="Locker"
                             className="locker-icon"
-                        />
+                        /> */}
                     </button>
                 </section>
 
