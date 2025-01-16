@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './BankSteps.css';
 import shared from './Shared';
 import backIcon from './images/back.svg';
@@ -14,10 +14,38 @@ import star5 from './images/single_star_5.svg';
 import starlet from './images/starlet.png';
 import { shareStory } from '@telegram-apps/sdk';
 
+/*
+url: /app/getBankSteps
+Request:
+Response:
+{
+    "code": 0,
+    "data": {
+        "received": 40,
+        "canReceive": 500,
+        "distance": 20,
+        "time": 30,
+        "steps": 800,
+        "energy": 50
+    }
+}
+
+url: /app/claimBankSteps
+Request:
+Response:
+{
+    "code": 0
+}
+*/
+
 const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     const [canClaim, setCanClaim] = React.useState(true);
     const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = React.useState(true);
+    const [starletsReceived, setStarletsReceived] = React.useState(0);
+    const [distance, setDistance] = React.useState(0);
+    const [time, setTime] = React.useState(0);
+    const [steps, setSteps] = React.useState(0);
 
     const handleBack = () => {
         onClose();
@@ -36,6 +64,14 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         // Handle find out more action
         window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
     };
+
+    const setUp = async () => {
+
+    };
+
+    useEffect(() => {
+        setUp();
+    }, []);
 
     const claimRewardFromSharingStory = async (depth = 0) => {
         if (depth > 3) {
@@ -158,7 +194,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 <div className="bank-steps-content-1">
                     <div className="starlets-received">
                         STARLETS RECEIVED
-                        <span className='starlets-received-amount'>172,8</span>
+                        <span className='starlets-received-amount'>{starletsReceived}</span>
                     </div>
 
                     <img 
@@ -169,15 +205,15 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                     <div className="bank-step-stats-container">
                         <div className="bank-step-stat-item">
-                            <div className="bank-step-stat-value">4.02</div>
+                            <div className="bank-step-stat-value">{distance}</div>
                             <div className="bank-step-stat-label">Km</div>
                         </div>
                         <div className="bank-step-stat-item">
-                            <div className="bank-step-stat-value">00:30:00</div>
+                            <div className="bank-step-stat-value">{`${String(Math.floor(time / 3600)).padStart(2, '0')}:${String(Math.floor((time % 3600) / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`}</div>
                             <div className="bank-step-stat-label">Time</div>
                         </div>
                         <div className="bank-step-stat-item">
-                            <div className="bank-step-stat-value">24,978</div>
+                            <div className="bank-step-stat-value">{steps}</div>
                             <div className="bank-step-stat-label">total steps</div>
                         </div>
                     </div>
