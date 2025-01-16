@@ -14,6 +14,7 @@ import lock_icon from "./images/ticket_lock_icon.svg";
 import shared from './Shared';
 import { popup } from '@telegram-apps/sdk';
 import LevelUp from './LevelUp';
+import unlock from './images/unlock.png';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -395,7 +396,7 @@ Response:
                                     </div>
                                     <div className="scratch-status">
                                         <div className="scratch-status-text"> <span className='scratch-status-text-count'>{slotUseNum}/{slotNum} </span> TICKETS SCRATCHED TODAY!</div>
-                                        <div className="scratch-status-subtext">UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!</div>
+                                        <div className="scratch-status-subtext"><img src={unlock} alt="Unlock" className="unlock-icon" /> UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!</div>
                                     </div>
                                 </div>
 

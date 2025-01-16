@@ -22,7 +22,7 @@
     background: rgba(117, 179, 255, 0.20);
     padding: 16px;
     margin-bottom: 0px;
-    margin: auto 4px 0px 4px;
+    margin: 2px 4px 0px 4px;
     border-radius: 8px;
 
     color: #FFF;
@@ -533,7 +533,9 @@
     line-height: normal;
     text-transform: uppercase;
     text-align: left;
-    padding: 10px 4px;
+    padding: 10px 0px;
+    margin: 0 -12px;
+    width: calc(100% + 24px);
 }
 
 .scratch-status-text {
@@ -566,4 +568,14 @@
     font-weight: 400;
     line-height: normal;
     text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scratch-status-subtext .unlock-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 0px;
 }
