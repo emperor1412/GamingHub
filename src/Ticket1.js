@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ticketIcon from './images/ticket.svg';
 // import kmIcon from './images/km.svg';
-import kmIcon from './images/starlet.png';
+import starletIcon from './images/starlet.png';
 import scratch_ticket_svg from './images/ticket_scratch_icon.svg';
 import scratch_ticket from './images/ticket_scratch_icon.png';
 import ticket_scratched from './images/ticket_scratched.png';
@@ -15,13 +15,13 @@ import shared from './Shared';
 import { popup } from '@telegram-apps/sdk';
 import LevelUp from './LevelUp';
 
-const Ticket1 = ({ kmPointData, getProfileData, onClose }) => {
+const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
     const [needsPadding, setNeedsPadding] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
     const [showTicket2, setShowTicket2] = useState(false);
     const [ticket, setTicket] = useState(0);
-    const [kmPoint, setKmPoint] = useState(0);
+    const [starlets, setStarlets] = useState(0);
     const [slotNum, setSlotNum] = useState(0);
     const [slotUseNum, setSlotUseNum] = useState(0);
     const [showTimer, setShowTimer] = useState(false);
@@ -39,9 +39,9 @@ const Ticket1 = ({ kmPointData, getProfileData, onClose }) => {
             return;
         }
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
-        const userKmPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
         if (userTicket) {
-            setKmPoint(userKmPoint.num);
+            setStarlets(userStarlets.num);
             setTicket(userTicket.num);
             // setTicket(1);
             
@@ -143,7 +143,7 @@ Response:
             setSlotUseNum(ticketSlotData.slotUseNum);
             // setTicket( Math.min(ticketSlotData.slotNum - ticketSlotData.slotUseNum, shared.getTicket()));
             setTicket(shared.getTicket());
-            setKmPoint(shared.getKMPoint());
+            setStarlets(shared.getStarlets());
 
             
             let row = Math.ceil(ticketSlotData.levelUpNum / 3);
@@ -330,8 +330,8 @@ Response:
                                     <span className='stat-item-main-text'>{ticket}</span>
                                 </div>
                                 <div className="stat-item-main">
-                                    <img src={kmIcon} alt="KMPoints" />
-                                    <span className='stat-item-main-text'>{kmPoint}</span>
+                                    <img src={starletIcon} alt="Starlets" />
+                                    <span className='stat-item-main-text'>{starlets}</span>
                                 </div>
                             </div>
                         </header>
@@ -377,8 +377,8 @@ Response:
                                         <span className='stat-item-main-text'>{ticket}</span>
                                     </div>
                                     <div className="stat-item-main">
-                                        <img src={kmIcon} alt="KMPoints" />
-                                        <span className='stat-item-main-text'>{kmPoint}</span>
+                                        <img src={starletIcon} alt="Starlets" />
+                                        <span className='stat-item-main-text'>{starlets}</span>
                                     </div>
                                 </div>
                             </header>

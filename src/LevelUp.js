@@ -102,13 +102,13 @@ const LevelUp = ({ onClose }) => {
     };
 
     const setup = () => {
-        const kmPoint = shared.getKMPoint();
+        const starlets = shared.getStarlets();
         const currentRequired = shared.userProfile.levelPoint;
-        console.log('KM Point:', kmPoint, 'Current Required:', currentRequired);
-        setProgress(Math.min((kmPoint / currentRequired) * 100, 100));
+        console.log('Starlets:', starlets, 'Current Required:', currentRequired);
+        setProgress(Math.min((starlets / currentRequired) * 100, 100));
         console.log('Progress:', progress);
 
-        setShowLevelUpButton(kmPoint >= currentRequired);
+        setShowLevelUpButton(starlets >= currentRequired);
     };
 
     useEffect(() => {
@@ -123,7 +123,7 @@ const LevelUp = ({ onClose }) => {
 
             <div className="level-up-scroll-container">
                 <div className="level-content">
-                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} KM POINTS TO REACH THE NEXT LEVEL.</h2>
+                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} STARLETS TO REACH THE NEXT LEVEL.</h2>
           
                     <div className="marty-card-outer">
                         <div className='marty-gradient-layer'></div>
@@ -165,7 +165,7 @@ const LevelUp = ({ onClose }) => {
                     :
                     (
                         <div className="points-info">
-                            <div className="points-text-content">EARN KM POINTS BY:</div>
+                            <div className="points-text-content">EARN STARLETS BY:</div>
                             <div className="points-item">DAILY CHECK-IN: <span className="points-text-content">KEEP YOUR STREAK!</span></div>
                             <div className="points-item">TICKETS: <span className="points-text-content">TRY YOUR LUCK AND WIN MORE POINTS</span></div>
                             <div className="points-item">TASKS: <span className="points-text-content">ENGAGE WITH TASKS TO UNLOCK REWARDS.</span></div>

@@ -6,14 +6,14 @@ import Ticket1 from './Ticket1';
 import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 // import kmIcon from './images/km.svg';
-import kmIcon from './images/starlet.png';
+import starletIcon from './images/starlet.png';
 import scratch_ticket from './images/scratch_ticket.svg';
 import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
-    const [kmPoint, setKmPoint] = useState(0);
+    const [starlets, setStarlets] = useState(0);
     const [showTicket1, setShowTicket1] = useState(false);
 
     const setupProfileData = async () => {
@@ -24,10 +24,10 @@ const Ticket = ({ onClose, getProfileData }) => {
             return;
         }
         const userTicket = shared.getTicket();
-        const userKmPoint = shared.getKMPoint();
+        const userStarlets = shared.getStarlets();
 
         if (userTicket) {
-            setKmPoint(userKmPoint);
+            setStarlets(userStarlets);
             setTicket(userTicket);
             // setTicket(1);
         }
@@ -40,7 +40,7 @@ const Ticket = ({ onClose, getProfileData }) => {
     return (
         <>
             {showTicket1 ? (
-                <Ticket1 kmPointData={kmPoint} getProfileData={getProfileData} onClose={() => {
+                <Ticket1 starletsData={starlets} getProfileData={getProfileData} onClose={() => {
                     setShowTicket1(false);
                 }} />
             ) : (
@@ -55,8 +55,8 @@ const Ticket = ({ onClose, getProfileData }) => {
                                 <span className='stat-item-main-text'>{ticket}</span>
                             </div>
                             <div className="stat-item-main">
-                                <img src={kmIcon} alt="KM" />
-                                <span className='stat-item-main-text'>{kmPoint}</span>
+                                <img src={starletIcon} alt="Starlets" />
+                                <span className='stat-item-main-text'>{starlets}</span>
                             </div>
                             {/*
                             <div className="stat-item">

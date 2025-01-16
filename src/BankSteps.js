@@ -218,13 +218,13 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         </div>
 
                         <div className="points-container">
-                            <div className="points-title">EARN UP TO 500 KM POINTS PER DAY!</div>
+                            <div className="points-title">EARN UP TO 500 STARLETS PER DAY!</div>
                             <ul className="points-steps">
                                 <li>DOWNLOAD THE STEPN APP FROM YOUR APP STORE.</li>
                                 <li>LINK YOUR STEPN APP TO YOUR FSL ID.</li>
                                 <li>LOG IN TO THE FSL GAME HUB VIA TELEGRAM.</li>
                                 <li>START YOUR WALK OR ACTIVITY USING THE STEPN APP.</li>
-                                <li>AFTER YOUR ACTIVITY, CLAIM YOUR KM POINTS IN THE FSL GAME HUB.</li>
+                                <li>AFTER YOUR ACTIVITY, CLAIM YOUR STARLETS IN THE FSL GAME HUB.</li>
                             </ul>
                         </div>
 
@@ -232,7 +232,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             CONNECT FSL ID
                         </button>
                         {/* <button className="secondary-button">
-                            CLAIM KM POINT
+                            CLAIM STARLETS
                         </button> */}
                     </div>
                 </div>

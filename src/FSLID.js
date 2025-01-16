@@ -5,7 +5,7 @@ import FSLAuthorization from 'fsl-authorization';
 // import fsl_logo from './images/fsl_logo.png';
 import fsl_logo from './images/FSLID_Masterlogo_logo_version1_color_white_nobg.png';
 import fsl_point from './images/fsl_point.png';
-import kmIcon from './images/starlet.png';
+import starletIcon from './images/starlet.png';
 import gmtIcon from './images/GMT_1.png';
 import ID_selected from './images/ID_selected.svg';
 
@@ -98,9 +98,9 @@ const FSLID = () => {
                     </div>
                     <div className="fsl-id-stats">
                         <div className="fsl-id-stat">
-                            <img src={kmIcon} className="fsl-stat-icon" alt="km" />
-                            <span className="fsl-stat-label">KM Point</span>
-                            <span className="stat-value">{shared.getKMPoint()}</span>
+                            <img src={starletIcon} className="fsl-stat-icon" alt="starlet" />
+                            <span className="fsl-stat-label">Starlets</span>
+                            <span className="stat-value">{shared.getStarlets()}</span>
                         </div>
                         <div className="fsl-id-stat">
                             <img src={fsl_point} className="fsl-stat-icon" alt="fsl" />

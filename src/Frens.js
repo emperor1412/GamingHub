@@ -6,7 +6,7 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import friendsIcon from './images/friends_icon.svg';
 // import kmIcon from './images/km.svg';
-import kmIcon from './images/starlet.png';
+import starletIcon from './images/starlet.png';
 import trophy_1 from './images/trophy_1_200px.png';
 import trophy_2 from './images/trophy_2_200px.png';
 import trophy_3 from './images/trophy_3_200px.png';
@@ -198,61 +198,61 @@ const Frens = () => {
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 }
             ],
@@ -289,7 +289,7 @@ const Frens = () => {
         const newFriendsData = data.data.page.list.map(friend => ({
           name: friend.name,
           ticket: friend.ticket,
-          kmPoint: friend.kmPoint,
+          starlets: friend.starlets,
           pictureIndex: friend.pictureIndex
         }));
 
@@ -441,17 +441,17 @@ const Frens = () => {
 
     /*
     setFriendsData([
-      { pictureIndex: 1, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 2, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 3, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 4, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 5, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 6, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 7, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 8, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 9, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 10, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 11, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 1, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 2, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 3, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 4, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 5, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 6, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 7, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 8, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 9, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 10, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 11, name: 'Chonky', ticket: 3, starlets: 267 },
     ]);  
     */
 
@@ -485,8 +485,8 @@ const Frens = () => {
                   <span>{friend.ticket}</span>
                 </div>
                 <div className="friend-stat">
-                  <img src={kmIcon} alt="GMT" className="stat-icon" />
-                  <span>{friend.kmPoint}</span>
+                  <img src={starletIcon} alt="Starlets" className="stat-icon" />
+                  <span>{friend.starlets}</span>
                 </div>
               </div>
             </div>
@@ -657,7 +657,7 @@ const Frens = () => {
                     SHARE A STORY
                   </button>
                   <div className="trophy-reward">
-                    <img src={kmIcon} alt="GMT" className="stat-icon" />
+                    <img src={starletIcon} alt="Starlets" className="stat-icon" />
                     <span>100</span>
                   </div>
                 </>

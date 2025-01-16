@@ -7,7 +7,7 @@ import stepn_background from './images/stepn_background.png';
 // import leaderboard from './images/leaderboard.png';
 import ticketIcon from './images/ticket.svg';
 // import km from './images/km.svg';
-import km from './images/starlet.png';
+import starlet from './images/starlet.png';
 import calendar from './images/calendar.svg';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.svg';
@@ -35,7 +35,7 @@ let scrollLeft;
 const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
-    const [kmpoint, setKmpoint] = useState(0);
+    const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
@@ -248,9 +248,9 @@ Response:
 
     const setupProfileData = async () => {
         await getProfileData();
-        const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
-        if (userKMPoint) {
-            setKmpoint(userKMPoint.num);
+        const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+            setStarlets(userStarlets.num);
         }
 
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
@@ -485,8 +485,8 @@ Response:
                         className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
-                        <img src={km} alt="Stat 1" />
-                        <span className='stat-item-main-text'>{kmpoint}</span>
+                        <img src={starlet} alt="Starlets" />
+                        <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>

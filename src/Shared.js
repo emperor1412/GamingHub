@@ -1,6 +1,6 @@
 import ticketIcon from './images/ticket.svg';
 // import kmIcon from './images/km.svg';
-import kmIcon from './images/starlet.png';
+import starletIcon from './images/starlet.png';
 // import gmtIcon from './images/gmt.svg';
 import gmtIcon from './images/GMT_1.png';
 import SUT from './images/SUT.png';
@@ -54,7 +54,7 @@ const shared = {
 
     mappingIcon : {
         10010: ticketIcon,
-        10020: kmIcon,
+        10020: starletIcon,
         10030: energy,
         20010: SUT,
         20020: gmtIcon,
@@ -354,7 +354,7 @@ const shared = {
         });
     },
 
-    getKMPoint : () => {
+    getStarlets : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10020);
         return retVal?.num || 0;
     },
