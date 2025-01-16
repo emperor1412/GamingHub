@@ -9,6 +9,7 @@ import './Share.css';
 import './LevelUp.css';
 import { shareStory } from '@telegram-apps/sdk';
 import shared from './Shared';
+import lv0 from './images/lv0.png';
 import lv1 from './images/lv1.png';
 import lv2 from './images/lv2.png';
 import lv3 from './images/lv3.png';
@@ -23,7 +24,7 @@ const LevelUp = ({ onClose }) => {
     const [progress, setProgress] = useState(0);
 
     const getLevelImage = (level) => {
-        const iconImages = [iconMarty, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
+        const iconImages = [lv0, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
         if (level >= iconImages.length) return lv7;
         return iconImages[level];
     };
