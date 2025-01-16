@@ -317,6 +317,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     >
                         {/* {canClaim ? 'CLAIM STARLETS' : 'CLAIM UNAVAILABLE'} */}
                         CLAIM STARLETS
+                    <div className='explain-text'>Available daily after 13:00 UTC</div>
                     </button>
                     <button className="secondary-button" onClick={handleFindOutMore}>
                         FIND OUT MORE
@@ -327,7 +328,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 <div className="bank-step-overlay">
                     <div className="bank-step-overlay-content">
                         <div className="bank-step-overlay-images">
-                            <img src={bank_step_coin} alt="" className="bank-step-overlay-coin" />
+                            <img src={starlet} alt="" className="bank-step-overlay-coin" />
                             <img src={sneaker_icon} alt="" className="bank-step-overlay-sneaker" />
                             <div className="bank-step-sparkle top-left"></div>
                             <div className="bank-step-sparkle top-right"></div>
