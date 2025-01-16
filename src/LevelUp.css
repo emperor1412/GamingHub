@@ -92,13 +92,14 @@
 
 .marty-image {
   position: absolute;
-  width: 120%;
+  /* width: 120%;
   height: auto;
-  max-width: 280px;
-  top: -110px;
-  /* left: 50%; */
+  max-width: 280px; */
+  max-height: 400px;
+  top: -140px;
+  left: 50%;
   /* transform: translateX(-50%); */
-  transform: scale(1.2);
+  transform: translate(-50%, 0) scale(1);
   object-fit: contain;
   z-index: 2;
 }
@@ -377,9 +378,11 @@
 }
 
 .level-up-overlay-icon {
-    width: 120%;
-    max-width: 280px;
-    transform: scale(1.3);
+    /* width: 120%; */
+    /* max-width: 280px; */
+    margin: -25px auto;
+    max-height: 400px;
+    transform: scale(1);
     object-fit: contain;
     z-index: 2;
 }
