@@ -470,7 +470,9 @@ Response:
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="level-badge" onClick={() => setShowProfileView(true)}>LV.{shared.userProfile.level || 0}</div>
+                <div className="level-badge" onClick={() => setShowProfileView(true)}>
+                    LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+                </div>
                 <div className="stats-main">
                     <button 
                         className="stat-item-main"
