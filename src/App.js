@@ -446,7 +446,11 @@ Response:
             setShowProfileView(false);
             setActiveTab('home');
           }}
-          getProfileData={getProfileData}/>
+          getProfileData={getProfileData}
+          showFSLIDScreen={() => {
+            setShowProfileView(false);
+            setActiveTab('fslid');
+          }}/>
       )
       : showTicketView ?
       (
