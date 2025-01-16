@@ -4,6 +4,7 @@ import background from './images/background.png';
 import shadow from './images/shadow.png';
 import hinh_thang_vuong from './images/hinh_thang_vuong.svg';
 import backIcon from './images/back.svg';
+import single_star from './images/single_star.svg';
 import './Share.css';
 import './LevelUp.css';
 import { shareStory } from '@telegram-apps/sdk';
@@ -156,10 +157,11 @@ const LevelUp = ({ onClose }) => {
                     {showLevelUpButton ? 
                     (
                         <div className="points-info">
-                            <div className="points-text-content">PROCEED TO THE NEXT LEVEL TO:</div>
+                            <div className="points-text-content-title">PROCEED TO THE NEXT LEVEL TO:</div>
                             <div className="points-icon-text-container"><img src={shared.mappingIcon[10010]} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
                             {/* <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div> */}
-                            <div className='points-icon-text-container'><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
+                            {/* <div className='points-icon-text-container'><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div> */}
+                            <div className="points-icon-text-container"><img src={single_star} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
                         </div>
                     )
                     :
