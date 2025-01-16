@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/GamingHub/static/css/main.a7140567.css",
-    "main.js": "/GamingHub/static/js/main.1c1065f8.js",
+    "main.js": "/GamingHub/static/js/main.b75cd3c9.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.98b373172c6b9a763db2fe34548fe933.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -65,6 +65,7 @@
     "static/media/x-icon.svg": "/GamingHub/static/media/x-icon.7539f9ae02dcf359a921e0a2d5053e69.svg",
     "static/media/Meet Marty 1.png": "/GamingHub/static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
     "static/media/lv1.png": "/GamingHub/static/media/lv1.d91dbb90dba7bf13c68d.png",
+    "static/media/lv0.png": "/GamingHub/static/media/lv0.fb4ba1748ae5478782ef.png",
     "static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.png": "/GamingHub/static/media/STEPNGO_SNEAKER_BUSHWALKING_Common.ed9133480dcb52288085.png",
     "static/media/calendar.svg": "/GamingHub/static/media/calendar.92a3ecb0cf2e6a90b9e2988339729be5.svg",
     "static/media/trophy_4_200px.png": "/GamingHub/static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
@@ -118,11 +119,11 @@
     "static/media/circle_dotted.svg": "/GamingHub/static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.a7140567.css.map": "/GamingHub/static/css/main.a7140567.css.map",
-    "main.1c1065f8.js.map": "/GamingHub/static/js/main.1c1065f8.js.map",
+    "main.b75cd3c9.js.map": "/GamingHub/static/js/main.b75cd3c9.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a7140567.css",
-    "static/js/main.1c1065f8.js"
+    "static/js/main.b75cd3c9.js"
   ]
 }
