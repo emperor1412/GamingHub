@@ -9,11 +9,24 @@ import './Share.css';
 import './LevelUp.css';
 import { shareStory } from '@telegram-apps/sdk';
 import shared from './Shared';
+import lv1 from './images/lv1.png';
+import lv2 from './images/lv2.png';
+import lv3 from './images/lv3.png';
+import lv4 from './images/lv4.png';
+import lv5 from './images/lv5.png';
+import lv6 from './images/lv6.png';
+import lv7 from './images/lv7.png';
 
 const LevelUp = ({ onClose }) => {
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
     const [progress, setProgress] = useState(0);
+
+    const getLevelImage = (level) => {
+        const iconImages = [iconMarty, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
+        if (level >= iconImages.length) return lv7;
+        return iconImages[level];
+    };
 
     const onClickLevelUp = async () => {
         console.log('Level up clicked');
@@ -129,8 +142,8 @@ const LevelUp = ({ onClose }) => {
                     <div className="marty-card-outer">
                         <div className='marty-gradient-layer'></div>
                         <div className="marty-card">
-                            <img src={iconMarty} alt="Marty" className="marty-image" />
-                            <img src={shadow} alt="Shadow" className="marty-shadow" />
+                            <img src={getLevelImage(shared.userProfile.level)} alt="Marty" className="marty-image" />
+                            {/* <img src={shadow} alt="Shadow" className="marty-shadow" /> */}
                             <div className="level-info">
                                 <div className="level-label">LV {shared.userProfile.level}</div>
                                 <div className="progress-bar">
@@ -185,7 +198,7 @@ const LevelUp = ({ onClose }) => {
                         </div>
 
                         <div className="level-up-overlay-icon-container">
-                            <img src={iconMarty} alt="Marty" className="level-up-overlay-icon" />
+                            <img src={getLevelImage(shared.userProfile.level)} alt="Marty" className="level-up-overlay-icon" />
                             <div className='stars' style={{top: 176, left: -32}}>
                                 <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                                 <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
