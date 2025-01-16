@@ -202,6 +202,7 @@ Response:
             const reward = rewards[0];
             console.log('Reward[0]:', JSON.stringify(reward, null, 2));
             setNoReward(reward.type === 10000);
+            // reward.type = 10000;
             // setNoReward(true);
             setRewardImage(shared.mappingIcon[reward.type]);
             setRewardAmount((reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount);
@@ -268,7 +269,7 @@ Response:
                 }
                 ++animationFrameIndex;
 
-            }, 500);
+            }, 200);
         }
         else {
             setTimeout(() => {
