@@ -263,6 +263,7 @@ const Tasks = ({
     const [showLearnTask, setShowLearnTask] = useState(null);
     const [timeLimitedExpanded, setTimeLimitedExpanded] = useState(true);
     const [standardTasksExpanded, setStandardTasksExpanded] = useState(true);
+    const [showLoading, setShowLoading] = useState(false);
 
     const setupProfileData = async () => {
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
@@ -334,12 +335,12 @@ const Tasks = ({
         }
 
         console.log(`Will call Complete task:${taskId} - answerIndex: ${answerIndex}`);
+        setShowLoading(true);
 
         let retVal;
         try {
             const response = await fetch(`${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskId}&answerIndex=${answerIndex}`, {
                 method: 'GET',
-                // body: JSON.stringify({ id: taskId })
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -350,6 +351,8 @@ const Tasks = ({
                 console.log('Task complete:', data);
                 if (data.code === 0) {
                     retVal = data.data.rewardList;
+                    await shared.getProfileWithRetry();
+                    setupProfileData();
                     fetchTaskList();
                 }
                 else if (data.code === 102001 || data.code === 102002) {
@@ -371,6 +374,8 @@ const Tasks = ({
             }
         } catch (error) {
             console.error('Error completing task:', error);
+        } finally {
+            setShowLoading(false);
         }
 
         return retVal;
@@ -481,7 +486,12 @@ const Tasks = ({
 
     return (
         <>
-        <header className="stats-header">
+            {showLoading && (
+                <div className="loading-overlay">
+                    LOADING...
+                </div>
+            )}
+            <header className="stats-header">
                 <button 
                     className="profile-pic"
                     onClick={() => setShowProfileView(true)}
