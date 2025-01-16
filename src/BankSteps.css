@@ -169,7 +169,8 @@
 }
 
 .stepn-info {
-    margin: 20px 0;
+    margin: 0px 0;
+    margin-top: -10px;
     padding: 0 28px;
     
     color: #D4D3D3;
@@ -186,7 +187,7 @@
     border: 1px solid #0000FF;
     border-radius: 8px;
     padding: 20px;
-    margin: 20px 0;
+    margin: 0px 0;
 }
 
 .points-title {
@@ -276,7 +277,7 @@
     display: flex;
     justify-content: space-between;
     background: rgba(0, 0, 0, 0.4);
-    padding: 20px;
+    padding: 10px;
     border-radius: 12px;
     margin: 0px 0;
     backdrop-filter: blur(2px);
@@ -316,7 +317,7 @@
 
 .starlets-received {
     padding: 10px 20px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 
     border-radius: 12px;
     background:#212121;
@@ -630,4 +631,32 @@
 .share-story-reward span {
     font-size: 14px;
     font-weight: 800;
+}
+
+.bank-step-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.bank-step-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: #0000FF;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

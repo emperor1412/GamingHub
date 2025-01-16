@@ -40,12 +40,13 @@ Response:
 
 const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
-    const [canClaim, setCanClaim] = React.useState(true);
-    const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = React.useState(true);
+    const [canClaim, setCanClaim] = React.useState(false);
+    const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = React.useState(false);
     const [starletsReceived, setStarletsReceived] = React.useState(0);
     const [distance, setDistance] = React.useState(0);
     const [time, setTime] = React.useState(0);
     const [steps, setSteps] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
 
     const handleBack = () => {
         onClose();
@@ -55,9 +56,25 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         showFSLIDScreen();
     };
 
-    const handleClaimStarlets = () => {
-        // Handle claiming starlets
-        setShowOverlayClaimSuccess(true);
+    const handleClaimStarlets = async () => {
+        setLoading(true);
+        try {
+            console.log('Claiming bank steps...');
+            const response = await fetch(`${shared.server_url}/api/app/claimBankSteps?token=${shared.loginData.token}`);
+            const data = await response.json();
+            console.log('Claim response:', data);
+            
+            if (data.code === 0) {
+                console.log('Claim successful, refreshing data...');
+                await getBankSteps();
+                setShowOverlayClaimSuccess(true);
+            } else {
+                console.error('Failed to claim bank steps:', data);
+            }
+        } catch (error) {
+            console.error('claimBankSteps error:', error);
+        }
+        setLoading(false);
     };
 
     const handleFindOutMore = () => {
@@ -65,8 +82,48 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
     };
 
-    const setUp = async () => {
+    const getBankSteps = async (depth = 0) => {
+        if (depth > 3) return;
+        try {
+            console.log('Fetching bank steps data...');
+            const response = await fetch(`${shared.server_url}/api/app/getBankSteps?token=${shared.loginData.token}`);
+            const data = await response.json();
+            console.log('Bank steps response:', data);
+            
+            if (data.code === 0) {
+                console.log('Bank steps data:', {
+                    received: data.data.received,
+                    canReceive: data.data.canReceive,
+                    distance: data.data.distance,
+                    time: data.data.time,
+                    steps: data.data.steps,
+                    energy: data.data.energy
+                });
+                setStarletsReceived(data.data.received);
+                setDistance(data.data.distance);
+                setTime(data.data.time);
+                setSteps(data.data.steps);
+                setCanClaim(data.data.canReceive > data.data.received);
+            } else if (data.code === 102002 || data.code === 102001) {
+                console.log('Token expired, attempting to refresh...');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    console.log('Token refresh successful, retrying getBankSteps...');
+                    getBankSteps(depth + 1);
+                }
+            } else {
+                console.error('Failed to get bank steps:', data);
+            }
+        } catch (error) {
+            console.error('getBankSteps error:', error);
+        }
+    };
 
+    const setUp = async () => {
+        if (shared.userProfile.fslId === 0) return;
+        setLoading(true);
+        await getBankSteps();
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -138,7 +195,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         }
     };
 
-    if (shared.userProfile.fslId === 0 && false) {
+    if (shared.userProfile.fslId === 0) {
         return (
             <>
                 <div className="bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
@@ -221,28 +278,30 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     <div className="bank-step-progress-container">
                         <div className="bank-step-progress-box">
                             <span className="bank-step-progress-label">STARLETS</span>
-                            {/* <span className="bank-step-progress-divider">|</span> */}
-                            <div className="bank-step-progress-value active">
+                            <div className={`bank-step-progress-value ${starletsReceived >= 100 ? 'active' : ''}`}>
                                 <span>100</span>
-                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                                {starletsReceived >= 100 && <img src={checkmark} alt="" className="bank-step-progress-checkmark" />}
                             </div>
                             <span className="bank-step-progress-divider">|</span>
-                            <div className="bank-step-progress-value active">
+                            <div className={`bank-step-progress-value ${starletsReceived >= 200 ? 'active' : ''}`}>
                                 <span>200</span>
-                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                                {starletsReceived >= 200 && <img src={checkmark} alt="" className="bank-step-progress-checkmark" />}
                             </div>
                             <span className="bank-step-progress-divider">|</span>
-                            <div className="bank-step-progress-value active">
+                            <div className={`bank-step-progress-value ${starletsReceived >= 300 ? 'active' : ''}`}>
                                 <span>300</span>
-                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                                {starletsReceived >= 300 && <img src={checkmark} alt="" className="bank-step-progress-checkmark" />}
                             </div>
                             <span className="bank-step-progress-divider">|</span>
-                            <div className="bank-step-progress-value active">
+                            <div className={`bank-step-progress-value ${starletsReceived >= 400 ? 'active' : ''}`}>
                                 <span>400</span>
-                                <img src={checkmark} alt="" className="bank-step-progress-checkmark" />
+                                {starletsReceived >= 400 && <img src={checkmark} alt="" className="bank-step-progress-checkmark" />}
                             </div>
                             <span className="bank-step-progress-divider">|</span>
-                            <div className="bank-step-progress-value">500</div>
+                            <div className={`bank-step-progress-value ${starletsReceived >= 500 ? 'active' : ''}`}>
+                                <span>500</span>
+                                {starletsReceived >= 500 && <img src={checkmark} alt="" className="bank-step-progress-checkmark" />}
+                            </div>
                         </div>
                     </div>
 
@@ -303,6 +362,11 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <span>DONE</span>
                         </button>
                     </div>
+                </div>
+            )}
+            {loading && (
+                <div className="bank-step-loading-overlay">
+                    <div className="bank-step-loading-spinner"></div>
                 </div>
             )}
         </>
