@@ -1,7 +1,8 @@
 import React from 'react';
 import './CheckIn.css';
 import ticket from './images/ticket.svg';
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import starlet from './images/starlet.png';
 import checkmark from './images/checkmark.svg';
 
 import shared from './Shared';
@@ -22,37 +23,37 @@ const CheckIn = ({ checkInData, onClose }) => {
         "dayRewards": [
             {
                 "day": 1,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 2,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 3,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 4,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 5,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 6,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 1
             },
             {
                 "day": 7,
-                "kmPoint": 50,
+                "starlets": 50,
                 "ticket": 2
             }
         ],
@@ -69,7 +70,7 @@ const CheckIn = ({ checkInData, onClose }) => {
                 day: reward.day,
                 label: daySuffixes[index],
                 status: isActive ? 'active' : 'inactive',
-                kmPoint: reward.kmPoint,
+                starlets: reward.starlets,
                 ticket: reward.ticket
             };
         });
@@ -81,49 +82,49 @@ const CheckIn = ({ checkInData, onClose }) => {
                 day: 1,
                 label: 'ST',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 2,
                 label: 'ND',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 3,
                 label: 'RD',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 4,
                 label: 'TH',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 5,
                 label: 'TH',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 6,
                 label: 'TH',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 1
             },
             {
                 day: 7,
                 label: 'TH',
                 status: 'inactive',
-                kmPoint: 50,
+                starlets: 50,
                 ticket: 2
             }
         ]
@@ -168,8 +169,8 @@ const CheckIn = ({ checkInData, onClose }) => {
                                     <span className='reward-text-checkin'>{day.ticket}</span>
                                 </div>
                                 <div className="reward">
-                                    <img src={km} alt="Distance" />
-                                    <span className='reward-text-checkin'>{day.kmPoint}</span>
+                                    <img src={starlet} alt="Starlets" />
+                                    <span className='reward-text-checkin'>{day.starlets}</span>
                                 </div>
                             </div>
                         </div>

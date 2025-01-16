@@ -5,7 +5,8 @@ import './Frens.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import friendsIcon from './images/friends_icon.svg';
-import kmIcon from './images/km.svg';
+// import kmIcon from './images/km.svg';
+import starletIcon from './images/starlet.png';
 import trophy_1 from './images/trophy_1_200px.png';
 import trophy_2 from './images/trophy_2_200px.png';
 import trophy_3 from './images/trophy_3_200px.png';
@@ -197,61 +198,61 @@ const Frens = () => {
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 },
                 {
                     "name": "t_name",
                     "ticket": 0,
-                    "kmPoint": 0,
+                    "starlets": 0,
                     "pictureIndex": 6
                 }
             ],
@@ -288,7 +289,7 @@ const Frens = () => {
         const newFriendsData = data.data.page.list.map(friend => ({
           name: friend.name,
           ticket: friend.ticket,
-          kmPoint: friend.kmPoint,
+          starlets: friend.starlets,
           pictureIndex: friend.pictureIndex
         }));
 
@@ -354,7 +355,7 @@ const Frens = () => {
     closeOverlay();
 
     if (shareStory.isSupported()) {
-      const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
+      const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
       // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
       
       // only premium users can share stories with links
@@ -442,17 +443,17 @@ const Frens = () => {
 
     /*
     setFriendsData([
-      { pictureIndex: 1, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 2, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 3, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 4, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 5, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 6, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 7, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 8, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 9, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 10, name: 'Chonky', ticket: 3, kmPoint: 267 },
-      { pictureIndex: 11, name: 'Chonky', ticket: 3, kmPoint: 267 },
+      { pictureIndex: 1, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 2, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 3, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 4, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 5, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 6, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 7, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 8, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 9, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 10, name: 'Chonky', ticket: 3, starlets: 267 },
+      { pictureIndex: 11, name: 'Chonky', ticket: 3, starlets: 267 },
     ]);  
     */
 
@@ -486,8 +487,8 @@ const Frens = () => {
                   <span>{friend.ticket}</span>
                 </div>
                 <div className="friend-stat">
-                  <img src={kmIcon} alt="GMT" className="stat-icon" />
-                  <span>{friend.kmPoint}</span>
+                  <img src={starletIcon} alt="Starlets" className="stat-icon" />
+                  <span>{friend.starlets}</span>
                 </div>
               </div>
             </div>
@@ -509,7 +510,7 @@ const Frens = () => {
     <div className="frens-content">
       <div className="frens-inner-content">
         <div className="info-box">
-          EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+        Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
         </div>
 
         <div className="stats-row">
@@ -656,11 +657,11 @@ const Frens = () => {
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     SHARE A STORY
+                    <div className="trophy-reward">
+                      <img src={starletIcon} alt="Starlets" className="stat-icon" />
+                      <span>20</span>
+                    </div>
                   </button>
-                  <div className="trophy-reward">
-                    <img src={kmIcon} alt="GMT" className="stat-icon" />
-                    <span>100</span>
-                  </div>
                 </>
               ) : (
                 <>

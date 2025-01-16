@@ -1,5 +1,6 @@
 import ticketIcon from './images/ticket.svg';
-import kmIcon from './images/km.svg';
+// import kmIcon from './images/km.svg';
+import starletIcon from './images/starlet.png';
 // import gmtIcon from './images/gmt.svg';
 import gmtIcon from './images/GMT_1.png';
 import SUT from './images/SUT.png';
@@ -53,7 +54,7 @@ const shared = {
 
     mappingIcon : {
         10010: ticketIcon,
-        10020: kmIcon,
+        10020: starletIcon,
         10030: energy,
         20010: SUT,
         20020: gmtIcon,
@@ -63,7 +64,7 @@ const shared = {
     },
     mappingText : {
         10010: 'Tickets',
-        10020: 'KM Points',
+        10020: 'Starlets',
         10030: 'Energy',
         20010: 'SUT',
         20020: 'GMT',
@@ -221,15 +222,17 @@ const shared = {
                         record: record,
                         type: record.prop_id
                     })),
-                    ...userProfileData.claimRecord.map(record => ({
-                        icon: shared.mappingIcon[record.type],
-                        text: shared.mappingText[record.type],
-                        value: record.num,
-                        showClaim: true,
-                        showArrow: true,
-                        record: record,
-                        type: record.type
-                    }))
+                    ...userProfileData.claimRecord
+                        .filter(record => record !== null)
+                        .map(record => ({
+                            icon: shared.mappingIcon[record.type],
+                            text: shared.mappingText[record.type],
+                            value: record.num,
+                            showClaim: true,
+                            showArrow: true,
+                            record: record,
+                            type: record.type
+                        }))
                 ];
 
                 shared.profileItems = profileItems;
@@ -351,7 +354,7 @@ const shared = {
         });
     },
 
-    getKMPoint : () => {
+    getStarlets : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10020);
         return retVal?.num || 0;
     },

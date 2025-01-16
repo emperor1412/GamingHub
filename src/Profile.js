@@ -17,7 +17,7 @@ import { popup, openLink } from '@telegram-apps/sdk';
 import shared from './Shared';
 import FSLAuthorization from 'fsl-authorization';
 
-const Profile = ({ onClose, getProfileData }) => {
+const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
     const [showLevelUp, setShowLevelUp] = useState(false);
 
@@ -28,58 +28,24 @@ const Profile = ({ onClose, getProfileData }) => {
         setShowLevelUp(!showLevelUp);
     }
     
-    const onClickClaim = (item) => {
+    const onClickClaim = async (item) => {
         console.log('Claim:', item);
 
-        const FSL_ID_URL = 'https://gm3.joysteps.io/login'; // 'https://id.fsl.com/login'
-
-        // const REDIRECT_URL = 'https://t.me/TestFSL_bot/';
-        const REDIRECT_URL = 'http://192.168.1.33:3000';
-        // const REDIRECT_URL = window.location.href; 
-
-
-        const fslAuthorization = FSLAuthorization.init({
-            responseType: 'code', // 'code' or 'token'
-            appKey: 'MiniGame',
-            redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-            scope: 'basic%20wallet', // Grant Scope
-            state: 'test',
-            usePopup: true // Popup a window instead of jump to
-        });
-        fslAuthorization.signIn().then((code) => {
-            if (code) {
-              // Implement your code here
-                console.log('FSL Login, Code:', code);
+        if(shared.userProfile.fslId === 0) {
+            onClose();
+            showFSLIDScreen();
+        }
+        else {
+            if (popup.open.isAvailable()) {
+                const promise = popup.open({
+                    title: 'Notice',
+                    message: 'This feature is coming soon',
+                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+                });
+                await promise;
             }
-        });
+        }
         
-        /*
-        // Construct login URL with necessary parameters
-        const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
-            client_id: 'MiniGame',
-            redirect_uri: REDIRECT_URL,
-            response_type: 'code',
-            state: 'test', // Generate random state for security verification
-        })
-
-        // Use Telegram Mini App API to open built-in browser
-        // openLink(loginUrl, {
-        //     tryBrowser: 'chrome',
-        //     tryInstantView: true,
-        // })
-
-        // // Alternative way 1: Using window.open
-        // window.open(loginUrl, '_blank');
-
-        // Alternative way 2: Using location.href
-        window.location.href = loginUrl;
-
-        // Alternative way 3: Using an anchor element
-        // const anchor = document.createElement('a');
-        // anchor.href = loginUrl;
-        // anchor.target = '_self';
-        // anchor.click();
-        */
     }
 
     useEffect(() => {

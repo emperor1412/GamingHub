@@ -3,7 +3,8 @@ import "./Tasks.css";
 import xIcon from './images/x-icon.svg';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import starlet from './images/starlet.png';
 import calendar from './images/calendar.svg';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.svg';
@@ -254,7 +255,7 @@ const Tasks = ({
     getProfileData 
 }) => {
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
-    const [kmpoint, setKmpoint] = useState(0);
+    const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
     const [tasksTimeLimited, setTasksTimelimited] = useState([]);
     const [tasksStandard, setTasksStandard] = useState([]);
@@ -264,9 +265,9 @@ const Tasks = ({
     const [standardTasksExpanded, setStandardTasksExpanded] = useState(true);
 
     const setupProfileData = async () => {
-        const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
-        if (userKMPoint) {
-            setKmpoint(userKMPoint.num);
+        const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+            setStarlets(userStarlets.num);
         }
 
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
@@ -450,7 +451,7 @@ const Tasks = ({
                     <h3 className={`task-title ${isDone ? 'done' : ''}`}>{task.name}</h3>
                     <div className="task-bottom-left">
                         <div className="task-reward">
-                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className={`reward-icon ${isDone ? 'done' : ''}`} />
+                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Starlets" className={`reward-icon ${isDone ? 'done' : ''}`} />
                             <span className="reward-amount-task">{task.rewardList[0]?.amount || 0}</span>
                         </div>
                         {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
@@ -502,8 +503,8 @@ const Tasks = ({
                         className="stat-item"
                         onClick={() => setShowProfileView(true)}
                     >
-                        <img src={km} alt="KM" />
-                        <span className="stat-item-text">{kmpoint}</span>
+                        <img src={starlet} alt="Starlets" />
+                        <span className="stat-item-text">{starlets}</span>
                     </button>
                     <div className="stat-item">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>

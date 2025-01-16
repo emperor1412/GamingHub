@@ -11,6 +11,7 @@ import FSLID from './FSLID';
 import Frens from './Frens';
 import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
+import BankSteps from './BankSteps';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -66,6 +67,7 @@ function App() {
   const [showTicketView, setShowTicketView] = useState(false);
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [buildVersion, setBuildVersion] = useState('');
+  const [showBankStepsView, setShowBankStepsView] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -324,6 +326,7 @@ Response:
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
+          setShowBankStepsView={setShowBankStepsView}
           getProfileData={getProfileData}
         />;      
       case 'tasks':
@@ -352,6 +355,7 @@ Response:
           setShowCheckInView={setShowCheckInView}
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
+          setShowBankStepsView={setShowBankStepsView}
           getProfileData={getProfileData}
         />;
     }
@@ -442,7 +446,11 @@ Response:
             setShowProfileView(false);
             setActiveTab('home');
           }}
-          getProfileData={getProfileData}/>
+          getProfileData={getProfileData}
+          showFSLIDScreen={() => {
+            setShowProfileView(false);
+            setActiveTab('fslid');
+          }}/>
       )
       : showTicketView ?
       (
@@ -453,7 +461,18 @@ Response:
           getProfileData={getProfileData}
         />
       )
-      : 
+      : showBankStepsView ?
+      (
+        <BankSteps showFSLIDScreen={() => {
+          setShowBankStepsView(false);
+          setActiveTab('fslid');
+        }} onClose={() => {
+            setShowBankStepsView(false);
+            setActiveTab('home');
+          }} 
+        />
+      )
+      :
       (
         <div className="app-container">
           {renderActiveView()}

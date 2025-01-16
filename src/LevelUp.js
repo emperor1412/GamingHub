@@ -4,15 +4,29 @@ import background from './images/background.png';
 import shadow from './images/shadow.png';
 import hinh_thang_vuong from './images/hinh_thang_vuong.svg';
 import backIcon from './images/back.svg';
+import single_star from './images/single_star.svg';
 import './Share.css';
 import './LevelUp.css';
 import { shareStory } from '@telegram-apps/sdk';
 import shared from './Shared';
+import lv1 from './images/lv1.png';
+import lv2 from './images/lv2.png';
+import lv3 from './images/lv3.png';
+import lv4 from './images/lv4.png';
+import lv5 from './images/lv5.png';
+import lv6 from './images/lv6.png';
+import lv7 from './images/lv7.png';
 
 const LevelUp = ({ onClose }) => {
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
     const [progress, setProgress] = useState(0);
+
+    const getLevelImage = (level) => {
+        const iconImages = [iconMarty, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
+        if (level >= iconImages.length) return lv7;
+        return iconImages[level];
+    };
 
     const onClickLevelUp = async () => {
         console.log('Level up clicked');
@@ -60,9 +74,9 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/hHinjx/xY6gECBXlMiE1Z95dGmuh/3Pqzg/tEcJ1P3s=.png';
+            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
             shareStory(url, {
-                text: 'ONLY LEGENDS REACH LEVEL 5! 🏆',
+                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
             });
             setShowOverlay(false);
             
@@ -102,13 +116,13 @@ const LevelUp = ({ onClose }) => {
     };
 
     const setup = () => {
-        const kmPoint = shared.getKMPoint();
+        const starlets = shared.getStarlets();
         const currentRequired = shared.userProfile.levelPoint;
-        console.log('KM Point:', kmPoint, 'Current Required:', currentRequired);
-        setProgress(Math.min((kmPoint / currentRequired) * 100, 100));
+        console.log('Starlets:', starlets, 'Current Required:', currentRequired);
+        setProgress(Math.min((starlets / currentRequired) * 100, 100));
         console.log('Progress:', progress);
 
-        setShowLevelUpButton(kmPoint >= currentRequired);
+        setShowLevelUpButton(starlets >= currentRequired);
     };
 
     useEffect(() => {
@@ -123,13 +137,13 @@ const LevelUp = ({ onClose }) => {
 
             <div className="level-up-scroll-container">
                 <div className="level-content">
-                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} KM POINTS TO REACH THE NEXT LEVEL.</h2>
+                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} STARLETS TO REACH THE NEXT LEVEL.</h2>
           
                     <div className="marty-card-outer">
                         <div className='marty-gradient-layer'></div>
                         <div className="marty-card">
-                            <img src={iconMarty} alt="Marty" className="marty-image" />
-                            <img src={shadow} alt="Shadow" className="marty-shadow" />
+                            <img src={getLevelImage(shared.userProfile.level)} alt="Marty" className="marty-image" />
+                            {/* <img src={shadow} alt="Shadow" className="marty-shadow" /> */}
                             <div className="level-info">
                                 <div className="level-label">LV {shared.userProfile.level}</div>
                                 <div className="progress-bar">
@@ -137,7 +151,7 @@ const LevelUp = ({ onClose }) => {
                                         className="progress" 
                                         style={{
                                             width: `${progress}%`,
-                                            '--progress-value': `"${progress}%"`
+                                            '--progress-value': `"${Math.floor(progress)}%"`
                                         }} 
                                     ></div>
                                 </div>
@@ -156,16 +170,17 @@ const LevelUp = ({ onClose }) => {
                     {showLevelUpButton ? 
                     (
                         <div className="points-info">
-                            <div className="points-text-content">PROCEED TO THE NEXT LEVEL TO:</div>
-                            <div><span className="points-text-content">• UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
-                            <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div>
-                            <div><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
+                            <div className="points-text-content-title">PROCEED TO THE NEXT LEVEL TO:</div>
+                            <div className="points-icon-text-container"><img src={shared.mappingIcon[10010]} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
+                            {/* <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div> */}
+                            {/* <div className='points-icon-text-container'><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div> */}
+                            <div className="points-icon-text-container"><img src={single_star} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
                         </div>
                     )
                     :
                     (
                         <div className="points-info">
-                            <div className="points-text-content">EARN KM POINTS BY:</div>
+                            <div className="points-text-content">EARN STARLETS BY:</div>
                             <div className="points-item">DAILY CHECK-IN: <span className="points-text-content">KEEP YOUR STREAK!</span></div>
                             <div className="points-item">TICKETS: <span className="points-text-content">TRY YOUR LUCK AND WIN MORE POINTS</span></div>
                             <div className="points-item">TASKS: <span className="points-text-content">ENGAGE WITH TASKS TO UNLOCK REWARDS.</span></div>
@@ -183,7 +198,7 @@ const LevelUp = ({ onClose }) => {
                         </div>
 
                         <div className="level-up-overlay-icon-container">
-                            <img src={iconMarty} alt="Marty" className="level-up-overlay-icon" />
+                            <img src={getLevelImage(shared.userProfile.level)} alt="Marty" className="level-up-overlay-icon" />
                             <div className='stars' style={{top: 176, left: -32}}>
                                 <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                                 <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
@@ -193,12 +208,14 @@ const LevelUp = ({ onClose }) => {
                             </div>
                         </div>
                         
+                        <div className='share-story-div'>
                         <button className="level-up-share-story-button" onClick={() => {
                                 onClickShareStory();
                                 setup();
                             }}>
-                            Share To Story 200 KM Points
+                            Share To Story 20 Starlets
                         </button>
+                        </div>
                         <button className="level-up-okay-button" onClick={() => {
                             setShowOverlay(false);
                             setup();

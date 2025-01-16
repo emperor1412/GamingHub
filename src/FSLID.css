@@ -1,10 +1,189 @@
 .fsl-id-container {
     padding: 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* background: #000000; */
+}
+
+.fsl-id-connected {
+    width: 100%;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.fsl-id-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fsl-id-user {
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    padding: 12px;
+    background: #212121;
+    border-radius: 8px;
+}
+
+.fsl-id-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.fsl-id-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fsl-id-name {
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 16px;
+}
+
+.fsl-id-emails {
+    background: #212121;
+    border-radius: 8px;
+    padding: 8px 0;
+}
+
+.fsl-id-email {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    gap: 12px;
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+.fsl-id-email-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.email-text {
+    color: #FFF;
+    text-align: left;
+
+    /* APP/Body/Strong/Body-M-Strong */
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 22px; /* 157.143% */
+}
+
+.wallet-text {
+    color: #999;
+    word-wrap: break-word;
+    word-break: break-all;
+    /* APP/Body/Default/Body-S-Default */
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18px; /* 150% */
+}
+
+.email-separator {
+    height: 1px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+}
+
+.fsl-id-hash {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    color: #999;
+
+    /* APP/Body/Default/Body-S-Default */
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18px; /* 150% */
+}
+
+.fsl-id-icon-1 {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.fsl-id-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 0px;
+}
+
+.fsl-id-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+    padding: 8px 0px;
+}
+
+.fsl-id-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.fsl-stat-label {
+    flex: 1;
+    text-align: left;
+    color: #83807F;
+    /* APP/Body/Strong/Body-M-Strong */
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 22px; /* 157.143% */
+}
+
+.stat-value {
+    font-size: 16px;
+    color: white;
+}
+
+.fsl-stat-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.claim-button {
+    background: #0000FF;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 16px;
 }
 
 .fsl-id {
@@ -16,18 +195,170 @@
     max-width: 100%;
 }
 
-.connect-fsl-button {
-    background: #007AFF;
+.fsl-id-signup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 5px;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.fsl-id-logo {
+    width: 140px;
+    height: 120px;
+    margin-bottom: 0;
+    object-fit: contain;
+}
+
+.fsl-id-logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00FF00, #00FFFF);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.fsl-id-logo-text {
     color: white;
-    border: none;
-    padding: 12px 24px;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: -28px;
+    margin-bottom: 16px;
+}
+
+.fsl-id-message {
+    text-align: center;
+    color: white;
+    font-family: 'PPNeueMachina', sans-serif;
+    font-style: italic;
+    padding: 16px;
+
+    border-radius: 16px;
+    border: 1px solid #46413F;
+    background: #212121;
+}
+
+.fsl-id-note-title {
+    color: #FFF;
+    text-align: left;
+
+    /* APP/Body/Strong/Body-M-Strong */
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 22px; /* 157.143% */
+}
+
+.fsl-id-note-1 {
+    margin: 8px 0;
+    text-align: left;
+    color: #A9A7A7;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.fsl-id-note {    
+    text-align: left;
+    margin-top: 16px !important;
+    color: #83807F;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.fsl-id-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.fsl-id-signup-button,
+.fsl-id-connect-button {
+    width: 100%;
+    /* padding: 14px; */
+    padding: 14px 0px;
+    max-width: 90%;
     border-radius: 8px;
     font-family: 'PPNeueMachina', sans-serif;
     font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: opacity 0.2s;
 }
 
-.connect-fsl-button:hover {
-    background: #0056b3;
+.fsl-id-signup-button {
+    background: #0000FF;
+    color: white;
+    border: none;
+}
+
+.fsl-id-connect-button {
+    background: transparent;
+    color: white;
+    border: 2px solid #0000FF;
+}
+
+.fsl-id-signup-button:hover,
+.fsl-id-connect-button:hover {
+    opacity: 0.9;
+}
+
+.fsl-id-signup-button:active,
+.fsl-id-connect-button:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+}
+
+.name-with-level {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #FFF;
+    text-align: center;
+
+    /* APP/Body/Strong/Body-M-Strong */
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 22px; /* 157.143% */
+}
+
+.level-tag {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #D4D3D3;
+    text-align: center;
+
+    /* APP/Detail/Detail-Light */
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 16px; /* 160% */
 }

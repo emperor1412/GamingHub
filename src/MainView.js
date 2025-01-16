@@ -3,9 +3,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import locker from './images/locker.png';
 // import locker from './images/locker.svg';
 import leaderboard from './images/leaderboard.svg';
+import stepn_background from './images/stepn_background.png';
 // import leaderboard from './images/leaderboard.png';
 import ticketIcon from './images/ticket.svg';
-import km from './images/km.svg';
+// import km from './images/km.svg';
+import starlet from './images/starlet.png';
 import calendar from './images/calendar.svg';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.svg';
@@ -30,10 +32,10 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
-    const [kmpoint, setKmpoint] = useState(0);
+    const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
@@ -246,9 +248,9 @@ Response:
 
     const setupProfileData = async () => {
         await getProfileData();
-        const userKMPoint = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
-        if (userKMPoint) {
-            setKmpoint(userKMPoint.num);
+        const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+            setStarlets(userStarlets.num);
         }
 
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
@@ -468,7 +470,9 @@ Response:
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="level-badge" onClick={() => setShowProfileView(true)}>LV.{shared.userProfile.level || 0}</div>
+                <div className="level-badge" onClick={() => setShowProfileView(true)}>
+                    LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+                </div>
                 <div className="stats-main">
                     <button 
                         className="stat-item-main"
@@ -481,8 +485,8 @@ Response:
                         className="stat-item-main"
                         onClick={() => setShowProfileView(true)}
                     >
-                        <img src={km} alt="Stat 1" />
-                        <span className='stat-item-main-text'>{kmpoint}</span>
+                        <img src={starlet} alt="Starlets" />
+                        <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
                         <button className="stat-button" onClick={() => onClickCheckIn()}>
@@ -523,7 +527,7 @@ Response:
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
                                 <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch tickets to get <br></br>rewards</p>
+                                <p className="event-card-subtitle">Scratch Tickets and Unlock <br></br>Rewards!</p>
                                 <div className="check-out-button">
                                     Scratch Tickets
                                 </div>
@@ -553,23 +557,23 @@ Response:
                         />
                     </button>
 
-                    <button className="locked-card">
-                    <div className='locked-card-image-container'>
-                        <img
-                            // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                            src={leaderboard}
-                            alt="Leaderboard Coming Soon"
-                            className="locked-card-image"
-                        />
-                        <div className='locked-card-container-border'></div>
-                        <div className='coming-soon-button'>Coming Soon</div>
-                        <div className='locked-card-text'>Leaderboard</div>
+                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
+                                src={stepn_background}
+                                alt="Leaderboard Coming Soon"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            <div className='check-out-button'>Bank Steps</div>
+                            <div className='locked-card-text'>STEPN</div>
                         </div>
-                        <img
+                        {/* <img
                             src={locker}
                             alt="Locker"
                             className="locker-icon"
-                        />
+                        /> */}
                     </button>
                 </section>
 
