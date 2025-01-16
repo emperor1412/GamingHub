@@ -340,7 +340,7 @@ Response:
                                     SHARE TO STORY
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM" className='share-story-reward-starlet'/>
-                                        <span className='share-story-reward-text'>100</span>
+                                        <span className='share-story-reward-text'>20</span>
                                     </div>
                                 </button>
                             )}
