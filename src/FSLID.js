@@ -44,7 +44,7 @@ const FSLID = () => {
                     responseType: 'code', // 'code' or 'token'
                     appKey: 'MiniGame',
                     redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-                    scope: 'basic', // Grant Scope
+                    scope: 'basic,wallet,stepn', // Grant Scope
                     state: state,
                     usePopup: true, // Popup a window instead of jump to
                     isApp: true,
