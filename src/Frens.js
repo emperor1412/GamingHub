@@ -355,7 +355,7 @@ const Frens = () => {
     closeOverlay();
 
     if (shareStory.isSupported()) {
-      const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
+      const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
       // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
       
       // only premium users can share stories with links
@@ -655,11 +655,11 @@ const Frens = () => {
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     SHARE A STORY
+                    <div className="trophy-reward">
+                      <img src={starletIcon} alt="Starlets" className="stat-icon" />
+                      <span>20</span>
+                    </div>
                   </button>
-                  <div className="trophy-reward">
-                    <img src={starletIcon} alt="Starlets" className="stat-icon" />
-                    <span>100</span>
-                  </div>
                 </>
               ) : (
                 <>

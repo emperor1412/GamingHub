@@ -100,8 +100,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     energy: data.data.energy
                 });
                 setStarletsReceived(data.data.received);
-                setDistance(data.data.distance);
-                setTime(data.data.time);
+                setDistance((data.data.distance * 0.1 / 1000).toFixed(2));
+                setTime(Math.round(data.data.time * 0.1));
                 setSteps(data.data.steps);
                 setCanClaim(data.data.canReceive > data.data.received);
             } else if (data.code === 102002 || data.code === 102001) {

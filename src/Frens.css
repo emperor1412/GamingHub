@@ -626,7 +626,7 @@
   margin: 8px 0;
   max-width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
   color: #FFF;
@@ -739,11 +739,8 @@
 .trophy-reward {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   margin-top: 0px;
-  width: 100%;
-  max-width: 280px;
   padding: 0px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
@@ -754,7 +751,7 @@
   font-size: 14px;
   font-style: italic;
   font-weight: 600;
-  line-height: 22px; /* 157.143% */
+  line-height: 22px;
 }
 
 .trophy-reward .stat-icon {
