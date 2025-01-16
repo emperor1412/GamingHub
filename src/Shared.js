@@ -34,6 +34,19 @@ import single_star_3 from './images/single_star_3.svg';
 import single_star_4 from './images/single_star_4.svg';
 import single_star_5 from './images/single_star_5.svg';
 
+const { Connection, PublicKey } = require('@solana/web3.js');
+const { TOKEN_PROGRAM_ID } = require('@solana/spl-token');
+const Web3 = require('web3');
+const tokenABI = [
+    {
+        "constant": true,
+        "inputs": [{"name": "_owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "balance", "type": "uint256"}],
+        "type": "function"
+    }
+];
+
 const shared = {
     server_url: 'https://gm14.joysteps.io',
     app_link: 'https://t.me/TestFSL_bot/fslhub',
@@ -362,6 +375,58 @@ const shared = {
     getTicket : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10010);
         return retVal?.num || 0;
+    },
+
+    getSolanaGMTBalance : async (walletAddress) => {
+        // GMT token mint address on Solana
+        const GMT_MINT = new PublicKey('7i5KKsX2weiTkry7jA4ZwSuXGhs5eJBEjY8vVxR4pfRx');
+        
+        // Initialize connection
+        const connection = new Connection('YOUR_RPC_ENDPOINT');
+        const wallet = new PublicKey(walletAddress);
+
+        try {
+            // Get all token accounts for this wallet
+            const tokenAccounts = await connection.getParsedTokenAccountsByOwner(wallet, {
+                programId: TOKEN_PROGRAM_ID
+            });
+
+            // Find GMT token account
+            const gmtAccount = tokenAccounts.value.find(
+                account => account.account.data.parsed.info.mint === GMT_MINT.toString()
+            );
+
+            if (gmtAccount) {
+                const balance = gmtAccount.account.data.parsed.info.tokenAmount.uiAmount;
+                return balance;
+            }
+            return 0;
+        } catch (error) {
+            console.error('Error getting Solana GMT balance:', error);
+            return null;
+        }
+    },
+
+    getPolygonGMTBalance : async (walletAddress) => {
+        // GMT token contract address on Polygon
+        const GMT_CONTRACT = '0x714DB550b574b3E927af3D93E26127D15721D4C2';
+        
+        // Initialize Web3 with Polygon RPC
+        const web3 = new Web3('YOUR_POLYGON_RPC_ENDPOINT');
+        
+        // Create contract instance
+        const contract = new web3.eth.Contract(tokenABI, GMT_CONTRACT);
+    
+        try {
+            // Get balance
+            const balance = await contract.methods.balanceOf(walletAddress).call();
+            // Convert from wei to token units (assuming 18 decimals)
+            const formattedBalance = web3.utils.fromWei(balance);
+            return formattedBalance;
+        } catch (error) {
+            console.error('Error getting Polygon GMT balance:', error);
+            return null;
+        }
     }
 
 };
