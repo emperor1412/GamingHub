@@ -61,7 +61,7 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/hHinjx/xY6gECBXlMiE1Z95dGmuh/3Pqzg/tEcJ1P3s=.png';
+            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
             shareStory(url, {
                 text: 'ONLY LEGENDS REACH LEVEL 5! 🏆',
             });
