@@ -297,6 +297,10 @@
 .fsl-id-signup-button,
 .fsl-id-connect-button {
     width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     /* padding: 14px; */
     padding: 14px 0px;
     max-width: 90%;
