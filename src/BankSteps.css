@@ -238,7 +238,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 8px;
     background: #0000FF;
     border: none;
     cursor: pointer;
@@ -269,7 +269,7 @@
     justify-content: center;
 
     padding: 14px;
-    border-radius: 12px;
+    border-radius: 8px;
     background: transparent;
     color: white;
     border: 1px solid #0000FF;
@@ -359,6 +359,7 @@
 .bank-step-progress-container {
     margin: 10px 0;
     transform: scale(0.9);
+    border-radius: 12px;
 }
 
 .bank-step-progress-box {
