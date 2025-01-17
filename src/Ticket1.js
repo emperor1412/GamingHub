@@ -249,6 +249,7 @@ Response:
             current_slots: slotNum,
             user_level: shared.userProfile.level
         }, shared.loginData?.userId);
+        handleTimerClick();
     };
 
     const handleLevelUpClick = () => {
@@ -296,7 +297,7 @@ Response:
                         <div className='scratch-item-border'>   
                             <div className='scratch-item-background'></div>
                         </div>
-                        <img src={lock_icon} alt="Lock" className='scratch-item-ticket-icon' />
+                        <img src={locker} alt="Lock" className='scratch-item-locked-icon' />
                     </button>
                 );
             })}
