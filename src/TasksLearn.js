@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import shared from './Shared';
 // import kmIcon from './images/km.svg';
 import kmIcon from './images/starlet.png';
 import './TasksLearn.css';
 import correct_answer from './images/correct_answer.svg';
 import incorrect_answer from './images/incorrect_answer.svg';
+import { trackTaskFunnel, trackTaskAttempt, trackTaskContent } from './analytics';
 
 const TasksLearn = ({ task, onClose, onComplete }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [tryCount, setTryCount] = useState(0);
 
     const handleNext = () => {
+        // Track content interaction
+        trackTaskContent(task.id, currentStep, 'next', shared.loginData?.userId);
+
         if (currentStep < task.contentList.length - 1) {
             setCurrentStep(currentStep + 1);
         } else if (currentStep === task.contentList.length - 1) {
+            // Track quiz start
+            trackTaskFunnel(task.id, 'quiz', 'quiz_start', {
+                task_name: task.name,
+                content_steps_completed: task.contentList.length
+            }, shared.loginData?.userId);
+            
             // Show quiz
             setCurrentStep(currentStep + 1);
         }
@@ -33,11 +44,40 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         setIsCorrect(correct);
         setShowResult(true);
         
+        // Track quiz attempt
+        trackTaskAttempt(task.id, 'quiz', correct, {
+            task_name: task.name,
+            selected_answer: selectedAnswer,
+            correct_answer: task.question.answerIndex,
+            attempt_count: tryCount + 1
+        }, shared.loginData?.userId);
+
         console.log('Correct:', correct);
         if(correct) {
+            // Track successful completion
+            trackTaskFunnel(task.id, 'quiz', 'completion', {
+                task_name: task.name,
+                attempts_needed: tryCount + 1
+            }, shared.loginData?.userId);
+
             const reward = await onComplete(task, selectedAnswer);
             console.log('Reward:', reward);
         }
+    };
+
+    // Track content view on initial render
+    useEffect(() => {
+        if (currentStep < task.contentList.length) {
+            trackTaskContent(task.id, currentStep, 'view', shared.loginData?.userId);
+        }
+    }, [currentStep, task.id, task.contentList.length]);
+
+    // Update tryCount when trying again
+    const handleTryAgain = () => {
+        setTryCount(prev => prev + 1);
+        setShowResult(false);
+        setSelectedAnswer(null);
+        setCurrentStep(0);
     };
 
     const renderContent = () => {
@@ -134,11 +174,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className="try-again-button" onClick={() => {
-                                    setShowResult(false);
-                                    setSelectedAnswer(null);
-                                    setCurrentStep(0);
-                                }}>
+                                <button className="try-again-button" onClick={handleTryAgain}>
                                     TRY AGAIN
                                 </button>
                             </div>

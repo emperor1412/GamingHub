@@ -12,6 +12,7 @@ import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
+import { trackTaskFunnel, trackTaskAttempt } from './analytics';
 /*
 url: /app/taskList
 Request:
@@ -421,9 +422,13 @@ const Tasks = ({
     };
 
     const handleStartTask = async (task) => {
-        if (task.type === 1) {
-            
+        // Track task start
+        trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'start', {
+            task_name: task.name,
+            task_category: task.category === 0 ? 'time_limited' : 'standard'
+        }, shared.loginData?.userId);
 
+        if (task.type === 1) {
             if (openLink.isAvailable()) {
                 openLink(task.url, {
                     tryBrowser: 'chrome',
@@ -434,9 +439,20 @@ const Tasks = ({
                 window.open(task.url, '_blank');
             }
 
+            // Track link task completion attempt
+            trackTaskAttempt(task.id, 'link', true, {
+                task_name: task.name,
+                task_url: task.url
+            }, shared.loginData?.userId);
+
             completeTask(task.id, 0);
 
         } else if (task.type === 2) {
+            // Track quiz task content view
+            trackTaskFunnel(task.id, 'quiz', 'content_view', {
+                task_name: task.name
+            }, shared.loginData?.userId);
+
             fetchTaskDataAndShow(task);
         }
     };
@@ -483,6 +499,21 @@ const Tasks = ({
         setupProfileData();
         fetchTaskList();
     }, []);
+
+    // Track when tasks are loaded and viewed
+    useEffect(() => {
+        if (tasksTimeLimited.length > 0 || tasksStandard.length > 0) {
+            // Track task list view
+            const allTasks = [...tasksTimeLimited, ...tasksStandard];
+            allTasks.forEach(task => {
+                trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'view', {
+                    task_name: task.name,
+                    task_category: task.category === 0 ? 'time_limited' : 'standard',
+                    task_state: task.state // 0: not done, 1: done
+                }, shared.loginData?.userId);
+            });
+        }
+    }, [tasksTimeLimited, tasksStandard]);
 
     return (
         <>

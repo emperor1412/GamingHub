@@ -13,6 +13,7 @@ import star4 from './images/single_star_4.svg';
 import star5 from './images/single_star_5.svg';
 import starlet from './images/starlet.png';
 import { shareStory } from '@telegram-apps/sdk';
+import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
 /*
 url: /app/getBankSteps
@@ -187,12 +188,30 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     text: inviteLink,
                     button_text: 'Join Now',
                 });
+
+                trackStoryShare('bank_steps', {
+                    invite_link: inviteLink,
+                    bank_steps_status: shared.userProfile.fslId !== 0 ? 'connected' : 'not_connected'
+                }, shared.loginData?.userId);
+
                 await claimRewardFromSharingStory();
                 setShowOverlayClaimSuccess(false);
             } catch (error) {
                 console.error('Error sharing story:', error);
             }
         }
+    };
+
+    // Track overlay views
+    useEffect(() => {
+        if (showOverlayClaimSuccess) {
+            trackOverlayView('bank_steps_success', shared.loginData?.link, 'bank_steps');
+        }
+    }, [showOverlayClaimSuccess]);
+
+    const handleCloseSuccessOverlay = () => {
+        trackOverlayExit('bank_steps_success', shared.loginData?.link, 'bank_steps');
+        setShowOverlayClaimSuccess(false);
     };
 
     if (shared.userProfile.fslId === 0) {
@@ -358,7 +377,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                         <button 
                             className="action-button" 
-                            onClick={() => setShowOverlayClaimSuccess(false)}
+                            onClick={handleCloseSuccessOverlay}
                         >
                             <span>DONE</span>
                         </button>

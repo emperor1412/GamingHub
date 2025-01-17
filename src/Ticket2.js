@@ -18,6 +18,7 @@ import fail_animation_frame_2 from './images/FSL Games UI 2-08.png';
 import fail_animation_frame_3 from './images/FSL Games UI 2-07.png';
 
 import { shareStory, popup } from '@telegram-apps/sdk';
+import { trackStoryShare } from './analytics';
 
 let animationFrameIndex = 0;
 
@@ -117,26 +118,12 @@ Response:
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            // const url = 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png';
             const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/xkD++/9T2na4RgKvFkcBnIokAAbpwqtK6Mrl4EYEZcg=.png';
-            // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
 
-        // only premium users can share stories with links
-        /*
-            const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
-            shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a', 
-            {
-                text: 'Yay! I just unlocked a trophy on FSL! 🏆',
-                widgetLink: {
-                url:url,
-                name: 'FSL Hub'
-                }
-            });
-            */
-
-            // shareStory(url, {
-            //     text: `Yay! I just got a reward from scratching a ticket in FSL Gaming Hub! 🎉\n${inviteLink}`,
-            // });
+            trackStoryShare('ticket', {
+                reward_claimed: true,
+                invite_link: inviteLink
+            }, shared.loginData?.userId);
 
             setShowShareStory(false);
             claimRewardFromSharingStory();

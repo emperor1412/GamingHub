@@ -15,6 +15,7 @@ import shared from './Shared';
 import { popup } from '@telegram-apps/sdk';
 import LevelUp from './LevelUp';
 import unlock from './images/unlock.png';
+import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -31,6 +32,8 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [progress, setProgress] = useState(50);
     const [showLevelUp, setShowLevelUp] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
+    const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = useState(false);
+    const [showTimerOverlay, setShowTimerOverlay] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -221,6 +224,42 @@ Response:
         };
     }, [showTimer, expireTime]);
 
+    const handleTimerClick = () => {
+        trackUserAction('ticket_timer_clicked', {
+            slots_used: slotUseNum,
+            total_slots: slotNum,
+            time_left_seconds: timeLeft.totalSeconds
+        }, shared.loginData?.userId);
+        setShowTimer(true);
+    };
+
+    const handleScratchClick = (index) => {
+        trackUserAction('ticket_scratch_clicked', {
+            slot_index: index,
+            slots_used: slotUseNum,
+            total_slots: slotNum,
+            tickets_remaining: ticket
+        }, shared.loginData?.userId);
+        setShowOverlay(true);
+    };
+
+    const handleLockedSlotClick = (index) => {
+        trackUserAction('ticket_locked_slot_clicked', {
+            slot_index: index,
+            current_slots: slotNum,
+            user_level: shared.userProfile.level
+        }, shared.loginData?.userId);
+    };
+
+    const handleLevelUpClick = () => {
+        trackUserAction('level_up_from_ticket', {
+            current_slots: slotNum,
+            slots_used: slotUseNum,
+            user_level: shared.userProfile.level
+        }, shared.loginData?.userId);
+        setShowLevelUp(true);
+    };
+
     const renderTicketRow = (startIndex) => (
         <div className="scratch-grid-row" key={startIndex}>
             {[0, 1, 2].map(offset => {
@@ -230,7 +269,7 @@ Response:
 
                 return isUnlocked ? (
                     isScratched ? (
-                        <div key={index} className="scratch-item unlocked" onClick={() => setShowTimer(true)}>
+                        <div key={index} className="scratch-item unlocked" onClick={handleTimerClick}>
                             <div className='scratch-item-border'>   
                                 <div className='scratch-item-background'></div>
                             </div>
@@ -240,24 +279,25 @@ Response:
                         <button 
                             key={index} 
                             className="scratch-item unlocked"
-                            onClick={() => {
-                                console.log('Scratch ticket', index);
-                                setShowOverlay(true);
-                            }}
+                            onClick={() => handleScratchClick(index)}
                         >
                             <div className='scratch-item-border'>   
                                 <div className='scratch-item-background'></div>
                             </div>
-                            <img src={scratch_ticket} alt="Scratch Ticket" className='scratch-item-ticket-icon' />
+                            <img src={scratch_ticket} alt="Scratch" className='scratch-item-ticket-icon' />
                         </button>
                     )
                 ) : (
-                    <div key={index} className="scratch-item locked" onClick={() => setShowTimer(true)}>
+                    <button 
+                        key={index} 
+                        className="scratch-item locked"
+                        onClick={() => handleLockedSlotClick(index)}
+                    >
                         <div className='scratch-item-border'>   
                             <div className='scratch-item-background'></div>
-                            <img src={locker} alt="Lock" className='scratch-item-locked-icon' onClick={() => setShowTimer(true)}/>
                         </div>
-                    </div>
+                        <img src={lock_icon} alt="Lock" className='scratch-item-ticket-icon' />
+                    </button>
                 );
             })}
         </div>
@@ -287,16 +327,35 @@ Response:
         return `polygon(${points.join(', ')})`;
     };
 
-    const onClickLevelUp = () => {
-        console.log('Level up clicked');
-        setShowLevelUp(true);
-    }
-
     const onCloseLevelup = async () => {
         await shared.getProfileWithRetry();
         setShowLevelUp(false);
         setUp();
     }
+
+    // Track overlay views
+    useEffect(() => {
+        if (showOverlayClaimSuccess) {
+            trackOverlayView('ticket_claim_success', shared.loginData?.link, 'ticket');
+        }
+    }, [showOverlayClaimSuccess]);
+
+    const handleCloseSuccessOverlay = () => {
+        trackOverlayExit('ticket_claim_success', shared.loginData?.link, 'ticket');
+        setShowOverlayClaimSuccess(false);
+    };
+
+    // Track timer overlay
+    useEffect(() => {
+        if (showTimerOverlay) {
+            trackOverlayView('ticket_timer', shared.loginData?.link, 'ticket');
+        }
+    }, [showTimerOverlay]);
+
+    const handleCloseTimerOverlay = () => {
+        trackOverlayExit('ticket_timer', shared.loginData?.link, 'ticket');
+        setShowTimerOverlay(false);
+    };
 
     return (
         // implement show loading here
@@ -317,7 +376,7 @@ Response:
                     setShowLoading(false);
                 }} />
             ) : showLevelUp ? (
-                <LevelUp onClose={() => onCloseLevelup()} />
+                <LevelUp onClose={onCloseLevelup} />
             ) : (
                 <>
                     <div className="ticket1-container">
@@ -361,7 +420,7 @@ Response:
                                     </div>
                                 </div>
                                 <div className="timer-buttons">
-                                    <button className="timer-button primary" onClick={() => onClickLevelUp()}>LEVEL UP</button>
+                                    <button className="timer-button primary" onClick={handleLevelUpClick}>LEVEL UP</button>
                                     <div className="level-up-description">
                                         EARN MORE REWARDS AND FEATURES BY LEVELING UP!
                                     </div>
@@ -425,6 +484,32 @@ Response:
                                         <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                     </button>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+                    {showOverlayClaimSuccess && (
+                        <div className="overlay-ticket1">
+                            <div className="overlay-content-ticket1">
+                                {/* ... existing overlay content ... */}
+                                <button 
+                                    className="overlay-button-ticket1" 
+                                    onClick={handleCloseSuccessOverlay}
+                                >
+                                    DONE
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    {showTimerOverlay && (
+                        <div className="overlay-ticket1">
+                            <div className="overlay-content-ticket1">
+                                {/* ... existing timer overlay content ... */}
+                                <button 
+                                    className="overlay-button-ticket1" 
+                                    onClick={handleCloseTimerOverlay}
+                                >
+                                    OKAY
+                                </button>
                             </div>
                         </div>
                     )}
