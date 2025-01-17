@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { shareStory, shareURL } from '@telegram-apps/sdk';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './Firebase';
 
 import './Frens.css';
 import shared from './Shared';
@@ -382,6 +384,13 @@ const Frens = () => {
     console.log('Invite friends');
     const url = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
     console.log('Invite friends URL:', url);
+    
+    // Log the invite friends event
+    logEvent(analytics, 'invite_friends_clicked', {
+        userId: shared.loginData?.userId || 'unknown',
+        timestamp: new Date().toISOString()
+    });
+    
     shareURL(url);
   };
 
