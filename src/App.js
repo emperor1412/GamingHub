@@ -40,6 +40,8 @@ import lock_icon from "./images/lock_trophy.png";
 import loading_background from "./images/GamesHubLoading.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
+import { analytics } from './Firebase';
+
 
 function App() {
   const { initDataRaw } = retrieveLaunchParams();
