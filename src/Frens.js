@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { shareStory, shareURL } from '@telegram-apps/sdk';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './Firebase';
+import { trackUserAction, trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
 import './Frens.css';
 import shared from './Shared';
@@ -356,27 +359,18 @@ const Frens = () => {
 
     if (shareStory.isSupported()) {
       const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
-      // const url = 'https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a' 
       
-      // only premium users can share stories with links
-      /*
-        const url = `https://t.me/TestFSL_bot/fslhub?startapp=invite_${shared.loginData.link}`;
-        shareStory('https://firebasestorage.googleapis.com/v0/b/text2image-118de.appspot.com/o/Test%2FFSL.png?alt=media&token=1c0da5c9-e748-4916-96b5-d28ff99e7a6a', 
-          {
-            text: 'Yay! I just unlocked a trophy on FSL! 🏆',
-            widgetLink: {
-              url:url,
-              name: 'FSL Hub'
-            }
-          });
-      */
+      shareStory(url, {
+        text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
+      });
 
-      // comment for internal testing
-      // shareStory(url, 
-      //   {
-      //     text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
-      //   });
-      // shareStoryAPI(selectedTrophy.id);
+      trackStoryShare('trophy', {
+        trophy_id: selectedTrophy.id,
+        trophy_name: selectedTrophy.name,
+        trophy_status: selectedTrophy.status
+      }, shared.loginData?.userId);
+
+      shareStoryAPI(selectedTrophy.id);
     }
   };
 
@@ -384,7 +378,14 @@ const Frens = () => {
     console.log('Invite friends');
     const url = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
     console.log('Invite friends URL:', url);
-    // shareURL(url);
+    
+    // Log the invite friends event
+    logEvent(analytics, 'invite_friends_clicked', {
+        userId: shared.loginData?.userId || 'unknown',
+        timestamp: new Date().toISOString()
+    });
+    
+    shareURL(url);
   };
 
   const handleTrophyClick = (trophy) => {
@@ -398,6 +399,7 @@ const Frens = () => {
   };
 
   const closeOverlay = () => {
+    trackOverlayExit('trophy_details', shared.loginData?.link, 'frens');
     setShowOverlay(false);
     setSelectedTrophy(null);
   };
@@ -505,6 +507,13 @@ const Frens = () => {
       </div>
     );
   };
+
+  // Track overlay views
+  useEffect(() => {
+    if (showOverlay && selectedTrophy) {
+      trackOverlayView('trophy_details', shared.loginData?.link, 'frens');
+    }
+  }, [showOverlay, selectedTrophy]);
 
   return (
     <div className="frens-content">

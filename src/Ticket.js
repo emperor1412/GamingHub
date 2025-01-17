@@ -10,6 +10,7 @@ import starletIcon from './images/starlet.png';
 import scratch_ticket from './images/scratch_ticket.svg';
 import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
+import { trackUserAction } from './analytics';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
@@ -36,6 +37,19 @@ const Ticket = ({ onClose, getProfileData }) => {
     useEffect(() => {
         setupProfileData();
     }, [showTicket1]);
+
+    const handleTicketSelect = (ticketType) => {
+        trackUserAction('ticket_type_selected', {
+            ticket_type: ticketType,
+            tickets_available: ticket,
+            starlets: starlets,
+            is_available: ticketType === 'scratch' // only scratch tickets are currently available
+        }, shared.loginData?.userId);
+
+        if (ticketType === 'scratch') {
+            setShowTicket1(true);
+        }
+    };
 
     return (
         <>
@@ -68,24 +82,29 @@ const Ticket = ({ onClose, getProfileData }) => {
 
                     <div className="tickets-wrapper">
                         <div className="tickets-content">
-                            <button className="ticket-card-item active" onClick={()=> {
-                                setShowTicket1(true);
-                            }}>
+                            <button 
+                                className="ticket-card-item active" 
+                                onClick={() => handleTicketSelect('scratch')}
+                            >
                                 <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
                             </button>
 
-                            <button className="ticket-card-item disabled">
-                                <img src={bank_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                {/* <div className="coming-soon">Coming Soon</div> */}
+                            <button 
+                                className="ticket-card-item disabled"
+                                onClick={() => handleTicketSelect('bank')}
+                            >
+                                <img src={bank_ticket} alt="Bank Ticket" className="ticket-card-image" />
                             </button>
 
-                            <button className="ticket-card-item disabled">
-                                <img src={burn_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                {/* <div className="coming-soon">Coming Soon</div> */}
+                            <button 
+                                className="ticket-card-item disabled"
+                                onClick={() => handleTicketSelect('burn')}
+                            >
+                                <img src={burn_ticket} alt="Burn Ticket" className="ticket-card-image" />
                             </button>
 
                             <div className="info-box-ticket">
-                            EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
                             </div>
                         </div>
                     </div>

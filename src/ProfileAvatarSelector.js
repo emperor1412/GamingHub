@@ -11,6 +11,7 @@ import lock_icon from "./images/lock_trophy.png";
 import shared from './Shared';
 import unlock from './images/unlock.png';
 import LevelUp from './LevelUp';
+import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 
 const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(shared.userProfile ? shared.userProfile.pictureIndex : 0);
@@ -20,6 +21,15 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
 
+  useEffect(() => {
+    // Track view when component mounts
+    trackOverlayView('avatar_selector', shared.loginData?.link, 'profile');
+    return () => {
+      // Track exit when component unmounts
+      trackOverlayExit('avatar_selector', shared.loginData?.link, 'profile');
+    };
+  }, []);
+
   const handleAvatarSelect = (index) => {
     console.log('Avatar selected:', index);
     setSelectedIndex(index);
@@ -28,8 +38,22 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       setSelectedAvatar(index);
       setHasChanged(index !== shared.userProfile.pictureIndex);
       onSelect(shared.avatars[index % 3]);
+      
+      // Track avatar selection
+      trackUserAction('avatar_selected', {
+        avatar_index: index,
+        previous_avatar: shared.userProfile.pictureIndex,
+        is_unlocked: true
+      }, shared.loginData?.userId);
     } else {
       setShowLockOverlay(true);
+      
+      // Track attempt to select locked avatar
+      trackUserAction('avatar_selected', {
+        avatar_index: index,
+        is_unlocked: false,
+        user_level: shared.userProfile.level
+      }, shared.loginData?.userId);
     }
   };
 
@@ -63,9 +87,23 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             await getProfileData();
             console.log('Update new userProfile:', shared.userProfile);
             setHasChanged(false);
+
+            // Track successful avatar change
+            trackUserAction('avatar_changed', {
+              new_avatar_index: selectedAvatar,
+              previous_avatar_index: shared.userProfile.pictureIndex,
+              success: true
+            }, shared.loginData?.userId);
         }
         catch (error) {
             console.error('CheckIn error:', error);
+            // Track failed avatar change
+            trackUserAction('avatar_changed', {
+              attempted_avatar_index: selectedAvatar,
+              error_code: data.code,
+              success: false
+            }, shared.loginData?.userId);
+
             if (data.code === 102001) {
                 // login();
             }
@@ -82,6 +120,16 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
         setShowLoading(false);
       }
     }
+  };
+
+  // Track level up attempts from avatar selector
+  const handleLevelUpClick = () => {
+    trackUserAction('level_up_from_avatar', {
+      locked_avatar_index: selectedIndex,
+      current_level: shared.userProfile.level
+    }, shared.loginData?.userId);
+    setShowLockOverlay(false);
+    setShowLevelUp(true);
   };
 
   return (
@@ -192,10 +240,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                   LEVEL UP YOUR ACCOUNT<br/>
                   TO UNLOCK EXCLUSIVE PFPS!
                 </div>
-                <button className="level-up-button-pfp" onClick={() => {
-                  setShowLockOverlay(false);
-                  setShowLevelUp(true);
-                }}>
+                <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
                   LEVEL UP
                 </button>
               </div>
