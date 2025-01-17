@@ -70,7 +70,7 @@ const CheckIn = ({ checkInData, onClose }) => {
                 day: reward.day,
                 label: daySuffixes[index],
                 status: isActive ? 'active' : 'inactive',
-                starlets: reward.starlets,
+                starlets: reward.kmPoint,
                 ticket: reward.ticket
             };
         });
