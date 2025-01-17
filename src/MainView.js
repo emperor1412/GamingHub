@@ -25,6 +25,7 @@ import checkout from './images/checkout.svg';
 import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
+import { trackUserAction } from './analytics';
 
 let isMouseDown = false;
 let startX;
@@ -595,12 +596,16 @@ Response:
                                 key={index} 
                                 className="event-card" 
                                 onClick={(e) => {
-
                                     try {
                                         const moveDistance = Math.abs(e.pageX - startDragX);
                                         const moveTime = Date.now() - startDragTime;
                                         
                                         if (moveDistance < 2 && moveTime < 200) {
+                                            trackUserAction('banner_clicked', {
+                                                banner_index: index,
+                                                banner_name: event.name,
+                                                banner_url: event.url
+                                            }, shared.loginData?.link);
                                             openLink(event.url);
                                         }
                                     }
