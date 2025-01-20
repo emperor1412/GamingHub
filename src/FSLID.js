@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import shared from './Shared';
 import './FSLID.css';
 import FSLAuthorization from 'fsl-authorization';
@@ -10,52 +10,71 @@ import gmtIcon from './images/GMT_1.png';
 import ID_selected from './images/ID_selected.svg';
 
 const FSLID = () => {
-    const connectFSLID = () => {
-        console.log('Connect FSL ID clicked');
+    const [loading, setLoading] = useState(false);
+    const [state, setState] = useState(null);
 
-        const fetchKey = async () => {
-            const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
-            console.log('RandKey API:', randKeyApi);
+    const fetchKey = async () => {
+        setLoading(true);
+        const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
+        console.log('RandKey API:', randKeyApi);
 
-            fetch(randKeyApi, {
+        try {
+            const response = await fetch(randKeyApi, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
-            }).then(response => response.json()).then(async data => {
-                console.log('RandKey Response:', data);
-
-                if (data.code === 102001 || data.code === 102002) {
-                    console.log('Token expired, re-login');
-                    const loginResult = await shared.login(shared.initData);
-                    if (loginResult.success) {
-                        console.log('Login success, fetch key again');
-                        fetchKey();
-                    }
-                    return;
-                }
-                
-                const state = data.data;
-                const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
-    
-                console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
-    
-                const fslAuthorization = FSLAuthorization.init({
-                    responseType: 'code', // 'code' or 'token'
-                    appKey: 'MiniGame',
-                    redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-                    scope: 'basic,wallet,stepn', // Grant Scope
-                    state: state,
-                    usePopup: true, // Popup a window instead of jump to
-                    isApp: true,
-                    domain: 'https://gm3.joysteps.io/'
-                });
-    
-                fslAuthorization.signInV2();
             });
-        };
+            const data = await response.json();
+            console.log('RandKey Response:', data);
 
+            if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, re-login');
+                const loginResult = await shared.login(shared.initData);
+                if (loginResult.success) {
+                    console.log('Login success, fetch key again');
+                    return fetchKey();
+                }
+                setLoading(false);
+                return;
+            }
+            
+            setState(data.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching key:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchKey();
+    }, []);
+
+    const connectFSLID = () => {
+        console.log('Connect FSL ID clicked');
+        
+        if (!state) {
+            console.log('State not ready, fetching key...');
+            fetchKey();
+            return;
+        }
+
+        const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+        console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
+
+        const fslAuthorization = FSLAuthorization.init({
+            responseType: 'code', // 'code' or 'token'
+            appKey: 'MiniGame',
+            redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+            scope: 'basic,wallet,stepn', // Grant Scope
+            state: state,
+            usePopup: true, // Popup a window instead of jump to
+            isApp: true,
+            domain: 'https://gm3.joysteps.io/'
+        });
+
+        fslAuthorization.signInV2();
     };
 
     return (
@@ -129,16 +148,23 @@ const FSLID = () => {
                         <button 
                             className="fsl-id-signup-button"
                             onClick={connectFSLID}
+                            disabled={loading}
                         >
                             SIGN UP
                         </button>
                         <button 
                             className="fsl-id-connect-button"
                             onClick={connectFSLID}
+                            disabled={loading}
                         >
                             CONNECT FSL ID
                         </button>
                     </div>
+                </div>
+            )}
+            {loading && (
+                <div className="bank-step-loading-overlay">
+                    <div className="bank-step-loading-spinner"></div>
                 </div>
             )}
         </div>
