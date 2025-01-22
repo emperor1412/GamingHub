@@ -12,6 +12,45 @@ import ID_selected from './images/ID_selected.svg';
 const FSLID = () => {
     const [loading, setLoading] = useState(false);
     const [state, setState] = useState(null);
+    const [showFullEVM, setShowFullEVM] = useState(false);
+    const [showFullSolana, setShowFullSolana] = useState(false);
+
+    const maskAddress = (address) => {
+        if (!address) return '';
+        return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+    };
+
+    const copyToClipboard = async (text) => {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                // Use the Clipboard API if available and in secure context
+                await navigator.clipboard.writeText(text);
+            } else {
+                // Fallback for older browsers or non-secure contexts
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                
+                // Make the textarea out of viewport
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    document.execCommand('copy');
+                } finally {
+                    textArea.remove();
+                }
+            }
+            // You could add a toast notification here
+            console.log('Text copied successfully');
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
+    };
 
     const fetchKey = async () => {
         setLoading(true);
@@ -101,16 +140,38 @@ const FSLID = () => {
                             <div className="fsl-id-email">
                                 <img src={ID_selected} className="fsl-id-icon" alt="fsl" />
                                 <div className="fsl-id-email-content">
-                                    <div className="email-text">{shared.userProfile.email}</div>
-                                    <div className="wallet-text">{shared.userProfile.evmAddr}</div>
+                                    <div className="wallet-label">EVM Wallet Address</div>
+                                    <div className="wallet-text" onClick={() => setShowFullEVM(!showFullEVM)}>
+                                        {showFullEVM ? shared.userProfile.evmAddr : maskAddress(shared.userProfile.evmAddr)}
+                                        <button 
+                                            className="copy-button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                copyToClipboard(shared.userProfile.evmAddr);
+                                            }}
+                                        >
+                                            Copy
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="email-separator"></div>
                             <div className="fsl-id-email">
                                 <img src={ID_selected} className="fsl-id-icon" alt="fsl" />
                                 <div className="fsl-id-email-content">
-                                    <div className="email-text">{shared.userProfile.email}</div>
-                                    <div className="wallet-text">{shared.userProfile.solAddr}</div>
+                                    <div className="wallet-label">Solana Wallet Address</div>
+                                    <div className="wallet-text" onClick={() => setShowFullSolana(!showFullSolana)}>
+                                        {showFullSolana ? shared.userProfile.solAddr : maskAddress(shared.userProfile.solAddr)}
+                                        <button 
+                                            className="copy-button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                copyToClipboard(shared.userProfile.solAddr);
+                                            }}
+                                        >
+                                            Copy
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
