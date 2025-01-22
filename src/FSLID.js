@@ -86,6 +86,26 @@ const FSLID = () => {
         }
     };
 
+    const handleLogout = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(shared.server_url + `/api/app/fslUnBinding?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            if (data.code === 0) {
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchKey();
     }, []);
@@ -135,6 +155,9 @@ const FSLID = () => {
                                     {shared.userProfile.email}
                                 </div>
                             </div>
+                            <button className="logout-button" onClick={handleLogout}>
+                                Log out
+                            </button>
                         </div>
                         <div className="fsl-id-emails">
                             <div className="fsl-id-email">

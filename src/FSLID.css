@@ -33,6 +33,7 @@
     padding: 12px;
     background: #212121;
     border-radius: 8px;
+    position: relative;
 }
 
 .fsl-id-avatar {
@@ -409,4 +410,26 @@
     font-style: italic;
     font-weight: 400;
     line-height: 16px; /* 160% */
+}
+
+.logout-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #FF0000;
+    color: #FFF;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255, 0, 0, 0.4);
 }
