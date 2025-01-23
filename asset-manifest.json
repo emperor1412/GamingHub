@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.e94a8b85.css",
-    "main.js": "/GamingHub/static/js/main.9c6d0c6e.js",
+    "main.css": "/GamingHub/static/css/main.40b9598e.css",
+    "main.js": "/GamingHub/static/js/main.52811670.js",
     "static/js/453.30dafb68.chunk.js": "/GamingHub/static/js/453.30dafb68.chunk.js",
     "static/media/my_ticket.svg": "/GamingHub/static/media/my_ticket.98b373172c6b9a763db2fe34548fe933.svg",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -15,6 +15,9 @@
     "static/media/morchigame.svg": "/GamingHub/static/media/morchigame.614e79bfd8558440a0cd96f46b79bd97.svg",
     "static/media/leaderboard.svg": "/GamingHub/static/media/leaderboard.e1e827432beeb5463d194471f5aba747.svg",
     "static/media/FSL Games UI 2-08.png": "/GamingHub/static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
+    "static/media/lv10.png": "/GamingHub/static/media/lv10.df989920a8743f36bd36.png",
+    "static/media/lv8.png": "/GamingHub/static/media/lv8.c637511eae9fc43ffc04.png",
+    "static/media/lv9.png": "/GamingHub/static/media/lv9.1f7effd4576f3c9f6bd9.png",
     "static/media/GamesHubLoading.png": "/GamingHub/static/media/GamesHubLoading.0170452ae6dd38cd0e04.png",
     "static/media/scratch_ticket.svg": "/GamingHub/static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
     "static/media/bank_ticket.svg": "/GamingHub/static/media/bank_ticket.59a113c097caac3a3d525cd39bb62511.svg",
@@ -74,6 +77,7 @@
     "static/media/trophy_6_200px.png": "/GamingHub/static/media/trophy_6_200px.50f7af80ec493810a734.png",
     "static/media/sneaker_icon.png": "/GamingHub/static/media/sneaker_icon.320259d366757b32997e.png",
     "static/media/stepn_background.png": "/GamingHub/static/media/stepn_background.08455f8a2d8cc14f4ea8.png",
+    "static/media/Coming soon-05.png": "/GamingHub/static/media/Coming soon-05.2a90ee886501e9436007.png",
     "static/media/LFGO.png": "/GamingHub/static/media/LFGO.364707930addb09f1e2a.png",
     "static/media/trophy_2_200px.png": "/GamingHub/static/media/trophy_2_200px.121e6ec8645f06825bbd.png",
     "static/media/shadow.png": "/GamingHub/static/media/shadow.27395acaf6c283eab075.png",
@@ -118,12 +122,12 @@
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "/GamingHub/static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.e94a8b85.css.map": "/GamingHub/static/css/main.e94a8b85.css.map",
-    "main.9c6d0c6e.js.map": "/GamingHub/static/js/main.9c6d0c6e.js.map",
+    "main.40b9598e.css.map": "/GamingHub/static/css/main.40b9598e.css.map",
+    "main.52811670.js.map": "/GamingHub/static/js/main.52811670.js.map",
     "453.30dafb68.chunk.js.map": "/GamingHub/static/js/453.30dafb68.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e94a8b85.css",
-    "static/js/main.9c6d0c6e.js"
+    "static/css/main.40b9598e.css",
+    "static/js/main.52811670.js"
   ]
 }
