@@ -628,7 +628,7 @@ const Frens = () => {
                     <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
                     <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
                     <p className="trophy-overlay-description">
-                      REFER <span className="bold-text">{selectedTrophy.min} FRIENDS</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
+                      REFER <span className="bold-text">{selectedTrophy.min} {selectedTrophy.min <= 1 ? 'FRIEND' : 'FRIENDS'}</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
                     </p>
                   </div>
                 </>

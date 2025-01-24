@@ -33,6 +33,7 @@
     padding: 12px;
     background: #212121;
     border-radius: 8px;
+    position: relative;
 }
 
 .fsl-id-avatar {
@@ -89,16 +90,60 @@
     line-height: 22px; /* 157.143% */
 }
 
-.wallet-text {
-    color: #999;
-    word-wrap: break-word;
-    word-break: break-all;
-    /* APP/Body/Default/Body-S-Default */
+.wallet-label {
+    color: #83807F;
     font-family: "PP Neue Machina";
     font-size: 12px;
     font-style: italic;
     font-weight: 400;
-    line-height: 18px; /* 150% */
+    line-height: normal;
+    margin-bottom: 4px;
+}
+
+.wallet-text {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    cursor: pointer;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    word-break: break-all;
+    word-wrap: break-word;
+    min-height: 32px;
+}
+
+.wallet-text:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.copy-button {
+    background: rgba(0, 0, 255, 0.2);
+    border: 1px solid #0000FF;
+    color: #FFF;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    height: fit-content;
+    margin-top: 2px;
+}
+
+.copy-button:hover {
+    background: rgba(0, 0, 255, 0.4);
 }
 
 .email-separator {
@@ -365,4 +410,26 @@
     font-style: italic;
     font-weight: 400;
     line-height: 16px; /* 160% */
+}
+
+.logout-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #FF0000;
+    color: #FFF;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255, 0, 0, 0.4);
 }
