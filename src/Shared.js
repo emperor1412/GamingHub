@@ -35,8 +35,8 @@ import single_star_4 from './images/single_star_4.svg';
 import single_star_5 from './images/single_star_5.svg';
 
 const shared = {
-    server_url: 'https://gm14.joysteps.io',
-    app_link: 'https://t.me/TestFSL_bot/fslhub',
+    server_url: 'https://gamehub.fsl.com',
+    app_link: 'https://t.me/FSLGameHub_Bot/fslgamehub',
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
