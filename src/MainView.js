@@ -20,6 +20,7 @@ import my_ticket from './images/my_ticket.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
+import comingsoon from './images/Coming soon-05.png';
 import checkout from './images/checkout.svg';
 
 import { popup, openLink } from '@telegram-apps/sdk';
@@ -543,13 +544,13 @@ Response:
                             <img
                                 // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                                 // src={Frame4561}
-                                src={morchigame}
+                                src={comingsoon}
                                 alt="Morchi Game Coming Soon"
-                                className="locked-card-image"
+                                className="locked-card-image minigames"
                             /> 
                             <div className='locked-card-container-border'></div>
                             <div className='coming-soon-button'>Coming Soon</div>
-                            <div className='locked-card-text'>Morchi Game</div>
+                            <div className='locked-card-text'></div>
                         </div>
                         <img
                             src={locker}

@@ -17,6 +17,9 @@ import lv4 from './images/lv4.png';
 import lv5 from './images/lv5.png';
 import lv6 from './images/lv6.png';
 import lv7 from './images/lv7.png';
+import lv8 from './images/lv8.png';
+import lv9 from './images/lv9.png';
+import lv10 from './images/lv10.png';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
 const LevelUp = ({ onClose }) => {
@@ -32,8 +35,8 @@ const LevelUp = ({ onClose }) => {
     }, [showOverlay]);
 
     const getLevelImage = (level) => {
-        const iconImages = [lv0, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
-        if (level >= iconImages.length) return lv7;
+        const iconImages = [lv0, lv1, lv2, lv3, lv4, lv5, lv6, lv7, lv8, lv9, lv10];
+        if (level >= iconImages.length) return iconImages[iconImages.length - 1];
         return iconImages[level];
     };
 
