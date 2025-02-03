@@ -226,7 +226,7 @@ const FSLID = () => {
                     <div className="fsl-id-message">
                         <p className='fsl-id-note-title'>Create a New FSL Account?</p>
                         <p className='fsl-id-note-1'>THIS EMAIL IS NOT YET REGISTERED. WOULD YOU LIKE TO CREATE A NEW FSL ACCOUNT?</p>
-                        <p className="fsl-id-note">PLEASE NOTE: IF YOU HAVE A DAS HERO OR MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.</p>
+                        <p className="fsl-id-note">PLEASE NOTE: IF YOU HAVE A GAS HERO OR MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.</p>
                     </div>
                     <div className="fsl-id-buttons">
                         <button 
