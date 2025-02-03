@@ -432,7 +432,7 @@
     flex: 1;
     overflow-y: auto;
     padding-top: 80px;
-    padding-bottom: 100px;
+    padding-bottom: 30%; /*120px;*/
     padding-left: 20px;
     padding-right: 20px;
     -webkit-overflow-scrolling: touch;
@@ -451,8 +451,8 @@
     -webkit-mask-image: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(0, 0, 0, 0.1) 8%,
-        black 12%,
+        rgba(0, 0, 0, 0.1) 6%,
+        black 10%,
         black 88%,
         rgba(0, 0, 0, 0.1) 92%,
         transparent 100%
@@ -460,8 +460,8 @@
     mask-image: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(0, 0, 0, 0.1) 8%,
-        black 12%,
+        rgba(0, 0, 0, 0.1) 6%,
+        black 10%,
         black 88%,
         rgba(0, 0, 0, 0.1) 92%,
         transparent 100%
