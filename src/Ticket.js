@@ -10,6 +10,8 @@ import starletIcon from './images/starlet.png';
 import scratch_ticket from './images/scratch_ticket.svg';
 import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
+import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
+import scratch_ticket_button_bg_disabled from './images/scratch_ticket_button_bg_disabled.png';
 import { trackUserAction } from './analytics';
 
 const Ticket = ({ onClose, getProfileData }) => {
@@ -83,24 +85,50 @@ const Ticket = ({ onClose, getProfileData }) => {
                     <div className="tickets-wrapper">
                         <div className="tickets-content">
                             <button 
-                                className="ticket-card-item active" 
+                                className="scratch-ticket-button" 
                                 onClick={() => handleTicketSelect('scratch')}
                             >
-                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                                <div className='scratch-ticket-button-image-container'>
+                                    {/* <img src={scratch_ticket} alt="Scratch Ticket" className="scratch-ticket-button-image" /> */}
+                                    <img src={scratch_ticket_button_bg} alt="Scratch Ticket" className="scratch-ticket-button-image" />
+                                    
+                                    <div className='scratch-ticket-button-container-border'></div>
+                                    <h3 className="scratch-event-card-title">SCRATCH TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Scratch Your Tickets to<br></br>Reveal Rewards!</p>
+                                    <div className="scratch-check-out-button">
+                                        Scratch Tickets
+                                    </div>
+                                </div>
                             </button>
 
                             <button 
-                                className="ticket-card-item disabled"
+                                className="scratch-ticket-button disabled" 
                                 onClick={() => handleTicketSelect('bank')}
                             >
-                                <img src={bank_ticket} alt="Bank Ticket" className="ticket-card-image" />
+                                <div className='scratch-ticket-button-image-container'>
+                                    <img src={scratch_ticket_button_bg_disabled} alt="Bank Ticket" className="scratch-ticket-button-image" />
+                                    <div className='scratch-ticket-button-container-border disabled'></div>
+                                    <h3 className="scratch-event-card-title">BANK TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Save your tickets to<br></br>enter a lucky draw</p>
+                                    <div className="scratch-check-out-button disabled">
+                                        Coming Soon
+                                    </div>
+                                </div>
                             </button>
 
                             <button 
-                                className="ticket-card-item disabled"
+                                className="scratch-ticket-button disabled"
                                 onClick={() => handleTicketSelect('burn')}
                             >
-                                <img src={burn_ticket} alt="Burn Ticket" className="ticket-card-image" />
+                                <div className='scratch-ticket-button-image-container'>
+                                    <img src={scratch_ticket_button_bg_disabled} alt="Burn Ticket" className="scratch-ticket-button-image" />
+                                    <div className='scratch-ticket-button-container-border disabled'></div>
+                                    <h3 className="scratch-event-card-title">BURN TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Burn 1 ticket daily for 7<br></br>consecutive days and<br></br> stand a chance to receive<br></br> a GOLDEN TICKET</p>
+                                    <div className="scratch-check-out-button disabled">
+                                        Coming Soon
+                                    </div>
+                                </div>
                             </button>
 
                             <div className="info-box-ticket">
