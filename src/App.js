@@ -429,7 +429,7 @@ Response:
   const versionStyle = {
     position: 'fixed',
     bottom: '2px',
-    right: '20px',
+    right: '30px',
     fontSize: '10px',
     color: 'rgba(255, 255, 255, 0.5)',
     zIndex: 1000
