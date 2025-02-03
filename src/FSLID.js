@@ -149,15 +149,15 @@ const FSLID = () => {
                                 <div className="name-with-level">
                                     {shared.user.firstName}
                                     <span className="level-tag">Lv.{shared.userProfile.level || 0}</span>
+                                    <button className="logout-button" onClick={handleLogout}>
+                                        Log out
+                                    </button>
                                 </div>
                                 <div className="fsl-id-hash">
                                     <img src={ID_selected} className="fsl-id-icon-1" alt="fsl" />
                                     {shared.userProfile.email}
                                 </div>
                             </div>
-                            <button className="logout-button" onClick={handleLogout}>
-                                Log out
-                            </button>
                         </div>
                         <div className="fsl-id-emails">
                             <div className="fsl-id-email">

@@ -120,6 +120,10 @@ Response:
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
             const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/xkD++/9T2na4RgKvFkcBnIokAAbpwqtK6Mrl4EYEZcg=.png';
 
+            // shareStory(url, {
+            //     text: 'I just scratched a ticket and claimed a reward!',
+            //   });
+
             trackStoryShare('ticket', {
                 reward_claimed: true,
                 invite_link: inviteLink
