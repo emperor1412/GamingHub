@@ -80,7 +80,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     const handleFindOutMore = () => {
         // Handle find out more action
-        window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
+        // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
+        window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
     };
 
     const getBankSteps = async (depth = 0) => {
