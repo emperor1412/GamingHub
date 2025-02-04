@@ -480,7 +480,7 @@ Response:
                                     <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
                                         SCRATCH 1 TICKET
                                     </button>
-                                    <button className="overlay-button-ticket1 secondary" disabled='true'>
+                                    <button className="overlay-button-ticket1 secondary" disabled={true}>
                                         SCRATCH ALL TICKETS
                                         <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                     </button>
