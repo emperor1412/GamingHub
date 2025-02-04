@@ -44,6 +44,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [canClaim, setCanClaim] = React.useState(false);
     const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = React.useState(false);
     const [starletsReceived, setStarletsReceived] = React.useState(0);
+    const [canReceive, setCanReceive] = React.useState(0);
     const [distance, setDistance] = React.useState(0);
     const [time, setTime] = React.useState(0);
     const [steps, setSteps] = React.useState(0);
@@ -93,6 +94,9 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             console.log('Bank steps response:', data);
             
             if (data.code === 0) {
+                // data.data.received = 110;
+                // data.data.canReceive = 240;
+
                 console.log('Bank steps data:', {
                     received: data.data.received,
                     canReceive: data.data.canReceive,
@@ -102,6 +106,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     energy: data.data.energy
                 });
                 setStarletsReceived(data.data.received);
+                setCanReceive(data.data.canReceive);
                 setDistance((data.data.distance * 0.1 / 1000).toFixed(2));
                 setTime(Math.round(data.data.time * 0.1));
                 setSteps(data.data.steps);
@@ -361,7 +366,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <img src={star5} alt="" className="bank-step-star star5" />
                         </div>
                         <div className="bank-step-overlay-text">
-                            <div>STARLETS CLAIMED</div>
+                            <div>{canReceive - starletsReceived} STARLETS CLAIMED</div>
                             <div>SUCCESSFULLY!</div>
                         </div>
 
