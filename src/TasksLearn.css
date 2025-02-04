@@ -96,9 +96,8 @@
     line-height: 1.5;
     margin-bottom: 32px;
     white-space: pre-line;
+    font-family: 'Sora', sans-serif;
 }
-
-
 
 .answers-container {
     display: flex;
@@ -109,11 +108,11 @@
     padding: 16px;
     border-radius: 12px;
 
-    color: var(--tokens-Text-text_med, #A9A7A7);
-    font-family: "PP Neue Machina";
+    color: #A9A7A7;
+    font-family: "Sora";
     font-size: 12px;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 500;
     line-height: normal;
     text-transform: uppercase;
 }
@@ -131,7 +130,7 @@
     position: relative;
 
     color: #D4D3D3;
-    font-family: "PP Neue Machina";
+    font-family: "Sora";
     font-size: 12px;
     font-style: italic;
     font-weight: 600;
@@ -413,10 +412,10 @@
 
 .quiz-question {
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: 'Sora', sans-serif;
     font-size: 18px;
-    font-style: italic;
-    font-weight: 800;
+    font-style: normal;
+    font-weight: 600;
     line-height: normal;
     text-transform: uppercase;
 }

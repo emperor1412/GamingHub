@@ -86,7 +86,9 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
+            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
+
             shareStory(url, {
                 text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! ��`,
             });
