@@ -21,3 +21,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/fonts/Sora.zip
+src/fonts/Sora/OFL.txt
+src/fonts/Sora/README.txt
+src/fonts/Sora/Sora-VariableFont_wght.ttf
+src/fonts/Sora/static/Sora-Bold.ttf
+src/fonts/Sora/static/Sora-ExtraBold.ttf
+src/fonts/Sora/static/Sora-ExtraLight.ttf
+src/fonts/Sora/static/Sora-Light.ttf
+src/fonts/Sora/static/Sora-Medium.ttf
+src/fonts/Sora/static/Sora-Regular.ttf
+src/fonts/Sora/static/Sora-SemiBold.ttf
+src/fonts/Sora/static/Sora-Thin.ttf
