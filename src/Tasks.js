@@ -421,6 +421,20 @@ const Tasks = ({
         }
     };
 
+    const handleFinishTaskClicked = async (task) => {
+        if (task.type === 1) {
+            if (openLink.isAvailable()) {
+                openLink(task.url, {
+                    tryBrowser: 'chrome',
+                    tryInstantView: true,
+                });
+            }
+            else {
+                window.open(task.url, '_blank');
+            }
+        }
+    };
+
     const handleStartTask = async (task) => {
         // Track task start
         trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'start', {
@@ -485,7 +499,7 @@ const Tasks = ({
                         START
                     </button>
                 ) : (
-                    <button className="done-button">
+                    <button className="done-button" onClick={() => handleFinishTaskClicked(task)}>
                         <img src={done_icon} alt="Done" />
                         DONE
                     </button>
