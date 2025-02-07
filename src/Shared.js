@@ -124,6 +124,15 @@ const shared = {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login data:', data);
+
+/*
+data object
+{
+    "link": 21201,
+    "token": "6z4J61p7506409405540464606_9432124300",
+    "inviter": 0
+}
+*/
                 
                 if (data.code === 0) {
                     const loginDataValue = data.data;

@@ -12,6 +12,15 @@ import Frens from './Frens';
 import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
 import BankSteps from './BankSteps';
+import { 
+  trackSectionView, 
+  trackNavigation, 
+  trackOverlayView,
+  trackOverlayExit,
+  trackUserAction,
+  trackSessionStart,
+  trackDeviceInfo
+} from './analytics';
 
 import HomeIcon_selected from './images/Home_selected.svg';
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -40,6 +49,8 @@ import lock_icon from "./images/lock_trophy.png";
 import loading_background from "./images/GamesHubLoading.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
+import { analytics } from './Firebase';
+
 
 function App() {
   const { initDataRaw } = retrieveLaunchParams();
@@ -68,6 +79,7 @@ function App() {
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
+  const [previousTab, setPreviousTab] = useState(null);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -167,16 +179,12 @@ Response:
                 setLoginData(loginResult.loginData);
                 setIsLoggedIn(true);
 
+                // Track session start and device info when user logs in
+                trackSessionStart(loginResult.loginData?.link);
+
                 await getProfileData(loginResult.loginData);
 
                 if (popup.open.isAvailable()) {
-                    // const promise = popup.open({
-                    //     title: 'Success',
-                    //     message: "Login Success",
-                    //     buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    // });
-                    // const buttonId = await promise;
-                    
                     const result = await checkIn(loginResult.loginData);
                     if(result == 1) {
                         setShowCheckInAnimation(true);
@@ -198,7 +206,6 @@ Response:
         }
     } catch (error) {
         console.error('Initialization error:', error);
-        // setIsLoggedIn(false);
     } finally {
         setIsLoading(false);
         initRef.current = false;
@@ -249,9 +256,8 @@ Response:
   useEffect(() => {
     console.log('App useEffect called');
     shared.initData = initDataRaw;
-    // console.log("initDataRaw: ", initDataRaw);
 
-  // Get the hash without the # symbol
+    // Get the hash without the # symbol
     const hash = window.location.hash.substring(1);
 
     // Create URLSearchParams object from the hash
@@ -267,10 +273,9 @@ Response:
     // Get start_param
     const startParam = webAppParams.get('start_param');
     console.log('hash:', hash);
-    console.log('startParam:', startParam); // Will output: "invite_21201"
+    console.log('startParam:', startParam);
 
     // get invite code from the start param
-    // sample param: "invite_21201__referral_1234__otherParam_5678"
     if (startParam) {
         const paramsArray = startParam.split('__');
         for (const param of paramsArray) {
@@ -304,6 +309,9 @@ Response:
     shared.user = userData;
     setUser(userData);
 
+    // Track initial device info even before login
+    trackDeviceInfo();
+
     console.log("initDataRaw: ", initDataRaw);
     login();
     
@@ -315,6 +323,63 @@ Response:
       .then(version => setBuildVersion(version))
       .catch(error => console.error('Error loading version:', error));
   }, []);
+
+  // Track tab changes
+  useEffect(() => {
+    if (previousTab) {
+      // Track navigation flow
+      trackNavigation(previousTab, activeTab, shared.loginData?.link);
+    }
+    // Track entry to new section
+    trackSectionView(activeTab, shared.loginData?.link);
+    setPreviousTab(activeTab);
+  }, [activeTab]);
+
+  // Track overlay views
+  useEffect(() => {
+    if (showCheckInView) {
+      trackOverlayView('checkin', shared.loginData?.link);
+    }
+    if (showProfileView) {
+      trackOverlayView('profile', shared.loginData?.link);
+    }
+    if (showTicketView) {
+      trackOverlayView('ticket', shared.loginData?.link);
+    }
+    if (showBankStepsView) {
+      trackOverlayView('banksteps', shared.loginData?.link);
+    }
+  }, [showCheckInView, showProfileView, showTicketView, showBankStepsView]);
+
+  // Track overlay exits
+  const handleOverlayClose = (overlayName) => {
+    trackOverlayExit(overlayName, shared.loginData?.link, activeTab);
+  };
+
+  // Modified overlay close handlers
+  const handleCheckInClose = () => {
+    handleOverlayClose('checkin');
+    setShowCheckInView(false);
+    setActiveTab('home');
+  };
+
+  const handleProfileClose = () => {
+    handleOverlayClose('profile');
+    setShowProfileView(false);
+    setActiveTab('home');
+  };
+
+  const handleTicketClose = () => {
+    handleOverlayClose('ticket');
+    setShowTicketView(false);
+    setActiveTab('home');
+  };
+
+  const handleBankStepsClose = () => {
+    handleOverlayClose('banksteps');
+    setShowBankStepsView(false);
+    setActiveTab('home');
+  };
 
   const renderActiveView = () => {
     switch (activeTab) {
@@ -364,7 +429,7 @@ Response:
   const versionStyle = {
     position: 'fixed',
     bottom: '2px',
-    right: '20px',
+    right: '30px',
     fontSize: '10px',
     color: 'rgba(255, 255, 255, 0.5)',
     zIndex: 1000
@@ -406,7 +471,7 @@ Response:
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
                 {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
                 {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
                 <img src={market_locked} alt="Market" />
@@ -435,41 +500,39 @@ Response:
       )
       : showCheckInView ?
       (
-        <CheckIn checkInData={checkInData} onClose={() => {
-          setShowCheckInView(false);
-          setActiveTab('home');
-        }}/>
+        <CheckIn 
+          checkInData={checkInData} 
+          onClose={handleCheckInClose}
+        />
       )
       : showProfileView ?
       (
-        <Profile onClose={() => {
-            setShowProfileView(false);
-            setActiveTab('home');
-          }}
+        <Profile 
+          onClose={handleProfileClose}
           getProfileData={getProfileData}
           showFSLIDScreen={() => {
+            handleOverlayClose('profile');
             setShowProfileView(false);
             setActiveTab('fslid');
-          }}/>
+          }}
+        />
       )
       : showTicketView ?
       (
-        <Ticket onClose={() => {
-            setShowTicketView(false);
-            setActiveTab('home');
-          }} 
+        <Ticket 
+          onClose={handleTicketClose}
           getProfileData={getProfileData}
         />
       )
       : showBankStepsView ?
       (
-        <BankSteps showFSLIDScreen={() => {
-          setShowBankStepsView(false);
-          setActiveTab('fslid');
-        }} onClose={() => {
+        <BankSteps 
+          showFSLIDScreen={() => {
+            handleOverlayClose('banksteps');
             setShowBankStepsView(false);
-            setActiveTab('home');
+            setActiveTab('fslid');
           }} 
+          onClose={handleBankStepsClose}
         />
       )
       :
@@ -489,7 +552,7 @@ Response:
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
               {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
               {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
               <img src={market_locked} alt="Market" />

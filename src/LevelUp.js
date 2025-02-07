@@ -9,6 +9,7 @@ import './Share.css';
 import './LevelUp.css';
 import { shareStory } from '@telegram-apps/sdk';
 import shared from './Shared';
+import lv0 from './images/lv0.png';
 import lv1 from './images/lv1.png';
 import lv2 from './images/lv2.png';
 import lv3 from './images/lv3.png';
@@ -16,15 +17,26 @@ import lv4 from './images/lv4.png';
 import lv5 from './images/lv5.png';
 import lv6 from './images/lv6.png';
 import lv7 from './images/lv7.png';
+import lv8 from './images/lv8.png';
+import lv9 from './images/lv9.png';
+import lv10 from './images/lv10.png';
+import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
 const LevelUp = ({ onClose }) => {
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
     const [progress, setProgress] = useState(0);
 
+    // Track overlay views
+    useEffect(() => {
+        if (showOverlay) {
+            trackOverlayView('level_up_success', shared.loginData?.link, 'level_up');
+        }
+    }, [showOverlay]);
+
     const getLevelImage = (level) => {
-        const iconImages = [iconMarty, lv1, lv2, lv3, lv4, lv5, lv6, lv7];
-        if (level >= iconImages.length) return lv7;
+        const iconImages = [lv0, lv1, lv2, lv3, lv4, lv5, lv6, lv7, lv8, lv9, lv10];
+        if (level >= iconImages.length) return iconImages[iconImages.length - 1];
         return iconImages[level];
     };
 
@@ -74,10 +86,18 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
+            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
+
             shareStory(url, {
-                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
+                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! ��`,
             });
+
+            trackStoryShare('level_up', {
+                level: shared.userProfile.level,
+                previous_level: shared.userProfile.level - 1
+            }, shared.loginData?.userId);
+
             setShowOverlay(false);
             
             try {
@@ -128,6 +148,13 @@ const LevelUp = ({ onClose }) => {
     useEffect(() => {
         setup();
     }, []);
+
+    // Modified overlay close handler
+    const handleOverlayClose = () => {
+        trackOverlayExit('level_up_success', shared.loginData?.link, 'level_up');
+        setShowOverlay(false);
+        setup();
+    };
 
     return (
         <div className="level-up-container">
@@ -190,7 +217,7 @@ const LevelUp = ({ onClose }) => {
             </div>
 
             {showOverlay && (
-                <div className="level-up-overlay-container" onClick={() => setShowOverlay(false)}>
+                <div className="level-up-overlay-container" onClick={() => handleOverlayClose()}>
                     <div className="level-up-overlay-content" onClick={e => e.stopPropagation()}>
                         <div className="level-up-overlay-promotion">
                             CONGRATULATIONS!<br />
@@ -216,10 +243,7 @@ const LevelUp = ({ onClose }) => {
                             Share To Story 20 Starlets
                         </button>
                         </div>
-                        <button className="level-up-okay-button" onClick={() => {
-                            setShowOverlay(false);
-                            setup();
-                        }}>
+                        <button className="level-up-okay-button" onClick={handleOverlayClose}>
                             Okay
                         </button>
                     </div>

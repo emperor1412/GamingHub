@@ -10,17 +10,22 @@ import starletIcon from './images/starlet.png';
 import scratch_ticket from './images/scratch_ticket.svg';
 import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
+import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
+import scratch_ticket_button_bg_disabled from './images/scratch_ticket_button_bg_disabled.png';
+import { trackUserAction } from './analytics';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
     const [starlets, setStarlets] = useState(0);
     const [showTicket1, setShowTicket1] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const setupProfileData = async () => {
-
-        // await getProfileData();
+        setLoading(true);
+        await getProfileData();
 
         if (!shared.userProfile || !shared.userProfile.UserToken) {
+            setLoading(false);
             return;
         }
         const userTicket = shared.getTicket();
@@ -29,16 +34,34 @@ const Ticket = ({ onClose, getProfileData }) => {
         if (userTicket) {
             setStarlets(userStarlets);
             setTicket(userTicket);
-            // setTicket(1);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
         setupProfileData();
     }, [showTicket1]);
 
+    const handleTicketSelect = (ticketType) => {
+        trackUserAction('ticket_type_selected', {
+            ticket_type: ticketType,
+            tickets_available: ticket,
+            starlets: starlets,
+            is_available: ticketType === 'scratch' // only scratch tickets are currently available
+        }, shared.loginData?.userId);
+
+        if (ticketType === 'scratch') {
+            setShowTicket1(true);
+        }
+    };
+
     return (
         <>
+            {loading && (
+                <div className="loading-overlay">
+                    LOADING...
+                </div>
+            )}
             {showTicket1 ? (
                 <Ticket1 starletsData={starlets} getProfileData={getProfileData} onClose={() => {
                     setShowTicket1(false);
@@ -68,24 +91,55 @@ const Ticket = ({ onClose, getProfileData }) => {
 
                     <div className="tickets-wrapper">
                         <div className="tickets-content">
-                            <button className="ticket-card-item active" onClick={()=> {
-                                setShowTicket1(true);
-                            }}>
-                                <img src={scratch_ticket} alt="Scratch Ticket" className="ticket-card-image" />
+                            <button 
+                                className="scratch-ticket-button" 
+                                onClick={() => handleTicketSelect('scratch')}
+                            >
+                                <div className='scratch-ticket-button-image-container'>
+                                    {/* <img src={scratch_ticket} alt="Scratch Ticket" className="scratch-ticket-button-image" /> */}
+                                    <img src={scratch_ticket_button_bg} alt="Scratch Ticket" className="scratch-ticket-button-image" />
+                                    
+                                    <div className='scratch-ticket-button-container-border'></div>
+                                    <h3 className="scratch-event-card-title">SCRATCH TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Scratch Your Tickets to<br></br>Reveal Rewards!</p>
+                                    <div className="scratch-check-out-button">
+                                        Scratch Tickets
+                                    </div>
+                                </div>
                             </button>
 
-                            <button className="ticket-card-item disabled">
-                                <img src={bank_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                {/* <div className="coming-soon">Coming Soon</div> */}
+                            <button 
+                                className="scratch-ticket-button disabled" 
+                                onClick={() => handleTicketSelect('bank')}
+                            >
+                                <div className='scratch-ticket-button-image-container'>
+                                    <img src={scratch_ticket_button_bg_disabled} alt="Bank Ticket" className="scratch-ticket-button-image" />
+                                    <div className='scratch-ticket-button-container-border disabled'></div>
+                                    <h3 className="scratch-event-card-title">BANK TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Save your tickets to<br></br>enter a lucky draw</p>
+                                    <div className="scratch-check-out-button disabled">
+                                        Coming Soon
+                                    </div>
+                                </div>
                             </button>
 
-                            <button className="ticket-card-item disabled">
-                                <img src={burn_ticket} alt="Scratch Ticket" className="ticket-card-image" />
-                                {/* <div className="coming-soon">Coming Soon</div> */}
+                            <button 
+                                className="scratch-ticket-button disabled"
+                                onClick={() => handleTicketSelect('burn')}
+                            >
+                                <div className='scratch-ticket-button-image-container'>
+                                    <img src={scratch_ticket_button_bg_disabled} alt="Burn Ticket" className="scratch-ticket-button-image" />
+                                    <div className='scratch-ticket-button-container-border disabled'></div>
+                                    <h3 className="scratch-event-card-title">BURN TICKET</h3>
+                                    <p className="scratch-event-card-subtitle">Burn 1 ticket daily for 7<br></br>consecutive days and<br></br> stand a chance to receive<br></br> a GOLDEN TICKET</p>
+                                    <div className="scratch-check-out-button disabled">
+                                        Coming Soon
+                                    </div>
+                                </div>
                             </button>
 
                             <div className="info-box-ticket">
-                            EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
                             </div>
                         </div>
                     </div>

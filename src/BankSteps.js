@@ -13,6 +13,7 @@ import star4 from './images/single_star_4.svg';
 import star5 from './images/single_star_5.svg';
 import starlet from './images/starlet.png';
 import { shareStory } from '@telegram-apps/sdk';
+import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
 /*
 url: /app/getBankSteps
@@ -43,6 +44,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [canClaim, setCanClaim] = React.useState(false);
     const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = React.useState(false);
     const [starletsReceived, setStarletsReceived] = React.useState(0);
+    const [canReceive, setCanReceive] = React.useState(0);
     const [distance, setDistance] = React.useState(0);
     const [time, setTime] = React.useState(0);
     const [steps, setSteps] = React.useState(0);
@@ -79,7 +81,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     const handleFindOutMore = () => {
         // Handle find out more action
-        window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
+        // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
+        window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
     };
 
     const getBankSteps = async (depth = 0) => {
@@ -91,6 +94,9 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             console.log('Bank steps response:', data);
             
             if (data.code === 0) {
+                // data.data.received = 110;
+                // data.data.canReceive = 240;
+
                 console.log('Bank steps data:', {
                     received: data.data.received,
                     canReceive: data.data.canReceive,
@@ -100,6 +106,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     energy: data.data.energy
                 });
                 setStarletsReceived(data.data.received);
+                setCanReceive(data.data.canReceive);
                 setDistance((data.data.distance * 0.1 / 1000).toFixed(2));
                 setTime(Math.round(data.data.time * 0.1));
                 setSteps(data.data.steps);
@@ -187,12 +194,30 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     text: inviteLink,
                     button_text: 'Join Now',
                 });
+
+                trackStoryShare('bank_steps', {
+                    invite_link: inviteLink,
+                    bank_steps_status: shared.userProfile.fslId !== 0 ? 'connected' : 'not_connected'
+                }, shared.loginData?.userId);
+
                 await claimRewardFromSharingStory();
                 setShowOverlayClaimSuccess(false);
             } catch (error) {
                 console.error('Error sharing story:', error);
             }
         }
+    };
+
+    // Track overlay views
+    useEffect(() => {
+        if (showOverlayClaimSuccess) {
+            trackOverlayView('bank_steps_success', shared.loginData?.link, 'bank_steps');
+        }
+    }, [showOverlayClaimSuccess]);
+
+    const handleCloseSuccessOverlay = () => {
+        trackOverlayExit('bank_steps_success', shared.loginData?.link, 'bank_steps');
+        setShowOverlayClaimSuccess(false);
     };
 
     if (shared.userProfile.fslId === 0) {
@@ -341,7 +366,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <img src={star5} alt="" className="bank-step-star star5" />
                         </div>
                         <div className="bank-step-overlay-text">
-                            <div>STARLETS CLAIMED</div>
+                            <div>{canReceive - starletsReceived} STARLETS CLAIMED</div>
                             <div>SUCCESSFULLY!</div>
                         </div>
 
@@ -358,7 +383,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                         <button 
                             className="action-button" 
-                            onClick={() => setShowOverlayClaimSuccess(false)}
+                            onClick={handleCloseSuccessOverlay}
                         >
                             <span>DONE</span>
                         </button>
