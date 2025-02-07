@@ -200,11 +200,11 @@ const FSLID = () => {
                         </div>
                     </div>
                     <div className="fsl-id-stats">
-                        <div className="fsl-id-stat">
+                        {/* <div className="fsl-id-stat">
                             <img src={starletIcon} className="fsl-stat-icon" alt="starlet" />
                             <span className="fsl-stat-label">Starlets</span>
                             <span className="stat-value">{shared.getStarlets()}</span>
-                        </div>
+                        </div> */}
                         <div className="fsl-id-stat">
                             <img src={fsl_point} className="fsl-stat-icon" alt="fsl" />
                             <span className="fsl-stat-label">FSL Point</span>
