@@ -14,6 +14,7 @@ const FSLID = () => {
     const [state, setState] = useState(null);
     const [showFullEVM, setShowFullEVM] = useState(false);
     const [showFullSolana, setShowFullSolana] = useState(false);
+    const [GMTBalance, setGMTBalance] = useState(0);
 
     const maskAddress = (address) => {
         if (!address) return '';
@@ -106,8 +107,15 @@ const FSLID = () => {
         }
     };
 
+    const getGMTBalance = async () => {
+        setGMTBalance(shared.GMT);
+        await shared.getGMTBalance();
+        setGMTBalance(shared.GMT);
+    };
+
     useEffect(() => {
         fetchKey();
+        getGMTBalance();
     }, []);
 
     const connectFSLID = () => {
@@ -213,7 +221,7 @@ const FSLID = () => {
                         <div className="fsl-id-stat">
                             <img src={gmtIcon} className="fsl-stat-icon" alt="gmt" />
                             <span className="fsl-stat-label">GMT</span>
-                            <span className="stat-value">0</span>
+                            <span className="stat-value">{GMTBalance}</span>
                         </div>
                     </div>
                 </div>
