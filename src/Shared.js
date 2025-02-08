@@ -34,6 +34,18 @@ import single_star_3 from './images/single_star_3.svg';
 import single_star_4 from './images/single_star_4.svg';
 import single_star_5 from './images/single_star_5.svg';
 
+const { Connection, PublicKey } = require('@solana/web3.js');
+const { Web3 } = require('web3');
+const tokenABI = [
+    {
+        "constant": true,
+        "inputs": [{"name": "_owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "balance", "type": "uint256"}],
+        "type": "function"
+    }
+];
+
 const shared = {
     server_url: 'https://gm14.joysteps.io',
     app_link: 'https://t.me/TestFSL_bot/fslhub',
@@ -80,6 +92,10 @@ const shared = {
     initData : null,
     user : null,
     fsl_binding_code : null,
+    GMT: 0,
+    GMT_Solana: 0,
+    GMT_Polygon: 0,
+    getGMT: false,
 
     // Add these to the shared object
     starImages: {
@@ -245,6 +261,12 @@ data object
                 ];
 
                 shared.profileItems = profileItems;
+
+                if (shared.userProfile && shared.userProfile.fslId && !shared.getGMT) {
+                    shared.getGMT = true;
+                    shared.getGMTBalance();
+                }
+
                 return {
                     success: true,
                     userProfile: userProfileData,
@@ -272,6 +294,19 @@ data object
                 error: error.message,
                 data: null
             };
+        }
+    },
+
+    getGMTBalance : async () => {
+        if (shared.userProfile && shared.userProfile.fslId) {
+
+            const balanceSolana = await shared.getSolanaGMTBalance(shared.userProfile.solAddr);
+            shared.GMT_Solana = balanceSolana;
+
+            const balancePolygon = await shared.getPolygonGMTBalance(shared.userProfile.evmAddr);
+            shared.GMT_Polygon = balancePolygon;
+
+            shared.GMT = shared.GMT_Solana + shared.GMT_Polygon;
         }
     },
 
@@ -371,6 +406,105 @@ data object
     getTicket : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10010);
         return retVal?.num || 0;
+    },
+
+    getSolanaGMTBalance : async (walletAddress) => {
+        console.log('Get Solana GMT balance for wallet:', walletAddress);
+
+        // Check if wallet address is valid
+        if (!walletAddress) {
+            console.log('No wallet address provided');
+            return 0;
+        }
+
+        // GMT token mint address on Solana
+        const GMT_MINT = new PublicKey('7i5KKsX2weiTkry7jA4ZwSuXGhs5eJBEjY8vVxR4pfRx');
+        
+        try {
+            // Initialize connection with commitment
+            const connection = new Connection('https://lb2.stepn.com/', 'confirmed');
+            const wallet = new PublicKey(walletAddress);
+
+            // Get token accounts by owner
+            const accounts = await connection.getParsedTokenAccountsByOwner(
+                wallet,
+                { mint: GMT_MINT }
+            );
+
+            console.log('GMT accounts Solana:', accounts);
+
+            if (accounts.value.length > 0) {
+                // Get the first account's balance
+                const balance = accounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+                console.log('GMT balance Solana:', balance);
+                return balance;
+            }
+            return 0;
+        } catch (error) {
+            console.error('Error getting Solana GMT balance:', error);
+            return 0;
+        }
+    },
+
+    getPolygonGMTBalance : async (walletAddress) => {
+        console.log('Get Polygon GMT balance for wallet:', walletAddress);
+
+        // Check if wallet address is valid
+        if (!walletAddress) {
+            console.log('No wallet address provided');
+            return 0;
+        }
+
+        // GMT token contract address on Polygon
+        const GMT_CONTRACT = '0x714DB550b574b3E927af3D93E26127D15721D4C2';
+        
+        try {
+            // Initialize Web3 with Polygon RPC
+            const web3 = new Web3('https://lb5.stepn.com/');
+            
+            // Create contract instance
+            const contract = new web3.eth.Contract(tokenABI, GMT_CONTRACT);
+    
+            try {
+                // Get balance with timeout
+                const balance = await Promise.race([
+                    contract.methods.balanceOf(walletAddress).call(),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout')), 10000)
+                    )
+                ]);
+
+                console.log('GMT balance Polygon (raw):', balance);
+                
+                // Convert from wei to token units (handling BigInt)
+                if (balance !== undefined) {
+                    // Convert BigInt to string before using fromWei
+                    const balanceStr = balance.toString();
+                    const formattedBalance = web3.utils.fromWei(balanceStr, 'ether');
+                    console.log('GMT balance Polygon (formatted):', formattedBalance);
+                    return Number(formattedBalance);
+                }
+                return 0;
+            } catch (error) {
+                console.error('Error getting Polygon GMT balance:', error);
+                return 0;
+            }
+        } catch (error) {
+            console.error('Error initializing Web3:', error);
+            return 0;
+        }
+    },
+
+    // type: 0 - error, 1 - notice
+    showPopup: async ({ type = 0, message = '', title = type === 0 ? 'Error' : 'Notice' }) => {
+        if (popup.open.isAvailable()) {
+            const promise = popup.open({
+                title: title,
+                message: message,
+                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+        }
     }
 
 };

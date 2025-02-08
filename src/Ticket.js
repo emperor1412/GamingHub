@@ -18,12 +18,14 @@ const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
     const [starlets, setStarlets] = useState(0);
     const [showTicket1, setShowTicket1] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const setupProfileData = async () => {
-
-        // await getProfileData();
+        setLoading(true);
+        await getProfileData();
 
         if (!shared.userProfile || !shared.userProfile.UserToken) {
+            setLoading(false);
             return;
         }
         const userTicket = shared.getTicket();
@@ -32,8 +34,8 @@ const Ticket = ({ onClose, getProfileData }) => {
         if (userTicket) {
             setStarlets(userStarlets);
             setTicket(userTicket);
-            // setTicket(1);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -55,6 +57,11 @@ const Ticket = ({ onClose, getProfileData }) => {
 
     return (
         <>
+            {loading && (
+                <div className="loading-overlay">
+                    LOADING...
+                </div>
+            )}
             {showTicket1 ? (
                 <Ticket1 starletsData={starlets} getProfileData={getProfileData} onClose={() => {
                     setShowTicket1(false);
