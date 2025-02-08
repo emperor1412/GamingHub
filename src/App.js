@@ -471,7 +471,7 @@ Response:
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
                 {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
                 {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
                 <img src={market_locked} alt="Market" />
@@ -552,7 +552,7 @@ Response:
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled='true'>
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
               {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
               {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
               <img src={market_locked} alt="Market" />

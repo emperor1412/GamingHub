@@ -15,6 +15,7 @@ import shared from './Shared';
 import { popup } from '@telegram-apps/sdk';
 import LevelUp from './LevelUp';
 import unlock from './images/unlock.png';
+import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
@@ -297,7 +298,9 @@ Response:
                         <div className='scratch-item-border'>   
                             <div className='scratch-item-background'></div>
                         </div>
-                        <img src={locker} alt="Lock" className='scratch-item-locked-icon' />
+                        {/* <img src={locker} alt="Lock" className='scratch-item-locked-icon' /> */}
+                        <img src={lock_ticket} alt="Lock" className='scratch-item-locked-icon' />
+                        
                     </button>
                 );
             })}
@@ -480,7 +483,7 @@ Response:
                                     <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
                                         SCRATCH 1 TICKET
                                     </button>
-                                    <button className="overlay-button-ticket1 secondary" disabled='true'>
+                                    <button className="overlay-button-ticket1 secondary" disabled={true}>
                                         SCRATCH ALL TICKETS
                                         <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                     </button>
