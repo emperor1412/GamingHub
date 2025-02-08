@@ -22,7 +22,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.88);
+    /* background: rgba(0, 0, 0, 0.88); */
     color: white;
     font-family: 'PPNeueMachina', sans-serif;
     overflow: hidden;
@@ -35,8 +35,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 16px;
-    padding-top: 16px;
-    padding-bottom: 450px;
+    padding-top: 0px;
+    padding-bottom: 32px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
     box-sizing: border-box;
@@ -47,40 +47,24 @@
     bottom: 0;
     min-height: 100%;
     touch-action: pan-y;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
 
     /* Hide scrollbars while maintaining functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
-    
-    /* Add mask gradient for soft scroll boundary */
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 0, 0, 0.1) 2%,
-        black 4%,
-        black 96%,
-        rgba(0, 0, 0, 0.1) 98%,
-        transparent 100%
-    );
-    mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 0, 0, 0.1) 2%,
-        black 4%,
-        black 96%,
-        rgba(0, 0, 0, 0.1) 98%,
-        transparent 100%
-    );
 }
 
 .bank-steps-content-1 {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 20px;
-    padding-top: 60px;
-    padding-bottom: 280px;
+    padding: 12px;
+    padding-top: 24px;
+    padding-bottom: 16px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
     box-sizing: border-box;
@@ -91,6 +75,10 @@
     bottom: 0;
     min-height: 100%;
     touch-action: pan-y;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 
     /* Hide scrollbars while maintaining functionality */
     scrollbar-width: none;
@@ -187,7 +175,7 @@
 .points-container {
     border: 1px solid #0000FF;
     border-radius: 8px;
-    padding: 17px;
+    padding: 5px 17px;
     margin: 0px 0;
 }
 
@@ -242,7 +230,7 @@
     background: #0000FF;
     border: none;
     cursor: pointer;
-    margin: 10px auto;
+    margin: 4px auto;
     transition: all 0.3s ease;
 
     color: #FFF;
@@ -684,4 +672,295 @@
     text-align: center;
     margin-top: 4px;
     text-transform: uppercase;
+}
+
+.stepn-nft-group {
+    width: 100%;
+    max-width: 230px;
+    height: auto;
+    margin: 0px auto;
+    object-fit: contain;
+    display: block;
+}
+
+.turn-steps-text {
+    width: 85%;
+    max-width: 400px;
+    height: auto;
+    margin: 8px 0px auto;
+    object-fit: contain;
+}
+
+.connect-info {
+    color: #D4D3D3;
+    text-align: center;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    margin: 8px 0;
+}
+
+.connect-fsl-button {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+    margin-top: auto;
+    transition: transform 0.2s ease;
+}
+
+.connect-fsl-button:active {
+    transform: scale(0.98);
+}
+
+.connect-fsl-button img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.starlets-header {
+    color: #FFF;
+    text-align: center;
+    font-family: "PP Neue Machina";
+    font-size: 46.798px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%; /* 46.798px */
+    text-transform: uppercase;
+    padding: 4px 24px;
+    border: 1px solid #0000FF;
+    border-radius: 0;
+    margin: 0 auto 16px;
+    width: 69%;
+    background: transparent;
+    margin-top: 25px;
+    margin-bottom: -8px;
+}
+
+.progress-bar {
+    width: 82%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 16px;
+    margin: 8px 0;
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 8px;
+    background: #000FEF;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 28px;
+    border-radius: 20px;
+    overflow: hidden;
+    --progress-width: 0%;
+}
+
+.progress-bar-track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress-width);
+    background: #00F1FF;
+}
+
+.progress-bar-track > div {
+    width: 1px;
+    height: 60%;    
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1;
+    min-height: 8px;
+    font-size: 0;
+}
+
+.progress-steps {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.progress-step {
+    color: #00F1FF;
+    font-family: "PP Neue Machina";
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+    flex: 1;
+}
+
+.bs_stat {
+    margin-top: -20px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-labels {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    margin-bottom: 1px;
+}
+
+.stat-label {
+    color: #01FFD9;
+    font-family: "PP Neue Machina";
+    font-size: 10.797px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%; /* 10.797px */
+    text-transform: capitalize;
+    flex: 1;
+    text-align: center;
+}
+
+.stats-display {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 2px;
+    margin-bottom: 0px;
+    border: 2px solid #00F0FF;
+    border-radius: 24px;
+    position: relative;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 0;
+}
+
+/* Remove the old separator style */
+.stat-item:not(:last-child)::after {
+    content: none;
+}
+
+/* Add new separators */
+.stats-display::before,
+.stats-display::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #00F0FF;
+}
+
+.stats-display::before {
+    left: 31%;
+}
+
+.stats-display::after {
+    right: 31%;
+}
+
+.stat-value {
+    color: #01FFD9;
+    font-family: "PP Neue Machina";
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.nft-info {
+    color: white;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.claim-button {
+    width: 100%;
+    height: 200px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-bottom: 8px;
+    margin-top: 0px;
+    transition: opacity 0.2s ease;
+}
+
+.claim-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.claim-button:disabled img {
+    filter: grayscale(100%);
+}
+
+.claim-button:disabled .claim-time {
+    color: #666;
+}
+
+.claim-button img {
+    width: 100%;
+    height: auto;
+    transition: filter 0.2s ease;
+}
+
+.claim-time {
+    color: #01FF00;
+    text-align: center;
+    font-family: "PP Neue Machina";
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: 100%; /* 11px */;
+    margin-top: 2px;
+}
+
+.find-out-more {
+    width: 60%;
+    padding: 4px;
+    margin-bottom: 10px;
+    /* position: relative; */
+    background: #00F0FF;
+    border: 1px solid #00F0FF;
+    border-radius: 20px;
+    color: #000;
+    text-align: center;
+    -webkit-text-stroke-width: 1;
+    -webkit-text-stroke-color: #000;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%; /* 20px */
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 8px;
+}
+
+.find-out-more:hover {
+    background: rgba(0, 240, 255, 0.1);
+    color: #FFFFFF;
 }

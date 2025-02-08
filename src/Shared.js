@@ -493,6 +493,18 @@ data object
             console.error('Error initializing Web3:', error);
             return 0;
         }
+    },
+
+    // type: 0 - error, 1 - notice
+    showPopup: async ({ type = 0, message = '', title = type === 0 ? 'Error' : 'Notice' }) => {
+        if (popup.open.isAvailable()) {
+            const promise = popup.open({
+                title: title,
+                message: message,
+                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+        }
     }
 
 };
