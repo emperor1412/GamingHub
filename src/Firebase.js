@@ -3,13 +3,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // Add the Firebase config and initialization before the App component
 const firebaseConfig = {
-  apiKey: "AIzaSyDD3PYowyQqVA6VGuG6b2YXcbWG_ZDjfTg",
-  authDomain: "fslgaminghub.firebaseapp.com",
-  projectId: "fslgaminghub",
-  storageBucket: "fslgaminghub.firebasestorage.app",
-  messagingSenderId: "971087549263",
-  appId: "1:971087549263:web:cca7177731a95b2d7deb3a",
-  measurementId: "G-0ZGTY3YXSZ"
+  apiKey: "AIzaSyBHqWXjirqUYVUzsm4-6gZ9k0ahxp65U-o",
+  authDomain: "fslgamehub-e7094.firebaseapp.com",
+  projectId: "fslgamehub-e7094",
+  storageBucket: "fslgamehub-e7094.firebasestorage.app",
+  messagingSenderId: "445933254471",
+  appId: "1:445933254471:web:a172bbf124ee74fc2e3e62",
+  measurementId: "G-T3VRTPGJJ0"
 };
 
 // Initialize Firebase
