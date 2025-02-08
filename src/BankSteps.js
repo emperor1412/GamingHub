@@ -114,7 +114,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     };
 
     const updateProgressBar = (received) => {
-        const progressBar = document.querySelector('.progress-bar-track');
+        const progressBar = document.querySelector('.bs_progress-bar-track');
         if (progressBar) {
             const progress = Math.min(Math.max(received / 500, 0), 1) * 100;
             progressBar.style.setProperty('--progress-width', `${progress}%`);
@@ -275,28 +275,28 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     if (shared.userProfile.fslId === 0) {
         return (
             <>
-                <div className="bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
-                <div className="bank-steps-container">
-                    <button className="back-button" onClick={handleBack}>
+                <div className="bs_bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
+                <div className="bs_bank-steps-container">
+                    <button className="bs_back-button" onClick={handleBack}>
                         <img src={backIcon} alt="Back" />
                     </button>
                     
-                    <div className="bank-steps-content">
+                    <div className="bs_bank-steps-content">
                         <img 
                             src={sneaker_icon}
                             alt="STEPN NFT" 
-                            className="stepn-nft"
+                            className="bs_stepn-nft"
                         />
 
-                        <div className="stepn-info">
+                        <div className="bs_stepn-info">
                             <div> STEPN IS A WEB3 LIFESTYLE APP THAT REWARDS </div>
                             <div> USERS FOR MOVEMENT </div>
                             USERS EQUIPPED WITH STEPN NFTS CAN EARN BY WALKING, JOGGING AND RUNNING OUTDOORS
                         </div>
 
-                        <div className="points-container">
-                            <div className="points-title">EARN UP TO 500 STARLETS PER DAY!</div>
-                            <ul className="points-steps">
+                        <div className="bs_points-container">
+                            <div className="bs_points-title">EARN UP TO 500 STARLETS PER DAY!</div>
+                            <ul className="bs_points-steps">
                                 <li>DOWNLOAD THE STEPN APP FROM YOUR APP STORE.</li>
                                 <li>LINK YOUR STEPN APP TO YOUR FSL ID.</li>
                                 <li>LOG IN TO THE FSL GAME HUB VIA TELEGRAM.</li>
@@ -305,7 +305,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             </ul>
                         </div>
 
-                        <button className="action-button" onClick={handleConnectFSL}>
+                        <button className="bs_connectfslid-button" onClick={handleConnectFSL}>
                             CONNECT FSL ID
                         </button>
                     </div>
@@ -316,19 +316,18 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
     return (
         <>
-            {/* <div className="bank-steps-container-1" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div> */}
-            <div className="bank-steps-container-1"> 
-                <button className="back-button" onClick={handleBack}>
+            <div className="bs_bank-steps-container-1"> 
+                <button className="bs_back-button" onClick={handleBack}>
                     <img src={backIcon} alt="Back" />
                 </button>
 
-                <div className="bank-steps-content-1">
-                    <div className="starlets-header">
+                <div className="bs_bank-steps-content-1">
+                    <div className="bs_starlets-header">
                         STARLETS
                     </div>
 
-                    <div className="progress-bar">
-                        <div className="progress-bar-track">
+                    <div className="bs_progress-bar">
+                        <div className="bs_progress-bar-track">
                             <div style={{ backgroundColor: '#000FEF' }}>&nbsp;</div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
@@ -336,72 +335,72 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <div>&nbsp;</div>
                             <div style={{ backgroundColor: '#000FEF' }}>&nbsp;</div>
                         </div>
-                        <div className="progress-steps">
-                            <div className="progress-step">100</div>
-                            <div className="progress-step">200</div>
-                            <div className="progress-step">300</div>
-                            <div className="progress-step">400</div>
-                            <div className="progress-step">500</div>
+                        <div className="bs_progress-steps">
+                            <div className="bs_progress-step">100</div>
+                            <div className="bs_progress-step">200</div>
+                            <div className="bs_progress-step">300</div>
+                            <div className="bs_progress-step">400</div>
+                            <div className="bs_progress-step">500</div>
                         </div>
                     </div>
 
                     <img 
                         src={sneaker_icon_group}
                         alt="STEPN NFT Group" 
-                        className="stepn-nft-group"
+                        className="bs_stepn-nft-group"
                     />
                     <div className='bs_stat'>
-                        <div className="stat-labels">
-                            <div className="stat-label">Km</div>
-                            <div className="stat-label">Time</div>
-                            <div className="stat-label">Total Steps</div>
+                        <div className="bs_stat-labels">
+                            <div className="bs_stat-label">Km</div>
+                            <div className="bs_stat-label">Time</div>
+                            <div className="bs_stat-label">Total Steps</div>
                         </div>
-                        <div className="stats-display">
-                            <div className="stat-item">
-                                <div className="stat-value">{distance}</div>
+                        <div className="bs_stats-display">
+                            <div className="bs_stat-item">
+                                <div className="bs_stat-value">{distance}</div>
                             </div>
-                            <div className="stat-item">
-                                <div className="stat-value">{`${String(Math.floor(time / 3600)).padStart(2, '0')}:${String(Math.floor((time % 3600) / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`}</div>
+                            <div className="bs_stat-item">
+                                <div className="bs_stat-value">{`${String(Math.floor(time / 3600)).padStart(2, '0')}:${String(Math.floor((time % 3600) / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`}</div>
                             </div>
-                            <div className="stat-item">
-                                <div className="stat-value">{steps}</div>
+                            <div className="bs_stat-item">
+                                <div className="bs_stat-value">{steps}</div>
                             </div>
                         </div>
                     </div>
                     <img 
                         src={text_turn_your_step}
                         alt="Turn your steps into instant rewards" 
-                        className="turn-steps-text"
+                        className="bs_turn-steps-text"
                     />
 
-                    <button className="claim-button" onClick={handleClaimStarlets} disabled={!canClaim}>
+                    <button className="bs_claim-button" onClick={handleClaimStarlets} disabled={!canClaim}>
                         <img src={claim_starlet_button} alt="Claim Starlets" />
-                        <div className="claim-time">*Available daily after 13:00 UTC</div>
+                        <div className="bs_claim-time">*Available daily after 13:00 UTC</div>
                     </button>
 
-                    <button className="find-out-more" onClick={handleFindOutMore}>
+                    <button className="bs_find-out-more" onClick={handleFindOutMore}>
                         FIND OUT MORE
                     </button>
                 </div>
             </div>
             {showOverlayClaimSuccess && (
-                <div className="bank-step-overlay">
-                    <div className="bank-step-overlay-content">
-                        <div className="bank-step-overlay-starlets">
+                <div className="bs_overlay">
+                    <div className="bs_overlay-content">
+                        <div className="bs_overlay-starlets">
                             {canReceive - starletsReceived}
                         </div>
                         <img 
                             src={bs_receive_starlet_text_claim} 
                             alt="Starlets Claimed Successfully" 
-                            className="bank-step-overlay-text-image"
+                            className="bs_overlay-text-image"
                         />
                         <img 
                             src={bs_receive_starlet_group_icon} 
                             alt="Starlets Group Icon" 
-                            className="bank-step-overlay-group-icon"
+                            className="bs_overlay-group-icon"
                         />
                         <button 
-                            className="action-button" 
+                            className="bs_action-button" 
                             onClick={handleCloseSuccessOverlay}
                         >
                             <span>DONE</span>
@@ -410,8 +409,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 </div>
             )}
             {loading && (
-                <div className="bank-step-loading-overlay">
-                    <div className="bank-step-loading-spinner"></div>
+                <div className="bs_loading-overlay">
+                    <div className="bs_loading-spinner"></div>
                 </div>
             )}
         </>
