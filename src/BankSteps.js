@@ -15,6 +15,9 @@ import starlet from './images/starlet.png';
 import sneaker_icon_group from './images/sneaker_icon_group.png';
 import text_turn_your_step from './images/text_turn_your_step.png';
 import claim_starlet_button from './images/claim_starlet_button.png';
+import bs_receive_starlet_text_claim from './images/bs_receive_starlet_text_claim.png';
+import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_icon.png';
+
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
@@ -384,35 +387,19 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             {showOverlayClaimSuccess && (
                 <div className="bank-step-overlay">
                     <div className="bank-step-overlay-content">
-                        <div className="bank-step-overlay-images">
-                            <img src={starlet} alt="" className="bank-step-overlay-coin" />
-                            <img src={sneaker_icon} alt="" className="bank-step-overlay-sneaker" />
-                            <div className="bank-step-sparkle top-left"></div>
-                            <div className="bank-step-sparkle top-right"></div>
-                            <div className="bank-step-sparkle bottom-left"></div>
-                            <div className="bank-step-sparkle bottom-right"></div>
-                            <img src={star1} alt="" className="bank-step-star star1" />
-                            <img src={star2} alt="" className="bank-step-star star2" />
-                            <img src={star3} alt="" className="bank-step-star star3" />
-                            <img src={star4} alt="" className="bank-step-star star4" />
-                            <img src={star5} alt="" className="bank-step-star star5" />
+                        <div className="bank-step-overlay-starlets">
+                            {canReceive - starletsReceived}
                         </div>
-                        <div className="bank-step-overlay-text">
-                            <div>{canReceive - starletsReceived} STARLETS CLAIMED</div>
-                            <div>SUCCESSFULLY!</div>
-                        </div>
-
-                        {/* <button 
-                            className="action-button share-story-button" 
-                            onClick={onClickShareStory}
-                        >
-                            <span>SHARE TO STORY</span>
-                            <div className="bank-step-share-story-reward">
-                                <img src={starlet} alt="" className="share-story-reward-icon" />
-                                <span>24.4</span>
-                            </div>
-                        </button> */}
-
+                        <img 
+                            src={bs_receive_starlet_text_claim} 
+                            alt="Starlets Claimed Successfully" 
+                            className="bank-step-overlay-text-image"
+                        />
+                        <img 
+                            src={bs_receive_starlet_group_icon} 
+                            alt="Starlets Group Icon" 
+                            className="bank-step-overlay-group-icon"
+                        />
                         <button 
                             className="action-button" 
                             onClick={handleCloseSuccessOverlay}
