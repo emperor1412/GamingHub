@@ -15,7 +15,7 @@ import calendar_before_checkin from './images/calendar.svg';
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
-import my_ticket from './images/my_ticket.svg';
+import my_ticket from './images/my_ticket.png';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
