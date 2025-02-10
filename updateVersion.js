@@ -5,7 +5,9 @@ function isDateFormat(version) {
 }
 
 function incrementVersion(version) {
-    const parts = version.split('.');
+    // Remove 'alpha.' prefix if it exists to process the version numbers
+    const versionWithoutPrefix = version.replace('alpha.', '');
+    const parts = versionWithoutPrefix.split('.');
     let [major, minor, patch] = parts.map(Number);
     
     patch++;
@@ -23,7 +25,8 @@ function incrementVersion(version) {
         }
     }
     
-    return `${major}.${minor}.${patch}`;
+    // Add 'alpha.' prefix to the version string
+    return `alpha.${major}.${minor}.${patch}`;
 }
 
 // Read current version
