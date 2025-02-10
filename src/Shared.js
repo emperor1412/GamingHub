@@ -244,13 +244,17 @@ data object
                 const userProfileData = data.data;
                 shared.userProfile = userProfileData;
 
+                const canShowClaim = [ 20010, 20020, 30020 ];
+
                 const profileItems = [
                     ...userProfileData.UserToken.map(record => ({
                         icon: shared.mappingIcon[record.prop_id],
                         text: shared.mappingText[record.prop_id],
                         value: record.num,
-                        showClaim: false,
-                        showArrow: false,
+                        showClaim: canShowClaim.includes(record.prop_id) && record.num > 0,
+                        // showArrow: canShowClaim.includes(record.prop_id) && record.num > 0,
+                        claimText: 'Claim',
+                        clickAble: canShowClaim.includes(record.prop_id) && record.num > 0,
                         record: record,
                         type: record.prop_id
                     })),
@@ -260,8 +264,10 @@ data object
                             icon: shared.mappingIcon[record.type],
                             text: shared.mappingText[record.type],
                             value: record.num,
-                            showClaim: true,
-                            showArrow: true,
+                            showClaim: canShowClaim.includes(record.type),
+                            // showArrow: canShowClaim.includes(record.type) && record.state === 0,
+                            claimText: record.state === 0 ? 'Claim' : record.state === 1 ? 'Claiming' : 'Claimed',
+                            clickAble: record.state === 0,
                             record: record,
                             type: record.type
                         }))
