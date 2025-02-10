@@ -43,6 +43,13 @@ const tokenABI = [
         "name": "balanceOf",
         "outputs": [{"name": "balance", "type": "uint256"}],
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{"name": "", "type": "uint8"}],
+        "type": "function"
     }
 ];
 
@@ -237,13 +244,17 @@ data object
                 const userProfileData = data.data;
                 shared.userProfile = userProfileData;
 
+                const canShowClaim = [ 20010, 20020, 30020 ];
+
                 const profileItems = [
                     ...userProfileData.UserToken.map(record => ({
                         icon: shared.mappingIcon[record.prop_id],
                         text: shared.mappingText[record.prop_id],
                         value: record.num,
-                        showClaim: false,
-                        showArrow: false,
+                        showClaim: canShowClaim.includes(record.prop_id) && record.num > 0,
+                        // showArrow: canShowClaim.includes(record.prop_id) && record.num > 0,
+                        claimText: 'Claim',
+                        clickAble: canShowClaim.includes(record.prop_id) && record.num > 0,
                         record: record,
                         type: record.prop_id
                     })),
@@ -253,8 +264,10 @@ data object
                             icon: shared.mappingIcon[record.type],
                             text: shared.mappingText[record.type],
                             value: record.num,
-                            showClaim: true,
-                            showArrow: true,
+                            showClaim: canShowClaim.includes(record.type),
+                            // showArrow: canShowClaim.includes(record.type) && record.state === 0,
+                            claimText: record.state === 0 ? 'Claim' : record.state === 1 ? 'Claiming' : 'Claimed',
+                            clickAble: record.state === 0,
                             record: record,
                             type: record.type
                         }))
@@ -449,24 +462,22 @@ data object
     getPolygonGMTBalance : async (walletAddress) => {
         console.log('Get Polygon GMT balance for wallet:', walletAddress);
 
-        // Check if wallet address is valid
         if (!walletAddress) {
             console.log('No wallet address provided');
             return 0;
         }
 
-        // GMT token contract address on Polygon
         const GMT_CONTRACT = '0x714DB550b574b3E927af3D93E26127D15721D4C2';
         
         try {
-            // Initialize Web3 with Polygon RPC
             const web3 = new Web3('https://lb5.stepn.com/');
-            
-            // Create contract instance
             const contract = new web3.eth.Contract(tokenABI, GMT_CONTRACT);
-    
+
             try {
-                // Get balance with timeout
+                // First get the token decimals
+                const decimals = await contract.methods.decimals().call();
+                console.log('GMT token decimals:', decimals);
+
                 const balance = await Promise.race([
                     contract.methods.balanceOf(walletAddress).call(),
                     new Promise((_, reject) => 
@@ -476,13 +487,13 @@ data object
 
                 console.log('GMT balance Polygon (raw):', balance);
                 
-                // Convert from wei to token units (handling BigInt)
                 if (balance !== undefined) {
-                    // Convert BigInt to string before using fromWei
-                    const balanceStr = balance.toString();
-                    const formattedBalance = web3.utils.fromWei(balanceStr, 'ether');
+                    // Convert BigInt values to strings before calculation
+                    const balanceNum = Number(balance.toString());
+                    const decimalsNum = Number(decimals.toString());
+                    const formattedBalance = balanceNum / Math.pow(10, decimalsNum);
                     console.log('GMT balance Polygon (formatted):', formattedBalance);
-                    return Number(formattedBalance);
+                    return formattedBalance;
                 }
                 return 0;
             } catch (error) {
