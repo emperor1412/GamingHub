@@ -55,6 +55,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [time, setTime] = React.useState(0);
     const [steps, setSteps] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
+    const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
 
     const handleBack = () => {
         onClose();
@@ -73,12 +74,14 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         setLoading(true);
         try {
             console.log('Claiming bank steps...');
+            setJustClaimedStarlets(0);
             const response = await fetch(`${shared.server_url}/api/app/claimBankSteps?token=${shared.loginData.token}`);
             const data = await response.json();
             console.log('Claim response:', data);
             
             if (data.code === 0) {
-                console.log('Claim successful, refreshing data...');
+                console.log(`Claim successful: ${data.data} starlets, refreshing data...`);
+                setJustClaimedStarlets(data.data);
                 await getBankSteps();
                 setShowOverlayClaimSuccess(true);
             } else if (data.code === 102002 || data.code === 102001) {
@@ -387,7 +390,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 <div className="bs_overlay">
                     <div className="bs_overlay-content">
                         <div className="bs_overlay-starlets">
-                            {canReceive - starletsReceived}
+                            {justClaimedStarlets}
                         </div>
                         <img 
                             src={bs_receive_starlet_text_claim} 
