@@ -482,8 +482,10 @@ data object
                 console.log('GMT balance Polygon (raw):', balance);
                 
                 if (balance !== undefined) {
-                    // Use the actual decimals from the contract
-                    const formattedBalance = Number(balance) / Math.pow(10, decimals);
+                    // Convert BigInt values to strings before calculation
+                    const balanceNum = Number(balance.toString());
+                    const decimalsNum = Number(decimals.toString());
+                    const formattedBalance = balanceNum / Math.pow(10, decimalsNum);
                     console.log('GMT balance Polygon (formatted):', formattedBalance);
                     return formattedBalance;
                 }
