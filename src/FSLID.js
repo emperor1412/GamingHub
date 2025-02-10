@@ -221,7 +221,7 @@ const FSLID = () => {
                         <div className="fsl-id-stat">
                             <img src={gmtIcon} className="fsl-stat-icon" alt="gmt" />
                             <span className="fsl-stat-label">GMT</span>
-                            <span className="stat-value">{GMTBalance}</span>
+                            <span className="stat-value">{GMTBalance.toFixed(3)}</span>
                         </div>
                     </div>
                 </div>
