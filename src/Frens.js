@@ -292,7 +292,7 @@ const Frens = () => {
         const newFriendsData = data.data.page.list.map(friend => ({
           name: friend.name,
           ticket: friend.ticket,
-          starlets: friend.starlets,
+          starlets: friend.kmPoint,
           pictureIndex: friend.pictureIndex
         }));
 
