@@ -306,7 +306,7 @@ Response:
     initData.restore();
     const userData = initData.user();
     console.log('User:', userData);
-    shared.user = userData;
+    shared.telegramUserData = userData;
     setUser(userData);
 
     // Track initial device info even before login

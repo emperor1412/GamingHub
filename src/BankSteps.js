@@ -378,8 +378,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                     <button className="bs_claim-button" onClick={handleClaimStarlets} disabled={!canClaim}>
                         <img src={claim_starlet_button} alt="Claim Starlets" />
-                        <div className="bs_claim-time">*Available daily after 13:00 UTC</div>
                     </button>
+                    <div className="bs_claim-time">*Available daily after 13:00 UTC</div>
 
                     <button className="bs_find-out-more" onClick={handleFindOutMore}>
                         FIND OUT MORE
