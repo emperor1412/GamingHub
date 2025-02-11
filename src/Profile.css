@@ -305,3 +305,29 @@
     font-size: 14px;
     font-style: italic;
 }
+
+.profile-email-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.2s ease;
+    background: #0a0a0a;
+}
+
+.profile-email-container:hover {
+    opacity: 0.8;
+}
+
+.profile-email {
+    color: #FFF;
+    transition: color 0.2s ease;
+}
+
+.profile-email.masked {
+    color: #83807F;
+}
+
+/* Remove the old show-hide-email-button styles */
+.show-hide-email-button {
+    display: none;
+}
