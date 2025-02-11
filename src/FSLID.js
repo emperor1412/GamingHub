@@ -155,7 +155,7 @@ const FSLID = () => {
                             </div>
                             <div className="fsl-id-name">
                                 <div className="name-with-level">
-                                    {shared.user.firstName}
+                                    {shared.telegramUserData.firstName}
                                     <span className="level-tag">Lv.{shared.userProfile.level || 0}</span>
                                     <button className="logout-button" onClick={handleLogout}>
                                         Log out

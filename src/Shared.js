@@ -97,7 +97,7 @@ const shared = {
     loginData : null,
     inviteCode: 0,
     initData : null,
-    user : null,
+    telegramUserData : null,
     fsl_binding_code : null,
     GMT: 0,
     GMT_Solana: 0,

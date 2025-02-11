@@ -173,8 +173,9 @@ Response:
                                 />
                                 <div>
                                     <div className="profile-username">
-                                        {shared.user.firstName}
+                                        {shared.telegramUserData.firstName}
                                         <button className="level-badge" onClick={() => onClickLevel()}>LV.{shared.userProfile.level || 0}</button>
+                                        {shared.loginData.link && <span className="profile-link">id: {shared.loginData.link}</span>}
                                     </div>
                                     <div className="profile-id">
                                         {shared.userProfile.email && (
