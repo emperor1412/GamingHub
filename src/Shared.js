@@ -5,7 +5,7 @@ import starletIcon from './images/starlet.png';
 import gmtIcon from './images/GMT_1.png';
 import SUT from './images/SUT.png';
 import energy from './images/energy.svg';
-import mooar from './images/Mooar.png';
+import mooar from './images/Mooar.svg';
 import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
 import stepn_go_code from './images/stepngo_code.png';
 
