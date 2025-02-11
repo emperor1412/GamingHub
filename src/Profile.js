@@ -17,9 +17,15 @@ import { popup, openLink } from '@telegram-apps/sdk';
 import shared from './Shared';
 import FSLAuthorization from 'fsl-authorization';
 
+const maskEmail = (email) => {
+    if (!email) return '';
+    return `${email.substring(0, 2)}...${email.substring(email.length - 4)}`;
+};
+
 const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
     const [showLevelUp, setShowLevelUp] = useState(false);
+    const [showFullEmail, setShowFullEmail] = useState(false);
 
     console.log('Current Window URL:', window.location.href);    
 
@@ -179,10 +185,19 @@ Response:
                                     </div>
                                     <div className="profile-id">
                                         {shared.userProfile.email && (
-                                            <>
+                                            <div 
+                                                className="profile-email-container"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setShowFullEmail(!showFullEmail);
+                                                }}
+                                                style={{ cursor: 'pointer' }}
+                                            >
                                                 <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-                                                {shared.userProfile.email}
-                                            </>
+                                                <span className={`profile-email ${!showFullEmail ? 'masked' : ''}`}>
+                                                    {showFullEmail ? shared.userProfile.email : maskEmail(shared.userProfile.email)}
+                                                </span>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
