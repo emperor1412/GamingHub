@@ -14,11 +14,17 @@ const FSLID = () => {
     const [state, setState] = useState(null);
     const [showFullEVM, setShowFullEVM] = useState(false);
     const [showFullSolana, setShowFullSolana] = useState(false);
+    const [showFullEmail, setShowFullEmail] = useState(false);
     const [GMTBalance, setGMTBalance] = useState(0);
 
     const maskAddress = (address) => {
         if (!address) return '';
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+    };
+
+    const maskEmail = (email) => {
+        if (!email) return '';
+        return `${email.substring(0, 2)}...${email.substring(email.length - 4)}`;
     };
 
     const copyToClipboard = async (text) => {
@@ -161,9 +167,20 @@ const FSLID = () => {
                                         Log out
                                     </button>
                                 </div>
-                                <div className="fsl-id-hash">
+                                <div className="fsl-id-hash" onClick={() => setShowFullEmail(!showFullEmail)}>
                                     <img src={ID_selected} className="fsl-id-icon-1" alt="fsl" />
-                                    {shared.userProfile.email}
+                                    <span>
+                                        {showFullEmail ? shared.userProfile.email : maskEmail(shared.userProfile.email)}
+                                    </span>
+                                    <button 
+                                        className="copy-button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            copyToClipboard(shared.userProfile.email);
+                                        }}
+                                    >
+                                        Copy
+                                    </button>
                                 </div>
                             </div>
                         </div>
