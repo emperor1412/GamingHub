@@ -17,6 +17,7 @@ import text_turn_your_step from './images/text_turn_your_step.png';
 import claim_starlet_button from './images/claim_starlet_button.png';
 import bs_receive_starlet_text_claim from './images/bs_receive_starlet_text_claim.png';
 import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_icon.png';
+import bank_step_group_icon from './images/bank_step_group_icon.png';
 
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
@@ -275,7 +276,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         setShowOverlayClaimSuccess(false);
     };
 
-    if (shared.userProfile.fslId === 0) {
+    if (shared.userProfile.fslId === 0 || true) {
         return (
             <>
                 <div className="bs_bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
@@ -286,31 +287,51 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     
                     <div className="bs_bank-steps-content">
                         <img 
-                            src={sneaker_icon}
-                            alt="STEPN NFT" 
-                            className="bs_stepn-nft"
+                            src={bank_step_group_icon}
+                            alt="Bank Steps Group" 
+                            className="bs_bank-steps-group"
                         />
 
-                        <div className="bs_stepn-info">
-                            <div> STEPN IS A WEB3 LIFESTYLE APP THAT REWARDS </div>
-                            <div> USERS FOR MOVEMENT </div>
-                            USERS EQUIPPED WITH STEPN NFTS CAN EARN BY WALKING, JOGGING AND RUNNING OUTDOORS
+                        <div className="bs_steps-sections">
+                            <div className="bs_step-box">
+                                <div className="bs_step-header-container">
+                                    <div className="bs_step-header">CONNECT</div>
+                                </div>
+                                <div className="bs_step-content">
+                                Link your FSL ID to FSL Game Hub and to STEPN.
+                                </div>
+                            </div>
+
+                            <div className="bs_step-box">
+                                <div className="bs_step-header-container">
+                                    <div className="bs_step-header bs_step-header2">CREATE</div>
+                                </div>
+                                <div className="bs_step-content">
+                                Do your daily walk with STEPN, as usual.
+                                </div>
+                            </div>
+
+                            <div className="bs_step-box">
+                                <div className="bs_step-header-container">
+                                    <div className="bs_step-header bs_step-header2">CLAIM</div>
+                                </div>
+                                <div className="bs_step-content">
+                                The following day,  you'll be able to claim Starlets for steps walked within the STEPN app.
+                                </div>
+                                <div className="bs_step-note">
+                                    5,000 STEPS = 500 STARLETS. WE HAVE SET A LIMIT OF BEING ABLE TO CLAIM 500 STARLETS PER DAY
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="bs_points-container">
-                            <div className="bs_points-title">EARN UP TO 500 STARLETS PER DAY!</div>
-                            <ul className="bs_points-steps">
-                                <li>DOWNLOAD THE STEPN APP FROM YOUR APP STORE.</li>
-                                <li>LINK YOUR STEPN APP TO YOUR FSL ID.</li>
-                                <li>LOG IN TO THE FSL GAME HUB VIA TELEGRAM.</li>
-                                <li>START YOUR WALK OR ACTIVITY USING THE STEPN APP.</li>
-                                <li>AFTER YOUR ACTIVITY, CLAIM YOUR STARLETS IN THE FSL GAME HUB.</li>
-                            </ul>
+                        <div className="bs_button-group">
+                            <button className="bs_cyan-button" onClick={handleConnectFSL}>
+                                CONNECT FSL ID
+                            </button>
+                            <button className="bs_cyan-button" onClick={handleFindOutMore}>
+                                FIND OUT MORE
+                            </button>
                         </div>
-
-                        <button className="bs_connectfslid-button" onClick={handleConnectFSL}>
-                            CONNECT FSL ID
-                        </button>
                     </div>
                 </div>
             </>
@@ -381,9 +402,9 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     </button>
                     <div className="bs_claim-time">*Available daily after 13:00 UTC</div>
 
-                    <button className="bs_find-out-more" onClick={handleFindOutMore}>
+                    {/* <button className="bs_find-out-more" onClick={handleFindOutMore}>
                         FIND OUT MORE
-                    </button>
+                    </button> */}
                 </div>
             </div>
             {showOverlayClaimSuccess && (
