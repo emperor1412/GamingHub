@@ -276,7 +276,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         setShowOverlayClaimSuccess(false);
     };
 
-    if (shared.userProfile.fslId === 0 || true) {
+    if (shared.userProfile.fslId === 0) {
         return (
             <>
                 <div className="bs_bank-steps-container" style={{ background: `url(${bank_step_background}) no-repeat center center fixed`, backgroundSize: 'cover' }}></div>
