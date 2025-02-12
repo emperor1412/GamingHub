@@ -95,20 +95,32 @@ const FSLID = () => {
 
     const handleLogout = async () => {
         setLoading(true);
+        console.log('Logout process started');
         try {
+            console.log('Sending request to unbind FSL ID');
             const response = await fetch(shared.server_url + `/api/app/fslUnBinding?token=${shared.loginData.token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
+            console.log('Response received:', response);
             const data = await response.json();
+            console.log('Response data:', data);
             if (data.code === 0) {
+                console.log('Unbinding successful, reloading page');
                 window.location.reload();
+            } else {
+                console.log('Unbinding failed with code:', data.code);
+                await shared.showPopup({
+                    type: 0,
+                    message: data.msg || 'Failed to unbind FSL ID. Please try again later.'
+                });
             }
         } catch (error) {
             console.error('Error logging out:', error);
         } finally {
+            console.log('Logout process ended');
             setLoading(false);
         }
     };
