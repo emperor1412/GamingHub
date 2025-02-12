@@ -600,7 +600,7 @@ const Tasks = ({
                                 TIME-LIMITED TASKS <img src={arrow_2} className={`arrow ${timeLimitedExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${timeLimitedExpanded ? 'expanded' : ''}`}>
-                                {tasksTimeLimited.map(task => renderTaskCard(task))}
+                                {tasksTimeLimited.filter(task => task.state === 0).map(task => renderTaskCard(task))}
                             </div>
                         </section>
 
@@ -612,7 +612,7 @@ const Tasks = ({
                                 STANDARD TASKS <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
-                                {tasksStandard.map(task => renderTaskCard(task))}
+                                {tasksStandard.filter(task => task.state === 0).map(task => renderTaskCard(task))}
                             </div>
                         </section>
                     </div>
