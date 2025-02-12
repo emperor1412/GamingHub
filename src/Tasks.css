@@ -118,7 +118,7 @@
 }
 
 .tasks-list.expanded {
-    max-height: 100vh;
+    max-height: unset;
 }
 
 .task-card {
