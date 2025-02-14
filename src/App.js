@@ -47,6 +47,7 @@ import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
 
 import loading_background from "./images/GamesHubLoading.png";
+import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
@@ -442,7 +443,7 @@ Response:
       </div>
       {(isLoading || !resourcesLoaded) ? (
         <>
-          <img src={loading_background} alt="Loading" className="loading-background" />
+          <img src={loading_background_valentine} alt="Loading" className="loading-background" />
           {/* <div className="loading">Loading...</div> */}
         </>
       ) 
