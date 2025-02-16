@@ -443,7 +443,7 @@ Response:
       </div>
       {(isLoading || !resourcesLoaded) ? (
         <>
-          <img src={loading_background_valentine} alt="Loading" className="loading-background" />
+          <img src={loading_background} alt="Loading" className="loading-background" />
           {/* <div className="loading">Loading...</div> */}
         </>
       ) 
