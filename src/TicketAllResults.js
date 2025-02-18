@@ -7,6 +7,28 @@ import { trackStoryShare } from './analytics';
 const TicketAllResults = ({ rewards, onClose }) => {
     const [showShareStory, setShowShareStory] = React.useState(true);
 
+    // Log rewards when component mounts
+    React.useEffect(() => {
+        console.log('Rewards to display:', rewards.map(reward => ({
+            type: reward.type,
+            amount: reward.amount,
+            displayAmount: (reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount
+        })));
+    }, [rewards]);
+
+    // If no valid rewards, close the screen
+    React.useEffect(() => {
+        if (rewards.length === 0) {
+            console.log('No valid rewards to display, closing screen');
+            onClose();
+        }
+    }, [rewards, onClose]);
+
+    // If no valid rewards, don't render anything
+    if (rewards.length === 0) {
+        return null;
+    }
+
     const onClickShareStory = () => {
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
@@ -33,6 +55,7 @@ const TicketAllResults = ({ rewards, onClose }) => {
             return;
         }
 
+        console.log('Claiming reward from sharing story...');
         try {
             const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
                 method: 'GET',
@@ -47,6 +70,7 @@ const TicketAllResults = ({ rewards, onClose }) => {
                     console.log('Reward claimed successfully');
                 }
                 else if (data.code === 102002 || data.code === 102001) {
+                    console.log('Token expired, attempting to re-login');
                     const result = await shared.login(shared.initData);
                     if (result.success) {
                         claimRewardFromSharingStory(depth + 1);
@@ -59,26 +83,31 @@ const TicketAllResults = ({ rewards, onClose }) => {
         }
     };
 
+    const handleClaim = () => {
+        console.log('Claiming rewards...');
+        onClose();
+    };
+
     return (
-        <div className="results-container">
-            <h1 className="results-title">RESULTS</h1>
-            <div className="results-subtitle">
+        <div className="sa_results-container">
+            <h1 className="sa_results-title">RESULTS</h1>
+            <div className="sa_results-subtitle">
                 CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW
             </div>
             
-            <div className="rewards-wrapper">
-                <div className="rewards-content">
-                    <div className="rewards-container">
-                        <div className="rewards-container-border"></div>
-                        <div className="rewards-grid">
+            <div className="sa_rewards-wrapper">
+                <div className="sa_rewards-content">
+                    <div className="sa_rewards-container">
+                        <div className="sa_rewards-container-border"></div>
+                        <div className="sa_rewards-grid">
                             {rewards.map((reward, index) => (
-                                <div key={index} className="reward-item">
+                                <div key={index} className="sa_reward-item">
                                     <img 
                                         src={shared.mappingIcon[reward.type]} 
                                         alt="reward" 
-                                        className="reward-icon"
+                                        className="sa_reward-icon"
                                     />
-                                    <span className="reward-amount">
+                                    <span className="sa_reward-amount">
                                         {(reward.type === 20010 || reward.type === 20020) 
                                             ? reward.amount / 100 
                                             : reward.amount}
@@ -90,14 +119,14 @@ const TicketAllResults = ({ rewards, onClose }) => {
                 </div>
             </div>
 
-            <div className="buttons-container">
+            <div className="sa_buttons-container">
                 {showShareStory && (
-                    <button className="share-story-button" onClick={onClickShareStory}>
+                    <button className="sa_share-story-button" onClick={onClickShareStory}>
                         SHARE STORY
                     </button>
                 )}
                 
-                <button className="claim-all-button" onClick={onClose}>
+                <button className="sa_claim-all-button" onClick={handleClaim}>
                     CLAIM
                 </button>
             </div>

@@ -15,6 +15,7 @@ const TicketAll = ({ onClose }) => {
         }
 
         try {
+            console.log('Requesting ticket use all...');
             const response = await fetch(`${shared.server_url}/api/app/ticketUse?token=${shared.loginData.token}&type=2`, {
                 method: 'GET',
                 headers: {
@@ -27,6 +28,8 @@ const TicketAll = ({ onClose }) => {
                 
                 if (data.code === 0) {
                     console.log('All tickets used successfully');
+                    console.log('Rewards data:', JSON.stringify(data.data, null, 2));
+                    console.log('Scratch completed!');
                     return data.data;
                 }
                 else if (data.code === 102002 || data.code === 102001) {
@@ -58,10 +61,13 @@ const TicketAll = ({ onClose }) => {
             try {
                 const rewardsData = await requestTicketUseAll();
                 if (rewardsData) {
-                    setRewards(rewardsData);
+                    // Filter out rewards with type 10000 (no rewards)
+                    const validRewards = rewardsData.filter(reward => reward.type !== 10000);
+                    console.log('Valid rewards after filtering:', validRewards);
+                    setRewards(validRewards);
                     trackUserAction('scratch_all_success', {
-                        rewards_count: rewardsData.length,
-                        rewards_types: rewardsData.map(r => r.type)
+                        rewards_count: validRewards.length,
+                        rewards_types: validRewards.map(r => r.type)
                     }, shared.loginData?.userId);
                 }
             } catch (error) {
