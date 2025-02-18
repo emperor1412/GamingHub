@@ -6,6 +6,7 @@ import { trackUserAction } from './analytics';
 const TicketAll = ({ onClose }) => {
     const [loading, setLoading] = useState(true);
     const [rewards, setRewards] = useState([]);
+    const [totalTicketsUsed, setTotalTicketsUsed] = useState(0);
     const [error, setError] = useState(null);
 
     const requestTicketUseAll = async (depth = 0) => {
@@ -30,6 +31,14 @@ const TicketAll = ({ onClose }) => {
                     console.log('All tickets used successfully');
                     console.log('Rewards data:', JSON.stringify(data.data, null, 2));
                     console.log('Scratch completed!');
+                    
+                    // Store total tickets used before filtering
+                    setTotalTicketsUsed(data.data.length);
+                    
+                    // Filter out rewards with type 10000 (no rewards)
+                    const validRewards = data.data.filter(reward => reward.type !== 10000);
+                    setRewards(validRewards);
+                    
                     return data.data;
                 }
                 else if (data.code === 102002 || data.code === 102001) {
@@ -61,13 +70,10 @@ const TicketAll = ({ onClose }) => {
             try {
                 const rewardsData = await requestTicketUseAll();
                 if (rewardsData) {
-                    // Filter out rewards with type 10000 (no rewards)
-                    const validRewards = rewardsData.filter(reward => reward.type !== 10000);
-                    console.log('Valid rewards after filtering:', validRewards);
-                    setRewards(validRewards);
                     trackUserAction('scratch_all_success', {
-                        rewards_count: validRewards.length,
-                        rewards_types: validRewards.map(r => r.type)
+                        rewards_count: rewards.length,
+                        total_tickets_used: rewardsData.length,
+                        rewards_types: rewards.map(r => r.type)
                     }, shared.loginData?.userId);
                 }
             } catch (error) {
@@ -101,7 +107,7 @@ const TicketAll = ({ onClose }) => {
         );
     }
 
-    return <TicketAllResults rewards={rewards} onClose={onClose} />;
+    return <TicketAllResults rewards={rewards} totalTicketsUsed={totalTicketsUsed} onClose={onClose} />;
 };
 
 export default TicketAll; 

@@ -3,9 +3,27 @@ import './TicketAllResults.css';
 import { shareStory, popup } from '@telegram-apps/sdk';
 import shared from './Shared';
 import { trackStoryShare } from './analytics';
+import back from './images/back.svg';
+import ticketIcon from './images/ticket.svg';
 
-const TicketAllResults = ({ rewards, onClose }) => {
+const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
     const [showShareStory, setShowShareStory] = React.useState(true);
+    const [remainingTickets, setRemainingTickets] = React.useState(0);
+
+    // Calculate remaining tickets when component mounts
+    React.useEffect(() => {
+        // Calculate remaining tickets using the total tickets used
+        const initialTickets = shared.getTicket();
+        const remaining = initialTickets - totalTicketsUsed;
+        setRemainingTickets(remaining);
+        
+        console.log('TicketAllResults - Remaining tickets calculation:', {
+            initialTickets,
+            totalTicketsUsed,
+            remaining,
+            calculation: `${initialTickets} - ${totalTicketsUsed} = ${remaining}`
+        });
+    }, []); // Only run once when component mounts
 
     // Log rewards when component mounts
     React.useEffect(() => {
@@ -90,6 +108,18 @@ const TicketAllResults = ({ rewards, onClose }) => {
 
     return (
         <div className="sa_results-container">
+            <header className="sa_header">
+                <button className="sa_back-button" onClick={onClose}>
+                    <img src={back} alt="Back" />
+                </button>
+                <div className="sa_header-stats">
+                    <div className="sa_stat-item">
+                        <img src={ticketIcon} alt="Tickets" />
+                        <span>{remainingTickets}</span>
+                    </div>
+                </div>
+            </header>
+
             <h1 className="sa_results-title">RESULTS</h1>
             <div className="sa_results-subtitle">
                 CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW
