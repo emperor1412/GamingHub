@@ -17,6 +17,7 @@ import LevelUp from './LevelUp';
 import unlock from './images/unlock.png';
 import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
+import TicketAll from './TicketAll';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -35,6 +36,7 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [showLoading, setShowLoading] = useState(false);
     const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = useState(false);
     const [showTimerOverlay, setShowTimerOverlay] = useState(false);
+    const [showTicketAll, setShowTicketAll] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -379,6 +381,15 @@ Response:
                     setUp();
                     setShowLoading(false);
                 }} />
+            ) : showTicketAll ? (
+                <TicketAll onClose={async () => {
+                    setShowTicketAll(false);
+                    setShowOverlay(false);
+                    setShowLoading(true);
+                    await setupProfileData();
+                    setUp();
+                    setShowLoading(false);
+                }} />
             ) : showLevelUp ? (
                 <LevelUp onClose={onCloseLevelup} />
             ) : (
@@ -474,18 +485,27 @@ Response:
                     {showOverlay && (
                         <div className="overlay-ticket1" onClick={() => setShowOverlay(false)}>
                             <div className="overlay-content-ticket1" onClick={e => e.stopPropagation()}>
-                                {/* <div className="overlay-text-ticket1">
-                                    TEST YOUR KNOWLEDGE OF POPULAR CRYPTO SLANG TERMS! SELECT THE CORRECT MEANING FOR EACH TERM BELOW.
-                                </div> */}
-                                
                                 <img src={scratch_ticket_svg} alt="Scratch Ticket" className="overlay-ticket1-img" />
                                 <div className="overlay-buttons-ticket1">
-                                    <button className="overlay-button-ticket1 primary" onClick={() => setShowTicket2(true)}>
+                                    <button 
+                                        className="overlay-button-ticket1 primary" 
+                                        onClick={() => setShowTicket2(true)}
+                                    >
                                         SCRATCH 1 TICKET
                                     </button>
-                                    <button className="overlay-button-ticket1 secondary" disabled={true}>
+                                    <button 
+                                        className="overlay-button-ticket1 secondary"
+                                        onClick={() => setShowTicketAll(true)}
+                                        disabled={ticket < 2}
+                                        style={{ 
+                                            opacity: ticket >= 2 ? 1 : 0.6,
+                                            cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
+                                        }}
+                                    >
                                         SCRATCH ALL TICKETS
-                                        <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
+                                        {ticket < 2 && (
+                                            <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
+                                        )}
                                     </button>
                                 </div>
                             </div>
