@@ -109,7 +109,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
     return (
         <div className="sa_results-container">
             <header className="sa_header">
-                <button className="sa_back-button" onClick={onClose}>
+                <button className="sa_back-button back-button-alignment" onClick={onClose}>
                     <img src={back} alt="Back" />
                 </button>
                 <div className="sa_header-stats">
