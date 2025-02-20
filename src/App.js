@@ -51,6 +51,7 @@ import loading_background_valentine from "./images/GH Valentines Day Post 450-02
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
+import Market from './Market';
 
 
 function App() {
@@ -405,14 +406,14 @@ Response:
             getProfileData={getProfileData}
         />;
       case 'fslid':
-        // return <FSLIDTest />;
         return <FSLID />;
       case 'frens':
         return <Frens />;
-      // case 'market':
-        // return <ScratchTest />;
-      // case 'checkin':
-      //   return <CheckIn onClose={() => setActiveTab('home')}/>;
+      case 'market':
+        return <Market 
+          showFSLIDScreen={() => setActiveTab('fslid')} 
+          setShowProfileView={setShowProfileView}
+        />;
       default:
         return <MainView 
           checkInData={checkInData}
@@ -472,10 +473,8 @@ Response:
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
-                {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
-                {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
-                <img src={market_locked} alt="Market" />
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+                <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
                 <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
@@ -553,14 +552,9 @@ Response:
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''} disabled={true}>
-              {/* <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" /> */}
-              {/* <img src={lock_icon} alt="Market" className="lock-icon-market" /> */}
-              <img src={market_locked} alt="Market" />
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
-            {/* <button onClick={() => setShowProfileView(true)} className={activeTab === 'fslid' ? 'active' : ''}>
-              <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
-            </button> */}
             <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
             </button>

@@ -1,0 +1,248 @@
+.market-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  color: white;
+  height: 100%;
+  background-color: #000;
+  width: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.market-top-bar {
+  position: fixed;
+  top: 18px;
+  width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 28px;
+  background: rgba(0, 0, 0, 1);
+  height: 60px;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-pic-main {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-left: 0;
+}
+
+.profile-pic-main img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.greeting-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.market-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 80px;
+}
+
+.market-title {
+  text-align: center;
+  font-size: clamp(72px, 15vw, 98px);
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  color: white;
+  text-transform: uppercase;
+  margin-top: 70px;
+  padding: 0 28px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+}
+
+.market-title span {
+  width: 100%;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  font-size: inherit;
+  text-align-last: justify;
+  -moz-text-align-last: justify;
+  text-justify: distribute;
+  letter-spacing: 0.1em;
+  line-height: 120px;
+  height: 120px;
+}
+
+.currency-info {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.currency-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.currency-item img {
+  width: 24px;
+  height: 24px;
+}
+
+.currency-value {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.fsl-connect-section {
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 28px 24px;
+  width: auto;
+}
+
+.fsl-connect-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lock-icon {
+  font-size: 24px;
+  color: #00ffff;
+  background: rgba(0, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.fsl-text {
+  flex: 1;
+}
+
+.connect-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.connect-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.starlet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 0 28px;
+  width: auto;
+}
+
+.starlet-item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.starlet-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.starlet-item:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+}
+
+.starlet-amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.starlet-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.price-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: rgba(74, 144, 226, 0.2);
+  border-radius: 16px;
+  display: inline-block;
+  color: #4a90e2;
+}
+
+.price-tag.free {
+  background: rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+}
+
+@media screen and (max-width: 500px) {
+  .market-container {
+    width: 100%;
+  }
+  
+  .market-top-bar {
+    width: 100%;
+  }
+} 
