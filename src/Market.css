@@ -22,9 +22,10 @@
   align-items: center;
   padding: 0px 28px;
   background: rgba(0, 0, 0, 1);
-  height: 60px;
   pointer-events: auto;
   box-sizing: border-box;
+  height: 0px;
+  margin-top: 35px;
 }
 
 .user-greeting {
@@ -44,8 +45,8 @@
 }
 
 .profile-pic-main img {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: #FF00F6 2px solid;
 }
@@ -58,6 +59,7 @@
   font-weight: 800;
   line-height: normal;
   text-transform: uppercase;
+  margin-top: 4px;
 }
 
 .market-content {
@@ -65,16 +67,19 @@
   flex-direction: column;
   width: 100%;
   padding-bottom: 80px;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
 }
 
 .market-title {
   text-align: center;
-  font-size: clamp(72px, 15vw, 98px);
+  font-size: clamp(72px, 15vw, 90px);
   font-weight: 700;
   font-family: "PP Neue Machina";
   color: white;
   text-transform: uppercase;
-  margin-top: 70px;
+  margin-top: 65px;
   padding: 0 28px;
   width: 100%;
   max-width: 100%;
@@ -82,7 +87,6 @@
   line-height: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 90px;
 }
 
@@ -120,8 +124,8 @@
 }
 
 .currency-item img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
 .currency-value {
@@ -132,13 +136,14 @@
   font-weight: 800;
   line-height: normal;
   text-transform: uppercase;
+  margin-top: 4px;
 }
 
 .fsl-connect-section {
   background: rgba(0, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 16px;
-  margin: 16px 28px 24px;
+  padding: 12px;
+  margin: 16px 28px 0px;
   width: auto;
 }
 
@@ -173,6 +178,55 @@
 .connect-subtitle {
   font-size: 12px;
   opacity: 0.8;
+}
+
+.scrollable-market-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  overscroll-behavior: none;
+  height: calc(100vh - 250px);
+
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+  
+  /* Additional WebView-specific properties */
+  -webkit-overflow-scrolling: touch;
+
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 6%,
+      black 10%,
+      black 88%,
+      rgba(0, 0, 0, 0.1) 92%,
+      transparent 100%
+  );
+  mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 6%,
+      black 10%,
+      black 88%,
+      rgba(0, 0, 0, 0.1) 92%,
+      transparent 100%
+  );
+}
+
+/* Hide WebKit scrollbars */
+.scrollable-market-content::-webkit-scrollbar,
+.scrollable-market-content::-webkit-scrollbar-thumb,
+.scrollable-market-content::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
 }
 
 .starlet-grid {
