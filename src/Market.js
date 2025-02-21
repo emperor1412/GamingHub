@@ -5,10 +5,13 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
+import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 
 const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedPurchase, setSelectedPurchase] = useState(null);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -27,16 +30,27 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   }, []);
 
   const handleStarletPurchase = (amount, stars, price) => {
+    setSelectedPurchase({ amount, stars });
+    setIsPopupOpen(true);
+  };
+
+  const handleConfirmPurchase = () => {
     if (!shared.loginData?.fslId) {
+      setIsPopupOpen(false);
+      setSelectedPurchase(null);
       showFSLIDScreen();
       return;
     }
-    // Handle purchase logic here
-    trackUserAction('market_purchase_click', {
-      amount: amount,
-      stars: stars,
-      price: price
-    }, shared.loginData?.link);
+
+    if (selectedPurchase) {
+      trackUserAction('market_purchase_click', {
+        amount: selectedPurchase.amount,
+        stars: selectedPurchase.stars,
+        price: selectedPurchase.stars === 0 ? 'FREE' : null
+      }, shared.loginData?.link);
+    }
+    setIsPopupOpen(false);
+    setSelectedPurchase(null);
   };
 
   return (
@@ -203,6 +217,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           </div>
         </div>
       </div>
+
+      <ConfirmPurchasePopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        amount={selectedPurchase?.amount}
+        stars={selectedPurchase?.stars}
+        onConfirm={handleConfirmPurchase}
+      />
     </div>
   );
 };
