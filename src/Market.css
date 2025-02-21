@@ -178,9 +178,12 @@
 .starlet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 0 28px;
-  width: auto;
+  gap: 12px;
+  padding: 0 26px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .starlet-item {
@@ -235,6 +238,137 @@
 .price-tag.free {
   background: rgba(0, 255, 0, 0.2);
   color: #00ff00;
+}
+
+.market-ticket-button {
+  position: relative;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 0px;
+}
+
+.market-ticket-button-image-container {
+  position: relative;
+  width: 100%;
+  background: #000;
+  border: 1px solid #0000FF;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-ticket-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: #000;
+  gap: 8px;
+  border-bottom: 1px solid #0000FF;
+  height: 55px;
+}
+
+.market-ticket-icon {
+  width: 35%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  position: relative;
+}
+
+.market-ticket-icon::after {
+  display: none;
+}
+
+.market-ticket-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.market-ticket-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0px;
+  width: fit-content;
+}
+
+.market-ticket-amount {
+  font-family: "PP Neue Machina";
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.market-ticket-label {
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  color: white;
+  opacity: 1;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-top: -2px;
+  min-width: 70px;
+  text-align: left;
+  font-weight: 550;
+  letter-spacing: 0.02em;
+}
+
+.market-ticket-bonus {
+  padding: 0.5px 4px;
+  background: #00FF00;
+  color: black;
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 70px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.market-ticket-price {
+  height: 20px;
+  background: #0000FF;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.market-ticket-button:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.market-ticket-button:hover .market-ticket-content {
+  background: rgba(0, 0, 255, 0.1);
+}
+
+.market-ticket-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 65%;
+  padding-left: 4px;
 }
 
 @media screen and (max-width: 500px) {

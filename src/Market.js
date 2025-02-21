@@ -4,6 +4,7 @@ import { trackUserAction } from './analytics';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
+import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 
 const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [tickets, setTickets] = useState(0);
@@ -79,41 +80,125 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         </div>
 
         <div className="starlet-grid">
-          <div className="starlet-item" onClick={() => handleStarletPurchase(10, 0, 'FREE')}>
-            <div className="starlet-amount">10</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag free">FREE</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(10, 0, 'FREE')}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">10</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">FREE</div>
+            </div>
+          </button>
 
-          <div className="starlet-item" onClick={() => handleStarletPurchase(100, 10, null)}>
-            <div className="starlet-amount">100</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag">10 TELEGRAM STARS</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(100, 5, null)}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">100</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">5 TELEGRAM STARS</div>
+            </div>
+          </button>
 
-          <div className="starlet-item" onClick={() => handleStarletPurchase(250, 10, null)}>
-            <div className="starlet-amount">250</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag">10 TELEGRAM STARS</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(250, 10, null)}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">250</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">10 TELEGRAM STARS</div>
+            </div>
+          </button>
 
-          <div className="starlet-item" onClick={() => handleStarletPurchase(300, 20, null)}>
-            <div className="starlet-amount">300</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag">20 TELEGRAM STARS</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(300, 20, null)}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">300</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">20 TELEGRAM STARS</div>
+            </div>
+          </button>
 
-          <div className="starlet-item" onClick={() => handleStarletPurchase(350, 20, null)}>
-            <div className="starlet-amount">350</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag">20 TELEGRAM STARS</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(350, 20, null)}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">350</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">20 TELEGRAM STARS</div>
+            </div>
+          </button>
 
-          <div className="starlet-item" onClick={() => handleStarletPurchase(500, 20, null)}>
-            <div className="starlet-amount">500</div>
-            <div className="starlet-label">STARLETS</div>
-            <div className="price-tag">20 TELEGRAM STARS</div>
-          </div>
+          <button className="market-ticket-button" onClick={() => handleStarletPurchase(500, 20, null)}>
+            <div className="market-ticket-button-image-container">
+              <div className="market-ticket-content">
+                <div className="market-ticket-icon">
+                  <img src={starlet} alt="Starlet" />
+                </div>
+                <div className="market-ticket-info">
+                  <div className="market-ticket-text">
+                    <div className="market-ticket-amount">500</div>
+                    <div className="market-ticket-label">STARLETS</div>
+                  </div>
+                  <div className="market-ticket-bonus">
+                    <span>X10</span>&nbsp;<span>TICKETS</span>
+                  </div>
+                </div>
+              </div>
+              <div className="market-ticket-price">20 TELEGRAM STARS</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
