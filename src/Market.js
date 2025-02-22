@@ -6,12 +6,14 @@ import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
+import Buy from './Buy';
 
 const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState(null);
+  const [showBuyView, setShowBuyView] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -31,7 +33,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
   const handleStarletPurchase = (amount, stars, price) => {
     setSelectedPurchase({ amount, stars });
-    setIsPopupOpen(true);
+    setShowBuyView(true);
   };
 
   const handleConfirmPurchase = () => {
@@ -51,7 +53,32 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
     setIsPopupOpen(false);
     setSelectedPurchase(null);
+    setShowBuyView(false);
   };
+
+  if (showBuyView) {
+    return (
+      <>
+        <Buy
+          selectedPurchase={selectedPurchase}
+          setShowBuyView={setShowBuyView}
+          showFSLIDScreen={showFSLIDScreen}
+          setIsPopupOpen={setIsPopupOpen}
+          setSelectedPurchase={setSelectedPurchase}
+        />
+        <ConfirmPurchasePopup
+          isOpen={isPopupOpen}
+          onClose={() => {
+            setIsPopupOpen(false);
+            setShowBuyView(false);
+          }}
+          amount={selectedPurchase?.amount}
+          stars={selectedPurchase?.stars}
+          onConfirm={handleConfirmPurchase}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="market-container">
@@ -217,14 +244,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           </div>
         </div>
       </div>
-
-      <ConfirmPurchasePopup
-        isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        amount={selectedPurchase?.amount}
-        stars={selectedPurchase?.stars}
-        onConfirm={handleConfirmPurchase}
-      />
     </div>
   );
 };
