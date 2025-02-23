@@ -4,8 +4,8 @@
   padding: 0;
   color: white;
   height: 100%;
-  background-color: #000;
-  width: 500px;
+  background-color: transparent;
+  width: min(500px, 100%);
   margin: 0 auto;
   position: relative;
 }
@@ -21,11 +21,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 0px 28px;
-  background: rgba(0, 0, 0, 1);
+  background: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
   box-sizing: border-box;
   height: 0px;
   margin-top: 35px;
+  backdrop-filter: blur(10px);
 }
 
 .user-greeting {
@@ -307,7 +308,7 @@
 .market-ticket-button-image-container {
   position: relative;
   width: 100%;
-  background: #000;
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid #0000FF;
   display: flex;
   flex-direction: column;
@@ -317,10 +318,11 @@
   display: flex;
   align-items: center;
   padding: 8px;
-  background: #000;
+  background: rgba(0, 0, 0, 0.5);
   gap: 8px;
   border-bottom: 1px solid #0000FF;
   height: 55px;
+  backdrop-filter: blur(5px);
 }
 
 .market-ticket-icon {
