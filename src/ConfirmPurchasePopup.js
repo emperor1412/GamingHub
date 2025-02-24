@@ -2,9 +2,47 @@ import React from 'react';
 import './ConfirmPurchasePopup.css';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
+import { handleStarletsPurchase } from './services/telegramPayment';
 
 const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => {
   if (!isOpen) return null;
+
+  const showError = async (message) => {
+    // Đóng confirm popup trước
+    onClose();
+    
+    // Đợi một chút để đảm bảo popup đã đóng
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    if (window.Telegram?.WebApp?.showPopup) {
+      try {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: message,
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      } catch (error) {
+        // Fallback nếu không thể hiển thị popup
+        console.error('Failed to show popup:', error);
+        alert(message);
+      }
+    } else {
+      // Fallback cho development environment
+      alert(message);
+    }
+  };
+
+  const handleConfirmAndPay = async () => {
+    try {
+      const result = await handleStarletsPurchase({ amount, stars });
+      if (result) {
+        onConfirm();
+      }
+    } catch (error) {
+      console.error('Purchase failed:', error);
+      await showError('Unable to process payment. Please try again.');
+    }
+  };
 
   return (
     <div className="popup-overlay">
@@ -41,7 +79,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => 
             </div>
           </div>
 
-          <button className="confirm-button" onClick={onConfirm}>
+          <button className="confirm-button" onClick={handleConfirmAndPay}>
             CONFIRM & PAY
           </button>
         </div>
