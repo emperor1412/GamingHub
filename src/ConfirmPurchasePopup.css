@@ -26,7 +26,7 @@
   width: 100%;
   max-width: 430px;
   background: #000;
-  border: 1px solid #0000FF;
+  border: 1px solid #FFFFFF;
   border-radius: 12px;
   padding: 24px;
   text-align: center;
@@ -69,11 +69,16 @@
 }
 
 .popup-subtitle {
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 700;
   margin-top: -10px;
   text-transform: uppercase;
   margin-bottom: 12px;
+  background: #FFFFFF;
+  color: #0000FF;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 .purchase-details {
@@ -98,15 +103,19 @@
   background: #0000FF;
   color: white;
   border: none;
-  padding: 16px 32px;
+  padding: 0;
+  height: 38px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 100px;
   cursor: pointer;
   width: 100%;
   font-family: "PP Neue Machina", sans-serif;
   text-transform: uppercase;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .confirm-button:hover {
