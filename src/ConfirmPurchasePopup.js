@@ -46,10 +46,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => 
 
   return (
     <div className="popup-overlay">
+      <button className="cfm_back-button back-button-alignment" onClick={onClose}>
+        <img src={back} alt="Back" />
+      </button>
       <div className="popup-container">
-        <button className="back-button back-button-alignment" onClick={onClose}>
-          <img src={back} alt="Back" />
-        </button>
         <div className="popup-content">
           <div className="popup-icon">
             <img src={starlet} alt="Starlet" />

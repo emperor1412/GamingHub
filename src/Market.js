@@ -88,8 +88,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             alt="Profile" 
           />
         </button>
-        <div className="level-badge" onClick={() => setShowProfileView(true)}>
-          LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+        <div className="stat-item-main-text" onClick={() => setShowProfileView(true)}>
+          GM {shared.telegramUserData?.firstName || 'User'}!
         </div>
         <div className="stats-main">
           <button 

@@ -7,6 +7,7 @@ import { trackUserAction } from './analytics';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import background from './images/background_2.png';
+import back from './images/back.svg';
 
 const Buy = ({ 
   selectedPurchase, 
@@ -53,17 +54,11 @@ const Buy = ({
       <div className="buy-container">
         <header className="stats-header">
           <button 
-            className="profile-pic-main"
-            onClick={() => setShowProfileView(true)}
+            className="back-button back-button-alignment"
+            onClick={() => setShowBuyView(false)}
           >
-            <img 
-              src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-              alt="Profile" 
-            />
+            <img src={back} alt="Back" />
           </button>
-          <div className="level-badge" onClick={() => setShowProfileView(true)}>
-            LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
-          </div>
           <div className="stats-main">
             <button 
               className="stat-item-main"
