@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ConfirmPurchasePopup.css';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
+import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => {
-  if (!isOpen) return null;
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView }) => {
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  if (!isOpen && !showSuccessPopup) return null;
 
   const showError = async (message) => {
-    // Đóng confirm popup trước
     onClose();
-    
-    // Đợi một chút để đảm bảo popup đã đóng
     await new Promise(resolve => setTimeout(resolve, 100));
 
     if (window.Telegram?.WebApp?.showPopup) {
@@ -22,12 +22,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => 
           buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
         });
       } catch (error) {
-        // Fallback nếu không thể hiển thị popup
         console.error('Failed to show popup:', error);
         alert(message);
       }
     } else {
-      // Fallback cho development environment
       alert(message);
     }
   };
@@ -35,8 +33,9 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => 
   const handleConfirmAndPay = async () => {
     try {
       const result = await handleStarletsPurchase({ amount, stars });
-      if (result) {
-        onConfirm();
+      if (result?.status === "paid") {
+        onClose();
+        setShowSuccessPopup(true);
       }
     } catch (error) {
       console.error('Purchase failed:', error);
@@ -44,12 +43,26 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm }) => 
     }
   };
 
+  const handleClaim = () => {
+    setShowSuccessPopup(false);
+    onConfirm();
+  };
+
+  if (showSuccessPopup) {
+    return <SuccessfulPurchasePopup 
+      isOpen={true}
+      onClaim={handleClaim}
+      amount={amount}
+      setShowProfileView={setShowProfileView}
+    />;
+  }
+
   return (
     <div className="popup-overlay">
-      <button className="cfm_back-button back-button-alignment" onClick={onClose}>
-        <img src={back} alt="Back" />
-      </button>
       <div className="popup-container">
+        <button className="cfm_back-button back-button-alignment" onClick={onClose}>
+          <img src={back} alt="Back" />
+        </button>
         <div className="popup-content">
           <div className="popup-icon">
             <img src={starlet} alt="Starlet" />

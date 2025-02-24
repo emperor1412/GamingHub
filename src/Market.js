@@ -15,6 +15,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState(null);
   const [showBuyView, setShowBuyView] = useState(false);
+  const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -127,11 +128,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           
           <div className="scrollable-market-content">
             <div className="starlet-grid">
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(10, 0, 'FREE')}>
+              <button 
+                className={`market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                onClick={() => !isFreeItemClaimed && handleStarletPurchase(10, 0, 'FREE')}
+                disabled={isFreeItemClaimed}
+              >
                 <div className="market-ticket-button-image-container">
                   <div className="market-ticket-content">
                     <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
+                      <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
                     </div>
                     <div className="market-ticket-info">
                       <div className="market-ticket-text">
@@ -143,7 +148,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="market-ticket-price">FREE</div>
+                  <div className="market-ticket-price">{isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}</div>
                 </div>
               </button>
 

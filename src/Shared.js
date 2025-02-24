@@ -114,6 +114,12 @@ const shared = {
         star5: single_star_5
     },
 
+    // Add setView function
+    setView: null, // This will be set by the main App component
+
+    // Add setActiveTab function
+    setActiveTab: null, // This will be set by the App component
+
     login: async (initDataRaw) => {
         try {
             let params = JSON.stringify({

@@ -24,7 +24,7 @@
 
 .popup-container {
   width: 100%;
-  max-width: 430px;
+  max-width: 250px;
   background: #000;
   border: 1px solid #FFFFFF;
   border-radius: 12px;
@@ -34,6 +34,7 @@
   font-family: "PP Neue Machina", sans-serif;
   position: relative;
   margin: 0 26px;
+  overflow: visible;
 }
 
 .popup-content {
@@ -87,7 +88,7 @@
 }
 
 .purchase-text {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.3;
   color: white;
   text-transform: uppercase;

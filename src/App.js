@@ -258,6 +258,7 @@ Response:
   useEffect(() => {
     console.log('App useEffect called');
     shared.initData = initDataRaw;
+    shared.setActiveTab = setActiveTab;
 
     // Get the hash without the # symbol
     const hash = window.location.hash.substring(1);

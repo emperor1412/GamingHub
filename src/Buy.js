@@ -36,10 +36,17 @@ const Buy = ({
       return;
     }
 
-    // Process the purchase here
+    if (selectedPurchase) {
+      trackUserAction('market_purchase_click', {
+        amount: selectedPurchase.amount,
+        stars: selectedPurchase.stars,
+        price: selectedPurchase.stars === 0 ? 'FREE' : null
+      }, shared.loginData?.link);
+    }
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);
+    setShowProfileView(false);
   };
 
   const handleClosePopup = () => {
@@ -147,6 +154,7 @@ const Buy = ({
           amount={selectedPurchase?.amount}
           stars={selectedPurchase?.stars}
           onConfirm={handleConfirmPurchase}
+          setShowProfileView={setShowProfileView}
         />
       </div>
     </>
