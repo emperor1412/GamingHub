@@ -260,10 +260,14 @@ const Tasks = ({
     const [ticket, setTicket] = useState(0);
     const [tasksTimeLimited, setTasksTimelimited] = useState([]);
     const [tasksStandard, setTasksStandard] = useState([]);
+    const [tasksDaily, setTasksDaily] = useState([]);
+    const [tasksPartner, setTasksPartner] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLearnTask, setShowLearnTask] = useState(null);
     const [timeLimitedExpanded, setTimeLimitedExpanded] = useState(true);
     const [standardTasksExpanded, setStandardTasksExpanded] = useState(true);
+    const [dailyTasksExpanded, setDailyTasksExpanded] = useState(true);
+    const [partnerTasksExpanded, setPartnerTasksExpanded] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
     const setupProfileData = async () => {
@@ -304,6 +308,8 @@ const Tasks = ({
                     const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
                     setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
                     setTasksStandard(sortedTasks.filter(task => task.category === 1));
+                    setTasksDaily(sortedTasks.filter(task => task.category === 3));
+                    setTasksPartner(sortedTasks.filter(task => task.category === 4));
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task list error:', data)
@@ -583,7 +589,6 @@ const Tasks = ({
                     task={showLearnTask}
                     onClose={() => setShowLearnTask(null)}
                     onComplete={async (task, answerIndex) => {
-                        // setShowLearnTask(null);
                         const reward = await completeTask(task.id, answerIndex);
                         return reward;
                     }}
@@ -615,6 +620,34 @@ const Tasks = ({
                             </h2>
                             <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksStandard
+                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .map(task => renderTaskCard(task))}
+                            </div>
+                        </section>
+
+                        <section className="tasks-section">
+                            <h2 
+                                className="section-title" 
+                                onClick={() => setDailyTasksExpanded(!dailyTasksExpanded)}
+                            >
+                                DAILY TASKS <img src={arrow_2} className={`arrow ${dailyTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                            </h2>
+                            <div className={`tasks-list ${dailyTasksExpanded ? 'expanded' : ''}`}>
+                                {tasksDaily
+                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .map(task => renderTaskCard(task))}
+                            </div>
+                        </section>
+
+                        <section className="tasks-section">
+                            <h2 
+                                className="section-title" 
+                                onClick={() => setPartnerTasksExpanded(!partnerTasksExpanded)}
+                            >
+                                PARTNER TASKS <img src={arrow_2} className={`arrow ${partnerTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                            </h2>
+                            <div className={`tasks-list ${partnerTasksExpanded ? 'expanded' : ''}`}>
+                                {tasksPartner
                                     .filter(task => task.state === 0 && task.endTime > Date.now())
                                     .map(task => renderTaskCard(task))}
                             </div>
