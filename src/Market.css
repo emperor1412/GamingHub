@@ -1,0 +1,451 @@
+.market-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  color: white;
+  height: 100%;
+  background-color: transparent;
+  width: min(500px, 100%);
+  margin: 0 auto;
+  position: relative;
+}
+
+.market-top-bar {
+  position: fixed;
+  top: 18px;
+  width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 28px;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  box-sizing: border-box;
+  height: 0px;
+  margin-top: 35px;
+  backdrop-filter: blur(10px);
+}
+
+.user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-pic-main {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-left: 0;
+}
+
+.profile-pic-main img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.greeting-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.market-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 80px;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.market-title {
+  text-align: center;
+  font-size: clamp(72px, 15vw, 90px);
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  color: white;
+  text-transform: uppercase;
+  margin-top: 65px;
+  padding: 0 28px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  height: 90px;
+}
+
+.market-title span {
+  width: 100%;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  font-size: inherit;
+  text-align-last: justify;
+  -moz-text-align-last: justify;
+  text-justify: distribute;
+  letter-spacing: 0.1em;
+  line-height: 120px;
+  height: 120px;
+}
+
+.currency-info {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.currency-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.currency-item img {
+  width: 20px;
+  height: 20px;
+}
+
+.currency-value {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.fsl-connect-section {
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 16px 28px 0px;
+  width: auto;
+}
+
+.fsl-connect-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lock-icon {
+  font-size: 24px;
+  color: #00ffff;
+  background: rgba(0, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.fsl-text {
+  flex: 1;
+}
+
+.connect-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.connect-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.scrollable-market-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  overscroll-behavior: none;
+  height: calc(100vh - 250px);
+
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+  
+  /* Additional WebView-specific properties */
+  -webkit-overflow-scrolling: touch;
+
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 6%,
+      black 10%,
+      black 88%,
+      rgba(0, 0, 0, 0.1) 92%,
+      transparent 100%
+  );
+  mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 6%,
+      black 10%,
+      black 88%,
+      rgba(0, 0, 0, 0.1) 92%,
+      transparent 100%
+  );
+}
+
+/* Hide WebKit scrollbars */
+.scrollable-market-content::-webkit-scrollbar,
+.scrollable-market-content::-webkit-scrollbar-thumb,
+.scrollable-market-content::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
+}
+
+.starlet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 26px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.starlet-item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.starlet-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.starlet-item:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+}
+
+.starlet-amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.starlet-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.price-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: rgba(74, 144, 226, 0.2);
+  border-radius: 16px;
+  display: inline-block;
+  color: #4a90e2;
+}
+
+.price-tag.free {
+  background: rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+}
+
+.market-ticket-button {
+  position: relative;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 0px;
+}
+
+.market-ticket-button-image-container {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #0000FF;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-ticket-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  gap: 8px;
+  border-bottom: 1px solid #0000FF;
+  height: 55px;
+  backdrop-filter: blur(5px);
+}
+
+.market-ticket-icon {
+  width: 35%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  position: relative;
+}
+
+.market-ticket-icon::after {
+  display: none;
+}
+
+.market-ticket-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.market-ticket-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0px;
+  width: fit-content;
+}
+
+.market-ticket-amount {
+  font-family: "PP Neue Machina";
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.market-ticket-label {
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  color: white;
+  opacity: 1;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-top: -2px;
+  min-width: 70px;
+  text-align: left;
+  font-weight: 550;
+  letter-spacing: 0.02em;
+}
+
+.market-ticket-bonus {
+  padding: 0.5px 4px;
+  background: #00FF00;
+  color: black;
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 70px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.market-ticket-price {
+  height: 20px;
+  background: #0000FF;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.market-ticket-button:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.market-ticket-button:hover .market-ticket-content {
+  background: rgba(0, 0, 255, 0.1);
+}
+
+.market-ticket-button.sold-out {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.market-ticket-button.sold-out:hover {
+  transform: none;
+}
+
+.market-ticket-button.sold-out .market-ticket-price {
+  background: #808080;
+}
+
+.market-ticket-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 65%;
+  padding-left: 4px;
+}
+
+@media screen and (max-width: 500px) {
+  .market-container {
+    width: 100%;
+  }
+  
+  .market-top-bar {
+    width: 100%;
+  }
+} 
