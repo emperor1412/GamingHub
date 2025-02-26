@@ -162,6 +162,7 @@
   font-style: italic;
   font-weight: 600;
   line-height: 22px;
+  white-space: nowrap;
 }
 
 .profile-item-right {
@@ -330,4 +331,61 @@
 /* Remove the old show-hide-email-button styles */
 .show-hide-email-button {
     display: none;
+}
+
+.profile-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-left: 16px;
+}
+
+.golden-ticket-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    gap: 2px;
+}
+
+.golden-ticket-expiry {
+    font-size: 12px;
+    color: #888888;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.time-value {
+    color: #FFF;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.time-unit {
+    color: #888888;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ticket-id {
+    font-size: 14px;
+    color: #FFF;
+    font-weight: 600;
+}
+
+.golden-ticket-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.golden-ticket-status.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.golden-ticket-status.used {
+    background-color: #9E9E9E;
+    color: white;
 }
