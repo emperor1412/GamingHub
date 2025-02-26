@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './ConfirmPurchasePopup.css';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
+import shared from './Shared';
 
 const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [purchaseData, setPurchaseData] = useState(null);
 
-  if (!isOpen && !showSuccessPopup) return null;
-
-  const showError = async (message) => {
+  const showError = useCallback(async (message) => {
     onClose();
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -28,31 +28,41 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     } else {
       alert(message);
     }
-  };
+  }, [onClose]);
 
-  const handleConfirmAndPay = async () => {
+  const handleConfirmAndPay = useCallback(async () => {
     try {
+      // Lưu số Starlets ban đầu
+      const initialStarlets = shared.getStarlets();
+      console.log('Initial Starlets before payment:', initialStarlets);
+
       const result = await handleStarletsPurchase({ amount, stars });
       if (result?.status === "paid") {
         onClose();
+        // Truyền initialStarlets qua purchaseData
+        setPurchaseData({ initialStarlets });
         setShowSuccessPopup(true);
       }
     } catch (error) {
       console.error('Purchase failed:', error);
       await showError('Unable to process payment. Please try again.');
     }
-  };
+  }, [amount, stars, onClose, showError]);
 
-  const handleClaim = () => {
+  const handleClaim = useCallback(() => {
     setShowSuccessPopup(false);
+    setPurchaseData(null);
     onConfirm();
-  };
+  }, [onConfirm]);
+
+  if (!isOpen && !showSuccessPopup) return null;
 
   if (showSuccessPopup) {
     return <SuccessfulPurchasePopup 
       isOpen={true}
       onClaim={handleClaim}
       amount={amount}
+      initialStarlets={purchaseData?.initialStarlets}
       setShowProfileView={setShowProfileView}
     />;
   }

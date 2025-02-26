@@ -1,4 +1,3 @@
-import { miniApp } from '@telegram-apps/sdk';
 import shared from '../Shared';
 
 // Test payment provider token cho Stripe (TEST)
@@ -94,18 +93,28 @@ export const handleStarletsPurchase = async (product) => {
     if (response.ok && response.result) {
       console.log('Generated invoice link:', response.result);
       
-      return window.Telegram.WebApp.openInvoice(response.result, (status) => {
-        if (status === "paid") {
-          console.log("Payment successful!");
-          return true;
-        } else if (status === "failed") {
-          console.error("Payment failed");
-          return false;
-        } else if (status === "pending") {
-          console.log("Payment pending...");
-        } else if (status === "cancelled") {
-          console.log("Payment cancelled by user");
-        }
+      return new Promise((resolve) => {
+        window.Telegram.WebApp.openInvoice(response.result, (status) => {
+          console.log("Payment status:", status);
+          if (status === "paid") {
+            console.log("Payment successful!");
+            resolve({ 
+              status: "paid",
+              amount: product.stars,
+              currency: "XTR",
+              payload: "starlets_" + product.amount
+            });
+          } else if (status === "failed") {
+            console.error("Payment failed");
+            resolve({ status: "failed" });
+          } else if (status === "pending") {
+            console.log("Payment pending...");
+            resolve({ status: "pending" });
+          } else if (status === "cancelled") {
+            console.log("Payment cancelled by user");
+            resolve({ status: "cancelled" });
+          }
+        });
       });
     } else {
       console.error('Failed response:', response);

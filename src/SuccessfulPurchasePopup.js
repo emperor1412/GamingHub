@@ -1,23 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SuccessfulPurchasePopup.css';
 import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
 const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount }) => {
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verifyError, setVerifyError] = useState(null);
+
   if (!isOpen) return null;
 
-  const handleClaim = () => {
-    onClaim();
-    // Redirect to Market view by setting the active tab
-    if (shared.setActiveTab) {
-      shared.setActiveTab('market');
+  const verifyStarletsPurchase = async () => {
+    const startTime = Date.now();
+    const TIMEOUT = 30000; // 30 seconds timeout
+    const INTERVAL = 2000; // Check every 2 seconds
+
+    const initialStarlets = shared.getStarlets();
+    console.log('Starting verification with initial Starlets:', initialStarlets);
+
+    while (Date.now() - startTime < TIMEOUT) {
+      try {
+        // Lấy profile mới để check số Starlets hiện tại
+        const profileResult = await shared.getProfileWithRetry();
+        if (!profileResult.success) {
+          await new Promise(resolve => setTimeout(resolve, INTERVAL));
+          continue;
+        }
+
+        // Lấy số Starlets hiện tại
+        const currentStarlets = shared.getStarlets();
+        console.log('Checking Starlets:', {
+          initialStarlets,
+          currentStarlets,
+          expectedAmount: amount,
+          difference: currentStarlets - initialStarlets
+        });
+
+        // So sánh chênh lệch với số Starlets đã mua
+        if (currentStarlets - initialStarlets === amount) {
+          return true;
+        }
+
+        // Đợi một khoảng thời gian trước khi check lại
+        await new Promise(resolve => setTimeout(resolve, INTERVAL));
+      } catch (error) {
+        console.error('Verify error:', error);
+        await new Promise(resolve => setTimeout(resolve, INTERVAL));
+      }
     }
+
+    setVerifyError('Payment failed. Please contact support.');
+    return false;
+  };
+
+  const handleClaim = async () => {
+    setIsVerifying(true);
+    setVerifyError(null);
+
+    const isValid = await verifyStarletsPurchase();
+    if (isValid) {
+      onClaim();
+      // Redirect to Market view
+      if (shared.setActiveTab) {
+        shared.setActiveTab('market');
+      }
+    }
+    setIsVerifying(false);
   };
 
   return (
     <div className="sp-popup-overlay">
-      <div className="sp-popup-container">
+      <div className={`sp-popup-container ${verifyError ? 'has-error' : ''}`}>
         <div className="sp-popup-content">
           <div className="sp-popup-icon">
             <img src={starletIcon} alt="Starlet" />
@@ -40,8 +93,16 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount }) => {
             </div>
           </div>
 
-          <button className="sp-claim-button" onClick={handleClaim}>
-            CLAIM
+          {verifyError && (
+            <div className="sp-error-message">{verifyError}</div>
+          )}
+
+          <button 
+            className="sp-claim-button" 
+            onClick={handleClaim}
+            disabled={isVerifying}
+          >
+            {isVerifying ? 'VERIFYING...' : 'CLAIM'}
           </button>
         </div>
 
