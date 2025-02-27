@@ -24,6 +24,12 @@
   position: relative;
   margin: 0 26px;
   overflow: visible;
+  transform: translateY(0);
+  transition: transform 0.2s ease;
+}
+
+.sp-popup-container.has-error {
+  transform: translateY(-40px);
 }
 
 .sp-popup-content {
@@ -245,6 +251,22 @@
 
 .sp-claim-button:hover {
   background: #0000CC;
+}
+
+.sp-error-message {
+  color: #FF4444;
+  font-size: 14px;
+  margin: 12px 0;
+  text-align: center;
+  padding: 8px 12px;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.sp-claim-button:disabled {
+  background: #666;
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 500px) {

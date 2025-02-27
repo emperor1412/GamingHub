@@ -1,16 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './ConfirmPurchasePopup.css';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
+import shared from './Shared';
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView }) => {
+// url: /app/buyOptions
+// Request:
+// Response:
+// {
+//     "code": 0,
+//     "data": [
+//         {
+//             "id": 1,
+//             "state": 0,
+//             "stars": 1,
+//             "starlet": 10,
+//             "ticket": 1
+//         },
+//         {
+//             "id": 2,
+//             "state": 0,
+//             "stars": 2,
+//             "starlet": 30,
+//             "ticket": 2
+//         }
+//     ]
+// }
+
+// url: /app/buyStarlets
+// Request:
+//     optionId int
+// Response:
+// {
+//     "code": 0,
+//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
+// }
+
+
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView, setShowBuyView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [purchaseData, setPurchaseData] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  if (!isOpen && !showSuccessPopup) return null;
-
-  const showError = async (message) => {
+  const showError = useCallback(async (message) => {
     onClose();
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -28,76 +62,117 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     } else {
       alert(message);
     }
-  };
+  }, [onClose]);
 
-  const handleConfirmAndPay = async () => {
+  const handleConfirmAndPay = useCallback(async () => {
+    setIsProcessing(true);
     try {
       const result = await handleStarletsPurchase({ amount, stars });
       if (result?.status === "paid") {
-        onClose();
+        setPurchaseData({ initialStarlets: result.initialStarlets });
         setShowSuccessPopup(true);
+      } else if (result?.status === "cancelled") {
+        onClose();
       }
     } catch (error) {
       console.error('Purchase failed:', error);
       await showError('Unable to process payment. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
-  };
+  }, [amount, stars, showError]);
 
-  const handleClaim = () => {
+  const handleClaim = useCallback(() => {
     setShowSuccessPopup(false);
+    setPurchaseData(null);
+    localStorage.removeItem('payment_success');
     onConfirm();
-  };
+    setShowBuyView(false);
+  }, [onConfirm, setShowBuyView]);
 
-  if (showSuccessPopup) {
-    return <SuccessfulPurchasePopup 
-      isOpen={true}
-      onClaim={handleClaim}
-      amount={amount}
-      setShowProfileView={setShowProfileView}
-    />;
-  }
+  useEffect(() => {
+    if (!isOpen) {
+      localStorage.removeItem('payment_success');
+      setShowSuccessPopup(false);
+      setPurchaseData(null);
+      return;
+    }
+
+    const paymentSuccess = localStorage.getItem('payment_success');
+    if (paymentSuccess) {
+      try {
+        const payment = JSON.parse(paymentSuccess);
+        setPurchaseData({ initialStarlets: payment.initialStarlets });
+        setShowSuccessPopup(true);
+      } catch (error) {
+        console.error('Error parsing payment success data:', error);
+        localStorage.removeItem('payment_success');
+      }
+    }
+  }, [isOpen]);
 
   return (
-    <div className="popup-overlay">
-      <div className="popup-container">
-        <button className="cfm_back-button back-button-alignment" onClick={onClose}>
-          <img src={back} alt="Back" />
-        </button>
-        <div className="popup-content">
-          <div className="popup-icon">
-            <img src={starlet} alt="Starlet" />
-          </div>
-          <h2 className="popup-title">CONFIRM</h2>
-          <div className="popup-subtitle">YOUR PURCHASE</div>
-          
-          <div className="purchase-details">
-            <div className="purchase-text">
-              DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-              {stars > 0 && (
-                <>
-                  <br />
-                  AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
-                  <br />
-                  FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
-                </>
-              )}
-              {stars === 0 && (
-                <>
-                  <br />
-                  AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
-                  <br />
-                  FOR <span className="highlight-value">FREE</span>?
-                </>
-              )}
+    <>
+      {(isOpen || showSuccessPopup) && (
+        <>
+          {isProcessing && (
+            <div className="loading-overlay">
+              <div className="loading-spinner"></div>
             </div>
-          </div>
+          )}
+          
+          {showSuccessPopup ? (
+            <SuccessfulPurchasePopup 
+              isOpen={true}
+              onClaim={handleClaim}
+              amount={amount}
+              setShowBuyView={setShowBuyView}
+            />
+          ) : isOpen && (
+            <div className="popup-overlay">
+              <div className="popup-container">
+                <button className="cfm_back-button back-button-alignment" onClick={onClose}>
+                  <img src={back} alt="Back" />
+                </button>
+                <div className="popup-content">
+                  <div className="popup-icon">
+                    <img src={starlet} alt="Starlet" />
+                  </div>
+                  <h2 className="popup-title">CONFIRM</h2>
+                  <div className="popup-subtitle">YOUR PURCHASE</div>
+                  
+                  <div className="purchase-details">
+                    <div className="purchase-text">
+                      DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
+                      {stars > 0 && (
+                        <>
+                          <br />
+                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                        </>
+                      )}
+                      {stars === 0 && (
+                        <>
+                          <br />
+                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">FREE</span>?
+                        </>
+                      )}
+                    </div>
+                  </div>
 
-          <button className="confirm-button" onClick={handleConfirmAndPay}>
-            CONFIRM & PAY
-          </button>
-        </div>
-      </div>
-    </div>
+                  <button className="confirm-button" onClick={handleConfirmAndPay}>
+                    CONFIRM & PAY
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

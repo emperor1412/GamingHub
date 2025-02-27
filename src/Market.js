@@ -33,6 +33,25 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setupProfileData();
   }, []);
 
+  // Add effect to watch showBuyView changes
+  useEffect(() => {
+    if (!showBuyView) { // When returning from Buy view
+      const updateData = async () => {
+        await shared.getProfileWithRetry();
+        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+          setStarlets(userStarlets.num);
+        }
+
+        const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+        if (userTicket) {
+          setTickets(userTicket.num);
+        }
+      };
+      updateData();
+    }
+  }, [showBuyView]);
+
   const handleConnectFSLID = () => {
     showFSLIDScreen();
   };
@@ -57,6 +76,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         price: selectedPurchase.stars === 0 ? 'FREE' : null
       }, shared.loginData?.link);
     }
+    
+    // Reset states
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);

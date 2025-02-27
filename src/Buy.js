@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Buy.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
@@ -29,13 +29,6 @@ const Buy = ({
   };
 
   const handleConfirmPurchase = () => {
-    if (!shared.loginData?.fslId) {
-      setIsPopupOpen(false);
-      setShowBuyView(false);
-      showFSLIDScreen();
-      return;
-    }
-
     if (selectedPurchase) {
       trackUserAction('market_purchase_click', {
         amount: selectedPurchase.amount,
@@ -155,6 +148,7 @@ const Buy = ({
           stars={selectedPurchase?.stars}
           onConfirm={handleConfirmPurchase}
           setShowProfileView={setShowProfileView}
+          setShowBuyView={setShowBuyView}
         />
       </div>
     </>

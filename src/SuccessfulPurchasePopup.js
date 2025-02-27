@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SuccessfulPurchasePopup.css';
 import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView }) => {
+  useEffect(() => {
+    // Clean up payment_success when component unmounts
+    return () => {
+      localStorage.removeItem('payment_success');
+    };
+  }, []);
+
   if (!isOpen) return null;
 
-  const handleClaim = () => {
-    onClaim();
-    // Redirect to Market view by setting the active tab
-    if (shared.setActiveTab) {
-      shared.setActiveTab('market');
+  const handleClaim = async () => {
+    try {
+      // Close popup and trigger back button in Buy.js
+      onClaim(); // Close ConfirmPurchasePopup
+      setShowBuyView(false); // Trigger back button effect
+    } catch (error) {
+      console.error('Error during claim:', error);
+      setShowBuyView(false);
     }
   };
 
@@ -40,7 +50,10 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount }) => {
             </div>
           </div>
 
-          <button className="sp-claim-button" onClick={handleClaim}>
+          <button 
+            className="sp-claim-button" 
+            onClick={handleClaim}
+          >
             CLAIM
           </button>
         </div>

@@ -1,10 +1,9 @@
-import { miniApp } from '@telegram-apps/sdk';
 import shared from '../Shared';
 
 // Test payment provider token cho Stripe (TEST)
 const TEST_PAYMENT_PROVIDER = '';
 const BASE_URL = `https://api.telegram.org/bot${shared.bot_token}/test/createInvoiceLink`;
-const MOCK_PAYMENT = true; // Toggle này để bật/tắt mock payment
+const MOCK_PAYMENT = false; // Toggle này để bật/tắt mock payment
 
 export const telegramPayment = {
   async createInvoiceLink(product) {
@@ -73,43 +72,79 @@ export const telegramPayment = {
 
 export const handleStarletsPurchase = async (product) => {
   try {
-    if (MOCK_PAYMENT) {
-      console.log('Using mock payment for:', product);
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log("Mock payment successful!");
-          resolve({
-            status: "paid",
-            amount: product.stars,
-            currency: "XTR",
-            payload: "starlets_" + product.amount
-          });
-        }, 1000);
-      });
-    }
+    // Lưu số Starlets ban đầu
+    const initialStarlets = shared.getStarlets();
+    console.log('Initial Starlets:', initialStarlets);
 
-    const response = await telegramPayment.createInvoiceLink(product);
-    console.log('Payment response:', response);
-    
-    if (response.ok && response.result) {
-      console.log('Generated invoice link:', response.result);
-      
-      return window.Telegram.WebApp.openInvoice(response.result, (status) => {
-        if (status === "paid") {
-          console.log("Payment successful!");
-          return true;
-        } else if (status === "failed") {
-          console.error("Payment failed");
-          return false;
-        } else if (status === "pending") {
-          console.log("Payment pending...");
-        } else if (status === "cancelled") {
-          console.log("Payment cancelled by user");
-        }
+    // Gọi API buyStarlets
+    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=1`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    console.log('API response:', data);
+
+    if (data.code === 0) {
+      return new Promise((resolve) => {
+        let isPaymentHandled = false;
+
+        const cleanup = () => {
+          window.Telegram.WebApp.MainButton.hide();
+          isPaymentHandled = true;
+        };
+
+        const checkPayment = async () => {
+          if (isPaymentHandled) return;
+
+          try {
+            await shared.getProfileWithRetry();
+            const currentStarlets = shared.getStarlets();
+            console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
+
+            if (currentStarlets > initialStarlets) {
+              cleanup();
+              localStorage.setItem('payment_success', JSON.stringify({
+                amount: product.amount,
+                initialStarlets,
+                timestamp: Date.now()
+              }));
+              resolve({
+                status: "paid",
+                amount: product.amount,
+                initialStarlets
+              });
+            } else {
+              cleanup();
+              resolve({ status: "cancelled" });
+            }
+          } catch (error) {
+            console.error('Error checking payment:', error);
+            cleanup();
+            resolve({ status: "cancelled" });
+          }
+        };
+
+        // Setup payment UI
+        window.Telegram.WebApp.MainButton.setText('Processing payment...');
+        window.Telegram.WebApp.MainButton.show();
+
+        // Open invoice URL and check payment after a delay
+        window.Telegram.WebApp.openInvoice(data.data);
+        setTimeout(checkPayment, 4000);
+
+        // Set a timeout for the entire payment process
+        setTimeout(() => {
+          if (!isPaymentHandled) {
+            cleanup();
+            resolve({ status: "cancelled" });
+          }
+        }, 20000); // 30 seconds timeout
       });
     } else {
-      console.error('Failed response:', response);
-      throw new Error(`Failed to create invoice link: ${JSON.stringify(response)}`);
+      throw new Error(data.msg || 'Failed to get payment URL');
     }
   } catch (error) {
     console.error('Purchase error:', error);
