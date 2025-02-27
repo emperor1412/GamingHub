@@ -625,6 +625,7 @@ const Tasks = ({
                             </div>
                         </section>
 
+                        {/* Daily Tasks section temporarily disabled
                         <section className="tasks-section">
                             <h2 
                                 className="section-title" 
@@ -652,6 +653,7 @@ const Tasks = ({
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
+                        */}
                     </div>
                 </div>
                 </>

@@ -133,7 +133,7 @@ export const handleStarletsPurchase = async (product) => {
 
         // Open invoice URL and check payment after a delay
         window.Telegram.WebApp.openInvoice(data.data);
-        setTimeout(checkPayment, 2000);
+        setTimeout(checkPayment, 4000);
 
         // Set a timeout for the entire payment process
         setTimeout(() => {
@@ -141,7 +141,7 @@ export const handleStarletsPurchase = async (product) => {
             cleanup();
             resolve({ status: "cancelled" });
           }
-        }, 30000); // 30 seconds timeout
+        }, 20000); // 30 seconds timeout
       });
     } else {
       throw new Error(data.msg || 'Failed to get payment URL');
