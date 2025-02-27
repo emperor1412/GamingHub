@@ -82,23 +82,25 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
   const handleClaim = useCallback(() => {
     setShowSuccessPopup(false);
     setPurchaseData(null);
+    localStorage.removeItem('payment_success');
     onConfirm();
   }, [onConfirm]);
 
   useEffect(() => {
-    const pendingPayment = localStorage.getItem('payment_pending');
-    const paymentSuccess = localStorage.getItem('payment_success');
-
-    if (pendingPayment && paymentSuccess) {
-      const payment = JSON.parse(pendingPayment);
-      setPurchaseData({ initialStarlets: shared.getStarlets() - payment.amount });
-      setShowSuccessPopup(true);
-      
-      // Clear payment data
-      localStorage.removeItem('payment_pending');
-      localStorage.removeItem('payment_success');
+    if (isOpen) {
+      const paymentSuccess = localStorage.getItem('payment_success');
+      if (paymentSuccess) {
+        try {
+          const payment = JSON.parse(paymentSuccess);
+          setPurchaseData({ initialStarlets: payment.initialStarlets });
+          setShowSuccessPopup(true);
+        } catch (error) {
+          console.error('Error parsing payment success data:', error);
+          localStorage.removeItem('payment_success');
+        }
+      }
     }
-  }, []);
+  }, [isOpen]);
 
   if (!isOpen && !showSuccessPopup) return null;
 

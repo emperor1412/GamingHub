@@ -308,8 +308,8 @@ const Tasks = ({
                     const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
                     setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
                     setTasksStandard(sortedTasks.filter(task => task.category === 1));
-                    setTasksDaily(sortedTasks.filter(task => task.category === 3));
-                    setTasksPartner(sortedTasks.filter(task => task.category === 4));
+                    setTasksDaily(sortedTasks.filter(task => task.category === 2));
+                    setTasksPartner(sortedTasks.filter(task => task.category === 3));
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task list error:', data)

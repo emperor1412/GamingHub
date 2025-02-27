@@ -88,35 +88,60 @@ export const handleStarletsPurchase = async (product) => {
     console.log('API response:', data);
 
     if (data.code === 0) {
-      // Lưu payment info vào localStorage để check sau
-      localStorage.setItem('payment_pending', JSON.stringify({
-        amount: product.amount,
-        stars: product.stars,
-        timestamp: Date.now()
-      }));
-
       return new Promise((resolve) => {
-        // Listen for invoice closed event
-        window.Telegram.WebApp.onEvent('invoiceClosed', (status) => {
-          console.log('Invoice closed with status:', status);
-          
-          // Check if payment was successful
-          if (status === 'paid') {
-            localStorage.setItem('payment_success', 'true');
-            resolve({ 
-              status: "paid",
-              amount: product.amount,
-              initialStarlets
-            });
-          } else {
+        let isPaymentHandled = false;
+
+        const cleanup = () => {
+          window.Telegram.WebApp.MainButton.hide();
+          isPaymentHandled = true;
+        };
+
+        const checkPayment = async () => {
+          if (isPaymentHandled) return;
+
+          try {
+            await shared.getProfileWithRetry();
+            const currentStarlets = shared.getStarlets();
+            console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
+
+            if (currentStarlets > initialStarlets) {
+              cleanup();
+              localStorage.setItem('payment_success', JSON.stringify({
+                amount: product.amount,
+                initialStarlets,
+                timestamp: Date.now()
+              }));
+              resolve({
+                status: "paid",
+                amount: product.amount,
+                initialStarlets
+              });
+            } else {
+              cleanup();
+              resolve({ status: "cancelled" });
+            }
+          } catch (error) {
+            console.error('Error checking payment:', error);
+            cleanup();
             resolve({ status: "cancelled" });
           }
-        });
+        };
 
-        // Open invoice URL trong Telegram WebApp
-        window.Telegram.WebApp.openInvoice(data.data, (status) => {
-          console.log('Invoice callback status:', status);
-        });
+        // Setup payment UI
+        window.Telegram.WebApp.MainButton.setText('Processing payment...');
+        window.Telegram.WebApp.MainButton.show();
+
+        // Open invoice URL and check payment after a delay
+        window.Telegram.WebApp.openInvoice(data.data);
+        setTimeout(checkPayment, 2000);
+
+        // Set a timeout for the entire payment process
+        setTimeout(() => {
+          if (!isPaymentHandled) {
+            cleanup();
+            resolve({ status: "cancelled" });
+          }
+        }, 30000); // 30 seconds timeout
       });
     } else {
       throw new Error(data.msg || 'Failed to get payment URL');
