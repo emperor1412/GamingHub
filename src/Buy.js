@@ -155,6 +155,7 @@ const Buy = ({
           stars={selectedPurchase?.stars}
           onConfirm={handleConfirmPurchase}
           setShowProfileView={setShowProfileView}
+          setShowBuyView={setShowBuyView}
         />
       </div>
     </>

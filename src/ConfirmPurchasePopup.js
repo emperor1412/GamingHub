@@ -39,9 +39,10 @@ import shared from './Shared';
 // }
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView, setShowBuyView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const showError = useCallback(async (message) => {
     onClose();
@@ -64,10 +65,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
   }, [onClose]);
 
   const handleConfirmAndPay = useCallback(async () => {
+    setIsProcessing(true);
     try {
       const result = await handleStarletsPurchase({ amount, stars });
       if (result?.status === "paid") {
-        onClose();
         setPurchaseData({ initialStarlets: result.initialStarlets });
         setShowSuccessPopup(true);
       } else if (result?.status === "cancelled") {
@@ -76,85 +77,102 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     } catch (error) {
       console.error('Purchase failed:', error);
       await showError('Unable to process payment. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
-  }, [amount, stars, onClose, showError]);
+  }, [amount, stars, showError]);
 
   const handleClaim = useCallback(() => {
     setShowSuccessPopup(false);
     setPurchaseData(null);
     localStorage.removeItem('payment_success');
     onConfirm();
-  }, [onConfirm]);
+    setShowBuyView(false);
+  }, [onConfirm, setShowBuyView]);
 
   useEffect(() => {
-    if (isOpen) {
-      const paymentSuccess = localStorage.getItem('payment_success');
-      if (paymentSuccess) {
-        try {
-          const payment = JSON.parse(paymentSuccess);
-          setPurchaseData({ initialStarlets: payment.initialStarlets });
-          setShowSuccessPopup(true);
-        } catch (error) {
-          console.error('Error parsing payment success data:', error);
-          localStorage.removeItem('payment_success');
-        }
+    if (!isOpen) {
+      localStorage.removeItem('payment_success');
+      setShowSuccessPopup(false);
+      setPurchaseData(null);
+      return;
+    }
+
+    const paymentSuccess = localStorage.getItem('payment_success');
+    if (paymentSuccess) {
+      try {
+        const payment = JSON.parse(paymentSuccess);
+        setPurchaseData({ initialStarlets: payment.initialStarlets });
+        setShowSuccessPopup(true);
+      } catch (error) {
+        console.error('Error parsing payment success data:', error);
+        localStorage.removeItem('payment_success');
       }
     }
   }, [isOpen]);
 
-  if (!isOpen && !showSuccessPopup) return null;
-
-  if (showSuccessPopup) {
-    return <SuccessfulPurchasePopup 
-      isOpen={true}
-      onClaim={handleClaim}
-      amount={amount}
-      initialStarlets={purchaseData?.initialStarlets}
-      setShowProfileView={setShowProfileView}
-    />;
-  }
-
   return (
-    <div className="popup-overlay">
-      <div className="popup-container">
-        <button className="cfm_back-button back-button-alignment" onClick={onClose}>
-          <img src={back} alt="Back" />
-        </button>
-        <div className="popup-content">
-          <div className="popup-icon">
-            <img src={starlet} alt="Starlet" />
-          </div>
-          <h2 className="popup-title">CONFIRM</h2>
-          <div className="popup-subtitle">YOUR PURCHASE</div>
-          
-          <div className="purchase-details">
-            <div className="purchase-text">
-              DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-              {stars > 0 && (
-                <>
-                  <br />
-                  AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
-                  <br />
-                  FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
-                </>
-              )}
-              {stars === 0 && (
-                <>
-                  <br />
-                  AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
-                  <br />
-                  FOR <span className="highlight-value">FREE</span>?
-                </>
-              )}
+    <>
+      {(isOpen || showSuccessPopup) && (
+        <>
+          {isProcessing && (
+            <div className="loading-overlay">
+              <div className="loading-spinner"></div>
             </div>
-          </div>
+          )}
+          
+          {showSuccessPopup ? (
+            <SuccessfulPurchasePopup 
+              isOpen={true}
+              onClaim={handleClaim}
+              amount={amount}
+              setShowBuyView={setShowBuyView}
+            />
+          ) : isOpen && (
+            <div className="popup-overlay">
+              <div className="popup-container">
+                <button className="cfm_back-button back-button-alignment" onClick={onClose}>
+                  <img src={back} alt="Back" />
+                </button>
+                <div className="popup-content">
+                  <div className="popup-icon">
+                    <img src={starlet} alt="Starlet" />
+                  </div>
+                  <h2 className="popup-title">CONFIRM</h2>
+                  <div className="popup-subtitle">YOUR PURCHASE</div>
+                  
+                  <div className="purchase-details">
+                    <div className="purchase-text">
+                      DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
+                      {stars > 0 && (
+                        <>
+                          <br />
+                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                        </>
+                      )}
+                      {stars === 0 && (
+                        <>
+                          <br />
+                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">FREE</span>?
+                        </>
+                      )}
+                    </div>
+                  </div>
 
-          <button className="confirm-button" onClick={handleConfirmAndPay}>
-            CONFIRM & PAY
-          </button>
-        </div>
-      </div>
-    </div>
+                  <button className="confirm-button" onClick={handleConfirmAndPay}>
+                    CONFIRM & PAY
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

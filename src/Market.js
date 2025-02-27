@@ -57,6 +57,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         price: selectedPurchase.stars === 0 ? 'FREE' : null
       }, shared.loginData?.link);
     }
+    
+    // Reset states
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);

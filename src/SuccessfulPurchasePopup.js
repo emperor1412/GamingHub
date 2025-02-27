@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SuccessfulPurchasePopup.css';
 import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView }) => {
+  useEffect(() => {
+    // Clean up payment_success when component unmounts
+    return () => {
+      localStorage.removeItem('payment_success');
+    };
+  }, []);
+
   if (!isOpen) return null;
 
-  const handleClaim = () => {
-    onClaim();
-    // Redirect to Market view
-    if (shared.setActiveTab) {
-      shared.setActiveTab('market');
+  const handleClaim = async () => {
+    try {
+      // Get latest profile data
+      await shared.getProfile();
+      
+      // Remove payment_success and close popup
+      localStorage.removeItem('payment_success');
+      
+      // Close popup and navigate back to market
+      onClaim();
+      setShowBuyView(false);
+      
+      // Force a delay and try again to ensure it works
+      setTimeout(() => {
+        setShowBuyView(false);
+      }, 100);
+      
+    } catch (error) {
+      console.error('Error during claim:', error);
+      // Even if there's an error, try to close
+      setShowBuyView(false);
     }
   };
 
