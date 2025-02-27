@@ -16,24 +16,11 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView }) =>
 
   const handleClaim = async () => {
     try {
-      // Get latest profile data
-      await shared.getProfile();
-      
-      // Remove payment_success and close popup
-      localStorage.removeItem('payment_success');
-      
-      // Close popup and navigate back to market
-      onClaim();
-      setShowBuyView(false);
-      
-      // Force a delay and try again to ensure it works
-      setTimeout(() => {
-        setShowBuyView(false);
-      }, 100);
-      
+      // Close popup and trigger back button in Buy.js
+      onClaim(); // Close ConfirmPurchasePopup
+      setShowBuyView(false); // Trigger back button effect
     } catch (error) {
       console.error('Error during claim:', error);
-      // Even if there's an error, try to close
       setShowBuyView(false);
     }
   };
