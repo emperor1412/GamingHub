@@ -1,10 +1,43 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './ConfirmPurchasePopup.css';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
 import shared from './Shared';
+
+// url: /app/buyOptions
+// Request:
+// Response:
+// {
+//     "code": 0,
+//     "data": [
+//         {
+//             "id": 1,
+//             "state": 0,
+//             "stars": 1,
+//             "starlet": 10,
+//             "ticket": 1
+//         },
+//         {
+//             "id": 2,
+//             "state": 0,
+//             "stars": 2,
+//             "starlet": 30,
+//             "ticket": 2
+//         }
+//     ]
+// }
+
+// url: /app/buyStarlets
+// Request:
+//     optionId int
+// Response:
+// {
+//     "code": 0,
+//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
+// }
+
 
 const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -32,16 +65,13 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
 
   const handleConfirmAndPay = useCallback(async () => {
     try {
-      // Lưu số Starlets ban đầu
-      const initialStarlets = shared.getStarlets();
-      console.log('Initial Starlets before payment:', initialStarlets);
-
       const result = await handleStarletsPurchase({ amount, stars });
       if (result?.status === "paid") {
         onClose();
-        // Truyền initialStarlets qua purchaseData
-        setPurchaseData({ initialStarlets });
+        setPurchaseData({ initialStarlets: result.initialStarlets });
         setShowSuccessPopup(true);
+      } else if (result?.status === "cancelled") {
+        onClose();
       }
     } catch (error) {
       console.error('Purchase failed:', error);
@@ -54,6 +84,21 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     setPurchaseData(null);
     onConfirm();
   }, [onConfirm]);
+
+  useEffect(() => {
+    const pendingPayment = localStorage.getItem('payment_pending');
+    const paymentSuccess = localStorage.getItem('payment_success');
+
+    if (pendingPayment && paymentSuccess) {
+      const payment = JSON.parse(pendingPayment);
+      setPurchaseData({ initialStarlets: shared.getStarlets() - payment.amount });
+      setShowSuccessPopup(true);
+      
+      // Clear payment data
+      localStorage.removeItem('payment_pending');
+      localStorage.removeItem('payment_success');
+    }
+  }, []);
 
   if (!isOpen && !showSuccessPopup) return null;
 

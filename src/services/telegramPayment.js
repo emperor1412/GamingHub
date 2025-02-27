@@ -3,7 +3,7 @@ import shared from '../Shared';
 // Test payment provider token cho Stripe (TEST)
 const TEST_PAYMENT_PROVIDER = '';
 const BASE_URL = `https://api.telegram.org/bot${shared.bot_token}/test/createInvoiceLink`;
-const MOCK_PAYMENT = true; // Toggle này để bật/tắt mock payment
+const MOCK_PAYMENT = false; // Toggle này để bật/tắt mock payment
 
 export const telegramPayment = {
   async createInvoiceLink(product) {
@@ -72,53 +72,54 @@ export const telegramPayment = {
 
 export const handleStarletsPurchase = async (product) => {
   try {
-    if (MOCK_PAYMENT) {
-      console.log('Using mock payment for:', product);
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log("Mock payment successful!");
-          resolve({
-            status: "paid",
-            amount: product.stars,
-            currency: "XTR",
-            payload: "starlets_" + product.amount
-          });
-        }, 1000);
-      });
-    }
+    // Lưu số Starlets ban đầu
+    const initialStarlets = shared.getStarlets();
+    console.log('Initial Starlets:', initialStarlets);
 
-    const response = await telegramPayment.createInvoiceLink(product);
-    console.log('Payment response:', response);
-    
-    if (response.ok && response.result) {
-      console.log('Generated invoice link:', response.result);
-      
+    // Gọi API buyStarlets
+    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=1`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    console.log('API response:', data);
+
+    if (data.code === 0) {
+      // Lưu payment info vào localStorage để check sau
+      localStorage.setItem('payment_pending', JSON.stringify({
+        amount: product.amount,
+        stars: product.stars,
+        timestamp: Date.now()
+      }));
+
       return new Promise((resolve) => {
-        window.Telegram.WebApp.openInvoice(response.result, (status) => {
-          console.log("Payment status:", status);
-          if (status === "paid") {
-            console.log("Payment successful!");
+        // Listen for invoice closed event
+        window.Telegram.WebApp.onEvent('invoiceClosed', (status) => {
+          console.log('Invoice closed with status:', status);
+          
+          // Check if payment was successful
+          if (status === 'paid') {
+            localStorage.setItem('payment_success', 'true');
             resolve({ 
               status: "paid",
-              amount: product.stars,
-              currency: "XTR",
-              payload: "starlets_" + product.amount
+              amount: product.amount,
+              initialStarlets
             });
-          } else if (status === "failed") {
-            console.error("Payment failed");
-            resolve({ status: "failed" });
-          } else if (status === "pending") {
-            console.log("Payment pending...");
-            resolve({ status: "pending" });
-          } else if (status === "cancelled") {
-            console.log("Payment cancelled by user");
+          } else {
             resolve({ status: "cancelled" });
           }
         });
+
+        // Open invoice URL trong Telegram WebApp
+        window.Telegram.WebApp.openInvoice(data.data, (status) => {
+          console.log('Invoice callback status:', status);
+        });
       });
     } else {
-      console.error('Failed response:', response);
-      throw new Error(`Failed to create invoice link: ${JSON.stringify(response)}`);
+      throw new Error(data.msg || 'Failed to get payment URL');
     }
   } catch (error) {
     console.error('Purchase error:', error);
