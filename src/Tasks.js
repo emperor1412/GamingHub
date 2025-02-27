@@ -639,6 +639,7 @@ const Tasks = ({
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
+                        */}
 
                         <section className="tasks-section">
                             <h2 
@@ -653,7 +654,7 @@ const Tasks = ({
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
-                        */}
+                        
                     </div>
                 </div>
                 </>
