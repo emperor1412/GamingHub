@@ -616,7 +616,7 @@ const Tasks = ({
                                 className="section-title" 
                                 onClick={() => setStandardTasksExpanded(!standardTasksExpanded)}
                             >
-                                STANDARD TASKS <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                                FSL Academy <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksStandard

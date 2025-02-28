@@ -17,12 +17,52 @@ const Buy = ({
   setShowProfileView 
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentOption, setCurrentOption] = useState(null);
+
+  useEffect(() => {
+    const fetchOptionData = async () => {
+      if (!selectedPurchase?.optionId) return;
+      
+      try {
+        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+        const data = await response.json();
+        if (data.code === 0 && Array.isArray(data.data)) {
+          const option = data.data.find(opt => opt.id === selectedPurchase.optionId);
+          if (option) {
+            setCurrentOption(option);
+          }
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && Array.isArray(retryData.data)) {
+              const option = retryData.data.find(opt => opt.id === selectedPurchase.optionId);
+              if (option) {
+                setCurrentOption(option);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch option data:', error);
+      }
+    };
+
+    fetchOptionData();
+  }, [selectedPurchase?.optionId]);
 
   const handlePaymentMethod = (method) => {
+    if (method === 'free') {
+      return;
+    }
+
     trackUserAction('buy_payment_method_click', {
       method,
       amount: selectedPurchase?.amount,
-      stars: selectedPurchase?.stars
+      stars: selectedPurchase?.stars,
+      optionId: selectedPurchase?.optionId
     }, shared.loginData?.link);
 
     setIsPopupOpen(true);
@@ -33,6 +73,7 @@ const Buy = ({
       trackUserAction('market_purchase_click', {
         amount: selectedPurchase.amount,
         stars: selectedPurchase.stars,
+        optionId: selectedPurchase.optionId,
         price: selectedPurchase.stars === 0 ? 'FREE' : null
       }, shared.loginData?.link);
     }
@@ -105,7 +146,7 @@ const Buy = ({
                 </div>
                 <div className="item-detail-box">
                   <div className="item-amount">
-                    <span className="x-mark">x</span>10 TICKETS
+                    <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
                   </div>
                 </div>
               </div>
@@ -146,6 +187,7 @@ const Buy = ({
           onClose={handleClosePopup}
           amount={selectedPurchase?.amount}
           stars={selectedPurchase?.stars}
+          optionId={selectedPurchase?.optionId}
           onConfirm={handleConfirmPurchase}
           setShowProfileView={setShowProfileView}
           setShowBuyView={setShowBuyView}
