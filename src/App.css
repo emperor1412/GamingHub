@@ -267,3 +267,13 @@ p {
   /* position: fixed; */
   /* height: 100%; */
 }
+
+.disabled-market {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled-market img {
+  width: 24px;
+  height: 24px;
+}
