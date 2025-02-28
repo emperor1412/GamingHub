@@ -56,6 +56,7 @@ const tokenABI = [
 const shared = {
     server_url: 'https://gamehub.fsl.com',
     app_link: 'https://t.me/FSLGameHub_Bot/fslgamehub',
+    host_environment: 'production',
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -112,6 +113,12 @@ const shared = {
         star4: single_star_4,
         star5: single_star_5
     },
+
+    // Add setView function
+    setView: null, // This will be set by the main App component
+
+    // Add setActiveTab function
+    setActiveTab: null, // This will be set by the App component
 
     login: async (initDataRaw) => {
         try {

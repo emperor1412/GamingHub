@@ -1,0 +1,276 @@
+.sp-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.sp-popup-container {
+  width: 100%;
+  max-width: 250px;
+  background: #000;
+  border: 1px solid #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  position: relative;
+  margin: 0 26px;
+  overflow: visible;
+  transform: translateY(0);
+  transition: transform 0.2s ease;
+}
+
+.sp-popup-container.has-error {
+  transform: translateY(-40px);
+}
+
+.sp-popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.sp-popup-icon {
+  width: 70px;
+  height: 70px;
+  background: #0000FF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.sp-popup-icon img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.sp-popup-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.sp-popup-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: -10px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  background: #FFFFFF;
+  color: #0000FF;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.sp-received-section {
+  margin: 12px 0 20px;
+  width: 100%;
+}
+
+.sp-received-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.sp-received-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.sp-received-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+}
+
+.sp-received-item img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  margin-top: 6px;
+}
+
+.sp-received-item .ticket-icon {
+  width: 42px;
+  height: 42px;
+  margin-top: 6px;
+}
+
+.sp-received-item span {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.sp-received-item span::before {
+  content: 'x';
+  font-size: 22px;
+  color: #0000FF;
+  margin-right: 4px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 0;
+}
+
+.sp-floating-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+
+.sp-floating-star {
+    position: absolute;
+    opacity: 0.8;
+}
+
+/* Ngôi sao ở viền - kích thước nhỏ */
+.sp-s1, .sp-s2, .sp-s5 {
+  width: 20px;
+  height: 20px;
+}
+
+.sp-s4, .sp-s3 {
+  width: 25px;
+  height: 25px;
+}
+
+/* Ngôi sao to */
+.sp-s6, .sp-s7, .sp-s8 {
+  width: 35px;
+  height: 35px;
+}
+
+/* Vị trí các ngôi sao nhỏ ở viền phía trên */
+.sp-s1 {
+  top: 20%;
+  right: 3%;
+  animation: sp-float 3s ease-in-out infinite;
+}
+
+.sp-s2 {
+  top: 35%;
+  right: 12%;
+  animation: sp-float 4s ease-in-out infinite 1s;
+}
+
+.sp-s3 {
+  top: 45%;
+  right: -3%;
+  animation: sp-float 3.5s ease-in-out infinite 0.5s;
+}
+
+.sp-s4 {
+  top: 18%;
+  left: 7%;
+  animation: sp-float 3.8s ease-in-out infinite 0.8s;
+}
+
+.sp-s5 {
+  top: 0%;
+  left: 15%;
+  animation: sp-float 3.2s ease-in-out infinite 1.2s;
+}
+
+/* Ngôi sao to gần chữ PURCHASE */
+.sp-s6 {
+  top: 45%;
+  right: 15%;
+  animation: sp-float 3.6s ease-in-out infinite 0.3s;
+}
+
+.sp-s7 {
+  top: 35%;
+  left: -12px;
+  animation: sp-float 3.8s ease-in-out infinite 0.8s;
+}
+
+.sp-s8 {
+  top: 5%;
+  right: 12%;
+  animation: sp-float 3.7s ease-in-out infinite 0.4s;
+}
+  
+@keyframes sp-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.sp-claim-button {
+  background: #0000FF;
+  color: white;
+  border: none;
+  padding: 0;
+  height: 38px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  width: 100%;
+  font-family: "PP Neue Machina", sans-serif;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-claim-button:hover {
+  background: #0000CC;
+}
+
+.sp-error-message {
+  color: #FF4444;
+  font-size: 14px;
+  margin: 12px 0;
+  text-align: center;
+  padding: 8px 12px;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.sp-claim-button:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 500px) {
+  .sp-popup-container {
+    width: 100%;
+  }
+}

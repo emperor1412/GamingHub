@@ -1,0 +1,237 @@
+.sa_results-container {
+    max-width: 430px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #000000;
+}
+
+.sa_results-title {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 800;
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.sa_results-subtitle {
+    color: rgba(131,128,127,255);
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    margin: 0 20px 16px;
+    padding: 10px 20px;
+    background: #292929;
+    border-radius: 8px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.sa_rewards-wrapper {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    padding: 0 20px;
+    margin: 10px 0;
+}
+
+.sa_rewards-content {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    bottom: 0;
+}
+
+.sa_rewards-container {
+    background: #212121;
+    height: 100%;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.sa_rewards-container-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #0000FF;
+    border-radius: 16px;
+    pointer-events: none;
+    z-index: 2;
+    background: transparent;
+}
+
+.sa_rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(auto-fill, minmax(48px, 1fr));
+    gap: 16px;
+    height: calc(100% - 32px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 16px;
+}
+
+.sa_rewards-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.sa_rewards-grid {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Gradient overlay for top fade */
+.sa_rewards-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background: linear-gradient(to bottom, rgba(0, 0, 255, 0.05) 0%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Gradient overlay for bottom fade */
+.sa_rewards-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background: linear-gradient(to top, rgba(0, 0, 255, 0.05) 0%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.sa_reward-item {
+    background: #292929;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+}
+
+.sa_reward-icon {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+}
+
+.sa_reward-amount {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 800;
+    flex: 1;
+    text-align: left;
+}
+
+.sa_buttons-container {
+    padding: 48px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.sa_share-story-button,
+.sa_claim-all-button {
+    width: 90%;
+    height: 40px;
+    border-radius: 8px;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa_share-story-button {
+    background: #0000FF;
+    border: none;
+    color: white;
+}
+
+.sa_claim-all-button {
+    background: transparent;
+    border: 2px solid #0000FF;
+    color: white;
+}
+
+.sa_header {
+    position: fixed;
+    width: 100%;
+    max-width: 430px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 1);
+    height: 40px;
+}
+
+.sa_back-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.sa_header-stats {
+    display: flex;
+    gap: 16px;
+    margin-right: 30px;
+    right: 10px;
+    position: absolute;
+}
+
+.sa_stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sa_stat-item img {
+    width: 24px;
+    height: 24px;
+}
+
+.sa_stat-item span {
+    color: white;
+    font-family: "PP Neue Machina";
+    font-style: italic;
+    font-weight: 800;
+}
+
+/* Adjust title margin to account for fixed header */
+.sa_results-title {
+    margin-top: 60px;
+} 
