@@ -79,7 +79,7 @@ export const handleStarletsPurchase = async (product) => {
     console.log('Initial Tickets:', initialTickets);
 
     // Gọi API buyStarlets với optionId từ product
-    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=${product.optionId || 1}`, {
+    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=${product.optionId || 1}&note=${shared.host_environment}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
