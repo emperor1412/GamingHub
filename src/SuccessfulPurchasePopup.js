@@ -4,7 +4,7 @@ import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tickets }) => {
   useEffect(() => {
     // Clean up payment_success when component unmounts
     return () => {
@@ -45,7 +45,7 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView }) =>
               </div>
               <div className="sp-received-item">
                 <img src={ticketIcon} alt="Ticket" className="ticket-icon" />
-                <span>10</span>
+                <span>{tickets || 10}</span>
               </div>
             </div>
           </div>

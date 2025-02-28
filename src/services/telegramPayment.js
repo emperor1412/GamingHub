@@ -72,12 +72,14 @@ export const telegramPayment = {
 
 export const handleStarletsPurchase = async (product) => {
   try {
-    // Lưu số Starlets ban đầu
-    const initialStarlets = shared.getStarlets();
+    // Lưu số Starlets và Tickets ban đầu
+    const initialStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+    const initialTickets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0;
     console.log('Initial Starlets:', initialStarlets);
+    console.log('Initial Tickets:', initialTickets);
 
-    // Gọi API buyStarlets
-    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=1`, {
+    // Gọi API buyStarlets với optionId từ product
+    const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=${product.optionId || 1}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -101,20 +103,24 @@ export const handleStarletsPurchase = async (product) => {
 
           try {
             await shared.getProfileWithRetry();
-            const currentStarlets = shared.getStarlets();
+            const currentStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+            const currentTickets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0;
             console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
+            console.log('Checking payment - Current Tickets:', currentTickets, 'Initial:', initialTickets);
 
-            if (currentStarlets > initialStarlets) {
+            if (currentStarlets > initialStarlets && currentTickets > initialTickets) {
               cleanup();
               localStorage.setItem('payment_success', JSON.stringify({
                 amount: product.amount,
                 initialStarlets,
+                tickets: currentTickets - initialTickets,
                 timestamp: Date.now()
               }));
               resolve({
                 status: "paid",
                 amount: product.amount,
-                initialStarlets
+                initialStarlets,
+                tickets: currentTickets - initialTickets
               });
             } else {
               cleanup();
@@ -141,8 +147,18 @@ export const handleStarletsPurchase = async (product) => {
             cleanup();
             resolve({ status: "cancelled" });
           }
-        }, 20000); // 30 seconds timeout
+        }, 20000); // 20 seconds timeout
       });
+    } else if (data.code === 102002 || data.code === 102001) {
+      // Token expired, attempt to refresh
+      console.log('Token expired, attempting to refresh...');
+      const result = await shared.login(shared.initData);
+      if (result.success) {
+        // Retry the purchase after login
+        return handleStarletsPurchase(product);
+      } else {
+        throw new Error('Failed to refresh token');
+      }
     } else {
       throw new Error(data.msg || 'Failed to get payment URL');
     }
