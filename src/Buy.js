@@ -54,6 +54,10 @@ const Buy = ({
   }, [selectedPurchase?.optionId]);
 
   const handlePaymentMethod = (method) => {
+    if (method === 'free') {
+      return;
+    }
+
     trackUserAction('buy_payment_method_click', {
       method,
       amount: selectedPurchase?.amount,
