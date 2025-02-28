@@ -9,6 +9,38 @@ import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
 
+// url: /app/buyOptions
+// Request:
+// Response:
+// {
+//     "code": 0,
+//     "data": [
+//         {
+//             "id": 1,
+//             "state": 0,
+//             "stars": 1,
+//             "starlet": 10,
+//             "ticket": 1
+//         },
+//         {
+//             "id": 2,
+//             "state": 0,
+//             "stars": 2,
+//             "starlet": 30,
+//             "ticket": 2
+//         }
+//     ]
+// }
+
+// url: /app/buyStarlets
+// Request:
+//     optionId int
+// Response:
+// {
+//     "code": 0,
+//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
+// }
+
 const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
@@ -16,6 +48,37 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [selectedPurchase, setSelectedPurchase] = useState(null);
   const [showBuyView, setShowBuyView] = useState(false);
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
+  const [buyOptions, setBuyOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchBuyOptions = async () => {
+      try {
+        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+        const data = await response.json();
+        console.log('Buy Options Response:', data);
+        if (data.code === 0 && Array.isArray(data.data)) {
+          console.log('Buy Options Data:', data.data);
+          setBuyOptions(data.data);
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            // Retry the fetch after login
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && Array.isArray(retryData.data)) {
+              setBuyOptions(retryData.data);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch buy options:', error);
+      }
+    };
+
+    fetchBuyOptions();
+  }, []);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -56,8 +119,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     showFSLIDScreen();
   };
 
-  const handleStarletPurchase = (amount, stars, price) => {
-    setSelectedPurchase({ amount, stars });
+  const handleStarletPurchase = (amount, stars, price, optionId = null) => {
+    setSelectedPurchase({ amount, stars, optionId });
     setShowBuyView(true);
   };
 
@@ -173,105 +236,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 </div>
               </button>
 
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(100, 5, null)}>
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
-                    </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">100</div>
-                        <div className="market-ticket-label">STARLETS</div>
+              {buyOptions.map((option) => (
+                <button 
+                  key={option.id}
+                  className="market-ticket-button" 
+                  onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                >
+                  <div className="market-ticket-button-image-container">
+                    <div className="market-ticket-content">
+                      <div className="market-ticket-icon">
+                        <img src={starlet} alt="Starlet" />
                       </div>
-                      <div className="market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
+                      <div className="market-ticket-info">
+                        <div className="market-ticket-text">
+                          <div className="market-ticket-amount">{option.starlet}</div>
+                          <div className="market-ticket-label">STARLETS</div>
+                        </div>
+                        <div className="market-ticket-bonus">
+                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                        </div>
                       </div>
                     </div>
+                    <div className="market-ticket-price">{option.stars} TELEGRAM STARS</div>
                   </div>
-                  <div className="market-ticket-price">5 TELEGRAM STARS</div>
-                </div>
-              </button>
-
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(250, 10, null)}>
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
-                    </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">250</div>
-                        <div className="market-ticket-label">STARLETS</div>
-                      </div>
-                      <div className="market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="market-ticket-price">10 TELEGRAM STARS</div>
-                </div>
-              </button>
-
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(300, 20, null)}>
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
-                    </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">300</div>
-                        <div className="market-ticket-label">STARLETS</div>
-                      </div>
-                      <div className="market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="market-ticket-price">20 TELEGRAM STARS</div>
-                </div>
-              </button>
-
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(350, 20, null)}>
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
-                    </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">350</div>
-                        <div className="market-ticket-label">STARLETS</div>
-                      </div>
-                      <div className="market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="market-ticket-price">20 TELEGRAM STARS</div>
-                </div>
-              </button>
-
-              <button className="market-ticket-button" onClick={() => handleStarletPurchase(500, 20, null)}>
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
-                      <img src={starlet} alt="Starlet" />
-                    </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">500</div>
-                        <div className="market-ticket-label">STARLETS</div>
-                      </div>
-                      <div className="market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="market-ticket-price">20 TELEGRAM STARS</div>
-                </div>
-              </button>
+                </button>
+              ))}
             </div>
           </div>
         </div>
