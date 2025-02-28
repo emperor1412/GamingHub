@@ -6,43 +6,50 @@ import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
 import shared from './Shared';
 
-// url: /app/buyOptions
-// Request:
-// Response:
-// {
-//     "code": 0,
-//     "data": [
-//         {
-//             "id": 1,
-//             "state": 0,
-//             "stars": 1,
-//             "starlet": 10,
-//             "ticket": 1
-//         },
-//         {
-//             "id": 2,
-//             "state": 0,
-//             "stars": 2,
-//             "starlet": 30,
-//             "ticket": 2
-//         }
-//     ]
-// }
-
-// url: /app/buyStarlets
-// Request:
-//     optionId int
-// Response:
-// {
-//     "code": 0,
-//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
-// }
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setShowProfileView, setShowBuyView }) => {
+
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConfirm, setShowProfileView, setShowBuyView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [currentOption, setCurrentOption] = useState(null);
+
+  useEffect(() => {
+    const fetchOptionData = async () => {
+      if (!optionId) return;
+      
+      try {
+        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+        const data = await response.json();
+        if (data.code === 0 && Array.isArray(data.data)) {
+          const option = data.data.find(opt => opt.id === optionId);
+          if (option) {
+            setCurrentOption(option);
+          }
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && Array.isArray(retryData.data)) {
+              const option = retryData.data.find(opt => opt.id === optionId);
+              if (option) {
+                setCurrentOption(option);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch option data:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchOptionData();
+    }
+  }, [isOpen, optionId]);
 
   const showError = useCallback(async (message) => {
     onClose();
@@ -67,9 +74,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
   const handleConfirmAndPay = useCallback(async () => {
     setIsProcessing(true);
     try {
-      const result = await handleStarletsPurchase({ amount, stars });
+      const result = await handleStarletsPurchase({ 
+        amount, 
+        stars,
+        optionId 
+      });
+
       if (result?.status === "paid") {
-        setPurchaseData({ initialStarlets: result.initialStarlets });
+        setPurchaseData({ 
+          initialStarlets: result.initialStarlets,
+          tickets: result.tickets
+        });
         setShowSuccessPopup(true);
       } else if (result?.status === "cancelled") {
         onClose();
@@ -80,7 +95,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, showError]);
+  }, [amount, stars, optionId, showError, onClose]);
 
   const handleClaim = useCallback(() => {
     setShowSuccessPopup(false);
@@ -102,7 +117,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
     if (paymentSuccess) {
       try {
         const payment = JSON.parse(paymentSuccess);
-        setPurchaseData({ initialStarlets: payment.initialStarlets });
+        setPurchaseData({ 
+          initialStarlets: payment.initialStarlets,
+          tickets: payment.tickets
+        });
         setShowSuccessPopup(true);
       } catch (error) {
         console.error('Error parsing payment success data:', error);
@@ -126,6 +144,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
               isOpen={true}
               onClaim={handleClaim}
               amount={amount}
+              tickets={purchaseData?.tickets || currentOption?.ticket || 10}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
@@ -147,7 +166,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
                       {stars > 0 && (
                         <>
                           <br />
-                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
                         </>
@@ -155,7 +174,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, onConfirm, setSh
                       {stars === 0 && (
                         <>
                           <br />
-                          AND <span className="highlight-value">10 TICKETS</span> IN FSL GAME HUB
+                          AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">FREE</span>?
                         </>
