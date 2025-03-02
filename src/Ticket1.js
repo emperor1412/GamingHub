@@ -381,15 +381,15 @@ Response:
                     setUp();
                     setShowLoading(false);
                 }} />
-            ) : showTicketAll ? (
-                <TicketAll onClose={async () => {
-                    setShowTicketAll(false);
-                    setShowOverlay(false);
-                    setShowLoading(true);
-                    await setupProfileData();
-                    setUp();
-                    setShowLoading(false);
-                }} />
+            // ) : showTicketAll ? (
+            //     <TicketAll onClose={async () => {
+            //         setShowTicketAll(false);
+            //         setShowOverlay(false);
+            //         setShowLoading(true);
+            //         await setupProfileData();
+            //         setUp();
+            //         setShowLoading(false);
+            //     }} />
             ) : showLevelUp ? (
                 <LevelUp onClose={onCloseLevelup} />
             ) : (
@@ -495,17 +495,18 @@ Response:
                                     </button>
                                     <button 
                                         className="overlay-button-ticket1 secondary"
-                                        onClick={() => setShowTicketAll(true)}
-                                        disabled={ticket < 2}
-                                        style={{ 
-                                            opacity: ticket >= 2 ? 1 : 0.6,
-                                            cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
-                                        }}
+                                        // onClick={() => setShowTicketAll(true)}
+                                        // disabled={ticket < 2}
+                                        // style={{ 
+                                        //     opacity: ticket >= 2 ? 1 : 0.6,
+                                        //     cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
+                                        // }}
                                     >
                                         SCRATCH ALL TICKETS
-                                        {ticket < 2 && (
+                                        <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
+                                        {/* {ticket < 2 && (
                                             <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
-                                        )}
+                                        )} */}
                                     </button>
                                 </div>
                             </div>
