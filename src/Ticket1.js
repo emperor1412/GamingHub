@@ -18,6 +18,7 @@ import unlock from './images/unlock.png';
 import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 import TicketAll from './TicketAll';
+import bulk_scratch_animation from './images/Bulk_Scratch_Ticket.gif';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -39,6 +40,7 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [showTicketAll, setShowTicketAll] = useState(false);
     const [showScratch1Overlay, setShowScratch1Overlay] = useState(false);
     const [showScratchAllOverlay, setShowScratchAllOverlay] = useState(false);
+    const [showBulkScratchAnimation, setShowBulkScratchAnimation] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -374,8 +376,6 @@ Response:
     };
 
     return (
-        // implement show loading here
-
         <>
             {showLoading && (
                 <div className="loading-overlay">
@@ -391,19 +391,32 @@ Response:
                     setUp();
                     setShowLoading(false);
                 }} />
-            // ) : showTicketAll ? (
-            //     <TicketAll onClose={async () => {
-            //         setShowTicketAll(false);
-            //         setShowOverlay(false);
-            //         setShowLoading(true);
-            //         await setupProfileData();
-            //         setUp();
-            //         setShowLoading(false);
-            //     }} />
+            ) : showTicketAll ? (
+                <TicketAll onClose={async () => {
+                    setShowTicketAll(false);
+                    setShowOverlay(false);
+                    setShowLoading(true);
+                    await setupProfileData();
+                    setUp();
+                    setShowLoading(false);
+                }} />
             ) : showLevelUp ? (
                 <LevelUp onClose={onCloseLevelup} />
             ) : (
                 <>
+                    {/* Show bulk scratch animation overlay first */}
+                    {showBulkScratchAnimation && (
+                        <div className="bulk-scratch-animation-overlay">
+                            <div className="bulk-scratch-animation-content">
+                                <img 
+                                    src={bulk_scratch_animation} 
+                                    alt="Bulk Scratch Animation" 
+                                    className="bulk-scratch-animation"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="ticket1-container">
                         <header className="ticket-header">
                             <button className="back-button back-button-alignment" onClick={onClose}>
@@ -564,7 +577,12 @@ Response:
                                         className="overlay-button-ticket1 primary"
                                         onClick={() => {
                                             setShowScratchAllOverlay(false);
-                                            setShowTicketAll(true);
+                                            setShowBulkScratchAnimation(true);
+                                            // Wait for animation duration (1.5s) then proceed
+                                            setTimeout(() => {
+                                                setShowBulkScratchAnimation(false);
+                                                setShowTicketAll(true);
+                                            }, 1500); // Duration of your GIF
                                         }}
                                     >
                                         BULK SCRATCH {Math.min(ticket, slotNum - slotUseNum)} TICKETS
