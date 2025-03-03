@@ -12,7 +12,6 @@
     padding: 60px 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
     height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
@@ -20,7 +19,7 @@
 
 .scratch-header {
     background: rgba(117, 179, 255, 0.20);
-    padding: 16px;
+    padding: 8px;
     margin-bottom: 0px;
     margin: 2px 4px 0px 4px;
     border-radius: 8px;
@@ -41,7 +40,7 @@
     background: #292929;
     padding: 16px 16px 0px;
     flex: 1 1 auto;
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 300px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -228,6 +227,14 @@
     text-align: center;
 }
 
+.stacked-tickets-container.scratch-all {
+    height: 400px;
+}
+
+.overlay-content-ticket1.scratch-all {
+    gap: 60px;
+}
+
 .overlay-ticket1-img {
     width: 200px;
     height: 200px;
@@ -256,11 +263,10 @@
     padding: 0 16px;
     justify-content: center;
     align-items: center;
-    border-radius: 8px;
+    border-radius: 32px;
     border: none;
     cursor: pointer;
     transition: transform 0.2s;
-
     color: #FFF;
     font-family: "PP Neue Machina";
     font-size: 16px;
@@ -580,4 +586,80 @@
     height: 20px;
     vertical-align: middle;
     margin-right: 0px;
+}
+
+.scratch-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.scratch-button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "PP Neue Machina";
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+.scratch-button.primary {
+    background: #0066FF;
+    color: white;
+}
+
+.scratch-button.secondary {
+    background: #1C1C1E;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scratch-button-lock {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+}
+
+.stacked-tickets-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.stacked-ticket {
+    width: 150px;
+    height: auto;
+    position: absolute;
+    transform-origin: center;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.stacked-ticket:nth-child(n) {
+    transform: translateY(calc((var(--n) - 1) * 10px));
+}
+
+.stacked-ticket:nth-child(2n) {
+    transform: translateX(40px) translateY(calc((var(--n) - 1) * 20px)) rotate(280deg);
+}
+
+.stacked-ticket:nth-child(2n + 1) {
+    transform: translateX(-40px) translateY(calc((var(--n) - 1) * 20px)) rotate(-80deg);
 }
