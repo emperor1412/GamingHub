@@ -18,6 +18,7 @@ import unlock from './images/unlock.png';
 import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 import TicketAll from './TicketAll';
+import bulk_scratch_animation from './images/Bulk_Scratch_Ticket.gif';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -37,6 +38,9 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [showOverlayClaimSuccess, setShowOverlayClaimSuccess] = useState(false);
     const [showTimerOverlay, setShowTimerOverlay] = useState(false);
     const [showTicketAll, setShowTicketAll] = useState(false);
+    const [showScratch1Overlay, setShowScratch1Overlay] = useState(false);
+    const [showScratchAllOverlay, setShowScratchAllOverlay] = useState(false);
+    const [showBulkScratchAnimation, setShowBulkScratchAnimation] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -236,14 +240,22 @@ Response:
         setShowTimer(true);
     };
 
-    const handleScratchClick = (index) => {
-        trackUserAction('ticket_scratch_clicked', {
-            slot_index: index,
+    const handleScratch1Click = () => {
+        trackUserAction('ticket_scratch_1_clicked', {
             slots_used: slotUseNum,
             total_slots: slotNum,
             tickets_remaining: ticket
         }, shared.loginData?.userId);
-        setShowOverlay(true);
+        setShowScratch1Overlay(true);
+    };
+
+    const handleScratchAllClick = () => {
+        trackUserAction('ticket_scratch_all_clicked', {
+            slots_used: slotUseNum,
+            total_slots: slotNum,
+            tickets_remaining: ticket
+        }, shared.loginData?.userId);
+        setShowScratchAllOverlay(true);
     };
 
     const handleLockedSlotClick = (index) => {
@@ -283,7 +295,7 @@ Response:
                         <button 
                             key={index} 
                             className="scratch-item unlocked"
-                            onClick={() => handleScratchClick(index)}
+                            onClick={() => handleScratch1Click()}
                         >
                             <div className='scratch-item-border'>   
                                 <div className='scratch-item-background'></div>
@@ -364,8 +376,6 @@ Response:
     };
 
     return (
-        // implement show loading here
-
         <>
             {showLoading && (
                 <div className="loading-overlay">
@@ -381,19 +391,32 @@ Response:
                     setUp();
                     setShowLoading(false);
                 }} />
-            // ) : showTicketAll ? (
-            //     <TicketAll onClose={async () => {
-            //         setShowTicketAll(false);
-            //         setShowOverlay(false);
-            //         setShowLoading(true);
-            //         await setupProfileData();
-            //         setUp();
-            //         setShowLoading(false);
-            //     }} />
+            ) : showTicketAll ? (
+                <TicketAll onClose={async () => {
+                    setShowTicketAll(false);
+                    setShowOverlay(false);
+                    setShowLoading(true);
+                    await setupProfileData();
+                    setUp();
+                    setShowLoading(false);
+                }} />
             ) : showLevelUp ? (
                 <LevelUp onClose={onCloseLevelup} />
             ) : (
                 <>
+                    {/* Show bulk scratch animation overlay first */}
+                    {showBulkScratchAnimation && (
+                        <div className="bulk-scratch-animation-overlay">
+                            <div className="bulk-scratch-animation-content">
+                                <img 
+                                    src={bulk_scratch_animation} 
+                                    alt="Bulk Scratch Animation" 
+                                    className="bulk-scratch-animation"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="ticket1-container">
                         <header className="ticket-header">
                             <button className="back-button back-button-alignment" onClick={onClose}>
@@ -442,7 +465,7 @@ Response:
                                     <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
                                 </div>
                             </div>
-                            <header className="ticket-header">
+                            <header className="t1_ticket-header">
                                 <button className="back-button back-button-alignment" onClick={() => setShowTimer(false)}>
                                     <img src={back} alt="Back" />
                                 </button>
@@ -469,11 +492,47 @@ Response:
                                         {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
                                     </div>
                                     <div className="scratch-status">
-                                        <div className="scratch-status-text"> <span className='scratch-status-text-count'>{slotUseNum}/{slotNum} </span> TICKETS SCRATCHED TODAY!</div>
-                                        <div className="scratch-status-subtext"><img src={unlock} alt="Unlock" className="unlock-icon" /> UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!</div>
+                                        <div className="scratch-status-text">
+                                            <span className='scratch-status-text-count'>{slotUseNum}/{slotNum} </span> 
+                                            TICKETS SCRATCHED TODAY!
+                                        </div>
+                                        <div className="scratch-status-subtext">
+                                            <img src={unlock} alt="Unlock" className="unlock-icon" /> 
+                                            UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!
+                                        </div>
                                     </div>
                                 </div>
 
+                                <div className="scratch-buttons">
+                                    <button 
+                                        className="overlay-button-ticket1 primary" 
+                                        onClick={handleScratch1Click}
+                                        disabled={ticket === 0 || slotUseNum >= slotNum}
+                                        style={{ 
+                                            opacity: (ticket === 0 || slotUseNum >= slotNum) ? 0.6 : 1,
+                                            cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        SCRATCH 1 TICKET
+                                        {(ticket === 0 || slotUseNum >= slotNum) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
+                                    </button>
+                                    <button 
+                                        className="overlay-button-ticket1 secondary"
+                                        onClick={handleScratchAllClick}
+                                        disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
+                                        style={{ 
+                                            opacity: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 0.6 : 1,
+                                            cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        SCRATCH ALL TICKETS
+                                        {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
+                                    </button>
+                                </div>
 
                                 <div className="info-box-ticket">
                                     Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
@@ -481,6 +540,82 @@ Response:
                             </div>
                         )}
                     </div>
+
+                    {showScratch1Overlay && (
+                        <div className="overlay-ticket1" onClick={() => setShowScratch1Overlay(false)}>
+                            <div className="overlay-content-ticket1" onClick={e => e.stopPropagation()}>
+                                <button className="back-button back-button-alignment" onClick={() => setShowScratch1Overlay(false)}>
+                                    <img src={back} alt="Back" />
+                                </button>
+                                <img src={scratch_ticket_svg} alt="Scratch Ticket" className="overlay-ticket1-img" />
+                                <div className="overlay-buttons-ticket1">
+                                    <button 
+                                        className="overlay-button-ticket1 primary" 
+                                        onClick={() => {
+                                            if (ticket === 0 || slotUseNum >= slotNum) return;
+                                            setShowScratch1Overlay(false);
+                                            setShowTicket2(true);
+                                        }}
+                                        disabled={ticket === 0 || slotUseNum >= slotNum}
+                                        style={{ 
+                                            opacity: (ticket === 0 || slotUseNum >= slotNum) ? 0.6 : 1,
+                                            cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        SCRATCH 1 TICKET
+                                        {(ticket === 0 || slotUseNum >= slotNum) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showScratchAllOverlay && (
+                        <div className="overlay-ticket1" onClick={() => setShowScratchAllOverlay(false)}>
+                            <div className="overlay-content-ticket1 scratch-all" onClick={e => e.stopPropagation()}>
+                                <button className="back-button back-button-alignment" onClick={() => setShowScratchAllOverlay(false)}>
+                                    <img src={back} alt="Back" />
+                                </button>
+                                <div className="stacked-tickets-container scratch-all">
+                                    {[...Array(Math.min(15, Math.min(ticket, slotNum - slotUseNum)))].map((_, index) => (
+                                        <img 
+                                            key={index}
+                                            src={scratch_ticket_svg} 
+                                            alt={`Scratch Ticket ${index + 1}`} 
+                                            className="stacked-ticket"
+                                            style={{ '--n': index + 1 }}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="overlay-buttons-ticket1">
+                                    <button 
+                                        className="overlay-button-ticket1 primary"
+                                        onClick={() => {
+                                            if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
+                                            setShowScratchAllOverlay(false);
+                                            setShowBulkScratchAnimation(true);
+                                            setTimeout(() => {
+                                                setShowBulkScratchAnimation(false);
+                                                setShowTicketAll(true);
+                                            }, 1500);
+                                        }}
+                                        disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
+                                        style={{ 
+                                            opacity: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 0.6 : 1,
+                                            cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        BULK SCRATCH {Math.min(ticket, slotNum - slotUseNum)} TICKETS
+                                        {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {showOverlay && (
                         <div className="overlay-ticket1" onClick={() => setShowOverlay(false)}>

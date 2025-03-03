@@ -1,4 +1,4 @@
-.market-container {
+.mk-market-container {
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -10,7 +10,7 @@
   position: relative;
 }
 
-.market-top-bar {
+.mk-market-top-bar {
   position: fixed;
   top: 18px;
   width: 500px;
@@ -29,13 +29,13 @@
   backdrop-filter: blur(10px);
 }
 
-.user-greeting {
+.mk-user-greeting {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.profile-pic-main {
+.mk-profile-pic-main {
   flex-shrink: 0;
   background: none;
   border: none;
@@ -45,14 +45,14 @@
   margin-left: 0;
 }
 
-.profile-pic-main img {
+.mk-profile-pic-main img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   border: #FF00F6 2px solid;
 }
 
-.greeting-text {
+.mk-greeting-text {
   color: #FFF;
   font-family: "PP Neue Machina";
   font-size: 12px;
@@ -63,7 +63,7 @@
   margin-top: 4px;
 }
 
-.market-content {
+.mk-market-content {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -73,7 +73,7 @@
   position: relative;
 }
 
-.market-title {
+.mk-market-title {
   text-align: center;
   font-size: clamp(72px, 15vw, 90px);
   font-weight: 700;
@@ -91,7 +91,7 @@
   height: 90px;
 }
 
-.market-title span {
+.mk-market-title span {
   width: 100%;
   display: block;
   text-align: center;
@@ -105,13 +105,13 @@
   height: 120px;
 }
 
-.currency-info {
+.mk-currency-info {
   display: flex;
   gap: 16px;
   margin-left: auto;
 }
 
-.currency-item {
+.mk-currency-item {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -124,12 +124,12 @@
   transition: opacity 0.2s;
 }
 
-.currency-item img {
+.mk-currency-item img {
   width: 20px;
   height: 20px;
 }
 
-.currency-value {
+.mk-currency-value {
   color: #FFF;
   font-family: "PP Neue Machina";
   font-size: 12px;
@@ -140,7 +140,7 @@
   margin-top: 4px;
 }
 
-.fsl-connect-section {
+.mk-fsl-connect-section {
   background: rgba(0, 255, 255, 0.1);
   border-radius: 12px;
   padding: 12px;
@@ -148,13 +148,13 @@
   width: auto;
 }
 
-.fsl-connect-content {
+.mk-fsl-connect-content {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.lock-icon {
+.mk-lock-icon {
   font-size: 24px;
   color: #00ffff;
   background: rgba(0, 255, 255, 0.2);
@@ -166,22 +166,22 @@
   border-radius: 50%;
 }
 
-.fsl-text {
+.mk-fsl-text {
   flex: 1;
 }
 
-.connect-title {
+.mk-connect-title {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 4px;
 }
 
-.connect-subtitle {
+.mk-connect-subtitle {
   font-size: 12px;
   opacity: 0.8;
 }
 
-.scrollable-market-content {
+.mk-scrollable-market-content {
   flex: 1;
   overflow-y: auto;
   padding-top: 10%;
@@ -221,16 +221,16 @@
 }
 
 /* Hide WebKit scrollbars */
-.scrollable-market-content::-webkit-scrollbar,
-.scrollable-market-content::-webkit-scrollbar-thumb,
-.scrollable-market-content::-webkit-scrollbar-track {
+.mk-scrollable-market-content::-webkit-scrollbar,
+.mk-scrollable-market-content::-webkit-scrollbar-thumb,
+.mk-scrollable-market-content::-webkit-scrollbar-track {
   width: 0 !important;
   height: 0 !important;
   background-color: transparent !important;
   display: none !important;
 }
 
-.starlet-grid {
+.mk-starlet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
@@ -241,7 +241,7 @@
   box-sizing: border-box;
 }
 
-.starlet-item {
+.mk-starlet-item {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   border-radius: 12px;
   padding: 16px;
@@ -253,7 +253,7 @@
   overflow: hidden;
 }
 
-.starlet-item::before {
+.mk-starlet-item::before {
   content: '';
   position: absolute;
   top: 0;
@@ -263,25 +263,25 @@
   background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
-.starlet-item:hover {
+.mk-starlet-item:hover {
   transform: translateY(-2px);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
 }
 
-.starlet-amount {
+.mk-starlet-amount {
   font-size: 28px;
   font-weight: bold;
   color: #fff;
   margin-bottom: 4px;
 }
 
-.starlet-label {
+.mk-starlet-label {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 12px;
 }
 
-.price-tag {
+.mk-price-tag {
   font-size: 12px;
   padding: 4px 12px;
   background: rgba(74, 144, 226, 0.2);
@@ -290,12 +290,12 @@
   color: #4a90e2;
 }
 
-.price-tag.free {
+.mk-price-tag.free {
   background: rgba(0, 255, 0, 0.2);
   color: #00ff00;
 }
 
-.market-ticket-button {
+.mk-market-ticket-button {
   position: relative;
   width: 100%;
   border: none;
@@ -305,7 +305,7 @@
   margin-bottom: 0px;
 }
 
-.market-ticket-button-image-container {
+.mk-market-ticket-button-image-container {
   position: relative;
   width: 100%;
   background: rgba(0, 0, 0, 0.3);
@@ -314,7 +314,7 @@
   flex-direction: column;
 }
 
-.market-ticket-content {
+.mk-market-ticket-content {
   display: flex;
   align-items: center;
   padding: 8px;
@@ -325,7 +325,7 @@
   backdrop-filter: blur(5px);
 }
 
-.market-ticket-icon {
+.mk-market-ticket-icon {
   width: 35%;
   height: 100%;
   display: flex;
@@ -336,11 +336,11 @@
   position: relative;
 }
 
-.market-ticket-icon::after {
+.mk-market-ticket-icon::after {
   display: none;
 }
 
-.market-ticket-icon img {
+.mk-market-ticket-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -348,7 +348,7 @@
   z-index: 1;
 }
 
-.market-ticket-text {
+.mk-market-ticket-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -357,7 +357,7 @@
   width: fit-content;
 }
 
-.market-ticket-amount {
+.mk-market-ticket-amount {
   font-family: "PP Neue Machina";
   font-size: 30px;
   font-weight: 700;
@@ -365,7 +365,7 @@
   line-height: 1;
 }
 
-.market-ticket-label {
+.mk-market-ticket-label {
   font-family: "PP Neue Machina";
   font-size: 14px;
   color: white;
@@ -379,7 +379,7 @@
   letter-spacing: 0.02em;
 }
 
-.market-ticket-bonus {
+.mk-market-ticket-bonus {
   padding: 0.5px 4px;
   background: #00FF00;
   color: black;
@@ -395,7 +395,7 @@
   margin-top: 2px;
 }
 
-.market-ticket-price {
+.mk-market-ticket-price {
   height: 20px;
   background: #0000FF;
   color: white;
@@ -407,29 +407,29 @@
   font-weight: 500;
 }
 
-.market-ticket-button:hover {
+.mk-market-ticket-button:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease;
 }
 
-.market-ticket-button:hover .market-ticket-content {
+.mk-market-ticket-button:hover .mk-market-ticket-content {
   background: rgba(0, 0, 255, 0.1);
 }
 
-.market-ticket-button.sold-out {
+.mk-market-ticket-button.sold-out {
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.market-ticket-button.sold-out:hover {
+.mk-market-ticket-button.sold-out:hover {
   transform: none;
 }
 
-.market-ticket-button.sold-out .market-ticket-price {
+.mk-market-ticket-button.sold-out .mk-market-ticket-price {
   background: #808080;
 }
 
-.market-ticket-info {
+.mk-market-ticket-info {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -441,11 +441,11 @@
 }
 
 @media screen and (max-width: 500px) {
-  .market-container {
+  .mk-market-container {
     width: 100%;
   }
   
-  .market-top-bar {
+  .mk-market-top-bar {
     width: 100%;
   }
 } 
