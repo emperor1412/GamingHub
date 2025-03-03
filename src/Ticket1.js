@@ -465,7 +465,7 @@ Response:
                                     <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
                                 </div>
                             </div>
-                            <header className="ticket-header">
+                            <header className="t1_ticket-header">
                                 <button className="back-button back-button-alignment" onClick={() => setShowTimer(false)}>
                                     <img src={back} alt="Back" />
                                 </button>
@@ -507,20 +507,28 @@ Response:
                                     <button 
                                         className="overlay-button-ticket1 primary" 
                                         onClick={handleScratch1Click}
+                                        disabled={ticket === 0 || slotUseNum >= slotNum}
+                                        style={{ 
+                                            opacity: (ticket === 0 || slotUseNum >= slotNum) ? 0.6 : 1,
+                                            cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
+                                        }}
                                     >
                                         SCRATCH 1 TICKET
+                                        {(ticket === 0 || slotUseNum >= slotNum) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
                                     </button>
                                     <button 
                                         className="overlay-button-ticket1 secondary"
                                         onClick={handleScratchAllClick}
-                                        disabled={ticket < 2}
+                                        disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
                                         style={{ 
-                                            opacity: ticket >= 2 ? 1 : 0.6,
-                                            cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
+                                            opacity: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 0.6 : 1,
+                                            cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
                                         SCRATCH ALL TICKETS
-                                        {ticket < 2 && (
+                                        {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
                                     </button>
@@ -544,11 +552,20 @@ Response:
                                     <button 
                                         className="overlay-button-ticket1 primary" 
                                         onClick={() => {
+                                            if (ticket === 0 || slotUseNum >= slotNum) return;
                                             setShowScratch1Overlay(false);
                                             setShowTicket2(true);
                                         }}
+                                        disabled={ticket === 0 || slotUseNum >= slotNum}
+                                        style={{ 
+                                            opacity: (ticket === 0 || slotUseNum >= slotNum) ? 0.6 : 1,
+                                            cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
+                                        }}
                                     >
                                         SCRATCH 1 TICKET
+                                        {(ticket === 0 || slotUseNum >= slotNum) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
                                     </button>
                                 </div>
                             </div>
@@ -576,16 +593,24 @@ Response:
                                     <button 
                                         className="overlay-button-ticket1 primary"
                                         onClick={() => {
+                                            if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
                                             setShowScratchAllOverlay(false);
                                             setShowBulkScratchAnimation(true);
-                                            // Wait for animation duration (1.5s) then proceed
                                             setTimeout(() => {
                                                 setShowBulkScratchAnimation(false);
                                                 setShowTicketAll(true);
-                                            }, 1500); // Duration of your GIF
+                                            }, 1500);
+                                        }}
+                                        disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
+                                        style={{ 
+                                            opacity: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 0.6 : 1,
+                                            cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
                                         BULK SCRATCH {Math.min(ticket, slotNum - slotUseNum)} TICKETS
+                                        {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
+                                            <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
+                                        )}
                                     </button>
                                 </div>
                             </div>

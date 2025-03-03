@@ -14,7 +14,7 @@
     touch-action: none;
 }
 
-.ticket-header {
+.t1_ticket-header {
     position: fixed;
     top: 0;
     left: 0;
@@ -389,7 +389,7 @@
     z-index: 1000;
 }
 
-.timer-overlay .ticket-header {
+.timer-overlay .t1_ticket-header {
     position: fixed;
     top: 0;
     left: 0;
@@ -668,7 +668,7 @@
     flex-direction: column;
     gap: 12px;
     margin: 20px 0;
-    width: 100%;
+    width: 95%;
 }
 
 .scratch-button {
@@ -737,4 +737,34 @@
 
 .stacked-ticket:nth-child(2n + 1) {
     transform: translateX(-40px) translateY(calc((var(--n) - 1) * 20px)) rotate(-80deg);
+}
+
+.bulk-scratch-animation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.98);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.bulk-scratch-animation-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bulk-scratch-animation {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
