@@ -194,70 +194,70 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         </div>
       </header>
 
-      <div className="market-container">
-        <div className="market-content">
-          <div className="market-title">MARKET</div>
+      <div className="mk-market-container">
+        <div className="mk-market-content">
+          <div className="mk-market-title">MARKET</div>
 
           {!shared.userProfile?.fslId && (
-            <div className="fsl-connect-section" onClick={handleConnectFSLID}>
-              <div className="fsl-connect-content">
-                <div className="lock-icon">🔒</div>
-                <div className="fsl-text">
-                  <div className="connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="connect-subtitle">STEPN OR SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY</div>
+            <div className="mk-fsl-connect-section" onClick={handleConnectFSLID}>
+              <div className="mk-fsl-connect-content">
+                <div className="mk-lock-icon">🔒</div>
+                <div className="mk-fsl-text">
+                  <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
+                  <div className="mk-connect-subtitle">STEPN OR SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY</div>
                 </div>
               </div>
             </div>
           )}
           
-          <div className="scrollable-market-content">
-            <div className="starlet-grid">
+          <div className="mk-scrollable-market-content">
+            <div className="mk-starlet-grid">
               <button 
-                className={`market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
                 onClick={() => !isFreeItemClaimed && handleStarletPurchase(10, 0, 'FREE')}
                 disabled={isFreeItemClaimed}
               >
-                <div className="market-ticket-button-image-container">
-                  <div className="market-ticket-content">
-                    <div className="market-ticket-icon">
+                <div className="mk-market-ticket-button-image-container">
+                  <div className="mk-market-ticket-content">
+                    <div className="mk-market-ticket-icon">
                       <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
                     </div>
-                    <div className="market-ticket-info">
-                      <div className="market-ticket-text">
-                        <div className="market-ticket-amount">10</div>
-                        <div className="market-ticket-label">STARLETS</div>
+                    <div className="mk-market-ticket-info">
+                      <div className="mk-market-ticket-text">
+                        <div className="mk-market-ticket-amount">10</div>
+                        <div className="mk-market-ticket-label">STARLETS</div>
                       </div>
-                      <div className="market-ticket-bonus">
+                      <div className="mk-market-ticket-bonus">
                         <span>X10</span>&nbsp;<span>TICKETS</span>
                       </div>
                     </div>
                   </div>
-                  <div className="market-ticket-price">{isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}</div>
+                  <div className="mk-market-ticket-price">{isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}</div>
                 </div>
               </button>
 
               {buyOptions.map((option) => (
                 <button 
                   key={option.id}
-                  className="market-ticket-button" 
+                  className="mk-market-ticket-button" 
                   onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
                 >
-                  <div className="market-ticket-button-image-container">
-                    <div className="market-ticket-content">
-                      <div className="market-ticket-icon">
+                  <div className="mk-market-ticket-button-image-container">
+                    <div className="mk-market-ticket-content">
+                      <div className="mk-market-ticket-icon">
                         <img src={starlet} alt="Starlet" />
                       </div>
-                      <div className="market-ticket-info">
-                        <div className="market-ticket-text">
-                          <div className="market-ticket-amount">{option.starlet}</div>
-                          <div className="market-ticket-label">STARLETS</div>
+                      <div className="mk-market-ticket-info">
+                        <div className="mk-market-ticket-text">
+                          <div className="mk-market-ticket-amount">{option.starlet}</div>
+                          <div className="mk-market-ticket-label">STARLETS</div>
                         </div>
-                        <div className="market-ticket-bonus">
+                        <div className="mk-market-ticket-bonus">
                           <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
                         </div>
                       </div>
                     </div>
-                    <div className="market-ticket-price">{option.stars} TELEGRAM STARS</div>
+                    <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
                   </div>
                 </button>
               ))}
