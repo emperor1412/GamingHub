@@ -9,182 +9,6 @@
     background: #000000;
 }
 
-.sa_results-title {
-    color: #FFF;
-    font-family: "PP Neue Machina";
-    font-size: 20px;
-    font-style: italic;
-    font-weight: 800;
-    margin: 20px 0 8px;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.sa_results-subtitle {
-    color: rgba(131,128,127,255);
-    font-family: "PP Neue Machina";
-    font-size: 14px;
-    font-style: italic;
-    font-weight: 600;
-    margin: 0 20px 16px;
-    padding: 10px 20px;
-    background: #292929;
-    border-radius: 8px;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.sa_rewards-wrapper {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    padding: 0 20px;
-    margin: 10px 0;
-}
-
-.sa_rewards-content {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 20px;
-    right: 20px;
-    bottom: 0;
-}
-
-.sa_rewards-container {
-    background: #212121;
-    height: 100%;
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.sa_rewards-container-border {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 2px solid #0000FF;
-    border-radius: 16px;
-    pointer-events: none;
-    z-index: 2;
-    background: transparent;
-}
-
-.sa_rewards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(auto-fill, minmax(48px, 1fr));
-    gap: 16px;
-    height: calc(100% - 32px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    box-sizing: border-box;
-    padding: 0px;
-    margin: 16px;
-}
-
-.sa_rewards-grid::-webkit-scrollbar {
-    display: none;
-}
-
-.sa_rewards-grid {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* Gradient overlay for top fade */
-.sa_rewards-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 16px;
-    background: linear-gradient(to bottom, rgba(0, 0, 255, 0.05) 0%, transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Gradient overlay for bottom fade */
-.sa_rewards-container::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 16px;
-    background: linear-gradient(to top, rgba(0, 0, 255, 0.05) 0%, transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.sa_reward-item {
-    background: #292929;
-    border-radius: 12px;
-    padding: 8px 12px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    height: 32px;
-}
-
-.sa_reward-icon {
-    width: 28px;
-    height: 28px;
-    margin: 0;
-}
-
-.sa_reward-amount {
-    color: #FFF;
-    font-family: "PP Neue Machina";
-    font-size: 14px;
-    font-style: italic;
-    font-weight: 800;
-    flex: 1;
-    text-align: left;
-}
-
-.sa_buttons-container {
-    padding: 48px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-}
-
-.sa_share-story-button,
-.sa_claim-all-button {
-    width: 90%;
-    height: 40px;
-    border-radius: 8px;
-    font-family: "PP Neue Machina";
-    font-size: 16px;
-    font-style: italic;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sa_share-story-button {
-    background: #0000FF;
-    border: none;
-    color: white;
-}
-
-.sa_claim-all-button {
-    background: transparent;
-    border: 2px solid #0000FF;
-    color: white;
-}
-
 .sa_header {
     position: fixed;
     width: 100%;
@@ -231,7 +55,225 @@
     font-weight: 800;
 }
 
-/* Adjust title margin to account for fixed header */
 .sa_results-title {
-    margin-top: 60px;
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 72px;
+    font-style: italic;
+    font-weight: 800;
+    margin: 80px 0 8px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1;
+}
+
+.sa_results-subtitle {
+    color: rgba(131,128,127,255);
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    margin: 0 20px 16px;
+    padding: 10px 20px;
+    background: #292929;
+    border-radius: 8px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.sa_rewards-wrapper {
+    flex: 1;
+    position: relative;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.sa_rewards-content {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    height: 450px;
+    aspect-ratio: 1;
+}
+
+.sa_rewards-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 2px solid #0000FF;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.sa_main-reward {
+    position: absolute;
+    left: 50%;
+    top: 32%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    text-align: center;
+}
+
+.sa_main-reward-icon {
+    width: 120px;
+    height: 120px;
+}
+
+.sa_main-reward-text {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+.sa_main-reward-amount {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 21.383px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding: 4px 16px;
+    border-radius: 12px;
+    margin-top: -5%;
+    z-index: -1;
+}
+
+.sa_reward-item {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sa_reward-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.sa_main-reward-logo {
+    margin-bottom: 10%;
+    width: 130px;
+    height: 60px;
+}
+
+.sa_reward-icon-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.sa_reward-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: -40%;
+    z-index: 2;
+    position: relative;
+}
+
+.sa_reward-amount {
+    color: #FFF;
+    font-size: 21.383px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    font-family: "PP Neue Machina";
+    padding: 2px 8px;
+    border-radius: 8px;
+    z-index: 1;
+    position: relative;
+}
+
+.sa_buttons-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.sa_share-story-button,
+.sa_claim-all-button {
+    width: 100%;
+    height: 38px;
+    border-radius: 32px;
+    font-family: "PP Neue Machina";
+    font-size: 15.166px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa_share-story-button {
+    background: #0000FF;
+    border: none;
+    color: white;
+    position: relative;
+    justify-content: left;
+    padding-left: 32px;
+    font-size: 14px;
+}
+
+.sa_share-story-reward {
+    position: absolute;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sa_share-story-reward span {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sa_share-story-reward img {
+    width: 22px;
+    height: 22px;
+}
+
+.sa_claim-all-button {
+    background: linear-gradient(90deg, #0000FF, #FF00FF);
+    border: none;
+    color: white;
+    width: 100%;
+    height: 38px;
+    border-radius: 32px;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa_claim-all-button:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
 } 
