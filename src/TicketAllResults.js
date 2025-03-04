@@ -12,18 +12,56 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     // Calculate remaining tickets when component mounts
     React.useEffect(() => {
-        // Calculate remaining tickets using the total tickets used
         const initialTickets = shared.getTicket();
         const remaining = initialTickets - totalTicketsUsed;
         setRemainingTickets(remaining);
-        
-        console.log('TicketAllResults - Remaining tickets calculation:', {
-            initialTickets,
-            totalTicketsUsed,
-            remaining,
-            calculation: `${initialTickets} - ${totalTicketsUsed} = ${remaining}`
+    }, [totalTicketsUsed]);
+
+    // Calculate total rewards by type
+    const calculateTotalRewards = () => {
+        const totals = {};
+        rewards.forEach(reward => {
+            if (!totals[reward.type]) {
+                totals[reward.type] = 0;
+            }
+            totals[reward.type] += reward.amount;
         });
-    }, []); // Only run once when component mounts
+        return totals;
+    };
+
+    const totalRewards = calculateTotalRewards();
+    console.log('Total rewards by type:', totalRewards);
+
+    // Define reward types and their positions
+    const rewardPositions = [
+        { type: 10010, position: { top: '5%', left: '7%' } },      // Ticket
+        { type: 20020, position: { top: '5%', right: '7%' } },     // GMT
+        { type: 30020, position: { top: '38%', left: '7%' } },      // MOOAR
+        { type: 10030, position: { top: '38%', right: '7%' } },     // FSL
+        { type: 20010, position: { top: '70%', left: '7%' } },   // Starlet
+        { type: 30010, position: { top: '70%', right: '7%' } }   // Plus
+    ];
+
+    // Map reward types to their backgrounds
+    const getRewardBackground = (type) => {
+        switch(type) {
+            case 10010: return 'rgba(255, 0, 255, 0.2)';  // Ticket - Pink
+            case 20020: return 'rgba(0, 255, 0, 0.2)';    // GMT - Green
+            case 30020: return 'rgba(0, 0, 255, 0.2)';    // MOOAR - Blue
+            case 10030: return 'rgba(255, 165, 0, 0.2)';  // FSL - Orange
+            case 20010: return 'rgba(255, 0, 255, 0.2)';  // Starlet - Pink
+            case 30010: return 'rgba(255, 255, 0, 0.2)';  // Plus - Yellow
+            default: return 'rgba(128, 128, 128, 0.2)';
+        }
+    };
+
+    // Format amount based on type
+    const formatAmount = (type, amount) => {
+        if (type === 20010 || type === 20020) {
+            return amount / 100;
+        }
+        return amount;
+    };
 
     // Log rewards when component mounts
     React.useEffect(() => {
@@ -120,44 +158,69 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                 </div>
             </header>
 
-            <h1 className="sa_results-title">RESULTS</h1>
+            {/* <h1 className="sa_results-title">RESULTS</h1>
             <div className="sa_results-subtitle">
                 CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW
-            </div>
+            </div> */}
             
             <div className="sa_rewards-wrapper">
                 <div className="sa_rewards-content">
                     <div className="sa_rewards-container">
-                        <div className="sa_rewards-container-border"></div>
-                        <div className="sa_rewards-grid">
-                            {rewards.map((reward, index) => (
-                                <div key={index} className="sa_reward-item">
-                                    <img 
-                                        src={shared.mappingIcon[reward.type]} 
-                                        alt="reward" 
-                                        className="sa_reward-icon"
-                                    />
+                        {/* Main Starlets Reward in center */}
+                        <div className="sa_main-reward">
+                            <img 
+                                src={shared.mappingIcon[10020]} 
+                                alt="Starlets"
+                                className="sa_main-reward-icon"
+                            />
+                            <span className="sa_main-reward-amount">
+                                X{formatAmount(10020, totalRewards[10020] || 0)}
+                            </span>
+                        </div>
+
+                        {/* Surrounding Rewards */}
+                        {rewardPositions.map((item, index) => {
+                            const amount = totalRewards[item.type] || 0;
+                            return (
+                                <div
+                                    key={index}
+                                    className="sa_reward-item"
+                                    style={item.position}
+                                >
+                                    <div 
+                                        className="sa_reward-icon-wrapper"
+                                        // style={{ background: getRewardBackground(item.type) }}
+                                    >
+                                        <img 
+                                            src={shared.mappingIcon[item.type]}
+                                            alt={`Reward ${item.type}`}
+                                            className="sa_reward-icon"
+                                        />
+                                    </div>
                                     <span className="sa_reward-amount">
-                                        {(reward.type === 20010 || reward.type === 20020) 
-                                            ? reward.amount / 100 
-                                            : reward.amount}
+                                        X{formatAmount(item.type, amount)}
                                     </span>
                                 </div>
-                            ))}
-                        </div>
+                            );
+                        })}
                     </div>
+                    
                 </div>
             </div>
 
             <div className="sa_buttons-container">
                 {showShareStory && (
                     <button className="sa_share-story-button" onClick={onClickShareStory}>
-                        SHARE STORY
+                        SHARE TO STORY
+                        <div className="sa_share-story-reward">
+                            <span>×40</span>
+                            <img src={shared.mappingIcon[10020]} alt="Starlet" />
+                        </div>
                     </button>
                 )}
                 
                 <button className="sa_claim-all-button" onClick={handleClaim}>
-                    CLAIM
+                    CLAIM LOOT
                 </button>
             </div>
         </div>
