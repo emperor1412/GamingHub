@@ -19,6 +19,7 @@ import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
 import TicketAll from './TicketAll';
 import bulk_scratch_animation from './images/Bulk_Scratch_Ticket.gif';
+import bulk_scratch_last_frame from './images/lock_ticket.png';
 
 const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [rowCount, setRowCount] = useState(0);
@@ -41,6 +42,7 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [showScratch1Overlay, setShowScratch1Overlay] = useState(false);
     const [showScratchAllOverlay, setShowScratchAllOverlay] = useState(false);
     const [showBulkScratchAnimation, setShowBulkScratchAnimation] = useState(false);
+    const [isGifFinished, setIsGifFinished] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -409,9 +411,13 @@ Response:
                         <div className="bulk-scratch-animation-overlay">
                             <div className="bulk-scratch-animation-content">
                                 <img 
-                                    src={bulk_scratch_animation} 
+                                    src={bulk_scratch_animation}
                                     alt="Bulk Scratch Animation" 
                                     className="bulk-scratch-animation"
+                                    onAnimationEnd={() => {
+                                        setShowBulkScratchAnimation(false);
+                                        setShowTicketAll(true);
+                                    }}
                                 />
                             </div>
                         </div>
@@ -596,10 +602,6 @@ Response:
                                             if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
                                             setShowScratchAllOverlay(false);
                                             setShowBulkScratchAnimation(true);
-                                            setTimeout(() => {
-                                                setShowBulkScratchAnimation(false);
-                                                setShowTicketAll(true);
-                                            }, 1500);
                                         }}
                                         disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
                                         style={{ 
