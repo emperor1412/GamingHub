@@ -169,6 +169,11 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                         {/* Main Starlets Reward in center */}
                         <div className="sa_main-reward">
                             <img 
+                                src={require("./images/FSL Game Hub logo-02.png")}
+                                alt="FSL Game Hub"
+                                className="sa_main-reward-logo"
+                            />
+                            <img 
                                 src={shared.mappingIcon[10020]} 
                                 alt="Starlets"
                                 className="sa_main-reward-icon"
@@ -207,6 +212,8 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                     
                 </div>
             </div>
+
+
 
             <div className="sa_buttons-container">
                 {showShareStory && (

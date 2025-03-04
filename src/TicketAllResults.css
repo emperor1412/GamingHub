@@ -114,7 +114,7 @@
 .sa_main-reward {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 45%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -168,6 +168,12 @@
     transition: transform 0.2s;
 }
 
+.sa_main-reward-logo {
+    margin-bottom: 10%;
+    width: 130px;
+    height: 60px;
+}
+
 .sa_reward-icon-wrapper:hover {
     transform: scale(1.1);
 }
@@ -175,6 +181,7 @@
 .sa_reward-icon {
     width: 42px;
     height: 42px;
+    margin-bottom: -15%;
 }
 
 .sa_reward-amount {
