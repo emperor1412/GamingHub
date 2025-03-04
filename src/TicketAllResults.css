@@ -115,7 +115,7 @@
 .sa_main-reward {
     position: absolute;
     left: 50%;
-    top: 30%;
+    top: 32%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -182,17 +182,21 @@
 .sa_reward-icon {
     width: 42px;
     height: 42px;
-    margin-bottom: -15%;
+    margin-bottom: -40%;
+    z-index: 2;
+    position: relative;
 }
 
 .sa_reward-amount {
     color: #FFF;
     font-family: "PP Neue Machina";
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 800;
     background: rgba(0, 0, 0, 0.5);
     padding: 2px 8px;
     border-radius: 8px;
+    z-index: 1;
+    position: relative;
 }
 
 .sa_buttons-container {
