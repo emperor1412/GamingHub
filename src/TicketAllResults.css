@@ -95,6 +95,7 @@
     position: relative;
     width: 100%;
     max-width: 320px;
+    height: 450px;
     aspect-ratio: 1;
 }
 
@@ -103,8 +104,8 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
     border: 2px solid #0000FF;
     padding: 20px;
     box-sizing: border-box;
@@ -114,7 +115,7 @@
 .sa_main-reward {
     position: absolute;
     left: 50%;
-    top: 45%;
+    top: 30%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -195,22 +196,22 @@
 }
 
 .sa_buttons-container {
-    padding: 20px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 18px;
     align-items: center;
     margin-top: auto;
-    margin-bottom: 20px;;
+    padding-top: 20px;
 }
 
 .sa_share-story-button,
 .sa_claim-all-button {
-    width: 92%;
-    height: 45px;
+    width: 100%;
+    height: 38px;
     border-radius: 32px;
     font-family: "PP Neue Machina";
-    font-size: 16px;
+    font-size: 14px;
     font-style: italic;
     font-weight: 700;
     text-transform: uppercase;
@@ -227,7 +228,7 @@
     position: relative;
     justify-content: left;
     padding-left: 32px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .sa_share-story-reward {
@@ -253,8 +254,8 @@
     background: linear-gradient(90deg, #0000FF, #FF00FF);
     border: none;
     color: white;
-    width: 92%;
-    height: 45px;
+    width: 100%;
+    height: 38px;
     border-radius: 32px;
     font-family: "PP Neue Machina";
     font-size: 16px;

@@ -34,12 +34,12 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     // Define reward types and their positions
     const rewardPositions = [
-        { type: 10010, position: { top: '8%', left: '7%' } },      // Ticket
-        { type: 20020, position: { top: '8%', right: '7%' } },     // GMT
-        { type: 30020, position: { top: '35%', left: '7%' } },      // MOOAR
-        { type: 10030, position: { top: '35%', right: '7%' } },     // FSL
-        { type: 20010, position: { top: '62%', left: '7%' } },   // Starlet
-        { type: 30010, position: { top: '62%', right: '7%' } }   // Plus
+        { type: 10010, position: { top: '5%', left: '7%' } },      // Ticket
+        { type: 20020, position: { top: '5%', right: '7%' } },     // GMT
+        { type: 30020, position: { top: '25%', left: '7%' } },      // MOOAR
+        { type: 10030, position: { top: '25%', right: '7%' } },     // FSL
+        { type: 20010, position: { top: '45%', left: '7%' } },   // Starlet
+        { type: 30010, position: { top: '45%', right: '7%' } }   // Plus
     ];
 
     // Map reward types to their backgrounds
@@ -194,7 +194,6 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                 >
                                     <div 
                                         className="sa_reward-icon-wrapper"
-                                        // style={{ background: getRewardBackground(item.type) }}
                                     >
                                         <img 
                                             src={shared.mappingIcon[item.type]}
@@ -208,27 +207,25 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                 </div>
                             );
                         })}
-                    </div>
-                    
-                </div>
-            </div>
 
-
-
-            <div className="sa_buttons-container">
-                {showShareStory && (
-                    <button className="sa_share-story-button" onClick={onClickShareStory}>
-                        SHARE TO STORY
-                        <div className="sa_share-story-reward">
-                            <span>×40</span>
-                            <img src={shared.mappingIcon[10020]} alt="Starlet" />
+                        {/* Buttons inside rewards container */}
+                        <div className="sa_buttons-container">
+                            {showShareStory && (
+                                <button className="sa_share-story-button" onClick={onClickShareStory}>
+                                    SHARE TO STORY
+                                    <div className="sa_share-story-reward">
+                                        <span>×40</span>
+                                        <img src={shared.mappingIcon[10020]} alt="Starlet" />
+                                    </div>
+                                </button>
+                            )}
+                            
+                            <button className="sa_claim-all-button" onClick={handleClaim}>
+                                CLAIM LOOT
+                            </button>
                         </div>
-                    </button>
-                )}
-                
-                <button className="sa_claim-all-button" onClick={handleClaim}>
-                    CLAIM LOOT
-                </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
