@@ -525,9 +525,9 @@ Response:
                         : (
                             <div className="scratch-content">
                                 <div className="scratch-grid-container">
-                                    <div className="scratch-header">
+                                    {/* <div className="scratch-header">
                                         SCRATCH
-                                    </div>
+                                    </div> */}
                                     <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
                                         {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
                                     </div>
