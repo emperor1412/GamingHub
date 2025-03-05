@@ -43,6 +43,7 @@ const Ticket1 = ({ starletsData, getProfileData, onClose }) => {
     const [showScratchAllOverlay, setShowScratchAllOverlay] = useState(false);
     const [showBulkScratchAnimation, setShowBulkScratchAnimation] = useState(false);
     const [isGifFinished, setIsGifFinished] = useState(false);
+    const [isAnimationLoaded, setIsAnimationLoaded] = useState(false);
 
     const setupProfileData = async () => {
         console.log('Ticket 1 setupProfileData');
@@ -377,6 +378,39 @@ Response:
         setShowTimerOverlay(false);
     };
 
+    // Add preload function
+    const preloadAnimation = () => {
+        const img = new Image();
+        img.src = bulk_scratch_animation;
+        img.onload = () => {
+            setIsAnimationLoaded(true);
+        };
+    };
+
+    // Preload animation when component mounts
+    useEffect(() => {
+        preloadAnimation();
+    }, []);
+
+    // Modify the button click handler
+    const handleBulkScratchClick = () => {
+        if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
+        if (!isAnimationLoaded) {
+            setShowLoading(true);
+            const checkLoad = setInterval(() => {
+                if (isAnimationLoaded) {
+                    clearInterval(checkLoad);
+                    setShowLoading(false);
+                    setShowScratchAllOverlay(false);
+                    setShowBulkScratchAnimation(true);
+                }
+            }, 100);
+        } else {
+            setShowScratchAllOverlay(false);
+            setShowBulkScratchAnimation(true);
+        }
+    };
+
     return (
         <>
             {showLoading && (
@@ -491,9 +525,9 @@ Response:
                         : (
                             <div className="scratch-content">
                                 <div className="scratch-grid-container">
-                                    <div className="scratch-header">
+                                    {/* <div className="scratch-header">
                                         SCRATCH
-                                    </div>
+                                    </div> */}
                                     <div className="scratch-grid" style={needsPadding ? { paddingBottom: '16vh' } : {}}>
                                         {[...Array(rowCount)].map((_, i) => renderTicketRow(i * 3))}
                                     </div>
@@ -598,11 +632,7 @@ Response:
                                 <div className="overlay-buttons-ticket1">
                                     <button 
                                         className="overlay-button-ticket1 primary"
-                                        onClick={() => {
-                                            if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
-                                            setShowScratchAllOverlay(false);
-                                            setShowBulkScratchAnimation(true);
-                                        }}
+                                        onClick={handleBulkScratchClick}
                                         disabled={ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5}
                                         style={{ 
                                             opacity: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 0.6 : 1,
