@@ -63,12 +63,12 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     // Define reward types and their positions
     const rewardPositions = [
-        { type: 10010, position: { top: '5%', left: '7%' } },      // Ticket
-        { type: 20020, position: { top: '5%', right: '7%' } },     // GMT
-        { type: 30020, position: { top: '25%', left: '7%' } },      // MOOAR
-        { type: 10030, position: { top: '25%', right: '7%' } },     // FSL
-        { type: 20010, position: { top: '45%', left: '7%' } },   // Starlet
-        { type: 30010, position: { top: '45%', right: '7%' } }   // Plus
+        { type: 10010, position: { top: '50%', left: '50%', right: '50%' } },      // Ticket
+        { type: 20020, position: { top: '50%', left: '7%' } },     // GMT
+        { type: 30020, position: { top: '50%', right: '7%' } },      // MOOAR
+        // { type: 10030, position: { top: '25%', right: '7%' } },     // FSL
+        // { type: 20010, position: { top: '45%', left: '7%' } },   // Starlet
+        // { type: 30010, position: { top: '45%', right: '7%' } }   // Plus
     ];
 
     // Map reward types to their backgrounds
@@ -223,12 +223,15 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                         <div className="sa_rewards-content">
                             <div className="sa_rewards-container">
                                 {/* Main Starlets Reward in center */}
-                                <div className="sa_main-reward">
+                                <div key={0} className="sa_reward-item" style={{ top: '1%', right: '-2%' }}>
                                     <img 
                                         src={require("./images/FSL Game Hub logo-02.png")}
                                         alt="FSL Game Hub"
                                         className="sa_main-reward-logo"
                                     />
+                                </div>
+                                <div className="sa_main-reward">
+                                    
                                     <img 
                                         src={shared.mappingIcon[10020]} 
                                         alt="Starlets"
