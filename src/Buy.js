@@ -92,60 +92,60 @@ const Buy = ({
       <div className="background-container">
         <img src={background} alt="background" />
       </div>
-      <div className="buy-container">
-        <header className="stats-header">
+      <div className="bmk-buy-container">
+        <header className="bmk-stats-header">
           <button 
             className="back-button back-button-alignment"
             onClick={() => setShowBuyView(false)}
           >
             <img src={back} alt="Back" />
           </button>
-          <div className="stats-main">
+          <div className="bmk-stats-main">
             <button 
-              className="stat-item-main"
+              className="bmk-stat-item-main"
               onClick={() => setShowProfileView(true)}
             >
               <img src={ticketIcon} alt="Tickets" />
-              <span className="stat-item-main-text">
+              <span className="bmk-stat-item-main-text">
                 {shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0}
               </span>
             </button>
             <button 
-              className="stat-item-main"
+              className="bmk-stat-item-main"
               onClick={() => setShowProfileView(true)}
             >
               <img src={starlet} alt="Starlets" />
-              <span className="stat-item-main-text">
+              <span className="bmk-stat-item-main-text">
                 {shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0}
               </span>
             </button>
           </div>
         </header>
 
-        <div className="buy-title">
+        <div className="bmk-buy-title">
           <span>BUY</span>
         </div>
 
-        <div className="buy-content">
-          <div className="item-display-container">
-            <div className="item-display">
-              <img src={scratch_ticket_button_bg} alt="Background" className="item-display-bg" />
-              <img src={starlet} alt="Item" className="item-icon" />
-              <div className="floating-starlets">
-                <img src={starlet} alt="Floating Starlet" className="floating-starlet s1" />
-                <img src={starlet} alt="Floating Starlet" className="floating-starlet s2" />
-                <img src={starlet} alt="Floating Starlet" className="floating-starlet s3" />
-                <img src={starlet} alt="Floating Starlet" className="floating-starlet s4" />
-                <img src={starlet} alt="Floating Starlet" className="floating-starlet s5" />
+        <div className="bmk-buy-content">
+          <div className="bmk-item-display-container">
+            <div className="bmk-item-display">
+              <img src={scratch_ticket_button_bg} alt="Background" className="bmk-item-display-bg" />
+              <img src={starlet} alt="Item" className="bmk-item-icon" />
+              <div className="bmk-floating-starlets">
+                <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s1" />
+                <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s2" />
+                <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s3" />
+                <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s4" />
+                <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s5" />
               </div>
-              <div className="item-details">
-                <div className="item-detail-box">
-                  <div className="item-amount">
+              <div className="bmk-item-details">
+                <div className="bmk-item-detail-box">
+                  <div className="bmk-item-amount">
                     <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
                   </div>
                 </div>
-                <div className="item-detail-box">
-                  <div className="item-amount">
+                <div className="bmk-item-detail-box">
+                  <div className="bmk-item-amount">
                     <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
                   </div>
                 </div>
@@ -153,29 +153,29 @@ const Buy = ({
             </div>
           </div>
 
-          <div className="item-description">
+          <div className="bmk-item-description">
             USE STARLETS TO LEVEL UP YOUR ACCOUNT AND UNLOCK SPECIAL FEATURES WITHIN FSL GAME HUB
           </div>
         </div>
 
-        <div className="payment-buttons">
+        <div className="bmk-payment-buttons">
           {selectedPurchase?.stars > 0 ? (
             <button 
-              className="payment-button stars-button"
+              className="bmk-payment-button bmk-stars-button"
               onClick={() => handlePaymentMethod('stars')}
             >
               PAY WITH {selectedPurchase?.stars} STARS
             </button>
           ) : (
             <button 
-              className="payment-button stars-button"
+              className="bmk-payment-button bmk-stars-button"
               onClick={() => handlePaymentMethod('free')}
             >
               CLAIM FREE
             </button>
           )}
           <button 
-            className="payment-button gmt-button"
+            className="bmk-payment-button bmk-gmt-button"
             onClick={() => handlePaymentMethod('gmt')}
           >
             PAY WITH GMT

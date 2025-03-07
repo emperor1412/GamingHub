@@ -31,10 +31,8 @@ const Ticket = ({ onClose, getProfileData }) => {
         const userTicket = shared.getTicket();
         const userStarlets = shared.getStarlets();
 
-        if (userTicket) {
-            setStarlets(userStarlets);
-            setTicket(userTicket);
-        }
+        setStarlets(userStarlets);
+        setTicket(userTicket);
         setLoading(false);
     };
 
