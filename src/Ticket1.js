@@ -567,7 +567,7 @@ Response:
                                             cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
-                                        SCRATCH ALL TICKETS
+                                        {shared.userProfile.level < 5 ? 'SCRATCH ALL [LVL 5 REQ]' : 'SCRATCH ALL TICKETS'}
                                         {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
@@ -669,7 +669,7 @@ Response:
                                         //     cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
                                         // }}
                                     >
-                                        SCRATCH ALL TICKETS
+                                        SCRATCH ALL [LVL 5 REQ]
                                         <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                         {/* {ticket < 2 && (
                                             <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
