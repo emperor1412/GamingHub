@@ -300,8 +300,9 @@ Response:
     viewport.expand();
 
     // Setup behaviors
-    closingBehavior.mount();
-    closingBehavior.enableConfirmation();
+    // closingBehavior.mount();
+    // closingBehavior.enableConfirmation();
+
     swipeBehavior.mount();        
     swipeBehavior.disableVertical();
 
