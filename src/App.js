@@ -470,13 +470,11 @@ Response:
               <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
                 <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
               </button>
-
               <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
-
-              <button className="disabled-market">
-                <img src={market_locked} alt="Market Locked" />
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+                <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
                 <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
@@ -549,13 +547,11 @@ Response:
             <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
               <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
             </button>
-
             <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
-
-            <button className="disabled-market">
-              <img src={market_locked} alt="Market Locked" />
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
             <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
