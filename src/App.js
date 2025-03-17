@@ -46,8 +46,9 @@ import checkInAnimation from './images/check_in_animation_540.gif';
 import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
 
-import loading_background from "./images/GamesHubLoading.png";
-import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
+// import loading_background from "./images/GamesHubLoading.png";
+// import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
+import loading_background from "./images/PatrickDay-AllBrands600-16-9.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
