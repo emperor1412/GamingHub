@@ -397,8 +397,9 @@ Response:
         if (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) return;
         if (!isAnimationLoaded) {
             setShowLoading(true);
+            const startTime = Date.now();
             const checkLoad = setInterval(() => {
-                if (isAnimationLoaded) {
+                if (isAnimationLoaded || Date.now() - startTime > 10000) {
                     clearInterval(checkLoad);
                     setShowLoading(false);
                     setShowScratchAllOverlay(false);
