@@ -16,6 +16,7 @@ import trophy_3 from './images/trophy_3_200px.png';
 import trophy_4 from './images/trophy_4_200px.png';
 import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
+import trophy_10000 from './images/trophy_10000_200px.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -100,6 +101,7 @@ const Frens = () => {
     4: trophy_4,
     5: trophy_5,
     6: trophy_6,
+    10000: trophy_10000
   }
 
   const getTrophyData = async (depth = 0) => {
@@ -628,7 +630,7 @@ const Frens = () => {
                     <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
                     <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
                     <p className="trophy-overlay-description">
-                      REFER <span className="bold-text">{selectedTrophy.min} {selectedTrophy.min <= 1 ? 'FRIEND' : 'FRIENDS'}</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
+                      {selectedTrophy.description}
                     </p>
                   </div>
                 </>

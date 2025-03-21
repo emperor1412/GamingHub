@@ -178,7 +178,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 Select Avatar
                 </div>
               <div className="avatar-grid">
-                {[...Array(12)].map((_, index) => (
+                {[...Array(shared.userProfile.buyStarlets ? 13 : 12)].map((_, index) => (
                   <button 
                     key={index} 
                     className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${index >= shared.userProfile.avatarNum ? 'locked' : ''}`}
