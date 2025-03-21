@@ -637,7 +637,7 @@ const Frens = () => {
               ) : selectedTrophy.status === 'ready' ? (
                 <>
                   <div className="trophy-overlay-requirement">
-                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : `${selectedTrophy.min} INVITES`}
+                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : ``}
                   </div>
                   <div className="trophy-overlay-icon-container">
                     <img
@@ -677,7 +677,7 @@ const Frens = () => {
               ) : (
                 <>
                   <div className="trophy-overlay-requirement">
-                  {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : `${selectedTrophy.min} INVITES`}
+                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : ``}
                   </div>
                   <div className="trophy-overlay-icon-container">
                     <img
