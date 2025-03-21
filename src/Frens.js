@@ -16,6 +16,8 @@ import trophy_3 from './images/trophy_3_200px.png';
 import trophy_4 from './images/trophy_4_200px.png';
 import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
+import trophy_10000 from './images/trophy_10000_200px.png';
+import trophy_10000_locked from './images/trophy_10000_locked.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -100,8 +102,13 @@ const Frens = () => {
     4: trophy_4,
     5: trophy_5,
     6: trophy_6,
+    10000: trophy_10000
   }
-
+  
+  const trophyIconLocked = {
+    10000: trophy_10000_locked
+  }
+  
   const getTrophyData = async (depth = 0) => {
     if (depth > 3) {
       console.error('Get trophy data failed after 3 attempts');
@@ -121,13 +128,13 @@ const Frens = () => {
       if (data.code === 0) {
         const trophiesData = data.data.map(trophy => ({
           id: trophy.id,
-          name: trophy.name,
+          name: trophy.id === 10000 && trophy.state === 2 ? "STARLETS CHAMPION" : trophy.name,
           description: trophy.description,
           min: trophy.min,
           max: trophy.max,
           state: trophy.state,
           status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
-          icon: trophyIcon[trophy.id]
+          icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : trophyIcon[trophy.id]
         }));
 
         // setTrophies(trophiesData.concat(trophiesData));
@@ -599,7 +606,9 @@ const Frens = () => {
                         <img src={unlock} alt="Ready to unlock" className="trophy-status-icon" />
                       )}
                       {trophy.status === 'ready' && <span className="ready-icon">✨</span>}
-                      <span className="trophy-name">{trophy.name}</span>
+                      <span className="trophy-name">
+                        {trophy.id === 10000 && trophy.status === 'unlocked' ? "Starlets Champion" : trophy.name}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -628,14 +637,14 @@ const Frens = () => {
                     <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
                     <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
                     <p className="trophy-overlay-description">
-                      REFER <span className="bold-text">{selectedTrophy.min} {selectedTrophy.min <= 1 ? 'FRIEND' : 'FRIENDS'}</span> TO UNLOCK THIS TROPHY AND BECOME AN INFLUENTIAL MEMBER OF OUR COMMUNITY!
+                      {selectedTrophy.description}
                     </p>
                   </div>
                 </>
               ) : selectedTrophy.status === 'ready' ? (
                 <>
                   <div className="trophy-overlay-requirement">
-                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : `${selectedTrophy.min} INVITES`}
+                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : ``}
                   </div>
                   <div className="trophy-overlay-icon-container">
                     <img
@@ -657,12 +666,27 @@ const Frens = () => {
                     </div>
                   </div>
                   <div className="trophy-overlay-promotion">
-                    CONGRATULATIONS!<br />
-                    YOU'VE BEEN PROMOTED!
+                    {selectedTrophy.id === 10000 ? (
+                      <>
+                        CONGRATULATIONS!<br />
+                        YOU'VE UNLOCKED A MYSTERY TROPHY!
+                      </>
+                    ) : (
+                      <>
+                        CONGRATULATIONS!<br />
+                        YOU'VE BEEN PROMOTED!
+                      </>
+                    )}
                   </div>
-                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+                  <h2 className="trophy-overlay-title">
+                    {selectedTrophy.id === 10000 ? "STARLETS CHAMPION" : selectedTrophy.name}
+                  </h2>
                   <p className="trophy-overlay-description">
-                    {selectedTrophy.description}
+                    {selectedTrophy.id === 10000 ? (
+                      "YOU DIDN'T JUST COLLECT STARLETS\nYOU BECAME ONE!"
+                    ) : (
+                      selectedTrophy.description
+                    )}
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     SHARE A STORY
@@ -675,7 +699,7 @@ const Frens = () => {
               ) : (
                 <>
                   <div className="trophy-overlay-requirement">
-                  {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : `${selectedTrophy.min} INVITES`}
+                    {selectedTrophy.max > 0 ? `${selectedTrophy.min} - ${selectedTrophy.max} INVITES` : ``}
                   </div>
                   <div className="trophy-overlay-icon-container">
                     <img
@@ -697,9 +721,15 @@ const Frens = () => {
                       <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
                     </div>
                   </div>
-                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+                  <h2 className="trophy-overlay-title">
+                    {selectedTrophy.id === 10000 ? "STARLETS CHAMPION" : selectedTrophy.name}
+                  </h2>
                   <p className="trophy-overlay-description">
-                    {selectedTrophy.description}
+                    {selectedTrophy.id === 10000 ? (
+                      "YOU DIDN'T JUST COLLECT STARLETS\nYOU BECAME ONE!"
+                    ) : (
+                      selectedTrophy.description
+                    )}
                   </p>
                 </>
               )}

@@ -194,6 +194,7 @@ Response:
 
     useEffect(() => {
         getProfileData(shared.loginData);
+        console.log('Available avatars:', shared.avatars);
     }, []);
 
     return (
