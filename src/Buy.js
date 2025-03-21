@@ -55,6 +55,10 @@ const Buy = ({
 
   const handlePaymentMethod = async (method) => {
     if (method === 'free') {
+      if (shared.userProfile.fslId === 0) {
+        showFSLIDScreen();
+        return;
+      }
       setIsPopupOpen(true);
       return;
     }
