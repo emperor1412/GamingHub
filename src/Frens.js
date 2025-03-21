@@ -128,7 +128,7 @@ const Frens = () => {
       if (data.code === 0) {
         const trophiesData = data.data.map(trophy => ({
           id: trophy.id,
-          name: trophy.name,
+          name: trophy.id === 10000 && trophy.state === 2 ? "STARLETS CHAMPION" : trophy.name,
           description: trophy.description,
           min: trophy.min,
           max: trophy.max,
@@ -606,7 +606,9 @@ const Frens = () => {
                         <img src={unlock} alt="Ready to unlock" className="trophy-status-icon" />
                       )}
                       {trophy.status === 'ready' && <span className="ready-icon">✨</span>}
-                      <span className="trophy-name">{trophy.name}</span>
+                      <span className="trophy-name">
+                        {trophy.id === 10000 && trophy.status === 'unlocked' ? "Starlets Champion" : trophy.name}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -664,12 +666,27 @@ const Frens = () => {
                     </div>
                   </div>
                   <div className="trophy-overlay-promotion">
-                    CONGRATULATIONS!<br />
-                    YOU'VE BEEN PROMOTED!
+                    {selectedTrophy.id === 10000 ? (
+                      <>
+                        CONGRATULATIONS!<br />
+                        YOU'VE UNLOCKED A MYSTERY TROPHY!
+                      </>
+                    ) : (
+                      <>
+                        CONGRATULATIONS!<br />
+                        YOU'VE BEEN PROMOTED!
+                      </>
+                    )}
                   </div>
-                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+                  <h2 className="trophy-overlay-title">
+                    {selectedTrophy.id === 10000 ? "STARLETS CHAMPION" : selectedTrophy.name}
+                  </h2>
                   <p className="trophy-overlay-description">
-                    {selectedTrophy.description}
+                    {selectedTrophy.id === 10000 ? (
+                      "YOU DIDN'T JUST COLLECT STARLETS\nYOU BECAME ONE!"
+                    ) : (
+                      selectedTrophy.description
+                    )}
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     SHARE A STORY
@@ -704,9 +721,15 @@ const Frens = () => {
                       <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
                     </div>
                   </div>
-                  <h2 className="trophy-overlay-title">{selectedTrophy.name}</h2>
+                  <h2 className="trophy-overlay-title">
+                    {selectedTrophy.id === 10000 ? "STARLETS CHAMPION" : selectedTrophy.name}
+                  </h2>
                   <p className="trophy-overlay-description">
-                    {selectedTrophy.description}
+                    {selectedTrophy.id === 10000 ? (
+                      "YOU DIDN'T JUST COLLECT STARLETS\nYOU BECAME ONE!"
+                    ) : (
+                      selectedTrophy.description
+                    )}
                   </p>
                 </>
               )}
