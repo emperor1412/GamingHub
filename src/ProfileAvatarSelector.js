@@ -265,7 +265,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 </div>
                 <div className="lock-overlay-header">
                   <img src={unlock} alt="Lock" className="header-lock-icon" />
-                  {selectedIndex === 12 ? 'MYSTERY TROPHY REWARD' : 'UNLOCK THIS PFP'}
+                  UNLOCK THIS PFP
                 </div>
                 <div className="lock-overlay-description">
                   {selectedIndex === 12 ? 

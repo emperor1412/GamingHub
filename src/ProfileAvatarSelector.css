@@ -85,7 +85,7 @@
 }
 
 .avatar-selector-header {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   margin-top: 0px;
   position: relative;
   z-index: 1;
@@ -103,8 +103,8 @@
   background: #292929;
   border: 2px solid #0000FF;
   border-radius: 16px;
-  padding: 20px;
-  margin: 34px 20px 0px 20px;
+  padding: 16px;
+  margin: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   position: relative;
