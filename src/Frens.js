@@ -17,6 +17,7 @@ import trophy_4 from './images/trophy_4_200px.png';
 import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
 import trophy_10000 from './images/trophy_10000_200px.png';
+import trophy_10000_locked from './images/trophy_10000_locked.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -103,7 +104,11 @@ const Frens = () => {
     6: trophy_6,
     10000: trophy_10000
   }
-
+  
+  const trophyIconLocked = {
+    10000: trophy_10000_locked
+  }
+  
   const getTrophyData = async (depth = 0) => {
     if (depth > 3) {
       console.error('Get trophy data failed after 3 attempts');
@@ -129,7 +134,7 @@ const Frens = () => {
           max: trophy.max,
           state: trophy.state,
           status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
-          icon: trophyIcon[trophy.id]
+          icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : trophyIcon[trophy.id]
         }));
 
         // setTrophies(trophiesData.concat(trophiesData));

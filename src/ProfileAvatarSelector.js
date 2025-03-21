@@ -34,6 +34,33 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
     console.log('Avatar selected:', index);
     setSelectedIndex(index);
 
+    // Special handling for buyStarlets avatar (index 12)
+    if (index === 12) {
+      if (shared.userProfile.buyStarlets) {
+        setSelectedAvatar(index);
+        setHasChanged(index !== shared.userProfile.pictureIndex);
+        onSelect(shared.avatars[index % 3]);
+        
+        // Track avatar selection
+        trackUserAction('avatar_selected', {
+          avatar_index: index,
+          previous_avatar: shared.userProfile.pictureIndex,
+          is_unlocked: true
+        }, shared.loginData?.userId);
+      } else {
+        setShowLockOverlay(true);
+        
+        // Track attempt to select locked avatar
+        trackUserAction('avatar_selected', {
+          avatar_index: index,
+          is_unlocked: false,
+          requires_starlets: true
+        }, shared.loginData?.userId);
+      }
+      return;
+    }
+
+    // Handle regular avatars
     if (index < shared.userProfile.avatarNum) {
       setSelectedAvatar(index);
       setHasChanged(index !== shared.userProfile.pictureIndex);
@@ -178,10 +205,14 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 Select Avatar
                 </div>
               <div className="avatar-grid">
-                {[...Array(shared.userProfile.buyStarlets ? 13 : 12)].map((_, index) => (
+                {[...Array(13)].map((_, index) => (
                   <button 
                     key={index} 
-                    className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${index >= shared.userProfile.avatarNum ? 'locked' : ''}`}
+                    className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${
+                      index === 12 
+                        ? (!shared.userProfile.buyStarlets ? 'locked' : '')
+                        : (index >= shared.userProfile.avatarNum ? 'locked' : '')
+                    }`}
                     onClick={() => handleAvatarSelect(index)}
                   >
                     {index === selectedAvatar && (
@@ -191,11 +222,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                       </div>
                     )}
                     <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
-                    {index >= shared.userProfile.avatarNum && (
+                    {(index === 12 && !shared.userProfile.buyStarlets) || (index < 12 && index >= shared.userProfile.avatarNum) ? (
                       <div className="lock-overlay">
                         <img src={lock_icon} alt="Locked" className="lock-icon" />
                       </div>
-                    )}
+                    ) : null}
                   </button>
                 ))}
               </div>
@@ -234,15 +265,18 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 </div>
                 <div className="lock-overlay-header">
                   <img src={unlock} alt="Lock" className="header-lock-icon" />
-                  UNLOCK THIS PFP
+                  {selectedIndex === 12 ? 'MYSTERY TROPHY REWARD' : 'UNLOCK THIS PFP'}
                 </div>
                 <div className="lock-overlay-description">
-                  LEVEL UP YOUR ACCOUNT<br/>
-                  TO UNLOCK EXCLUSIVE PFPS!
+                  {selectedIndex === 12 ? 
+                    'SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?' :
+                    'LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!'}
                 </div>
-                <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
-                  LEVEL UP
-                </button>
+                {selectedIndex !== 12 && (
+                  <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
+                    LEVEL UP
+                  </button>
+                )}
               </div>
             </div>
           )}
