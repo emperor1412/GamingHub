@@ -196,7 +196,7 @@ const FSLID = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="fsl-id-emails">
+                        {/* <div className="fsl-id-emails">
                             <div className="fsl-id-email">
                                 <img src={ID_selected} className="fsl-id-icon" alt="fsl" />
                                 <div className="fsl-id-email-content">
@@ -234,7 +234,7 @@ const FSLID = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="fsl-id-stats">
                         {/* <div className="fsl-id-stat">

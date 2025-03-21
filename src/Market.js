@@ -41,6 +41,25 @@ import background from './images/background_2.png';
 //     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
 // }
 
+// url: /app/getFreeRewardTime
+// Request:
+// Response:
+// {
+//     "code": 0,
+//     "data": 1741737600000
+// }
+
+// url: /app/claimFreeReward
+// Request:
+// Response:
+// {
+//     "code": 0,
+//     "data": {
+//         "success": true,
+//         "time": 1741737600000
+//     }
+// }
+
 const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
@@ -48,6 +67,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [selectedPurchase, setSelectedPurchase] = useState(null);
   const [showBuyView, setShowBuyView] = useState(false);
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
+  const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
 
   useEffect(() => {
@@ -115,6 +135,115 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   }, [showBuyView]);
 
+  // Add new function to check free reward time
+  const checkFreeRewardTime = async () => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/getFreeRewardTime?token=${shared.loginData.token}`);
+      const data = await response.json();
+      if (data.code === 0) {
+        const currentTime = Date.now();
+        const nextTime = data.data;
+        setNextClaimTime(nextTime);
+        setIsFreeItemClaimed(nextTime > currentTime);
+      } else if (data.code === 102002 || data.code === 102001) {
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/getFreeRewardTime?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0) {
+            const currentTime = Date.now();
+            const nextTime = retryData.data;
+            setNextClaimTime(nextTime);
+            setIsFreeItemClaimed(nextTime > currentTime);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check free reward time:', error);
+    }
+  };
+
+  // Add new function to claim free reward
+  const handleClaimFreeReward = async () => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+      const data = await response.json();
+      if (data.code === 0 && data.data.success) {
+        // Update next claim time
+        setNextClaimTime(data.data.time);
+        setIsFreeItemClaimed(true);
+        
+        // Update user profile to reflect new starlets and tickets
+        await shared.getProfileWithRetry();
+        
+        // Update local state
+        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+          setStarlets(userStarlets.num);
+        }
+
+        const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+        if (userTicket) {
+          setTickets(userTicket.num);
+        }
+
+        // Show success popup
+        if (window.Telegram?.WebApp?.showPopup) {
+          await window.Telegram.WebApp.showPopup({
+            title: 'Success',
+            message: 'You have successfully claimed your free reward!',
+            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          });
+        }
+      } else if (data.code === 102002 || data.code === 102001) {
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && retryData.data.success) {
+            setNextClaimTime(retryData.data.time);
+            setIsFreeItemClaimed(true);
+            await shared.getProfileWithRetry();
+            
+            const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+              setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+            if (userTicket) {
+              setTickets(userTicket.num);
+            }
+
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Success',
+                message: 'You have successfully claimed your free reward!',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to claim free reward:', error);
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Failed to claim free reward. Please try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
+    }
+  };
+
+  // Add useEffect to check free reward time on component mount
+  useEffect(() => {
+    checkFreeRewardTime();
+  }, []);
+
   const handleConnectFSLID = () => {
     showFSLIDScreen();
   };
@@ -123,6 +252,33 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setSelectedPurchase({ amount, stars, optionId });
     setShowBuyView(true);
   };
+
+  const refreshUserProfile = async () => {
+    await shared.getProfileWithRetry();
+    const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+    if (userStarlets) {
+      setStarlets(userStarlets.num);
+    }
+
+    const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+    if (userTicket) {
+      setTickets(userTicket.num);
+    }
+
+    // Check free reward time after profile refresh
+    await checkFreeRewardTime();
+  };
+
+  // Add effect to watch showBuyView changes
+  useEffect(() => {
+    if (!showBuyView) { // When returning from Buy view
+      refreshUserProfile();
+    }
+  }, [showBuyView]);
+
+  useEffect(() => {
+    refreshUserProfile();
+  }, []);
 
   const handleConfirmPurchase = () => {
     if (!shared.loginData?.fslId) {
@@ -204,7 +360,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
                   <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">STEPN OR SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY</div>
+                  <div className="mk-connect-subtitle">USERS WHO HAVE FSL ID CONNECTED WILL BE ABLE TO CLAIM 50 STARLETS AND 1 TICKET DAILY</div>
                 </div>
               </div>
             </div>
@@ -214,7 +370,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             <div className="mk-starlet-grid">
               <button 
                 className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                onClick={() => !isFreeItemClaimed && handleStarletPurchase(10, 0, 'FREE')}
+                onClick={() => !isFreeItemClaimed && handleStarletPurchase(10, 0, 'FREE', 'free')}
                 disabled={isFreeItemClaimed}
               >
                 <div className="mk-market-ticket-button-image-container">
@@ -224,15 +380,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     </div>
                     <div className="mk-market-ticket-info">
                       <div className="mk-market-ticket-text">
-                        <div className="mk-market-ticket-amount">10</div>
-                        <div className="mk-market-ticket-label">STARLETS</div>
-                      </div>
-                      <div className="mk-market-ticket-bonus">
-                        <span>X10</span>&nbsp;<span>TICKETS</span>
+                        <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>10</div>
+                        <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
                       </div>
                     </div>
                   </div>
-                  <div className="mk-market-ticket-price">{isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}</div>
+                  <div className="mk-market-ticket-price">
+                    {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                  </div>
                 </div>
               </button>
 
