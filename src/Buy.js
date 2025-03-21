@@ -145,10 +145,10 @@ const Buy = ({
                     <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
                   </div>
                 </div>
-                {selectedPurchase?.optionId !== 'free' && (
+                {(selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1) && (
                   <div className="bmk-item-detail-box">
                     <div className="bmk-item-amount">
-                      <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
+                      <span className="x-mark">x</span>{selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1} TICKETS
                     </div>
                   </div>
                 )}

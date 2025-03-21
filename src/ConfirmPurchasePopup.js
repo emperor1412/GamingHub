@@ -81,8 +81,8 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
         if (data.code === 0 && data.data.success) {
           result = {
             status: "paid",
-            initialStarlets: 10,
-            tickets: 0
+            initialStarlets: 50,
+            tickets: 1
           };
         } else if (data.code === 102002 || data.code === 102001) {
           console.log('Token expired, attempting to refresh...');
@@ -93,8 +93,8 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
             if (retryData.code === 0 && retryData.data.success) {
               result = {
                 status: "paid",
-                initialStarlets: 10,
-                tickets: 0
+                initialStarlets: 50,
+                tickets: 1
               };
             }
           }
@@ -175,7 +175,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
               isOpen={true}
               onClaim={handleClaim}
               amount={amount}
-              tickets={optionId === 'free' ? 0 : (purchaseData?.tickets || currentOption?.ticket || 10)}
+              tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
@@ -194,16 +194,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   <div className="purchase-details">
                     <div className="purchase-text">
                       DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-                      {stars > 0 && (
+                      {stars > 0 ? (
                         <>
                           <br />
                           AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
                         </>
-                      )}
-                      {stars === 0 && (
+                      ) : (
                         <>
+                          <br />
+                          AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">FREE</span>?
                         </>

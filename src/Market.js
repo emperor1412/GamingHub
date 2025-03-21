@@ -370,7 +370,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             <div className="mk-starlet-grid">
               <button 
                 className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                onClick={() => !isFreeItemClaimed && handleStarletPurchase(10, 0, 'FREE', 'free')}
+                onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
                 disabled={isFreeItemClaimed}
               >
                 <div className="mk-market-ticket-button-image-container">
@@ -380,8 +380,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     </div>
                     <div className="mk-market-ticket-info">
                       <div className="mk-market-ticket-text">
-                        <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>10</div>
+                        <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
                         <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                      </div>
+                      <div className="mk-market-ticket-bonus">
+                        <span>X1</span>&nbsp;<span>TICKETS</span>
                       </div>
                     </div>
                   </div>
