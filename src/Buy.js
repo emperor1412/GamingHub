@@ -53,8 +53,9 @@ const Buy = ({
     fetchOptionData();
   }, [selectedPurchase?.optionId]);
 
-  const handlePaymentMethod = (method) => {
+  const handlePaymentMethod = async (method) => {
     if (method === 'free') {
+      setIsPopupOpen(true);
       return;
     }
 
@@ -144,11 +145,13 @@ const Buy = ({
                     <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
                   </div>
                 </div>
-                <div className="bmk-item-detail-box">
-                  <div className="bmk-item-amount">
-                    <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
+                {selectedPurchase?.optionId !== 'free' && (
+                  <div className="bmk-item-detail-box">
+                    <div className="bmk-item-amount">
+                      <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
