@@ -27,6 +27,7 @@ import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 import { trackUserAction } from './analytics';
+import EggletEventPopup from './EggletEventPopup';
 
 let isMouseDown = false;
 let startX;
@@ -43,6 +44,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const carouselRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const intervalRef = useRef(null);
+    const [showEggletPopup, setShowEggletPopup] = useState(false);
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -267,9 +269,28 @@ Response:
         setEventData(events);
     };
 
+    // Check if the Egglet popup should be shown (once daily)
+    const checkEggletPopup = () => {
+        // Always show popup when app is loaded (for testing purposes)
+        console.log('Always showing Egglet popup');
+        setShowEggletPopup(true);
+    };
+
+    const closeEggletPopup = () => {
+        setShowEggletPopup(false);
+        // Track that user has seen the popup
+        trackUserAction('egglet_popup_closed', {}, shared.loginData?.link);
+    };
+
     useEffect(() => {
         setupProfileData();
         setupEvents();
+        
+        // Show Egglet popup on initial load, no conditions
+        // Small timeout to let the page load first
+        setTimeout(() => {
+            checkEggletPopup();
+        }, 500);
     }, []);
 
     const startAutoScroll = () => {
@@ -649,6 +670,9 @@ Response:
                     </div>
                 </section>
             </div>
+
+            {/* Egglet Event Popup */}
+            <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />
         </>
     );
 };
