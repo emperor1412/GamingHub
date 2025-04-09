@@ -22,12 +22,14 @@ import LFGO from './images/LFGO.png';
 import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
 import checkout from './images/checkout.svg';
+import eggletLogo from './images/Egglets_Logo.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
+import EggletEventPage from './EggletEventPage';
 
 let isMouseDown = false;
 let startX;
@@ -45,6 +47,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [isDragging, setIsDragging] = useState(false);
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
+    const [showEggletPage, setShowEggletPage] = useState(false);
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -544,7 +547,7 @@ Response:
                         <div className='ticket-button-image-container'>
                             <img
                                 src={my_ticket}
-                                alt="My Tickets"
+                                alt="My Ticketssssssss"
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
@@ -597,6 +600,25 @@ Response:
                             alt="Locker"
                             className="locker-icon"
                         /> */}
+                    </button>
+                </section>
+
+                {/* Egglet Event Section */}
+                <section className="egglet-section">
+                    <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                        <div className='egglet-button-image-container'>
+                            <img
+                                src={eggletLogo}
+                                alt="Egglet Event"
+                                className="egglet-button-image"
+                            />
+                            <div className='egglet-button-container-border'></div>
+                            <h3 className="event-card-title">EGGLET EVENT</h3>
+                            <p className="event-card-subtitle">Earn Points & Get Egglets!</p>
+                            <div className="check-out-button">
+                                Join Event
+                            </div>
+                        </div>
                     </button>
                 </section>
 
@@ -670,6 +692,9 @@ Response:
                     </div>
                 </section>
             </div>
+
+            {/* EggletEventPage component */}
+            {showEggletPage && <EggletEventPage onClose={() => setShowEggletPage(false)} />}
 
             {/* Egglet Event Popup */}
             <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />
