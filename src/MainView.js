@@ -23,6 +23,7 @@ import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
+import eggletBackground from './images/Egglets_Background.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -547,7 +548,7 @@ Response:
                         <div className='ticket-button-image-container'>
                             <img
                                 src={my_ticket}
-                                alt="My Ticketssssssss"
+                                alt="My Tickets"
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
@@ -606,19 +607,11 @@ Response:
                 {/* Egglet Event Section */}
                 <section className="egglet-section">
                     <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
-                        <div className='egglet-button-image-container'>
-                            <img
-                                src={eggletLogo}
-                                alt="Egglet Event"
-                                className="egglet-button-image"
-                            />
-                            <div className='egglet-button-container-border'></div>
-                            <h3 className="event-card-title">EGGLET EVENT</h3>
-                            <p className="event-card-subtitle">Earn Points & Get Egglets!</p>
-                            <div className="check-out-button">
-                                Join Event
-                            </div>
+                        <div className="egglet-event-content">
+                            <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                            <div className="egglet-date">15 – 25 APRIL</div>
                         </div>
+                        <div className="egglet-event-tag">EGGLET EVENT</div>
                     </button>
                 </section>
 

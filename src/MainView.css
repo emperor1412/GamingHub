@@ -599,6 +599,98 @@
 }
 
 .egglet-section {
-    /* Add styles for egglet section similar to tickets section */
     margin-bottom: 20px;
+}
+
+.egglet-button {
+    width: 350px;
+    height: 182px;
+    border: 2px solid #0033cc;
+    cursor: pointer;
+    background: url('./images/Egglets_Background.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0 auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.egglet-event-content {
+    padding: 16px 20px;
+    text-align: left;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.egglet-title {
+    font-size: 27px;
+    font-weight: 700;
+    color: #0000FF;
+    letter-spacing: 0.5px;
+    margin: 0;
+    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    text-transform: uppercase;
+    text-align: left;
+    line-height: 0.9;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.egglet-title::before {
+    content: "EARN";
+    display: block;
+}
+
+.egglet-title::after {
+    content: "EGGLETS";
+    display: block;
+}
+
+.egglet-date {
+    width: 41%;
+    font-size: 16px;
+    font-weight: bold;
+    background: #0000FF;
+    color: white;
+    display: inline-block;
+    padding: 1px 4px;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    text-align: left;
+}
+
+.egglet-event-tag {
+    position: absolute;
+    bottom: 5px;
+    left: 12px;
+    background: black;
+    color: white;
+    padding: 2px 8px;
+    font-weight: bold;
+    font-size: 17px;
+    border: 2px solid white;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    z-index: 2;
+}
+
+/* Hide the actual text content of the title since we're using pseudo-elements */
+.egglet-title span {
+    display: none;
+}
+
+/* Remove the old styles that we're replacing */
+.egglet-button-image-container,
+.egglet-button-image,
+.egglet-button-container-border,
+.egglet-button .check-out-button {
+    /* These old styles are being replaced, keeping the selectors for reference */
 }

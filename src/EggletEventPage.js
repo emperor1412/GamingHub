@@ -13,6 +13,7 @@ import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
 import eggIcon from './images/eggs_event-points-icon.png';
 import { trackUserAction } from './analytics';
+import AccountLinkPopup from './AccountLinkPopup';
 
 const EggletEventPage = ({ onClose }) => {
     const [eventPoints, setEventPoints] = useState(0);
@@ -24,6 +25,8 @@ const EggletEventPage = ({ onClose }) => {
         total: 2000000
     });
     const [loading, setLoading] = useState(false);
+    const [showAccountPopup, setShowAccountPopup] = useState(false);
+    const [accountLinkType, setAccountLinkType] = useState(null);
 
     const calculateLevelGain = (level) => {
         if (level < 2) return 0;
@@ -68,6 +71,22 @@ const EggletEventPage = ({ onClose }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleFSLIDClick = () => {
+        setAccountLinkType('fsl');
+        setShowAccountPopup(true);
+        trackUserAction('egglet_fsl_link_clicked', {}, shared.loginData?.userId);
+    };
+
+    const handleMOOARClick = () => {
+        setAccountLinkType('mooar');
+        setShowAccountPopup(true);
+        trackUserAction('egglet_mooar_link_clicked', {}, shared.loginData?.userId);
+    };
+
+    const closeAccountPopup = () => {
+        setShowAccountPopup(false);
     };
 
     const progressPercentage = Math.min((eggletsProgress.current / eggletsProgress.total) * 100, 100);
@@ -123,14 +142,14 @@ const EggletEventPage = ({ onClose }) => {
                                     {eggletsProgress.current >= eggletsProgress.total ? (
                                         "✓"
                                     ) : (
-                                        <img src={fslLogo} alt="FSL ID" className="eggs_indicator-logo" />
+                                        <img src={fslLogo} onClick={handleFSLIDClick} alt="FSL ID" className="eggs_indicator-logo" />
                                     )}
                                 </span>
                                 <span className="eggs_claim-indicator">
                                     {eggletsProgress.current >= eggletsProgress.total / 2 ? (
                                         "✓"
                                     ) : (
-                                        <img src={mooarLogo} alt="MOOAR" className="eggs_indicator-logo" />
+                                        <img src={mooarLogo} onClick={handleMOOARClick} alt="MOOAR" className="eggs_indicator-logo" />
                                     )}
                                 </span>
                             </div>
@@ -209,10 +228,17 @@ const EggletEventPage = ({ onClose }) => {
                 </div>
                                
                 <div className="eggs_auth-logos">
-                    <img src={fslLogo} alt="FSL ID" className="eggs_auth-logo" />
-                    <img src={mooarLogo} alt="MOOAR" className="eggs_auth-logo" />
+                    <div className="eggs_auth-logo-button"></div>
+                    <div className="eggs_auth-logo-button"></div>
                 </div>
             </div>
+
+            {/* Account Link Popup */}
+            <AccountLinkPopup 
+                isOpen={showAccountPopup} 
+                onClose={closeAccountPopup} 
+                linkType={accountLinkType} 
+            />
         </div>
     );
 };

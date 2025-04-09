@@ -1,0 +1,233 @@
+.egglink_popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.egglink_popup-container {
+  width: 85%;
+  max-width: 280px;
+  background: #000;
+  border: 1px solid #fff;
+  border-radius: 12px;
+  padding: 0 4% 4%;
+  text-align: center;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  position: relative;
+  overflow: visible;
+  max-height: min(450px, 80vh);
+  margin-top: 12%;
+}
+
+.egglink_back-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.egglink_back-button:hover {
+  opacity: 0.8;
+}
+
+/* Reusing the global back-button-alignment class */
+
+.egglink_logo-container {
+  width: 100%;
+  max-width: 160px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 1001;
+  aspect-ratio: 1/1;
+}
+
+.egglink_logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.egglink_popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: calc(20% + 20px);
+  padding-bottom: 20px;
+}
+
+
+.egglink_footer {
+  width: 100%;
+}
+
+.egglink_popup-title {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.egglink_subtitle {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.egglink_service-logo-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.egglink_service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45%;
+}
+
+.egglink_service-logo {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.egglink_service-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin: 20%;
+}
+
+.egglink_service-text {
+  font-size: 9px;
+  line-height: 1.1;
+  color: white;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  letter-spacing: 0.1px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.egglink_note {
+  font-size: 10.26px;
+  line-height: 1.1;
+  color: white;
+  text-transform: uppercase;
+  width: 90%;
+  letter-spacing: 0.2px;
+}
+
+.egglink_subtext {
+  font-size: 12.16px;
+  line-height: 1.1;
+  color: white;
+  text-transform: uppercase;
+  width: 90%;
+  letter-spacing: 0.1px;
+}
+
+.egglink_link-button {
+  background: linear-gradient(to right, #0080FF, #00FF80);
+  border: none;
+  color: black;
+  font-weight: 700;
+  font-size: 10px;
+  padding: 4px 0;
+  width: 70%;
+  border-radius: 25px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  text-transform: uppercase;
+}
+
+.egglink_service-item:nth-child(2) .egglink_link-button {
+  background: linear-gradient(to right, #FF8000, #FF80FF);
+}
+
+.egglink_link-button:hover {
+  opacity: 0.9;
+}
+
+/* Media queries for different screen sizes */
+@media screen and (min-height: 680px) {
+  .egglink_popup-title {
+    font-size: 30px;
+  }
+  
+  .egglink_link-button {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-height: 680px) {
+  .egglink_popup-container {
+    padding-bottom: 12px;
+  }
+  
+  .egglink_logo-container {
+    max-width: 130px;
+    transform: translate(-50%, -60%);
+  }
+  
+  .egglink_popup-content {
+    margin-top: calc(16% + 18px);
+  }
+  
+
+  
+  .egglink_service-logo-container {
+    margin: 12px 0;
+  }
+  
+  .egglink_note {
+    font-size: 12.16px;
+    margin: 14px 0 12px;
+  }  
+}
+
+@media screen and (max-height: 600px) {
+
+  .egglink_subtitle {
+    margin-bottom: 0px;
+  }
+  
+  .egglink_popup-container {
+    margin-top: 10%;
+  }
+  
+  .egglink_logo-container {
+    max-width: 160px;
+    transform: translate(-50%, -60%);
+  }
+  
+  .egglink_popup-content {
+    margin-top: calc(22% + 8px);
+  }
+  
+  .egglink_service-logo {
+    width: 45px;
+    height: 45px;
+  }
+}

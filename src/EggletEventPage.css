@@ -42,7 +42,6 @@
   padding: 8px 15px;
   background: #000;
   border: 2px solid #0000FF;
-  border-radius: 10px;
   margin-bottom: 20px;
   color: white;
   height: 48px;
@@ -143,6 +142,13 @@
 .eggs_indicator-logo {
   width: 28px;
   height: 28px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.eggs_indicator-logo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
 }
 
 .eggs_global-egglets-title {
@@ -171,6 +177,28 @@
   justify-content: center;
   color: white;
   font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+/* Pulse animation for indicator logos */
+@keyframes pulseEffect {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(0, 0, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 255, 0);
+  }
+}
+
+.eggs_claim-indicator:hover {
+  background-color: #2222FF;
+}
+
+.eggs_claim-indicator:hover .eggs_indicator-logo {
+  animation: pulseEffect 1.5s infinite;
 }
 
 .eggs_claim-indicator.completed {
@@ -322,14 +350,37 @@
 .eggs_auth-logos {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  margin-bottom: 20px;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.eggs_auth-logo-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.eggs_auth-logo-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .eggs_auth-logo {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
   object-fit: contain;
+}
+
+.eggs_auth-logo-label {
+  color: #0000FF;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
 }
 
 /* Loading overlay */
