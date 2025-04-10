@@ -1,25 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './AccountLinkPopup.css';
 import eggletLogo from './images/Egglets_Logo.png';
 import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
+import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import back from './images/back.svg';
+import shared from './Shared';
+import { trackUserAction } from './analytics';
 
 const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
+  const [fslLinked, setFslLinked] = useState(false);
+  const [mooarLinked, setMooarLinked] = useState(false);
+
+  useEffect(() => {
+    // Check if FSL is linked based on user profile
+    if (shared.userProfile && shared.userProfile.fslId) {
+      setFslLinked(true);
+    }
+
+    // Check if MOOAR is linked from shared data or fetch from API
+    const checkMooarStatus = async () => {
+      try {
+        const response = await fetch(`${shared.server_url}/api/app/eventPointData?token=${shared.loginData.token}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.code === 0 && data.data) {
+            setMooarLinked(data.data.mooarFlag);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking MOOAR status:', error);
+      }
+    };
+
+    if (isOpen) {
+      checkMooarStatus();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleFSLLinkAccount = () => {
-    // Implement FSL linking logic
-    console.log('Linking FSL ID account');
-    // After linking is complete:
-    // onClose();
+    if (fslLinked) return; // Do nothing if already linked
+    
+    // Track event and show FSL ID tab
+    trackUserAction('egglet_fsl_link_clicked', {}, shared.loginData?.userId);
+    
+    // Close popup and navigate to FSLID tab
+    onClose();
+    
+    // Navigate to FSL ID tab - assuming there's a function to switch tabs
+    if (typeof shared.showTab === 'function') {
+      shared.showTab('fslid');
+    } else {
+      // Fallback if direct tab navigation isn't available
+      window.location.hash = '#fslid';
+    }
   };
 
   const handleMOOARLinkAccount = () => {
-    // Implement MOOAR linking logic
-    console.log('Linking MOOAR account');
-    // After linking is complete:
-    // onClose();
+    if (mooarLinked) return; // Do nothing if already linked
+    
+    // Track event
+    trackUserAction('egglet_mooar_link_clicked', {}, shared.loginData?.userId);
+    
+    // Open MOOAR login page in a new tab
+    window.open('https://id.fsl.com/login', '_blank');
   };
 
   return (
@@ -42,25 +94,41 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
           <div className="egglink_service-logo-container">
             <div className="egglink_service-item">
               <div className="egglink_service-logo">
-                <img src={fslLogo} alt="FSL ID" />
+                <img 
+                  src={fslLinked ? loggedInLogo : fslLogo} 
+                  alt="FSL ID" 
+                  className={fslLinked ? "logged-in" : ""}
+                />
               </div>
               <p className="egglink_service-text">
                 LINK TO YOUR FSL ID TO<br />GAIN YOUR POINTS
               </p>
-              <button className="egglink_link-button" onClick={handleFSLLinkAccount}>
-                LINK
+              <button 
+                className="egglink_link-button" 
+                onClick={handleFSLLinkAccount}
+                disabled={fslLinked}
+              >
+                {fslLinked ? "LINKED" : "LINK"}
               </button>
             </div>
             
             <div className="egglink_service-item">
               <div className="egglink_service-logo">
-                <img src={mooarLogo} alt="MOOAR" />
+                <img 
+                  src={mooarLinked ? loggedInLogo : mooarLogo} 
+                  alt="MOOAR" 
+                  className={mooarLinked ? "logged-in" : ""}
+                />
               </div>
               <p className="egglink_service-text">
                 LINK MOOAR ACCOUNT<br />TO RECEIVE EGGLETS
               </p>
-              <button className="egglink_link-button" onClick={handleMOOARLinkAccount}>
-                LINK
+              <button 
+                className="egglink_link-button" 
+                onClick={handleMOOARLinkAccount}
+                disabled={mooarLinked}
+              >
+                {mooarLinked ? "LINKED" : "LINK"}
               </button>
             </div>
           </div>

@@ -146,9 +146,21 @@
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
+.eggs_indicator-logo.logged-in {
+  cursor: default;
+  width: 30px;
+  height: 30px;
+  margin: -1px;
+}
+
 .eggs_indicator-logo:hover {
   transform: scale(1.1);
   filter: brightness(1.2);
+}
+
+.eggs_indicator-logo.logged-in:hover {
+  transform: none;
+  filter: none;
 }
 
 .eggs_global-egglets-title {
@@ -213,7 +225,7 @@
 
 .eggs_progress-bar {
   height: 33.79px;
-  background-color: #0057ff;
+  background-color: #0000FF;
   border-radius: 25px;
   overflow: hidden;
   position: relative;
@@ -398,4 +410,21 @@
   color: white;
   font-size: 18px;
   font-weight: 700;
+}
+
+.eggs_back-to-main-button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.eggs_back-to-main-button:hover {
+  background: #2980b9;
 } 

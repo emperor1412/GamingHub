@@ -49,6 +49,11 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+    const [eventActive, setEventActive] = useState(false);
+    const [showedEggletToday, setShowedEggletToday] = useState(false);
+    
+    // Set to true to disable daily checking and always show popup when event is active
+    const isMockup = true;
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -273,11 +278,111 @@ Response:
         setEventData(events);
     };
 
+    // Fetch event status data
+    const fetchEventStatus = async (depth = 0) => {
+        if (depth > 3) {
+            console.error('Get event status failed after 3 attempts');
+            return null;
+        }
+        
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/eventPointData?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Event status data:', data);
+
+                if (data.code === 0) {
+                    return data.data;
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.error('Token expired, attempting to re-login');
+                    const loginResult = await shared.login(shared.initData);
+                    if (loginResult.success) {
+                        return fetchEventStatus(depth + 1);
+                    } else {
+                        console.error('Re-login failed:', loginResult.error);
+                    }
+                } else {
+                    console.error('Failed to fetch event status:', data.msg);
+                }
+            } else {
+                console.error('Event status response error:', response);
+            }
+        } catch (error) {
+            console.error('Error fetching event status:', error);
+        }
+        
+        return null;
+    };
+
     // Check if the Egglet popup should be shown (once daily)
-    const checkEggletPopup = () => {
-        // Always show popup when app is loaded (for testing purposes)
-        console.log('Always showing Egglet popup');
-        setShowEggletPopup(true);
+    const checkEggletPopup = async () => {
+        // If in mockup mode, skip daily checking
+        if (isMockup) {
+            console.log('Mockup mode: Skipping daily check for egglet popup');
+            await updateEventStatus(true);
+            return;
+        }
+        
+        // Regular daily checking logic
+        const lastPopupTimeStr = localStorage.getItem('lastEggletPopupTime');
+        
+        if (lastPopupTimeStr) {
+            const lastPopupTime = new Date(lastPopupTimeStr);
+            const now = new Date();
+            
+            // Check if it's still the same day (using UTC to match check-in logic)
+            const isSameDay = 
+                lastPopupTime.getUTCFullYear() === now.getUTCFullYear() &&
+                lastPopupTime.getUTCMonth() === now.getUTCMonth() &&
+                lastPopupTime.getUTCDate() === now.getUTCDate();
+                
+            if (isSameDay) {
+                console.log('Egglet popup already shown today, not showing again');
+                setShowedEggletToday(true);
+                // Still fetch event status to update other UI elements
+                await updateEventStatus();
+                return;
+            }
+        }
+        
+        // Not shown today or never shown, proceed with checking event status
+        await updateEventStatus(true);
+    };
+    
+    // Separate function to update event status and conditionally show popup
+    const updateEventStatus = async (showPopupIfActive = false) => {
+        // Fetch event status to determine if popup should be shown
+        const eventData = await fetchEventStatus();
+        
+        if (eventData) {
+            // Only show popup if eventStart is true and eventEnd is false
+            const isEventActive = eventData.eventStart && !eventData.eventEnd;
+            setEventActive(isEventActive);
+            
+            if (isEventActive && showPopupIfActive) {
+                console.log('Showing Egglet popup - event is active');
+                setShowEggletPopup(true);
+                
+                // Only save last popup time if not in mockup mode
+                if (!isMockup) {
+                    localStorage.setItem('lastEggletPopupTime', new Date().toISOString());
+                    setShowedEggletToday(true);
+                }
+            } else if (!isEventActive) {
+                console.log('Egglet popup not shown - event is not active');
+                setShowEggletPopup(false);
+            }
+        } else {
+            console.error('Failed to fetch event status data');
+            setEventActive(false);
+            setShowEggletPopup(false);
+        }
     };
 
     const closeEggletPopup = () => {
@@ -290,11 +395,49 @@ Response:
         setupProfileData();
         setupEvents();
         
-        // Show Egglet popup on initial load, no conditions
+        // Check if we should show Egglet popup (once daily logic)
         // Small timeout to let the page load first
         setTimeout(() => {
             checkEggletPopup();
         }, 500);
+    }, []);
+    
+    // Reset egglet popup flag at midnight
+    useEffect(() => {
+        // Skip this useEffect if in mockup mode
+        if (isMockup) {
+            console.log('Mockup mode: Skipping midnight reset for egglet popup');
+            return;
+        }
+        
+        let resetTimeout;
+        
+        const setupResetTimeout = () => {
+            // Calculate time until next midnight (UTC)
+            const now = new Date();
+            const nextMidnight = new Date(now);
+            nextMidnight.setUTCDate(now.getUTCDate() + 1);
+            nextMidnight.setUTCHours(0, 0, 0, 0);
+            const timeUntilMidnight = nextMidnight - now;
+            
+            console.log('Setting timeout to reset egglet popup flag in', timeUntilMidnight, 'ms');
+            
+            // Set timeout to reset popup flag at midnight
+            resetTimeout = setTimeout(() => {
+                console.log('Resetting egglet popup flag at midnight');
+                setShowedEggletToday(false);
+                // Check if popup should be shown again (e.g., if user is still using the app past midnight)
+                checkEggletPopup();
+                // Setup the next day's reset
+                setupResetTimeout();
+            }, timeUntilMidnight);
+        };
+        
+        // Initial setup
+        setupResetTimeout();
+        
+        // Cleanup on unmount
+        return () => clearTimeout(resetTimeout);
     }, []);
 
     const startAutoScroll = () => {
@@ -563,6 +706,19 @@ Response:
                     </button>
                 </section>
 
+                {/* Egglet Event Section - only shown if event is active */}
+                {eventActive && (
+                    <section className="egglet-section">
+                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                            <div className="egglet-event-content">
+                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                                <div className="egglet-date">17 – 27 APRIL</div>
+                            </div>
+                            <div className="egglet-event-tag">EGGLET EVENT</div>
+                        </button>
+                    </section>
+                )}
+
                 <section className="locked-sections">
                     <button className="locked-card">
                         <div className='locked-card-image-container'>
@@ -601,17 +757,6 @@ Response:
                             alt="Locker"
                             className="locker-icon"
                         /> */}
-                    </button>
-                </section>
-
-                {/* Egglet Event Section */}
-                <section className="egglet-section">
-                    <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
-                        <div className="egglet-event-content">
-                            <div className="egglet-title"><span>EARN EGGLETS</span></div>
-                            <div className="egglet-date">15 – 25 APRIL</div>
-                        </div>
-                        <div className="egglet-event-tag">EGGLET EVENT</div>
                     </button>
                 </section>
 
@@ -689,8 +834,8 @@ Response:
             {/* EggletEventPage component */}
             {showEggletPage && <EggletEventPage onClose={() => setShowEggletPage(false)} />}
 
-            {/* Egglet Event Popup */}
-            <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />
+            {/* Egglet Event Popup - only shown if event is active */}
+            {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
         </>
     );
 };

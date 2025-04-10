@@ -26,7 +26,7 @@ const EggletEventPopup = ({ isOpen, onClose }) => {
         <div className="egg_popup-content">
           <h2 className="egg_popup-title">EGGLET EVENT IS HERE!</h2>
           
-          <div className="egg_date">15 - 25 APRIL</div>
+          <div className="egg_date">17 - 27 APRIL</div>
           
           <p className="egg_description">
             EARN EVENT POINTS TO EARN EGGLETS
