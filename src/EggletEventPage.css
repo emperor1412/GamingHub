@@ -1,3 +1,130 @@
+/* Font Definitions for Inktrap */
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegularItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemiboldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltraboldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
 .eggs_egglet-event-container {
   position: fixed;
   top: 0;
@@ -8,7 +135,7 @@
   color: #FFF;
   z-index: 1000;
   overflow-y: auto;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
 }
 
 .eggs_egglet-event-header {
