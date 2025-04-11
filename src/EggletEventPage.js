@@ -5,14 +5,16 @@ import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 import starletIcon from './images/starlet.png';
 import eggletLogo from './images/Egglets_Logo.png';
-import scratching from './images/Egglets_Description_1.png';
-import buying from './images/Egglets_Description_2.png';
-import inviting from './images/Egglets_Description_3.png';
-import levelUp from './images/Egglets_Description_4.png';
+import scratching from './images/Egglet_Image_1.png';
+import buying from './images/Egglet_Image_2.png';
+import inviting from './images/Egglet_Image_3.png';
+import levelUp from './images/Egglet_Image_4.png';
 import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
 import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import eggIcon from './images/eggs_event-points-icon.png';
+import calendar from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar.svg';
 import { trackUserAction } from './analytics';
 import AccountLinkPopup from './AccountLinkPopup';
 
@@ -29,7 +31,7 @@ Response:
     }
 } */
 
-const EggletEventPage = ({ onClose }) => {
+const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, checkInData }) => {
     const [eventPoints, setEventPoints] = useState(0);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
@@ -44,6 +46,7 @@ const EggletEventPage = ({ onClose }) => {
     const [mooarFlag, setMooarFlag] = useState(false);
     const [fslFlag, setFslFlag] = useState(false);
     const [eventActive, setEventActive] = useState(false);
+    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
 
     const calculateLevelGain = (level) => {
         if (level < 2) return 0;
@@ -51,13 +54,80 @@ const EggletEventPage = ({ onClose }) => {
         return 15 + (level - 2) * 2;
     };
 
+    // Calculate what check-in display to show based on time of day
+    const calculateCheckInDisplay = () => {
+        if (!shared.checkInData || !shared.checkInData.lastTime) {
+            console.log('No check-in data available, showing CHECK-IN TODAY');
+            return true;
+        }
+        
+        try {
+            const lastTime = new Date(shared.checkInData.lastTime);
+            const now = new Date();
+            const nextCheckInTime = new Date(now);
+            nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
+            nextCheckInTime.setUTCHours(0, 0, 0, 0);
+            const remaining = nextCheckInTime - now;
+
+            if (remaining > 0) {
+                console.log('After check-in state, remaining: ' + remaining);
+                return false; // Show streakDay number
+            } else {
+                console.log('Before check-in state, remaining: ' + remaining);
+                return true; // Show CHECK-IN TODAY
+            }
+        } catch (e) {
+            console.error('Error calculating check-in display:', e);
+            return true; // Default to CHECK-IN TODAY on error
+        }
+    };
+
     useEffect(() => {
+        console.log('EggletEventPage mounted');
         // Initialize data
         setupData();
         
         // Track event page view
         trackUserAction('egglet_event_page_viewed', {}, shared.loginData?.userId);
-    }, []);
+        
+        // Check if user is in check-in state - to match MainView behavior
+        let myTimeout;
+        try {
+            console.log('EggletEventPage useEffect - checkInData:', checkInData);
+            if (checkInData && checkInData.lastTime) {
+                const lastTime = new Date(checkInData.lastTime);
+                console.log('EggletEventPage useEffect - lastTime:', lastTime);
+                
+                const now = new Date();
+                const nextCheckInTime = new Date(now);
+                nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
+                nextCheckInTime.setUTCHours(0, 0, 0, 0);
+                const remaining = nextCheckInTime - now;
+                console.log('EggletEventPage useEffect - remaining:', remaining);
+
+                if (remaining > 0) {
+                    console.log('EggletEventPage useEffect: after check-in state, remaining: ' + remaining);
+                    setShowTextCheckIn(false);
+                    myTimeout = setTimeout(() => setShowTextCheckIn(true), remaining);
+                } else {
+                    console.log('EggletEventPage useEffect: before check-in state, remaining: ' + remaining);
+                    setShowTextCheckIn(true);
+                }
+            } else {
+                // Default to showing "CHECK-IN TODAY" if no check-in data
+                console.log('EggletEventPage useEffect: No check-in data available');
+                setShowTextCheckIn(true);
+            }
+        } catch (e) {
+            console.log('EggletEventPage useEffect error:', e);
+            // Default to showing "CHECK-IN TODAY" on error
+            setShowTextCheckIn(true);
+        }
+
+        return () => {
+            if (myTimeout) clearTimeout(myTimeout);
+        };
+    }, [checkInData]);
 
     const fetchEventPointData = async (depth = 0) => {
         if (depth > 3) {
@@ -234,6 +304,47 @@ const EggletEventPage = ({ onClose }) => {
     const progressPercentage = Math.min((eggletsProgress.current / eggletsProgress.total) * 100, 100);
     const progressPercentageDisplay = Math.min((eggletsProgress.current / eggletsProgress.total) * 100, 97.7);
 
+    // Function to handle check-in click
+    const onClickCheckIn = async () => {
+        console.log('EggletEventPage onClickCheckIn');
+        try {
+            if (!shared.loginData) {
+                console.log('Login data not available');
+                shared.showPopup({ 
+                    type: 0, 
+                    message: 'Please log in to check in.' 
+                });
+                return;
+            }
+            
+            // Directly use the shared.checkIn which should be populated from the app parent
+            if (shared.checkIn) {
+                const result = await shared.checkIn(shared.loginData);
+                console.log('CheckIn Response:', result);
+                
+                if (result.code === 0) {
+                    // Update checkInData with the new data
+                    setShowCheckInView(true);
+                } else {
+                    console.log('Check-in failed:', result);
+                    shared.showPopup({ 
+                        type: 0, 
+                        message: 'Failed to check in. Please try again later.' 
+                    });
+                }
+            } else {
+                console.log('Check-in function not available');
+                onClose();
+            }
+        } catch (error) {
+            console.error('Error during check-in:', error);
+            shared.showPopup({ 
+                type: 0, 
+                message: 'Failed to check in. Please try again later.' 
+            });
+        }
+    };
+
     return (
         <div className="eggs_egglet-event-container">
             {loading && (
@@ -256,18 +367,49 @@ const EggletEventPage = ({ onClose }) => {
                 </div>
             )}
             
+                        
             <header className="eggs_egglet-event-header">
-                <button className="back-button back-button-alignment" onClick={onClose}>
+                <button 
+                    className="back-button"
+                    onClick={onClose}
+                >
                     <img src={back} alt="Back" />
                 </button>
-                <div className="header-stats">
-                    <div className="stat-item-main">
+                <div className="stats-main">
+                    <button 
+                        className="stat-item-main"
+                        onClick={() => {
+                            // Show Profile using setShowProfileView
+                            setShowProfileView(true);
+                        }}
+                    >
                         <img src={ticketIcon} alt="Tickets" />
                         <span className='stat-item-main-text'>{ticket}</span>
-                    </div>
-                    <div className="stat-item-main">
+                    </button>
+                    <button 
+                        className="stat-item-main"
+                        onClick={() => {
+                            // Show Profile using setShowProfileView
+                            setShowProfileView(true);
+                        }}
+                    >
                         <img src={starletIcon} alt="Starlets" />
                         <span className='stat-item-main-text'>{starlets}</span>
+                    </button>
+                    <div className="stat-item-main">
+                        <button className="stat-button">
+                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
+                            <div className="check-in-text">
+                                {showTextCheckIn ? (
+                                    <>
+                                        <span>CHECK-IN</span>
+                                        <span>TODAY</span>
+                                    </>
+                                ) : (
+                                    <span className='stat-item-main-text'>{checkInData?.streakDay || "0"}</span>
+                                )}
+                            </div>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -372,7 +514,7 @@ const EggletEventPage = ({ onClose }) => {
                             <div className="eggs_method-details">
                                 <div className="eggs_method-detail">NORMAL USER = 5</div>
                                 <div className="eggs_method-detail">PREMIUM USER = 15</div>
-                                <div className="eggs_method-detail">MAX 6 INVITES PER DAY</div>
+                                <div className="eggs_method-detail">MAX 6 FRIENDS PER DAY</div>
                             </div>
                         </div>
                         
