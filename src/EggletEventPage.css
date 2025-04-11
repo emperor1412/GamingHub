@@ -160,6 +160,27 @@
   align-items: center;
 }
 
+/* Back button styling - standalone version */
+.eggs_standalone-back-button {
+  position: fixed;
+  top: 70px;
+  left: 15px;
+  z-index: 1002;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.eggs_standalone-back-button img {
+  width: 28px;
+  height: 28px;
+}
+
 /* Event Points Bar */
 .eggs_event-points-bar {
   display: flex;
@@ -173,6 +194,7 @@
   color: white;
   height: 48px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .eggs_event-points-label {
@@ -180,6 +202,8 @@
   font-weight: 700;
   text-transform: uppercase;
   color: white;
+  flex: 1;
+  text-align: center;
 }
 
 .eggs_event-points-value-display {
@@ -209,6 +233,110 @@
   letter-spacing: 1px;
   color: white;
   align-content: center;
+}
+
+/* Profile pic and level badge */
+.profile-pic-main img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.profile-pic-main {
+  margin-left: 10px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.level-badge {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(255, 0, 246, 0.2);
+  border: 1px solid #FF00F6;
+  border-radius: 4px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.stats-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  flex: 1;
+}
+
+.stat-item-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.stat-item-main img {
+  width: 24px;
+  height: 24px;
+}
+
+.stat-item-main-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.check-in-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  margin-left: 2px;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.stat-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  color: white;
+  font-family: 'PPNeueMachina', sans-serif;
+}
+
+.stat-button img {
+  margin-right: 2px;
+}
+
+.stat-button:hover {
+  opacity: 0.8;
 }
 
 /* Global Egglets Section */

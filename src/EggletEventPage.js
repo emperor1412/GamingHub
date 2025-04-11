@@ -13,6 +13,8 @@ import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
 import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import eggIcon from './images/eggs_event-points-icon.png';
+import calendar from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar.svg';
 import { trackUserAction } from './analytics';
 import AccountLinkPopup from './AccountLinkPopup';
 
@@ -44,11 +46,41 @@ const EggletEventPage = ({ onClose }) => {
     const [mooarFlag, setMooarFlag] = useState(false);
     const [fslFlag, setFslFlag] = useState(false);
     const [eventActive, setEventActive] = useState(false);
+    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
+    const [checkInData, setCheckInData] = useState(null);
 
     const calculateLevelGain = (level) => {
         if (level < 2) return 0;
         if (level > 50) return 109;
         return 15 + (level - 2) * 2;
+    };
+
+    // Calculate what check-in display to show based on time of day
+    const calculateCheckInDisplay = () => {
+        if (!shared.checkInData || !shared.checkInData.lastTime) {
+            console.log('No check-in data available, showing CHECK-IN TODAY');
+            return true;
+        }
+        
+        try {
+            const lastTime = new Date(shared.checkInData.lastTime);
+            const now = new Date();
+            const nextCheckInTime = new Date(now);
+            nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
+            nextCheckInTime.setUTCHours(0, 0, 0, 0);
+            const remaining = nextCheckInTime - now;
+
+            if (remaining > 0) {
+                console.log('After check-in state, remaining: ' + remaining);
+                return false; // Show streakDay number
+            } else {
+                console.log('Before check-in state, remaining: ' + remaining);
+                return true; // Show CHECK-IN TODAY
+            }
+        } catch (e) {
+            console.error('Error calculating check-in display:', e);
+            return true; // Default to CHECK-IN TODAY on error
+        }
     };
 
     useEffect(() => {
@@ -57,6 +89,40 @@ const EggletEventPage = ({ onClose }) => {
         
         // Track event page view
         trackUserAction('egglet_event_page_viewed', {}, shared.loginData?.userId);
+        
+        // Check if user is in check-in state - to match MainView behavior
+        let myTimeout;
+        try {
+            if (shared.checkInData && shared.checkInData.lastTime) {
+                const lastTime = new Date(shared.checkInData.lastTime);
+                
+                const now = new Date();
+                const nextCheckInTime = new Date(now);
+                nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
+                nextCheckInTime.setUTCHours(0, 0, 0, 0);
+                const remaining = nextCheckInTime - now;
+
+                if (remaining > 0) {
+                    console.log('EggletEventPage useEffect: after check-in state, remaining: ' + remaining);
+                    setShowTextCheckIn(false);
+                    myTimeout = setTimeout(() => setShowTextCheckIn(true), remaining);
+                } else {
+                    console.log('EggletEventPage useEffect: before check-in state, remaining: ' + remaining);
+                    setShowTextCheckIn(true);
+                }
+            } else {
+                // Default to showing "CHECK-IN TODAY" if no check-in data
+                setShowTextCheckIn(true);
+            }
+        } catch (e) {
+            console.log(e);
+            // Default to showing "CHECK-IN TODAY" on error
+            setShowTextCheckIn(true);
+        }
+
+        return () => {
+            if (myTimeout) clearTimeout(myTimeout);
+        };
     }, []);
 
     const fetchEventPointData = async (depth = 0) => {
@@ -169,6 +235,10 @@ const EggletEventPage = ({ onClose }) => {
                 setFslFlag(!!shared.userProfile.fslId);
             }
             
+            // Get check-in data directly from shared
+            // This ensures we're using the exact same data as MainView
+            setCheckInData(shared.checkInData);
+            
             // Fetch event points data
             const eventData = await fetchEventPointData();
             if (eventData) {
@@ -234,6 +304,47 @@ const EggletEventPage = ({ onClose }) => {
     const progressPercentage = Math.min((eggletsProgress.current / eggletsProgress.total) * 100, 100);
     const progressPercentageDisplay = Math.min((eggletsProgress.current / eggletsProgress.total) * 100, 97.7);
 
+    // Function to handle check-in click
+    const onClickCheckIn = async () => {
+        console.log('EggletEventPage onClickCheckIn');
+        try {
+            if (!shared.loginData) {
+                console.log('Login data not available');
+                shared.showPopup({ 
+                    type: 0, 
+                    message: 'Please log in to check in.' 
+                });
+                return;
+            }
+            
+            // Directly use the shared.checkIn which should be populated from the app parent
+            if (shared.checkIn) {
+                const result = await shared.checkIn(shared.loginData);
+                if (result === 1) {
+                    console.log('Check-in successful, showing animation');
+                    // Close this view to return to MainView where animation will be shown
+                    onClose();
+                } else if (result === 0) {
+                    console.log('Already checked in today, showing check-in view');
+                    // We need to close this view to let MainView handle showing CheckIn.js
+                    onClose();
+                } else {
+                    console.log('Check-in returned unexpected result:', result);
+                }
+            } else {
+                console.log('Check-in function not available');
+                // We'll still close the view to return to MainView where CheckIn is properly implemented
+                onClose();
+            }
+        } catch (error) {
+            console.error('Error during check-in:', error);
+            shared.showPopup({ 
+                type: 0, 
+                message: 'Failed to check in. Please try again later.' 
+            });
+        }
+    };
+
     return (
         <div className="eggs_egglet-event-container">
             {loading && (
@@ -256,18 +367,63 @@ const EggletEventPage = ({ onClose }) => {
                 </div>
             )}
             
+            <button className="back-button eggs_standalone-back-button" onClick={onClose}>
+                <img src={back} alt="Back" />
+            </button>
+            
             <header className="eggs_egglet-event-header">
-                <button className="back-button back-button-alignment" onClick={onClose}>
-                    <img src={back} alt="Back" />
+                <button 
+                    className="profile-pic-main"
+                    onClick={() => {
+                        // Return to MainView which will show Profile
+                        onClose();
+                    }} 
+                >
+                    <img 
+                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                    alt="Profile" />
                 </button>
-                <div className="header-stats">
-                    <div className="stat-item-main">
+                <div className="level-badge" onClick={() => {
+                    // Return to MainView which will show Profile
+                    onClose();
+                }}>
+                    LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+                </div>
+                <div className="stats-main">
+                    <button 
+                        className="stat-item-main"
+                        onClick={() => {
+                            // Return to MainView which will show Profile
+                            onClose();
+                        }}
+                    >
                         <img src={ticketIcon} alt="Tickets" />
                         <span className='stat-item-main-text'>{ticket}</span>
-                    </div>
-                    <div className="stat-item-main">
+                    </button>
+                    <button 
+                        className="stat-item-main"
+                        onClick={() => {
+                            // Return to MainView which will show Profile
+                            onClose();
+                        }}
+                    >
                         <img src={starletIcon} alt="Starlets" />
                         <span className='stat-item-main-text'>{starlets}</span>
+                    </button>
+                    <div className="stat-item-main">
+                        <button className="stat-button" onClick={() => onClickCheckIn()}>
+                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
+                            <div className="check-in-text">
+                                {showTextCheckIn ? (
+                                    <>
+                                        <span>CHECK-IN</span>
+                                        <span>TODAY</span>
+                                    </>
+                                ) : (
+                                    <span className='stat-item-main-text'>{shared.checkInData ? shared.checkInData.streakDay : "0"}</span>
+                                )}
+                            </div>
+                        </button>
                     </div>
                 </div>
             </header>
