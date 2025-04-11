@@ -53,7 +53,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
     // Set to true to disable daily checking and always show popup when event is active
-    const isMockup = true;
+    const isMockup = false;
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
