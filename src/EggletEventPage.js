@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './EggletEventPage.css';
 import shared from './Shared';
 import back from './images/back.svg';
@@ -47,6 +47,10 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
     const [fslFlag, setFslFlag] = useState(false);
     const [eventActive, setEventActive] = useState(false);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
+    const contentRef = useRef(null);
+
+    // Ref để theo dõi các sự kiện touch đã được đăng ký
+    const eventHandlersAttached = useRef(false);
 
     const calculateLevelGain = (level) => {
         if (level < 2) return 0;
@@ -90,6 +94,18 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
         // Track event page view
         trackUserAction('egglet_event_page_viewed', {}, shared.loginData?.userId);
         
+        // Setup advanced touch handling
+        const setupTouchHandlers = () => {
+            if (contentRef.current && !eventHandlersAttached.current) {
+                // Sử dụng passive: false để đảm bảo preventDefault() hoạt động đúng
+                contentRef.current.addEventListener('touchmove', handleTouchMove, { passive: false });
+                eventHandlersAttached.current = true;
+            }
+        };
+        
+        // Đăng ký handler sau khi component đã mount
+        const timer = setTimeout(setupTouchHandlers, 100);
+        
         // Check if user is in check-in state - to match MainView behavior
         let myTimeout;
         try {
@@ -124,8 +140,27 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             setShowTextCheckIn(true);
         }
 
+        // Add body overflow control to prevent main content scrolling
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.height = '100%'; 
+        document.body.style.touchAction = 'none';
+
         return () => {
             if (myTimeout) clearTimeout(myTimeout);
+            clearTimeout(timer);
+            // Cleanup touch handlers
+            if (contentRef.current && eventHandlersAttached.current) {
+                contentRef.current.removeEventListener('touchmove', handleTouchMove);
+            }
+            
+            // Restore body overflow when component unmounts
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.height = '';
+            document.body.style.touchAction = '';
         };
     }, [checkInData]);
 
@@ -345,8 +380,67 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
         }
     };
 
+    // Ngăn chặn scroll ngang cho toàn bộ container
+    const preventHorizontalScroll = (e) => {
+        // Nếu chuyển động ngang lớn hơn chuyển động dọc
+        if (Math.abs(e.touches[0].clientX - e.touches[0].initialX) > 
+            Math.abs(e.touches[0].clientY - e.touches[0].initialY)) {
+            e.preventDefault();
+        }
+    };
+    
+    // Handle wheel events to prevent overscrolling
+    const handleWheel = (e) => {
+        if (!contentRef.current) return;
+        
+        const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+        
+        // Chỉ xử lý chuyển động lên xuống, bỏ qua chuyển động sang ngang
+        if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+        
+        // Check if we're at the top or bottom boundary
+        if ((scrollTop <= 0 && e.deltaY < 0) || 
+            (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0)) {
+            // Prevent scrolling beyond boundaries
+            e.preventDefault();
+        }
+    };
+    
+    // Add touch event handlers to prevent overscrolling on mobile
+    const handleTouchStart = (e) => {
+        if (!contentRef.current) return;
+        // Chỉ lưu vị trí Y, bỏ qua X
+        contentRef.current.startY = e.touches[0].clientY;
+        contentRef.current.startScrollTop = contentRef.current.scrollTop;
+        
+        // Lưu vị trí ban đầu để tính toán hướng chuyển động
+        e.touches[0].initialX = e.touches[0].clientX;
+        e.touches[0].initialY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+        if (!contentRef.current || contentRef.current.startY === undefined) return;
+        
+        const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+        const currentY = e.touches[0].clientY;
+        const diff = contentRef.current.startY - currentY;
+        
+        // Ngăn chặn sự kiện mặc định nếu đang ở ranh giới cuộn
+        if ((scrollTop <= 0 && diff < 0) || 
+            (scrollTop + clientHeight >= scrollHeight && diff > 0)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    };
+
+    // Handle content click to prevent event bubbling to overlay
+    const handleContentClick = (e) => {
+        e.stopPropagation();
+    };
+
     return (
-        <div className="eggs_egglet-event-container">
+        <div className="eggs_egglet-event-page">
             {loading && (
                 <div className="eggs_loading-overlay">
                     LOADING...
@@ -371,7 +465,10 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             <header className="eggs_egglet-event-header">
                 <button 
                     className="back-button"
-                    onClick={onClose}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onClose();
+                    }}
                 >
                     <img src={back} alt="Back" />
                 </button>
@@ -397,7 +494,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
-                        <button className="stat-button">
+                        <button className="stat-button" onClick={() => onClickCheckIn()}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
@@ -406,7 +503,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span className='stat-item-main-text'>{checkInData?.streakDay || "0"}</span>
+                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>
@@ -416,7 +513,14 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
 
             {/* Only show content when event is active */}
             {eventActive && (
-                <div className="eggs_egglet-event-content">
+                <div 
+                    className="eggs_egglet-event-content" 
+                    ref={contentRef}
+                    onWheel={handleWheel}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onClick={handleContentClick}
+                >
                     <div className="eggs_event-points-bar">
                         <span className="eggs_event-points-label">EVENT POINTS</span>
                         <div className="eggs_event-points-value-display">
@@ -536,11 +640,16 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             )}
 
             {/* Account Link Popup */}
-            <AccountLinkPopup 
-                isOpen={showAccountPopup} 
-                onClose={closeAccountPopup} 
-                linkType={accountLinkType} 
-            />
+            {showAccountPopup && (
+                <AccountLinkPopup 
+                    type={accountLinkType} 
+                    onClose={closeAccountPopup} 
+                    onSuccess={() => {
+                        closeAccountPopup();
+                        setupData(); // Refresh data after successful account linking
+                    }}
+                />
+            )}
         </div>
     );
 };

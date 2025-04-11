@@ -125,40 +125,65 @@
   font-style: italic;
 }
 
-.eggs_egglet-event-container {
+.eggs_egglet-event-page {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  color: #FFF;
-  z-index: 1000;
-  overflow-y: auto;
-  font-family: "PP Neue Machina Inktrap", sans-serif;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 9990;
+  overflow: hidden;
+  /* Prevent touch events from propagating through to main content */
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  /* Ensure the page stays above other content */
+  isolation: isolate;
 }
 
 .eggs_egglet-event-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  height: 56px;
+  padding: 4px 4px 8px 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background: rgba(0, 0, 0, 1);
-  z-index: 1001;
-  height: 60px;
-  box-sizing: border-box;
+  background: #000;
+  z-index: 9991;
+  position: relative;
 }
 
 .eggs_egglet-event-content {
-  padding: 75px 15px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: calc(100% - 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #000 url('./images/Egglets_Background.png') no-repeat center center;
+  background-size: cover;
+  z-index: 9991;
   position: relative;
+  padding: 12px;
+  /* Enable vertical scrolling only */
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .eggs_egglet-event-page {
+    /* iOS-specific fixes to prevent background scrolling */
+    position: fixed;
+    height: 100vh;
+    /* Fix for iOS height calculation */
+    height: -webkit-fill-available;
+  }
+
+  .eggs_egglet-event-content {
+    /* Fix for iOS scrolling */
+    position: absolute;
+    top: 56px;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+  }
 }
 
 /* Back button styling - standalone version */
@@ -682,4 +707,27 @@
 
 .eggs_back-to-main-button:hover {
   background: #2980b9;
+}
+
+/* Add event inactive overlay styling */
+.eggs_event-inactive-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  color: white;
+}
+
+.eggs_event-inactive-message {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
 } 

@@ -53,7 +53,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
     // Set to true to disable daily checking and always show popup when event is active
-    const isMockup = false;
+    const isMockup = true;
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -516,7 +516,11 @@ Response:
         return () => clearTimeout(myTimeout);
     }, []);
 
+    // Make sure event handlers don't trigger when popup is open
     const handleMouseDown = (e) => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         setIsDragging(true);
         isMouseDown = true;
         const carousel = carouselRef.current;
@@ -529,8 +533,9 @@ Response:
     };
 
     const handleMouseMove = (e) => {
-        // if (!isDragging) return;
-        // console.log('handleMouseMove, isMouseDown:', isMouseDown);
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         if (!isMouseDown) return;
 
         stopAutoScroll();
@@ -546,6 +551,9 @@ Response:
     };
 
     const handleMouseUp = (e) => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         try {
             setIsDragging(false); 
             isMouseDown = false;
@@ -586,8 +594,9 @@ Response:
     };
 
     const handleMouseLeave = () => {
-        // console.log('handleMouseLeave, isMouseDown:', isMouseDown);
-
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         if (isMouseDown) {
             handleMouseUp();
         }
@@ -600,20 +609,32 @@ Response:
     };
 
     const handleTouchStart = (e) => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         setIsDragging(true);
         stopAutoScroll();
     };
 
     const handleTouchMove = (e) => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         if (!isDragging) return;        
     };
 
     const handleTouchEnd = () => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         handleMouseUp();
     };
 
     // In MainView.js
     const handleWheel = (e) => {
+        // Don't handle events when popup is open
+        if (showEggletPopup || showEggletPage) return;
+        
         // If it's a vertical scroll (deltaY), let it propagate to parent
         
         // e.preventDefault();
@@ -628,6 +649,49 @@ Response:
             // handleMouseUp();
         }
     };
+
+    // Add a useEffect to control body overflow based on popup state
+    useEffect(() => {
+        // When popup is open, disable scrolling on the body
+        if (showEggletPopup || showEggletPage) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.touchAction = 'none';
+        } else {
+            // Re-enable scrolling when popup is closed
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.touchAction = '';
+        }
+        
+        // Cleanup function to ensure scrolling is re-enabled
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.touchAction = '';
+        };
+    }, [showEggletPopup, showEggletPage]);
+
+    // Add a cleanup effect when component unmounts
+    useEffect(() => {
+        return () => {
+            // Ensure body styles are reset when component unmounts
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.height = '';
+            document.body.style.touchAction = '';
+            
+            // Clear any intervals or timeouts
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+    }, []);
 
     return (
         <>

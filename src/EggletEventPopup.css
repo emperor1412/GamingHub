@@ -136,6 +136,9 @@
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  isolation: isolate;
 }
 
 .egg_popup-container {
@@ -153,6 +156,8 @@
   max-height: 85vh;
   aspect-ratio: 0.65/1;
   margin-top: 15%;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .egg_back-button {
@@ -211,6 +216,7 @@
   width: 100%;
   overflow-y: auto;
   padding-bottom: 2%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .egg_popup-title {
@@ -367,5 +373,33 @@
   .egg_auth-logo {
     width: 45px;
     height: 45px;
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .egg_popup-overlay {
+    /* iOS-specific fixes to prevent background scrolling */
+    position: fixed;
+    height: 100vh;
+    /* Fix for iOS height calculation */
+    height: -webkit-fill-available;
+  }
+  
+  .egg_popup-container {
+    /* Ensure proper sizing on iOS */
+    max-height: 80vh; 
+    max-height: -webkit-fill-available;
+    /* Prevent rubber-banding at edges */
+    overscroll-behavior: none;
+  }
+  
+  .egg_popup-content {
+    /* Ensure scroll momentum works properly on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scrolling */
+    overflow-x: hidden;
+    /* Better handling of content overflow */
+    max-height: calc(80vh - 100px);
   }
 } 
