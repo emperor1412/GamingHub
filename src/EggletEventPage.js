@@ -31,7 +31,7 @@ Response:
     }
 } */
 
-const EggletEventPage = ({ onClose, setShowProfileView }) => {
+const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, checkInData }) => {
     const [eventPoints, setEventPoints] = useState(0);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
@@ -47,7 +47,6 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
     const [fslFlag, setFslFlag] = useState(false);
     const [eventActive, setEventActive] = useState(false);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
-    const [checkInData, setCheckInData] = useState(null);
 
     const calculateLevelGain = (level) => {
         if (level < 2) return 0;
@@ -84,6 +83,7 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
     };
 
     useEffect(() => {
+        console.log('EggletEventPage mounted');
         // Initialize data
         setupData();
         
@@ -93,14 +93,17 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
         // Check if user is in check-in state - to match MainView behavior
         let myTimeout;
         try {
-            if (shared.checkInData && shared.checkInData.lastTime) {
-                const lastTime = new Date(shared.checkInData.lastTime);
+            console.log('EggletEventPage useEffect - checkInData:', checkInData);
+            if (checkInData && checkInData.lastTime) {
+                const lastTime = new Date(checkInData.lastTime);
+                console.log('EggletEventPage useEffect - lastTime:', lastTime);
                 
                 const now = new Date();
                 const nextCheckInTime = new Date(now);
                 nextCheckInTime.setUTCDate(now.getUTCDate() + 1);
                 nextCheckInTime.setUTCHours(0, 0, 0, 0);
                 const remaining = nextCheckInTime - now;
+                console.log('EggletEventPage useEffect - remaining:', remaining);
 
                 if (remaining > 0) {
                     console.log('EggletEventPage useEffect: after check-in state, remaining: ' + remaining);
@@ -112,10 +115,11 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
                 }
             } else {
                 // Default to showing "CHECK-IN TODAY" if no check-in data
+                console.log('EggletEventPage useEffect: No check-in data available');
                 setShowTextCheckIn(true);
             }
         } catch (e) {
-            console.log(e);
+            console.log('EggletEventPage useEffect error:', e);
             // Default to showing "CHECK-IN TODAY" on error
             setShowTextCheckIn(true);
         }
@@ -123,7 +127,7 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
         return () => {
             if (myTimeout) clearTimeout(myTimeout);
         };
-    }, []);
+    }, [checkInData]);
 
     const fetchEventPointData = async (depth = 0) => {
         if (depth > 3) {
@@ -235,10 +239,6 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
                 setFslFlag(!!shared.userProfile.fslId);
             }
             
-            // Get check-in data directly from shared
-            // This ensures we're using the exact same data as MainView
-            setCheckInData(shared.checkInData);
-            
             // Fetch event points data
             const eventData = await fetchEventPointData();
             if (eventData) {
@@ -324,11 +324,7 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
                 
                 if (result.code === 0) {
                     // Update checkInData with the new data
-                    setCheckInData(result.data);
-                    
-                    // Always close this view to let MainView handle showing CheckIn.js
-                    // This matches MainView's behavior where it shows CheckIn.js after any check-in attempt
-                    onClose();
+                    setShowCheckInView(true);
                 } else {
                     console.log('Check-in failed:', result);
                     shared.showPopup({ 
@@ -412,7 +408,7 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
                         <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
-                        <button className="stat-button" onClick={() => onClickCheckIn()}>
+                        <button className="stat-button">
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
@@ -421,7 +417,7 @@ const EggletEventPage = ({ onClose, setShowProfileView }) => {
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                    <span className='stat-item-main-text'>{checkInData?.streakDay || "0"}</span>
                                 )}
                             </div>
                         </button>

@@ -835,6 +835,8 @@ Response:
             {showEggletPage && <EggletEventPage 
                 onClose={() => setShowEggletPage(false)} 
                 setShowProfileView={setShowProfileView}
+                setShowCheckInView={setShowCheckInView}
+                checkInData={checkInData}
             />}
 
             {/* Egglet Event Popup - only shown if event is active */}
