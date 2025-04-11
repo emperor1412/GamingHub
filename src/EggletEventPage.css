@@ -295,7 +295,7 @@
   font-weight: 700;
   margin-bottom: 15px;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   color: white;
   text-transform: uppercase;

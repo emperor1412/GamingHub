@@ -293,7 +293,6 @@ const EggletEventPage = ({ onClose }) => {
                             <div className="eggs_corner eggs_bottom-right"></div>
                             
                             <div className="eggs_global-egglets-title">
-                                GLOBAL EGGLETS CLAIMED
                                 <div className="eggs_claim-indicators">
                                     <span className={`eggs_claim-indicator ${fslFlag || eggletsProgress.current >= eggletsProgress.total ? 'completed' : ''}`}>
                                         {eggletsProgress.current >= eggletsProgress.total ? (
@@ -314,7 +313,7 @@ const EggletEventPage = ({ onClose }) => {
                                 </div>
                             </div>
                             
-                            <div className="eggs_progress-bar-container">
+                            {/* <div className="eggs_progress-bar-container">
                                 <div className="eggs_progress-bar">
                                     <div 
                                         className="eggs_progress-fill" 
@@ -334,7 +333,7 @@ const EggletEventPage = ({ onClose }) => {
                                     </div>
                                     
                                 </div>
-                            </div>
+                            </div> */}
                             
                             <div className="eggs_egglets-info-container">
                                 <div className="eggs_egglets-info">
@@ -373,6 +372,7 @@ const EggletEventPage = ({ onClose }) => {
                             <div className="eggs_method-details">
                                 <div className="eggs_method-detail">NORMAL USER = 5</div>
                                 <div className="eggs_method-detail">PREMIUM USER = 15</div>
+                                <div className="eggs_method-detail">MAX 6 INVITES PER DAY</div>
                             </div>
                         </div>
                         
