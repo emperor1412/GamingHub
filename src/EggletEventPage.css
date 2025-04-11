@@ -136,6 +136,31 @@
   z-index: 1000;
   overflow-y: auto;
   font-family: "PP Neue Machina Inktrap", sans-serif;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide WebKit scrollbars */
+.eggs_egglet-event-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+/* Ensure all child elements also hide scrollbars */
+.eggs_egglet-event-container * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.eggs_egglet-event-container *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
 }
 
 .eggs_egglet-event-header {
@@ -682,4 +707,40 @@
 
 .eggs_back-to-main-button:hover {
   background: #2980b9;
+}
+
+.eggs_event-inactive-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hide scrollbars */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.eggs_event-inactive-overlay::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.eggs_event-inactive-message {
+  margin-bottom: 20px;
+  text-align: center;
+  max-width: 80%;
+  text-transform: uppercase;
 } 
