@@ -186,7 +186,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 50px);
+  width: 100%;
   padding: 8px 15px;
   background: #000;
   border: 2px solid #0000FF;
@@ -195,7 +195,6 @@
   height: 48px;
   box-sizing: border-box;
   position: relative;
-  margin-left: 70px;
 }
 
 .eggs_event-points-label {
@@ -204,7 +203,7 @@
   text-transform: uppercase;
   color: white;
   flex: 1;
-  text-align: center;
+  text-align: left;
 }
 
 .eggs_event-points-value-display {
@@ -424,7 +423,7 @@
   font-weight: 700;
   margin-bottom: 15px;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   color: white;
   text-transform: uppercase;
@@ -579,8 +578,8 @@
 }
 
 .eggs_method-image {
-  width: 150px;
-  height: 105px;
+  max-width: 132.71px;
+  max-height: 103.57px;
   margin-bottom: 10px;
 }
 
