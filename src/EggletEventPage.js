@@ -470,7 +470,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                                 </div>
                             </div>
                             
-                            <div className="eggs_progress-bar-container">
+                            {/* <div className="eggs_progress-bar-container">
                                 <div className="eggs_progress-bar">
                                     <div 
                                         className="eggs_progress-fill" 
@@ -490,7 +490,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                                     </div>
                                     
                                 </div>
-                            </div>
+                            </div> */}
                             
                             <div className="eggs_egglets-info-container">
                                 <div className="eggs_egglets-info">
@@ -529,6 +529,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                             <div className="eggs_method-details">
                                 <div className="eggs_method-detail">NORMAL USER = 5</div>
                                 <div className="eggs_method-detail">PREMIUM USER = 15</div>
+                                <div className="eggs_method-detail">MAX 6 FRIENDS PER DAY</div>
                             </div>
                         </div>
                         
