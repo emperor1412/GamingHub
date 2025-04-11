@@ -538,44 +538,52 @@ Response:
                     </button>
                 </section>
 
-                <section className="locked-sections">
-                    <button className="locked-card">
-                        <div className='locked-card-image-container'>
+                <section className="minigame-section">
+                    <button 
+                        className="minigame-card"
+                        onClick={() => {
+                            try {
+                                trackUserAction('minigame_clicked', {
+                                    game_name: 'Tadogami',
+                                    game_url: 'https://t.me/TestFSL_bot/tadogami'
+                                }, shared.loginData?.link);
+                                openLink('https://t.me/TestFSL_bot/tadogami');
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }}
+                    >
+                        <div className='minigame-card-image-container'>
                             <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                                // src={Frame4561}
-                                src={comingsoon}
-                                alt="Morchi Game Coming Soon"
-                                className="locked-card-image minigames"
+                                src={morchigame}
+                                alt="Tadogami Game"
+                                className="minigame-card-image"
                             /> 
-                            <div className='locked-card-container-border'></div>
-                            <div className='coming-soon-button'>Coming Soon</div>
-                            <div className='locked-card-text'></div>
+                            <div className='minigame-card-container-border'></div>
+                            <h3 className="event-card-title">TADOGAMI</h3>
+                            <p className="event-card-subtitle">Play fun games and earn rewards!</p>
+                            <div className='check-out-button'>
+                                Play Now
+                                <img src={checkout} alt="Arrow" />
+                            </div>
                         </div>
-                        <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        />
                     </button>
 
-                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
-                        <div className='locked-card-image-container'>
+                    <button className="minigame-card" onClick={() => setShowBankStepsView(true)}>
+                        <div className='minigame-card-image-container'>
                             <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                                 src={stepn_background}
-                                alt="Leaderboard Coming Soon"
-                                className="locked-card-image"
+                                alt="STEPN"
+                                className="minigame-card-image"
                             />
                             <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>Bank Steps</div>
-                            <div className='locked-card-text'>STEPN</div>
+                            <h3 className="event-card-title">STEPN</h3>
+                            <p className="event-card-subtitle">Move to earn rewards</p>
+                            <div className='check-out-button'>
+                                Bank Steps
+                                <img src={checkout} alt="Arrow" />
+                            </div>
                         </div>
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
                 </section>
 
