@@ -158,14 +158,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 /* Back button styling - standalone version */
 .eggs_standalone-back-button {
-  position: fixed;
-  top: 70px;
+  position: absolute;
+  top: 80px;
   left: 15px;
-  z-index: 1002;
   background: none;
   border: none;
   width: 40px;
@@ -177,8 +177,8 @@
 }
 
 .eggs_standalone-back-button img {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
 }
 
 /* Event Points Bar */
@@ -186,7 +186,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 50px);
   padding: 8px 15px;
   background: #000;
   border: 2px solid #0000FF;
@@ -195,6 +195,7 @@
   height: 48px;
   box-sizing: border-box;
   position: relative;
+  margin-left: 70px;
 }
 
 .eggs_event-points-label {

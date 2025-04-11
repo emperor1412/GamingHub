@@ -367,10 +367,7 @@ const EggletEventPage = ({ onClose }) => {
                 </div>
             )}
             
-            <button className="back-button eggs_standalone-back-button" onClick={onClose}>
-                <img src={back} alt="Back" />
-            </button>
-            
+                        
             <header className="eggs_egglet-event-header">
                 <button 
                     className="profile-pic-main"
@@ -431,6 +428,9 @@ const EggletEventPage = ({ onClose }) => {
             {/* Only show content when event is active */}
             {eventActive && (
                 <div className="eggs_egglet-event-content">
+                    <button className="back-button eggs_standalone-back-button" onClick={onClose}>
+                        <img src={back} alt="Back" />
+                    </button>
                     <div className="eggs_event-points-bar">
                         <span className="eggs_event-points-label">EVENT POINTS</span>
                         <div className="eggs_event-points-value-display">
