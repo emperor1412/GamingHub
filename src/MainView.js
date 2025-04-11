@@ -832,7 +832,10 @@ Response:
             </div>
 
             {/* EggletEventPage component */}
-            {showEggletPage && <EggletEventPage onClose={() => setShowEggletPage(false)} />}
+            {showEggletPage && <EggletEventPage 
+                onClose={() => setShowEggletPage(false)} 
+                setShowProfileView={setShowProfileView}
+            />}
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}

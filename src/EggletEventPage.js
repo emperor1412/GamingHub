@@ -31,7 +31,7 @@ Response:
     }
 } */
 
-const EggletEventPage = ({ onClose }) => {
+const EggletEventPage = ({ onClose, setShowProfileView }) => {
     const [eventPoints, setEventPoints] = useState(0);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
@@ -320,20 +320,24 @@ const EggletEventPage = ({ onClose }) => {
             // Directly use the shared.checkIn which should be populated from the app parent
             if (shared.checkIn) {
                 const result = await shared.checkIn(shared.loginData);
-                if (result === 1) {
-                    console.log('Check-in successful, showing animation');
-                    // Close this view to return to MainView where animation will be shown
-                    onClose();
-                } else if (result === 0) {
-                    console.log('Already checked in today, showing check-in view');
-                    // We need to close this view to let MainView handle showing CheckIn.js
+                console.log('CheckIn Response:', result);
+                
+                if (result.code === 0) {
+                    // Update checkInData with the new data
+                    setCheckInData(result.data);
+                    
+                    // Always close this view to let MainView handle showing CheckIn.js
+                    // This matches MainView's behavior where it shows CheckIn.js after any check-in attempt
                     onClose();
                 } else {
-                    console.log('Check-in returned unexpected result:', result);
+                    console.log('Check-in failed:', result);
+                    shared.showPopup({ 
+                        type: 0, 
+                        message: 'Failed to check in. Please try again later.' 
+                    });
                 }
             } else {
                 console.log('Check-in function not available');
-                // We'll still close the view to return to MainView where CheckIn is properly implemented
                 onClose();
             }
         } catch (error) {
@@ -372,8 +376,8 @@ const EggletEventPage = ({ onClose }) => {
                 <button 
                     className="profile-pic-main"
                     onClick={() => {
-                        // Return to MainView which will show Profile
-                        onClose();
+                        // Show Profile using setShowProfileView
+                        setShowProfileView(true);
                     }} 
                 >
                     <img 
@@ -381,8 +385,8 @@ const EggletEventPage = ({ onClose }) => {
                     alt="Profile" />
                 </button>
                 <div className="level-badge" onClick={() => {
-                    // Return to MainView which will show Profile
-                    onClose();
+                    // Show Profile using setShowProfileView
+                    setShowProfileView(true);
                 }}>
                     LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
@@ -390,8 +394,8 @@ const EggletEventPage = ({ onClose }) => {
                     <button 
                         className="stat-item-main"
                         onClick={() => {
-                            // Return to MainView which will show Profile
-                            onClose();
+                            // Show Profile using setShowProfileView
+                            setShowProfileView(true);
                         }}
                     >
                         <img src={ticketIcon} alt="Tickets" />
@@ -400,8 +404,8 @@ const EggletEventPage = ({ onClose }) => {
                     <button 
                         className="stat-item-main"
                         onClick={() => {
-                            // Return to MainView which will show Profile
-                            onClose();
+                            // Show Profile using setShowProfileView
+                            setShowProfileView(true);
                         }}
                     >
                         <img src={starletIcon} alt="Starlets" />
@@ -417,7 +421,7 @@ const EggletEventPage = ({ onClose }) => {
                                         <span>TODAY</span>
                                     </>
                                 ) : (
-                                    <span className='stat-item-main-text'>{shared.checkInData ? shared.checkInData.streakDay : "0"}</span>
+                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
                                 )}
                             </div>
                         </button>
