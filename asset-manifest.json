@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.0ef9f814.css",
-    "main.js": "/GamingHub/static/js/main.db00eee8.js",
+    "main.css": "/GamingHub/static/css/main.784285a6.css",
+    "main.js": "/GamingHub/static/js/main.2f1e5fb1.js",
     "static/js/453.589b9bb9.chunk.js": "/GamingHub/static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "/GamingHub/static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -82,6 +82,7 @@
     "static/media/lv_generic.png": "/GamingHub/static/media/lv_generic.9e37a1f9d889cc1681bd.png",
     "static/media/Sora-VariableFont_wght.ttf": "/GamingHub/static/media/Sora-VariableFont_wght.e56298aec2e944c699d8.ttf",
     "static/media/x-icon.svg": "/GamingHub/static/media/x-icon.699021517046322407f2ca01239e5315.svg",
+    "static/media/Egglet_Image_1.png": "/GamingHub/static/media/Egglet_Image_1.c897b94fb142c796a62c.png",
     "static/media/Meet Marty 1.png": "/GamingHub/static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
     "static/media/lv9.png": "/GamingHub/static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "/GamingHub/static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
@@ -107,13 +108,16 @@
     "static/media/scratch_ticket_button_bg_disabled.png": "/GamingHub/static/media/scratch_ticket_button_bg_disabled.19bd25de9b65f43e412e.png",
     "static/media/sneaker_icon.png": "/GamingHub/static/media/sneaker_icon.320259d366757b32997e.png",
     "static/media/trophy_10000_locked.png": "/GamingHub/static/media/trophy_10000_locked.22418ed22f822c5b8699.png",
+    "static/media/Egglet_Image_3.png": "/GamingHub/static/media/Egglet_Image_3.a0d08b47f16b01d17d67.png",
     "static/media/Egglets_Description_3.png": "/GamingHub/static/media/Egglets_Description_3.fa4392c05f39c61550df.png",
     "static/media/Egglets_Description_4.png": "/GamingHub/static/media/Egglets_Description_4.6d50e70fbb04a52d6109.png",
+    "static/media/Egglet_Image_4.png": "/GamingHub/static/media/Egglet_Image_4.64eea55b250eeb18a250.png",
     "static/media/stepn_background.png": "/GamingHub/static/media/stepn_background.08455f8a2d8cc14f4ea8.png",
     "static/media/Coming soon-05.png": "/GamingHub/static/media/Coming soon-05.2a90ee886501e9436007.png",
     "static/media/LFGO.png": "/GamingHub/static/media/LFGO.364707930addb09f1e2a.png",
     "static/media/Egglets_Description_1.png": "/GamingHub/static/media/Egglets_Description_1.a37b3eaf28e4e9a771c3.png",
     "static/media/sneaker_icon_group.png": "/GamingHub/static/media/sneaker_icon_group.99d5d639102b5d61d969.png",
+    "static/media/Egglet_Image_2.png": "/GamingHub/static/media/Egglet_Image_2.37666797c66de9bfbf00.png",
     "static/media/Egglets_Description_2.png": "/GamingHub/static/media/Egglets_Description_2.1bafb46d6285270f7d12.png",
     "static/media/trophy_2_200px.png": "/GamingHub/static/media/trophy_2_200px.121e6ec8645f06825bbd.png",
     "static/media/shadow.png": "/GamingHub/static/media/shadow.27395acaf6c283eab075.png",
@@ -162,12 +166,12 @@
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "/GamingHub/static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.0ef9f814.css.map": "/GamingHub/static/css/main.0ef9f814.css.map",
-    "main.db00eee8.js.map": "/GamingHub/static/js/main.db00eee8.js.map",
+    "main.784285a6.css.map": "/GamingHub/static/css/main.784285a6.css.map",
+    "main.2f1e5fb1.js.map": "/GamingHub/static/js/main.2f1e5fb1.js.map",
     "453.589b9bb9.chunk.js.map": "/GamingHub/static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0ef9f814.css",
-    "static/js/main.db00eee8.js"
+    "static/css/main.784285a6.css",
+    "static/js/main.2f1e5fb1.js"
   ]
 }
