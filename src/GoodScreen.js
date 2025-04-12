@@ -1,0 +1,54 @@
+import React, { useEffect } from 'react';
+import './TestScreens.css';
+
+/**
+ * GoodScreen - màn hình đã khắc phục vấn đề overscrolling
+ * Màn hình này áp dụng tất cả các kỹ thuật để ngăn chặn overscrolling
+ */
+const GoodScreen = ({ onBack }) => {
+  const items = Array.from({ length: 20 }, (_, i) => i + 1);
+
+  // Thêm class để điều khiển overscrolling ở cấp body, giống cách làm trong Market.js
+  useEffect(() => {
+    // Thêm class khi component được mount
+    document.body.classList.add('no-overscroll');
+    
+    // Xóa class khi component unmount
+    return () => {
+      document.body.classList.remove('no-overscroll');
+    };
+  }, []);
+
+  return (
+    <div className="test-screen-container good-screen-container">
+      <div className="test-screen-header">
+        Màn hình đã fix Overscrolling
+      </div>
+      <button className="back-button" onClick={onBack}>
+        ← Quay lại
+      </button>
+      <div className="good-screen-content">
+        {items.map((item) => (
+          <div key={item} className="test-item">
+            <p>Phần tử #{item} - Cuộn lên/xuống để test</p>
+          </div>
+        ))}
+        <div className="test-item" style={{ background: 'rgba(0, 255, 0, 0.1)' }}>
+          <p>
+            Đây là màn hình ĐÃ FIX LỖI OVERSCROLLING.<br/><br/>
+            Cải tiến:<br/>
+            - Sử dụng position: fixed thay vì absolute<br/>
+            - Áp dụng overscroll-behavior: none<br/>
+            - Thêm class kiểm soát overflow ở body<br/>
+            - Có -webkit-overflow-scrolling: touch<br/>
+            - Thêm touch-action: pan-y<br/>
+            - Ẩn thanh cuộn nhưng vẫn giữ chức năng cuộn<br/>
+            - Áp dụng mask gradient để tạo hiệu ứng biên mềm mại
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GoodScreen; 

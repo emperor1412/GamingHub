@@ -1,0 +1,147 @@
+/* Common styles for both test screens */
+.test-screen-container {
+  background-color: #000;
+  color: #FFF;
+  font-family: "PP Neue Machina", sans-serif;
+  width: 100%;
+  height: 100%;
+}
+
+.test-screen-header {
+  text-align: center;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #0000FF;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 255, 0.3);
+}
+
+.test-screen-content {
+  padding-top: 80px;
+  padding-bottom: 20px;
+}
+
+.test-item {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 10px 20px;
+  padding: 20px;
+  border-radius: 10px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.test-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.test-item:nth-child(odd) {
+  background: rgba(0, 0, 255, 0.1);
+}
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+/* Fixed With Overscrolling Problem */
+.bad-screen-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Fixed With No Overscrolling */
+.good-screen-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.good-screen-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.good-screen-container * {
+  overscroll-behavior: inherit;
+  touch-action: pan-y;
+}
+
+.good-screen-content {
+  padding-top: 80px;
+  padding-bottom: 20px;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+}
+
+/* Add body class management for the good screen */
+body.no-overscroll {
+  overscroll-behavior-y: none;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+} 

@@ -53,6 +53,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
+import OverscrollTestApp from './OverscrollTestApp';
 
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
+  const [showTestScreen, setShowTestScreen] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -440,6 +442,10 @@ Response:
     zIndex: 1000
   };
 
+  if (showTestScreen) {
+    return <OverscrollTestApp onBack={() => setShowTestScreen(false)} />;
+  }
+
   return (
     <div className="App">
       <div className="background-container">
@@ -566,6 +572,26 @@ Response:
       )}
 
       <div style={versionStyle}>{buildVersion}</div>
+
+      <button 
+        onClick={() => setShowTestScreen(true)}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          padding: '12px 20px',
+          background: '#0000FF',
+          color: 'white',
+          border: 'none',
+          borderRadius: '10px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          zIndex: 999
+        }}
+      >
+        Test Overscrolling
+      </button>
     </div>
   );
 }
