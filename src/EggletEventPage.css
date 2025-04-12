@@ -137,7 +137,8 @@
   overflow-y: auto;
   font-family: "PP Neue Machina Inktrap", sans-serif;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
+  touch-action: pan-y;
   
   /* Hide scrollbars while maintaining functionality */
   scrollbar-width: none;  /* Firefox */
@@ -155,6 +156,8 @@
 .eggs_egglet-event-container * {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overscroll-behavior: inherit;
+  touch-action: pan-y;
 }
 
 .eggs_egglet-event-container *::-webkit-scrollbar {
@@ -184,6 +187,28 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
 }
 
 /* Back button styling - standalone version */
@@ -690,6 +715,7 @@
   color: white;
   font-size: 18px;
   font-weight: 700;
+  overscroll-behavior: none;
 }
 
 .eggs_back-to-main-button {
@@ -724,8 +750,9 @@
   color: white;
   font-size: 18px;
   font-weight: 700;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   
   /* Hide scrollbars */
   scrollbar-width: none;  /* Firefox */
