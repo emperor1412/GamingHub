@@ -71,7 +71,7 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     trackUserAction('egglet_mooar_link_clicked', {}, shared.loginData?.userId);
     
     // Open MOOAR login page in a new tab
-    window.open('https://id.fsl.com/login', '_blank');
+    window.open('https://mooar.com/', '_blank');
   };
 
   return (
