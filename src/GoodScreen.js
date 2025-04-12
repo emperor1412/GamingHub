@@ -46,6 +46,14 @@ const GoodScreen = ({ onBack }) => {
             - Áp dụng mask gradient để tạo hiệu ứng biên mềm mại
           </p>
         </div>
+        
+        {/* Thêm phần tử cuối cùng với padding đủ lớn để tránh bị che khuất */}
+        <div className="test-item last-item">
+          <p>
+            Phần tử cuối cùng - với padding-bottom đủ lớn để không bị che khuất.<br/><br/>
+            Phần này sẽ luôn hiển thị đầy đủ và không bị cut-off ở dưới cùng.
+          </p>
+        </div>
       </div>
     </div>
   );

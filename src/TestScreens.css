@@ -56,6 +56,11 @@
   background: rgba(0, 0, 255, 0.1);
 }
 
+/* Phần tử cuối cùng không bị che khuất */
+.last-item {
+  margin-bottom: 80px; /* Thêm margin đủ lớn để tránh bị che khuất */
+}
+
 .back-button {
   position: fixed;
   top: 20px;
@@ -135,6 +140,152 @@
     rgba(0, 0, 0, 0.1) 98%,
     transparent 100%
   );
+}
+
+/* Short Content with Overscrolling Problem */
+.short-screen-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Note: No overflow property set, but still can overscroll on mobile */
+}
+
+/* Short Content with Fixed Overscrolling */
+.fixed-short-screen-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* Disable all touch gestures */
+  overscroll-behavior: none;
+}
+
+.fixed-short-content {
+  padding-top: 80px;
+  padding-bottom: 20px;
+  min-height: 100%;
+  /* No overflow property - we don't need scrolling for short content */
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+/* Bad Popup - has overscrolling issues */
+.bad-popup {
+  overflow: auto; /* Allows body scrolling underneath */
+}
+
+/* Good Popup - fixed overscrolling */
+.good-popup {
+  overflow: hidden; /* Prevents body scrolling */
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.popup-content {
+  background: #1a1a1a;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.popup-content h2 {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+}
+
+.popup-description {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.popup-items {
+  overflow-y: auto;
+  max-height: 50vh;
+  padding-right: 10px;
+  /* Fixed scrolling for good popup */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+}
+
+/* For Webkit browsers (Chrome, Safari) - customize scrollbar */
+.good-popup .popup-items::-webkit-scrollbar {
+  width: 4px;
+}
+
+.good-popup .popup-items::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.good-popup .popup-items::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.popup-item {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 8px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.popup-item-spacer {
+  height: 60px; /* Extra space at the bottom of popup content */
+  opacity: 0;
+}
+
+/* Class for body when good popup is open */
+body.popup-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 /* Add body class management for the good screen */
