@@ -121,24 +121,16 @@
   min-height: 100%;
   -webkit-overflow-scrolling: touch;
   
-  /* Add mask gradient for soft scroll boundary */
+  /* Điều chỉnh mask gradient để giảm hiệu ứng mờ ở trên và dưới */
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
-    black 5%,
-    black 95%,
-    rgba(0, 0, 0, 0.1) 98%,
-    transparent 100%
+    black 0%,    /* Thay đổi từ transparent thành black để loại bỏ hiệu ứng mờ ở trên */
+    black 100%   /* Loại bỏ các bước gradient ở giữa và dưới */
   );
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
-    black 5%,
-    black 95%,
-    rgba(0, 0, 0, 0.1) 98%,
-    transparent 100%
+    black 0%,    /* Thay đổi từ transparent thành black để loại bỏ hiệu ứng mờ ở trên */
+    black 100%   /* Loại bỏ các bước gradient ở giữa và dưới */
   );
 }
 
