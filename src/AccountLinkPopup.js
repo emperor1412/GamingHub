@@ -55,9 +55,9 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     // Close popup and navigate to FSLID tab
     onClose();
     
-    // Navigate to FSL ID tab - assuming there's a function to switch tabs
-    if (typeof shared.showTab === 'function') {
-      shared.showTab('fslid');
+    // Navigate to FSL ID tab using setActiveTab function that's available in shared
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setActiveTab('fslid');
     } else {
       // Fallback if direct tab navigation isn't available
       window.location.hash = '#fslid';
