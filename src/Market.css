@@ -1,3 +1,12 @@
+/* Add a specific body class when market is open */
+body.mk-market-open {
+  overscroll-behavior-y: none;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
 .mk-market-container {
   display: flex;
   flex-direction: column;
@@ -8,6 +17,23 @@
   width: min(500px, 100%);
   margin: 0 auto;
   position: relative;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide WebKit scrollbars for the main container */
+.mk-market-container::-webkit-scrollbar,
+.mk-market-container::-webkit-scrollbar-thumb,
+.mk-market-container::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
 }
 
 .mk-market-top-bar {
@@ -71,6 +97,7 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+  overscroll-behavior: none;
 }
 
 .mk-market-title {
@@ -440,9 +467,22 @@
   padding-left: 4px;
 }
 
+/* Ensure all children in market container have consistent overscroll behavior */
+.mk-market-container * {
+  overscroll-behavior: inherit;
+}
+
 @media screen and (max-width: 500px) {
   .mk-market-container {
     width: 100%;
+    overscroll-behavior-y: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    touch-action: pan-y;
   }
   
   .mk-market-top-bar {
