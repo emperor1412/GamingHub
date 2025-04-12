@@ -49,7 +49,7 @@ const FixedShortContentScreen = ({ onBack }) => {
     overflowY: 'auto',
     WebkitOverflowScrolling: 'touch',
     position: 'relative',
-    overscrollBehavior: 'none',
+    overscrollBehavior: 'contain',
     paddingTop: '80px',
     paddingBottom: '40px',
     scrollbarWidth: 'none',
