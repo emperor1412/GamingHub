@@ -360,7 +360,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         
             <header className="eggs_egglet-event-header">
                 <button 
-                    className="back-button"
+                    className="back-button back-button-alignment"
                     onClick={onClose}
                 >
                     <img src={back} alt="Back" />
