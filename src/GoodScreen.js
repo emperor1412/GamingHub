@@ -8,12 +8,9 @@ import './TestScreens.css';
 const GoodScreen = ({ onBack }) => {
   const items = Array.from({ length: 20 }, (_, i) => i + 1);
 
-  // Thêm class để điều khiển overscrolling ở cấp body, giống cách làm trong Market.js
+  // Add body class to control overscrolling at body level
   useEffect(() => {
-    // Thêm class khi component được mount
     document.body.classList.add('no-overscroll');
-    
-    // Xóa class khi component unmount
     return () => {
       document.body.classList.remove('no-overscroll');
     };
@@ -27,13 +24,14 @@ const GoodScreen = ({ onBack }) => {
       <button className="back-button" onClick={onBack}>
         ← Quay lại
       </button>
-      <div className="good-screen-content">
+      <div className="good-screen-content hide-scrollbar">
         {items.map((item) => (
           <div key={item} className="test-item">
             <p>Phần tử #{item} - Cuộn lên/xuống để test</p>
           </div>
         ))}
-        <div className="test-item" style={{ background: 'rgba(0, 255, 0, 0.1)' }}>
+        
+        <div className="test-item success-item">
           <p>
             Đây là màn hình ĐÃ FIX LỖI OVERSCROLLING.<br/><br/>
             Cải tiến:<br/>
@@ -42,12 +40,10 @@ const GoodScreen = ({ onBack }) => {
             - Thêm class kiểm soát overflow ở body<br/>
             - Có -webkit-overflow-scrolling: touch<br/>
             - Thêm touch-action: pan-y<br/>
-            - Ẩn thanh cuộn nhưng vẫn giữ chức năng cuộn<br/>
-            - Áp dụng mask gradient để tạo hiệu ứng biên mềm mại
+            - Ẩn thanh cuộn nhưng vẫn giữ chức năng cuộn
           </p>
         </div>
         
-        {/* Thêm phần tử cuối cùng với padding đủ lớn để tránh bị che khuất */}
         <div className="test-item last-item">
           <p>
             Phần tử cuối cùng - với padding-bottom đủ lớn để không bị che khuất.<br/><br/>

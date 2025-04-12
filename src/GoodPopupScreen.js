@@ -8,28 +8,23 @@ import './TestScreens.css';
 const GoodPopupScreen = ({ onBack }) => {
   const [showPopup, setShowPopup] = useState(false);
   
-  // Điều khiển body khi hiển thị popup
+  // Control body class when showing popup
   useEffect(() => {
     if (showPopup) {
-      // Thêm class khi hiển thị popup
       document.body.classList.add('popup-open');
     } else {
-      // Xóa class khi đóng popup
       document.body.classList.remove('popup-open');
     }
     
-    // Cleanup khi component unmount
     return () => {
       document.body.classList.remove('popup-open');
     };
   }, [showPopup]);
   
-  // Thêm class để kiểm soát overscrolling ở cấp body
+  // Add class to control overscrolling at body level
   useEffect(() => {
-    // Thêm class khi component được mount
     document.body.classList.add('no-overscroll');
     
-    // Xóa class khi component unmount
     return () => {
       document.body.classList.remove('no-overscroll');
     };
@@ -54,25 +49,12 @@ const GoodPopupScreen = ({ onBack }) => {
           </div>
         ))}
         
-        <div className="test-item" style={{ background: 'rgba(0, 255, 0, 0.1)' }}>
-          <button 
-            onClick={togglePopup}
-            style={{
-              padding: '15px 30px',
-              background: 'rgba(0, 255, 0, 0.3)',
-              border: '1px solid #00FF00',
-              borderRadius: '10px',
-              color: 'white',
-              fontSize: '16px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
-          >
+        <div className="test-item success-item">
+          <button className="popup-trigger-button" onClick={togglePopup}>
             Mở Popup Đã Fix
           </button>
         </div>
         
-        {/* Phần tử cuối cùng với padding đủ lớn để không bị che khuất */}
         <div className="test-item last-item">
           <p>Phần tử cuối cùng - không bị che khuất</p>
         </div>
@@ -93,10 +75,10 @@ const GoodPopupScreen = ({ onBack }) => {
                   <p>Phần tử Popup #{i + 1}</p>
                 </div>
               ))}
-              <div className="popup-item" style={{ background: 'rgba(0, 255, 0, 0.2)' }}>
-                <div>
+              <div className="popup-item success-popup-item">
+                <div className="solution-content">
                   <p>Giải pháp:</p>
-                  <ul style={{ textAlign: 'left', paddingLeft: '20px' }}>
+                  <ul className="solution-list">
                     <li>Thêm class cho body khi popup hiển thị</li>
                     <li>Sử dụng position: fixed cho overlay</li>
                     <li>Áp dụng overscroll-behavior: none cho popup</li>
@@ -106,7 +88,6 @@ const GoodPopupScreen = ({ onBack }) => {
                   </ul>
                 </div>
               </div>
-              {/* Đảm bảo có đủ không gian dưới cùng để tránh bị che khuất */}
               <div className="popup-item-spacer"></div>
             </div>
           </div>

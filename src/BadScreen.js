@@ -22,7 +22,8 @@ const BadScreen = ({ onBack }) => {
             <p>Phần tử #{item} - Cuộn lên/xuống để test</p>
           </div>
         ))}
-        <div className="test-item" style={{ background: 'rgba(255, 0, 0, 0.1)' }}>
+        
+        <div className="test-item error-item">
           <p>
             Đây là màn hình BỊ LỖI OVERSCROLLING.<br/><br/>
             Vấn đề: khi cuộn đến cuối trang, màn hình sẽ bị "bounce" hoặc hiện nền phía sau.

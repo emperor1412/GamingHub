@@ -16,17 +16,17 @@ const ShortContentScreen = ({ onBack }) => {
         ← Quay lại
       </button>
       <div className="test-screen-content">
-        <div className="test-item" style={{ background: 'rgba(255, 165, 0, 0.1)', minHeight: '150px' }}>
+        <div className="test-item large-item warning-item">
           <p>
             Đây là một màn hình có nội dung ngắn.<br/><br/>
             Thử kéo/vuốt lên xuống và bạn sẽ thấy vấn đề overscrolling vẫn xảy ra.
           </p>
         </div>
         
-        <div className="test-item" style={{ marginTop: '15px', background: 'rgba(255, 165, 0, 0.2)' }}>
-          <div>
-            <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Vấn đề:</p>
-            <ul style={{ textAlign: 'left', paddingLeft: '20px', margin: '0' }}>
+        <div className="test-item warning-item-alt">
+          <div className="warning-content">
+            <p className="warning-title">Vấn đề:</p>
+            <ul className="warning-list">
               <li>Màn hình có ít nội dung nhưng vẫn có thể cuộn</li>
               <li>Khi vuốt/kéo, hiệu ứng "bounce" hoặc kéo nền vẫn xảy ra</li>
               <li>Có thể kéo màn hình ra ngoài ranh giới</li>
@@ -35,13 +35,8 @@ const ShortContentScreen = ({ onBack }) => {
           </div>
         </div>
         
-        {/* Phần tử cuối đảm bảo không bị tràn */}
-        <div className="test-item" style={{ 
-          marginTop: '15px', 
-          background: 'rgba(255, 165, 0, 0.15)',
-          marginBottom: '20px'
-        }}>
-          <p style={{ margin: '0' }}>
+        <div className="test-item warning-item-light last-short-item">
+          <p>
             Thử cuộn từ đây đến cuối và kéo tiếp.
           </p>
         </div>

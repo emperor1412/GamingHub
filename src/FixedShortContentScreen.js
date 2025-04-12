@@ -64,7 +64,7 @@ const FixedShortContentScreen = ({ onBack }) => {
     left: '50%',
     transform: 'translateX(-50%)',
     width: 'min(500px, 100%)',
-    zIndex: 100,
+    zIndex: 1001, // Tăng z-index để đảm bảo luôn hiển thị phía trên
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -75,6 +75,8 @@ const FixedShortContentScreen = ({ onBack }) => {
     fontSize: '18px',
     textTransform: 'uppercase',
     boxShadow: '0 2px 10px rgba(0, 0, 255, 0.3)',
+    boxSizing: 'border-box',
+    height: '70px',
   };
 
   // Style cho nút back, đặt trên header
@@ -88,13 +90,17 @@ const FixedShortContentScreen = ({ onBack }) => {
     color: 'white',
     fontSize: '16px',
     cursor: 'pointer',
-    zIndex: 101,
+    zIndex: 1002,
+    padding: '8px',
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
   };
 
   // Style cho card
   const cardStyle = (color) => ({
     background: color,
-    margin: '10px 20px',
+    margin: '14px 20px',
     padding: '20px',
     borderRadius: '10px',
     minHeight: '80px',
@@ -103,20 +109,20 @@ const FixedShortContentScreen = ({ onBack }) => {
 
   return (
     <>
-      {/* Overlay header - fixed position */}
+      {/* Header cố định */}
       <div style={headerStyle}>
-        Nội dung ngắn giống Market.css
+        Nội dung ngắn không Overscroll
         <button style={backButtonStyle} onClick={onBack}>
           ← Quay lại
         </button>
       </div>
 
-      {/* Main container - scrollable */}
+      {/* Container chính có thể cuộn */}
       <div 
         ref={containerRef}
         style={containerStyle}
       >
-        {/* Scrollable content */}
+        {/* Nội dung có thể cuộn */}
         <div style={scrollableContentStyle}>
           {/* Card 1 */}
           <div style={cardStyle('rgba(0, 200, 255, 0.1)')}>
@@ -136,6 +142,7 @@ const FixedShortContentScreen = ({ onBack }) => {
                 <li>Áp dụng WebkitOverflowScrolling: touch</li>
                 <li>Sử dụng class mk-market-open cho body</li>
                 <li>Ẩn scrollbar nhưng vẫn giữ chức năng cuộn</li>
+                <li>Header cố định luôn hiển thị đúng</li>
               </ul>
             </div>
           </div>

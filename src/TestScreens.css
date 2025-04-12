@@ -1,4 +1,4 @@
-/* Common styles for both test screens */
+/* Base styles */
 .test-screen-container {
   background-color: #000;
   color: #FFF;
@@ -29,6 +29,7 @@
   box-sizing: border-box;
 }
 
+/* Common UI elements */
 .test-item {
   background: rgba(255, 255, 255, 0.1);
   margin: 10px 20px;
@@ -66,9 +67,8 @@
   background: rgba(0, 0, 255, 0.1);
 }
 
-/* Phần tử cuối cùng không bị che khuất */
 .last-item {
-  margin-bottom: 80px; /* Thêm margin đủ lớn để tránh bị che khuất */
+  margin-bottom: 80px; /* Space at bottom to prevent cut-off */
 }
 
 .back-button {
@@ -87,7 +87,20 @@
   text-decoration: underline;
 }
 
-/* Fixed With Overscrolling Problem */
+/* Hide scrollbars while maintaining functionality */
+.hide-scrollbar {
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+/* Overscroll Behavior - Problem vs Fixed screens */
+/* 1. Screens with overscrolling problems */
 .bad-screen-container {
   position: absolute;
   top: 0;
@@ -97,7 +110,7 @@
   overflow-y: auto;
 }
 
-/* Fixed With No Overscrolling */
+/* 2. Screens with fixed overscrolling */
 .good-screen-container {
   position: fixed;
   top: 0;
@@ -108,16 +121,6 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   touch-action: pan-y;
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-}
-
-.good-screen-container::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  background: transparent;
 }
 
 .good-screen-container * {
@@ -130,21 +133,9 @@
   padding-bottom: 20px;
   min-height: 100%;
   -webkit-overflow-scrolling: touch;
-  
-  /* Điều chỉnh mask gradient để giảm hiệu ứng mờ ở trên và dưới */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,    /* Thay đổi từ transparent thành black để loại bỏ hiệu ứng mờ ở trên */
-    black 100%   /* Loại bỏ các bước gradient ở giữa và dưới */
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,    /* Thay đổi từ transparent thành black để loại bỏ hiệu ứng mờ ở trên */
-    black 100%   /* Loại bỏ các bước gradient ở giữa và dưới */
-  );
 }
 
-/* Short Content with Overscrolling Problem */
+/* 3. Short content screen with overscrolling problems */
 .short-screen-container {
   position: absolute;
   top: 0;
@@ -156,14 +147,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Short Content with Fixed Overscrolling */
+/* 4. Fixed short content screen */
 .fixed-short-screen-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  touch-action: none; /* Disable all touch gestures */
+  touch-action: none;
   overscroll-behavior: none;
 }
 
@@ -171,50 +162,8 @@
   padding-top: 80px;
   padding-bottom: 20px;
   min-height: 100%;
-  /* No overflow property - we don't need scrolling for short content */
   touch-action: none;
   overscroll-behavior: none;
-}
-
-/* Short Content with Fixed Overscrolling - Allow Scroll version */
-.fixed-short-screen-container-allow-scroll {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto; /* Allow scrolling */
-  overscroll-behavior: none; /* Prevent bounce effect */
-  touch-action: pan-y; /* Allow vertical touch scrolling */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  box-sizing: border-box;
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-}
-
-.fixed-short-screen-container-allow-scroll::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  background: transparent;
-}
-
-.fixed-short-content-allow-scroll {
-  padding-top: 80px;
-  padding-bottom: 20px;
-  min-height: 100%;
-  overscroll-behavior: none;
-  touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Body class for screen with scrolling but no overscroll */
-body.no-overscroll-allow-scroll {
-  overscroll-behavior-y: none; /* Prevent bounce effect */
-  /* Don't set overflow: hidden or position: fixed to allow scrolling */
 }
 
 /* Popup Styles */
@@ -231,12 +180,10 @@ body.no-overscroll-allow-scroll {
   z-index: 100;
 }
 
-/* Bad Popup - has overscrolling issues */
 .bad-popup {
   overflow: auto; /* Allows body scrolling underneath */
 }
 
-/* Good Popup - fixed overscrolling */
 .good-popup {
   overflow: hidden; /* Prevents body scrolling */
   overscroll-behavior: none;
@@ -287,14 +234,12 @@ body.no-overscroll-allow-scroll {
   overflow-y: auto;
   max-height: 50vh;
   padding-right: 10px;
-  /* Fixed scrolling for good popup */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
 }
 
-/* For Webkit browsers (Chrome, Safari) - customize scrollbar */
 .good-popup .popup-items::-webkit-scrollbar {
   width: 4px;
 }
@@ -325,16 +270,21 @@ body.no-overscroll-allow-scroll {
   opacity: 0;
 }
 
-/* Class for body when good popup is open */
-body.popup-open {
+/* Body state classes for different overscroll scenarios */
+body.popup-open,
+body.no-overscroll {
   overflow: hidden;
   position: fixed;
   width: 100%;
   height: 100%;
 }
 
-/* Add body class management for the good screen */
 body.no-overscroll {
+  overscroll-behavior-y: none;
+}
+
+/* Global market class - used in main app only */
+body.mk-market-open {
   overscroll-behavior-y: none;
   overflow: hidden;
   position: fixed;
@@ -342,98 +292,230 @@ body.no-overscroll {
   height: 100%;
 }
 
-/* Short Content with Fixed Overscrolling - Strict version */
-.fixed-short-screen-container-strict {
+/* OverscrollTestApp component styles */
+.overscroll-test-app {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: black;
+  width: min(600px, 100%);
+  margin: 0 auto;
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: none;
-  touch-action: none; /* Changed from pan-y to none to prevent all overscrolling */
   -webkit-overflow-scrolling: touch;
+  padding: 20px;
   box-sizing: border-box;
-  -ms-scroll-chaining: none; /* IE/Edge */
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  
-  /* Prevent all overscroll behavior */
-  overscroll-behavior-y: none;
-  overscroll-behavior-x: none;
-  
-  /* Add for smoother scrolling */
-  scroll-behavior: smooth;
-  background-color: #000000;
+  text-align: center;
+  z-index: 1000;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.fixed-short-screen-container-strict::-webkit-scrollbar {
+.overscroll-test-app::-webkit-scrollbar {
   display: none;
   width: 0;
   background: transparent;
 }
 
-.fixed-short-content-strict {
-  padding-top: 80px;
-  padding-bottom: 20px;
-  min-height: 100%;
-  overscroll-behavior: none;
-  touch-action: none; /* Changed from pan-y to none */
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(600px, 100%);
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  background: #0000FF;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 10px rgba(0, 0, 255, 0.3);
   box-sizing: border-box;
-  overflow-y: auto;
-  
-  /* Add more properties for better behavior */
+  height: 70px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.app-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+.app-description {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.app-description p {
+  margin: 0 0 10px 0;
+}
+
+.app-description p:last-child {
+  margin-bottom: 0;
+}
+
+.highlight {
+  color: #0000FF;
+}
+
+.category-title {
+  color: #FFF;
+  margin-bottom: 15px;
+  font-size: 20px;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
   justify-content: center;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: calc(100vh - 80px);
+  margin-bottom: 30px;
+  width: 100%;
 }
 
-/* Visual feedback for the test items in fixed short screens */
-.fixed-short-screen-container-strict .test-item {
-  transform: translateZ(0);
-  will-change: transform;
-  transition: transform 0.15s ease-out;
-  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.15);
+.screen-button {
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 200px;
 }
 
-.fixed-short-screen-container-strict .test-item:active {
-  transform: scale(0.98);
+.screen-button.error {
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid #FF0000;
 }
 
-/* Extra strict body class for no overscroll */
-body.no-overscroll-strict {
-  overscroll-behavior: none !important;
-  overflow: hidden !important; /* Changed from auto to hidden */
-  -webkit-overflow-scrolling: touch !important;
-  touch-action: none !important; /* Changed from pan-y to none */
-  height: 100% !important;
-  position: fixed !important; 
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  
-  /* Ensure no overscrolling happens at all */
-  -ms-scroll-chaining: none !important;
-  overscroll-behavior-y: none !important;
-  overscroll-behavior-x: none !important;
-  
-  /* Safari-specific fixes */
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
+.screen-button.success {
+  background: rgba(0, 255, 0, 0.2);
+  border: 1px solid #00FF00;
 }
 
-/* Add specific styles for each possible viewport element */
-html.no-overscroll-strict,
-body.no-overscroll-strict * {
-  overscroll-behavior: none !important;
-  touch-action: none !important; /* Changed from pan-y to none */
+.screen-button.warning {
+  background: rgba(255, 165, 0, 0.2);
+  border: 1px solid #FFA500;
+}
+
+.app-note {
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.7;
+  max-width: 500px;
+  margin-bottom: 80px;
+}
+
+.float-button {
+  position: relative;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background: #0000FF;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1002;
+  box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3);
+}
+
+/* Item variants */
+.success-item {
+  background: rgba(0, 255, 0, 0.1) !important;
+}
+
+.error-item {
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.warning-item {
+  background: rgba(255, 165, 0, 0.1) !important;
+  min-height: 150px;
+}
+
+.warning-item-alt {
+  background: rgba(255, 165, 0, 0.2) !important;
+  margin-top: 15px;
+}
+
+.warning-item-light {
+  background: rgba(255, 165, 0, 0.15) !important;
+  margin-top: 15px;
+}
+
+.large-item {
+  min-height: 150px;
+}
+
+.last-short-item {
+  margin-bottom: 20px;
+}
+
+.warning-content {
+  width: 100%;
+}
+
+.warning-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.warning-list {
+  text-align: left;
+  padding-left: 20px;
+  margin: 0;
+}
+
+/* Popup specific styles */
+.popup-trigger-button {
+  padding: 15px 30px;
+  background: rgba(0, 255, 0, 0.3);
+  border: 1px solid #00FF00;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.success-popup-item {
+  background: rgba(0, 255, 0, 0.2) !important;
+}
+
+.solution-content {
+  width: 100%;
+}
+
+.solution-list {
+  text-align: left;
+  padding-left: 20px;
 } 
