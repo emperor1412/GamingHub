@@ -16,24 +16,34 @@ const ShortContentScreen = ({ onBack }) => {
         ← Quay lại
       </button>
       <div className="test-screen-content">
-        <div className="test-item" style={{ height: '200px', background: 'rgba(255, 165, 0, 0.1)' }}>
+        <div className="test-item" style={{ background: 'rgba(255, 165, 0, 0.1)', minHeight: '150px' }}>
           <p>
-            Đây là một màn hình có rất ít nội dung, không đủ để tạo thanh cuộn.<br/><br/>
-            Thử kéo/vuốt lên xuống và bạn sẽ thấy vấn đề overscrolling vẫn xảy ra.<br/><br/>
-            Điều này đặc biệt phổ biến trên thiết bị di động.
+            Đây là một màn hình có nội dung ngắn.<br/><br/>
+            Thử kéo/vuốt lên xuống và bạn sẽ thấy vấn đề overscrolling vẫn xảy ra.
           </p>
         </div>
         
-        <div className="test-item" style={{ marginTop: '30px', background: 'rgba(255, 165, 0, 0.2)' }}>
+        <div className="test-item" style={{ marginTop: '15px', background: 'rgba(255, 165, 0, 0.2)' }}>
           <div>
-            <p>Vấn đề:</p>
-            <ul style={{ textAlign: 'left', paddingLeft: '20px' }}>
-              <li>Màn hình có ít nội dung không cần cuộn</li>
-              <li>Người dùng vẫn có thể kéo/vuốt màn hình</li>
-              <li>Khi vuốt, hiệu ứng "bounce" hoặc kéo nền vẫn xảy ra</li>
+            <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Vấn đề:</p>
+            <ul style={{ textAlign: 'left', paddingLeft: '20px', margin: '0' }}>
+              <li>Màn hình có ít nội dung nhưng vẫn có thể cuộn</li>
+              <li>Khi vuốt/kéo, hiệu ứng "bounce" hoặc kéo nền vẫn xảy ra</li>
+              <li>Có thể kéo màn hình ra ngoài ranh giới</li>
               <li>Tạo cảm giác ứng dụng không mượt mà</li>
             </ul>
           </div>
+        </div>
+        
+        {/* Phần tử cuối đảm bảo không bị tràn */}
+        <div className="test-item" style={{ 
+          marginTop: '15px', 
+          background: 'rgba(255, 165, 0, 0.15)',
+          marginBottom: '20px'
+        }}>
+          <p style={{ margin: '0' }}>
+            Thử cuộn từ đây đến cuối và kéo tiếp.
+          </p>
         </div>
       </div>
     </div>

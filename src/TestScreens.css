@@ -25,6 +25,8 @@
 .test-screen-content {
   padding-top: 80px;
   padding-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .test-item {
@@ -32,7 +34,7 @@
   margin: 10px 20px;
   padding: 20px;
   border-radius: 10px;
-  min-height: 100px;
+  min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,6 +42,14 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  width: auto;
+  word-wrap: break-word;
+}
+
+.test-item p {
+  margin: 0;
+  max-width: 100%;
 }
 
 .test-item::before {
@@ -141,7 +151,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Note: No overflow property set, but still can overscroll on mobile */
+  overflow-y: auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Short Content with Fixed Overscrolling */
@@ -162,6 +174,47 @@
   /* No overflow property - we don't need scrolling for short content */
   touch-action: none;
   overscroll-behavior: none;
+}
+
+/* Short Content with Fixed Overscrolling - Allow Scroll version */
+.fixed-short-screen-container-allow-scroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Allow scrolling */
+  overscroll-behavior: none; /* Prevent bounce effect */
+  touch-action: pan-y; /* Allow vertical touch scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  box-sizing: border-box;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.fixed-short-screen-container-allow-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.fixed-short-content-allow-scroll {
+  padding-top: 80px;
+  padding-bottom: 20px;
+  min-height: 100%;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Body class for screen with scrolling but no overscroll */
+body.no-overscroll-allow-scroll {
+  overscroll-behavior-y: none; /* Prevent bounce effect */
+  /* Don't set overflow: hidden or position: fixed to allow scrolling */
 }
 
 /* Popup Styles */
@@ -287,4 +340,100 @@ body.no-overscroll {
   position: fixed;
   width: 100%;
   height: 100%;
+}
+
+/* Short Content with Fixed Overscrolling - Strict version */
+.fixed-short-screen-container-strict {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  touch-action: none; /* Changed from pan-y to none to prevent all overscrolling */
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  -ms-scroll-chaining: none; /* IE/Edge */
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  
+  /* Prevent all overscroll behavior */
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+  
+  /* Add for smoother scrolling */
+  scroll-behavior: smooth;
+  background-color: #000000;
+}
+
+.fixed-short-screen-container-strict::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.fixed-short-content-strict {
+  padding-top: 80px;
+  padding-bottom: 20px;
+  min-height: 100%;
+  overscroll-behavior: none;
+  touch-action: none; /* Changed from pan-y to none */
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  
+  /* Add more properties for better behavior */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: calc(100vh - 80px);
+}
+
+/* Visual feedback for the test items in fixed short screens */
+.fixed-short-screen-container-strict .test-item {
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.15);
+}
+
+.fixed-short-screen-container-strict .test-item:active {
+  transform: scale(0.98);
+}
+
+/* Extra strict body class for no overscroll */
+body.no-overscroll-strict {
+  overscroll-behavior: none !important;
+  overflow: hidden !important; /* Changed from auto to hidden */
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: none !important; /* Changed from pan-y to none */
+  height: 100% !important;
+  position: fixed !important; 
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* Ensure no overscrolling happens at all */
+  -ms-scroll-chaining: none !important;
+  overscroll-behavior-y: none !important;
+  overscroll-behavior-x: none !important;
+  
+  /* Safari-specific fixes */
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+/* Add specific styles for each possible viewport element */
+html.no-overscroll-strict,
+body.no-overscroll-strict * {
+  overscroll-behavior: none !important;
+  touch-action: none !important; /* Changed from pan-y to none */
 } 

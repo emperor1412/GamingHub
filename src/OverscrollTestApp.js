@@ -168,7 +168,7 @@ const OverscrollTestApp = ({ onBack }) => {
             minWidth: '200px'
           }}
         >
-          Nội dung ngắn - ĐÃ FIX
+          Nội dung ngắn - Cuộn không bounce
         </button>
       </div>
       
