@@ -13,8 +13,8 @@ import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
 import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import eggIcon from './images/eggs_event-points-icon.png';
-import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar.svg';
+import calendar from './images/calendar.png';
+import calendar_before_checkin from './images/calendar.png';
 import { trackUserAction } from './analytics';
 import AccountLinkPopup from './AccountLinkPopup';
 
