@@ -8,9 +8,9 @@ import stepn_background from './images/stepn_background.png';
 import ticketIcon from './images/ticket.svg';
 // import km from './images/km.svg';
 import starlet from './images/starlet.png';
-import calendar from './images/calendar.svg';
+import calendar from './images/calendar.png';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
-import calendar_before_checkin from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar.png';
 
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
