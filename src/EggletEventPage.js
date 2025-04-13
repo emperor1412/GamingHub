@@ -321,17 +321,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             if (shared.checkIn) {
                 const result = await shared.checkIn(shared.loginData);
                 console.log('CheckIn Response:', result);
-                
-                if (result.code === 0) {
-                    // Update checkInData with the new data
-                    setShowCheckInView(true);
-                } else {
-                    console.log('Check-in failed:', result);
-                    shared.showPopup({ 
-                        type: 0, 
-                        message: 'Failed to check in. Please try again later.' 
-                    });
-                }
+                setShowCheckInView(true);
             } else {
                 console.log('Check-in function not available');
                 onClose();
@@ -370,7 +360,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         
             <header className="eggs_egglet-event-header">
                 <button 
-                    className="back-button"
+                    className="back-button back-button-alignment"
                     onClick={onClose}
                 >
                     <img src={back} alt="Back" />
@@ -397,7 +387,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
-                        <button className="stat-button">
+                        <button className="stat-button" onClick={onClickCheckIn}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
