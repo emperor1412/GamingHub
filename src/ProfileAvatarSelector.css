@@ -51,7 +51,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   /* padding: 10px; */
-  padding-bottom: 40px;
+  padding-bottom: 50px;
   padding-right: 0px;
   box-sizing: border-box;
   /* Add mask gradient for soft scroll boundary */
