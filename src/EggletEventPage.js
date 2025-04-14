@@ -5,16 +5,16 @@ import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 import starletIcon from './images/starlet.png';
 import eggletLogo from './images/Egglets_Logo.png';
-import scratching from './images/Egglets_Description_1.png';
-import buying from './images/Egglets_Description_2.png';
-import inviting from './images/Egglets_Description_3.png';
-import levelUp from './images/Egglets_Description_4.png';
+import scratching from './images/Egglet_Image_1.png';
+import buying from './images/Egglet_Image_2.png';
+import inviting from './images/Egglet_Image_3.png';
+import levelUp from './images/Egglet_Image_4.png';
 import fslLogo from './images/FSLID_Login_Logo.png';
 import mooarLogo from './images/MooAR_Login_Logo.png';
 import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import eggIcon from './images/eggs_event-points-icon.png';
-import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar.svg';
+import calendar from './images/calendar.png';
+import calendar_before_checkin from './images/calendar.png';
 import { trackUserAction } from './analytics';
 import AccountLinkPopup from './AccountLinkPopup';
 
@@ -321,17 +321,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             if (shared.checkIn) {
                 const result = await shared.checkIn(shared.loginData);
                 console.log('CheckIn Response:', result);
-                
-                if (result.code === 0) {
-                    // Update checkInData with the new data
-                    setShowCheckInView(true);
-                } else {
-                    console.log('Check-in failed:', result);
-                    shared.showPopup({ 
-                        type: 0, 
-                        message: 'Failed to check in. Please try again later.' 
-                    });
-                }
+                setShowCheckInView(true);
             } else {
                 console.log('Check-in function not available');
                 onClose();
@@ -370,22 +360,11 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         
             <header className="eggs_egglet-event-header">
                 <button 
-                    className="profile-pic-main"
-                    onClick={() => {
-                        // Show Profile using setShowProfileView
-                        setShowProfileView(true);
-                    }} 
+                    className="back-button back-button-alignment"
+                    onClick={onClose}
                 >
-                    <img 
-                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                    alt="Profile" />
+                    <img src={back} alt="Back" />
                 </button>
-                <div className="level-badge" onClick={() => {
-                    // Show Profile using setShowProfileView
-                    setShowProfileView(true);
-                }}>
-                    LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
-                </div>
                 <div className="stats-main">
                     <button 
                         className="stat-item-main"
@@ -408,7 +387,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                         <span className='stat-item-main-text'>{starlets}</span>
                     </button>
                     <div className="stat-item-main">
-                        <button className="stat-button">
+                        <button className="stat-button" onClick={onClickCheckIn}>
                             <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Calendar" />
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
@@ -428,9 +407,6 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             {/* Only show content when event is active */}
             {eventActive && (
                 <div className="eggs_egglet-event-content">
-                    <button className="back-button eggs_standalone-back-button" onClick={onClose}>
-                        <img src={back} alt="Back" />
-                    </button>
                     <div className="eggs_event-points-bar">
                         <span className="eggs_event-points-label">EVENT POINTS</span>
                         <div className="eggs_event-points-value-display">
@@ -449,7 +425,6 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
                             <div className="eggs_corner eggs_bottom-right"></div>
                             
                             <div className="eggs_global-egglets-title">
-                                GLOBAL EGGLETS CLAIMED
                                 <div className="eggs_claim-indicators">
                                     <span className={`eggs_claim-indicator ${fslFlag || eggletsProgress.current >= eggletsProgress.total ? 'completed' : ''}`}>
                                         {eggletsProgress.current >= eggletsProgress.total ? (

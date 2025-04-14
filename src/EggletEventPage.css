@@ -136,6 +136,34 @@
   z-index: 1000;
   overflow-y: auto;
   font-family: "PP Neue Machina Inktrap", sans-serif;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide WebKit scrollbars */
+.eggs_egglet-event-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+/* Ensure all child elements also hide scrollbars */
+.eggs_egglet-event-container * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: inherit;
+  touch-action: pan-y;
+}
+
+.eggs_egglet-event-container *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
 }
 
 .eggs_egglet-event-header {
@@ -159,6 +187,28 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
 }
 
 /* Back button styling - standalone version */
@@ -186,7 +236,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 50px);
+  width: 100%;
   padding: 8px 15px;
   background: #000;
   border: 2px solid #0000FF;
@@ -195,7 +245,6 @@
   height: 48px;
   box-sizing: border-box;
   position: relative;
-  margin-left: 70px;
 }
 
 .eggs_event-points-label {
@@ -204,7 +253,7 @@
   text-transform: uppercase;
   color: white;
   flex: 1;
-  text-align: center;
+  text-align: left;
 }
 
 .eggs_event-points-value-display {
@@ -424,7 +473,7 @@
   font-weight: 700;
   margin-bottom: 15px;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   color: white;
   text-transform: uppercase;
@@ -579,8 +628,8 @@
 }
 
 .eggs_method-image {
-  width: 150px;
-  height: 105px;
+  max-width: 132.71px;
+  max-height: 103.57px;
   margin-bottom: 10px;
 }
 
@@ -666,6 +715,7 @@
   color: white;
   font-size: 18px;
   font-weight: 700;
+  overscroll-behavior: none;
 }
 
 .eggs_back-to-main-button {
@@ -683,4 +733,41 @@
 
 .eggs_back-to-main-button:hover {
   background: #2980b9;
+}
+
+.eggs_event-inactive-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  
+  /* Hide scrollbars */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.eggs_event-inactive-overlay::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.eggs_event-inactive-message {
+  margin-bottom: 20px;
+  text-align: center;
+  max-width: 80%;
+  text-transform: uppercase;
 } 

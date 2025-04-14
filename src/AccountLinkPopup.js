@@ -55,9 +55,9 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     // Close popup and navigate to FSLID tab
     onClose();
     
-    // Navigate to FSL ID tab - assuming there's a function to switch tabs
-    if (typeof shared.showTab === 'function') {
-      shared.showTab('fslid');
+    // Navigate to FSL ID tab using setActiveTab function that's available in shared
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setActiveTab('fslid');
     } else {
       // Fallback if direct tab navigation isn't available
       window.location.hash = '#fslid';
@@ -71,7 +71,7 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     trackUserAction('egglet_mooar_link_clicked', {}, shared.loginData?.userId);
     
     // Open MOOAR login page in a new tab
-    window.open('https://id.fsl.com/login', '_blank');
+    window.open('https://mooar.com/', '_blank');
   };
 
   return (
