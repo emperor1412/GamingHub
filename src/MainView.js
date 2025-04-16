@@ -248,6 +248,28 @@ Response:
         }
     }
 
+    const onClickOpenGame = async () => {
+        try {
+            trackUserAction('minigame_clicked', {
+                game_name: 'Tadogami',
+                game_url: 'https://t.me/TestFSL_bot/tadogami'
+            }, shared.loginData?.link);
+            
+            // Use Telegram WebApp API to open the mini app directly within Telegram
+            if (window.Telegram?.WebApp?.openTelegramLink) {
+                // This method will open the link within Telegram without launching a browser
+                window.Telegram.WebApp.openTelegramLink('https://t.me/TestFSL_bot/tadogami');
+            } else {
+                // Fallback to SDK method if the direct method isn't available
+                openLink('https://t.me/TestFSL_bot/tadogami');
+            }
+        } catch (e) {
+            console.log('Error opening Tadogami game:', e);
+            // Fallback in case of error
+            openLink('https://t.me/TestFSL_bot/tadogami');
+        }
+    }
+
     const setupProfileData = async () => {
         await getProfileData();
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
@@ -538,45 +560,36 @@ Response:
                     </button>
                 </section>
 
-                <section className="minigame-section">
-                    <button 
-                        className="minigame-card"
-                        onClick={() => {
-                            try {
-                                trackUserAction('minigame_clicked', {
-                                    game_name: 'Tadogami',
-                                    game_url: 'https://t.me/TestFSL_bot/tadogami'
-                                }, shared.loginData?.link);
-                                
-                                // Use Telegram WebApp API to open the mini app directly within Telegram
-                                if (window.Telegram?.WebApp?.openTelegramLink) {
-                                    // This method will open the link within Telegram without launching a browser
-                                    window.Telegram.WebApp.openTelegramLink('https://t.me/TestFSL_bot/tadogami');
-                                } else {
-                                    // Fallback to SDK method if the direct method isn't available
-                                    openLink('https://t.me/TestFSL_bot/tadogami');
-                                }
-                            } catch (e) {
-                                console.log('Error opening Tadogami game:', e);
-                                // Fallback in case of error
-                                openLink('https://t.me/TestFSL_bot/tadogami');
-                            }
-                        }}
-                    >
-                        <div className='minigame-card-image-container'>
+                {/* Egglet Event Section - only shown if event is active */}
+                {eventActive && (
+                    <section className="egglet-section">
+                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                            <div className="egglet-event-content">
+                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                                <div className="egglet-date">17 – 27 APRIL</div>
+                            </div>
+                            <div className="egglet-event-tag">EGGLET EVENT</div>
+                        </button>
+                    </section>
+                )}
+
+                <section className="locked-sections">
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
+                        <div className='locked-card-image-container'>
                             <img
                                 src={morchigame}
                                 alt="Tadogami Game"
                                 className="minigame-card-image"
                             /> 
-                            <div className='minigame-card-container-border'></div>
-                            <h3 className="event-card-title">TADOGAMI</h3>
-                            <p className="event-card-subtitle">Play fun games and earn rewards!</p>
-                            <div className='check-out-button'>
-                                Play Now
-                                <img src={checkout} alt="Arrow" />
-                            </div>
+                            <div className='locked-card-container-border'></div>
+                            <div className='coming-soon-button'>Updating</div>
+                            <div className='locked-card-text'></div>
                         </div>
+                        {/* <img
+                            src={locker}
+                            alt="Locker"
+                            className="locker-icon"
+                        /> */}
                     </button>
 
                     <button className="minigame-card" onClick={() => setShowBankStepsView(true)}>
