@@ -70,6 +70,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
 
+  // Add body class to prevent iOS overscrolling
+  useEffect(() => {
+    // Add class when component mounts
+    document.body.classList.add('mk-market-open');
+    
+    // Remove class when component unmounts
+    return () => {
+      document.body.classList.remove('mk-market-open');
+    };
+  }, []);
+
   useEffect(() => {
     const fetchBuyOptions = async () => {
       try {

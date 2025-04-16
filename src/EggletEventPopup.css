@@ -1,0 +1,397 @@
+/* Font Definitions for Inktrap */
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegularItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemiboldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltraboldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+.egg_popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* Ensure the overlay is non-scrollable */
+  overflow: hidden;
+}
+
+.egg_popup-container {
+  width: 85%;
+  max-width: 280px;
+  background: #000;
+  border: 1px solid #fff;
+  border-radius: 12px;
+  padding: 0 4% 4%;
+  text-align: center;
+  color: white;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  position: relative;
+  overflow: visible;
+  max-height: 85vh;
+  aspect-ratio: 0.65/1;
+  margin-top: 15%;
+  /* Make container itself scrollable if content exceeds max-height */
+  display: flex;
+  flex-direction: column;
+}
+
+.egg_back-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.egg_back-button:hover {
+  opacity: 0.8;
+}
+
+/* Align back button as in other popups */
+.back-button-alignment {
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 20px;
+  left: 20px;
+  z-index: 10000;
+}
+
+.back-button-alignment img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.egg_logo-container {
+  width: 100%;
+  max-width: 190px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  aspect-ratio: 1/1;
+}
+
+.egg_logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.egg_popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(24% + 5px);
+  width: 100%;
+  overflow-y: auto; /* Allow vertical scrolling if content is too long */
+  padding-bottom: 2%;
+  /* Add some padding so the bottom content isn't cut off when scrolling */
+  padding-right: 5px; /* Add right padding to account for scrollbar */
+  /* Enable momentum-based scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Hide scrollbar while still allowing scrolling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* For Webkit browsers (Chrome, Safari) - customize scrollbar */
+.egg_popup-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.egg_popup-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.egg_popup-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.egg_popup-title {
+  font-size: clamp(24.56px, 6vw, 30.56px);
+  font-weight: 700;
+  margin: 3%;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.egg_popup-subtitle {
+  font-size: clamp(13px, 4vw, 16.5px);
+  font-weight: 700;
+  margin-top: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4%;
+  color: white;
+}
+
+.egg_date {
+  background: #0000FF;
+  color: white;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: clamp(15px, 3.5vw, 18.16px);
+  margin-bottom: 2%;
+  letter-spacing: 0.5px;
+}
+
+.egg_description {
+  font-size: clamp(10px, 3.5vw, 11.16px);
+  line-height: 1.3;
+  color: white;
+  text-transform: uppercase;
+  width: 90%;
+  letter-spacing: 0.2px;
+}
+
+.egg_points-section {
+  width: 90%;
+}
+
+.egg_earn-text {
+  font-size: clamp(10px, 3.5vw, 11.16px);
+  font-weight: 500;
+  color: white;
+}
+
+.egg_methods {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 2%;
+}
+
+.egg_method {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 22%;
+  margin-bottom: 6%;
+}
+
+.egg_method img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.egg_method span {
+  font-size: clamp(7px, 2vw, 9px);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+}
+
+.egg_note {
+  border-radius: 8px;
+  font-size: clamp(9px, 2vw, 10.81px);
+  line-height: 1.3;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 4%;
+  width: 100%;
+  letter-spacing: 0.2px;
+}
+
+/* Logo wrapper styles */
+.egg_logo-wrapper {
+  width: 90%;
+  margin: 4px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.egg_auth-logos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+.egg_auth-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.egg_waiting-text {
+  color: white;
+  font-size: clamp(13.5px, 2vw, 15.26px);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 2%;
+}
+
+/* Media queries for different aspect ratios */
+@media screen and (max-height: 600px) {
+  .egg_popup-container {
+    aspect-ratio: 0.75/1;
+  }
+  
+  /* .egg_popup-content {
+    margin-top: calc(28% + 5px);
+  } */
+  
+  .egg_logo-container {
+    width: 100%;
+  }
+  
+  .egg_method {
+    margin-bottom: 3%;
+  }
+  
+  .egg_method img {
+    margin-bottom: 3px;
+  }
+  
+  .egg_auth-logo {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Ensure the popup doesn't get too large on bigger screens */
+@media screen and (min-width: 768px) {
+  .egg_popup-container {
+    max-width: 320px;
+  }
+    
+  .egg_auth-logo {
+    width: 45px;
+    height: 45px;
+  }
+} 

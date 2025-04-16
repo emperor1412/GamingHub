@@ -1,0 +1,773 @@
+/* Font Definitions for Inktrap */
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegularItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemiboldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltraboldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+.eggs_egglet-event-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #FFF;
+  z-index: 1000;
+  overflow-y: auto;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide WebKit scrollbars */
+.eggs_egglet-event-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+/* Ensure all child elements also hide scrollbars */
+.eggs_egglet-event-container * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: inherit;
+  touch-action: pan-y;
+}
+
+.eggs_egglet-event-container *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.eggs_egglet-event-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 1);
+  z-index: 1001;
+  height: 60px;
+  box-sizing: border-box;
+}
+
+.eggs_egglet-event-content {
+  padding: 75px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 5%,
+    black 95%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+}
+
+/* Back button styling - standalone version */
+.eggs_standalone-back-button {
+  position: absolute;
+  top: 80px;
+  left: 15px;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.eggs_standalone-back-button img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Event Points Bar */
+.eggs_event-points-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 15px;
+  background: #000;
+  border: 2px solid #0000FF;
+  margin-bottom: 20px;
+  color: white;
+  height: 48px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.eggs_event-points-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+  flex: 1;
+  text-align: left;
+}
+
+.eggs_event-points-value-display {
+  display: flex;
+  flex-direction: row;
+}
+
+.eggs_event-points-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.eggs_event-points-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.eggs_event-points-value {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  align-content: center;
+}
+
+/* Profile pic and level badge */
+.profile-pic-main img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.profile-pic-main {
+  margin-left: 10px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.level-badge {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(255, 0, 246, 0.2);
+  border: 1px solid #FF00F6;
+  border-radius: 4px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.stats-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  flex: 1;
+}
+
+.stat-item-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.stat-item-main img {
+  width: 24px;
+  height: 24px;
+}
+
+.stat-item-main-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.check-in-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  margin-left: 2px;
+
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.stat-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  color: white;
+  font-family: 'PPNeueMachina', sans-serif;
+}
+
+.stat-button img {
+  margin-right: 2px;
+}
+
+.stat-button:hover {
+  opacity: 0.8;
+}
+
+/* Global Egglets Section */
+.eggs_global-egglets-section {
+  width: 100%;
+  margin-bottom: 10px;
+  position: relative;
+  padding: 2px;
+}
+
+.eggs_corner-frame {
+  width: 100%;
+  padding: 15px;
+  background-color: transparent;
+  box-sizing: border-box;
+  position: relative;
+  color: white;
+  align-items: center;
+}
+
+/* Corner Frame */
+.eggs_corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: white;
+  z-index: 1;
+}
+
+.eggs_top-left {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.eggs_top-right {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.eggs_bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.eggs_bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.eggs_indicator-logo {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.eggs_indicator-logo.logged-in {
+  cursor: default;
+  width: 30px;
+  height: 30px;
+  margin: -1px;
+}
+
+.eggs_indicator-logo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.eggs_indicator-logo.logged-in:hover {
+  transform: none;
+  filter: none;
+}
+
+.eggs_global-egglets-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  color: white;
+  text-transform: uppercase;
+}
+
+.eggs_claim-indicators {
+  display: flex;
+  gap: 12px;
+}
+
+.eggs_claim-indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #0000FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+/* Pulse animation for indicator logos */
+@keyframes pulseEffect {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(0, 0, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 255, 0);
+  }
+}
+
+.eggs_claim-indicator:hover {
+  background-color: #2222FF;
+}
+
+.eggs_claim-indicator:hover .eggs_indicator-logo {
+  animation: pulseEffect 1.5s infinite;
+}
+
+.eggs_claim-indicator.completed {
+  background: #0000FF;
+  color: white;
+}
+
+.eggs_progress-bar-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.eggs_progress-bar {
+  height: 33.79px;
+  background-color: #0000FF;
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+}
+
+.eggs_progress-fill {
+  height: 90%;
+  background: linear-gradient(120deg, #ffffff, #d3d3ff, #ffccff, #ccffff, #ffffff);
+  position: absolute;
+  transition: width 0.5s ease;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eggs_progress-text {
+  width: 100%;
+  text-align: center;
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+  z-index: 1;
+  position: relative;
+  margin: 0 auto;
+  letter-spacing: 0.5px;
+}
+
+.eggs_egglets-info-container {
+  width: 99%;
+  border: 2px solid white;
+  border-radius: 0px;
+  padding: 6px 0;
+  background-color: transparent;
+  margin-top: 15px;
+  height: 50px;
+  position: relative;
+}
+
+.eggs_egglets-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 90px;
+  gap: 0px;
+  position: relative;
+  height: 100%;
+}
+
+.eggs_egglets-balloons {
+  width: 120px;
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: -15px;
+  bottom: -20px;
+  z-index: 2;
+}
+
+.eggs_egglet-balloons-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.eggs_egglets-title {
+  font-size: 20.42px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Points Methods Section */
+.eggs_points-methods-section {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 20px;
+}
+
+.eggs_points-method {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.eggs_method-image {
+  max-width: 132.71px;
+  max-height: 103.57px;
+  margin-bottom: 10px;
+}
+
+.eggs_method-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.eggs_method-details {
+  width: 100%;
+  font-size: 12px;
+  color: white;
+}
+
+.eggs_method-detail {
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+/* FSL Note and Logos */
+.eggs_egglet-fsl-note {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 20px 0 15px;
+  line-height: 1.4;
+  color: white;
+  text-transform: uppercase;
+}
+
+.eggs_auth-logos {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.eggs_auth-logo-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.eggs_auth-logo-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.eggs_auth-logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.eggs_auth-logo-label {
+  color: #0000FF;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+}
+
+/* Loading overlay */
+.eggs_loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  overscroll-behavior: none;
+}
+
+.eggs_back-to-main-button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.eggs_back-to-main-button:hover {
+  background: #2980b9;
+}
+
+.eggs_event-inactive-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  
+  /* Hide scrollbars */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.eggs_event-inactive-overlay::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+.eggs_event-inactive-message {
+  margin-bottom: 20px;
+  text-align: center;
+  max-width: 80%;
+  text-transform: uppercase;
+} 
