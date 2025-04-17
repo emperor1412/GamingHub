@@ -63,7 +63,7 @@ const EggletEventPopup = ({ isOpen, onClose }) => {
               </div>
               <div className="egg_method">
                 <img src={unlittyHat} alt="Unlitty Hat" />
-                <span>UNLITTY MISSIONS</span>
+                <span>INVITING MISSIONS</span>
               </div>
               <div className="egg_method">
                 <img src={levelUp} alt="Leveling Up" />
