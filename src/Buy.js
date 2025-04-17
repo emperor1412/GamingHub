@@ -53,8 +53,13 @@ const Buy = ({
     fetchOptionData();
   }, [selectedPurchase?.optionId]);
 
-  const handlePaymentMethod = (method) => {
+  const handlePaymentMethod = async (method) => {
     if (method === 'free') {
+      if (shared.userProfile.fslId === 0) {
+        showFSLIDScreen();
+        return;
+      }
+      setIsPopupOpen(true);
       return;
     }
 
@@ -144,11 +149,13 @@ const Buy = ({
                     <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
                   </div>
                 </div>
-                <div className="bmk-item-detail-box">
-                  <div className="bmk-item-amount">
-                    <span className="x-mark">x</span>{currentOption?.ticket || 10} TICKETS
+                {(selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1) && (
+                  <div className="bmk-item-detail-box">
+                    <div className="bmk-item-amount">
+                      <span className="x-mark">x</span>{selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1} TICKETS
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

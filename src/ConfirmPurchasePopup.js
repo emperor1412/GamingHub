@@ -74,11 +74,38 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
   const handleConfirmAndPay = useCallback(async () => {
     setIsProcessing(true);
     try {
-      const result = await handleStarletsPurchase({ 
-        amount, 
-        stars,
-        optionId 
-      });
+      let result;
+      if (optionId === 'free') {
+        const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+        const data = await response.json();
+        if (data.code === 0 && data.data.success) {
+          result = {
+            status: "paid",
+            initialStarlets: 50,
+            tickets: 1
+          };
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && retryData.data.success) {
+              result = {
+                status: "paid",
+                initialStarlets: 50,
+                tickets: 1
+              };
+            }
+          }
+        }
+      } else {
+        result = await handleStarletsPurchase({ 
+          amount, 
+          stars,
+          optionId 
+        });
+      }
 
       if (result?.status === "paid") {
         setPurchaseData({ 
@@ -97,10 +124,14 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     }
   }, [amount, stars, optionId, showError, onClose]);
 
-  const handleClaim = useCallback(() => {
+  const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);
     setPurchaseData(null);
     localStorage.removeItem('payment_success');
+    
+    // Refresh user profile
+    await shared.getProfileWithRetry();
+    
     onConfirm();
     setShowBuyView(false);
   }, [onConfirm, setShowBuyView]);
@@ -144,7 +175,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
               isOpen={true}
               onClaim={handleClaim}
               amount={amount}
-              tickets={purchaseData?.tickets || currentOption?.ticket || 10}
+              tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
@@ -163,18 +194,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   <div className="purchase-details">
                     <div className="purchase-text">
                       DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-                      {stars > 0 && (
+                      {stars > 0 ? (
                         <>
                           <br />
                           AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
                         </>
-                      )}
-                      {stars === 0 && (
+                      ) : (
                         <>
                           <br />
-                          AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
+                          AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">FREE</span>?
                         </>

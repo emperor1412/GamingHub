@@ -47,7 +47,8 @@ import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
 
 import loading_background from "./images/GamesHubLoading.png";
-import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
+// import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
+// import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
 
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
@@ -300,8 +301,9 @@ Response:
     viewport.expand();
 
     // Setup behaviors
-    closingBehavior.mount();
-    closingBehavior.enableConfirmation();
+    // closingBehavior.mount();
+    // closingBehavior.enableConfirmation();
+
     swipeBehavior.mount();        
     swipeBehavior.disableVertical();
 
@@ -474,8 +476,8 @@ Response:
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button className="disabled-market">
-                <img src={market_locked} alt="Market Locked" />
+              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+                <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
                 <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
@@ -553,8 +555,8 @@ Response:
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button className="disabled-market">
-              <img src={market_locked} alt="Market Locked" />
+            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
             <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
