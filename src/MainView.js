@@ -259,6 +259,28 @@ Response:
         }
     }
 
+    const onClickOpenGame = async () => {
+        try {
+            trackUserAction('minigame_clicked', {
+                game_name: 'Tadogami',
+                game_url: 'https://t.me/TestFSL_bot/tadogami'
+            }, shared.loginData?.link);
+            
+            // Use Telegram WebApp API to open the mini app directly within Telegram
+            if (window.Telegram?.WebApp?.openTelegramLink) {
+                // This method will open the link within Telegram without launching a browser
+                window.Telegram.WebApp.openTelegramLink('https://t.me/TestFSL_bot/tadogami');
+            } else {
+                // Fallback to SDK method if the direct method isn't available
+                openLink('https://t.me/TestFSL_bot/tadogami');
+            }
+        } catch (e) {
+            console.log('Error opening Tadogami game:', e);
+            // Fallback in case of error
+            openLink('https://t.me/TestFSL_bot/tadogami');
+        }
+    }
+
     const setupProfileData = async () => {
         await getProfileData();
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
@@ -720,7 +742,7 @@ Response:
                 )}
 
                 <section className="locked-sections">
-                    <button className="locked-card">
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
                         <div className='locked-card-image-container'>
                             <img
                                 // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
@@ -733,11 +755,11 @@ Response:
                             <div className='coming-soon-button'>Coming Soon</div>
                             <div className='locked-card-text'></div>
                         </div>
-                        <img
+                        {/* <img
                             src={locker}
                             alt="Locker"
                             className="locker-icon"
-                        />
+                        /> */}
                     </button>
 
                     <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
