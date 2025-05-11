@@ -689,3 +689,14 @@
 .egglet-button .check-out-button {
     /* These old styles are being replaced, keeping the selectors for reference */
 }
+
+.locked-card-image.minigames {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    top: unset;
+    position: static;
+}
