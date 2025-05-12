@@ -270,15 +270,15 @@ Response:
             // Use Telegram WebApp API to open the mini app directly within Telegram
             if (window.Telegram?.WebApp?.openTelegramLink) {
                 // This method will open the link within Telegram without launching a browser
-                window.Telegram.WebApp.openTelegramLink('https://t.me/TestFSL_bot/tadogami');
+                window.Telegram.WebApp.openTelegramLink(shared.game_link);
             } else {
                 // Fallback to SDK method if the direct method isn't available
-                openLink('https://t.me/TestFSL_bot/tadogami');
+                openLink(shared.game_link);
             }
         } catch (e) {
-            console.log('Error opening Tadogami game:', e);
+            console.log('Error opening Tadokami game:', e);
             // Fallback in case of error
-            openLink('https://t.me/TestFSL_bot/tadogami');
+            openLink(shared.game_link);
         }
     }
 
