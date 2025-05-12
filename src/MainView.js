@@ -21,6 +21,7 @@ import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
+import tadokami from './images/Tadokami_Logo.png'
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
@@ -256,6 +257,28 @@ Response:
         }
         else {
 
+        }
+    }
+
+    const onClickOpenGame = async () => {
+        try {
+            trackUserAction('minigame_clicked', {
+                game_name: 'Tadokami',
+                game_url: shared.game_link,
+            }, shared.loginData?.link);
+            
+            // Use Telegram WebApp API to open the mini app directly within Telegram
+            if (window.Telegram?.WebApp?.openTelegramLink) {
+                // This method will open the link within Telegram without launching a browser
+                window.Telegram.WebApp.openTelegramLink('https://t.me/TestFSL_bot/tadogami');
+            } else {
+                // Fallback to SDK method if the direct method isn't available
+                openLink('https://t.me/TestFSL_bot/tadogami');
+            }
+        } catch (e) {
+            console.log('Error opening Tadogami game:', e);
+            // Fallback in case of error
+            openLink('https://t.me/TestFSL_bot/tadogami');
         }
     }
 
@@ -720,24 +743,24 @@ Response:
                 )}
 
                 <section className="locked-sections">
-                    <button className="locked-card">
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
                         <div className='locked-card-image-container'>
                             <img
                                 // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                                 // src={Frame4561}
-                                src={comingsoon}
-                                alt="Morchi Game Coming Soon"
+                                src={tadokami}
+                                alt="Tadokami "
                                 className="locked-card-image minigames"
                             /> 
-                            <div className='locked-card-container-border'></div>
-                            <div className='coming-soon-button'>Coming Soon</div>
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
                             <div className='locked-card-text'></div>
                         </div>
-                        <img
+                        {/* <img
                             src={locker}
                             alt="Locker"
                             className="locker-icon"
-                        />
+                        /> */}
                     </button>
 
                     <button className="locked-card" onClick={() => setShowBankStepsView(true)}>

@@ -57,7 +57,8 @@ const tokenABI = [
 const shared = {
     server_url: 'https://gm14.joysteps.io',
     app_link: 'https://t.me/TestFSL_bot/fslhub',
-    host_environment: 'production',
+    game_link: 'https://t.me/TestFSL_bot/tadogami',
+    host_environment: 'test',
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
