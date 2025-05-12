@@ -57,6 +57,7 @@ const tokenABI = [
 const shared = {
     server_url: 'https://gamehub.fsl.com',
     app_link: 'https://t.me/FSLGameHub_Bot/fslgamehub',
+    game_link: 't.me/FSLGameHub_Bot/Tadokami',
     host_environment: 'production',
     avatars : [
         { id: 0, src: avatar1 },
