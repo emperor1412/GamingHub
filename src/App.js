@@ -146,22 +146,38 @@ function App() {
 };
 
 const bind_fslid = async () => {
-  /*
-  url: /app/fslBinding
-Request:
-	code string  //The token that calls the fslId callback
-	//For example
-	//https://gm3.joysteps.io/login/authorization?response_type=code&appkey=MiniGame&scope=basic&state=&use_popup=true
-Response:
-{
-    "code": 0
-}
-  */
   const apiLink = `${shared.server_url}/api/app/fslBinding?token=${shared.loginData.token}&code=${shared.fsl_binding_code}`;
   console.log('Calling FSL Binding API:', apiLink);
-  const response = await fetch(apiLink);
-  const data = await response.json();
-  console.log('FSL Binding finished:', data);
+  try {
+    const response = await fetch(apiLink);
+    const data = await response.json();
+    console.log('FSL Binding finished:', data);
+    
+    if (data.code === 0) {
+      // Success case
+      return true;
+    } else {
+      // Handle different error cases
+      let errorMessage = data.msg || 'Failed to bind FSL ID. Please try again later.';
+      
+      // Show error popup but don't block the app
+      shared.showPopup({
+        type: 0,
+        message: errorMessage
+      }).catch(err => console.error('Error showing popup:', err));
+      
+      return false;
+    }
+  } catch (error) {
+    console.error('Error binding FSL ID:', error);
+    // Show error popup but don't block the app
+    shared.showPopup({
+      type: 0,
+      message: 'Failed to bind FSL ID. Please try again later.'
+    }).catch(err => console.error('Error showing popup:', err));
+    
+    return false;
+  }
 }
 
   const login = async () => {
