@@ -18,6 +18,8 @@ import trophy_5 from './images/trophy_5_200px.png';
 import trophy_6 from './images/trophy_6_200px.png';
 import trophy_10000 from './images/trophy_10000_200px.png';
 import trophy_10000_locked from './images/trophy_10000_locked.png';
+import trophy_10010 from './images/Trophy-ALPHA_TESTER_Unlocked.png';
+import trophy_10010_locked from './images/Trophy-ALPHA_TESTER2-Locked.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -102,11 +104,13 @@ const Frens = () => {
     4: trophy_4,
     5: trophy_5,
     6: trophy_6,
-    10000: trophy_10000
+    10000: trophy_10000,
+    10010: trophy_10010
   }
   
   const trophyIconLocked = {
-    10000: trophy_10000_locked
+    10000: trophy_10000_locked,
+    10010: trophy_10010_locked
   }
   
   const getTrophyData = async (depth = 0) => {
@@ -134,7 +138,9 @@ const Frens = () => {
           max: trophy.max,
           state: trophy.state,
           status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
-          icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : trophyIcon[trophy.id]
+          icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : 
+                trophy.id === 10010 && trophy.state === 0 ? trophy_10010_locked :
+                trophyIcon[trophy.id]
         }));
 
         // setTrophies(trophiesData.concat(trophiesData));
