@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import './Share.css';
+import liff from '@line/liff';
 
 import MainView from './MainView';
 import Tasks from './Tasks';
@@ -50,28 +51,17 @@ import loading_background from "./images/GamesHubLoading.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 // import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
 
-import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
 
-
 function App() {
-  const { initDataRaw } = retrieveLaunchParams();
-  
-
-  // const hash = window.location.hash.slice(1);
-  // const hash = window.location.hash;
-  // const params = new URLSearchParams(hash);
-  // const tgWebAppStartParam = params.get('tgWebAppStartParam');
-  // console.log('tgWebAppStartParam:', tgWebAppStartParam); // "6.2"
-
   const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState(null);
   const [checkInData, setCheckInData] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
   const [userProfile, setUserProfile] = useState(null);
   const [profileItems, setProfileItems] = useState([]);
-  // const swipeBehavior = useSwipeBehavior();
+  const [debugInfo, setDebugInfo] = useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,7 +93,7 @@ function App() {
         return 0;
     } else {
         if (checkInResult.needRelogin) {
-            const loginResult = await shared.login(initDataRaw);
+            const loginResult = await shared.login(user);
             if (loginResult.success) {
                 setLoginData(loginResult.loginData);
                 setIsLoggedIn(true);
@@ -111,21 +101,18 @@ function App() {
             }
         }
         
-        if (popup.open.isAvailable()) {
-            const promise = popup.open({
-                title: 'Error Checking-in',
-                message: `Error: ${checkInResult.error}`,
-                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-            });
-            await promise;
-        }
+        liff.showPopup({
+            title: 'Error Checking-in',
+            message: `Error: ${checkInResult.error}`,
+            buttons: [{ text: 'OK' }],
+        });
         return 2;
     }
-};
+  };
 
   const getProfileData = async (loginDataParam) => {
     const dataToUse = loginDataParam || loginData;
-    shared.loginData = dataToUse; // Ensure shared.loginData is set for getProfileWithRetry
+    shared.loginData = dataToUse;
     const profileResult = await shared.getProfileWithRetry();
     
     if (profileResult.success) {
@@ -133,52 +120,42 @@ function App() {
         setProfileItems(profileResult.profileItems);
         return [profileResult.userProfile, profileResult.profileItems];
     } else {
-        if (popup.open.isAvailable()) {
-            const promise = popup.open({
-                title: 'Error Getting Profile Data',
-                message: `Error: ${profileResult.error}`,
-                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-            });
-            await promise;
-        }
+        liff.showPopup({
+            title: 'Error Getting Profile Data',
+            message: `Error: ${profileResult.error}`,
+            buttons: [{ text: 'OK' }],
+        });
         return [null, []];
     }
-};
+  };
 
-const bind_fslid = async () => {
-  const apiLink = `${shared.server_url}/api/app/fslBinding?token=${shared.loginData.token}&code=${shared.fsl_binding_code}`;
-  console.log('Calling FSL Binding API:', apiLink);
-  try {
-    const response = await fetch(apiLink);
-    const data = await response.json();
-    console.log('FSL Binding finished:', data);
-    
-    if (data.code === 0) {
-      // Success case
-      return true;
-    } else {
-      // Handle different error cases
-      let errorMessage = data.msg || 'Failed to bind FSL ID. Please try again later.';
+  const bind_fslid = async () => {
+    const apiLink = `${shared.server_url}/api/app/fslBinding?token=${shared.loginData.token}&code=${shared.fsl_binding_code}`;
+    console.log('Calling FSL Binding API:', apiLink);
+    try {
+      const response = await fetch(apiLink);
+      const data = await response.json();
+      console.log('FSL Binding finished:', data);
       
-      // Show error popup but don't block the app
-      shared.showPopup({
+      if (data.code === 0) {
+        return true;
+      } else {
+        let errorMessage = data.msg || 'Failed to bind FSL ID. Please try again later.';
+        liff.showPopup({
+          type: 0,
+          message: errorMessage
+        });
+        return false;
+      }
+    } catch (error) {
+      console.error('Error binding FSL ID:', error);
+      liff.showPopup({
         type: 0,
-        message: errorMessage
-      }).catch(err => console.error('Error showing popup:', err));
-      
+        message: 'Failed to bind FSL ID. Please try again later.'
+      });
       return false;
     }
-  } catch (error) {
-    console.error('Error binding FSL ID:', error);
-    // Show error popup but don't block the app
-    shared.showPopup({
-      type: 0,
-      message: 'Failed to bind FSL ID. Please try again later.'
-    }).catch(err => console.error('Error showing popup:', err));
-    
-    return false;
   }
-}
 
   const login = async () => {
     try {
@@ -187,41 +164,39 @@ const bind_fslid = async () => {
 
         console.log('Initializing app...');            
 
-        if (initDataRaw) {
-            const loginResult = await shared.login(initDataRaw);
-            
-            if (loginResult.success) {
-                if (shared.fsl_binding_code) {
-                  await bind_fslid();
-                }
-
-                setLoginData(loginResult.loginData);
-                setIsLoggedIn(true);
-
-                // Track session start and device info when user logs in
-                trackSessionStart(loginResult.loginData?.link);
-
-                await getProfileData(loginResult.loginData);
-
-                if (popup.open.isAvailable()) {
-                    const result = await checkIn(loginResult.loginData);
-                    if(result == 1) {
-                        setShowCheckInAnimation(true);
-                    }
-                }
-            } else {
-                console.log('User is not logged in');
-                setIsLoggedIn(false);
-
-                if (popup.open.isAvailable()) {
-                    const promise = popup.open({
-                        title: 'Error',
-                        message: loginResult.error,
-                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    });
-                    const buttonId = await promise;
-                }
+        const loginResult = await shared.login({
+            platform: 'line',
+            userId: user.userId,
+            displayName: user.displayName,
+            pictureUrl: user.pictureUrl,
+            statusMessage: user.statusMessage
+        });
+        
+        if (loginResult.success) {
+            if (shared.fsl_binding_code) {
+                await bind_fslid();
             }
+
+            setLoginData(loginResult.loginData);
+            setIsLoggedIn(true);
+
+            trackSessionStart(loginResult.loginData?.link);
+
+            await getProfileData(loginResult.loginData);
+
+            const result = await checkIn(loginResult.loginData);
+            if(result == 1) {
+                setShowCheckInAnimation(true);
+            }
+        } else {
+            console.log('Line user is not logged in');
+            setIsLoggedIn(false);
+            
+            liff.showPopup({
+                title: 'Error',
+                message: loginResult.error,
+                buttons: [{ text: 'OK' }]
+            });
         }
     } catch (error) {
         console.error('Initialization error:', error);
@@ -229,7 +204,7 @@ const bind_fslid = async () => {
         setIsLoading(false);
         initRef.current = false;
     }
-};
+  };
 
   const preloadImages = (imageUrls) => {
     const promises = imageUrls.map((url) => {
@@ -259,7 +234,6 @@ const bind_fslid = async () => {
       background,
       checkInAnimation,
       lock_icon,
-      // Add any other images you need to preload
     ];
 
     preloadImages(imageUrls)
@@ -268,37 +242,52 @@ const bind_fslid = async () => {
       })
       .catch((error) => {
         console.error('Error preloading images:', error);
-        setResourcesLoaded(true); // Proceed even if some images fail to load
+        setResourcesLoaded(true);
       });
   }, []);
 
   useEffect(() => {
     console.log('App useEffect called');
-    shared.initData = initDataRaw;
     shared.setActiveTab = setActiveTab;
 
-    // Get the hash without the # symbol
-    const hash = window.location.hash.substring(1);
+    const initializeLine = async () => {
+      try {
+        await liff.init({ 
+          liffId: '2007409525-zEYm88eE',
+          withLoginOnExternalBrowser: true
+        });
+        
+        // Check if user is logged in
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
 
-    // Create URLSearchParams object from the hash
-    const params = new URLSearchParams(hash);
-
-    // Get tgWebAppData parameter and decode it
-    const tgWebAppData = params.get('tgWebAppData');
-    const decodedData = decodeURIComponent(tgWebAppData);
-
-    // Create URLSearchParams object from the decoded data
-    const webAppParams = new URLSearchParams(decodedData);
-
-    // Get start_param
-    const startParam = webAppParams.get('start_param');
-    console.log('hash:', hash);
-    console.log('startParam:', startParam);
-
-    // get invite code from the start param
-    if (startParam) {
-        const paramsArray = startParam.split('__');
-        for (const param of paramsArray) {
+        const profile = await liff.getProfile();
+        console.log('Line User:', profile);
+        setUser(profile);
+        
+        // Debug information
+        const info = {
+          isLoggedIn: liff.isLoggedIn(),
+          os: liff.getOS(),
+          language: liff.getLanguage(),
+          version: liff.getVersion(),
+          lineVersion: liff.getLineVersion(),
+          context: liff.getContext(),
+          profile: profile,
+          urlParams: Object.fromEntries(new URLSearchParams(window.location.search))
+        };
+        
+        console.log('Debug Info:', info);
+        setDebugInfo(info);
+        
+        // Get URL parameters for Line
+        const urlParams = new URLSearchParams(window.location.search);
+        const startParam = urlParams.get('start_param');
+        if (startParam) {
+          const paramsArray = startParam.split('__');
+          for (const param of paramsArray) {
             if (param.startsWith('invite_')) {
               shared.inviteCode = param.split('_')[1];
               console.log('Invite Code:', shared.inviteCode);
@@ -307,35 +296,23 @@ const bind_fslid = async () => {
               shared.fsl_binding_code = param.split('_')[1];
               console.log('FSL Binding Code:', shared.fsl_binding_code);
             }
+          }
         }
-    }
 
-    // Initialize Telegram Mini App
-    init();
-    miniApp.ready();
-    miniApp.mount();
-    viewport.expand();
+        // Track initial device info even before login
+        trackDeviceInfo();
 
-    // Setup behaviors
-    // closingBehavior.mount();
-    // closingBehavior.enableConfirmation();
+        login();
+      } catch (err) {
+        console.error('LIFF initialization failed', err);
+        setDebugInfo({
+          error: err.message,
+          stack: err.stack
+        });
+      }
+    };
 
-    swipeBehavior.mount();        
-    swipeBehavior.disableVertical();
-
-    // Get user data
-    initData.restore();
-    const userData = initData.user();
-    console.log('User:', userData);
-    shared.telegramUserData = userData;
-    setUser(userData);
-
-    // Track initial device info even before login
-    trackDeviceInfo();
-
-    console.log("initDataRaw: ", initDataRaw);
-    login();
-    
+    initializeLine();
   }, []);
 
   useEffect(() => {
@@ -348,10 +325,8 @@ const bind_fslid = async () => {
   // Track tab changes
   useEffect(() => {
     if (previousTab) {
-      // Track navigation flow
       trackNavigation(previousTab, activeTab, shared.loginData?.link);
     }
-    // Track entry to new section
     trackSectionView(activeTab, shared.loginData?.link);
     setPreviousTab(activeTab);
   }, [activeTab]);
@@ -456,6 +431,82 @@ const bind_fslid = async () => {
     zIndex: 1000
   };
 
+  const DebugPopup = ({ info, onClose }) => {
+    if (!info) return null;
+    
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999,
+        padding: '20px'
+      }}>
+        <div style={{
+          backgroundColor: '#1a1a1a',
+          padding: '20px',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '500px',
+          maxHeight: '80vh',
+          overflow: 'auto',
+          border: '1px solid #333',
+          color: '#fff',
+          fontFamily: 'monospace'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '15px',
+            borderBottom: '1px solid #333',
+            paddingBottom: '10px'
+          }}>
+            <h3 style={{ 
+              margin: 0, 
+              color: '#00ff00',
+              fontSize: '18px',
+              fontWeight: 'bold'
+            }}>
+              Debug Info
+            </h3>
+            <button 
+              onClick={onClose}
+              style={{
+                border: 'none',
+                background: 'none',
+                fontSize: '24px',
+                cursor: 'pointer',
+                color: '#fff',
+                padding: '5px 10px'
+              }}
+            >
+              ×
+            </button>
+          </div>
+          <pre style={{
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            margin: 0,
+            fontSize: '14px',
+            color: '#00ff00',
+            backgroundColor: '#000',
+            padding: '10px',
+            borderRadius: '6px'
+          }}>
+            {JSON.stringify(info, null, 2)}
+          </pre>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="App">
       <div className="background-container">
@@ -464,7 +515,6 @@ const bind_fslid = async () => {
       {(isLoading || !resourcesLoaded) ? (
         <>
           <img src={loading_background} alt="Loading" className="loading-background" />
-          {/* <div className="loading">Loading...</div> */}
         </>
       ) 
       : !isLoggedIn ? (
@@ -582,6 +632,12 @@ const bind_fslid = async () => {
       )}
 
       <div style={versionStyle}>{buildVersion}</div>
+      
+      {/* Debug Popup */}
+      <DebugPopup 
+        info={debugInfo} 
+        onClose={() => setDebugInfo(null)} 
+      />
     </div>
   );
 }
