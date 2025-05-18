@@ -526,7 +526,38 @@ data object
             });
             await promise;
         }
-    }
+    },
+
+    // Add helper function for story sharing with referral
+    shareStoryWithReferral: async (type, media, text, buttonText = 'Join Now') => {
+        if (!shared.loginData?.link) {
+            console.error('No referral link available');
+            return false;
+        }
+
+        const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+        const shareText = `${text}\n\n${inviteLink}`;
+
+        try {
+            await shareStory({
+                media: media,
+                text: shareText,
+                button_text: buttonText,
+            });
+
+            // Track analytics
+            trackStoryShare(type, {
+                invite_link: inviteLink,
+                has_referral: true,
+                share_type: 'story_with_referral'
+            }, shared.loginData?.userId);
+
+            return true;
+        } catch (error) {
+            console.error('Error sharing story with referral:', error);
+            return false;
+        }
+    },
 
 };
 

@@ -114,23 +114,22 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
         return null;
     }
 
-    const onClickShareStory = () => {
+    const onClickShareStory = async () => {
         if (shareStory.isSupported()) {
-            const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
+            try {
+                const success = await shared.shareStoryWithReferral(
+                    'ticket_all',
+                    "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
+                    'I just scratched all my tickets and claimed amazing rewards! Join me to get your rewards too!'
+                );
 
-            shareStory(url, {
-                text: 'I just scratched all my tickets and claimed rewards!',
-            });
-
-            trackStoryShare('ticket_all', {
-                reward_claimed: true,
-                invite_link: inviteLink,
-                rewards_count: rewards.length
-            }, shared.loginData?.userId);
-
-            setShowShareStory(false);
-            claimRewardFromSharingStory();
+                if (success) {
+                    setShowShareStory(false);
+                    await claimRewardFromSharingStory();
+                }
+            } catch (error) {
+                console.error('Error sharing story:', error);
+            }
         }
     };
 
