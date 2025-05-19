@@ -7,23 +7,20 @@ const LINE_PAY_API_URL = 'https://api-pay.line.me/v2/payments';
 export const linePayment = {
   async createPayment(product) {
     try {
-      const data = {
-        productName: `${product.amount} Starlets`,
-        amount: product.stars,
-        currency: 'TWD', // Taiwan Dollar, có thể thay đổi tùy khu vực
-        orderId: `order_${Date.now()}`,
-        confirmUrl: `${shared.server_url}/payment/confirm`,
-        cancelUrl: `${shared.server_url}/payment/cancel`
-      };
-
-      const response = await fetch(`${LINE_PAY_API_URL}/request`, {
+      // Gọi backend để tạo payment request
+      const response = await fetch(`${shared.server_url}/api/app/createLinePayPayment`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-LINE-ChannelId': LINE_PAY_CHANNEL_ID,
-          'X-LINE-ChannelSecret': LINE_PAY_CHANNEL_SECRET
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          productName: `${product.amount} Starlets`,
+          amount: product.stars,
+          currency: 'TWD',
+          orderId: `order_${Date.now()}`,
+          confirmUrl: `${shared.server_url}/payment/confirm`,
+          cancelUrl: `${shared.server_url}/payment/cancel`
+        })
       });
 
       const jsonResponse = await response.json();
@@ -36,16 +33,14 @@ export const linePayment = {
 
   async confirmPayment(transactionId) {
     try {
-      const response = await fetch(`${LINE_PAY_API_URL}/confirm`, {
+      // Gọi backend để xác nhận payment
+      const response = await fetch(`${shared.server_url}/api/app/confirmLinePayPayment`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-LINE-ChannelId': LINE_PAY_CHANNEL_ID,
-          'X-LINE-ChannelSecret': LINE_PAY_CHANNEL_SECRET
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          transactionId: transactionId,
-          amount: 0 // Số tiền thực tế sẽ được lấy từ transaction
+          transactionId: transactionId
         })
       });
 

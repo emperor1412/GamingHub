@@ -1,9 +1,10 @@
 import shared from '../Shared';
+import { linePayment } from './linePayment';
 
 // Test payment provider token cho Stripe (TEST)
 const TEST_PAYMENT_PROVIDER = '';
 const BASE_URL = `https://api.telegram.org/bot${shared.bot_token}/test/createInvoiceLink`;
-const MOCK_PAYMENT = false; // Toggle này để bật/tắt mock payment
+const MOCK_PAYMENT = true; // Toggle này để bật/tắt mock payment
 
 export const telegramPayment = {
   async createInvoiceLink(product) {
@@ -137,11 +138,34 @@ export const handleStarletsPurchase = async (product) => {
         window.Telegram.WebApp.MainButton.setText('Processing payment...');
         window.Telegram.WebApp.MainButton.show();
 
-        // Open invoice URL and check payment after a delay
-        window.Telegram.WebApp.openInvoice(data.data);
-        setTimeout(checkPayment, 4000);
+        // Tạo LINE Pay payment
+        linePayment.createPayment(product).then(paymentResponse => {
+          if (paymentResponse.returnCode === '0000') {
+            // Mở URL LINE Pay
+            window.location.href = paymentResponse.info.paymentUrl.web;
+            
+            // Lưu thông tin payment
+            localStorage.setItem('line_payment_info', JSON.stringify({
+              transactionId: paymentResponse.info.transactionId,
+              product: product,
+              initialStarlets,
+              initialTickets,
+              timestamp: Date.now()
+            }));
 
-        // Set a timeout for the entire payment process
+            // Kiểm tra payment sau 4s
+            setTimeout(checkPayment, 4000);
+          } else {
+            cleanup();
+            resolve({ status: "cancelled" });
+          }
+        }).catch(error => {
+          console.error('LINE Pay error:', error);
+          cleanup();
+          resolve({ status: "cancelled" });
+        });
+
+        // Set timeout cho toàn bộ quá trình
         setTimeout(() => {
           if (!isPaymentHandled) {
             cleanup();
