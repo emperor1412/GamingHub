@@ -264,21 +264,32 @@ Response:
         try {
             trackUserAction('minigame_clicked', {
                 game_name: 'Tadokami',
-                game_url: shared.game_link,
+                game_url: shared.game_link
             }, shared.loginData?.link);
             
-            // Use Telegram WebApp API to open the mini app directly within Telegram
-            if (window.Telegram?.WebApp?.openTelegramLink) {
-                // This method will open the link within Telegram without launching a browser
-                window.Telegram.WebApp.openTelegramLink(shared.game_link);
+            // LINE Game Platform integration
+            if (window.liff?.openGame) {
+                // Open game in LINE Game Platform
+                window.liff.openGame({
+                    gameId: 'YOUR_LINE_GAME_ID', // Replace with your LINE Game ID
+                    gameUrl: shared.game_link,
+                    onSuccess: () => {
+                        console.log('Game opened successfully in LINE');
+                    },
+                    onError: (error) => {
+                        console.error('Error opening game in LINE:', error);
+                        // Fallback to browser
+                        window.open(shared.game_link, '_blank');
+                    }
+                });
             } else {
-                // Fallback to SDK method if the direct method isn't available
-                openLink(shared.game_link);
+                // Fallback to browser if LINE Game Platform is not available
+                window.open(shared.game_link, '_blank');
             }
         } catch (e) {
             console.log('Error opening Tadokami game:', e);
             // Fallback in case of error
-            openLink(shared.game_link);
+            window.open(shared.game_link, '_blank');
         }
     }
 
