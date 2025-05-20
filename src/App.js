@@ -168,10 +168,10 @@ function App() {
 
         const loginResult = await shared.login({
             platform: 'line',
-            userId: user.userId,
-            displayName: user.displayName,
-            pictureUrl: user.pictureUrl,
-            statusMessage: user.statusMessage
+            userId: 'mock_user_id', // Mock user ID
+            displayName: 'Mock User',
+            pictureUrl: 'https://example.com/mock.jpg',
+            statusMessage: 'Mock status'
         });
         
         if (loginResult.success) {
@@ -304,6 +304,8 @@ function App() {
         // Track initial device info even before login
         trackDeviceInfo();
 
+        // Wait for user state to be updated
+        await new Promise(resolve => setTimeout(resolve, 0));
         login();
       } catch (err) {
         console.error('LIFF initialization failed', err);
@@ -636,10 +638,10 @@ function App() {
       <div style={versionStyle}>{buildVersion}</div>
       
       {/* Debug Popup */}
-      <DebugPopup 
+      {/* <DebugPopup 
         info={debugInfo} 
         onClose={() => setDebugInfo(null)} 
-      />
+      /> */}
     </div>
   );
 }
