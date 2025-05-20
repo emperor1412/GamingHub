@@ -1,5 +1,7 @@
 import shared from '../Shared';
 
+const LINE_PAY_CHANNEL_ID = '2007433542';
+
 // Mock API responses
 const mockResponses = {
   // Login
@@ -151,11 +153,11 @@ const mockResponses = {
       returnMessage: "Success",
       info: {
         paymentUrl: {
-          web: "https://pay.line.me/linepay/payment/123456789",
-          app: "line://pay/123456789"
+          web: `https://pay.line.me/linepay/payment/${LINE_PAY_CHANNEL_ID}`,
+          app: `line://pay/${LINE_PAY_CHANNEL_ID}`
         },
         paymentAccessToken: "mock_token_123",
-        transactionId: "mock_payment_123"
+        transactionId: `mock_payment_${Date.now()}`
       }
     }
   },
@@ -319,6 +321,36 @@ const mockResponses = {
   }
 };
 
+// List of endpoints that should be mocked
+const mockEndpoints = [
+  '/api/app/login',
+  '/api/app/checkIn',
+  '/api/app/userData',
+  '/api/app/taskList',
+  '/api/app/taskComplete',
+  '/api/app/taskData',
+  '/api/app/buyOptions',
+  '/api/app/getFreeRewardTime',
+  '/api/app/claimFreeReward',
+  '/api/app/getEvents',
+  '/api/app/eventPointData',
+  '/api/app/globalEggletsProgress',
+  '/api/app/ticketSlot',
+  '/api/app/ticketUse',
+  '/api/app/sharingStory',
+  '/api/app/sharingTrophy',
+  '/api/app/changePicture',
+  '/api/app/handleReferral',
+  '/api/app/getReferralInfo',
+  '/api/app/claimBankSteps',
+  '/api/app/getBankSteps',
+  '/api/app/trophiesData',
+  '/api/app/unlockTrophy',
+  '/api/app/frensData',
+  '/api/app/createLinePayPayment',
+  '/api/app/confirmLinePayPayment'
+];
+
 // Mock API service
 const mockApi = {
   async fetch(url, options = {}) {
@@ -326,6 +358,11 @@ const mockApi = {
     
     // Extract the API endpoint from the URL
     const endpoint = url.split('?')[0].split(shared.server_url)[1];
+    
+    // If endpoint is not in mockEndpoints list, use original fetch
+    if (!mockEndpoints.includes(endpoint)) {
+      return originalFetch(url, options);
+    }
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 500));

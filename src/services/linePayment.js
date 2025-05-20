@@ -1,7 +1,8 @@
 import shared from '../Shared';
+import liff from '@line/liff';
 
-const LINE_PAY_CHANNEL_ID = ''; // LINE Pay Channel ID
-const LINE_PAY_CHANNEL_SECRET = ''; // LINE Pay Channel Secret
+const LINE_PAY_CHANNEL_ID = '2007433542'; // LINE Pay Channel ID
+const LINE_PAY_CHANNEL_SECRET = process.env.REACT_APP_LINE_PAY_CHANNEL_SECRET; // LINE Pay Channel Secret from environment variable
 const LINE_PAY_API_URL = 'https://api-pay.line.me/v2/payments';
 
 export const linePayment = {
@@ -11,19 +12,25 @@ export const linePayment = {
       const response = await fetch(`${shared.server_url}/api/app/createLinePayPayment`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${shared.loginData?.token}`
         },
         body: JSON.stringify({
           productName: `${product.amount} Starlets`,
           amount: product.stars,
           currency: 'TWD',
           orderId: `order_${Date.now()}`,
-          confirmUrl: `${shared.server_url}/payment/confirm`,
-          cancelUrl: `${shared.server_url}/payment/cancel`
+          confirmUrl: `${window.location.origin}/payment/confirm`,
+          cancelUrl: `${window.location.origin}/payment/cancel`
         })
       });
 
       const jsonResponse = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(jsonResponse.message || 'Failed to create payment');
+      }
+      
       return jsonResponse;
     } catch (error) {
       console.error('LINE Pay API Error:', error);
@@ -37,7 +44,8 @@ export const linePayment = {
       const response = await fetch(`${shared.server_url}/api/app/confirmLinePayPayment`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${shared.loginData?.token}`
         },
         body: JSON.stringify({
           transactionId: transactionId
@@ -45,6 +53,11 @@ export const linePayment = {
       });
 
       const jsonResponse = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(jsonResponse.message || 'Failed to confirm payment');
+      }
+      
       return jsonResponse;
     } catch (error) {
       console.error('LINE Pay Confirmation Error:', error);
