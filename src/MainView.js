@@ -264,32 +264,18 @@ Response:
         try {
             trackUserAction('minigame_clicked', {
                 game_name: 'Tadokami',
-                game_url: shared.game_link
+                game_url: 'https://liff.line.me/2007433542-kEVqEBd3'
             }, shared.loginData?.link);
             
-            // LINE Game Platform integration
-            if (window.liff?.openGame) {
-                // Open game in LINE Game Platform
-                window.liff.openGame({
-                    gameId: 'YOUR_LINE_GAME_ID', // Replace with your LINE Game ID
-                    gameUrl: shared.game_link,
-                    onSuccess: () => {
-                        console.log('Game opened successfully in LINE');
-                    },
-                    onError: (error) => {
-                        console.error('Error opening game in LINE:', error);
-                        // Fallback to browser
-                        window.open(shared.game_link, '_blank');
-                    }
-                });
-            } else {
-                // Fallback to browser if LINE Game Platform is not available
-                window.open(shared.game_link, '_blank');
-            }
+            // Open LIFF URL
+            liff.openWindow({
+                url: 'https://liff.line.me/2007433542-kEVqEBd3',
+                external: false
+            });
         } catch (e) {
-            console.log('Error opening Tadokami game:', e);
-            // Fallback in case of error
-            window.open(shared.game_link, '_blank');
+            console.log('Error opening LIFF:', e);
+            // Fallback to browser
+            window.open('https://liff.line.me/2007433542-kEVqEBd3', '_blank');
         }
     }
 

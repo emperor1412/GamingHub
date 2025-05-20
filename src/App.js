@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import './Share.css';
-// import liff from '@line/liff';
-import liff from './mock/liff';
+import liff from '@line/liff';
+// import liff from './mock/liff';
 import './mock/api';  // Import mock API
 
 import MainView from './MainView';
