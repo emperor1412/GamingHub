@@ -33,6 +33,8 @@ import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 
+import liff from '@line/liff';
+
 let isMouseDown = false;
 let startX;
 let startDragX;
@@ -264,21 +266,18 @@ Response:
         try {
             trackUserAction('minigame_clicked', {
                 game_name: 'Tadokami',
-                game_url: shared.game_link,
+                game_url: 'https://liff.line.me/2007433542-kEVqEBd3'
             }, shared.loginData?.link);
             
-            // Use Telegram WebApp API to open the mini app directly within Telegram
-            if (window.Telegram?.WebApp?.openTelegramLink) {
-                // This method will open the link within Telegram without launching a browser
-                window.Telegram.WebApp.openTelegramLink(shared.game_link);
-            } else {
-                // Fallback to SDK method if the direct method isn't available
-                openLink(shared.game_link);
-            }
+            // Open LIFF URL
+            liff.openWindow({
+                url: 'https://liff.line.me/2007433542-kEVqEBd3',
+                external: false
+            });
         } catch (e) {
-            console.log('Error opening Tadokami game:', e);
-            // Fallback in case of error
-            openLink(shared.game_link);
+            console.log('Error opening LIFF:', e);
+            // Fallback to browser
+            window.open('https://liff.line.me/2007433542-kEVqEBd3', '_blank');
         }
     }
 
