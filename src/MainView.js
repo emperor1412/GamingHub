@@ -33,6 +33,8 @@ import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 
+import liff from '@line/liff';
+
 let isMouseDown = false;
 let startX;
 let startDragX;
