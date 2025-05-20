@@ -55,6 +55,7 @@ import loading_background from "./images/GamesHubLoading.png";
 
 import { analytics } from './Firebase';
 import Market from './Market';
+import { lineShare } from './services/lineShare';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -185,6 +186,9 @@ function App() {
             trackSessionStart(loginResult.loginData?.link);
 
             await getProfileData(loginResult.loginData);
+
+            // Check for referral after successful login
+            await lineShare.checkAndHandleReferral();
 
             const result = await checkIn(loginResult.loginData);
             if(result == 1) {

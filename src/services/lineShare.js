@@ -1,91 +1,59 @@
 import shared from '../Shared';
 import { trackStoryShare, trackUserAction } from '../analytics';
+import liff from '@line/liff';
 
 export const lineShare = {
   // Tạo link share với referral code
   generateShareLink(referralCode) {
-    return `${shared.app_link}?startapp=invite_${referralCode}`;
+    const inviteLink = `${shared.app_link}?startapp=invite_${referralCode}`;
+    console.log('Generated invite link:', inviteLink);
+    return inviteLink;
   },
 
   // Share thông qua LINE
   async shareToLine(product, referralCode) {
     try {
-      // Tạo nội dung share
-      const shareContent = {
-        type: 'flex',
-        altText: `Join me in ${product.amount} Starlets!`,
-        contents: {
-          type: 'bubble',
-          header: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'text',
-                text: '🎮 Join the Game!',
-                weight: 'bold',
-                size: 'xl',
-                color: '#ffffff'
-              }
-            ],
-            backgroundColor: '#27AE60',
-            paddingAll: '20px'
-          },
-          body: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'text',
-                text: `Get ${product.amount} Starlets and 10 Tickets!`,
-                wrap: true,
-                color: '#666666',
-                size: 'md',
-                margin: 'md'
-              },
-              {
-                type: 'text',
-                text: 'Use my referral code to get bonus rewards!',
-                wrap: true,
-                color: '#666666',
-                size: 'sm',
-                margin: 'md'
-              }
-            ]
-          },
-          footer: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'button',
-                style: 'primary',
-                color: '#27AE60',
-                action: {
-                  type: 'uri',
-                  label: 'Join Now',
-                  uri: this.generateShareLink(referralCode)
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      // Sử dụng LINE LIFF API để share
-      if (window.liff) {
-        await window.liff.shareTargetPicker([shareContent]);
-        
-        // Track share event
-        trackStoryShare('line_share', {
-          product_amount: product.amount,
-          referral_code: referralCode
-        }, shared.loginData?.userId);
-
-        return true;
-      } else {
+      if (!window.liff) {
         throw new Error('LIFF is not initialized');
       }
+
+      // Tạo URL với referral code
+      const shareUrl = this.generateShareLink(referralCode);
+      const shareText = `🎮 Join with me!\n\nGet ${product.amount} Starlets and 10 Tickets!\n\nUse my referral code to get bonus rewards!\n\n${shareUrl}`;
+      
+      // Log share URL và text
+      console.log('Share URL:', shareUrl);
+      console.log('Share text:', shareText);
+
+      // Kiểm tra xem shareTargetPicker có khả dụng không
+      if (!liff.isApiAvailable('shareTargetPicker')) {
+        console.log('shareTargetPicker not available, showing popup');
+        // Hiển thị popup thông báo
+        await shared.showPopup({
+          type: 1, // Notice type
+          title: 'Share Not Available',
+          message: 'Please open this app in LINE app to share with your friends.'
+        });
+        return false;
+      }
+
+      // Tạo share content
+      const shareContent = {
+        type: 'text',
+        text: shareText
+      };
+      console.log('Share content:', shareContent);
+
+      // Share trực tiếp trong LINE app
+      await liff.shareTargetPicker([shareContent]);
+      
+      // Track share event
+      trackStoryShare('line_share', {
+        product_amount: product.amount,
+        referral_code: referralCode
+      }, shared.loginData?.userId);
+
+      return true;
     } catch (error) {
       console.error('Share error:', error);
       throw error;
@@ -96,12 +64,26 @@ export const lineShare = {
   async shareStory(imageUrl, text, type = 'general') {
     try {
       if (window.liff) {
-        await window.liff.shareTargetPicker([{
+        // Kiểm tra xem shareTargetPicker có khả dụng không
+        if (!liff.isApiAvailable('shareTargetPicker')) {
+          // Hiển thị popup thông báo
+          await shared.showPopup({
+            type: 1, // Notice type
+            title: 'Share Not Available',
+            message: 'Please open this app in LINE app to share with your friends.'
+          });
+          return false;
+        }
+
+        // Tạo share content với hình ảnh
+        const shareContent = {
           type: 'image',
           originalContentUrl: imageUrl,
-          previewImageUrl: imageUrl,
-          text: text
-        }]);
+          previewImageUrl: imageUrl
+        };
+
+        // Share trực tiếp trong LINE app
+        await liff.shareTargetPicker([shareContent]);
 
         // Track story share
         trackStoryShare(`line_story_${type}`, {
@@ -114,52 +96,6 @@ export const lineShare = {
       return false;
     } catch (error) {
       console.error('Story share error:', error);
-      throw error;
-    }
-  },
-
-  // Xử lý referral khi người dùng mới vào
-  async handleReferral() {
-    try {
-      // Lấy referral code từ URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const referralCode = urlParams.get('ref');
-
-      if (referralCode) {
-        // Gọi API để xác thực và xử lý referral
-        const response = await fetch(`${shared.server_url}/api/app/handleReferral`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            referralCode,
-            userId: shared.userProfile?.userId,
-            token: shared.loginData.token,
-            platform: 'line'
-          })
-        });
-
-        const data = await response.json();
-        if (data.code === 0) {
-          // Track successful referral
-          trackUserAction('referral_success', {
-            referral_code: referralCode,
-            platform: 'line'
-          }, shared.loginData?.userId);
-
-          // Xóa referral code khỏi URL
-          window.history.replaceState({}, document.title, window.location.pathname);
-          return {
-            success: true,
-            message: 'Referral processed successfully',
-            rewards: data.rewards
-          };
-        }
-      }
-      return { success: false };
-    } catch (error) {
-      console.error('Referral handling error:', error);
       throw error;
     }
   },

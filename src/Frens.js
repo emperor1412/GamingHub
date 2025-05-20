@@ -3,6 +3,7 @@ import { shareStory, shareURL } from '@telegram-apps/sdk';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from './Firebase';
 import { trackUserAction, trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
+import { lineShare } from './services/lineShare';
 
 import './Frens.css';
 import shared from './Shared';
@@ -39,6 +40,7 @@ const Frens = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalFriends, setTotalFriends] = useState(0);
   const [earnedTickets, setEarnedTickets] = useState(0);
+  const [isSharing, setIsSharing] = useState(false);
 
 
 
@@ -387,18 +389,47 @@ const Frens = () => {
     }
   };
 
-  const onClickInviteFriends = () => {
-    console.log('Invite friends');
-    const url = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-    console.log('Invite friends URL:', url);
+  const onClickInviteFriends = async () => {
+    if (isSharing) return; // Prevent multiple clicks
     
-    // Log the invite friends event
-    logEvent(analytics, 'invite_friends_clicked', {
+    console.log('Invite friends');
+    setIsSharing(true);
+    
+    try {
+      // Log the invite friends event
+      logEvent(analytics, 'invite_friends_clicked', {
         userId: shared.loginData?.userId || 'unknown',
         timestamp: new Date().toISOString()
-    });
-    
-    shareURL(url);
+      });
+
+      // Log referral code for debugging
+      console.log('Referral code:', shared.loginData?.link);
+
+      // Share using LINE
+      const success = await lineShare.shareToLine({
+        amount: '10', // Default amount for new users
+      }, shared.loginData?.link);
+
+      if (success) {
+        // Show success message
+        shared.showPopup({
+          type: 1,
+          message: 'Share link created successfully! Your friends can now join using your referral code.',
+          title: 'Success'
+        });
+      }
+
+    } catch (error) {
+      console.error('Error sharing to LINE:', error);
+      // Show error popup
+      shared.showPopup({
+        type: 0,
+        message: error.message || 'Failed to share. Please try again.',
+        title: 'Error'
+      });
+    } finally {
+      setIsSharing(false);
+    }
   };
 
   const handleTrophyClick = (trophy) => {
@@ -568,8 +599,12 @@ const Frens = () => {
               {renderFriendsList()}
             </div>
             <div className="invite-button-container">
-              <button className="invite-button" onClick={onClickInviteFriends}>
-                Invite Friends
+              <button 
+                className={`invite-button ${isSharing ? 'loading' : ''}`} 
+                onClick={onClickInviteFriends}
+                disabled={isSharing}
+              >
+                {isSharing ? 'Sharing...' : 'Invite Friends'}
                 <img src={link} alt="Link" className="invite-icon" />
               </button>
             </div>
