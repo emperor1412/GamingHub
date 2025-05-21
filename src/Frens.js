@@ -368,24 +368,29 @@ const Frens = () => {
     }
   };
 
-  const onClickShareStory = () => {
+  const onClickShareStory = async () => {
     console.log('Share story');
     closeOverlay();
 
-    if (shareStory.isSupported()) {
-      // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
+    try {
       const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2542.png";
-      shareStory(url, {
-        text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
-      });
+      const success = await lineShare.shareStory(
+        url,
+        'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
+        'trophy'
+      );
 
-      trackStoryShare('trophy', {
-        trophy_id: selectedTrophy.id,
-        trophy_name: selectedTrophy.name,
-        trophy_status: selectedTrophy.status
-      }, shared.loginData?.userId);
+      if (success) {
+        trackStoryShare('trophy', {
+          trophy_id: selectedTrophy.id,
+          trophy_name: selectedTrophy.name,
+          trophy_status: selectedTrophy.status
+        }, shared.loginData?.userId);
 
-      shareStoryAPI(selectedTrophy.id);
+        shareStoryAPI(selectedTrophy.id);
+      }
+    } catch (error) {
+      console.error('Error sharing story:', error);
     }
   };
 
@@ -446,6 +451,36 @@ const Frens = () => {
     trackOverlayExit('trophy_details', shared.loginData?.link, 'frens');
     setShowOverlay(false);
     setSelectedTrophy(null);
+  };
+
+  const onClickTestShare = async () => {
+    try {
+      // Sử dụng URL hình ảnh từ một nguồn công khai khác
+      const url = "https://picsum.photos/800/600";
+      const success = await lineShare.shareStory(
+        url,
+        'Test share story functionality! 🎮',
+        'test'
+      );
+
+      if (success) {
+        console.log('Test share successful');
+        // Show success message
+        shared.showPopup({
+          type: 1,
+          message: 'Test share successful! Check console for details.',
+          title: 'Success'
+        });
+      }
+    } catch (error) {
+      console.error('Test share error:', error);
+      // Show error message
+      shared.showPopup({
+        type: 0,
+        message: error.message || 'Test share failed. Please try again.',
+        title: 'Error'
+      });
+    }
   };
 
   useEffect(() => {
@@ -562,6 +597,25 @@ const Frens = () => {
   return (
     <div className="frens-content">
       <div className="frens-inner-content">
+        <button 
+          className="test-share-button" 
+          onClick={onClickTestShare}
+          style={{
+            margin: '10px 0',
+            padding: '10px 20px',
+            backgroundColor: '#0000FF',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontFamily: '"PP Neue Machina"',
+            fontSize: '14px',
+            fontWeight: 'bold'
+          }}
+        >
+          Test Share Story
+        </button>
+
         <div className="info-box">
         Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
         </div>

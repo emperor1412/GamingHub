@@ -61,41 +61,122 @@ export const lineShare = {
   },
 
   // Share story với hình ảnh
-  async shareStory(imageUrl, text, type = 'general') {
+  async shareStory(imageUrl, text, type = 'general', storyMethod = 'deeplink') {
     try {
+      console.log('Starting story share with method:', storyMethod);
+      console.log('Share details:', { imageUrl, text, type });
+
+      // Kiểm tra môi trường
       if (window.liff) {
-        // Kiểm tra xem shareTargetPicker có khả dụng không
-        if (!liff.isApiAvailable('shareTargetPicker')) {
-          // Hiển thị popup thông báo
-          await shared.showPopup({
-            type: 1, // Notice type
-            title: 'Share Not Available',
-            message: 'Please open this app in LINE app to share with your friends.'
-          });
-          return false;
+        console.log('Running in LINE mini app');
+        // Trong LINE mini app
+        if (storyMethod === 'social' && window.LineSocial) {
+          console.log('Attempting to use LINE Social API');
+          // Sử dụng LINE Social API
+          try {
+            await window.LineSocial.shareStory({
+              imageUrl: imageUrl,
+              text: text
+            });
+            console.log('Story shared via LINE Social API successfully');
+          } catch (error) {
+            console.error('LINE Social API error:', error);
+            console.log('Falling back to deep link method');
+            // Fallback to deep link if Social API fails
+            this.openLineStoryDeepLink(imageUrl, text);
+          }
+        } else {
+          console.log('Using LINE Deep Link method');
+          // Sử dụng LINE Deep Link
+          this.openLineStoryDeepLink(imageUrl, text);
         }
-
-        // Tạo share content với hình ảnh
-        const shareContent = {
-          type: 'image',
-          originalContentUrl: imageUrl,
-          previewImageUrl: imageUrl
-        };
-
-        // Share trực tiếp trong LINE app
-        await liff.shareTargetPicker([shareContent]);
-
-        // Track story share
-        trackStoryShare(`line_story_${type}`, {
-          image_url: imageUrl,
-          share_text: text
-        }, shared.loginData?.userId);
-
-        return true;
+      } else {
+        console.log('Running in browser environment');
+        // Trong browser
+        console.log('Showing story info in browser:', {
+          imageUrl,
+          text
+        });
+        await shared.showPopup({
+          type: 1,
+          title: 'Story Info',
+          message: `Image URL: ${imageUrl}\n\nStory Text: ${text}\n\nPlease open LINE app to create story.`
+        });
       }
-      return false;
+
+      // Track story share
+      trackStoryShare(`line_story_${type}`, {
+        image_url: imageUrl,
+        share_text: text,
+        story_method: storyMethod,
+        environment: window.liff ? 'line_mini_app' : 'browser'
+      }, shared.loginData?.userId);
+
+      return true;
     } catch (error) {
       console.error('Story share error:', error);
+      // Hiển thị thông báo lỗi chi tiết hơn
+      await shared.showPopup({
+        type: 0,
+        title: 'Share Error',
+        message: `Failed to share story: ${error.message || 'Unknown error'}\n\nPlease try again or contact support.`
+      });
+      throw error;
+    }
+  },
+
+  // Helper function để mở LINE story qua Deep Link
+  openLineStoryDeepLink(imageUrl, text) {
+    try {
+      console.log('Preparing LINE story deep link');
+      
+      // Validate và encode parameters
+      if (!imageUrl) {
+        throw new Error('Image URL is required');
+      }
+
+      // Encode parameters an toàn hơn
+      const encodedImageUrl = encodeURIComponent(imageUrl.trim());
+      const encodedText = encodeURIComponent((text || '').trim());
+
+      // Tạo deep link với format chuẩn cho LINE story
+      // Thử format khác cho LINE story
+      const lineStoryUrl = `line://msg/story/${encodedImageUrl}?text=${encodedText}`;
+      
+      // Validate URL format
+      if (!lineStoryUrl.startsWith('line://')) {
+        throw new Error('Invalid LINE deep link format');
+      }
+
+      // Kiểm tra độ dài URL (LINE có giới hạn độ dài URL)
+      if (lineStoryUrl.length > 2000) {
+        throw new Error('URL is too long');
+      }
+
+      console.log('Generated deep link:', lineStoryUrl);
+
+      // Thử mở deep link
+      window.location.href = lineStoryUrl;
+      
+      // Fallback nếu không mở được
+      setTimeout(() => {
+        // Nếu không mở được LINE app, hiển thị thông báo
+        if (document.hidden === false) {
+          shared.showPopup({
+            type: 0,
+            title: 'Cannot Open LINE',
+            message: 'Please make sure LINE app is installed and try again.'
+          });
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error opening LINE deep link:', error);
+      shared.showPopup({
+        type: 0,
+        title: 'Share Error',
+        message: `Failed to open LINE: ${error.message}`
+      });
       throw error;
     }
   },

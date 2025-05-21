@@ -1,10 +1,11 @@
 import React from 'react';
 import './TicketAllResults.css';
-import { shareStory, popup } from '@telegram-apps/sdk';
+import { popup } from '@telegram-apps/sdk';
 import shared from './Shared';
 import { trackStoryShare } from './analytics';
 import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
+import { lineShare } from './services/lineShare';
 
 /*- API for Scratching all the current available tickets
     - Request:
@@ -115,21 +116,19 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
     }
 
     const onClickShareStory = async () => {
-        if (shareStory.isSupported()) {
-            try {
-                const success = await shared.shareStoryWithReferral(
-                    'ticket_all',
-                    "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
-                    'I just scratched all my tickets and claimed amazing rewards! Join me to get your rewards too!'
-                );
+        try {
+            const success = await lineShare.shareStory(
+                "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
+                'I just scratched all my tickets and claimed amazing rewards! Join me to get your rewards too!',
+                'ticket_all'
+            );
 
-                if (success) {
-                    setShowShareStory(false);
-                    await claimRewardFromSharingStory();
-                }
-            } catch (error) {
-                console.error('Error sharing story:', error);
+            if (success) {
+                setShowShareStory(false);
+                await claimRewardFromSharingStory();
             }
+        } catch (error) {
+            console.error('Error sharing story:', error);
         }
     };
 
