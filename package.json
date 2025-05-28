@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@line/liff": "^2.26.0",
+    "@line/liff": "^2.26.1",
     "@solana/web3.js": "^1.98.0",
     "@telegram-apps/sdk": "^2.6.0",
     "@testing-library/jest-dom": "^5.17.0",

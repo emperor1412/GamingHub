@@ -255,7 +255,7 @@ function App() {
     const initializeLine = async () => {
       try {
         await liff.init({ 
-          liffId: '2007409525-zEYm88eE',
+          liffId: '2007483147-wdK507yD',
           withLoginOnExternalBrowser: true
         });
         
@@ -278,6 +278,7 @@ function App() {
           lineVersion: liff.getLineVersion(),
           context: liff.getContext(),
           profile: profile,
+          idtoken: liff.getIDToken(),
           urlParams: Object.fromEntries(new URLSearchParams(window.location.search))
         };
         
@@ -638,10 +639,10 @@ function App() {
       <div style={versionStyle}>{buildVersion}</div>
       
       {/* Debug Popup */}
-      {/* <DebugPopup 
+      <DebugPopup 
         info={debugInfo} 
         onClose={() => setDebugInfo(null)} 
-      /> */}
+      />
     </div>
   );
 }
