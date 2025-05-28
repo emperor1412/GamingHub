@@ -255,7 +255,7 @@ function App() {
     const initializeLine = async () => {
       try {
         await liff.init({ 
-          liffId: '2007483147-wdK507yD',
+          liffId: '2007488153-aBQgjwyL',
           withLoginOnExternalBrowser: true
         });
         
