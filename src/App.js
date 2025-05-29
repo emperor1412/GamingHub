@@ -166,12 +166,17 @@ function App() {
 
         console.log('Initializing app...');            
 
+        const profile = await liff.getProfile();
+        console.log('Line User:', profile);
+        setUser(profile);
+        
         const loginResult = await shared.login({
             platform: 'line',
-            userId: 'mock_user_id', // Mock user ID
-            displayName: 'Mock User',
-            pictureUrl: 'https://example.com/mock.jpg',
-            statusMessage: 'Mock status'
+            userId: profile.userId,
+            displayName: profile.displayName,
+            pictureUrl: profile.pictureUrl,
+            statusMessage: profile.statusMessage,
+            fslId: 0 // Ensure FSL ID is not bound
         });
         
         if (loginResult.success) {
