@@ -55,6 +55,7 @@ import loading_background from "./images/GamesHubLoading.png";
 
 import { analytics } from './Firebase';
 import Market from './Market';
+import { lineShare } from './services/lineShare';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -191,6 +192,9 @@ function App() {
 
             await getProfileData(loginResult.loginData);
 
+            // Check for referral after successful login
+            await lineShare.checkAndHandleReferral();
+
             const result = await checkIn(loginResult.loginData);
             if(result == 1) {
                 setShowCheckInAnimation(true);
@@ -277,14 +281,14 @@ function App() {
         // Debug information
         const info = {
           isLoggedIn: liff.isLoggedIn(),
-          os: liff.getOS(),
-          language: liff.getLanguage(),
-          version: liff.getVersion(),
-          lineVersion: liff.getLineVersion(),
-          context: liff.getContext(),
-          profile: profile,
-          idtoken: liff.getIDToken(),
-          urlParams: Object.fromEntries(new URLSearchParams(window.location.search))
+          os: liff.getOS(),               // thông tin device/platform
+          language: liff.getLanguage(),  // ngôn ngữ người dùng
+          version: liff.getVersion(),    // phiên bản LIFF app
+          lineVersion: liff.getLineVersion(), // phiên bản LINE app (nếu có)
+          context: liff.getContext(),    // thông tin context (nếu backend cần)
+          profile: profile,              // thông tin user (userId, displayName, pictureUrl)
+          urlParams: Object.fromEntries(new URLSearchParams(window.location.search)),
+          idToken: await liff.getIDToken()  // **bắt buộc phải có để backend verify user**
         };
         
         console.log('Debug Info:', info);
