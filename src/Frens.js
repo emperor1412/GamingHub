@@ -20,6 +20,8 @@ import trophy_10000 from './images/trophy_10000_200px.png';
 import trophy_10000_locked from './images/trophy_10000_locked.png';
 import trophy_10010 from './images/Trophy-ALPHA_TESTER_Unlocked.png';
 import trophy_10010_locked from './images/Trophy-ALPHA_TESTER2-Locked.png';
+import trophy_10020 from './images/Runner-Trophy_Colour.png';
+import trophy_10020_locked from './images/Runner-Trophy_Bw.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -105,12 +107,14 @@ const Frens = () => {
     5: trophy_5,
     6: trophy_6,
     10000: trophy_10000,
-    10010: trophy_10010
+    10010: trophy_10010,
+    10020: trophy_10020
   }
   
   const trophyIconLocked = {
     10000: trophy_10000_locked,
-    10010: trophy_10010_locked
+    10010: trophy_10010_locked,
+    10020: trophy_10020_locked
   }
   
   const getTrophyData = async (depth = 0) => {
