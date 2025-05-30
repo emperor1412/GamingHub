@@ -8,7 +8,7 @@ import energy from './images/energy.svg';
 import mooar from './images/Mooar.svg';
 import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
 import stepn_go_code from './images/stepngo_code.png';
-import alpha_chest from './images/Backpack.png';
+import alpha_chest from './images/Chest_Icon.png';
 
 import avatar1 from './images/avatar_1_Dino_300px.png';
 import avatar2 from './images/avatar_2_Chef_Cat_300px.png';
