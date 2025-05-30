@@ -299,34 +299,28 @@ const Tasks = ({
 
     const fetchTaskList = async (depth = 0) => {
         try {
-            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Tasks List:', data);
+            const data = await shared.api.getTaskList(shared.loginData.token);
+            console.log('Tasks List:', data);
 
-                if (data.code === 0) {
-                    const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
-                    setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
-                    setTasksStandard(sortedTasks.filter(task => task.category === 1));
-                    setTasksDaily(sortedTasks.filter(task => task.category === 2));
-                    setTasksPartner(sortedTasks.filter(task => task.category === 3));
-                }
-                else if (data.code === 102001 || data.code === 102002) {
-                    console.log('Get Task list error:', data)
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        fetchTaskList(depth + 1);
-                    }
-                    else {
-                        console.error('Error fetching tasks:', result.error);
-                    }
+            if (data.code === 0) {
+                const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
+                setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
+                setTasksStandard(sortedTasks.filter(task => task.category === 1));
+                setTasksDaily(sortedTasks.filter(task => task.category === 2));
+                setTasksPartner(sortedTasks.filter(task => task.category === 3));
+            }
+            else if (data.code === 102001 || data.code === 102002) {
+                console.log('Get Task list error:', data)
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    fetchTaskList(depth + 1);
                 }
                 else {
-                    console.log('Get Task list error:', data)
+                    console.error('Error fetching tasks:', result.error);
                 }
             }
             else {
-                console.error('Error fetching tasks:', response);
+                console.log('Get Task list error:', data)
             }
         } catch (error) {
             console.error('Error fetching tasks:', error);
@@ -346,38 +340,26 @@ const Tasks = ({
 
         let retVal;
         try {
-            const response = await fetch(`${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskId}&answerIndex=${answerIndex}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Task complete:', data);
-                if (data.code === 0) {
-                    retVal = data.data.rewardList;
-                    await shared.getProfileWithRetry();
-                    setupProfileData();
-                    fetchTaskList();
-                }
-                else if (data.code === 102001 || data.code === 102002) {
-                    console.log('Complete Task error:', data)
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        completeTask(taskId, depth + 1);
-                    }
-                    else {
-                        console.error('Error completing task:', result.error);
-                    }
+            const data = await shared.api.completeTask(shared.loginData.token, taskId, answerIndex);
+            console.log('Task complete:', data);
+            if (data.code === 0) {
+                retVal = data.data.rewardList;
+                await shared.getProfileWithRetry();
+                setupProfileData();
+                fetchTaskList();
+            }
+            else if (data.code === 102001 || data.code === 102002) {
+                console.log('Complete Task error:', data)
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    completeTask(taskId, depth + 1);
                 }
                 else {
-                    console.log('Complete Task error:', data)
+                    console.error('Error completing task:', result.error);
                 }
             }
             else {
-                console.error('Error completing task:', response);
+                console.log('Complete Task error:', data)
             }
         } catch (error) {
             console.error('Error completing task:', error);
@@ -390,40 +372,27 @@ const Tasks = ({
 
     const fetchTaskDataAndShow = async (task, depth = 0) => {
         console.log('fetchTaskDataAndShow:', task);
-        const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
-            method: 'GET',
-            // body: JSON.stringify({ id: task.id })
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            const data = await shared.api.getTaskData(shared.loginData.token, task.id);
+            console.log('Task data:', data);
+            if (data.code === 0) {
+                setShowLearnTask(data.data);
             }
-        });
-
-        if(response.ok) {
-            try {
-                const data = await response.json();
-                console.log('Task data:', data);
-                if (data.code === 0) {
-                    setShowLearnTask(data.data);
-                }
-                else if (data.code === 102001 || data.code === 102002) {
-                    console.log('Get Task data error:', data)
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        fetchTaskDataAndShow(task, depth + 1);
-                    }
-                    else {
-                        console.error('Error fetching task data:', result.error);
-                    }
+            else if (data.code === 102001 || data.code === 102002) {
+                console.log('Get Task data error:', data)
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    fetchTaskDataAndShow(task, depth + 1);
                 }
                 else {
-                    console.log('Get Task data error:', data)
+                    console.error('Error fetching task data:', result.error);
                 }
-            } catch (error) {
-                console.error('Error fetching task data:', error);
             }
-        }
-        else {
-            console.error('Error fetching task data:', response);
+            else {
+                console.log('Get Task data error:', data)
+            }
+        } catch (error) {
+            console.error('Error fetching task data:', error);
         }
     };
 

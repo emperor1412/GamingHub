@@ -199,51 +199,27 @@ Response:
             console.log('getEvents: too many retries');
             return;
         }
-        let retVal = [];
-        console.log('getEvents...');
+
         try {
-            const response = await fetch(`${shared.server_url}/api/app/getEvents?token=${shared.loginData.token}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            console.log('getEvents Response:', response);
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('getEvents Data:', data);                
-                
-                if (data.code === 0) {
-                    console.log('getEvents: success');
-                    retVal = data.data;
-                }
-                else if (data.code === 102001 || data.code === 102002) {
-                    console.log('getEvents: login again');                    
-                    const result = await shared.login();
-                    if (result) {
-                        retVal = getEvents(depth + 1);
-                    }
+            const data = await shared.api.getEvents(shared.loginData.token);
+            console.log('Events data:', data);
+            if (data.code === 0) {
+                setEventData(data.data);
+            }
+            else if (data.code === 102002 || data.code === 102001) {
+                console.log('Token expired, attempting to refresh...');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    getEvents(depth + 1);
                 }
                 else {
-                    const promise = popup.open({
-                        title: 'Error Getting Events',
-                        message: `Error code:${JSON.stringify(data)}`,
-                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    });
-                    const buttonId = await promise;
+                    console.error('Login failed:', result.error);
                 }
             }
-            else {
-                console.log('getEvents Response not ok:', response);
-            }
+        } catch (error) {
+            console.error('Error getting events:', error);
         }
-        catch (e) {
-            console.error('getEvents error:', e);
-        }        
-        return retVal;
-    }
+    };
 
     const onClickCheckIn = async () => {
         console.log('onClickCheckIn');
@@ -296,51 +272,45 @@ Response:
     };
 
     const setupEvents = async () => {
-        const events = await getEvents();
-        console.log('setupEvents:', events);
-        setEventData(events);
+        try {
+            await getEvents();
+        } catch (error) {
+            console.error('Error setting up events:', error);
+            setEventData([]); // Ensure eventData is an empty array on error
+        }
     };
 
     // Fetch event status data
     const fetchEventStatus = async (depth = 0) => {
         if (depth > 3) {
-            console.error('Get event status failed after 3 attempts');
-            return null;
+            console.log('fetchEventStatus: too many retries');
+            return;
         }
-        
+
         try {
-            const response = await fetch(`${shared.server_url}/api/app/eventPointData?token=${shared.loginData.token}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Event status data:', data);
-
-                if (data.code === 0) {
-                    return data.data;
-                } else if (data.code === 102001 || data.code === 102002) {
-                    console.error('Token expired, attempting to re-login');
-                    const loginResult = await shared.login(shared.initData);
-                    if (loginResult.success) {
-                        return fetchEventStatus(depth + 1);
-                    } else {
-                        console.error('Re-login failed:', loginResult.error);
-                    }
-                } else {
-                    console.error('Failed to fetch event status:', data.msg);
-                }
-            } else {
-                console.error('Event status response error:', response);
+            const data = await shared.api.getEventPointData(shared.loginData.token);
+            console.log('Event status data:', data);
+            if (data.code === 0) {
+                const eventActive = data.data.eventActive;
+                setEventActive(eventActive);
+                return eventActive;
             }
+            else if (data.code === 102002 || data.code === 102001) {
+                console.log('Token expired, attempting to refresh...');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return fetchEventStatus(depth + 1);
+                }
+                else {
+                    console.error('Login failed:', result.error);
+                    return false;
+                }
+            }
+            return false;
         } catch (error) {
             console.error('Error fetching event status:', error);
+            return false;
         }
-        
-        return null;
     };
 
     // Check if the Egglet popup should be shown (once daily)
@@ -791,12 +761,9 @@ Response:
                         onMouseUp={handleMouseUp}
                         onMouseLeave={handleMouseLeave}
                         onMouseMove={handleMouseMove}
-                        // onTouchStart={handleTouchStart}
-                        // onTouchMove={handleTouchMove}
-                        // onTouchEnd={handleMouseUp}
-                        onWheel={handleWheel}  // Add this handler
+                        onWheel={handleWheel}
                     >
-                        {eventData.map((event, index) => (
+                        {Array.isArray(eventData) && eventData.map((event, index) => (
                             <button 
                                 key={index} 
                                 className="event-card" 
@@ -825,8 +792,6 @@ Response:
                                     className="event-card-image"
                                 />
                                 <div className="event-card-content">
-                                    {/* <h3 className="event-card-title">{event.name}</h3>
-                                    <p className="event-card-subtitle">{event.description}</p> */}
                                     <div className="check-out-button">
                                         Check out
                                         <img src={checkout} alt="Arrow" />
@@ -836,7 +801,7 @@ Response:
                         ))}
                     </div>
                     <div className="carousel-dots">
-                        {eventData.map((_, index) => (
+                        {Array.isArray(eventData) && eventData.map((_, index) => (
                             <button
                                 key={index}
                                 className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}

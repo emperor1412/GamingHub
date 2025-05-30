@@ -45,38 +45,27 @@ const LevelUp = ({ onClose }) => {
         console.log('Level up clicked');
 
         try {
-            const response = await fetch(`${shared.server_url}/api/app/levelUp?token=${shared.loginData.token}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Level up response:', data);
+            const data = await shared.api.levelUp(shared.loginData.token);
+            console.log('Level up response:', data);
+            
+            if (data.code === 0) {
+                console.log('Level up successful');                    
                 
-                if (data.code === 0) {
-                    console.log('Level up successful');                    
-                    
-                    // Get updated profile data with retries
-                    await shared.getProfileWithRetry();
-                    setShowOverlay(true);
+                // Get updated profile data with retries
+                await shared.getProfileWithRetry();
+                setShowOverlay(true);
 
-                } else if (data.code === 102001 || data.code === 102002) {
-                    console.log('Token expired, attempting to re-login');
-                    const loginResult = await shared.login(shared.initData);
-                    if (loginResult.success) {
-                        // Retry the level up call after successful re-login
-                        onClickLevelUp();
-                    } else {
-                        console.error('Re-login failed:', loginResult.error);
-                    }
+            } else if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, attempting to re-login');
+                const loginResult = await shared.login(shared.initData);
+                if (loginResult.success) {
+                    // Retry the level up call after successful re-login
+                    onClickLevelUp();
                 } else {
-                    console.error('Level up failed:', data.msg);
+                    console.error('Re-login failed:', loginResult.error);
                 }
             } else {
-                console.error('Level up request failed:', response);
+                console.error('Level up failed:', data.msg);
             }
         } catch (error) {
             console.error('Error during level up:', error);
@@ -87,11 +76,10 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
 
             shareStory(url, {
-                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! ��`,
+                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}!`,
             });
 
             trackStoryShare('level_up', {
@@ -102,33 +90,22 @@ const LevelUp = ({ onClose }) => {
             setShowOverlay(false);
             
             try {
-                const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const data = await shared.api.sharingStory(shared.loginData.token, 1);
+                console.log('Share story API response:', data);
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Share story API response:', data);
-
-                    if (data.code === 0) {
-                        console.log('Story shared successfully');
-                    } else if (data.code === 102001 || data.code === 102002) {
-                        console.log('Token expired, attempting to re-login');
-                        const loginResult = await shared.login(shared.initData);
-                        if (loginResult.success) {
-                            // Retry the API call after successful re-login
-                            onClickShareStory();
-                        } else {
-                            console.error('Re-login failed:', loginResult.error);
-                        }
+                if (data.code === 0) {
+                    console.log('Story shared successfully');
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const loginResult = await shared.login(shared.initData);
+                    if (loginResult.success) {
+                        // Retry the API call after successful re-login
+                        onClickShareStory();
                     } else {
-                        console.error('Share story failed:', data.msg);
+                        console.error('Re-login failed:', loginResult.error);
                     }
                 } else {
-                    console.error('Share story request failed:', response);
+                    console.error('Share story failed:', data.msg);
                 }
             } catch (error) {
                 console.error('Error sharing story:', error);

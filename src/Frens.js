@@ -123,15 +123,8 @@ const Frens = () => {
       return;
     }
 
-    const response = await fetch(`${shared.server_url}/api/app/trophiesData?token=${shared.loginData.token}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
+    try {
+      const data = await shared.api.getTrophiesData(shared.loginData.token);
       console.log('Trophies data:', data);
       if (data.code === 0) {
         const trophiesData = data.data.map(trophy => ({
@@ -148,7 +141,6 @@ const Frens = () => {
                 trophyIcon[trophy.id]
         }));
 
-        // setTrophies(trophiesData.concat(trophiesData));
         setTrophies(trophiesData);
       }
       else if (data.code === 102002 || data.code === 102001) {
@@ -161,8 +153,8 @@ const Frens = () => {
           console.error('Login failed:', result.error);
         }
       }
-    } else {
-      console.error('Trophies data error:', response);
+    } catch (error) {
+      console.error('Trophies data error:', error);
     }
   };
 
@@ -171,15 +163,9 @@ const Frens = () => {
       console.error('Unlock trophy failed after 3 attempts');
       return;
     }
-    const response = await fetch(`${shared.server_url}/api/app/unlockTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
 
-    if (response.ok) {
-      const data = await response.json();
+    try {
+      const data = await shared.api.unlockTrophy(shared.loginData.token, trophyId);
       console.log('Unlock trophy data:', data);
       if (data.code === 0) {
         console.log('Trophy unlocked success');
@@ -195,8 +181,8 @@ const Frens = () => {
           console.error('Login failed:', result.error);
         }
       }
-    } else {
-      console.error('Unlock trophy data error:', response);
+    } catch (error) {
+      console.error('Unlock trophy data error:', error);
     }
   };
 
@@ -293,32 +279,15 @@ const Frens = () => {
       return;
     }
 
-    setIsLoading(true);
-    // await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const response = await fetch(`${shared.server_url}/api/app/frensData?token=${shared.loginData.token}&page=${page}&pageSize=10`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
+    try {
+      const data = await shared.api.getFrensData(shared.loginData.token, page, 10);
       console.log('Friends data:', data);
       if (data.code === 0) {
-        const newFriendsData = data.data.page.list.map(friend => ({
-          name: friend.name,
-          ticket: friend.ticket,
-          starlets: friend.kmPoint,
-          pictureIndex: friend.pictureIndex
-        }));
-
-        setEarnedTickets(data.data.ticket);
-        setTotalFriends(data.data.page.totalRecords);
-        setFriendsData(prev => page === 1 ? newFriendsData : [...prev, ...newFriendsData]);
-        setHasMorePages(data.data.page.nextPage);
-        setCurrentPage(page);
+        const friendsData = data.data.page?.list || [];
+        setFriendsData(prevData => page === 1 ? friendsData : [...prevData, ...friendsData]);
+        setHasMorePages(data.data.page?.nextPage || false);
+        setTotalFriends(data.data.friends || 0);
+        setEarnedTickets(data.data.ticket || 0);
       }
       else if (data.code === 102002 || data.code === 102001) {
         console.error('Friends data error:', data.msg);
@@ -330,34 +299,28 @@ const Frens = () => {
           console.error('Login failed:', result.error);
         }
       }
-    } else {
-      console.error('Friends data error:', response);
+    } catch (error) {
+      console.error('Friends data error:', error);
+      setFriendsData([]); // Ensure friendsData is an empty array on error
     }
-    setIsLoading(false);
   };
 
   // url: /app/sharingTrophy
 
   const shareStoryAPI = async (trophyId, depth = 0) => {
     if (depth > 3) {
-      console.error('Share story API failed after 3 attempts');
+      console.error('Share story failed after 3 attempts');
       return;
     }
-    const response = await fetch(`${shared.server_url}/api/app/sharingTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Share story API data:', data);
+    try {
+      const data = await shared.api.sharingTrophy(shared.loginData.token, trophyId);
+      console.log('Share story data:', data);
       if (data.code === 0) {
-        console.log('Story shared API called success');
+        console.log('Story shared success');
       }
       else if (data.code === 102002 || data.code === 102001) {
-        console.error('Share story data error:', data.msg);
+        console.error('Share story error:', data.msg);
         const result = await shared.login(shared.initData);
         if (result.success) {
           shareStoryAPI(trophyId, depth + 1);
@@ -366,8 +329,8 @@ const Frens = () => {
           console.error('Login failed:', result.error);
         }
       }
-    } else {
-      console.error('Share story API data error:', response);
+    } catch (error) {
+      console.error('Share story error:', error);
     }
   };
 
@@ -492,10 +455,10 @@ const Frens = () => {
   const renderFriendsList = () => {
     return (
       <div className="friends-list-content">
-        {friendsData.map((friend, index) => (
+        {Array.isArray(friendsData) && friendsData.map((friend, index) => (
           <div key={index} className="friend-item">
             <img
-              src={shared.avatars[friend.pictureIndex].src}
+              src={shared.avatars[friend.pictureIndex]?.src}
               alt="Avatar"
               className="friend-avatar"
             />

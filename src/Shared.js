@@ -60,6 +60,217 @@ const shared = {
     app_link: 'https://t.me/TestFSL_bot/fslhub',
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
+
+    // API Service
+    api: {
+        // Auth APIs
+        login: async (initDataRaw) => {
+            const params = JSON.stringify({
+                link: `${shared.inviteCode}`,
+                initData: initDataRaw
+            });
+            const response = await fetch(`${shared.server_url}/api/app/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: params
+            });
+            return response.json();
+        },
+
+        checkIn: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/checkIn?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // User APIs
+        getUserData: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/userData?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        changePicture: async (token, index) => {
+            const response = await fetch(`${shared.server_url}/api/app/changePicture?token=${token}&index=${index}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Ticket APIs
+        ticketSlot: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/ticketSlot?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        ticketUse: async (token, type) => {
+            const response = await fetch(`${shared.server_url}/api/app/ticketUse?token=${token}&type=${type}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Task APIs
+        getTaskList: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        completeTask: async (token, taskId, answerIndex) => {
+            const response = await fetch(`${shared.server_url}/api/app/taskComplete?token=${token}&id=${taskId}&answerIndex=${answerIndex}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getTaskData: async (token, taskId) => {
+            const response = await fetch(`${shared.server_url}/api/app/taskData?token=${token}&id=${taskId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Market APIs
+        getBuyOptions: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        buyStarlets: async (token, optionId, note) => {
+            const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${token}&optionId=${optionId}&note=${note}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getFreeRewardTime: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/getFreeRewardTime?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        claimFreeReward: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Event APIs
+        getEvents: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/getEvents?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getEventPointData: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/eventPointData?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getGlobalEggletsProgress: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/globalEggletsProgress?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Level Up APIs
+        levelUp: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/levelUp?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Frens APIs
+        getTrophiesData: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/trophiesData?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        unlockTrophy: async (token, trophyId) => {
+            const response = await fetch(`${shared.server_url}/api/app/unlockTrophy?token=${token}&trophyId=${trophyId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getFrensData: async (token, page, pageSize) => {
+            const response = await fetch(`${shared.server_url}/api/app/frensData?token=${token}&page=${page}&pageSize=${pageSize}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        sharingTrophy: async (token, trophyId) => {
+            const response = await fetch(`${shared.server_url}/api/app/sharingTrophy?token=${token}&trophyId=${trophyId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Bank Steps APIs
+        claimBankSteps: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/claimBankSteps?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        getBankSteps: async (token) => {
+            const response = await fetch(`${shared.server_url}/api/app/getBankSteps?token=${token}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        },
+
+        // Sharing APIs
+        sharingStory: async (token, type) => {
+            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${token}&type=${type}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.json();
+        }
+    },
+
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },

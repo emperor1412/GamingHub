@@ -82,18 +82,7 @@ Response:
         const retryDelay = 1000; // 1 second delay between retries
 
         try {
-            const response = await fetch(`${shared.server_url}/api/app/ticketSlot?token=${shared.loginData.token}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await shared.api.ticketSlot(shared.loginData.token);
             
             if (data.code === 0) {
                 console.log('Ticket slot data:', data.data);

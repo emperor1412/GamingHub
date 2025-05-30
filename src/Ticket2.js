@@ -76,36 +76,24 @@ Response:
         console.log('Claiming reward from sharing story...');
 
         try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const data = await shared.api.sharingStory(shared.loginData.token, 0);
+            console.log('Claim reward from sharing story data:', data);
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Claim reward from sharing story data:', data);
-
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.error('Claim reward from sharing story error:', data.msg);
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                    else {
-                        console.error('Login failed:', result.error);
-                    }
+            if (data.code === 0) {
+                console.log('Reward claimed successfully');
+            }
+            else if (data.code === 102002 || data.code === 102001) {
+                console.error('Claim reward from sharing story error:', data.msg);
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    claimRewardFromSharingStory(depth + 1);
                 }
                 else {
-                    console.error('Claim reward from sharing story error:', response);
+                    console.error('Login failed:', result.error);
                 }
             }
             else {
-                console.error('Claim reward from sharing story error:', response);
+                console.error('Claim reward from sharing story error:', data);
             }
         }
         catch (error) {
@@ -144,39 +132,25 @@ Response:
         let retVal;
 
         try {
-            const response = await fetch(`${shared.server_url}/api/app/ticketUse?token=${shared.loginData.token}&type=${amount}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },                
-            });
+            const data = await shared.api.ticketUse(shared.loginData.token, amount);
+            console.log('Ticket use data:', data);
 
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Ticket use data:', data);
-
-                if (data.code === 0) {
-                    console.log('Ticket used successfully');
-                    retVal = data.data;
-
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.error('Ticket use error:', data.msg);
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        retVal = requestTicketUse(amount, depth + 1);
-                    }
-                    else {
-                        console.error('Login failed:', result.error);
-                    }
+            if (data.code === 0) {
+                console.log('Ticket used successfully');
+                retVal = data.data;
+            }
+            else if (data.code === 102002 || data.code === 102001) {
+                console.error('Ticket use error:', data.msg);
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    retVal = requestTicketUse(amount, depth + 1);
                 }
                 else {
-                    console.error('Ticket use error:', response);
+                    console.error('Login failed:', result.error);
                 }
             }
             else {
-                console.error('Ticket use error:', response);
+                console.error('Ticket use error:', data);
             }
         }
         catch (error) {

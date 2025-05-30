@@ -99,49 +99,41 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       setShowLoading(true);
       try {
         console.log('ChangePicture:', selectedAvatar);
-        const response = await fetch(`${shared.server_url}/api/app/changePicture?token=${shared.loginData.token}&index=${selectedAvatar}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        console.log('ChangePicture Response:', response);
-        const data = await response.json();
+        const data = await shared.api.changePicture(shared.loginData.token, selectedAvatar);
+        console.log('ChangePicture Data:', data);
 
         try {
-            console.log('ChangePicture Data:', data);
-            await getProfileData();
-            console.log('Update new userProfile:', shared.userProfile);
-            setHasChanged(false);
+          await getProfileData();
+          console.log('Update new userProfile:', shared.userProfile);
+          setHasChanged(false);
 
-            // Track successful avatar change
-            trackUserAction('avatar_changed', {
-              new_avatar_index: selectedAvatar,
-              previous_avatar_index: shared.userProfile.pictureIndex,
-              success: true
-            }, shared.loginData?.userId);
+          // Track successful avatar change
+          trackUserAction('avatar_changed', {
+            new_avatar_index: selectedAvatar,
+            previous_avatar_index: shared.userProfile.pictureIndex,
+            success: true
+          }, shared.loginData?.userId);
         }
         catch (error) {
-            console.error('CheckIn error:', error);
-            // Track failed avatar change
-            trackUserAction('avatar_changed', {
-              attempted_avatar_index: selectedAvatar,
-              error_code: data.code,
-              success: false
-            }, shared.loginData?.userId);
+          console.error('CheckIn error:', error);
+          // Track failed avatar change
+          trackUserAction('avatar_changed', {
+            attempted_avatar_index: selectedAvatar,
+            error_code: data.code,
+            success: false
+          }, shared.loginData?.userId);
 
-            if (data.code === 102001) {
-                // login();
-            }
-            else {
-                const promise = popup.open({
-                    title: 'Error Getting Profile Data',
-                    message: `Error code:${JSON.stringify(data)}`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                const buttonId = await promise;
-            }
+          if (data.code === 102001) {
+            // login();
+          }
+          else {
+            const promise = popup.open({
+              title: 'Error Getting Profile Data',
+              message: `Error code:${JSON.stringify(data)}`,
+              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            const buttonId = await promise;
+          }
         }
       } finally {
         setShowLoading(false);

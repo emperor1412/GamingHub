@@ -84,8 +84,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   useEffect(() => {
     const fetchBuyOptions = async () => {
       try {
-        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-        const data = await response.json();
+        const data = await shared.api.getBuyOptions(shared.loginData.token);
         console.log('Buy Options Response:', data);
         if (data.code === 0 && Array.isArray(data.data)) {
           console.log('Buy Options Data:', data.data);
@@ -96,8 +95,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           const result = await shared.login(shared.initData);
           if (result.success) {
             // Retry the fetch after login
-            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-            const retryData = await retryResponse.json();
+            const retryData = await shared.api.getBuyOptions(shared.loginData.token);
             if (retryData.code === 0 && Array.isArray(retryData.data)) {
               setBuyOptions(retryData.data);
             }
@@ -149,8 +147,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   // Add new function to check free reward time
   const checkFreeRewardTime = async () => {
     try {
-      const response = await fetch(`${shared.server_url}/api/app/getFreeRewardTime?token=${shared.loginData.token}`);
-      const data = await response.json();
+      const data = await shared.api.getFreeRewardTime(shared.loginData.token);
       if (data.code === 0) {
         const currentTime = Date.now();
         const nextTime = data.data;
@@ -160,8 +157,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
         if (result.success) {
-          const retryResponse = await fetch(`${shared.server_url}/api/app/getFreeRewardTime?token=${shared.loginData.token}`);
-          const retryData = await retryResponse.json();
+          const retryData = await shared.api.getFreeRewardTime(shared.loginData.token);
           if (retryData.code === 0) {
             const currentTime = Date.now();
             const nextTime = retryData.data;
@@ -178,8 +174,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   // Add new function to claim free reward
   const handleClaimFreeReward = async () => {
     try {
-      const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
-      const data = await response.json();
+      const data = await shared.api.claimFreeReward(shared.loginData.token);
       if (data.code === 0 && data.data.success) {
         // Update next claim time
         setNextClaimTime(data.data.time);
@@ -211,8 +206,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
         if (result.success) {
-          const retryResponse = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
-          const retryData = await retryResponse.json();
+          const retryData = await shared.api.claimFreeReward(shared.loginData.token);
           if (retryData.code === 0 && retryData.data.success) {
             setNextClaimTime(retryData.data.time);
             setIsFreeItemClaimed(true);
