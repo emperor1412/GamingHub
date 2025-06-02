@@ -8,6 +8,8 @@ import energy from './images/energy.svg';
 import mooar from './images/Mooar.svg';
 import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
 import stepn_go_code from './images/stepngo_code.png';
+import { shareStory } from '@telegram-apps/sdk';
+import { trackStoryShare } from './analytics';
 
 import avatar1 from './images/avatar_1_Dino_300px.png';
 import avatar2 from './images/avatar_2_Chef_Cat_300px.png';
@@ -56,7 +58,7 @@ const tokenABI = [
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
-    app_link: 'https://t.me/TestFSL_bot/fslhub',
+    app_link: 'https://liff.line.me/2007409525-zEYm88eE',
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
     avatars : [
@@ -526,7 +528,38 @@ data object
             });
             await promise;
         }
-    }
+    },
+
+    // Add helper function for story sharing with referral
+    shareStoryWithReferral: async (type, media, text, buttonText = 'Join Now') => {
+        if (!shared.loginData?.link) {
+            console.error('No referral link available');
+            return false;
+        }
+
+        const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+        const shareText = `${text}\n\n${inviteLink}`;
+
+        try {
+            await shareStory({
+                media: media,
+                text: shareText,
+                button_text: buttonText,
+            });
+
+            // Track analytics
+            trackStoryShare(type, {
+                invite_link: inviteLink,
+                has_referral: true,
+                share_type: 'story_with_referral'
+            }, shared.loginData?.userId);
+
+            return true;
+        } catch (error) {
+            console.error('Error sharing story with referral:', error);
+            return false;
+        }
+    },
 
 };
 

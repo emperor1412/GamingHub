@@ -56,6 +56,7 @@ import loading_background from "./images/GamesHubLoading.png";
 
 import { analytics } from './Firebase';
 import Market from './Market';
+import { lineShare } from './services/lineShare';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -167,12 +168,17 @@ function App() {
 
         console.log('Initializing app...');            
 
+        const profile = await liff.getProfile();
+        console.log('Line User:', profile);
+        setUser(profile);
+        
         const loginResult = await shared.login({
             platform: 'line',
-            userId: 'mock_user_id', // Mock user ID
-            displayName: 'Mock User',
-            pictureUrl: 'https://example.com/mock.jpg',
-            statusMessage: 'Mock status'
+            userId: profile.userId,
+            displayName: profile.displayName,
+            pictureUrl: profile.pictureUrl,
+            statusMessage: profile.statusMessage,
+            fslId: 0 // Ensure FSL ID is not bound
         });
         
         if (loginResult.success) {
@@ -186,6 +192,9 @@ function App() {
             trackSessionStart(loginResult.loginData?.link);
 
             await getProfileData(loginResult.loginData);
+
+            // Check for referral after successful login
+            await lineShare.checkAndHandleReferral();
 
             const result = await checkIn(loginResult.loginData);
             if(result == 1) {
@@ -275,14 +284,14 @@ function App() {
         // Debug information
         const info = {
           isLoggedIn: liff.isLoggedIn(),
-          os: liff.getOS(),
-          language: liff.getLanguage(),
-          version: liff.getVersion(),
-          lineVersion: liff.getLineVersion(),
-          context: liff.getContext(),
-          profile: profile,
-          idtoken: liff.getIDToken(),
-          urlParams: Object.fromEntries(new URLSearchParams(window.location.search))
+          os: liff.getOS(),               // thông tin device/platform
+          language: liff.getLanguage(),  // ngôn ngữ người dùng
+          version: liff.getVersion(),    // phiên bản LIFF app
+          lineVersion: liff.getLineVersion(), // phiên bản LINE app (nếu có)
+          context: liff.getContext(),    // thông tin context (nếu backend cần)
+          profile: profile,              // thông tin user (userId, displayName, pictureUrl)
+          urlParams: Object.fromEntries(new URLSearchParams(window.location.search)),
+          idToken: await liff.getIDToken()  // **bắt buộc phải có để backend verify user**
         };
         
         console.log('Debug Info:', info);

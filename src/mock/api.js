@@ -40,6 +40,11 @@ const mockResponses = {
       displayName: 'Mock User',
       pictureUrl: 'https://example.com/mock-profile.jpg',
       statusMessage: 'Hello from mock!',
+      fslId: 0,
+      email: '',
+      evmAddr: '',
+      solAddr: '',
+      flsPoint: 0,
       UserToken: [
         {
           prop_id: 10010,

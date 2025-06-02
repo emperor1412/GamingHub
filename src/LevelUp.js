@@ -22,6 +22,7 @@ import lv9 from './images/lv9.png';
 import lv10 from './images/lv10.png';
 import lv_generic from './images/lv_generic.png';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
+import { lineShare } from './services/lineShare';
 
 const LevelUp = ({ onClose }) => {
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
@@ -86,53 +87,57 @@ const LevelUp = ({ onClose }) => {
     const onClickShareStory = async () => {
         console.log('Share story clicked');
         
-        if (shareStory.isSupported()) {
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
+        try {
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
+            const success = await lineShare.shareStory(
+                url,
+                `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
+                'level_up'
+            );
 
-            shareStory(url, {
-                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! ��`,
-            });
+            if (success) {
+                trackStoryShare('level_up', {
+                    level: shared.userProfile.level,
+                    previous_level: shared.userProfile.level - 1
+                }, shared.loginData?.userId);
 
-            trackStoryShare('level_up', {
-                level: shared.userProfile.level,
-                previous_level: shared.userProfile.level - 1
-            }, shared.loginData?.userId);
+                setShowOverlay(false);
+                
+                try {
+                    const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-            setShowOverlay(false);
-            
-            try {
-                const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Share story API response:', data);
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Share story API response:', data);
-
-                    if (data.code === 0) {
-                        console.log('Story shared successfully');
-                    } else if (data.code === 102001 || data.code === 102002) {
-                        console.log('Token expired, attempting to re-login');
-                        const loginResult = await shared.login(shared.initData);
-                        if (loginResult.success) {
-                            // Retry the API call after successful re-login
-                            onClickShareStory();
+                        if (data.code === 0) {
+                            console.log('Story shared successfully');
+                        } else if (data.code === 102001 || data.code === 102002) {
+                            console.log('Token expired, attempting to re-login');
+                            const loginResult = await shared.login(shared.initData);
+                            if (loginResult.success) {
+                                // Retry the API call after successful re-login
+                                onClickShareStory();
+                            } else {
+                                console.error('Re-login failed:', loginResult.error);
+                            }
                         } else {
-                            console.error('Re-login failed:', loginResult.error);
+                            console.error('Share story failed:', data.msg);
                         }
                     } else {
-                        console.error('Share story failed:', data.msg);
+                        console.error('Share story request failed:', response);
                     }
-                } else {
-                    console.error('Share story request failed:', response);
+                } catch (error) {
+                    console.error('Error claiming reward:', error);
                 }
-            } catch (error) {
-                console.error('Error sharing story:', error);
             }
+        } catch (error) {
+            console.error('Error sharing story:', error);
         }
     };
 

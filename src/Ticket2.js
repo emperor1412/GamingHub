@@ -113,27 +113,26 @@ Response:
         }
     };
 
-    const onClickShareStory = () => {
+    const onClickShareStory = async () => {
         console.log('Share story');
 
         if (shareStory.isSupported()) {
-            const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/xkD++/9T2na4RgKvFkcBnIokAAbpwqtK6Mrl4EYEZcg=.png';
-            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
+            try {
+                const success = await shared.shareStoryWithReferral(
+                    'ticket',
+                    "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
+                    'I just scratched a ticket and claimed a reward! Join me to get your rewards too!'
+                );
 
-            shareStory(url, {
-                text: 'I just scratched a ticket and claimed a reward!',
-              });
-
-            trackStoryShare('ticket', {
-                reward_claimed: true,
-                invite_link: inviteLink
-            }, shared.loginData?.userId);
-
-            setShowShareStory(false);
-            claimRewardFromSharingStory();
+                if (success) {
+                    setShowShareStory(false);
+                    await claimRewardFromSharingStory();
+                }
+            } catch (error) {
+                console.error('Error sharing story:', error);
+            }
         }
-    };   
+    };
 
     const requestTicketUse = async (amount, depth = 0) => {
         if (depth > 3) {
