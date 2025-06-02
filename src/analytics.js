@@ -143,4 +143,23 @@ export const trackSessionStart = (userId) => {
   
   // Track device info on session start
   trackDeviceInfo(userId);
+};
+
+// Track LINE conversion events
+export const trackLineConversion = (type = 'Conversion') => {
+  // Check if LINE tracking script is loaded
+  if (window._lt && typeof window._lt === 'function') {
+    console.log('Sending LINE tracking event:', {
+      type: type,
+      tagId: '96df2fe5-e5d3-41ce-9bdc-322a26de15d0'
+    });
+    
+    window._lt('send', 'cv', {
+      type: type
+    }, ['96df2fe5-e5d3-41ce-9bdc-322a26de15d0']);
+    
+    console.log('LINE tracking event sent successfully');
+  } else {
+    console.warn('LINE tracking not available - _lt function not found');
+  }
 }; 

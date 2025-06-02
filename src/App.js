@@ -22,7 +22,8 @@ import {
   trackOverlayExit,
   trackUserAction,
   trackSessionStart,
-  trackDeviceInfo
+  trackDeviceInfo,
+  trackLineConversion
 } from './analytics';
 
 import HomeIcon_selected from './images/Home_selected.svg';
@@ -255,9 +256,11 @@ function App() {
     const initializeLine = async () => {
       try {
         await liff.init({ 
-          liffId: '2007483147-wdK507yD',
+          liffId: '2007488153-aBQgjwyL',
           withLoginOnExternalBrowser: true
         });
+
+        trackLineConversion("liff_init");
         
         // Check if user is logged in
         if (!liff.isLoggedIn()) {

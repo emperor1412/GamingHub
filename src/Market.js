@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Market.css';
-import { trackUserAction } from './analytics';
+import { trackLineConversion, trackUserAction } from './analytics';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
@@ -381,7 +381,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             <div className="mk-starlet-grid">
               <button 
                 className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
+                onClick={() => 
+                {
+                  !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')
+                  trackLineConversion('Free_Starlets_Click');
+                }}
                 disabled={isFreeItemClaimed}
               >
                 <div className="mk-market-ticket-button-image-container">
@@ -409,7 +413,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 <button 
                   key={option.id}
                   className="mk-market-ticket-button" 
-                  onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                  onClick={() => 
+                  {
+                    handleStarletPurchase(option.starlet, option.stars, null, option.id)
+                    trackLineConversion('Starlets_Purchase_Click');
+                  }
+                  }
                 >
                   <div className="mk-market-ticket-button-image-container">
                     <div className="mk-market-ticket-content">

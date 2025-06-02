@@ -12,7 +12,7 @@ import bank_ticket from './images/bank_ticket.svg';
 import burn_ticket from './images/burn_ticket.svg';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import scratch_ticket_button_bg_disabled from './images/scratch_ticket_button_bg_disabled.png';
-import { trackUserAction } from './analytics';
+import { trackUserAction, trackLineConversion } from './analytics';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
@@ -47,6 +47,9 @@ const Ticket = ({ onClose, getProfileData }) => {
             starlets: starlets,
             is_available: ticketType === 'scratch' // only scratch tickets are currently available
         }, shared.loginData?.userId);
+
+        // Track LINE conversion for ticket usage
+        trackLineConversion('Ticket_Usage');
 
         if (ticketType === 'scratch') {
             setShowTicket1(true);

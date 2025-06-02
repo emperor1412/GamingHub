@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CheckIn.css';
 import ticket from './images/ticket.svg';
 // import km from './images/km.svg';
@@ -6,8 +6,11 @@ import starlet from './images/starlet.png';
 import checkmark from './images/checkmark.svg';
 
 import shared from './Shared';
+import { trackUserAction, trackLineConversion } from './analytics';
 
-const CheckIn = ({ checkInData, onClose }) => {
+const CheckIn = ({ checkInData, onClose, setShowCheckInAnimation }) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     /*
     checkInData =
@@ -130,6 +133,42 @@ const CheckIn = ({ checkInData, onClose }) => {
         ]
     }
 
+    const handleCheckIn = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${shared.server_url}/api/app/checkIn?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            if (data.code === 0) {
+                // Track successful check-in
+                trackUserAction('check_in_success', {
+                    check_in_date: new Date().toISOString(),
+                    rewards: data.rewards
+                }, shared.loginData?.userId);
+
+                // Track LINE conversion for check-in
+                trackLineConversion('Check_In');
+
+                setShowCheckInAnimation(true);
+                setTimeout(() => {
+                    setShowCheckInAnimation(false);
+                    onClose();
+                }, 3000);
+            } else {
+                setError(data.message || 'Check-in failed');
+            }
+        } catch (error) {
+            console.error('Check-in error:', error);
+            setError('Failed to check in. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="checkin-container">

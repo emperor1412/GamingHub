@@ -29,7 +29,7 @@ import eggletBackground from './images/Egglets_Background.png';
 import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
-import { trackUserAction } from './analytics';
+import { trackLineConversion, trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 
@@ -248,6 +248,7 @@ Response:
     }
 
     const onClickCheckIn = async () => {
+        trackLineConversion('Check_In_Click');
         console.log('onClickCheckIn');
         const result = await checkIn(shared.loginData);
         if(result == 1) {
@@ -268,6 +269,8 @@ Response:
                 game_name: 'Tadokami',
                 game_url: 'https://liff.line.me/2007433542-kEVqEBd3'
             }, shared.loginData?.link);
+
+            trackLineConversion('Tadokami_Game_Click');
             
             // Open LIFF URL
             liff.openWindow({
@@ -656,19 +659,28 @@ Response:
             <header className="stats-header">
                 <button 
                     className="profile-pic-main"
-                    onClick={() => setShowProfileView(true)}
+                    onClick={() => {
+                        setShowProfileView(true);
+                        trackLineConversion('Profile_Click');
+                    }}
                 >
                     <img 
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="level-badge" onClick={() => setShowProfileView(true)}>
+                <div className="level-badge" onClick={() => {
+                    setShowProfileView(true);
+                    trackLineConversion('Level_Badge_Click');
+                    }}>
                     LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
                 <div className="stats-main">
                     <button 
                         className="stat-item-main"
-                        onClick={() => setShowProfileView(true)}
+                        onClick={() => {
+                            setShowProfileView(true)
+                            trackLineConversion('Ticket_Usage');
+                        }}
                     >
                         <img src={ticketIcon} alt="Stat 1" />
                         <span className='stat-item-main-text'>{ticket}</span>
@@ -709,7 +721,10 @@ Response:
                         />
                     </button> */}
 
-                    <button className="ticket-button" onClick={() => setShowTicketView(true)}>
+                    <button className="ticket-button" onClick={() => {
+                        setShowTicketView(true);
+                        trackLineConversion('Ticket_Usage');
+                    }}>
                         <div className='ticket-button-image-container'>
                             <img
                                 src={my_ticket}
@@ -762,7 +777,11 @@ Response:
                         /> */}
                     </button>
 
-                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
+                    <button className="locked-card" onClick={() => 
+                    {
+                        setShowBankStepsView(true)
+                        trackLineConversion('Bank_Steps_Click');
+                    }}>
                         <div className='locked-card-image-container'>
                             <img
                                 // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
@@ -800,6 +819,7 @@ Response:
                                 key={index} 
                                 className="event-card" 
                                 onClick={(e) => {
+                                    trackLineConversion('Event_Card_Click');
                                     try {
                                         const moveDistance = Math.abs(e.pageX - startDragX);
                                         const moveTime = Date.now() - startDragTime;
@@ -840,6 +860,7 @@ Response:
                                 key={index}
                                 className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}
                                 onClick={() => {
+                                    trackLineConversion('Event_Card_Click');
                                     setCurrentSlide(index);
                                     carouselRef.current.children[index].scrollIntoView({
                                         behavior: 'smooth',
