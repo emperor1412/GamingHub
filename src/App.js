@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import './Share.css';
 import liff from '@line/liff';
+import LIFFInspectorPlugin from '@line/liff-inspector';
 // import liff from './mock/liff';
 import './mock/api';  // Import mock API
 
@@ -264,6 +265,11 @@ function App() {
 
     const initializeLine = async () => {
       try {
+        // Add LIFF Inspector plugin
+        liff.use(new LIFFInspectorPlugin({
+          origin: 'wss://8af6-2001-ee0-4f83-4140-fdd2-d13a-3962-9e7a.ngrok-free.app'
+        }));
+
         await liff.init({ 
           liffId: '2007488153-aBQgjwyL',
           withLoginOnExternalBrowser: true
