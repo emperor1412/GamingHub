@@ -129,11 +129,11 @@ const shared = {
         try {
             let params = JSON.stringify({
                 link: `${shared.inviteCode}`,
-                initData: initDataRaw
+                idToken: initDataRaw
             });
             console.log('Login params:', params);
 
-            const response = await fetch(`${shared.server_url}/api/app/login`, {
+            const response = await fetch(`${shared.server_url}/api/app/lineLogin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

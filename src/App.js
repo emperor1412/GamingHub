@@ -4,7 +4,6 @@ import './Share.css';
 import liff from '@line/liff';
 import LIFFInspectorPlugin from '@line/liff-inspector';
 // import liff from './mock/liff';
-import './mock/api';  // Import mock API
 
 import MainView from './MainView';
 import Tasks from './Tasks';
@@ -60,6 +59,7 @@ import Market from './Market';
 import { lineShare } from './services/lineShare';
 
 function App() {
+  const [initDataRaw, setInitDataRaw] = useState(null);
   const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState(null);
   const [checkInData, setCheckInData] = useState(null);
@@ -98,7 +98,7 @@ function App() {
         return 0;
     } else {
         if (checkInResult.needRelogin) {
-            const loginResult = await shared.login(user);
+            const loginResult = await shared.login(initDataRaw);
             if (loginResult.success) {
                 setLoginData(loginResult.loginData);
                 setIsLoggedIn(true);
@@ -106,11 +106,7 @@ function App() {
             }
         }
         
-        liff.showPopup({
-            title: 'Error Checking-in',
-            message: `Error: ${checkInResult.error}`,
-            buttons: [{ text: 'OK' }],
-        });
+        window.alert(`Error Checking-in: ${checkInResult.error}`);
         return 2;
     }
   };
@@ -125,11 +121,7 @@ function App() {
         setProfileItems(profileResult.profileItems);
         return [profileResult.userProfile, profileResult.profileItems];
     } else {
-        liff.showPopup({
-            title: 'Error Getting Profile Data',
-            message: `Error: ${profileResult.error}`,
-            buttons: [{ text: 'OK' }],
-        });
+        window.alert(`Error Getting Profile Data: ${profileResult.error}`);
         return [null, []];
     }
   };
@@ -146,18 +138,12 @@ function App() {
         return true;
       } else {
         let errorMessage = data.msg || 'Failed to bind FSL ID. Please try again later.';
-        liff.showPopup({
-          type: 0,
-          message: errorMessage
-        });
+        window.alert(errorMessage);
         return false;
       }
     } catch (error) {
       console.error('Error binding FSL ID:', error);
-      liff.showPopup({
-        type: 0,
-        message: 'Failed to bind FSL ID. Please try again later.'
-      });
+      window.alert('Failed to bind FSL ID. Please try again later.');
       return false;
     }
   }
@@ -169,47 +155,32 @@ function App() {
 
         console.log('Initializing app...');            
 
-        const profile = await liff.getProfile();
-        console.log('Line User:', profile);
-        setUser(profile);
-        
-        const loginResult = await shared.login({
-            platform: 'line',
-            userId: profile.userId,
-            displayName: profile.displayName,
-            pictureUrl: profile.pictureUrl,
-            statusMessage: profile.statusMessage,
-            fslId: 0 // Ensure FSL ID is not bound
-        });
-        
-        if (loginResult.success) {
-            if (shared.fsl_binding_code) {
-                await bind_fslid();
-            }
-
-            setLoginData(loginResult.loginData);
-            setIsLoggedIn(true);
-
-            trackSessionStart(loginResult.loginData?.link);
-
-            await getProfileData(loginResult.loginData);
-
-            // Check for referral after successful login
-            await lineShare.checkAndHandleReferral();
-
-            const result = await checkIn(loginResult.loginData);
-            if(result == 1) {
-                setShowCheckInAnimation(true);
-            }
-        } else {
-            console.log('Line user is not logged in');
-            setIsLoggedIn(false);
+        if (initDataRaw) {
+            const loginResult = await shared.login(initDataRaw);
             
-            liff.showPopup({
-                title: 'Error',
-                message: loginResult.error,
-                buttons: [{ text: 'OK' }]
-            });
+            if (loginResult.success) {
+                if (shared.fsl_binding_code) {
+                  await bind_fslid();
+                }
+
+                setLoginData(loginResult.loginData);
+                setIsLoggedIn(true);
+
+                // Track session start and device info when user logs in
+                trackSessionStart(loginResult.loginData?.link);
+
+                await getProfileData(loginResult.loginData);
+
+                const result = await checkIn(loginResult.loginData);
+                    if(result == 1) {
+                        setShowCheckInAnimation(true);
+                }
+            } else {
+                console.log('User is not logged in');
+                setIsLoggedIn(false);
+
+                window.alert(`Error: ${loginResult.error}`);
+            }
         }
     } catch (error) {
         console.error('Initialization error:', error);
@@ -217,7 +188,8 @@ function App() {
         setIsLoading(false);
         initRef.current = false;
     }
-  };
+};
+
 
   const preloadImages = (imageUrls) => {
     const promises = imageUrls.map((url) => {
@@ -267,7 +239,7 @@ function App() {
       try {
         // Add LIFF Inspector plugin
         liff.use(new LIFFInspectorPlugin({
-          origin: 'wss://8af6-2001-ee0-4f83-4140-fdd2-d13a-3962-9e7a.ngrok-free.app'
+          origin: 'wss://76b8-14-169-210-27.ngrok-free.app'
         }));
 
         await liff.init({ 
@@ -285,24 +257,12 @@ function App() {
 
         const profile = await liff.getProfile();
         console.log('Line User:', profile);
+        shared.telegramUserData = profile;
         setUser(profile);
         
-        // Debug information
-        const info = {
-          isLoggedIn: liff.isLoggedIn(),
-          os: liff.getOS(),               // thông tin device/platform
-          language: liff.getLanguage(),  // ngôn ngữ người dùng
-          version: liff.getVersion(),    // phiên bản LIFF app
-          lineVersion: liff.getLineVersion(), // phiên bản LINE app (nếu có)
-          context: liff.getContext(),    // thông tin context (nếu backend cần)
-          profile: profile,              // thông tin user (userId, displayName, pictureUrl)
-          urlParams: Object.fromEntries(new URLSearchParams(window.location.search)),
-          idToken: await liff.getIDToken()  // **bắt buộc phải có để backend verify user**
-        };
-        
-        console.log('Debug Info:', info);
-        setDebugInfo(info);
-        
+        var dataRaw = await liff.getIDToken();
+        setInitDataRaw(dataRaw);
+                
         // Get URL parameters for Line
         const urlParams = new URLSearchParams(window.location.search);
         const startParam = urlParams.get('start_param');
@@ -322,16 +282,9 @@ function App() {
 
         // Track initial device info even before login
         trackDeviceInfo();
-
-        // Wait for user state to be updated
-        await new Promise(resolve => setTimeout(resolve, 0));
-        login();
       } catch (err) {
         console.error('LIFF initialization failed', err);
-        setDebugInfo({
-          error: err.message,
-          stack: err.stack
-        });
+        window.alert(`Error: ${err.message}`);
       }
     };
 
@@ -454,81 +407,12 @@ function App() {
     zIndex: 1000
   };
 
-  const DebugPopup = ({ info, onClose }) => {
-    if (!info) return null;
-    
-    return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 9999,
-        padding: '20px'
-      }}>
-        <div style={{
-          backgroundColor: '#1a1a1a',
-          padding: '20px',
-          borderRadius: '12px',
-          width: '100%',
-          maxWidth: '500px',
-          maxHeight: '80vh',
-          overflow: 'auto',
-          border: '1px solid #333',
-          color: '#fff',
-          fontFamily: 'monospace'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '15px',
-            borderBottom: '1px solid #333',
-            paddingBottom: '10px'
-          }}>
-            <h3 style={{ 
-              margin: 0, 
-              color: '#00ff00',
-              fontSize: '18px',
-              fontWeight: 'bold'
-            }}>
-              Debug Info
-            </h3>
-            <button 
-              onClick={onClose}
-              style={{
-                border: 'none',
-                background: 'none',
-                fontSize: '24px',
-                cursor: 'pointer',
-                color: '#fff',
-                padding: '5px 10px'
-              }}
-            >
-              ×
-            </button>
-          </div>
-          <pre style={{
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            margin: 0,
-            fontSize: '14px',
-            color: '#00ff00',
-            backgroundColor: '#000',
-            padding: '10px',
-            borderRadius: '6px'
-          }}>
-            {JSON.stringify(info, null, 2)}
-          </pre>
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    if (initDataRaw) {
+      console.log('InitDataRaw updated:', initDataRaw);
+      login();
+    }
+  }, [initDataRaw]);
 
   return (
     <div className="App">
@@ -656,13 +540,9 @@ function App() {
 
       <div style={versionStyle}>{buildVersion}</div>
       
-      {/* Debug Popup */}
-      <DebugPopup 
-        info={debugInfo} 
-        onClose={() => setDebugInfo(null)} 
-      />
     </div>
   );
 }
 
 export default App;
+
