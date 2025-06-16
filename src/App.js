@@ -239,7 +239,7 @@ function App() {
       try {
         // Add LIFF Inspector plugin
         liff.use(new LIFFInspectorPlugin({
-          origin: 'wss://76b8-14-169-210-27.ngrok-free.app'
+          origin: 'wss://4c4b-2001-ee0-5001-9b70-99b5-a2d2-ab78-5c2.ngrok-free.app'
         }));
 
         await liff.init({ 

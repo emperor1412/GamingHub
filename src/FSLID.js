@@ -145,12 +145,12 @@ const FSLID = () => {
             return;
         }
 
-        const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+        const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
         console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
         const fslAuthorization = FSLAuthorization.init({
             responseType: 'code', // 'code' or 'token'
-            appKey: 'MiniGame',
+            appKey: 'LineMiniGame',
             redirectUri: REDIRECT_URL, // https://xxx.xxx.com
             scope: 'basic,wallet,stepn', // Grant Scope
             state: state,

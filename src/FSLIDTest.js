@@ -44,13 +44,13 @@ Response:
     
                 const state = data.data;
                 // return;
-                const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+                const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
     
                 console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
     
                 const fslAuthorization = FSLAuthorization.init({
                     responseType: 'code', // 'code' or 'token'
-                    appKey: 'MiniGame',
+                    appKey: 'LineMiniGame',
                     redirectUri: REDIRECT_URL, // https://xxx.xxx.com
                     scope: 'basic', // Grant Scope
                     state: state,
@@ -90,7 +90,7 @@ Response:
 
         const fslAuthorization = FSLAuthorization.init({
             responseType: 'code', // 'code' or 'token'
-            appKey: 'MiniGame',
+            appKey: 'LineMiniGame',
             redirectUri: REDIRECT_URL, // https://xxx.xxx.com
             scope: 'basic', // Grant Scope
             state: 'test',
@@ -123,7 +123,7 @@ Response:
         const FSL_ID_URL = 'https://gm3.joysteps.io/login';
 
         const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
-            client_id: 'MiniGame',
+            client_id: 'LineMiniGame',
             redirect_uri: REDIRECT_URL,
             response_type: 'code',
             state: 'test', // Generate random state for security verification
@@ -139,7 +139,7 @@ Response:
         const FSL_ID_URL = 'https://gm3.joysteps.io/login';
 
         const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
-            client_id: 'MiniGame',
+            client_id: 'LineMiniGame',
             redirect_uri: REDIRECT_URL,
             response_type: 'code',
             state: 'test', // Generate random state for security verification
@@ -155,11 +155,11 @@ Response:
                 <pre>
                     {`
 
-const REDIRECT_URL = Shared.server_url + '/api/app/fslCallback';
+const REDIRECT_URL = Shared.server_url + '/api/app/lineFslCallback';
 
 const fslAuthorization = FSLAuthorization.init({
     responseType: 'code', // 'code' or 'token'
-    appKey: 'MiniGame',
+    appKey: 'LineMiniGame',
     redirectUri: REDIRECT_URL, // https://xxx.xxx.com
     scope: 'basic', // Grant Scope
     state: 'test',
@@ -189,7 +189,7 @@ const REDIRECT_URL = window.location.href;
 
 const fslAuthorization = FSLAuthorization.init({
     responseType: 'code', // 'code' or 'token'
-    appKey: 'MiniGame',
+    appKey: 'LineMiniGame',
     redirectUri: REDIRECT_URL,
     scope: 'basic', // Grant Scope
     state: 'test',
@@ -232,7 +232,7 @@ https://emperor1412.github.io/GamingHub/#tgWebAppData=user%3D%257B%2522id%2522%2
 const FSL_ID_URL = 'https://gm3.joysteps.io/login';
 
 const loginUrl = {FSL_ID_URL} + new URLSearchParams({
-  client_id: 'MiniGame',
+  client_id: 'LineMiniGame',
   redirect_uri: REDIRECT_URL,
   response_type: 'code',
   state: 'test', // Generate random state for security verification
@@ -251,7 +251,7 @@ window.location.href = loginUrl;`}
 const FSL_ID_URL = 'https://gm3.joysteps.io/login';
 
 const loginUrl = {FSL_ID_URL} + new URLSearchParams({
-  client_id: 'MiniGame',
+  client_id: 'LineMiniGame',
   redirect_uri: REDIRECT_URL,
   response_type: 'code',
   state: 'test', // Generate random state for security verification
