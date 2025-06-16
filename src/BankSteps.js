@@ -21,6 +21,7 @@ import bank_step_group_icon from './images/bank_step_group_icon.png';
 
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
+import { lineShare } from './services/lineShare';
 
 /*
 url: /app/getBankSteps
@@ -242,22 +243,19 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const onClickShareStory = async () => {
         console.log('Share story');
 
-        if (shareStory.isSupported()) {
-            try {
-                const success = await shared.shareStoryWithReferral(
-                    'bank_steps',
-                    'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png',
-                    'Join me in FSL Gaming Hub!',
-                    'Join Now'
-                );
+        try {
+            const success = await lineShare.shareStory(
+                'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png',
+                'Join me in FSL Gaming Hub!',
+                'bank_steps'
+            );
 
-                if (success) {
-                    await claimRewardFromSharingStory();
-                    setShowOverlayClaimSuccess(false);
-                }
-            } catch (error) {
-                console.error('Error sharing story:', error);
+            if (success) {
+                await claimRewardFromSharingStory();
+                setShowOverlayClaimSuccess(false);
             }
+        } catch (error) {
+            console.error('Error sharing story:', error);
         }
     };
 

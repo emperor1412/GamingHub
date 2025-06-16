@@ -19,6 +19,7 @@ import fail_animation_frame_3 from './images/FSL Games UI 2-07.png';
 
 import { shareStory, popup } from '@telegram-apps/sdk';
 import { trackStoryShare } from './analytics';
+import { lineShare } from './services/lineShare';
 
 let animationFrameIndex = 0;
 
@@ -116,21 +117,19 @@ Response:
     const onClickShareStory = async () => {
         console.log('Share story');
 
-        if (shareStory.isSupported()) {
-            try {
-                const success = await shared.shareStoryWithReferral(
-                    'ticket',
-                    "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
-                    'I just scratched a ticket and claimed a reward! Join me to get your rewards too!'
-                );
+        try {
+            const success = await lineShare.shareStory(
+                "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
+                'I just scratched a ticket and claimed a reward! Join me to get your rewards too!',
+                'ticket'
+            );
 
-                if (success) {
-                    setShowShareStory(false);
-                    await claimRewardFromSharingStory();
-                }
-            } catch (error) {
-                console.error('Error sharing story:', error);
+            if (success) {
+                setShowShareStory(false);
+                await claimRewardFromSharingStory();
             }
+        } catch (error) {
+            console.error('Error sharing story:', error);
         }
     };
 
