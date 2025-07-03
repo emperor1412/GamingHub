@@ -134,21 +134,19 @@ const Frens = () => {
       const data = await response.json();
       console.log('Trophies data:', data);
       if (data.code === 0) {
-        const trophiesData = data.data
-          .filter(trophy => trophy.id !== 10010) // Ẩn trophy 10010
-          .map(trophy => ({
-            id: trophy.id,
-            name: trophy.id === 10000 && trophy.state === 2 ? "STARLETS CHAMPION" : trophy.name,
-            description: trophy.description,
-            min: trophy.min,
-            max: trophy.max,
-            state: trophy.state,
-            status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
-            icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : 
-                  trophy.id === 10010 && trophy.state === 0 ? trophy_10010_locked :
-                  trophy.id === 10020 && trophy.state === 0 ? trophy_10020_locked :
-                  trophyIcon[trophy.id]
-          }));
+        const trophiesData = data.data.map(trophy => ({
+          id: trophy.id,
+          name: trophy.id === 10000 && trophy.state === 2 ? "STARLETS CHAMPION" : trophy.name,
+          description: trophy.description,
+          min: trophy.min,
+          max: trophy.max,
+          state: trophy.state,
+          status: trophy.state === 0 ? 'locked' : trophy.state === 1 ? 'ready' : 'unlocked',
+          icon: trophy.id === 10000 && trophy.state === 0 ? trophy_10000_locked : 
+                trophy.id === 10010 && trophy.state === 0 ? trophy_10010_locked :
+                trophy.id === 10020 && trophy.state === 0 ? trophy_10020_locked :
+                trophyIcon[trophy.id]
+        }));
 
         // setTrophies(trophiesData.concat(trophiesData));
         setTrophies(trophiesData);
