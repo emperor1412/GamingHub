@@ -597,25 +597,6 @@ const Frens = () => {
   return (
     <div className="frens-content">
       <div className="frens-inner-content">
-        <button 
-          className="test-share-button" 
-          onClick={onClickTestShare}
-          style={{
-            margin: '10px 0',
-            padding: '10px 20px',
-            backgroundColor: '#0000FF',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontFamily: '"PP Neue Machina"',
-            fontSize: '14px',
-            fontWeight: 'bold'
-          }}
-        >
-          Test Share Story
-        </button>
-
         <div className="info-box">
         Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
         </div>
