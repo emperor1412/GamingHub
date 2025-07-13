@@ -54,6 +54,7 @@ import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retr
 import { analytics } from './Firebase';
 import Market from './Market';
 
+import { t } from './utils/localization';
 
 function App() {
   const { initDataRaw } = retrieveLaunchParams();
@@ -469,9 +470,9 @@ const bind_fslid = async () => {
       ) 
       : !isLoggedIn ? (
         <div className="login-error">
-          <div>Unable to log in. Please try again.</div>
+          <div>{t('LOGIN_ERROR')}</div>
           <button className="retry-button" onClick={login}>
-            Retry
+            {t('RETRY')}
           </button>
         </div>
       ) 

@@ -35,6 +35,23 @@
     box-sizing: border-box;
 }
 
+.language-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+    z-index: 1001;
+}
+
+.language-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
 .stats-main {
     display: flex;
     align-items: center;

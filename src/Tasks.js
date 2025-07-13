@@ -12,6 +12,8 @@ import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
+
+import { t } from './utils/localization';
 import { trackTaskFunnel, trackTaskAttempt } from './analytics';
 /*
 url: /app/taskList
@@ -573,8 +575,8 @@ const Tasks = ({
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
                                     <>
-                                        <span>CHECK-IN</span>
-                                        <span>TODAY</span>
+                                        <span>{t('CHECK_IN')}</span>
+                                        <span>{t('TODAY')}</span>
                                     </>
                                 ) : (
                                     <span className="stat-item-text">{checkInData != null ? checkInData.streakDay : "0"}</span>

@@ -23,6 +23,8 @@ import lv10 from './images/lv10.png';
 import lv_generic from './images/lv_generic.png';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 
+import { t } from './utils/localization';
+
 const LevelUp = ({ onClose }) => {
     const [showLevelUpButton, setShowLevelUpButton] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
@@ -165,7 +167,7 @@ const LevelUp = ({ onClose }) => {
 
             <div className="level-up-scroll-container">
                 <div className="level-content">
-                    <h2 className="level-header">YOU NEED {shared.userProfile.levelPoint} STARLETS TO REACH THE NEXT LEVEL.</h2>
+                    <h2 className="level-header">{t('NEED_STARLETS').replace('XX', shared.userProfile.levelPoint)}</h2>
           
                     <div className="marty-card-outer">
                         <div className='marty-gradient-layer'></div>
@@ -173,7 +175,7 @@ const LevelUp = ({ onClose }) => {
                             <img src={getLevelImage(shared.userProfile.level)} alt="Marty" className="marty-image" />
                             {/* <img src={shadow} alt="Shadow" className="marty-shadow" /> */}
                             <div className="level-info">
-                                <div className="level-label">LV {shared.userProfile.level}</div>
+                                <div className="level-label">{t('LEVEL_ABBR')} {shared.userProfile.level}</div>
                                 <div className="progress-bar">
                                     <div 
                                         className="progress" 
@@ -187,10 +189,10 @@ const LevelUp = ({ onClose }) => {
                         </div>
 
                         {showLevelUpButton ? 
-                            <button className="level-up-button" onClick={() => onClickLevelUp()}>Level up</button>
+                            <button className="level-up-button" onClick={() => onClickLevelUp()}>{t('LEVEL_UP')}</button>
                         : 
                         (
-                            <button className="level-up-lock-button">Level up</button>
+                            <button className="level-up-lock-button">{t('LEVEL_UP')}</button>
                         )
                         } 
                     </div>

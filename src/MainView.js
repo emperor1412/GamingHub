@@ -32,6 +32,7 @@ import shared from './Shared';
 import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
+import { t, getCurrentLanguage, setLanguage } from './utils/localization';
 
 let isMouseDown = false;
 let startX;
@@ -52,6 +53,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showEggletPage, setShowEggletPage] = useState(false);
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
+    const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
     
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
@@ -414,6 +416,11 @@ Response:
         trackUserAction('egglet_popup_closed', {}, shared.loginData?.link);
     };
 
+    const toggleLanguage = () => {
+        const newLang = currentLanguage === 'en' ? 'ja' : 'en';
+        setLanguage(newLang);
+    };
+
     useEffect(() => {
         setupProfileData();
         setupEvents();
@@ -663,8 +670,10 @@ Response:
                     src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                     alt="Profile" />
                 </button>
-                <div className="level-badge" onClick={() => setShowProfileView(true)}>
-                    LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+                <div className="level-badge" onClick={() => {
+                    setShowProfileView(true);
+                    }}>
+                    {t('LEVEL_ABBR')}.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
                 <div className="stats-main">
                     <button 
@@ -687,8 +696,8 @@ Response:
                             <div className="check-in-text">
                                 {showTextCheckIn ? (
                                     <>
-                                        <span>CHECK-IN</span>
-                                        <span>TODAY</span>
+                                        <span>{t('CHECK_IN')}</span>
+                                        <span>{t('TODAY')}</span>
                                     </>
                                 ) : (
                                     <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
@@ -697,6 +706,13 @@ Response:
                         </button>
                     </div>
                 </div>
+                <button 
+                    className="language-toggle"
+                    onClick={toggleLanguage}
+                    title={t('LANGUAGE')}
+                >
+                    {currentLanguage === 'en' ? '🇯🇵' : '🇺🇸'}
+                </button>
             </header>
 
             <div className="scrollable-content">
@@ -719,11 +735,11 @@ Response:
                             />
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
-                                <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch Tickets and Unlock <br></br>Rewards!</p>
-                                <div className="check-out-button">
-                                    Scratch Tickets
-                                </div>
+                                                            <h3 className="event-card-title">{t('MY_TICKETS')}</h3>
+                            <p className="event-card-subtitle">{t('SCRATCH_TICKETS_REWARDS')}</p>
+                            <div className="check-out-button">
+                                {t('SCRATCH_TICKETS')}
+                            </div>
                             {/* </div> */}
                         </div>
                     </button>
@@ -734,8 +750,8 @@ Response:
                     <section className="egglet-section">
                         <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
                             <div className="egglet-event-content">
-                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
-                                <div className="egglet-date">17 – 27 APRIL</div>
+                                                            <div className="egglet-title"><span>{t('EARN_EGGLETS')}</span></div>
+                            <div className="egglet-date">17 – 27 APRIL</div>
                             </div>
                             <div className="egglet-event-tag">EGGLET EVENT</div>
                         </button>
@@ -772,7 +788,7 @@ Response:
                                 className="locked-card-image"
                             />
                             <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>Bank Steps</div>
+                            <div className='check-out-button'>{t('BANK_STEPS')}</div>
                             <div className='locked-card-text'>STEPN</div>
                         </div>
                         {/* <img
@@ -828,7 +844,7 @@ Response:
                                     {/* <h3 className="event-card-title">{event.name}</h3>
                                     <p className="event-card-subtitle">{event.description}</p> */}
                                     <div className="check-out-button">
-                                        Check out
+                                        {t('CHECK_OUT')}
                                         <img src={checkout} alt="Arrow" />
                                     </div>
                                 </div>
