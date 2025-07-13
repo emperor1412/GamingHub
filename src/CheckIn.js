@@ -7,6 +7,7 @@ import checkmark from './images/checkmark.svg';
 
 import shared from './Shared';
 import { trackUserAction, trackLineConversion } from './analytics';
+import { t } from './utils/localization';
 
 const CheckIn = ({ checkInData, onClose, setShowCheckInAnimation }) => {
     const [loading, setLoading] = useState(false);
@@ -180,8 +181,8 @@ const CheckIn = ({ checkInData, onClose, setShowCheckInAnimation }) => {
                 </div>
                 <div className="content-container">
                     <div className="streak-info">
-                        <p className="streak-text">LOG IN STREAK</p>
-                        <h1 className="streak-days">{checkInData.streakDay} <span className="days-text">{checkInData.streakDay === 1 ? 'DAY' : 'DAYS'}</span></h1>
+                        <p className="streak-text">{t('LOG_IN_STREAK')}</p>
+                        <h1 className="streak-days">{checkInData.streakDay} <span className="days-text">{checkInData.streakDay === 1 ? t('DAY') : t('DAYS')}</span></h1>
                     </div>
                 </div>
             </div>

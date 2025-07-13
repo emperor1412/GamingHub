@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build -r https://github.com/hoangdevgames/GamingHub_Build",
+    "deploy": "gh-pages -d build -r https://github.com/vuongnt2201/line_gamehub_build",
     "prebuild": "node updateVersion.js"
   },
   "eslintConfig": {
@@ -46,7 +46,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://hoangdevgames.github.io/GamingHub_Build/",
+  "homepage": "https://vuongnt2201.github.io/line_gamehub_build/",
   "devDependencies": {
     "gh-pages": "^6.2.0"
   }

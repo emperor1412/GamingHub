@@ -57,6 +57,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { analytics } from './Firebase';
 import Market from './Market';
 import { lineShare } from './services/lineShare';
+import { t } from './utils/localization';
 
 function App() {
   const [initDataRaw, setInitDataRaw] = useState(null);
@@ -426,9 +427,9 @@ function App() {
       ) 
       : !isLoggedIn ? (
         <div className="login-error">
-          <div>Unable to log in. Please try again.</div>
+          <div>{t('LOGIN_ERROR')}</div>
           <button className="retry-button" onClick={login}>
-            Retry
+            {t('RETRY')}
           </button>
         </div>
       ) 
