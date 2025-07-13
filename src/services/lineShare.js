@@ -19,8 +19,33 @@ export const lineShare = {
 
       // Tạo URL với referral code
       const shareUrl = this.generateShareLink(referralCode);
-      const shareText = `🎮 Join with me!\n\nGet ${product.amount} Starlets and 10 Tickets!\n\nUse my referral code to get bonus rewards!\n\n${shareUrl}`;
       
+      // Customize message based on type
+      let shareText = `🎮 Join with me!\n\nGet ${product.amount} Starlets and 10 Tickets!\n\nUse my referral code to get bonus rewards!\n\n${shareUrl}`;
+      
+      // Add specific message based on type
+      if (product.type) {
+        switch (product.type) {
+          case 'ticket_scratch':
+            shareText = `🎉 I just scratched a ticket and won rewards!\n\nJoin me to scratch your own tickets!\n\n${shareUrl}`;
+            break;
+          case 'ticket_all':
+            shareText = `🎉 I just scratched all my tickets and claimed amazing rewards!\n\nJoin me to get your own rewards!\n\n${shareUrl}`;
+            break;
+          case 'level_up':
+            shareText = `🏆 I just reached a new level in FSL Gaming Hub!\n\nJoin me to level up together!\n\n${shareUrl}`;
+            break;
+          case 'trophy_unlock':
+            shareText = `🏆 I just unlocked a trophy in FSL Gaming Hub!\n\nJoin me to unlock your own trophies!\n\n${shareUrl}`;
+            break;
+          case 'bank_steps':
+            shareText = `🚶‍♂️ I just earned Starlets from my daily steps!\n\nJoin me to turn your steps into rewards!\n\n${shareUrl}`;
+            break;
+          default:
+            shareText = `🎮 Join with me!\n\nGet ${product.amount} Starlets and 10 Tickets!\n\nUse my referral code to get bonus rewards!\n\n${shareUrl}`;
+        }
+      }
+
       // Log share URL và text
       console.log('Share URL:', shareUrl);
       console.log('Share text:', shareText);
@@ -50,6 +75,7 @@ export const lineShare = {
       // Track share event
       trackStoryShare('line_share', {
         product_amount: product.amount,
+        product_type: product.type,
         referral_code: referralCode
       }, shared.loginData?.userId);
 

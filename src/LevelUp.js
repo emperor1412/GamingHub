@@ -88,12 +88,10 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         try {
-            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
-            const success = await lineShare.shareStory(
-                url,
-                `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
-                'level_up'
-            );
+            const success = await lineShare.shareToLine({
+                amount: '20', // Reward amount
+                type: 'level_up'
+            }, shared.loginData?.link);
 
             if (success) {
                 trackStoryShare('level_up', {

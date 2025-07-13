@@ -244,18 +244,22 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         console.log('Share story');
 
         try {
-            const success = await lineShare.shareStory(
-                'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png',
-                'Join me in FSL Gaming Hub!',
-                'bank_steps'
-            );
+            const success = await lineShare.shareToLine({
+                amount: '20', // Reward amount
+                type: 'bank_steps'
+            }, shared.loginData?.link);
 
             if (success) {
+                trackStoryShare('bank_steps', {
+                    invite_link: `${shared.app_link}?startapp=invite_${shared.loginData.link}`,
+                    bank_steps_status: shared.userProfile.fslId !== 0 ? 'connected' : 'not_connected'
+                }, shared.loginData?.userId);
+
                 await claimRewardFromSharingStory();
                 setShowOverlayClaimSuccess(false);
             }
         } catch (error) {
-            console.error('Error sharing story:', error);
+            console.error('Error sharing:', error);
         }
     };
 

@@ -118,18 +118,17 @@ Response:
         console.log('Share story');
 
         try {
-            const success = await lineShare.shareStory(
-                "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
-                'I just scratched a ticket and claimed a reward! Join me to get your rewards too!',
-                'ticket'
-            );
+            const success = await lineShare.shareToLine({
+                amount: '20', // Reward amount
+                type: 'ticket_scratch'
+            }, shared.loginData?.link);
 
             if (success) {
                 setShowShareStory(false);
                 await claimRewardFromSharingStory();
             }
         } catch (error) {
-            console.error('Error sharing story:', error);
+            console.error('Error sharing:', error);
         }
     };
 

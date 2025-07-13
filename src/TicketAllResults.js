@@ -117,18 +117,17 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     const onClickShareStory = async () => {
         try {
-            const success = await lineShare.shareStory(
-                "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png",
-                'I just scratched all my tickets and claimed amazing rewards! Join me to get your rewards too!',
-                'ticket_all'
-            );
+            const success = await lineShare.shareToLine({
+                amount: '40', // Reward amount for all tickets
+                type: 'ticket_all'
+            }, shared.loginData?.link);
 
             if (success) {
                 setShowShareStory(false);
                 await claimRewardFromSharingStory();
             }
         } catch (error) {
-            console.error('Error sharing story:', error);
+            console.error('Error sharing:', error);
         }
     };
 

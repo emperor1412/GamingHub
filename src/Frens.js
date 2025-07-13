@@ -378,26 +378,24 @@ const Frens = () => {
     closeOverlay();
 
     try {
-      const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2542.png";
-      const success = await lineShare.shareStory(
-        url,
-        'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
-        'trophy'
-      );
+        const success = await lineShare.shareToLine({
+            amount: '20', // Reward amount
+            type: 'trophy_unlock'
+        }, shared.loginData?.link);
 
-      if (success) {
-        trackStoryShare('trophy', {
-          trophy_id: selectedTrophy.id,
-          trophy_name: selectedTrophy.name,
-          trophy_status: selectedTrophy.status
-        }, shared.loginData?.userId);
+        if (success) {
+            trackStoryShare('trophy', {
+                trophy_id: selectedTrophy.id,
+                trophy_name: selectedTrophy.name,
+                trophy_status: selectedTrophy.status
+            }, shared.loginData?.userId);
 
-        shareStoryAPI(selectedTrophy.id);
-      }
+            shareStoryAPI(selectedTrophy.id);
+        }
     } catch (error) {
-      console.error('Error sharing story:', error);
+        console.error('Error sharing:', error);
     }
-  };
+};
 
   const onClickInviteFriends = async () => {
     if (isSharing) return; // Prevent multiple clicks
