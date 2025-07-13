@@ -105,25 +105,11 @@ Response:
                     console.log('Re-login successful, retrying ticket slot fetch');
                     return getTicketSlotData(depth + 1);
                 } else {
-                    if (popup.open.isAvailable()) {
-                        const promise = popup.open({
-                            title: 'Error',
-                            message: `Re-login failed: ${loginResult.error}`,
-                            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                        });
-                        await promise;
-                    }
+                    alert('Notice\n\n' + loginResult.error);
                     return null;
                 }
             } else {
-                if (popup.open.isAvailable()) {
-                    const promise = popup.open({
-                        title: 'Error',
-                        message: `Server returned error code: ${data.code}`,
-                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    });
-                    await promise;
-                }
+                alert('Error Getting Ticket Slot Data\n\nServer returned error code: ' + data.code);
                 return null;
             }
         } catch (error) {
@@ -137,14 +123,7 @@ Response:
             }
             
             // If all retries failed, show popup
-            if (popup.open.isAvailable()) {
-                const promise = popup.open({
-                    title: 'Error Getting Ticket Slot Data',
-                    message: `Failed after ${maxRetries} attempts: ${error.message}`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                await promise;
-            }
+            alert('Error Getting Ticket Slot Data\n\nFailed after ' + maxRetries + ' attempts: ' + error.message);
             return null;
         }
     };

@@ -170,12 +170,7 @@ data object
                 } else {
 
                     if (data.code === 102003) {
-                        const promise = popup.open({
-                            title: 'Login Fail',
-                            message: "Login failed",
-                            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                        });
-                        const buttonId = await promise;
+                        alert('Login Fail\n\nLogin failed');
                     }
 
                     return {
@@ -390,15 +385,7 @@ data object
                 }
                 else {
                     console.error('Login failed:', loginResult.error);
-                    // show popup 
-                    // if (loginResult.error) {
-                        const promise = popup.open({
-                            title: 'bind FSL Fail',
-                            message: loginResult.error,
-                            buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                        });
-                        // const buttonId = await promise;
-                    // }
+                    alert('bind FSL Fail\n\n' + loginResult.error);
                 }
                 return;
             }
@@ -523,14 +510,7 @@ data object
 
     // type: 0 - error, 1 - notice
     showPopup: async ({ type = 0, message = '', title = type === 0 ? 'Error' : 'Notice' }) => {
-        if (popup.open.isAvailable()) {
-            const promise = popup.open({
-                title: title,
-                message: message,
-                buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-            });
-            await promise;
-        }
+        alert(title + '\n\n' + message);
     },
 
     // Add helper function for story sharing with referral

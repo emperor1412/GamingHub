@@ -202,14 +202,7 @@ Response:
         }
         else {
             console.error('Ticket use failed');
-            if (popup.open.isAvailable()) {
-                const promise = popup.open({
-                    title: 'Ticket use failed',
-                    message: `Error: Ticket use failed`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                await promise;
-            }
+            alert('Ticket use failed\n\nError: Ticket use failed');
             onClose();
         }
         setShowLoading(false);

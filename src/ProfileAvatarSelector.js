@@ -135,12 +135,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 // login();
             }
             else {
-                const promise = popup.open({
-                    title: 'Error Getting Profile Data',
-                    message: `Error code:${JSON.stringify(data)}`,
-                    buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                });
-                const buttonId = await promise;
+                alert('Notice\n\nAvatar selection failed');
             }
         }
       } finally {

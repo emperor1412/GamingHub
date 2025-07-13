@@ -237,13 +237,13 @@ function App() {
 
     const initializeLine = async () => {
       try {
-        // // Add LIFF Inspector plugin
-        // liff.use(new LIFFInspectorPlugin({
-        //   origin: 'wss://f39acd71cac5.ngrok-free.app'
-        // }));
+        // Add LIFF Inspector plugin
+        liff.use(new LIFFInspectorPlugin({
+          origin: 'wss://f39acd71cac5.ngrok-free.app'
+        }));
 
         await liff.init({ 
-          liffId: '2007739334-1y40PGGg',
+          liffId: '2007488153-aBQgjwyL',
           withLoginOnExternalBrowser: true
         });
 

@@ -229,12 +229,7 @@ Response:
                     }
                 }
                 else {
-                    const promise = popup.open({
-                        title: 'Error Getting Events',
-                        message: `Error code:${JSON.stringify(data)}`,
-                        buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-                    });
-                    const buttonId = await promise;
+                    alert('Error\n\nSomething went wrong');
                 }
             }
             else {
