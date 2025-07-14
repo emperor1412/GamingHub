@@ -68,64 +68,131 @@ function convertJsToCsv() {
     }
 }
 
-// Convert CSV to JS
+// Convert CSV to JS (PRESERVE EXISTING KEYS)
 function convertCsvToJs() {
     try {
-        console.log('🔄 Converting CSV to localization.js...');
+        console.log('🔄 Converting CSV to localization.js (preserving existing keys)...');
+        
+        // First, read the current localization.js to preserve existing keys
+        const currentLocalizationContent = fs.readFileSync(CONFIG.localizationJsPath, 'utf8');
+        const translationsMatch = currentLocalizationContent.match(/const translations = ({[\s\S]*?});/);
+        
+        if (!translationsMatch) {
+            throw new Error('Could not find translations object in localization.js');
+        }
+        
+        // Get current translations (to preserve existing keys)
+        const currentTranslations = eval('(' + translationsMatch[1] + ')');
         
         // Read the CSV file
         const csvContent = fs.readFileSync(CONFIG.csvPath, 'utf8');
         
-        // Parse CSV (simple parsing, assumes no commas in content)
-        const lines = csvContent.split('\n').filter(line => line.trim());
-        
-        // Initialize translations object
+        // --- Robust CSV parser for multi-line quoted fields ---
+        function parseCsvRows(csvContent) {
+            const rows = [];
+            let currentRow = '';
+            let inQuotes = false;
+            const lines = csvContent.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                // Count quotes in this line
+                let quoteCount = (line.match(/\"/g) || []).length;
+                if (!inQuotes) {
+                    currentRow = line;
+                } else {
+                    currentRow += '\n' + line;
+                }
+                // Toggle inQuotes for each quote
+                let quoteToggles = 0;
+                for (let j = 0; j < line.length; j++) {
+                    if (line[j] === '"') {
+                        // If double quote inside quoted field, skip
+                        if (line[j + 1] === '"') {
+                            j++;
+                        } else {
+                            quoteToggles++;
+                        }
+                    }
+                }
+                if (quoteToggles % 2 !== 0) {
+                    inQuotes = !inQuotes;
+                }
+                if (!inQuotes) {
+                    rows.push(currentRow);
+                    currentRow = '';
+                }
+            }
+            return rows;
+        }
+
+        // Use robust parser
+        const lines = parseCsvRows(csvContent).filter(line => line.trim());
+
+        // Start with current translations (to preserve existing keys)
         const translations = {
-            en: {},
-            ja: {}
+            en: { ...currentTranslations.en },
+            ja: { ...currentTranslations.ja }
         };
-        
+
         // Process each line (skip header)
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
-            const values = line.split(',');
-            
+            // Parse CSV line properly (reuse previous logic)
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            for (let j = 0; j < line.length; j++) {
+                const char = line[j];
+                if (char === '"') {
+                    if (inQuotes && line[j + 1] === '"') {
+                        current += '"';
+                        j++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            values.push(current.trim());
             if (values.length >= 3) {
-                const key = values[0].replace(/"/g, ''); // Remove quotes
-                const english = values[1].replace(/"/g, '').replace(/""/g, '"'); // Handle escaped quotes
-                const japanese = values[2].replace(/"/g, '').replace(/""/g, '"'); // Handle escaped quotes
-                
+                const key = values[0];
+                const english = values[1];
+                const japanese = values[2];
                 if (key && key.trim()) {
-                    translations.en[key.trim()] = english.trim();
-                    translations.ja[key.trim()] = japanese.trim();
+                    const trimmedKey = key.trim();
+                    if (translations.en.hasOwnProperty(trimmedKey) || translations.ja.hasOwnProperty(trimmedKey)) {
+                        translations.en[trimmedKey] = english.trim();
+                        translations.ja[trimmedKey] = japanese.trim();
+                    }
                 }
             }
         }
         
-        // Generate the localization.js content
-        const localizationContent = `// Localization utility
-const translations = ${JSON.stringify(translations, null, 2)};
+        // Generate the localization.js content with unquoted keys
+        function objectToJs(obj, indent = 2) {
+            const pad = ' '.repeat(indent);
+            let str = '{\n';
+            const keys = Object.keys(obj);
+            keys.forEach((key, idx) => {
+                const value = obj[key];
+                // If value is an object, recurse
+                if (typeof value === 'object' && value !== null) {
+                    str += `${pad}${key}: ${objectToJs(value, indent + 2)}`;
+                } else {
+                    // Always quote the value, never the key
+                    str += `${pad}${key}: ${JSON.stringify(value)}`;
+                }
+                if (idx < keys.length - 1) str += ',\n';
+            });
+            str += '\n' + ' '.repeat(indent - 2) + '}';
+            return str;
+        }
 
-// Get current language from localStorage or default to English
-const getCurrentLanguage = () => {
-  return localStorage.getItem('language') || 'en';
-};
-
-// Set language
-const setLanguage = (language) => {
-  localStorage.setItem('language', language);
-  window.location.reload(); // Simple reload to apply changes
-};
-
-// Get translation for a key
-const t = (key) => {
-  const currentLang = getCurrentLanguage();
-  return translations[currentLang][key] || translations.en[key] || key;
-};
-
-// Export functions
-export { t, getCurrentLanguage, setLanguage };
-`;
+        const localizationContent = `// Localization utility\nconst translations = ${objectToJs(translations, 2)};\n\n// Get current language from localStorage or default to English\nconst getCurrentLanguage = () => {\n  return localStorage.getItem('language') || 'en';\n};\n\n// Set language\nconst setLanguage = (language) => {\n  localStorage.setItem('language', language);\n  window.location.reload(); // Simple reload to apply changes\n};\n\n// Get translation for a key\nconst t = (key) => {\n  const currentLang = getCurrentLanguage();\n  return translations[currentLang][key] || translations.en[key] || key;\n};\n\n// Export functions\nexport { t, getCurrentLanguage, setLanguage };\n`;
         
         // Write directly to localization.js
         fs.writeFileSync(CONFIG.localizationJsPath, localizationContent, 'utf8');
@@ -133,6 +200,7 @@ export { t, getCurrentLanguage, setLanguage };
         console.log('✅ CSV to JS conversion completed!');
         console.log(`📁 Updated file: ${CONFIG.localizationJsPath}`);
         console.log(`📊 Total keys: ${Object.keys(translations.en).length}`);
+        console.log('⚠️  Note: Existing keys in localization.js have been preserved');
         
         return true;
     } catch (error) {
@@ -152,7 +220,7 @@ Usage:
 
 Commands:
   js2csv    - Convert localization.js to CSV (for Google Docs)
-  csv2js    - Convert CSV back to localization.js
+  csv2js    - Convert CSV back to localization.js (PRESERVES EXISTING KEYS)
   both      - Run both conversions
   help      - Show this help message
 
@@ -164,6 +232,8 @@ Examples:
 Files:
   JS:  ${CONFIG.localizationJsPath}
   CSV: ${CONFIG.csvPath}
+
+⚠️  IMPORTANT: csv2js now preserves existing keys in localization.js
 `);
 }
 
