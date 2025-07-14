@@ -202,20 +202,20 @@ const LevelUp = ({ onClose }) => {
                     {showLevelUpButton ? 
                     (
                         <div className="points-info">
-                            <div className="points-text-content-title">PROCEED TO THE NEXT LEVEL TO:</div>
-                            <div className="points-icon-text-container"><img src={shared.mappingIcon[10010]} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> UNLOCK 3 EXTRA SCRATCH-ABLE TICKETS</span></div>
+                            <div className="points-text-content-title">{t('PROCEED_TO_NEXT_LEVEL')}</div>
+                            <div className="points-icon-text-container"><img src={shared.mappingIcon[10010]} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> {t('UNLOCK_EXTRA_TICKETS')}</span></div>
                             {/* <div><span className="points-text-content">• REDUCE COOL DOWN PERIOD</span></div> */}
                             {/* <div className='points-icon-text-container'><span className="points-text-content">• ACCESS EXCLUSIVE PFPS, AND MORE</span></div> */}
-                            <div className="points-icon-text-container"><img src={single_star} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> ACCESS EXCLUSIVE PFPS, AND MORE</span></div>
+                            <div className="points-icon-text-container"><img src={single_star} alt="Ticket Icon" className="points-icon-levelup" /><span className="points-text-content"> {t('ACCESS_EXCLUSIVE_PFPS')}</span></div>
                         </div>
                     )
                     :
                     (
                         <div className="points-info">
-                            <div className="points-text-content">EARN STARLETS BY:</div>
-                            <div className="points-item">DAILY CHECK-IN: <span className="points-text-content">KEEP YOUR STREAK!</span></div>
-                            <div className="points-item">TICKETS: <span className="points-text-content">TRY YOUR LUCK AND WIN MORE POINTS</span></div>
-                            <div className="points-item">TASKS: <span className="points-text-content">ENGAGE WITH TASKS TO UNLOCK REWARDS.</span></div>
+                            <div className="points-text-content">{t('EARN_STARLETS_BY')}</div>
+                            <div className="points-item">{t('DAILY_CHECK_IN')} <span className="points-text-content">{t('KEEP_YOUR_STREAK')}</span></div>
+                            <div className="points-item">{t('TICKETS')} <span className="points-text-content">{t('TRY_YOUR_LUCK')}</span></div>
+                            <div className="points-item">{t('TASKS')} <span className="points-text-content">{t('ENGAGE_WITH_TASKS')}</span></div>
                         </div>
                     )}
                 </div>
@@ -225,8 +225,8 @@ const LevelUp = ({ onClose }) => {
                 <div className="level-up-overlay-container" onClick={() => handleOverlayClose()}>
                     <div className="level-up-overlay-content" onClick={e => e.stopPropagation()}>
                         <div className="level-up-overlay-promotion">
-                            CONGRATULATIONS!<br />
-                            ONLY LEGENDS REACH LEVEL {shared.userProfile.level}!
+                            {t('CONGRATULATIONS')}!<br />
+                            {t('ONLY_LEGENDS_REACH')} {shared.userProfile.level}!
                         </div>
 
                         <div className="level-up-overlay-icon-container">
@@ -245,11 +245,11 @@ const LevelUp = ({ onClose }) => {
                                 onClickShareStory();
                                 setup();
                             }}>
-                            Share To Story 20 Starlets
+                            {t('SHARE_TO_STORY_20')}
                         </button>
                         </div>
                         <button className="level-up-okay-button" onClick={handleOverlayClose}>
-                            Okay
+                            {t('OKAY')}
                         </button>
                     </div>
                 </div>

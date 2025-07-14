@@ -13,6 +13,7 @@ import { popup, openLink } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 import FSLAuthorization from 'fsl-authorization';
+import { t } from './utils/localization';
 
 const maskEmail = (email) => {
     if (!email) return '';
@@ -52,7 +53,7 @@ const GoldenTicketList = ({ onClose, tickets }) => {
                             <div className="profile-item-left">
                                 <img src={ticketDiscountIcon} alt="" className="profile-item-icon" />
                                 <div className="golden-ticket-info">
-                                    <div className="profile-item-text">Discount Ticket</div>
+                                    <div className="profile-item-text">{t('DISCOUNT_TICKET')}</div>
                                     <span className="golden-ticket-expiry">
                                         {getTimeRemaining(ticket.expiredTime)}
                                     </span>
@@ -60,7 +61,7 @@ const GoldenTicketList = ({ onClose, tickets }) => {
                             </div>
                             <div className="profile-item-right">
                                 <span className={`golden-ticket-status ${ticket.state === 0 ? 'active' : 'used'}`}>
-                                    {ticket.state === 0 ? 'Active' : 'Used'}
+                                    {ticket.state === 0 ? t('ACTIVE') : t('USED')}
                                 </span>
                             </div>
                         </div>
@@ -68,7 +69,7 @@ const GoldenTicketList = ({ onClose, tickets }) => {
                 </div>
             </div>
             <div className="profile-info-box">
-                Golden Tickets provide special discounts. Each ticket has an expiration date, make sure to use them before they expire!
+                {t('GOLDEN_TICKETS_INFO')}
             </div>
         </div>
     );
@@ -293,14 +294,14 @@ Response:
                                 <div className="profile-item">
                                     <div className="profile-item-left">
                                         <img src={ticketDiscountIcon} alt="" className="profile-item-icon" />
-                                        <span className="profile-item-text">Golden Tickets</span>
+                                        <span className="profile-item-text">{t('GOLDEN_TICKETS')}</span>
                                     </div>
                                     <div className="profile-item-right">
                                         <button 
                                             className="profile-claim" 
                                             onClick={() => setShowGoldenTickets(true)}
                                         >
-                                            View Details
+                                            {t('VIEW_DETAILS')}
                                         </button>
                                         <span className="profile-item-value">
                                             {shared.userProfile.goldenTicketList.filter(ticket => ticket.state === 0).length}
@@ -312,7 +313,7 @@ Response:
                         </div>
                     </div>
                     <div className="profile-info-box">
-                        Earn extra rewards by inviting frens or by completing daily tasks. The more you engage, the more rewards you'll unlock.
+                        {t('PROFILE_INFO')}
                     </div>
                 </div>
             )}

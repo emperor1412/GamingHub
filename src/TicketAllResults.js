@@ -6,6 +6,7 @@ import { trackStoryShare } from './analytics';
 import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
 import { lineShare } from './services/lineShare';
+import { t } from './utils/localization';
 
 /*- API for Scratching all the current available tickets
     - Request:
@@ -193,9 +194,9 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                             </div>
                         </div>
                     </div>
-                    <h2 className="congratulations">CONGRATULATIONS</h2>
-                    <p className="reward-message">YOU'VE WON 40 STARLETS!</p>
-                    <button className="claim-button" onClick={handleClaimReward}>CLAIM</button>
+                    <h2 className="congratulations">{t('CONGRATULATIONS')}</h2>
+                    <p className="reward-message">{t('YOU_HAVE_WON')} 40 STARLETS!</p>
+                    <button className="claim-button" onClick={handleClaimReward}>{t('CLAIM')}</button>
                 </div>
             ) : (
                 <>
@@ -268,7 +269,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                 <div className="sa_buttons-container">
                                     {showShareStory && (
                                         <button className="sa_share-story-button" onClick={onClickShareStory}>
-                                            SHARE TO STORY
+                                            {t('SHARE_TO_STORY')}
                                             <div className="sa_share-story-reward">
                                                 <span>×40</span>
                                                 <img src={shared.mappingIcon[10020]} alt="Starlet" />
@@ -277,7 +278,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     )}
                                     
                                     <button className="sa_claim-all-button" onClick={handleClaim}>
-                                        CLAIM LOOT
+                                        {t('CLAIM_LOOT')}
                                     </button>
                                 </div>
                             </div>
