@@ -277,3 +277,118 @@ p {
   width: 24px;
   height: 24px;
 }
+
+/* ID Token Button and Popup Styles */
+.login-error-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.id-token-button {
+  padding: 8px 12px;
+  background-color: #FF6B35;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.id-token-button:hover {
+  background-color: #E55A2B;
+}
+
+.id-token-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.id-token-popup {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 90%;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #333;
+}
+
+.id-token-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.id-token-popup-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
+
+.id-token-close-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.id-token-close-btn:hover {
+  color: white;
+}
+
+.id-token-content {
+  color: white;
+}
+
+.id-token-content p {
+  margin-bottom: 16px;
+  color: #ccc;
+}
+
+.id-token-display {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  word-break: break-all;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.id-token-display code {
+  color: #4CAF50;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.id-token-copy-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.id-token-copy-btn:hover {
+  background-color: #0056b3;
+}

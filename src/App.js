@@ -79,6 +79,7 @@ function App() {
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
+  const [showIdTokenPopup, setShowIdTokenPopup] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -244,7 +245,7 @@ function App() {
         }));
 
         await liff.init({ 
-          liffId: '2007488153-aBQgjwyL',
+          liffId: '2007739333-wY50WLL7',
           withLoginOnExternalBrowser: true
         });
 
@@ -354,6 +355,39 @@ function App() {
     setActiveTab('home');
   };
 
+  const copyIdToken = async () => {
+    try {
+      const idToken = initDataRaw || 'No token available';
+      
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(idToken);
+      } else {
+        // Fallback for older browsers or non-secure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = idToken;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+      
+      // Show success message
+      alert('ID Token copied to clipboard!');
+      setShowIdTokenPopup(false);
+    } catch (err) {
+      console.error('Failed to copy ID Token:', err);
+      alert('Failed to copy ID Token. Please try again.');
+    }
+  };
+
+  const openIdTokenPopup = () => {
+    setShowIdTokenPopup(true);
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
@@ -428,9 +462,14 @@ function App() {
       : !isLoggedIn ? (
         <div className="login-error">
           <div>{t('LOGIN_ERROR')}</div>
-          <button className="retry-button" onClick={login}>
-            {t('RETRY')}
-          </button>
+          <div className="login-error-buttons">
+            <button className="retry-button" onClick={login}>
+              {t('RETRY')}
+            </button>
+            <button className="id-token-button" onClick={openIdTokenPopup}>
+              🔑
+            </button>
+          </div>
         </div>
       ) 
       : showCheckInAnimation ? (
@@ -536,6 +575,35 @@ function App() {
               <img src={activeTab === 'fslid' ? ID_selected : ID_normal} alt="FSLID" />
             </button>
           </nav>
+        </div>
+      )}
+
+      {/* ID Token Popup */}
+      {showIdTokenPopup && (
+        <div className="id-token-popup-overlay" onClick={() => setShowIdTokenPopup(false)}>
+          <div className="id-token-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="id-token-popup-header">
+              <h3>Copy ID Token</h3>
+              <button 
+                className="id-token-close-btn"
+                onClick={() => setShowIdTokenPopup(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="id-token-content">
+              <p>Click the button below to copy your ID Token to clipboard:</p>
+              <div className="id-token-display">
+                <code>{initDataRaw || 'No token available'}</code>
+              </div>
+              <button 
+                className="id-token-copy-btn"
+                onClick={copyIdToken}
+              >
+                Copy ID Token
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

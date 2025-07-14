@@ -56,6 +56,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
+    const [showIdTokenPopup, setShowIdTokenPopup] = useState(false);
     
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
@@ -418,6 +419,39 @@ Response:
         setLanguage(newLang);
     };
 
+    const copyIdToken = async () => {
+        try {
+            const idToken = shared.loginData?.token || 'No token available';
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(idToken);
+            } else {
+                // Fallback for older browsers or non-secure contexts
+                const textArea = document.createElement('textarea');
+                textArea.value = idToken;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                textArea.remove();
+            }
+            
+            // Show success message
+            alert('ID Token copied to clipboard!');
+            setShowIdTokenPopup(false);
+        } catch (err) {
+            console.error('Failed to copy ID Token:', err);
+            alert('Failed to copy ID Token. Please try again.');
+        }
+    };
+
+    const openIdTokenPopup = () => {
+        setShowIdTokenPopup(true);
+    };
+
     useEffect(() => {
         setupProfileData();
         setupEvents();
@@ -717,6 +751,13 @@ Response:
                 >
                     {currentLanguage === 'en' ? '🇯🇵' : '🇺🇸'}
                 </button>
+                <button 
+                    className="id-token-toggle"
+                    onClick={openIdTokenPopup}
+                    title="Copy ID Token"
+                >
+                    🔑
+                </button>
             </header>
 
             <div className="scrollable-content">
@@ -893,6 +934,35 @@ Response:
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
+
+            {/* ID Token Popup */}
+            {showIdTokenPopup && (
+                <div className="id-token-popup-overlay" onClick={() => setShowIdTokenPopup(false)}>
+                    <div className="id-token-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="id-token-popup-header">
+                            <h3>Copy ID Token</h3>
+                            <button 
+                                className="id-token-close-btn"
+                                onClick={() => setShowIdTokenPopup(false)}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="id-token-content">
+                            <p>Click the button below to copy your ID Token to clipboard:</p>
+                            <div className="id-token-display">
+                                <code>{shared.loginData?.token || 'No token available'}</code>
+                            </div>
+                            <button 
+                                className="id-token-copy-btn"
+                                onClick={copyIdToken}
+                            >
+                                Copy ID Token
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
