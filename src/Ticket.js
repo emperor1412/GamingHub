@@ -13,6 +13,7 @@ import burn_ticket from './images/burn_ticket.svg';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import scratch_ticket_button_bg_disabled from './images/scratch_ticket_button_bg_disabled.png';
 import { trackUserAction, trackLineConversion } from './analytics';
+import { t } from './utils/localization';
 
 const Ticket = ({ onClose, getProfileData }) => {
     const [ticket, setTicket] = useState(0);
@@ -101,10 +102,10 @@ const Ticket = ({ onClose, getProfileData }) => {
                                     <img src={scratch_ticket_button_bg} alt="Scratch Ticket" className="scratch-ticket-button-image" />
                                     
                                     <div className='scratch-ticket-button-container-border'></div>
-                                    <h3 className="scratch-event-card-title">SCRATCH TICKET</h3>
-                                    <p className="scratch-event-card-subtitle">Scratch Your Tickets to<br></br>Reveal Rewards!</p>
+                                    <h3 className="scratch-event-card-title">{t('SCRATCH_TICKET')}</h3>
+                                    <p className="scratch-event-card-subtitle">{t('SCRATCH_REWARDS')}</p>
                                     <div className="scratch-check-out-button">
-                                        Scratch Tickets
+                                        {t('SCRATCH_TICKETS')}
                                     </div>
                                 </div>
                             </button>
@@ -116,10 +117,10 @@ const Ticket = ({ onClose, getProfileData }) => {
                                 <div className='scratch-ticket-button-image-container'>
                                     <img src={scratch_ticket_button_bg_disabled} alt="Bank Ticket" className="scratch-ticket-button-image" />
                                     <div className='scratch-ticket-button-container-border disabled'></div>
-                                    <h3 className="scratch-event-card-title">BANK TICKET</h3>
-                                    <p className="scratch-event-card-subtitle">Save your tickets to<br></br>enter a lucky draw</p>
+                                    <h3 className="scratch-event-card-title">{t('BANK_TICKET')}</h3>
+                                    <p className="scratch-event-card-subtitle">{t('LUCKY_DRAW')}</p>
                                     <div className="scratch-check-out-button disabled">
-                                        Coming Soon
+                                        {t('COMING_SOON')}
                                     </div>
                                 </div>
                             </button>
@@ -131,16 +132,16 @@ const Ticket = ({ onClose, getProfileData }) => {
                                 <div className='scratch-ticket-button-image-container'>
                                     <img src={scratch_ticket_button_bg_disabled} alt="Burn Ticket" className="scratch-ticket-button-image" />
                                     <div className='scratch-ticket-button-container-border disabled'></div>
-                                    <h3 className="scratch-event-card-title">BURN TICKET</h3>
-                                    <p className="scratch-event-card-subtitle">Burn 1 ticket daily for 7<br></br>consecutive days and<br></br> stand a chance to receive<br></br> a GOLDEN TICKET</p>
+                                    <h3 className="scratch-event-card-title">{t('BURN_TICKET')}</h3>
+                                    <p className="scratch-event-card-subtitle">{t('GOLDEN_TICKET')}</p>
                                     <div className="scratch-check-out-button disabled">
-                                        Coming Soon
+                                        {t('COMING_SOON')}
                                     </div>
                                 </div>
                             </button>
 
                             <div className="info-box-ticket">
-                                EARN EXTRA TICKETS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                                {t('EARN_EXTRA_TICKETS')}
                             </div>
                         </div>
                     </div>
