@@ -17,6 +17,7 @@ import LevelUp from './LevelUp';
 import unlock from './images/unlock.png';
 import lock_ticket from './images/lock_ticket.png';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
+import { t } from './utils/localization';
 import TicketAll from './TicketAll';
 import bulk_scratch_animation from './images/Bulk_Scratch_Ticket.gif';
 import bulk_scratch_last_frame from './images/lock_ticket.png';
@@ -535,11 +536,11 @@ Response:
                                     <div className="scratch-status">
                                         <div className="scratch-status-text">
                                             <span className='scratch-status-text-count'>{slotUseNum}/{slotNum} </span> 
-                                            TICKETS SCRATCHED TODAY!
+                                            {t('TICKETS_SCRATCHED_TODAY')}
                                         </div>
                                         <div className="scratch-status-subtext">
                                             <img src={unlock} alt="Unlock" className="unlock-icon" /> 
-                                            UNLOCK 3 MORE SLOTS BY LEVELING UP TO LEVEL {shared.userProfile.level + 1}!
+                                            {t('LEVEL_UP_SLOTS').replace('2', shared.userProfile.level + 1)}
                                         </div>
                                     </div>
                                 </div>
@@ -554,7 +555,7 @@ Response:
                                             cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
-                                        SCRATCH 1 TICKET
+                                        {t('SCRATCH_1_TICKET')}
                                         {(ticket === 0 || slotUseNum >= slotNum) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
@@ -568,7 +569,7 @@ Response:
                                             cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
-                                        {shared.userProfile.level < 5 ? 'SCRATCH ALL [LVL 5 REQ]' : 'SCRATCH ALL TICKETS'}
+                                        {shared.userProfile.level < 5 ? t('SCRATCH_ALL_LVL5_REQ') : t('SCRATCH_ALL_TICKETS')}
                                         {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
@@ -576,7 +577,7 @@ Response:
                                 </div>
 
                                 <div className="info-box-ticket">
-                                    Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
+                                    {t('EARN_EXTRA_TICKETS')}
                                 </div>
                             </div>
                         )}
@@ -603,7 +604,7 @@ Response:
                                             cursor: (ticket === 0 || slotUseNum >= slotNum) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
-                                        SCRATCH 1 TICKET
+                                        {t('SCRATCH_1_TICKET')}
                                         {(ticket === 0 || slotUseNum >= slotNum) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
@@ -640,7 +641,7 @@ Response:
                                             cursor: (ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) ? 'not-allowed' : 'pointer'
                                         }}
                                     >
-                                        BULK SCRATCH {Math.min(ticket, slotNum - slotUseNum)} TICKETS
+                                        {t('BULK_SCRATCH')} {Math.min(ticket, slotNum - slotUseNum)} {t('TICKETS')}
                                         {(ticket < 2 || slotUseNum >= slotNum || shared.userProfile.level < 5) && (
                                             <img src={lock_icon} alt="Locked" className="scratch-button-lock" />
                                         )}
@@ -659,7 +660,7 @@ Response:
                                         className="overlay-button-ticket1 primary" 
                                         onClick={() => setShowTicket2(true)}
                                     >
-                                        SCRATCH 1 TICKET
+                                        {t('SCRATCH_1_TICKET')}
                                     </button>
                                     <button 
                                         className="overlay-button-ticket1 secondary"
@@ -670,7 +671,7 @@ Response:
                                         //     cursor: ticket >= 2 ? 'pointer' : 'not-allowed'
                                         // }}
                                     >
-                                        SCRATCH ALL [LVL 5 REQ]
+                                        {t('SCRATCH_ALL_LVL5_REQ')}
                                         <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
                                         {/* {ticket < 2 && (
                                             <img src={lock_icon} alt="Locked" className="overlay-button-ticket1-lock" />
@@ -688,7 +689,7 @@ Response:
                                     className="overlay-button-ticket1" 
                                     onClick={handleCloseSuccessOverlay}
                                 >
-                                    DONE
+                                    {t('DONE')}
                                 </button>
                             </div>
                         </div>
@@ -701,7 +702,7 @@ Response:
                                     className="overlay-button-ticket1" 
                                     onClick={handleCloseTimerOverlay}
                                 >
-                                    OKAY
+                                    {t('OKAY')}
                                 </button>
                             </div>
                         </div>

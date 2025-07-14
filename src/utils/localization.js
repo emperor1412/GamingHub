@@ -80,7 +80,19 @@ const translations = {
     RETRY: "Retry",
     LOG_IN_STREAK: "LOG IN STREAK",
     DAY: "DAY",
-    DAYS: "DAYS"
+    DAYS: "DAYS",
+    TICKETS_SCRATCHED_TODAY: "TICKETS SCRATCHED TODAY!",
+    SCRATCH_ALL_LVL5_REQ: "SCRATCH ALL [LVL 5 REQ]",
+    SCRATCH_ALL_TICKETS: "SCRATCH ALL TICKETS",
+    BULK_SCRATCH: "BULK SCRATCH",
+    DONE: "DONE",
+    OKAY: "OKAY",
+    TROPHIES: "TROPHIES",
+    SHARING: "SHARING...",
+    UNLOCK_THIS_TROPHY: "UNLOCK THIS TROPHY",
+    UNLOCKED_MYSTERY_TROPHY: "YOU'VE UNLOCKED A MYSTERY TROPHY",
+    YOU_HAVE_BEEN_PROMOTED: "YOU'VE BEEN PROMOTED",
+    SHARE_A_STORY: "SHARE A STORY"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -162,7 +174,19 @@ const translations = {
     RETRY: "再試行",
     LOG_IN_STREAK: "ログインストリーク",
     DAY: "日",
-    DAYS: "日"
+    DAYS: "日",
+    TICKETS_SCRATCHED_TODAY: "今日削ったチケット！",
+    SCRATCH_ALL_LVL5_REQ: "すべて削る [LV5必要]",
+    SCRATCH_ALL_TICKETS: "すべてのチケットを削る",
+    BULK_SCRATCH: "一括削除",
+    DONE: "完了",
+    OKAY: "OK",
+    TROPHIES: "トロフィー",
+    SHARING: "シェア中...",
+    UNLOCK_THIS_TROPHY: "このトロフィーを解放",
+    UNLOCKED_MYSTERY_TROPHY: "謎のトロフィーを解放しました",
+    YOU_HAVE_BEEN_PROMOTED: "昇格しました",
+    SHARE_A_STORY: "ストーリーをシェア"
   }
 };
 

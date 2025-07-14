@@ -3,6 +3,8 @@ import { shareStory, shareURL } from '@telegram-apps/sdk';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from './Firebase';
 import { trackUserAction, trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
+import { t } from './utils/localization';
+
 
 import './Frens.css';
 import shared from './Shared';
@@ -537,13 +539,13 @@ const Frens = () => {
     <div className="frens-content">
       <div className="frens-inner-content">
         <div className="info-box">
-        Earn extra tickets by inviting friends or completing daily tasks. The more you engage, the more rewards you unlock!
+                                    {t('EARN_EXTRA_TICKETS')}
         </div>
 
         <div className="stats-row">
           <div className="stat-item-frens">
             <img src={friendsIcon} alt="Friends" className="stat-icon" />
-            <span className="stat-label">Friends</span>
+                                    <span className="stat-label">{t('FRIENDS')}</span>
             <span className="stat-value">{totalFriends}</span>
           </div>
           <div className="stat-item-frens">
@@ -560,13 +562,13 @@ const Frens = () => {
                 className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
                 onClick={() => setActiveTab('friends')}
               >
-                Friends
+                {t('FRIENDS')}
               </button>
               <button
                 className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
                 onClick={() => setActiveTab('trophies')}
               >
-                Trophies
+                {t('TROPHIES')}
               </button>
             </div>
             <div className="friends-list" onScroll={handleScroll}>
@@ -646,7 +648,7 @@ const Frens = () => {
                   </div>
                   <div className="trophy-overlay-lock-content">
                     <img src={lock_trophy} alt="Lock" className="trophy-overlay-lock" />
-                    <div className="trophy-overlay-title">UNLOCK THIS TROPHY</div>
+                    <div className="trophy-overlay-title">{t('UNLOCK_THIS_TROPHY')}</div>
                     <p className="trophy-overlay-description">
                       {selectedTrophy.description}
                     </p>
@@ -679,13 +681,13 @@ const Frens = () => {
                   <div className="trophy-overlay-promotion">
                     {selectedTrophy.id === 10000 ? (
                       <>
-                        CONGRATULATIONS!<br />
-                        YOU'VE UNLOCKED A MYSTERY TROPHY!
+                        {t('CONGRATULATIONS')}!<br />
+                        {t('UNLOCKED_MYSTERY_TROPHY')}!
                       </>
                     ) : (
                       <>
-                        CONGRATULATIONS!<br />
-                        YOU'VE BEEN PROMOTED!
+                        {t('CONGRATULATIONS')}!<br />
+                        {t('YOU_HAVE_BEEN_PROMOTED')}!
                       </>
                     )}
                   </div>
@@ -700,7 +702,7 @@ const Frens = () => {
                     )}
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
-                    SHARE A STORY
+                    {t('SHARE_A_STORY')}
                     <div className="trophy-reward">
                       <img src={starletIcon} alt="Starlets" className="stat-icon" />
                       <span>20</span>

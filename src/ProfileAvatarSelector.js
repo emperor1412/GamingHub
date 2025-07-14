@@ -12,6 +12,7 @@ import shared from './Shared';
 import unlock from './images/unlock.png';
 import LevelUp from './LevelUp';
 import { trackUserAction, trackOverlayView, trackOverlayExit } from './analytics';
+import { t } from './utils/localization';
 
 const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(shared.userProfile ? shared.userProfile.pictureIndex : 0);
@@ -202,7 +203,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             <div className="avatar-grid-container">
                 <img src={background_avatar_selection} alt="Background" className="background-avatar-selection" />
                 <div className="avatar-selector-header">
-                Select Avatar
+                {t('SELECT_AVATAR')}
                 </div>
               <div className="avatar-grid">
                 {[...Array(13)].map((_, index) => (
