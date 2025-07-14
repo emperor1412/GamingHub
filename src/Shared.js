@@ -10,6 +10,9 @@ import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
 import stepn_go_code from './images/stepngo_code.png';
 import alpha_chest from './images/Chest_Icon.png';
 
+
+import { t } from './utils/localization';
+
 import avatar1 from './images/avatar_1_Dino_300px.png';
 import avatar2 from './images/avatar_2_Chef_Cat_300px.png';
 import avatar3 from './images/avatar_3_Bunny_300px.png';
@@ -87,16 +90,19 @@ const shared = {
         40010: stepn_go_sneaker,
         50010: alpha_chest
     },
-    mappingText : {
-        10010: 'Tickets',
-        10020: 'Starlets',
-        10030: 'Energy',
-        20010: 'SUT',
-        20020: 'GMT',
-        30010: 'StepN GO code',
-        30020: 'MOOAR+ Membership',
-        40010: 'StepN GO Shoe',
-        50010: 'Alpha Chest'
+    getMappingText: (type) => {
+        const mapping = {
+            10010: t('TICKETS_TEXT'),
+            10020: t('STARLETS_TEXT'),
+            10030: t('ENERGY_TEXT'),
+            20010: t('SUT_TEXT'),
+            20020: t('GMT_TEXT'),
+            30010: t('STEPN_GO_CODE_TEXT'),
+            30020: t('MOOAR_MEMBERSHIP_TEXT'),
+            40010: t('STEPN_GO_SHOE_TEXT'),
+            50010: t('ALPHA_CHEST_TEXT')
+        };
+        return mapping[type] || 'Unknown';
     },
     
     profileItems : [],
@@ -262,7 +268,7 @@ data object
                 const profileItems = [
                     ...userProfileData.UserToken.map(record => ({
                         icon: shared.mappingIcon[record.prop_id],
-                        text: shared.mappingText[record.prop_id],
+                        text: shared.getMappingText(record.prop_id),
                         value: record.num,
                         showClaim: canShowClaim.includes(record.prop_id) && record.num > 0,
                         // showArrow: canShowClaim.includes(record.prop_id) && record.num > 0,
@@ -275,7 +281,7 @@ data object
                         .filter(record => record !== null)
                         .map(record => ({
                             icon: shared.mappingIcon[record.type],
-                            text: shared.mappingText[record.type],
+                            text: shared.getMappingText(record.type),
                             value: record.num,
                             showClaim: canShowClaim.includes(record.type),
                             // showArrow: canShowClaim.includes(record.type) && record.state === 0,

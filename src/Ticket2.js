@@ -200,7 +200,7 @@ Response:
             // setNoReward(true);
             setRewardImage(shared.mappingIcon[reward.type]);
             setRewardAmount((reward.type === 20010 || reward.type === 20020) ? reward.amount / 100 : reward.amount);
-            setRewardText(shared.mappingText[reward.type]);
+            setRewardText(shared.getMappingText(reward.type));
 
             // testing
             // setRewardImage(shared.mappingIcon[30020]);
