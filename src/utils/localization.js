@@ -118,7 +118,16 @@ const translations = {
     CLAIM: "Claim",
     CLAIM_LOOT: "CLAIM LOOT",
     RESULTS: "RESULTS",
-    CLAIM_YOUR_WINNINGS: "CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW"
+    CLAIM_YOUR_WINNINGS: "CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW",
+    TICKETS_TEXT: "Tickets",
+    STARLETS_TEXT: "Starlets",
+    ENERGY_TEXT: "Energy",
+    SUT_TEXT: "SUT",
+    GMT_TEXT: "GMT",
+    STEPN_GO_CODE_TEXT: "StepN GO code",
+    MOOAR_MEMBERSHIP_TEXT: "MOOAR+ Membership",
+    STEPN_GO_SHOE_TEXT: "StepN GO Shoe",
+    ALPHA_CHEST_TEXT: "Alpha Chest"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -238,7 +247,16 @@ const translations = {
     CLAIM: "獲得",
     CLAIM_LOOT: "戦利品を獲得",
     RESULTS: "結果",
-    CLAIM_YOUR_WINNINGS: "おめでとうございます！下記の賞品を獲得してください"
+    CLAIM_YOUR_WINNINGS: "おめでとうございます！下記の賞品を獲得してください",
+    TICKETS_TEXT: "チケット",
+    STARLETS_TEXT: "スターレット",
+    ENERGY_TEXT: "エネルギー",
+    SUT_TEXT: "SUT",
+    GMT_TEXT: "GMT",
+    STEPN_GO_CODE_TEXT: "StepN GOコード",
+    MOOAR_MEMBERSHIP_TEXT: "MOOAR+メンバーシップ",
+    STEPN_GO_SHOE_TEXT: "StepN GOシューズ",
+    ALPHA_CHEST_TEXT: "アルファチェスト"
   }
 };
 
