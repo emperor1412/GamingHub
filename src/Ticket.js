@@ -42,12 +42,6 @@ const Ticket = ({ onClose, getProfileData }) => {
     }, [showTicket1]);
 
     const handleTicketSelect = (ticketType) => {
-        trackUserAction('ticket_type_selected', {
-            ticket_type: ticketType,
-            tickets_available: ticket,
-            starlets: starlets,
-            is_available: ticketType === 'scratch' // only scratch tickets are currently available
-        }, shared.loginData?.userId);
 
         if (ticketType === 'scratch') {
             setShowTicket1(true);
