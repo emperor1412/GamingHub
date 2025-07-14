@@ -4,8 +4,7 @@ const path = require('path');
 // Configuration - chỉ làm việc với 2 file chính
 const CONFIG = {
     localizationJsPath: path.join(__dirname, 'src', 'utils', 'localization.js'),
-    csvPath: path.join(__dirname, 'src', 'components', 'Localization', 'GameHub_Localization.csv'),
-    jsOutputPath: path.join(__dirname, 'src', 'utils', 'localization_converted.js')
+    csvPath: path.join(__dirname, 'src', 'components', 'Localization', 'GameHub_Localization.csv')
 };
 
 // Convert JS to CSV
@@ -128,11 +127,11 @@ const t = (key) => {
 export { t, getCurrentLanguage, setLanguage };
 `;
         
-        // Write the converted file
-        fs.writeFileSync(CONFIG.jsOutputPath, localizationContent, 'utf8');
+        // Write directly to localization.js
+        fs.writeFileSync(CONFIG.localizationJsPath, localizationContent, 'utf8');
         
         console.log('✅ CSV to JS conversion completed!');
-        console.log(`📁 Output file: ${CONFIG.jsOutputPath}`);
+        console.log(`📁 Updated file: ${CONFIG.localizationJsPath}`);
         console.log(`📊 Total keys: ${Object.keys(translations.en).length}`);
         
         return true;
@@ -163,9 +162,8 @@ Examples:
   node localizationConverter.js both
 
 Files:
-  Input JS:  ${CONFIG.localizationJsPath}
-  CSV:       ${CONFIG.csvPath}
-  Output JS: ${CONFIG.jsOutputPath}
+  JS:  ${CONFIG.localizationJsPath}
+  CSV: ${CONFIG.csvPath}
 `);
 }
 
