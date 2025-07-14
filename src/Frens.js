@@ -550,7 +550,7 @@ const Frens = () => {
           </div>
           <div className="stat-item-frens">
             <img src={ticketIcon} alt="Tickets" className="stat-icon" />
-            <span className="stat-label">Earned</span>
+            <span className="stat-label">{t('EARNED')}</span>
             <span className="stat-value">{earnedTickets}</span>
           </div>
         </div>

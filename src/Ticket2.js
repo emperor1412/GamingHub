@@ -20,6 +20,8 @@ import fail_animation_frame_3 from './images/FSL Games UI 2-07.png';
 import { shareStory, popup } from '@telegram-apps/sdk';
 import { trackStoryShare } from './analytics';
 
+import { t } from './utils/localization';
+
 let animationFrameIndex = 0;
 
 const Ticket2 = ({ onClose }) => {
@@ -328,12 +330,12 @@ Response:
                                     </div>
                                 </div>
                             </div>
-                            <h2 className="congratulations">CONGRATULATIONS</h2>
-                            <p className="reward-message">YOU'VE WON {rewardAmount} {rewardText}!</p>
+                            <h2 className="congratulations">{t('CONGRATULATIONS')}</h2>
+                            <p className="reward-message">{t('YOU_HAVE_WON')} {rewardAmount} {rewardText}!</p>
 
                             {showShareStory && (
                                 <button className="share-button" onClick={() => onClickShareStory()}>
-                                    SHARE TO STORY
+                                    {t('SHARE_TO_STORY')}
                                     <div className='share-story-reward'>
                                         <img src={km} alt="KM" className='share-story-reward-starlet'/>
                                         <span className='share-story-reward-text'>20</span>
@@ -341,7 +343,7 @@ Response:
                                 </button>
                             )}
 
-                            <button className="claim-button" onClick={handleClaim}>CLAIM</button>
+                            <button className="claim-button" onClick={handleClaim}>{t('CLAIM')}</button>
                         </>
                     )}
                 </div>
