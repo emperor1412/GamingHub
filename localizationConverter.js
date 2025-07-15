@@ -128,10 +128,10 @@ function convertCsvToJs() {
         // Use robust parser
         const lines = parseCsvRows(csvContent).filter(line => line.trim());
 
-        // Start with current translations (to preserve existing keys)
+        // Start with empty translations (only keep keys from CSV)
         const translations = {
-            en: { ...currentTranslations.en },
-            ja: { ...currentTranslations.ja }
+            en: {},
+            ja: {}
         };
 
         // Process each line (skip header)
@@ -164,10 +164,9 @@ function convertCsvToJs() {
                 const japanese = values[2];
                 if (key && key.trim()) {
                     const trimmedKey = key.trim();
-                    if (translations.en.hasOwnProperty(trimmedKey) || translations.ja.hasOwnProperty(trimmedKey)) {
-                        translations.en[trimmedKey] = english.trim();
-                        translations.ja[trimmedKey] = japanese.trim();
-                    }
+                    // Always add/update the key from CSV
+                    translations.en[trimmedKey] = english.trim();
+                    translations.ja[trimmedKey] = japanese.trim();
                 }
             }
         }
