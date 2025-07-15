@@ -655,13 +655,13 @@ const Frens = () => {
                 className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
                 onClick={() => setActiveTab('friends')}
               >
-                Friends
+                {t('FRIENDS')}
               </button>
               <button
                 className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
                 onClick={() => setActiveTab('trophies')}
               >
-                Trophies
+                {t('TROPHIES')}
               </button>
             </div>
             <div className="trophies-list">

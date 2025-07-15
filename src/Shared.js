@@ -267,7 +267,7 @@ data object
                         value: record.num,
                         showClaim: canShowClaim.includes(record.prop_id) && record.num > 0,
                         // showArrow: canShowClaim.includes(record.prop_id) && record.num > 0,
-                        claimText: 'Claim',
+                        claimText: t('CLAIM'),
                         clickAble: canShowClaim.includes(record.prop_id) && record.num > 0,
                         record: record,
                         type: record.prop_id
@@ -280,7 +280,7 @@ data object
                             value: record.num,
                             showClaim: canShowClaim.includes(record.type),
                             // showArrow: canShowClaim.includes(record.type) && record.state === 0,
-                            claimText: record.state === 0 ? 'Claim' : record.state === 1 ? 'Claiming' : 'Claimed',
+                            claimText: record.state === 0 ? t('CLAIM') : record.state === 1 ? t('CLAIMING') : t('CLAIMED'),
                             clickAble: record.state === 0,
                             record: record,
                             type: record.type
