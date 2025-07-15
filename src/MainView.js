@@ -265,20 +265,20 @@ Response:
         try {
             trackUserAction('minigame_clicked', {
                 game_name: 'Tadokami',
-                game_url: 'https://miniapp.line.me/2007739328-AXQNennQ'
+                game_url: shared.game_link,
             }, shared.loginData?.link);
 
             trackLineConversion('Tadokami_Game_Click');
             
             // Open LIFF URL
             liff.openWindow({
-                url: 'https://miniapp.line.me/2007739328-AXQNennQ',
+                url: shared.game_link,
                 external: false
             });
         } catch (e) {
             console.log('Error opening LIFF:', e);
             // Fallback to browser
-            window.open('https://miniapp.line.me/2007739328-AXQNennQ', '_blank');
+            window.open(shared.game_link, '_blank');
         }
     }
 

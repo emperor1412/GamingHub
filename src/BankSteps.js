@@ -251,7 +251,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
             if (success) {
                 trackStoryShare('bank_steps', {
-                    invite_link: `${shared.app_link}?startapp=invite_${shared.loginData.link}`,
+                    invite_link: `${shared.app_link}?startParam=invite_${shared.loginData.link}`,
                     bank_steps_status: shared.userProfile.fslId !== 0 ? 'connected' : 'not_connected'
                 }, shared.loginData?.userId);
 

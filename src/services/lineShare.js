@@ -5,7 +5,7 @@ import liff from '@line/liff';
 export const lineShare = {
   // Tạo link share với referral code
   generateShareLink(referralCode) {
-    const inviteLink = `${shared.app_link}?startapp=invite_${referralCode}`;
+    const inviteLink = `${shared.app_link}?startParam=invite_${referralCode}`;
     console.log('Generated invite link:', inviteLink);
     return inviteLink;
   },

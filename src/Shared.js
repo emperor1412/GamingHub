@@ -60,8 +60,8 @@ const tokenABI = [
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
-    app_link: 'https://liff.line.me/2007409525-zEYm88eE',
-    game_link: 'https://t.me/TestFSL_bot/tadogami',
+    app_link: 'https://miniapp.line.me/2007739332-39PNxppa',
+    game_link: 'https://miniapp.line.me/2007739328-AXQNennQ',
     host_environment: 'test',
     
     // LINE LIFF Configuration
@@ -532,7 +532,7 @@ data object
             return false;
         }
 
-        const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+        const inviteLink = `${shared.app_link}?startParam=invite_${shared.loginData.link}`;
         const shareText = `${text}\n\n${inviteLink}`;
 
         try {
