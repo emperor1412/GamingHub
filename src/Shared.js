@@ -60,13 +60,13 @@ const tokenABI = [
 
 const shared = {
     server_url: 'https://gm14.joysteps.io',
-    app_link: 'https://miniapp.line.me/2007739332-39PNxppa',
-    game_link: 'https://miniapp.line.me/2007739328-AXQNennQ',
+    app_link: 'https://miniapp.line.me/2007739333-wY50WLL7',
+    game_link: 'https://miniapp.line.me/2007739329-YvLZ466r',
     host_environment: 'test',
     
     // LINE LIFF Configuration
     liff: {
-        liffId: '2007739332-39PNxppa',
+        liffId: '2007739333-wY50WLL7',
         inspectorOrigin: 'wss://f39acd71cac5.ngrok-free.app',
         withLoginOnExternalBrowser: true
     },
