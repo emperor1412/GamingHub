@@ -709,7 +709,13 @@
 
 .locked-card-image.minigames {
     object-fit: contain;
+    width: 100%;
     height: 100%;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    top: unset;
+    position: static;
 }
 
 /* ID Token Toggle Button */
