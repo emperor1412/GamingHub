@@ -63,6 +63,14 @@ const shared = {
     app_link: 'https://liff.line.me/2007409525-zEYm88eE',
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
+    
+    // LINE LIFF Configuration
+    liff: {
+        liffId: '2007739332-39PNxppa',
+        inspectorOrigin: 'wss://f39acd71cac5.ngrok-free.app',
+        withLoginOnExternalBrowser: true
+    },
+    
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },

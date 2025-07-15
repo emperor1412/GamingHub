@@ -241,12 +241,12 @@ function App() {
       try {
         // Add LIFF Inspector plugin
         liff.use(new LIFFInspectorPlugin({
-          origin: 'wss://f39acd71cac5.ngrok-free.app'
+          origin: shared.liff.inspectorOrigin
         }));
 
         await liff.init({ 
-          liffId: '2007739332-39PNxppa',
-          withLoginOnExternalBrowser: true
+          liffId: shared.liff.liffId,
+          withLoginOnExternalBrowser: shared.liff.withLoginOnExternalBrowser
         });
 
         trackLineConversion("liff_init");

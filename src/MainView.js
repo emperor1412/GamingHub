@@ -708,7 +708,7 @@ Response:
                     setShowProfileView(true);
                     trackLineConversion('Level_Badge_Click');
                     }}>
-                    {t('LEVEL_ABBR')}.{shared.userProfile ? shared.userProfile.level || 0 : 0}
+                    {t('LEVEL_ABBR')} {shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
                 <div className="stats-main">
                     <button 
