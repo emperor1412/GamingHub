@@ -245,7 +245,7 @@ function App() {
         }));
 
         await liff.init({ 
-          liffId: '2007739333-wY50WLL7',
+          liffId: '2007739332-39PNxppa',
           withLoginOnExternalBrowser: true
         });
 

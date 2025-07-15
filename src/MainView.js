@@ -265,20 +265,20 @@ Response:
         try {
             trackUserAction('minigame_clicked', {
                 game_name: 'Tadokami',
-                game_url: 'https://liff.line.me/2007433542-kEVqEBd3'
+                game_url: 'https://miniapp.line.me/2007739328-AXQNennQ'
             }, shared.loginData?.link);
 
             trackLineConversion('Tadokami_Game_Click');
             
             // Open LIFF URL
             liff.openWindow({
-                url: 'https://liff.line.me/2007433542-kEVqEBd3',
+                url: 'https://miniapp.line.me/2007739328-AXQNennQ',
                 external: false
             });
         } catch (e) {
             console.log('Error opening LIFF:', e);
             // Fallback to browser
-            window.open('https://liff.line.me/2007433542-kEVqEBd3', '_blank');
+            window.open('https://miniapp.line.me/2007739328-AXQNennQ', '_blank');
         }
     }
 
