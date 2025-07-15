@@ -751,13 +751,13 @@ Response:
                 >
                     {currentLanguage === 'en' ? '🇯🇵' : '🇺🇸'}
                 </button>
-                <button 
+                {/* <button 
                     className="id-token-toggle"
                     onClick={openIdTokenPopup}
                     title="Copy ID Token"
                 >
                     🔑
-                </button>
+                </button> */}
             </header>
 
             <div className="scrollable-content">
