@@ -252,9 +252,9 @@ const translations = {
   }
 };
 
-// Get current language from localStorage or default to English
+// Get current language from localStorage or default to Japanese
 const getCurrentLanguage = () => {
-  return localStorage.getItem('language') || 'en';
+  return localStorage.getItem('language') || 'ja';
 };
 
 // Set language

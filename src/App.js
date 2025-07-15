@@ -466,9 +466,9 @@ function App() {
             <button className="retry-button" onClick={login}>
               {t('RETRY')}
             </button>
-            <button className="id-token-button" onClick={openIdTokenPopup}>
+            {/* <button className="id-token-button" onClick={openIdTokenPopup}>
               🔑
-            </button>
+            </button> */}
           </div>
         </div>
       ) 
