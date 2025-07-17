@@ -60,7 +60,7 @@ const tokenABI = [
 ];
 
 const shared = {
-    server_url: 'https://gm14.joysteps.io',
+    server_url: 'https://gamehub.fsl.com',
     app_link: 'https://miniapp.line.me/2007739332-39PNxppa',
     game_link: 'https://miniapp.line.me/2007739328-AXQNennQ',
     host_environment: 'test',

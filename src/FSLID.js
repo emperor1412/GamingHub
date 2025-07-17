@@ -150,7 +150,7 @@ const FSLID = () => {
 
         const fslAuthorization = FSLAuthorization.init({
             responseType: 'code', // 'code' or 'token'
-            appKey: 'LineMiniGame',
+            appKey: 'yshgTgd6qz9',
             redirectUri: REDIRECT_URL, // https://xxx.xxx.com
             scope: 'basic,wallet,stepn', // Grant Scope
             state: state,
