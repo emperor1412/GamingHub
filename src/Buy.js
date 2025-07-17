@@ -63,6 +63,25 @@ const Buy = ({
       return;
     }
 
+    if (method === 'gmt') {
+      // Redirect to GameHubPayment for GMT payment
+      if (shared.userProfile.fslId === 0) {
+        showFSLIDScreen();
+        return;
+      }
+      
+      trackUserAction('buy_payment_method_click', {
+        method: 'gmt',
+        amount: selectedPurchase?.amount,
+        stars: selectedPurchase?.stars,
+        optionId: selectedPurchase?.optionId
+      }, shared.loginData?.link);
+
+      // Redirect to GameHubPayment
+      shared.redirectToGameHubPayment(selectedPurchase);
+      return;
+    }
+
     trackUserAction('buy_payment_method_click', {
       method,
       amount: selectedPurchase?.amount,
@@ -185,7 +204,7 @@ const Buy = ({
             className="bmk-payment-button bmk-gmt-button"
             onClick={() => handlePaymentMethod('gmt')}
           >
-            PAY WITH GMT
+            PAY WITH SOLANA-GMT
           </button>
         </div>
 
