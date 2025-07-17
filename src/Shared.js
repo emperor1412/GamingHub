@@ -32,6 +32,7 @@ import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
+import liff from '@line/liff';
 
 import single_star from './images/single_star.svg';
 import single_star_2 from './images/single_star_2.svg';
@@ -597,8 +598,24 @@ data object
         
         console.log('Redirecting to GameHubPayment:', redirectUrl);
         
-        // Open in new tab
-        window.open(redirectUrl, '_blank');
+        // Check if running in LINE Mini App
+        if (window.liff && liff.isInClient()) {
+            try {
+                // Use LIFF to open in external browser
+                liff.openWindow({
+                    url: redirectUrl,
+                    external: true
+                });
+                console.log('Opened GameHubPayment in external browser via LIFF');
+            } catch (error) {
+                console.error('Error opening with LIFF, falling back to window.open:', error);
+                // Fallback to window.open
+                window.open(redirectUrl, '_blank');
+            }
+        } else {
+            // For non-LINE environments, use regular window.open
+            window.open(redirectUrl, '_blank');
+        }
         
         return redirectUrl;
     },
