@@ -106,15 +106,6 @@ function App() {
         }
         return 0;
     } else {
-        if (checkInResult.needRelogin) {
-            const loginResult = await shared.login(initDataRaw);
-            if (loginResult.success) {
-                setLoginData(loginResult.loginData);
-                setIsLoggedIn(true);
-                return await checkIn(loginResult.loginData);
-            }
-        }
-        
         if (popup.open.isAvailable()) {
             const promise = popup.open({
                 title: 'Error Checking-in',
@@ -273,7 +264,12 @@ const bind_fslid = async () => {
       unfocusTimeRef.current = Date.now();
     };
 
-    // Primary method: Document Visibility API (most reliable for mobile)
+    // Kiểm tra Telegram WebView environment
+    if (window.TelegramWebviewProxy) {
+      console.log('TelegramWebviewProxy available, but no focus events - using visibility API');
+    }
+
+    // Sử dụng Document Visibility API (hoạt động tốt nhất cho WebView)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         handleUnfocus();
@@ -282,7 +278,7 @@ const bind_fslid = async () => {
       }
     });
 
-    // Backup method: Window Focus Events
+    // Backup: Window Focus Events
     window.addEventListener('focus', handleFocus);
     window.addEventListener('blur', handleUnfocus);
 
