@@ -271,14 +271,35 @@ Response:
             if (window.Telegram?.WebApp?.openTelegramLink) {
                 // This method will open the link within Telegram without launching a browser
                 window.Telegram.WebApp.openTelegramLink(shared.game_link);
+                
+                // Minimize current app after opening game
+                setTimeout(() => {
+                    if (window.Telegram?.WebApp?.close) {
+                        window.Telegram.WebApp.close();
+                    }
+                }, 1000); // Wait 1 second for game to open
             } else {
                 // Fallback to SDK method if the direct method isn't available
                 openLink(shared.game_link);
+                
+                // Minimize current app after opening game
+                setTimeout(() => {
+                    if (window.Telegram?.WebApp?.close) {
+                        window.Telegram.WebApp.close();
+                    }
+                }, 1000); // Wait 1 second for game to open
             }
         } catch (e) {
             console.log('Error opening Tadokami game:', e);
             // Fallback in case of error
             openLink(shared.game_link);
+            
+            // Minimize current app after opening game
+            setTimeout(() => {
+                if (window.Telegram?.WebApp?.close) {
+                    window.Telegram.WebApp.close();
+                }
+            }, 1000); // Wait 1 second for game to open
         }
     }
 
