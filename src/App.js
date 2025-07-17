@@ -230,10 +230,15 @@ const bind_fslid = async () => {
   // Function to reload app data
   const reloadAppData = async () => {
     console.log('Reloading app data after long unfocus...');
+    console.log('Current loginData:', loginData);
+    console.log('Current shared.loginData:', shared.loginData);
+    
     try {
-      if (loginData) {
+      if (loginData && shared.loginData) {
+        console.log('Starting getProfileWithRetry...');
         // Use getProfileWithRetry which already has retry logic built-in
         const profileResult = await shared.getProfileWithRetry();
+        console.log('getProfileWithRetry result:', profileResult);
         
         if (profileResult.success) {
           // Force a re-render by updating state with the same values
@@ -265,6 +270,8 @@ const bind_fslid = async () => {
             await promise;
           }
         }
+      } else {
+        console.log('No loginData available for reload');
       }
     } catch (error) {
       console.error('Error reloading app data:', error);
@@ -301,6 +308,8 @@ const bind_fslid = async () => {
 
     const handleUnfocus = () => {
       console.log('App unfocused');
+      console.log('loginData at unfocus:', loginData);
+      console.log('shared.loginData at unfocus:', shared.loginData);
       unfocusTimeRef.current = Date.now();
     };
 
