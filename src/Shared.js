@@ -555,7 +555,6 @@ data object
             return false;
         }
     },
-    },
 
     // Redirect to GameHubPayment with user data and purchase info
     redirectToGameHubPayment: (purchaseData) => {
