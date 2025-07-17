@@ -467,7 +467,7 @@ const Tasks = ({
 
             completeTask(task.id, 0);
 
-        } else if (task.type === 2) {
+        } else if (task.type === 2 || task.type === 3) {
             // Track quiz task content view
             trackTaskFunnel(task.id, 'quiz', 'content_view', {
                 task_name: task.name

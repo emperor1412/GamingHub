@@ -53,8 +53,13 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         }, shared.loginData?.userId);
 
         console.log('Correct:', correct);
-        if(correct) {
-            // Track successful completion
+        
+        // For task type 3, always call completeTask regardless of correct/incorrect
+        if (task.type === 3) {
+            const reward = await onComplete(task, selectedAnswer);
+            console.log('Reward:', reward);
+        } else if (correct) {
+            // For task type 2, only call completeTask if correct
             trackTaskFunnel(task.id, 'quiz', 'completion', {
                 task_name: task.name,
                 attempts_needed: tryCount + 1
@@ -72,12 +77,14 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         }
     }, [currentStep, task.id, task.contentList.length]);
 
-    // Update tryCount when trying again
+    // Update tryCount when trying again (only for task type 2)
     const handleTryAgain = () => {
-        setTryCount(prev => prev + 1);
-        setShowResult(false);
-        setSelectedAnswer(null);
-        setCurrentStep(0);
+        if (task.type === 2) {
+            setTryCount(prev => prev + 1);
+            setShowResult(false);
+            setSelectedAnswer(null);
+            setCurrentStep(0);
+        }
     };
 
     const renderContent = () => {
@@ -173,9 +180,17 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                             <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
                                         </div>
                                     </div>
+                                    {task.type === 3 && (
+                                        <div className="better-luck-message">
+                                            <p>Better luck next time!</p>
+                                        </div>
+                                    )}
                                 </div>
-                                <button className="try-again-button" onClick={handleTryAgain}>
-                                    TRY AGAIN
+                                <button 
+                                    className={task.type === 3 ? "confirm-button" : "try-again-button"} 
+                                    onClick={task.type === 3 ? onClose : handleTryAgain}
+                                >
+                                    {task.type === 3 ? "CONFIRM" : "TRY AGAIN"}
                                 </button>
                             </div>
                         )
