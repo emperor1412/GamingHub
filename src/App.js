@@ -87,6 +87,10 @@ function App() {
   // Add a ref to track initialization
   const initRef = useRef(false);
 
+  // Add focus/unfocus tracking
+  const unfocusTimeRef = useRef(null);
+  const FOCUS_TIMEOUT = 60000; // 60 seconds
+
   const checkIn = async (loginData) => {
     const now = new Date();
     console.log(`Checking in ........: ${now.toLocaleString()}`);
@@ -230,6 +234,66 @@ const bind_fslid = async () => {
         initRef.current = false;
     }
 };
+
+  // Function to reload app data
+  const reloadAppData = async () => {
+    console.log('Reloading app data after long unfocus...');
+    try {
+      if (loginData) {
+        await getProfileData(loginData);
+        // You can add more data reload functions here
+        console.log('App data reloaded successfully');
+      }
+    } catch (error) {
+      console.error('Error reloading app data:', error);
+    }
+  };
+
+  // Focus/Unfocus detection
+  useEffect(() => {
+    const handleFocus = () => {
+      console.log('App focused');
+      
+      // Check if app was unfocused for more than 60 seconds
+      if (unfocusTimeRef.current) {
+        const unfocusDuration = Date.now() - unfocusTimeRef.current;
+        console.log(`App was unfocused for ${unfocusDuration}ms`);
+        
+        if (unfocusDuration > FOCUS_TIMEOUT) {
+          console.log('App was unfocused for more than 60s, reloading data...');
+          reloadAppData();
+        }
+        
+        unfocusTimeRef.current = null;
+      }
+    };
+
+    const handleUnfocus = () => {
+      console.log('App unfocused');
+      unfocusTimeRef.current = Date.now();
+    };
+
+    // Primary method: Document Visibility API (most reliable for mobile)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        handleUnfocus();
+      } else {
+        handleFocus();
+      }
+    });
+
+    // Backup method: Window Focus Events
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleUnfocus);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('visibilitychange', handleFocus);
+      document.removeEventListener('visibilitychange', handleUnfocus);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleUnfocus);
+    };
+  }, [loginData]); // Re-run when loginData changes
 
   const preloadImages = (imageUrls) => {
     const promises = imageUrls.map((url) => {

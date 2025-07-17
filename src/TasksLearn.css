@@ -253,6 +253,45 @@
     text-transform: uppercase;
 }
 
+.confirm-button {
+    background: #0000FF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 32px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 16px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.better-luck-message {
+    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.better-luck-message p {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    margin: 0;
+}
+
 .tasks-okay-button {
     background: #0000FF;
     border: none;
