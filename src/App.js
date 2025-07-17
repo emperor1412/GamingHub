@@ -83,6 +83,7 @@ function App() {
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
+  const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -231,7 +232,26 @@ const bind_fslid = async () => {
     console.log('Reloading app data after long unfocus...');
     try {
       if (loginData) {
-        await getProfileData(loginData);
+        // getProfileData already updates state internally
+        const [newUserProfile, newProfileItems] = await getProfileData(loginData);
+        
+        // Force a re-render by updating state with the same values
+        if (newUserProfile) {
+          setUserProfile({...newUserProfile}); // Create new object to trigger re-render
+          console.log('UserProfile force updated:', newUserProfile);
+          
+          // Update shared.userProfile to ensure all components get the new data
+          shared.userProfile = newUserProfile;
+          console.log('Shared userProfile updated');
+        }
+        if (newProfileItems) {
+          setProfileItems([...newProfileItems]); // Create new array to trigger re-render
+          console.log('ProfileItems force updated:', newProfileItems);
+        }
+        
+        // Trigger re-render of child components
+        setDataRefreshTrigger(prev => prev + 1);
+        
         // You can add more data reload functions here
         console.log('App data reloaded successfully');
       }
@@ -466,6 +486,7 @@ const bind_fslid = async () => {
     switch (activeTab) {
       case 'home':
         return <MainView 
+          key={`mainview-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
@@ -477,6 +498,7 @@ const bind_fslid = async () => {
         />;      
       case 'tasks':
         return <Tasks 
+            key={`tasks-${dataRefreshTrigger}`}
             checkInData={checkInData}
             setShowCheckInAnimation={setShowCheckInAnimation}
             checkIn={checkIn}
@@ -485,16 +507,18 @@ const bind_fslid = async () => {
             getProfileData={getProfileData}
         />;
       case 'fslid':
-        return <FSLID />;
+        return <FSLID key={`fslid-${dataRefreshTrigger}`} />;
       case 'frens':
-        return <Frens />;
+        return <Frens key={`frens-${dataRefreshTrigger}`} />;
       case 'market':
         return <Market 
+          key={`market-${dataRefreshTrigger}`}
           showFSLIDScreen={() => setActiveTab('fslid')} 
           setShowProfileView={setShowProfileView}
         />;
       default:
         return <MainView 
+          key={`mainview-default-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
