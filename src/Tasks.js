@@ -520,6 +520,23 @@ const Tasks = ({
         fetchTaskList();
     }, []);
 
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('Tasks: Updating currency display after data refresh');
+            const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+                setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+            if (userTicket) {
+                setTicket(userTicket.num);
+            }
+        }
+    }, [shared.userProfile]); // This will trigger when shared.userProfile changes
+
     // Track when tasks are loaded and viewed
     useEffect(() => {
         if (tasksTimeLimited.length > 0 || tasksStandard.length > 0) {

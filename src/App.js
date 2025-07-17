@@ -232,31 +232,51 @@ const bind_fslid = async () => {
     console.log('Reloading app data after long unfocus...');
     try {
       if (loginData) {
-        // getProfileData already updates state internally
-        const [newUserProfile, newProfileItems] = await getProfileData(loginData);
+        // Use getProfileWithRetry which already has retry logic built-in
+        const profileResult = await shared.getProfileWithRetry();
         
-        // Force a re-render by updating state with the same values
-        if (newUserProfile) {
-          setUserProfile({...newUserProfile}); // Create new object to trigger re-render
-          console.log('UserProfile force updated:', newUserProfile);
+        if (profileResult.success) {
+          // Force a re-render by updating state with the same values
+          setUserProfile({...profileResult.userProfile}); // Create new object to trigger re-render
+          console.log('UserProfile force updated:', profileResult.userProfile);
           
           // Update shared.userProfile to ensure all components get the new data
-          shared.userProfile = newUserProfile;
+          shared.userProfile = profileResult.userProfile;
           console.log('Shared userProfile updated');
+          
+          if (profileResult.profileItems) {
+            setProfileItems([...profileResult.profileItems]); // Create new array to trigger re-render
+            console.log('ProfileItems force updated:', profileResult.profileItems);
+          }
+          
+          // Trigger re-render of child components
+          setDataRefreshTrigger(prev => prev + 1);
+          
+          console.log('App data reloaded successfully');
+        } else {
+          console.error('Failed to reload app data:', profileResult.error);
+          // If retry login failed, we might need to show an error or redirect to login
+          if (popup.open.isAvailable()) {
+            const promise = popup.open({
+              title: 'Error Reloading Data',
+              message: `Failed to reload data: ${profileResult.error}. Please refresh the app.`,
+              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+          }
         }
-        if (newProfileItems) {
-          setProfileItems([...newProfileItems]); // Create new array to trigger re-render
-          console.log('ProfileItems force updated:', newProfileItems);
-        }
-        
-        // Trigger re-render of child components
-        setDataRefreshTrigger(prev => prev + 1);
-        
-        // You can add more data reload functions here
-        console.log('App data reloaded successfully');
       }
     } catch (error) {
       console.error('Error reloading app data:', error);
+      // Show error popup for unexpected errors
+      if (popup.open.isAvailable()) {
+        const promise = popup.open({
+          title: 'Error',
+          message: 'An unexpected error occurred while reloading data. Please refresh the app.',
+          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+        });
+        await promise;
+      }
     }
   };
 

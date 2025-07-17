@@ -446,6 +446,23 @@ Response:
         }, 500);
     }, []);
     
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('MainView: Updating currency display after data refresh');
+            const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+                setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+            if (userTicket) {
+                setTicket(userTicket.num);
+            }
+        }
+    }, [getProfileData]); // This will trigger when getProfileData function reference changes (which happens when dataRefreshTrigger changes)
+    
     // Reset egglet popup flag at midnight
     useEffect(() => {
         // Skip this useEffect if in mockup mode

@@ -40,6 +40,19 @@ const Ticket = ({ onClose, getProfileData }) => {
         setupProfileData();
     }, [showTicket1]);
 
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('Ticket: Updating currency display after data refresh');
+            const userTicket = shared.getTicket();
+            const userStarlets = shared.getStarlets();
+
+            setStarlets(userStarlets);
+            setTicket(userTicket);
+        }
+    }, [shared.userProfile]); // This will trigger when shared.userProfile changes
+
     const handleTicketSelect = (ticketType) => {
         trackUserAction('ticket_type_selected', {
             ticket_type: ticketType,
