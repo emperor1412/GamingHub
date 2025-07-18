@@ -56,7 +56,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     
     // Daily task states
     const [dailyTaskId, setDailyTaskId] = useState(null);
-    const [dailyTaskStatus, setDailyTaskStatus] = useState(0); // 0: not completed, 1: completed
+    const [dailyTaskStatus, setDailyTaskStatus] = useState(1); // Default: completed (disabled)
     const [dailyTaskData, setDailyTaskData] = useState(null);
     
     // Set to true to disable daily checking and always show popup when event is active
@@ -391,6 +391,8 @@ Response:
                 
                 if (data.code === 0) {
                     setDailyTaskData(data.data);
+                    // Only enable button if task is not completed (state 0)
+                    // Otherwise keep it disabled (state 1)
                     setDailyTaskStatus(data.data.state);
                 }
                 else if (data.code === 102001 || data.code === 102002) {
