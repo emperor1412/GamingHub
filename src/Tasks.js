@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import "./Tasks.css";
 import xIcon from './images/x-icon.svg';
 import shared from './Shared';
@@ -336,7 +336,7 @@ const Tasks = ({
         }
     };
 
-    const completeTask = async (taskId, answerIndex, depth = 0) => { 
+    const completeTask = useCallback(async (taskId, answerIndex, depth = 0) => { 
         if (depth > 3) {
             console.error('Complete task api failed after 3 attempts');
             return;
@@ -387,9 +387,9 @@ const Tasks = ({
         }
 
         return retVal;
-    }
+    }, []);
 
-    const fetchTaskDataAndShow = async (task, depth = 0) => {
+    const fetchTaskDataAndShow = useCallback(async (task, depth = 0) => {
         console.log('fetchTaskDataAndShow:', task);
         const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
             method: 'GET',
@@ -426,7 +426,7 @@ const Tasks = ({
         else {
             console.error('Error fetching task data:', response);
         }
-    };
+    }, []);
 
     const handleFinishTaskClicked = async (task) => {
         if (task.type === 1) {
@@ -441,7 +441,7 @@ const Tasks = ({
         }
     };
 
-    const handleStartTask = async (task) => {
+    const handleStartTask = useCallback(async (task) => {
         // Track task start
         trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'start', {
             task_name: task.name,
@@ -477,7 +477,7 @@ const Tasks = ({
 
             fetchTaskDataAndShow(task);
         }
-    };
+    }, [completeTask, fetchTaskDataAndShow]);
 
     const renderTaskCard = (task) => {
         const isDone = task.state === 1;
@@ -521,6 +521,43 @@ const Tasks = ({
         setupProfileData();
         fetchTaskList();
     }, []);
+
+    // Add useEffect to handle auto-start functionality
+    useEffect(() => {
+        // Check if there's a task to auto-start (from MainView daily tasks button)
+        if (shared.autoStartTaskId && !showLearnTask) {
+            console.log('Auto-starting task:', shared.autoStartTaskId);
+            
+            // Find the task in the loaded tasks
+            const allTasks = [...tasksTimeLimited, ...tasksStandard, ...tasksDaily, ...tasksPartner];
+            const taskToStart = allTasks.find(task => task.id === shared.autoStartTaskId);
+            
+            if (taskToStart) {
+                console.log('Found task to auto-start:', taskToStart);
+                // Clear the auto-start flag
+                shared.autoStartTaskId = null;
+                // Start the task
+                handleStartTask(taskToStart);
+            }
+        }
+    }, [tasksTimeLimited, tasksStandard, tasksDaily, tasksPartner, showLearnTask, handleStartTask]);
+
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('Tasks: Updating currency display after data refresh');
+            const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+                setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+            if (userTicket) {
+                setTicket(userTicket.num);
+            }
+        }
+    }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
     // Track when tasks are loaded and viewed
     useEffect(() => {

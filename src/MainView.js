@@ -59,6 +59,11 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
     const [showIdTokenPopup, setShowIdTokenPopup] = useState(false);
     
+    // Daily task states
+    const [dailyTaskId, setDailyTaskId] = useState(null);
+    const [dailyTaskStatus, setDailyTaskStatus] = useState(0); // 0: not completed, 1: completed
+    const [dailyTaskData, setDailyTaskData] = useState(null);
+    
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
 
@@ -66,6 +71,14 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     // const [startX, setStartX] = useState(0);
     // const [startDragX, setStartDragX] = useState(0);
     // const [startDragTime, setStartDragTime] = useState(0);
+
+    // url: /app/getDailyTask
+    // Request:
+    // Response:
+    // {
+    //     "code": 0,
+    //     "data": 1048109
+    // }
 
     /*
 userProfile : {
@@ -285,9 +298,16 @@ Response:
 
     const onClickDailyTasks = async () => {
         try {
-            
+            if (dailyTaskId) {
+                // Store the daily task ID in shared object so Tasks component can access it
+                shared.autoStartTaskId = dailyTaskId;
+                // Navigate to Tasks view
+                shared.setActiveTab('tasks');
+            } else {
+                console.log('No daily task available');
+            }
         } catch (e) {
-            
+            console.error('Error opening daily tasks:', e);
         }
     }
 
@@ -301,6 +321,95 @@ Response:
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
         if (userTicket) {
             setTicket(userTicket.num);
+        }
+    };
+
+    const getDailyTask = async (depth = 0) => {
+        if (depth > 3) {
+            console.log('getDailyTask: too many retries');
+            return;
+        }
+        
+        console.log('getDailyTask...');
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/getDailyTask?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getDailyTask Response:', response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getDailyTask Data:', data);                
+                
+                if (data.code === 0) {
+                    console.log('getDailyTask: success, task ID:', data.data);
+                    setDailyTaskId(data.data);
+                    // Fetch task details to get status
+                    await fetchDailyTaskDetails(data.data);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getDailyTask: login again');                    
+                    const result = await shared.login();
+                    if (result) {
+                        getDailyTask(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getDailyTask error:', data);
+                }
+            }
+            else {
+                console.log('getDailyTask Response not ok:', response);
+            }
+        }
+        catch (e) {
+            console.error('getDailyTask error:', e);
+        }        
+    };
+
+    const fetchDailyTaskDetails = async (taskId, depth = 0) => {
+        if (depth > 3) {
+            console.log('fetchDailyTaskDetails: too many retries');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${taskId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Daily task details:', data);
+                
+                if (data.code === 0) {
+                    setDailyTaskData(data.data);
+                    setDailyTaskStatus(data.data.state);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('fetchDailyTaskDetails: login again');
+                    const result = await shared.login();
+                    if (result) {
+                        fetchDailyTaskDetails(taskId, depth + 1);
+                    }
+                }
+                else {
+                    console.log('fetchDailyTaskDetails error:', data);
+                }
+            }
+            else {
+                console.log('fetchDailyTaskDetails Response not ok:', response);
+            }
+        }
+        catch (e) {
+            console.error('fetchDailyTaskDetails error:', e);
         }
     };
 
@@ -464,6 +573,7 @@ Response:
     useEffect(() => {
         setupProfileData();
         setupEvents();
+        getDailyTask();
         
         // Check if we should show Egglet popup (once daily logic)
         // Small timeout to let the page load first
@@ -472,6 +582,31 @@ Response:
         }, 500);
     }, []);
     
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('MainView: Updating currency display after data refresh');
+            const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+                setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+            if (userTicket) {
+                setTicket(userTicket.num);
+            }
+        }
+    }, [getProfileData]); // This will trigger when getProfileData function reference changes (which happens when dataRefreshTrigger changes)
+    
+    // Add useEffect to refresh daily task data when user profile changes
+    useEffect(() => {
+        if (shared.userProfile && dailyTaskId) {
+            console.log('MainView: Refreshing daily task status after data refresh');
+            fetchDailyTaskDetails(dailyTaskId);
+        }
+    }, [shared.userProfile, dailyTaskId]);
+
     // Reset egglet popup flag at midnight
     useEffect(() => {
         // Skip this useEffect if in mockup mode
@@ -802,18 +937,25 @@ Response:
                 )}
 
                 <section className="locked-sections">
-                    <button className="locked-card" onClick={() => onClickDailyTasks()}>
+                    <button 
+                        className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
+                        onClick={() => dailyTaskStatus !== 1 && onClickDailyTasks()}
+                        disabled={dailyTaskStatus === 1}
+                    >
                         <div className='locked-card-image-container'>
                             <img
-                                
                                 src={dailyTasks}
                                 alt="Daily Tasks"
                                 className="locked-card-image minigames"
+                                style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
                             /> 
                             <div className='ticket-button-container-border'></div>
                             {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
                             <div className='locked-card-text'></div>
                         </div>
+                        {dailyTaskStatus === 1 && (
+                            <div className="sold-out-overlay">COMPLETED</div>
+                        )}
                         {/* <img
                             src={locker}
                             alt="Locker"
