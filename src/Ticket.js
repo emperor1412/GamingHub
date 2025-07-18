@@ -60,9 +60,9 @@ const Ticket = ({ onClose, getProfileData }) => {
     return (
         <>
             {loading && (
-                <div className="loading-overlay">
-                    LOADING...
-                </div>
+                            <div className="loading-overlay">
+                {t('LOADING')}
+            </div>
             )}
             {showTicket1 ? (
                 <Ticket1 starletsData={starlets} getProfileData={getProfileData} onClose={() => {

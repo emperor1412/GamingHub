@@ -108,6 +108,7 @@ const translations = {
     TASKS: "TASKS:",
     ENGAGE_WITH_TASKS: "ENGAGE WITH TASKS TO UNLOCK REWARDS.",
     ONLY_LEGENDS_REACH: "ONLY LEGENDS REACH LEVEL",
+    SHARE_TO_STORY: "SHARE TO STORY",
     SHARE_TO_STORY_20: "Share To Story 20 Starlets",
     YOU_HAVE_WON: "YOU'VE WON",
     CLAIM_LOOT: "CLAIM LOOT",
@@ -136,7 +137,14 @@ const translations = {
     TIME: "Time",
     TOTAL_STEPS: "Total Steps",
     AVAILABLE_DAILY: "*Available daily after 13:00 UTC",
-    CLAIM_STARLETS_ERROR: "Failed to claim starlets. Please try again later."
+    CLAIM_STARLETS_ERROR: "Failed to claim starlets. Please try again later.",
+    
+    // Ticket1.js locked ticket messages
+    TICKET_LOCKED_MESSAGE: "YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.",
+    EARN_MORE_REWARDS: "EARN MORE REWARDS AND FEATURES BY LEVELING UP!",
+    
+    // Loading states
+    LOADING: "LOADING..."
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -195,7 +203,7 @@ const translations = {
     STARLETS_UI: "スターレット",
     MOOAR_MEMBERSHIP: "MOOAR+メンバーシップ",
     ALPHA_CHEST: "アルファチェスト",
-    NEED_STARLETS: "次のレベルに進むには<STARLET>スターレットが必要です。",
+    NEED_STARLETS: "次のレベルに進むには XX スターレットが必要です。",
     LEVEL_UP: "レベルアップ",
     EARN_STARLETS: "スターレットの獲得方法:",
     DAILY_CHECKIN_STREAK: "デイリーチェックイン：連続記録を続けよう！",
@@ -246,6 +254,7 @@ const translations = {
     TASKS: "タスク:",
     ENGAGE_WITH_TASKS: "タスクに取り組んで報酬をアンロック。",
     ONLY_LEGENDS_REACH: "伝説のみがレベルに到達",
+    SHARE_TO_STORY: "ストーリーにシェア",
     SHARE_TO_STORY_20: "ストーリーにシェア 20スターレット",
     YOU_HAVE_WON: "獲得しました",
     CLAIM_LOOT: "戦利品を獲得",
@@ -274,7 +283,14 @@ const translations = {
     TIME: "時間",
     TOTAL_STEPS: "総歩数",
     AVAILABLE_DAILY: "*毎日13:00 UTC以降に利用可能",
-    CLAIM_STARLETS_ERROR: "スターレットの受け取りに失敗しました。後でもう一度お試しください。"
+    CLAIM_STARLETS_ERROR: "スターレットの受け取りに失敗しました。後でもう一度お試しください。",
+    
+    // Ticket1.js locked ticket messages
+    TICKET_LOCKED_MESSAGE: "チケットがロックされています。アカウントをレベルアップしてチケットスロットを解放するか、タイマーが終了するまでお待ちください。",
+    EARN_MORE_REWARDS: "レベルアップしてより多くの報酬と機能を獲得しよう！",
+    
+    // Loading states
+    LOADING: "読み込み中..."
   }
 };
 

@@ -435,6 +435,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             {loading && (
                 <div className="bs_loading-overlay">
                     <div className="bs_loading-spinner"></div>
+                    <div className="bs_loading-text">{t('LOADING')}</div>
                 </div>
             )}
         </>

@@ -543,7 +543,7 @@ const Tasks = ({
         <>
             {showLoading && (
                 <div className="loading-overlay">
-                    LOADING...
+                    {t('LOADING')}
                 </div>
             )}
             <header className="stats-header">

@@ -158,9 +158,9 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
   return (
     <div className="avatar-selector-overlay">
       {showLoading && (
-        <div className="loading-overlay">
-          LOADING...
-        </div>
+                        <div className="loading-overlay">
+                    {t('LOADING')}
+                </div>
       )}
       
       {showLevelUp ? (
@@ -179,7 +179,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
               />
               <div>
                 <div className="profile-username">{shared.telegramUserData.firstName}
-                <div className="level-badge">LV.{shared.userProfile.level || 0}</div>
+                <div className="level-badge">{t('LEVEL_ABBR')}.{shared.userProfile.level || 0}</div>
                 </div>
                 <div className="profile-id">
                 {shared.userProfile.email && (

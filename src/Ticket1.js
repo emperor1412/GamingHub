@@ -460,7 +460,7 @@ Response:
                             
                             <div className="timer-overlay">
                                 <div className="timer-message">
-                                    YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.
+                                    {t('TICKET_LOCKED_MESSAGE')}
                                 </div>
                                 <div className="timer-circle">
                                     <img src={circle_dotted} alt="Timer Background" className="timer-circle-bg" />
@@ -481,7 +481,7 @@ Response:
                                 <div className="timer-buttons">
                                     <button className="timer-button primary" onClick={handleLevelUpClick}>LEVEL UP</button>
                                     <div className="level-up-description">
-                                        EARN MORE REWARDS AND FEATURES BY LEVELING UP!
+                                        {t('EARN_MORE_REWARDS')}
                                     </div>
                                     <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
                                 </div>

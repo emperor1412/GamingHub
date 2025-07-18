@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import shared from './Shared';
 import TicketAllResults from './TicketAllResults';
 import { trackUserAction } from './analytics';
+import { t } from './utils/localization';
 
 const TicketAll = ({ onClose }) => {
     const [loading, setLoading] = useState(true);
@@ -91,9 +92,9 @@ const TicketAll = ({ onClose }) => {
 
     if (loading) {
         return (
-            <div className="loading-overlay">
-                LOADING...
-            </div>
+                            <div className="loading-overlay">
+                    {t('LOADING')}
+                </div>
         );
     }
 
