@@ -499,19 +499,19 @@ const Tasks = ({
                             <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Starlets" className={`reward-icon ${isDone ? 'done' : ''}`} />
                             <span className="reward-amount-task">{task.rewardList[0]?.amount || 0}</span>
                         </div>
-                        {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
+                        {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>{t('ENDS')} {formattedDate}</div>)} 
                     </div>
                 </div>
 
                 {!isDone ? (
-                    <button className={`start-button`}
+                                            <button className={`start-button`}
                             onClick={() => handleStartTask(task)}>
-                        START
+                        {t('START')}
                     </button>
                 ) : (
                     <button className="done-button" onClick={() => handleFinishTaskClicked(task)}>
                         <img src={done_icon} alt="Done" />
-                        DONE
+                        {t('DONE')}
                     </button>
                 )}
                 
@@ -606,7 +606,7 @@ const Tasks = ({
                                 className="section-title" 
                                 onClick={() => setTimeLimitedExpanded(!timeLimitedExpanded)}
                             >
-                                TIME-LIMITED TASKS <img src={arrow_2} className={`arrow ${timeLimitedExpanded ? 'expanded' : ''}`} alt="arrow" />
+                                {t('TIME_LIMITED_TASKS')} <img src={arrow_2} className={`arrow ${timeLimitedExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${timeLimitedExpanded ? 'expanded' : ''}`}>
                                 {tasksTimeLimited
@@ -620,7 +620,7 @@ const Tasks = ({
                                 className="section-title" 
                                 onClick={() => setStandardTasksExpanded(!standardTasksExpanded)}
                             >
-                                FSL Academy <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                                {t('FSL_ACADEMY')} <img src={arrow_2} className={`arrow ${standardTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksStandard
@@ -635,7 +635,7 @@ const Tasks = ({
                                 className="section-title" 
                                 onClick={() => setDailyTasksExpanded(!dailyTasksExpanded)}
                             >
-                                DAILY TASKS <img src={arrow_2} className={`arrow ${dailyTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                                {t('DAILY_TASKS')} <img src={arrow_2} className={`arrow ${dailyTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${dailyTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksDaily
@@ -650,7 +650,7 @@ const Tasks = ({
                                 className="section-title" 
                                 onClick={() => setPartnerTasksExpanded(!partnerTasksExpanded)}
                             >
-                                PARTNER TASKS <img src={arrow_2} className={`arrow ${partnerTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
+                                {t('PARTNER_TASKS')} <img src={arrow_2} className={`arrow ${partnerTasksExpanded ? 'expanded' : ''}`} alt="arrow" />
                             </h2>
                             <div className={`tasks-list ${partnerTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksPartner

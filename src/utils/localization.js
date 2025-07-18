@@ -111,6 +111,15 @@ const translations = {
     SHARE_TO_STORY: "SHARE TO STORY",
     SHARE_TO_STORY_20: "Share To Story 20 Starlets",
     YOU_HAVE_WON: "YOU'VE WON",
+    
+    // Tasks section titles
+    TIME_LIMITED_TASKS: "TIME-LIMITED TASKS",
+    FSL_ACADEMY: "FSL ACADEMY",
+    PARTNER_TASKS: "PARTNER TASKS",
+    DAILY_TASKS: "DAILY TASKS",
+    START: "START",
+    DONE: "DONE",
+    ENDS: "ENDS",
     CLAIM_LOOT: "CLAIM LOOT",
     RESULTS: "RESULTS",
     CLAIM_YOUR_WINNINGS: "CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW",
@@ -257,6 +266,15 @@ const translations = {
     SHARE_TO_STORY: "ストーリーにシェア",
     SHARE_TO_STORY_20: "ストーリーにシェア 20スターレット",
     YOU_HAVE_WON: "獲得しました",
+    
+    // Tasks section titles
+    TIME_LIMITED_TASKS: "期間限定タスク",
+    FSL_ACADEMY: "FSLアカデミー",
+    PARTNER_TASKS: "パートナータスク",
+    DAILY_TASKS: "デイリータスク",
+    START: "開始",
+    DONE: "完了",
+    ENDS: "終了",
     CLAIM_LOOT: "戦利品を獲得",
     RESULTS: "結果",
     CLAIM_YOUR_WINNINGS: "おめでとうございます！下記の賞品を獲得してください",
