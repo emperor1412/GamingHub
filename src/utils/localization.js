@@ -153,7 +153,15 @@ const translations = {
     EARN_MORE_REWARDS: "EARN MORE REWARDS AND FEATURES BY LEVELING UP!",
     
     // Loading states
-    LOADING: "LOADING..."
+    LOADING: "LOADING...",
+    
+    // ProfileAvatarSelector.js
+    UNLOCK_THIS_PFP: "UNLOCK THIS PFP",
+    UNLOCK_EXCLUSIVE_PFPS: "LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!",
+    SECRETS_DISCOVERED: "SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?",
+    OKAY_BUTTON: "Okay",
+    TERMS_AND_CONDITIONS: "Terms and Conditions",
+    PRIVACY_POLICY: "Privacy Policy"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -308,7 +316,15 @@ const translations = {
     EARN_MORE_REWARDS: "レベルアップしてより多くの報酬と機能を獲得しよう！",
     
     // Loading states
-    LOADING: "読み込み中..."
+    LOADING: "読み込み中...",
+    
+    // ProfileAvatarSelector.js
+    UNLOCK_THIS_PFP: "このPFPを解放",
+    UNLOCK_EXCLUSIVE_PFPS: "アカウントをレベルアップして\n限定PFPを解放しよう！",
+    SECRETS_DISCOVERED: "秘密は発見されるために\nあるもの。解放できるかな？",
+    OKAY_BUTTON: "OK",
+    TERMS_AND_CONDITIONS: "利用規約",
+    PRIVACY_POLICY: "プライバシーポリシー"
   }
 };
 

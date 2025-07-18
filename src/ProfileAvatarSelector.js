@@ -231,17 +231,17 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 onClick={handleOkayClick}
                 disabled={!hasChanged}
               >
-                Okay
+                {t('OKAY_BUTTON')}
               </button>
             </div>
             </div>
 
             <div className="avatar-footer">
               <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4")}>
-                Terms and Conditions
+                {t('TERMS_AND_CONDITIONS')}
               </button>
               <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4")}>
-                Privacy Policy
+                {t('PRIVACY_POLICY')}
               </button>
             </div>
 
@@ -261,16 +261,16 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 </div>
                 <div className="lock-overlay-header">
                   <img src={unlock} alt="Lock" className="header-lock-icon" />
-                  UNLOCK THIS PFP
+                  {t('UNLOCK_THIS_PFP')}
                 </div>
                 <div className="lock-overlay-description">
                   {selectedIndex === 12 ? 
-                    'SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?' :
-                    'LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!'}
+                    t('SECRETS_DISCOVERED') :
+                    t('UNLOCK_EXCLUSIVE_PFPS')}
                 </div>
                 {selectedIndex !== 12 && (
                   <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
-                    LEVEL UP
+                    {t('LEVEL_UP')}
                   </button>
                 )}
               </div>

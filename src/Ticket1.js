@@ -479,11 +479,11 @@ Response:
                                     </div>
                                 </div>
                                 <div className="timer-buttons">
-                                    <button className="timer-button primary" onClick={handleLevelUpClick}>LEVEL UP</button>
+                                    <button className="timer-button primary" onClick={handleLevelUpClick}>{t('LEVEL_UP')}</button>
                                     <div className="level-up-description">
                                         {t('EARN_MORE_REWARDS')}
                                     </div>
-                                    <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
+                                    <button className="timer-button secondary" onClick={() => setShowTimer(false)}>{t('DONE')}</button>
                                 </div>
                             </div>
                             <header className="t1_ticket-header">
