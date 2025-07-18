@@ -22,6 +22,7 @@ import LFGO from './images/LFGO.png';
 import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
 import tadokami from './images/Tadokami_Logo.png'
+import dailyTasks from './images/one_shot.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
@@ -279,6 +280,14 @@ Response:
             console.log('Error opening LIFF:', e);
             // Fallback to browser
             window.open(shared.game_link, '_blank');
+        }
+    }
+
+    const onClickDailyTasks = async () => {
+        try {
+            
+        } catch (e) {
+            
         }
     }
 
@@ -761,37 +770,23 @@ Response:
             </header>
 
             <div className="scrollable-content">
-                <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
-                        <img
-                            // src={Frame4556}
-                            src = {my_ticket}
-                            alt="My Tickets"
-                            className="ticket-card-image-main"
-                        />
-                    </button> */}
-
-                    <button className="ticket-button" onClick={() => {
-                        setShowTicketView(true);
-                        trackLineConversion('Ticket_Usage');
-                    }}>
+            <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
                         <div className='ticket-button-image-container'>
                             <img
-                                src={my_ticket}
+                                src={tadokami}
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
-                                                            <h3 className="event-card-title">{t('MY_TICKETS')}</h3>
-                            <p className="event-card-subtitle">{t('SCRATCH_TICKETS_REWARDS')}</p>
-                            <div className="check-out-button">
-                                {t('SCRATCH_TICKETS')}
-                            </div>
+                                {/* <h3 className="event-card-title">TADOKAMI</h3>
+                                <p className="event-card-subtitle">Is now live</p> */}
                             {/* </div> */}
                         </div>
                     </button>
                 </section>
+
 
                 {/* Egglet Event Section - only shown if event is active */}
                 {eventActive && (
@@ -807,13 +802,12 @@ Response:
                 )}
 
                 <section className="locked-sections">
-                    <button className="locked-card" onClick={() => onClickOpenGame()}>
+                    <button className="locked-card" onClick={() => onClickDailyTasks()}>
                         <div className='locked-card-image-container'>
                             <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                                // src={Frame4561}
-                                src={tadokami}
-                                alt="Tadokami "
+                                
+                                src={dailyTasks}
+                                alt="Daily Tasks"
                                 className="locked-card-image minigames"
                             /> 
                             <div className='ticket-button-container-border'></div>
@@ -841,13 +835,41 @@ Response:
                             />
                             <div className='ticket-button-container-border'></div>
                             <div className='check-out-button'>{t('BANK_STEPS')}</div>
-                            <div className='locked-card-text'>STEPN</div>
                         </div>
                         {/* <img
                             src={locker}
                             alt="Locker"
                             className="locker-icon"
                         /> */}
+                    </button>
+                </section>
+
+                <section className="tickets-section">
+                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
+                        <img
+                            // src={Frame4556}
+                            src = {my_ticket}
+                            alt="My Tickets"
+                            className="ticket-card-image-main"
+                        />
+                    </button> */}
+
+                    <button className="ticket-button" onClick={() => setShowTicketView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={my_ticket}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className="ticket-button-content"> */}
+                                <h3 className="event-card-title">MY TICKETS</h3>
+                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                                <div className="check-out-button ticket">
+                                    Scratch Tickets
+                                </div>
+                            {/* </div> */}
+                        </div>
                     </button>
                 </section>
 
