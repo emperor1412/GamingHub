@@ -123,7 +123,20 @@ const translations = {
     STEPN_GO_SHOE_TEXT: "StepN GO Shoe",
     ALPHA_CHEST_TEXT: "Alpha Chest",
     CLAIMING: "CLAIMING",
-    CLAIMED: "CLAIMED"
+    CLAIMED: "CLAIMED",
+    CONNECT: "CONNECT",
+    LINK_YOUR_FSL: "Link your FSL ID to FSL Game Hub and to STEPN.",
+    CREATE: "CREATE",
+    DAILY_WALK: "DO YOUR DAILY WALK WITH STEPN, AS USUAL!",
+    FOLLOWING_DAY_CLAIM: "THE FOLLOWING DAY YOU’LL BE ABLE TO CLAIM STARLETS FOR STEPS WALKED WITHIN THE STEPN APP.",
+    STEPS_TO_STARLET: "5,000 STEPS = 500 STARLETS WE HAVE SET A LIMIT OF BEING ABLE TO CLAIM 500 STARLETS PER DAY",
+    CONNECT_FSL_ID: "CONNECT FSL ID",
+    FIND_OUT_MORE: "FIND OUT MORE",
+    KM: "Km",
+    TIME: "Time",
+    TOTAL_STEPS: "Total Steps",
+    AVAILABLE_DAILY: "*Available daily after 13:00 UTC",
+    CLAIM_STARLETS_ERROR: "Failed to claim starlets. Please try again later."
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -248,11 +261,23 @@ const translations = {
     STEPN_GO_SHOE_TEXT: "StepN GOシューズ",
     ALPHA_CHEST_TEXT: "アルファチェスト",
     CLAIMING: "受け取り中",
-    CLAIMED: "受け取り済み"
+    CLAIMED: "受け取り済み",
+    CONNECT: "連携",
+    LINK_YOUR_FSL: "FSL IDをFSLゲームハブとSTEPNに連携しよう",
+    CREATE: "はじめる",
+    DAILY_WALK: "いつも通りSTEPNでウォーキングしよう！",
+    FOLLOWING_DAY_CLAIM: "翌日、STEPNアプリで歩いた歩数に応じてスターリットを受け取れます。",
+    STEPS_TO_STARLET: "5,000歩 = 500スターリット\r\n1日に受け取れるスターリットは最大500までです。",
+    CONNECT_FSL_ID: "FSL IDを接続",
+    FIND_OUT_MORE: "詳しく見る",
+    KM: "km",
+    TIME: "時間",
+    TOTAL_STEPS: "総歩数",
+    AVAILABLE_DAILY: "*毎日13:00 UTC以降に利用可能",
+    CLAIM_STARLETS_ERROR: "スターレットの受け取りに失敗しました。後でもう一度お試しください。"
   }
 };
 
-// Get current language from localStorage or default to Japanese
 const getCurrentLanguage = () => {
   return localStorage.getItem('language') || 'ja';
 };
