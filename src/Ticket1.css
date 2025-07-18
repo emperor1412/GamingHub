@@ -121,7 +121,7 @@
     flex-direction: column;
     overscroll-behavior: contain;
     box-sizing: border-box;  /* Added this */
-
+    width: 97%;
 
     /* Hide scrollbars while maintaining functionality */
     scrollbar-width: none;  /* Firefox */
