@@ -347,7 +347,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                 <div className="bs_bank-steps-content-1">
                     <div className="bs_starlets-header">
-                        {t('STARLETS')}
+                        {t('BANK_STEPS')}
                     </div>
 
                     <div className="bs_progress-bar">
