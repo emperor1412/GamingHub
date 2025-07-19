@@ -7,6 +7,7 @@ import ID_selected from './images/ID_selected.svg';
 import circle from './images/circle.svg';
 import selected_avatar from './images/selected_avatar.svg';
 import { openLink, popup } from '@telegram-apps/sdk';
+import liff from '@line/liff';
 import lock_icon from "./images/lock_trophy.png";
 import shared from './Shared';
 import unlock from './images/unlock.png';
@@ -237,10 +238,28 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
             </div>
 
             <div className="avatar-footer">
-              <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4")}>
+              <button className="footer-button" onClick={() => {
+                if (window.liff && liff.isInClient()) {
+                  liff.openWindow({
+                    url: "https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4",
+                    external: true
+                  });
+                } else {
+                  window.open("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4", '_blank');
+                }
+              }}>
                 {t('TERMS_AND_CONDITIONS')}
               </button>
-              <button className="footer-button" onClick={() => openLink("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4")}>
+              <button className="footer-button" onClick={() => {
+                if (window.liff && liff.isInClient()) {
+                  liff.openWindow({
+                    url: "https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4",
+                    external: true
+                  });
+                } else {
+                  window.open("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4", '_blank');
+                }
+              }}>
                 {t('PRIVACY_POLICY')}
               </button>
             </div>

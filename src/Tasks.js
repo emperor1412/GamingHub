@@ -9,7 +9,7 @@ import calendar from './images/calendar.png';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.png';
 import TasksLearn from './TasksLearn';
-import { openLink } from '@telegram-apps/sdk';
+import liff from '@line/liff';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
 import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion } from './analytics';
@@ -430,13 +430,12 @@ const Tasks = ({
 
     const handleFinishTaskClicked = async (task) => {
         if (task.type === 1) {
-            if (openLink.isAvailable()) {
-                openLink(task.url, {
-                    tryBrowser: 'chrome',
-                    tryInstantView: true,
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: task.url,
+                    external: true
                 });
-            }
-            else {
+            } else {
                 window.open(task.url, '_blank');
             }
         }
@@ -450,13 +449,12 @@ const Tasks = ({
         }, shared.loginData?.userId);
 
         if (task.type === 1) {
-            if (openLink.isAvailable()) {
-                openLink(task.url, {
-                    tryBrowser: 'chrome',
-                    tryInstantView: true,
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: task.url,
+                    external: true
                 });
-            }
-            else {
+            } else {
                 window.open(task.url, '_blank');
             }
 

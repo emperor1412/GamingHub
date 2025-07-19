@@ -26,7 +26,7 @@ import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
 
-import { popup, openLink } from '@telegram-apps/sdk';
+import { popup } from '@telegram-apps/sdk';
 
 import shared from './Shared';
 import { trackLineConversion, trackUserAction } from './analytics';
@@ -880,7 +880,14 @@ Response:
                                                 banner_name: event.name,
                                                 banner_url: event.url
                                             }, shared.loginData?.link);
-                                            openLink(event.url);
+                                            if (window.liff && liff.isInClient()) {
+                                                liff.openWindow({
+                                                    url: event.url,
+                                                    external: true
+                                                });
+                                            } else {
+                                                window.open(event.url, '_blank');
+                                            }
                                         }
                                     }
                                     catch (e) {
