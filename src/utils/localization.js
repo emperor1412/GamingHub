@@ -175,7 +175,14 @@ const translations = {
     LOG_OUT: "Log out",
     
     // CheckIn.js
-    DAY_LABEL: "DAY"
+    DAY_LABEL: "DAY",
+    
+    // TasksLearn.js
+    NEXT: "NEXT",
+    BINGO: "BINGO",
+    QUIZ_COMPLETED: "YOU'VE COMPLETED THE QUIZ!",
+    YOU_EARNED: "YOU'VE EARNED",
+    TRY_AGAIN: "TRY AGAIN"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -352,7 +359,14 @@ const translations = {
     LOG_OUT: "ログアウト",
     
     // CheckIn.js
-    DAY_LABEL: "日"
+    DAY_LABEL: "日",
+    
+    // TasksLearn.js
+    NEXT: "次へ",
+    BINGO: "ビンゴ",
+    QUIZ_COMPLETED: "クイズを完了しました！",
+    YOU_EARNED: "獲得しました",
+    TRY_AGAIN: "再試行"
   }
 };
 
