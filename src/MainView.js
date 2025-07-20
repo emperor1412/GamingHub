@@ -956,7 +956,7 @@ Response:
                             <div className='locked-card-text'></div>
                         </div>
                         {dailyTaskStatus === 1 && (
-                            <div className="sold-out-overlay">COMPLETED</div>
+                            <div className="sold-out-overlay">{t('DONE')}</div>
                         )}
                         {/* <img
                             src={locker}
@@ -1007,10 +1007,10 @@ Response:
                             />
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
-                                <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                                <h3 className="event-card-title">{t('MY_TICKETS')}</h3>
+                                <p className="event-card-subtitle">{t('SCRATCH_TICKETS_REWARDS')}</p>
                                 <div className="check-out-button ticket">
-                                    Scratch Tickets
+                                    {t('SCRATCH_TICKETS')}
                                 </div>
                             {/* </div> */}
                         </div>

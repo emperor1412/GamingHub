@@ -186,7 +186,7 @@ const translations = {
   },
   ja: {
     MY_TICKETS: "マイチケット",
-    SCRATCH_TICKETS_REWARDS: "スクラッチで報酬を獲得",
+    SCRATCH_TICKETS_REWARDS: "スクラッチで\n報酬を獲得",
     SCRATCH_TICKETS: "スクラッチ",
     BANK_STEPS: "ステップバンク",
     ALPHA: "アルファ",
