@@ -201,7 +201,7 @@ const CheckIn = ({ checkInData, onClose, setShowCheckInAnimation }) => {
                                     <span className="number">{day.day}</span>
                                     <span className="suffix">{day.label}</span>
                                 </div>
-                                <span className="label">DAY</span>
+                                <span className="label">{t('DAY_LABEL')}</span>
                             </div>
                             <div className="rewards">
                                 <div className="reward">
@@ -218,7 +218,7 @@ const CheckIn = ({ checkInData, onClose, setShowCheckInAnimation }) => {
                 })}
             </div>
             <button className="okay-button-checkin" onClick={onClose}>
-                Okay
+                {t('OKAY_BUTTON')}
             </button>
         </div>
     );

@@ -168,7 +168,14 @@ const translations = {
     MINUTE: "minute",
     MINUTES: "minutes",
     SECOND: "second",
-    SECONDS: "seconds"
+    SECONDS: "seconds",
+    
+    // FSLID.js buttons
+    COPY: "Copy",
+    LOG_OUT: "Log out",
+    
+    // CheckIn.js
+    DAY_LABEL: "DAY"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -338,7 +345,14 @@ const translations = {
     MINUTE: "分",
     MINUTES: "分",
     SECOND: "秒",
-    SECONDS: "秒"
+    SECONDS: "秒",
+    
+    // FSLID.js buttons
+    COPY: "コピー",
+    LOG_OUT: "ログアウト",
+    
+    // CheckIn.js
+    DAY_LABEL: "日"
   }
 };
 

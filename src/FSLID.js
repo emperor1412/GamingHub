@@ -177,7 +177,7 @@ const FSLID = () => {
                                     {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || 'User'}
                                     <span className="level-tag">{t('LEVEL_ABBR')}.{shared.userProfile.level || 0}</span>
                                     <button className="logout-button" onClick={handleLogout}>
-                                        Log out
+                                        {t('LOG_OUT')}
                                     </button>
                                 </div>
                                 <div className="fsl-id-hash" onClick={() => setShowFullEmail(!showFullEmail)}>
@@ -192,7 +192,7 @@ const FSLID = () => {
                                             copyToClipboard(shared.userProfile.email);
                                         }}
                                     >
-                                        Copy
+                                        {t('COPY')}
                                     </button>
                                 </div>
                             </div>
