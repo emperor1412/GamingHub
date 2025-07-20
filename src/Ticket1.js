@@ -474,7 +474,7 @@ Response:
                                             {String(timeLeft.seconds).padStart(2, '0')}
                                         </div>
                                         <div className="timer-subtext">
-                                            Time Remaining: {timeLeft.hours} {timeLeft.hours === 1 ? 'hour' : 'hours'}, {timeLeft.minutes} {timeLeft.minutes === 1 ? 'minute' : 'minutes'}, {timeLeft.seconds} {timeLeft.seconds === 1 ? 'second' : 'seconds'}
+                                            {t('TIME_REMAINING')}: {timeLeft.hours} {timeLeft.hours === 1 ? t('HOUR') : t('HOURS')}, {timeLeft.minutes} {timeLeft.minutes === 1 ? t('MINUTE') : t('MINUTES')}, {timeLeft.seconds} {timeLeft.seconds === 1 ? t('SECOND') : t('SECONDS')}
                                         </div>
                                     </div>
                                 </div>

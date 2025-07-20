@@ -161,7 +161,14 @@ const translations = {
     SECRETS_DISCOVERED: "SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?",
     OKAY_BUTTON: "Okay",
     TERMS_AND_CONDITIONS: "Terms and Conditions",
-    PRIVACY_POLICY: "Privacy Policy"
+    PRIVACY_POLICY: "Privacy Policy",
+    TIME_REMAINING: "Time Remaining",
+    HOUR: "hour",
+    HOURS: "hours",
+    MINUTE: "minute",
+    MINUTES: "minutes",
+    SECOND: "second",
+    SECONDS: "seconds"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -324,10 +331,18 @@ const translations = {
     SECRETS_DISCOVERED: "秘密は発見されるために\nあるもの。解放できるかな？",
     OKAY_BUTTON: "OK",
     TERMS_AND_CONDITIONS: "利用規約",
-    PRIVACY_POLICY: "プライバシーポリシー"
+    PRIVACY_POLICY: "プライバシーポリシー",
+    TIME_REMAINING: "残り時間",
+    HOUR: "時間",
+    HOURS: "時間",
+    MINUTE: "分",
+    MINUTES: "分",
+    SECOND: "秒",
+    SECONDS: "秒"
   }
 };
 
+// Get current language from localStorage or default to English
 const getCurrentLanguage = () => {
   return localStorage.getItem('language') || 'ja';
 };

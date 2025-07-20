@@ -154,3 +154,10 @@ DISCOVERED. CAN YOU UNLOCK IT?","秘密は発見されるために
 OKAY_BUTTON,Okay,OK
 TERMS_AND_CONDITIONS,Terms and Conditions,利用規約
 PRIVACY_POLICY,Privacy Policy,プライバシーポリシー
+TIME_REMAINING,Time Remaining,残り時間
+HOUR,hour,時間
+HOURS,hours,時間
+MINUTE,minute,分
+MINUTES,minutes,分
+SECOND,second,秒
+SECONDS,seconds,秒
