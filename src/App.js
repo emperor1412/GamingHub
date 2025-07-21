@@ -83,6 +83,7 @@ function App() {
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
+  const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -106,15 +107,6 @@ function App() {
         }
         return 0;
     } else {
-        if (checkInResult.needRelogin) {
-            const loginResult = await shared.login(initDataRaw);
-            if (loginResult.success) {
-                setLoginData(loginResult.loginData);
-                setIsLoggedIn(true);
-                return await checkIn(loginResult.loginData);
-            }
-        }
-        
         if (popup.open.isAvailable()) {
             const promise = popup.open({
                 title: 'Error Checking-in',
@@ -238,14 +230,59 @@ const bind_fslid = async () => {
   // Function to reload app data
   const reloadAppData = async () => {
     console.log('Reloading app data after long unfocus...');
+    console.log('Current shared.loginData:', shared.loginData);
+    
     try {
-      if (loginData) {
-        await getProfileData(loginData);
-        // You can add more data reload functions here
-        console.log('App data reloaded successfully');
+      if (shared.loginData) {
+        console.log('Starting getProfileWithRetry...');
+        // Use getProfileWithRetry which already has retry logic built-in
+        const profileResult = await shared.getProfileWithRetry();
+        console.log('getProfileWithRetry result:', profileResult);
+        
+        if (profileResult.success) {
+          // Force a re-render by updating state with the same values
+          setUserProfile({...profileResult.userProfile}); // Create new object to trigger re-render
+          console.log('UserProfile force updated:', profileResult.userProfile);
+          
+          // Update shared.userProfile to ensure all components get the new data
+          shared.userProfile = profileResult.userProfile;
+          console.log('Shared userProfile updated');
+          
+          if (profileResult.profileItems) {
+            setProfileItems([...profileResult.profileItems]); // Create new array to trigger re-render
+            console.log('ProfileItems force updated:', profileResult.profileItems);
+          }
+          
+          // Trigger re-render of child components
+          setDataRefreshTrigger(prev => prev + 1);
+          
+          console.log('App data reloaded successfully');
+        } else {
+          console.error('Failed to reload app data:', profileResult.error);
+          // If retry login failed, we might need to show an error or redirect to login
+          if (popup.open.isAvailable()) {
+            const promise = popup.open({
+              title: 'Error Reloading Data',
+              message: `Failed to reload data: ${profileResult.error}. Please refresh the app.`,
+              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+          }
+        }
+      } else {
+        console.log('No shared.loginData available for reload');
       }
     } catch (error) {
       console.error('Error reloading app data:', error);
+      // Show error popup for unexpected errors
+      if (popup.open.isAvailable()) {
+        const promise = popup.open({
+          title: 'Error',
+          message: 'An unexpected error occurred while reloading data. Please refresh the app.',
+          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+        });
+        await promise;
+      }
     }
   };
 
@@ -270,10 +307,17 @@ const bind_fslid = async () => {
 
     const handleUnfocus = () => {
       console.log('App unfocused');
+      console.log('loginData at unfocus:', loginData);
+      console.log('shared.loginData at unfocus:', shared.loginData);
       unfocusTimeRef.current = Date.now();
     };
 
-    // Primary method: Document Visibility API (most reliable for mobile)
+    // Kiểm tra Telegram WebView environment
+    if (window.TelegramWebviewProxy) {
+      console.log('TelegramWebviewProxy available, but no focus events - using visibility API');
+    }
+
+    // Sử dụng Document Visibility API (hoạt động tốt nhất cho WebView)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         handleUnfocus();
@@ -282,7 +326,7 @@ const bind_fslid = async () => {
       }
     });
 
-    // Backup method: Window Focus Events
+    // Backup: Window Focus Events
     window.addEventListener('focus', handleFocus);
     window.addEventListener('blur', handleUnfocus);
 
@@ -470,6 +514,7 @@ const bind_fslid = async () => {
     switch (activeTab) {
       case 'home':
         return <MainView 
+          key={`mainview-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
@@ -481,6 +526,7 @@ const bind_fslid = async () => {
         />;      
       case 'tasks':
         return <Tasks 
+            key={`tasks-${dataRefreshTrigger}`}
             checkInData={checkInData}
             setShowCheckInAnimation={setShowCheckInAnimation}
             checkIn={checkIn}
@@ -489,16 +535,18 @@ const bind_fslid = async () => {
             getProfileData={getProfileData}
         />;
       case 'fslid':
-        return <FSLID />;
+        return <FSLID key={`fslid-${dataRefreshTrigger}`} />;
       case 'frens':
-        return <Frens />;
+        return <Frens key={`frens-${dataRefreshTrigger}`} />;
       case 'market':
         return <Market 
+          key={`market-${dataRefreshTrigger}`}
           showFSLIDScreen={() => setActiveTab('fslid')} 
           setShowProfileView={setShowProfileView}
         />;
       default:
         return <MainView 
+          key={`mainview-default-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}

@@ -242,8 +242,12 @@ data object
     },
 
     getProfileData: async (loginData) => {
+        console.log('getProfileData called with loginData:', loginData);
         try {
-            const response = await fetch(`${shared.server_url}/api/app/userData?token=${loginData.token}`, {
+            const url = `${shared.server_url}/api/app/userData?token=${loginData.token}`;
+            console.log('Fetching from URL:', url);
+            
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -337,6 +341,9 @@ data object
     },
 
     getProfileWithRetry: async (depth = 0) => {
+        console.log(`getProfileWithRetry called with depth: ${depth}`);
+        console.log('shared.loginData in getProfileWithRetry:', shared.loginData);
+        
         if (depth > 3) {
             console.error('Get profile data failed after 3 attempts');
             return {
@@ -345,7 +352,10 @@ data object
             };
         }
 
+        console.log('Calling getProfileData...');
         const profileResult = await shared.getProfileData(shared.loginData);
+        console.log('getProfileData result:', profileResult);
+        
         if (!profileResult.success) {
             if (profileResult.needRelogin) {
                 console.log('Token expired while getting profile, attempting to re-login');
@@ -364,6 +374,7 @@ data object
                 return profileResult;
             }
         }
+        console.log('getProfileWithRetry returning success result');
         return profileResult;
     },
 
