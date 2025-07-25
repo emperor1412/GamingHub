@@ -46,7 +46,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://hoangdevgames.github.io/GamingHub_Build_Published/",
+  "homepage": ".",
   "devDependencies": {
     "gh-pages": "^6.2.0"
   }
