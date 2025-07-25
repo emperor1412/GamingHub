@@ -8,6 +8,7 @@ import fsl_point from './images/fsl_point.png';
 import starletIcon from './images/starlet.png';
 import gmtIcon from './images/GMT_1.png';
 import ID_selected from './images/ID_selected.svg';
+import { t } from './utils/localization';
 
 const FSLID = () => {
     const [loading, setLoading] = useState(false);
@@ -174,9 +175,9 @@ const FSLID = () => {
                             <div className="fsl-id-name">
                                 <div className="name-with-level">
                                     {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || 'User'}
-                                    <span className="level-tag">Lv.{shared.userProfile.level || 0}</span>
+                                    <span className="level-tag">{t('LEVEL_ABBR')}.{shared.userProfile.level || 0}</span>
                                     <button className="logout-button" onClick={handleLogout}>
-                                        Log out
+                                        {t('LOG_OUT')}
                                     </button>
                                 </div>
                                 <div className="fsl-id-hash" onClick={() => setShowFullEmail(!showFullEmail)}>
@@ -191,7 +192,7 @@ const FSLID = () => {
                                             copyToClipboard(shared.userProfile.email);
                                         }}
                                     >
-                                        Copy
+                                        {t('COPY')}
                                     </button>
                                 </div>
                             </div>
@@ -286,6 +287,7 @@ const FSLID = () => {
             {loading && (
                 <div className="bank-step-loading-overlay">
                     <div className="bank-step-loading-spinner"></div>
+                    <div className="bank-step-loading-text">{t('LOADING')}</div>
                 </div>
             )}
         </div>

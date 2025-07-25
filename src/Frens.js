@@ -583,7 +583,7 @@ const Frens = () => {
           <div className="friend-item loading" style={{
             height: friendsData.length === 0 ? '100%' : 'auto'
           }}>
-            Loading...
+                                {t('LOADING')}
           </div>
         )}
         <div className="friend-item placeholder"></div>

@@ -460,7 +460,7 @@ Response:
                             
                             <div className="timer-overlay">
                                 <div className="timer-message">
-                                    YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.
+                                    {t('TICKET_LOCKED_MESSAGE')}
                                 </div>
                                 <div className="timer-circle">
                                     <img src={circle_dotted} alt="Timer Background" className="timer-circle-bg" />
@@ -474,16 +474,16 @@ Response:
                                             {String(timeLeft.seconds).padStart(2, '0')}
                                         </div>
                                         <div className="timer-subtext">
-                                            Time Remaining: {timeLeft.hours} {timeLeft.hours === 1 ? 'hour' : 'hours'}, {timeLeft.minutes} {timeLeft.minutes === 1 ? 'minute' : 'minutes'}, {timeLeft.seconds} {timeLeft.seconds === 1 ? 'second' : 'seconds'}
+                                            {t('TIME_REMAINING')}: {timeLeft.hours} {timeLeft.hours === 1 ? t('HOUR') : t('HOURS')}, {timeLeft.minutes} {timeLeft.minutes === 1 ? t('MINUTE') : t('MINUTES')}, {timeLeft.seconds} {timeLeft.seconds === 1 ? t('SECOND') : t('SECONDS')}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="timer-buttons">
-                                    <button className="timer-button primary" onClick={handleLevelUpClick}>LEVEL UP</button>
+                                    <button className="timer-button primary" onClick={handleLevelUpClick}>{t('LEVEL_UP')}</button>
                                     <div className="level-up-description">
-                                        EARN MORE REWARDS AND FEATURES BY LEVELING UP!
+                                        {t('EARN_MORE_REWARDS')}
                                     </div>
-                                    <button className="timer-button secondary" onClick={() => setShowTimer(false)}>DONE</button>
+                                    <button className="timer-button secondary" onClick={() => setShowTimer(false)}>{t('DONE')}</button>
                                 </div>
                             </div>
                             <header className="t1_ticket-header">

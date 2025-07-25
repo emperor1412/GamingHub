@@ -238,7 +238,6 @@
     transition: opacity 0.2s;
     height: 30px;
     align-self: center;
-
     color: #FFF;
     font-family: "PP Neue Machina";
     font-size: 14px;
@@ -246,6 +245,8 @@
     font-weight: 700;
     line-height: normal;
     text-transform: uppercase;
+    width: 50px;  /* ← Đây là vấn đề! */
+    min-width: 50px;
 }
 
 .start-button:hover {

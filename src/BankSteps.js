@@ -22,6 +22,7 @@ import bank_step_group_icon from './images/bank_step_group_icon.png';
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 import { lineShare } from './services/lineShare';
+import { t } from './utils/localization';
 
 /*
 url: /app/getBankSteps
@@ -104,10 +105,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             }
         } catch (error) {
             console.error('claimBankSteps error:', error);
-            await shared.showPopup({
-                type: 0,
-                message: 'Failed to claim starlets. Please try again later.'
-            });
+                            await shared.showPopup({
+                    type: 0,
+                    message: t('CLAIM_STARLETS_ERROR')
+                });
         }
         setLoading(false);
     };
@@ -294,41 +295,41 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         <div className="bs_steps-sections">
                             <div className="bs_step-box">
                                 <div className="bs_step-header-container">
-                                    <div className="bs_step-header">CONNECT</div>
+                                    <div className="bs_step-header">{t('CONNECT')}</div>
                                 </div>
                                 <div className="bs_step-content">
-                                Link your FSL ID to FSL Game Hub and to STEPN.
+                                {t('LINK_YOUR_FSL')}
                                 </div>
                             </div>
 
                             <div className="bs_step-box">
                                 <div className="bs_step-header-container">
-                                    <div className="bs_step-header bs_step-header2">CREATE</div>
+                                    <div className="bs_step-header bs_step-header2">{t('CREATE')}</div>
                                 </div>
                                 <div className="bs_step-content">
-                                Do your daily walk with STEPN, as usual.
+                                {t('DAILY_WALK')}
                                 </div>
                             </div>
 
                             <div className="bs_step-box">
                                 <div className="bs_step-header-container">
-                                    <div className="bs_step-header bs_step-header2">CLAIM</div>
+                                    <div className="bs_step-header bs_step-header2">{t('CLAIM')}</div>
                                 </div>
                                 <div className="bs_step-content">
-                                The following day,  you'll be able to claim Starlets for steps walked within the STEPN app.
+                                {t('FOLLOWING_DAY_CLAIM')}
                                 </div>
                                 <div className="bs_step-note">
-                                    5,000 STEPS = 500 STARLETS. WE HAVE SET A LIMIT OF BEING ABLE TO CLAIM 500 STARLETS PER DAY
+                                    {t('STEPS_TO_STARLET')}
                                 </div>
                             </div>
                         </div>
 
                         <div className="bs_button-group">
                             <button className="bs_cyan-button" onClick={handleConnectFSL}>
-                                CONNECT FSL ID
+                                {t('CONNECT_FSL_ID')}
                             </button>
                             <button className="bs_cyan-button" onClick={handleFindOutMore}>
-                                FIND OUT MORE
+                                {t('FIND_OUT_MORE')}
                             </button>
                         </div>
                     </div>
@@ -346,7 +347,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
                 <div className="bs_bank-steps-content-1">
                     <div className="bs_starlets-header">
-                        STARLETS
+                        {t('BANK_STEPS')}
                     </div>
 
                     <div className="bs_progress-bar">
@@ -374,9 +375,9 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     />
                     <div className='bs_stat'>
                         <div className="bs_stat-labels">
-                            <div className="bs_stat-label">Km</div>
-                            <div className="bs_stat-label">Time</div>
-                            <div className="bs_stat-label">Total Steps</div>
+                            <div className="bs_stat-label">{t('KM')}</div>
+                            <div className="bs_stat-label">{t('TIME')}</div>
+                            <div className="bs_stat-label">{t('TOTAL_STEPS')}</div>
                         </div>
                         <div className="bs_stats-display">
                             <div className="bs_stat-item">
@@ -399,7 +400,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     <button className="bs_claim-button" onClick={handleClaimStarlets} disabled={!canClaim}>
                         <img src={claim_starlet_button} alt="Claim Starlets" />
                     </button>
-                    <div className="bs_claim-time">*Available daily after 13:00 UTC</div>
+                    <div className="bs_claim-time">{t('AVAILABLE_DAILY')}</div>
 
                     {/* <button className="bs_find-out-more" onClick={handleFindOutMore}>
                         FIND OUT MORE
@@ -426,7 +427,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             className="bs_action-button" 
                             onClick={handleCloseSuccessOverlay}
                         >
-                            <span>DONE</span>
+                            <span>{t('DONE')}</span>
                         </button>
                     </div>
                 </div>
@@ -434,6 +435,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             {loading && (
                 <div className="bs_loading-overlay">
                     <div className="bs_loading-spinner"></div>
+                    <div className="bs_loading-text">{t('LOADING')}</div>
                 </div>
             )}
         </>

@@ -108,8 +108,18 @@ const translations = {
     TASKS: "TASKS:",
     ENGAGE_WITH_TASKS: "ENGAGE WITH TASKS TO UNLOCK REWARDS.",
     ONLY_LEGENDS_REACH: "ONLY LEGENDS REACH LEVEL",
+    SHARE_TO_STORY: "SHARE TO STORY",
     SHARE_TO_STORY_20: "Share To Story 20 Starlets",
     YOU_HAVE_WON: "YOU'VE WON",
+    
+    // Tasks section titles
+    TIME_LIMITED_TASKS: "TIME-LIMITED TASKS",
+    FSL_ACADEMY: "FSL ACADEMY",
+    PARTNER_TASKS: "PARTNER TASKS",
+    DAILY_TASKS: "DAILY TASKS",
+    START: "START",
+    DONE: "DONE",
+    ENDS: "ENDS",
     CLAIM_LOOT: "CLAIM LOOT",
     RESULTS: "RESULTS",
     CLAIM_YOUR_WINNINGS: "CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW",
@@ -123,11 +133,60 @@ const translations = {
     STEPN_GO_SHOE_TEXT: "StepN GO Shoe",
     ALPHA_CHEST_TEXT: "Alpha Chest",
     CLAIMING: "CLAIMING",
-    CLAIMED: "CLAIMED"
+    CLAIMED: "CLAIMED",
+    CONNECT: "CONNECT",
+    LINK_YOUR_FSL: "Link your FSL ID to FSL Game Hub and to STEPN.",
+    CREATE: "CREATE",
+    DAILY_WALK: "DO YOUR DAILY WALK WITH STEPN, AS USUAL!",
+    FOLLOWING_DAY_CLAIM: "THE FOLLOWING DAY YOU’LL BE ABLE TO CLAIM STARLETS FOR STEPS WALKED WITHIN THE STEPN APP.",
+    STEPS_TO_STARLET: "5,000 STEPS = 500 STARLETS WE HAVE SET A LIMIT OF BEING ABLE TO CLAIM 500 STARLETS PER DAY",
+    CONNECT_FSL_ID: "CONNECT FSL ID",
+    FIND_OUT_MORE: "FIND OUT MORE",
+    KM: "Km",
+    TIME: "Time",
+    TOTAL_STEPS: "Total Steps",
+    AVAILABLE_DAILY: "*Available daily after 13:00 UTC",
+    CLAIM_STARLETS_ERROR: "Failed to claim starlets. Please try again later.",
+    
+    // Ticket1.js locked ticket messages
+    TICKET_LOCKED_MESSAGE: "YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.",
+    EARN_MORE_REWARDS: "EARN MORE REWARDS AND FEATURES BY LEVELING UP!",
+    
+    // Loading states
+    LOADING: "LOADING...",
+    
+    // ProfileAvatarSelector.js
+    UNLOCK_THIS_PFP: "UNLOCK THIS PFP",
+    UNLOCK_EXCLUSIVE_PFPS: "LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!",
+    SECRETS_DISCOVERED: "SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?",
+    OKAY_BUTTON: "Okay",
+    TERMS_AND_CONDITIONS: "Terms and Conditions",
+    PRIVACY_POLICY: "Privacy Policy",
+    TIME_REMAINING: "Time Remaining",
+    HOUR: "hour",
+    HOURS: "hours",
+    MINUTE: "minute",
+    MINUTES: "minutes",
+    SECOND: "second",
+    SECONDS: "seconds",
+    
+    // FSLID.js buttons
+    COPY: "Copy",
+    LOG_OUT: "Log out",
+    
+    // CheckIn.js
+    DAY_LABEL: "DAY",
+    
+    // TasksLearn.js
+    NEXT: "NEXT",
+    BINGO: "BINGO",
+    QUIZ_COMPLETED: "YOU'VE COMPLETED THE QUIZ!",
+    YOU_EARNED: "YOU'VE EARNED",
+    TRY_AGAIN: "TRY AGAIN"
   },
   ja: {
     MY_TICKETS: "マイチケット",
-    SCRATCH_TICKETS_REWARDS: "スクラッチで報酬を獲得",
+    SCRATCH_TICKETS_REWARDS: "スクラッチで\n報酬を獲得",
     SCRATCH_TICKETS: "スクラッチ",
     BANK_STEPS: "ステップバンク",
     ALPHA: "アルファ",
@@ -182,7 +241,7 @@ const translations = {
     STARLETS_UI: "スターレット",
     MOOAR_MEMBERSHIP: "MOOAR+メンバーシップ",
     ALPHA_CHEST: "アルファチェスト",
-    NEED_STARLETS: "次のレベルに進むには<STARLET>スターレットが必要です。",
+    NEED_STARLETS: "次のレベルに進むには XX スターレットが必要です。",
     LEVEL_UP: "レベルアップ",
     EARN_STARLETS: "スターレットの獲得方法:",
     DAILY_CHECKIN_STREAK: "デイリーチェックイン：連続記録を続けよう！",
@@ -233,8 +292,18 @@ const translations = {
     TASKS: "タスク:",
     ENGAGE_WITH_TASKS: "タスクに取り組んで報酬をアンロック。",
     ONLY_LEGENDS_REACH: "伝説のみがレベルに到達",
+    SHARE_TO_STORY: "ストーリーにシェア",
     SHARE_TO_STORY_20: "ストーリーにシェア 20スターレット",
     YOU_HAVE_WON: "獲得しました",
+    
+    // Tasks section titles
+    TIME_LIMITED_TASKS: "期間限定タスク",
+    FSL_ACADEMY: "FSLアカデミー",
+    PARTNER_TASKS: "パートナータスク",
+    DAILY_TASKS: "デイリータスク",
+    START: "開始",
+    DONE: "完了",
+    ENDS: "終了",
     CLAIM_LOOT: "戦利品を獲得",
     RESULTS: "結果",
     CLAIM_YOUR_WINNINGS: "おめでとうございます！下記の賞品を獲得してください",
@@ -248,11 +317,60 @@ const translations = {
     STEPN_GO_SHOE_TEXT: "StepN GOシューズ",
     ALPHA_CHEST_TEXT: "アルファチェスト",
     CLAIMING: "受け取り中",
-    CLAIMED: "受け取り済み"
+    CLAIMED: "受け取り済み",
+    CONNECT: "連携",
+    LINK_YOUR_FSL: "FSL IDをFSLゲームハブとSTEPNに連携しよう",
+    CREATE: "はじめる",
+    DAILY_WALK: "いつも通りSTEPNでウォーキングしよう！",
+    FOLLOWING_DAY_CLAIM: "翌日、STEPNアプリで歩いた歩数に応じてスターリットを受け取れます。",
+    STEPS_TO_STARLET: "5,000歩 = 500スターリット\r\n1日に受け取れるスターリットは最大500までです。",
+    CONNECT_FSL_ID: "FSL IDを接続",
+    FIND_OUT_MORE: "詳しく見る",
+    KM: "km",
+    TIME: "時間",
+    TOTAL_STEPS: "総歩数",
+    AVAILABLE_DAILY: "*毎日13:00 UTC以降に利用可能",
+    CLAIM_STARLETS_ERROR: "スターレットの受け取りに失敗しました。後でもう一度お試しください。",
+    
+    // Ticket1.js locked ticket messages
+    TICKET_LOCKED_MESSAGE: "チケットがロックされています。アカウントをレベルアップしてチケットスロットを解放するか、タイマーが終了するまでお待ちください。",
+    EARN_MORE_REWARDS: "レベルアップしてより多くの報酬と機能を獲得しよう！",
+    
+    // Loading states
+    LOADING: "読み込み中...",
+    
+    // ProfileAvatarSelector.js
+    UNLOCK_THIS_PFP: "このPFPを解放",
+    UNLOCK_EXCLUSIVE_PFPS: "アカウントをレベルアップして\n限定PFPを解放しよう！",
+    SECRETS_DISCOVERED: "秘密は発見されるために\nあるもの。解放できるかな？",
+    OKAY_BUTTON: "OK",
+    TERMS_AND_CONDITIONS: "利用規約",
+    PRIVACY_POLICY: "プライバシーポリシー",
+    TIME_REMAINING: "残り時間",
+    HOUR: "時間",
+    HOURS: "時間",
+    MINUTE: "分",
+    MINUTES: "分",
+    SECOND: "秒",
+    SECONDS: "秒",
+    
+    // FSLID.js buttons
+    COPY: "コピー",
+    LOG_OUT: "ログアウト",
+    
+    // CheckIn.js
+    DAY_LABEL: "日",
+    
+    // TasksLearn.js
+    NEXT: "次へ",
+    BINGO: "ビンゴ",
+    QUIZ_COMPLETED: "クイズを完了しました！",
+    YOU_EARNED: "獲得しました",
+    TRY_AGAIN: "再試行"
   }
 };
 
-// Get current language from localStorage or default to Japanese
+// Get current language from localStorage or default to English
 const getCurrentLanguage = () => {
   return localStorage.getItem('language') || 'ja';
 };
