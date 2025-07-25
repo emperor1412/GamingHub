@@ -111,15 +111,6 @@ const translations = {
     SHARE_TO_STORY: "SHARE TO STORY",
     SHARE_TO_STORY_20: "Share To Story 20 Starlets",
     YOU_HAVE_WON: "YOU'VE WON",
-    
-    // Tasks section titles
-    TIME_LIMITED_TASKS: "TIME-LIMITED TASKS",
-    FSL_ACADEMY: "FSL ACADEMY",
-    PARTNER_TASKS: "PARTNER TASKS",
-    DAILY_TASKS: "DAILY TASKS",
-    START: "START",
-    DONE: "DONE",
-    ENDS: "ENDS",
     CLAIM_LOOT: "CLAIM LOOT",
     RESULTS: "RESULTS",
     CLAIM_YOUR_WINNINGS: "CONGRATULATIONS! CLAIM YOUR WINNINGS BELOW",
@@ -147,46 +138,42 @@ const translations = {
     TOTAL_STEPS: "Total Steps",
     AVAILABLE_DAILY: "*Available daily after 13:00 UTC",
     CLAIM_STARLETS_ERROR: "Failed to claim starlets. Please try again later.",
-    
-    // Ticket1.js locked ticket messages
     TICKET_LOCKED_MESSAGE: "YOUR TICKET IS LOCKED, UNLOCK MORE TICKET SLOTS BY LEVELING UP YOUR ACCOUNT OR WAIT FOR THE TIMER TO RUN OUT.",
     EARN_MORE_REWARDS: "EARN MORE REWARDS AND FEATURES BY LEVELING UP!",
-    
-    // Loading states
     LOADING: "LOADING...",
-    
-    // ProfileAvatarSelector.js
+    DAILY_TASKS: "DAILY TASKS",
+    START: "START",
+    ENDS: "ENDS",
     UNLOCK_THIS_PFP: "UNLOCK THIS PFP",
-    UNLOCK_EXCLUSIVE_PFPS: "LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!",
-    SECRETS_DISCOVERED: "SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?",
+    UNLOCK_EXCLUSIVE_PFPS: "\"LEVEL UP YOUR ACCOUNT\r\nTO UNLOCK EXCLUSIVE PFPS!\"",
+    SECRETS_DISCOVERED: "\"SOME SECRETS ARE MEANT TO BE\r\nDISCOVERED. CAN YOU UNLOCK IT?\"",
     OKAY_BUTTON: "Okay",
     TERMS_AND_CONDITIONS: "Terms and Conditions",
     PRIVACY_POLICY: "Privacy Policy",
-    TIME_REMAINING: "Time Remaining",
     HOUR: "hour",
     HOURS: "hours",
     MINUTE: "minute",
     MINUTES: "minutes",
     SECOND: "second",
     SECONDS: "seconds",
-    
-    // FSLID.js buttons
-    COPY: "Copy",
-    LOG_OUT: "Log out",
-    
-    // CheckIn.js
-    DAY_LABEL: "DAY",
-    
-    // TasksLearn.js
     NEXT: "NEXT",
     BINGO: "BINGO",
     QUIZ_COMPLETED: "YOU'VE COMPLETED THE QUIZ!",
     YOU_EARNED: "YOU'VE EARNED",
-    TRY_AGAIN: "TRY AGAIN"
+    TRY_AGAIN: "TRY AGAIN",
+    CREATE_FSLID: "CREATE A NEW FSL ACCOUNT?",
+    NOT_REGISTER: "THIS EMAIL IS NOT YET REGISTERED, WOULD YOU LIKE TO CREATE A NEW FSL ACCOUNT?",
+    NOTE_MOOAR: "PLEASE NOTE: IF YOU HAVE A 2184 OF MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.",
+    SIGN_UP: "SIGN UP",
+    TIME_REMAINING: "Time Remaining",
+    COPY: "Copy",
+    LOG_OUT: "Log out",
+    DAY_LABEL: "DAY",
+    USER: "User"
   },
   ja: {
     MY_TICKETS: "マイチケット",
-    SCRATCH_TICKETS_REWARDS: "スクラッチで\n報酬を獲得",
+    SCRATCH_TICKETS_REWARDS: "スクラッチで報酬を獲得",
     SCRATCH_TICKETS: "スクラッチ",
     BANK_STEPS: "ステップバンク",
     ALPHA: "アルファ",
@@ -266,8 +253,8 @@ const translations = {
     DAY: "日",
     DAYS: "日",
     TICKETS_SCRATCHED_TODAY: "今日削ったチケット！",
-    SCRATCH_ALL_LVL5_REQ: "すべて削る [LV5必要]",
-    BULK_SCRATCH: "一括削除",
+    SCRATCH_ALL_LVL5_REQ: "すべてスクラッチする [LV5必要]",
+    BULK_SCRATCH: "一括スクラッチ",
     DONE: "完了",
     SHARING: "シェア中...",
     UNLOCK_THIS_TROPHY: "このトロフィーを解放",
@@ -295,15 +282,6 @@ const translations = {
     SHARE_TO_STORY: "ストーリーにシェア",
     SHARE_TO_STORY_20: "ストーリーにシェア 20スターレット",
     YOU_HAVE_WON: "獲得しました",
-    
-    // Tasks section titles
-    TIME_LIMITED_TASKS: "期間限定タスク",
-    FSL_ACADEMY: "FSLアカデミー",
-    PARTNER_TASKS: "パートナータスク",
-    DAILY_TASKS: "デイリータスク",
-    START: "開始",
-    DONE: "完了",
-    ENDS: "終了",
     CLAIM_LOOT: "戦利品を獲得",
     RESULTS: "結果",
     CLAIM_YOUR_WINNINGS: "おめでとうございます！下記の賞品を獲得してください",
@@ -322,8 +300,8 @@ const translations = {
     LINK_YOUR_FSL: "FSL IDをFSLゲームハブとSTEPNに連携しよう",
     CREATE: "はじめる",
     DAILY_WALK: "いつも通りSTEPNでウォーキングしよう！",
-    FOLLOWING_DAY_CLAIM: "翌日、STEPNアプリで歩いた歩数に応じてスターリットを受け取れます。",
-    STEPS_TO_STARLET: "5,000歩 = 500スターリット\r\n1日に受け取れるスターリットは最大500までです。",
+    FOLLOWING_DAY_CLAIM: "翌日、STEPNアプリで歩いた歩数に応じてスターレットを受け取れます。",
+    STEPS_TO_STARLET: "5,000歩 = 500スターレット\n1日に受け取れるスターレットは最大500までです。",
     CONNECT_FSL_ID: "FSL IDを接続",
     FIND_OUT_MORE: "詳しく見る",
     KM: "km",
@@ -331,42 +309,38 @@ const translations = {
     TOTAL_STEPS: "総歩数",
     AVAILABLE_DAILY: "*毎日13:00 UTC以降に利用可能",
     CLAIM_STARLETS_ERROR: "スターレットの受け取りに失敗しました。後でもう一度お試しください。",
-    
-    // Ticket1.js locked ticket messages
     TICKET_LOCKED_MESSAGE: "チケットがロックされています。アカウントをレベルアップしてチケットスロットを解放するか、タイマーが終了するまでお待ちください。",
     EARN_MORE_REWARDS: "レベルアップしてより多くの報酬と機能を獲得しよう！",
-    
-    // Loading states
     LOADING: "読み込み中...",
-    
-    // ProfileAvatarSelector.js
+    DAILY_TASKS: "デイリータスク",
+    START: "開始",
+    ENDS: "終了",
     UNLOCK_THIS_PFP: "このPFPを解放",
-    UNLOCK_EXCLUSIVE_PFPS: "アカウントをレベルアップして\n限定PFPを解放しよう！",
-    SECRETS_DISCOVERED: "秘密は発見されるために\nあるもの。解放できるかな？",
+    UNLOCK_EXCLUSIVE_PFPS: "\"アカウントをレベルアップして\r\n限定PFPを解放しよう！\"",
+    SECRETS_DISCOVERED: "\"秘密は、発見されるために存在します。あなたはそれを解き明かせますか？\"",
     OKAY_BUTTON: "OK",
     TERMS_AND_CONDITIONS: "利用規約",
     PRIVACY_POLICY: "プライバシーポリシー",
-    TIME_REMAINING: "残り時間",
     HOUR: "時間",
     HOURS: "時間",
     MINUTE: "分",
     MINUTES: "分",
     SECOND: "秒",
     SECONDS: "秒",
-    
-    // FSLID.js buttons
-    COPY: "コピー",
-    LOG_OUT: "ログアウト",
-    
-    // CheckIn.js
-    DAY_LABEL: "日",
-    
-    // TasksLearn.js
     NEXT: "次へ",
     BINGO: "ビンゴ",
     QUIZ_COMPLETED: "クイズを完了しました！",
     YOU_EARNED: "獲得しました",
-    TRY_AGAIN: "再試行"
+    TRY_AGAIN: "再試行",
+    CREATE_FSLID: "FSLアカウントを新規作成しますか？",
+    NOT_REGISTER: "このメールアドレスはまだ登録されていません。新しいFSLアカウントを作成しますか？",
+    NOTE_MOOAR: "ご注意：2184またはMOOARのFSLアカウントをお持ちの場合は、そのログイン情報でログインできます。",
+    SIGN_UP: "新規登録",
+    TIME_REMAINING: "残り時間",
+    COPY: "コピー",
+    LOG_OUT: "ログアウト",
+    DAY_LABEL: "日",
+    USER: "ユーザー"
   }
 };
 

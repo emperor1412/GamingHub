@@ -174,7 +174,7 @@ const FSLID = () => {
                             </div>
                             <div className="fsl-id-name">
                                 <div className="name-with-level">
-                                    {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || 'User'}
+                                    {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || t('USER')}
                                     <span className="level-tag">{t('LEVEL_ABBR')}.{shared.userProfile.level || 0}</span>
                                     <button className="logout-button" onClick={handleLogout}>
                                         {t('LOG_OUT')}
@@ -262,9 +262,9 @@ const FSLID = () => {
                         {/* <span className="fsl-id-logo-text">FSL ID</span> */}
                     {/* </div> */}
                     <div className="fsl-id-message">
-                        <p className='fsl-id-note-title'>Create a New FSL Account?</p>
-                        <p className='fsl-id-note-1'>THIS EMAIL IS NOT YET REGISTERED. WOULD YOU LIKE TO CREATE A NEW FSL ACCOUNT?</p>
-                        <p className="fsl-id-note">PLEASE NOTE: IF YOU HAVE A GAS HERO OR MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.</p>
+                        <p className='fsl-id-note-title'>{t('CREATE_FSLID')}</p>
+                        <p className='fsl-id-note-1'>{t('NOT_REGISTER')}</p>
+                        <p className="fsl-id-note">{t('NOTE_MOOAR')}</p>
                     </div>
                     <div className="fsl-id-buttons">
                         <button 
@@ -272,14 +272,14 @@ const FSLID = () => {
                             onClick={connectFSLID}
                             disabled={loading}
                         >
-                            SIGN UP
+                            {t('SIGN_UP')}
                         </button>
                         <button 
                             className="fsl-id-connect-button"
                             onClick={connectFSLID}
                             disabled={loading}
                         >
-                            CONNECT FSL ID
+                            {t('CONNECT_FSL_ID')}
                         </button>
                     </div>
                 </div>
