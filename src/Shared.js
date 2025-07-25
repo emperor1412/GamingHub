@@ -61,13 +61,13 @@ const tokenABI = [
 
 const shared = {
     server_url: 'https://gamehub.fsl.com',
-    app_link: 'https://miniapp.line.me/2007739332-39PNxppa',
-    game_link: 'https://miniapp.line.me/2007739328-AXQNennQ',
+    app_link: 'https://miniapp.line.me/2007739334-1y40PGGg',
+    game_link: 'https://miniapp.line.me/2007739330-o6yN0LLG',
     host_environment: 'test',
     
     // LINE LIFF Configuration
     liff: {
-        liffId: '2007739332-39PNxppa',
+        liffId: '2007739334-1y40PGGg',
         inspectorOrigin: 'wss://f39acd71cac5.ngrok-free.app',
         withLoginOnExternalBrowser: true
     },
