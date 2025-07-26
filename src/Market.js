@@ -78,7 +78,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState('starlet'); // 'starlet' or 'telegram'
+  const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -572,6 +572,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                           
                           {/* Show regular options */}
                           {options.map((option) => {
+                            // Check if option is available (state 0 = available, 1 = unavailable)
+                            const isAvailable = option.state === 0 && option.canBuy;
+                            
                             // Calculate bonus for special offers
                             let bonusText = null;
                             if (type === 30) { // Exclusive One-Time Offer
@@ -592,28 +595,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                             return (
                               <button 
                                 key={option.id}
-                                className="mk-market-ticket-button" 
-                                onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                className={`mk-market-ticket-button ${!isAvailable ? 'sold-out' : ''}`}
+                                onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                disabled={!isAvailable}
                               >
                                 <div className="mk-market-ticket-button-image-container">
                                   <div className="mk-market-ticket-content">
                                     <div className="mk-market-ticket-icon">
-                                      <img src={starlet} alt="Starlet" />
+                                      <img src={starlet} alt="Starlet" style={{ opacity: isAvailable ? 1 : 0.5 }} />
                                     </div>
                                     <div className="mk-market-ticket-info">
                                       {bonusText && (
-                                        <div className="mk-market-ticket-bonus-text">{bonusText}</div>
+                                        <div className="mk-market-ticket-bonus-text" style={{ opacity: isAvailable ? 1 : 0.5 }}>{bonusText}</div>
                                       )}
                                       <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount">{option.starlet}</div>
-                                        <div className="mk-market-ticket-label">STARLETS</div>
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
                                       </div>
-                                      <div className="mk-market-ticket-bonus">
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                         <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
+                                  <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    {!isAvailable ? 'SOLD OUT' : `${option.stars} TELEGRAM STARS`}
+                                  </div>
                                 </div>
                               </button>
                             );
