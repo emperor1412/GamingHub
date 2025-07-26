@@ -8,26 +8,35 @@ import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
+import arrow_2 from './images/arrow_2.svg';
 
 // url: /app/buyOptions
 // Request:
 // Response:
+// type Type_Init = 0;
+//      Type_Weekly = 10;
+//      Type_Month = 20;
+//      Type_OnlyOnce = 30;
 // {
 //     "code": 0,
 //     "data": [
 //         {
-//             "id": 1,
+//             "id": 2001,
 //             "state": 0,
-//             "stars": 1,
-//             "starlet": 10,
-//             "ticket": 1
+//             "type": 20,
+//             "stars": 250,
+//             "starlet": 1950,
+//             "ticket": 0,
+//             "canBuy": true
 //         },
 //         {
-//             "id": 2,
+//             "id": 4,
 //             "state": 0,
-//             "stars": 2,
-//             "starlet": 30,
-//             "ticket": 2
+//             "type": 0,
+//             "stars": 100,
+//             "starlet": 500,
+//             "ticket": 0,
+//             "canBuy": true
 //         }
 //     ]
 // }
@@ -69,6 +78,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
+  
+  // Category expansion states
+  const [standardPackExpanded, setStandardPackExpanded] = useState(true);
+  const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
+  const [monthlyOfferExpanded, setMonthlyOfferExpanded] = useState(true);
+  const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
 
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
@@ -330,6 +345,77 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setShowBuyView(false);
   };
 
+  // Helper function to get category title and color based on type
+  const getCategoryInfo = (type) => {
+    switch (type) {
+      case 0:
+        return { title: 'STANDARD PACK', color: '#00FF00', bgColor: 'rgba(0, 255, 0, 0.1)' };
+      case 10:
+        return { title: 'LIMITED WEEKLY OFFER', color: '#FF69B4', bgColor: 'rgba(255, 105, 180, 0.1)' };
+      case 20:
+        return { title: 'LIMITED MONTHLY OFFER', color: '#9370DB', bgColor: 'rgba(147, 112, 219, 0.1)' };
+      case 30:
+        return { title: 'EXCLUSIVE ONE-TIME OFFER', color: '#FFA500', bgColor: 'rgba(255, 165, 0, 0.1)' };
+      default:
+        return { title: 'STANDARD PACK', color: '#00FF00', bgColor: 'rgba(0, 255, 0, 0.1)' };
+    }
+  };
+
+  // Helper function to get expansion state based on type
+  const getExpansionState = (type) => {
+    switch (type) {
+      case 0:
+        return standardPackExpanded;
+      case 10:
+        return weeklyOfferExpanded;
+      case 20:
+        return monthlyOfferExpanded;
+      case 30:
+        return exclusiveOfferExpanded;
+      default:
+        return standardPackExpanded;
+    }
+  };
+
+  // Helper function to set expansion state based on type
+  const setExpansionState = (type, value) => {
+    switch (type) {
+      case 0:
+        setStandardPackExpanded(value);
+        break;
+      case 10:
+        setWeeklyOfferExpanded(value);
+        break;
+      case 20:
+        setMonthlyOfferExpanded(value);
+        break;
+      case 30:
+        setExclusiveOfferExpanded(value);
+        break;
+      default:
+        setStandardPackExpanded(value);
+    }
+  };
+
+  // Group buy options by type
+  const groupedOptions = buyOptions.reduce((acc, option) => {
+    if (!acc[option.type]) {
+      acc[option.type] = [];
+    }
+    acc[option.type].push(option);
+    return acc;
+  }, {});
+
+  // Ensure all category types exist
+  [0, 10, 20, 30].forEach(type => {
+    if (!groupedOptions[type]) {
+      groupedOptions[type] = [];
+    }
+  });
+
+  // Sort categories by type order: 0 (Standard), 30 (Exclusive), 20 (Monthly), 10 (Weekly)
+  const categoryOrder = [0, 30, 20, 10];
+
   if (showBuyView) {
     return (
       <Buy
@@ -388,66 +474,132 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
                   <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">USERS WHO HAVE FSL ID CONNECTED WILL BE ABLE TO CLAIM 50 STARLETS AND 1 TICKET DAILY</div>
+                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
                 </div>
               </div>
             </div>
           )}
           
           <div className="mk-scrollable-market-content">
-            <div className="mk-starlet-grid">
-              <button 
-                className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
-                disabled={isFreeItemClaimed}
-              >
-                <div className="mk-market-ticket-button-image-container">
-                  <div className="mk-market-ticket-content">
-                    <div className="mk-market-ticket-icon">
-                      <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
-                    </div>
-                    <div className="mk-market-ticket-info">
-                      <div className="mk-market-ticket-text">
-                        <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
-                        <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
-                      </div>
-                      <div className="mk-market-ticket-bonus">
-                        <span>X1</span>&nbsp;<span>TICKETS</span>
-                      </div>
+            {/* Render each category in order */}
+            {categoryOrder.map((type) => {
+              const categoryInfo = getCategoryInfo(type);
+              const isExpanded = getExpansionState(type);
+              const options = groupedOptions[type] || [];
+              
+              // Skip empty sections except Standard Pack (type 0) which should always show for free item
+              if (options.length === 0 && type !== 0) {
+                return null;
+              }
+              
+              return (
+                <div key={type} className="mk-market-section">
+                  <div 
+                    className="mk-section-header"
+                    onClick={() => setExpansionState(type, !isExpanded)}
+                  >
+                    {/* Corner borders */}
+                    <div className="mk-corner mk-top-left"></div>
+                    <div className="mk-corner mk-top-right"></div>
+                    
+                    <div 
+                      className="mk-section-title-container"
+                      style={{ backgroundColor: categoryInfo.color }}
+                    >
+                      <span className="mk-section-title">
+                        {categoryInfo.title}
+                      </span>
+                      <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
                     </div>
                   </div>
-                  <div className="mk-market-ticket-price">
-                    {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                  <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
+                    {/* Corner borders for content */}
+                    <div className="mk-corner mk-bottom-left"></div>
+                    <div className="mk-corner mk-bottom-right"></div>
+                    
+                    <div className="mk-starlet-grid">
+                      {/* Show free item only in Standard Pack (type 0) */}
+                      {type === 0 && (
+                        <button 
+                          className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                          onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
+                          disabled={isFreeItemClaimed}
+                        >
+                          <div className="mk-market-ticket-button-image-container">
+                            <div className="mk-market-ticket-content">
+                              <div className="mk-market-ticket-icon">
+                                <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
+                              </div>
+                              <div className="mk-market-ticket-info">
+                                <div className="mk-market-ticket-text">
+                                  <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
+                                  <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                                </div>
+                                <div className="mk-market-ticket-bonus">
+                                  <span>X1</span>&nbsp;<span>TICKETS</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="mk-market-ticket-price">
+                              {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                            </div>
+                          </div>
+                        </button>
+                      )}
+                      
+                      {/* Show regular options */}
+                      {options.map((option) => {
+                        // Calculate bonus for special offers
+                        let bonusText = null;
+                        if (type === 30) { // Exclusive One-Time Offer
+                          if (option.stars === 0) bonusText = "BONUS: 50";
+                          else if (option.stars === 5) bonusText = "BONUS: 325";
+                          else if (option.stars === 10) bonusText = "BONUS: 325";
+                        } else if (type === 10) { // Limited Weekly Offer
+                          if (option.stars === 0) bonusText = "BONUS: 25";
+                          else if (option.stars === 5) {
+                            if (option.starlet === 100) bonusText = "BONUS: 195";
+                            else bonusText = "BONUS: 675";
+                          }
+                        } else if (type === 20) { // Limited Monthly Offer
+                          if (option.stars === 0) bonusText = "50% VALUE";
+                          else if (option.stars === 5) bonusText = "100% VALUE";
+                        }
+                        
+                        return (
+                          <button 
+                            key={option.id}
+                            className="mk-market-ticket-button" 
+                            onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                          >
+                            <div className="mk-market-ticket-button-image-container">
+                              <div className="mk-market-ticket-content">
+                                <div className="mk-market-ticket-icon">
+                                  <img src={starlet} alt="Starlet" />
+                                </div>
+                                <div className="mk-market-ticket-info">
+                                  {bonusText && (
+                                    <div className="mk-market-ticket-bonus-text">{bonusText}</div>
+                                  )}
+                                  <div className="mk-market-ticket-text">
+                                    <div className="mk-market-ticket-amount">{option.starlet}</div>
+                                    <div className="mk-market-ticket-label">STARLETS</div>
+                                  </div>
+                                  <div className="mk-market-ticket-bonus">
+                                    <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </button>
-
-              {buyOptions.map((option) => (
-                <button 
-                  key={option.id}
-                  className="mk-market-ticket-button" 
-                  onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
-                >
-                  <div className="mk-market-ticket-button-image-container">
-                    <div className="mk-market-ticket-content">
-                      <div className="mk-market-ticket-icon">
-                        <img src={starlet} alt="Starlet" />
-                      </div>
-                      <div className="mk-market-ticket-info">
-                        <div className="mk-market-ticket-text">
-                          <div className="mk-market-ticket-amount">{option.starlet}</div>
-                          <div className="mk-market-ticket-label">STARLETS</div>
-                        </div>
-                        <div className="mk-market-ticket-bonus">
-                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
-                  </div>
-                </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

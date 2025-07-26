@@ -257,15 +257,223 @@ body.mk-market-open {
   display: none !important;
 }
 
+/* Market Section Styles */
+.mk-market-section {
+  margin-bottom: 16px;
+  padding: 0 26px;
+}
+
+.mk-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  /* border-radius: 8px 8px 0 0; */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  border-bottom: none;
+  background: transparent; /* Remove background, will use elliptical background for text */
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  /* Add margin to create indentation effect - more indented than corner borders */
+  margin-left: 16px;
+  margin-right: 16px;
+  /* Ensure proper border styling */
+  box-sizing: border-box;
+}
+
+.mk-section-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent; /* Remove background */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* border-radius: 8px 8px 0 0; */
+}
+
+.mk-section-header:hover::before {
+  opacity: 1;
+}
+
+/* Corner borders for section header */
+.mk-section-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  /* border-radius: 8px 8px 0 0; */
+}
+
+.mk-section-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spread title and arrow to opposite ends */
+  padding: 8px 16px;
+  border-radius: 20px; /* Make it elliptical */
+  width: 100%; /* Extend to full width */
+  box-sizing: border-box;
+  /* Scale up to 1.2x without changing position */
+  transform: scaleX(1.075);
+  transform-origin: center;
+}
+
+.mk-section-title {
+  font-family: "PP Neue Machina";
+  font-size: 15px;
+  font-weight: 700;
+  color: black; /* Change to black text */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+  text-shadow: none; /* Remove text shadow for black text */
+  /* Remove individual background and padding since it's now in container */
+  display: inline-block;
+}
+
+.mk-section-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  filter: brightness(0); /* Change to black arrow */
+  position: relative;
+  z-index: 1;
+  /* Remove individual background styling */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Prevent arrow from shrinking */
+}
+
+.mk-section-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.mk-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background: rgba(0, 0, 0, 0.3);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  border-top: none;
+  /* border-radius: 0 0 8px 8px; */
+  backdrop-filter: blur(5px);
+  /* Remove side padding to match header width */
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  /* Add margin to match header indentation */
+  margin-left: 16px;
+  margin-right: 16px;
+  /* Ensure proper border styling */
+  box-sizing: border-box;
+}
+
+/* Corner borders for section content */
+.mk-section-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  /* border-radius: 0 0 8px 8px; */
+}
+
+/* Corner border elements */
+.mk-corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: white;
+  z-index: 2;
+}
+
+.mk-top-left {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.mk-top-right {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.mk-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.mk-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.mk-section-content.expanded {
+  max-height: 1000px;
+  padding: 16px 10px; /* Adjust padding to account for increased margin */
+}
+
 .mk-starlet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  padding: 0 26px;
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+/* Responsive grid adjustments */
+@media screen and (max-width: 400px) {
+  .mk-starlet-grid {
+    grid-template-columns: repeat(2, 1fr); /* Keep 2 columns even on small screens */
+    gap: 8px;
+  }
+  
+  .mk-section-content.expanded {
+    padding: 12px 12px; /* Reduce padding on small screens */
+  }
+  
+  .mk-market-section {
+    padding: 0 20px;
+  }
+  
+  .mk-section-header,
+  .mk-section-content {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 500px) {
+  .mk-starlet-grid {
+    gap: 10px;
+  }
+  
+  .mk-section-header,
+  .mk-section-content {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
 }
 
 .mk-starlet-item {
@@ -465,6 +673,17 @@ body.mk-market-open {
   align-items: flex-start;
   width: 65%;
   padding-left: 4px;
+}
+
+.mk-market-ticket-bonus-text {
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: 700;
+  color: #FFD700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* Ensure all children in market container have consistent overscroll behavior */
