@@ -10,6 +10,7 @@ import ticketDiscountIcon from './images/ticket-discount.png';
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 
 import { popup, openLink } from '@telegram-apps/sdk';
+import liff from '@line/liff';
 
 import shared from './Shared';
 import FSLAuthorization from 'fsl-authorization';
@@ -272,7 +273,21 @@ Response:
                                         <img src={item.icon} alt="" className="profile-item-icon" />
                                         <span className="profile-item-text">{item.text}</span>
                                     {item.type === 30020 && (
-                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank')}>
+                                        <button className="info-button" onClick={() => {
+                                            try {
+                                                if (window.liff && liff.isInClient()) {
+                                                    liff.openWindow({
+                                                        url: 'https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4',
+                                                        external: true
+                                                    });
+                                                } else {
+                                                    window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank');
+                                                }
+                                            } catch (e) {
+                                                console.log('Error opening link:', e);
+                                                window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank');
+                                            }
+                                        }}>
                                             i
                                         </button>
                                     )}

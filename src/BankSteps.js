@@ -20,6 +20,7 @@ import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_ico
 import bank_step_group_icon from './images/bank_step_group_icon.png';
 
 import { shareStory } from '@telegram-apps/sdk';
+import liff from '@line/liff';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
 import { lineShare } from './services/lineShare';
 import { t } from './utils/localization';
@@ -116,7 +117,19 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const handleFindOutMore = () => {
         // Handle find out more action
         // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
-        window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+        try {
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: "https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4",
+                    external: true
+                });
+            } else {
+                window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+            }
+        } catch (e) {
+            console.log('Error opening link:', e);
+            window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+        }
     };
 
     const updateProgressBar = (received) => {
