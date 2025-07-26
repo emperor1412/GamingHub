@@ -485,35 +485,38 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             <div className="mk-market-tab-container">
               <div className="mk-tabs">
                 <button
-                  className={`mk-tab ${activeTab === 'starlet' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('starlet')}
-                >
-                  <div>STARLET</div>
-                  <div>PACKAGES</div>
-                </button>
-                <button
                   className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
                   onClick={() => setActiveTab('telegram')}
                 >
                   <div>TELEGRAM</div>
                   <div>PACKAGES</div>
                 </button>
+                <button
+                  className={`mk-tab ${activeTab === 'starlet' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('starlet')}
+                >
+                  <div>STARLET</div>
+                  <div>PACKAGES</div>
+                </button>
               </div>
               
               <div className="mk-scrollable-market-content">
-                {/* Render each category in order */}
-                {categoryOrder.map((type) => {
-                  const categoryInfo = getCategoryInfo(type);
-                  const isExpanded = getExpansionState(type);
-                  const options = groupedOptions[type] || [];
-                  
-                  // Skip empty sections except Standard Pack (type 0) which should always show for free item
-                  if (options.length === 0 && type !== 0) {
-                    return null;
-                  }
-                  
-                  return (
-                    <div key={type} className="mk-market-section">
+                {/* Show content based on active tab */}
+                {activeTab === 'telegram' && (
+                  <>
+                    {/* Render each category in order */}
+                    {categoryOrder.map((type) => {
+                      const categoryInfo = getCategoryInfo(type);
+                      const isExpanded = getExpansionState(type);
+                      const options = groupedOptions[type] || [];
+                      
+                      // Skip empty sections except Standard Pack (type 0) which should always show for free item
+                      if (options.length === 0 && type !== 0) {
+                        return null;
+                      }
+                      
+                      return (
+                        <div key={type} className="mk-market-section">
                       <div 
                         className="mk-section-header"
                         onClick={() => setExpansionState(type, !isExpanded)}
@@ -620,6 +623,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     </div>
                   );
                 })}
+                  </>
+                )}
+                
+                {activeTab === 'starlet' && (
+                  <div className="mk-starlet-packages-placeholder">
+                    <div className="mk-placeholder-content">
+                      <div className="mk-placeholder-text">STARLET PACKAGES</div>
+                      <div className="mk-placeholder-subtext">Coming Soon</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
