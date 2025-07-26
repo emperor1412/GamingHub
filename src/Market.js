@@ -47,7 +47,7 @@ import arrow_2 from './images/arrow_2.svg';
 // Response:
 // {
 //     "code": 0,
-//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
+//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGU/vcVgAw"
 // }
 
 // url: /app/getFreeRewardTime
@@ -78,6 +78,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
+  const [activeTab, setActiveTab] = useState('starlet'); // 'starlet' or 'telegram'
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -480,126 +481,147 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             </div>
           )}
           
-          <div className="mk-scrollable-market-content">
-            {/* Render each category in order */}
-            {categoryOrder.map((type) => {
-              const categoryInfo = getCategoryInfo(type);
-              const isExpanded = getExpansionState(type);
-              const options = groupedOptions[type] || [];
+          <div className="mk-market-inner-content">
+            <div className="mk-market-tab-container">
+              <div className="mk-tabs">
+                <button
+                  className={`mk-tab ${activeTab === 'starlet' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('starlet')}
+                >
+                  <div>STARLET</div>
+                  <div>PACKAGES</div>
+                </button>
+                <button
+                  className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('telegram')}
+                >
+                  <div>TELEGRAM</div>
+                  <div>PACKAGES</div>
+                </button>
+              </div>
               
-              // Skip empty sections except Standard Pack (type 0) which should always show for free item
-              if (options.length === 0 && type !== 0) {
-                return null;
-              }
-              
-              return (
-                <div key={type} className="mk-market-section">
-                  <div 
-                    className="mk-section-header"
-                    onClick={() => setExpansionState(type, !isExpanded)}
-                  >
-                    {/* Corner borders */}
-                    <div className="mk-corner mk-top-left"></div>
-                    <div className="mk-corner mk-top-right"></div>
-                    
-                    <div 
-                      className="mk-section-title-container"
-                      style={{ backgroundColor: categoryInfo.color }}
-                    >
-                      <span className="mk-section-title">
-                        {categoryInfo.title}
-                      </span>
-                      <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
-                    </div>
-                  </div>
-                  <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
-                    {/* Corner borders for content */}
-                    <div className="mk-corner mk-bottom-left"></div>
-                    <div className="mk-corner mk-bottom-right"></div>
-                    
-                    <div className="mk-starlet-grid">
-                      {/* Show free item only in Standard Pack (type 0) */}
-                      {type === 0 && (
-                        <button 
-                          className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                          onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
-                          disabled={isFreeItemClaimed}
-                        >
-                          <div className="mk-market-ticket-button-image-container">
-                            <div className="mk-market-ticket-content">
-                              <div className="mk-market-ticket-icon">
-                                <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
-                              </div>
-                              <div className="mk-market-ticket-info">
-                                <div className="mk-market-ticket-text">
-                                  <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
-                                  <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
-                                </div>
-                                <div className="mk-market-ticket-bonus">
-                                  <span>X1</span>&nbsp;<span>TICKETS</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="mk-market-ticket-price">
-                              {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
-                            </div>
-                          </div>
-                        </button>
-                      )}
-                      
-                      {/* Show regular options */}
-                      {options.map((option) => {
-                        // Calculate bonus for special offers
-                        let bonusText = null;
-                        if (type === 30) { // Exclusive One-Time Offer
-                          if (option.stars === 0) bonusText = "BONUS: 50";
-                          else if (option.stars === 5) bonusText = "BONUS: 325";
-                          else if (option.stars === 10) bonusText = "BONUS: 325";
-                        } else if (type === 10) { // Limited Weekly Offer
-                          if (option.stars === 0) bonusText = "BONUS: 25";
-                          else if (option.stars === 5) {
-                            if (option.starlet === 100) bonusText = "BONUS: 195";
-                            else bonusText = "BONUS: 675";
-                          }
-                        } else if (type === 20) { // Limited Monthly Offer
-                          if (option.stars === 0) bonusText = "50% VALUE";
-                          else if (option.stars === 5) bonusText = "100% VALUE";
-                        }
+              <div className="mk-scrollable-market-content">
+                {/* Render each category in order */}
+                {categoryOrder.map((type) => {
+                  const categoryInfo = getCategoryInfo(type);
+                  const isExpanded = getExpansionState(type);
+                  const options = groupedOptions[type] || [];
+                  
+                  // Skip empty sections except Standard Pack (type 0) which should always show for free item
+                  if (options.length === 0 && type !== 0) {
+                    return null;
+                  }
+                  
+                  return (
+                    <div key={type} className="mk-market-section">
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setExpansionState(type, !isExpanded)}
+                      >
+                        {/* Corner borders */}
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
                         
-                        return (
-                          <button 
-                            key={option.id}
-                            className="mk-market-ticket-button" 
-                            onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
-                          >
-                            <div className="mk-market-ticket-button-image-container">
-                              <div className="mk-market-ticket-content">
-                                <div className="mk-market-ticket-icon">
-                                  <img src={starlet} alt="Starlet" />
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: categoryInfo.color }}
+                        >
+                          <span className="mk-section-title">
+                            {categoryInfo.title}
+                          </span>
+                          <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
+                        {/* Corner borders for content */}
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+                        
+                        <div className="mk-starlet-grid">
+                          {/* Show free item only in Standard Pack (type 0) */}
+                          {type === 0 && (
+                            <button 
+                              className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                              onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
+                              disabled={isFreeItemClaimed}
+                            >
+                              <div className="mk-market-ticket-button-image-container">
+                                <div className="mk-market-ticket-content">
+                                  <div className="mk-market-ticket-icon">
+                                    <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
+                                  </div>
+                                  <div className="mk-market-ticket-info">
+                                    <div className="mk-market-ticket-text">
+                                      <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
+                                      <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                                    </div>
+                                    <div className="mk-market-ticket-bonus">
+                                      <span>X1</span>&nbsp;<span>TICKETS</span>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="mk-market-ticket-info">
-                                  {bonusText && (
-                                    <div className="mk-market-ticket-bonus-text">{bonusText}</div>
-                                  )}
-                                  <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount">{option.starlet}</div>
-                                    <div className="mk-market-ticket-label">STARLETS</div>
-                                  </div>
-                                  <div className="mk-market-ticket-bonus">
-                                    <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
-                                  </div>
+                                <div className="mk-market-ticket-price">
+                                  {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
                                 </div>
                               </div>
-                              <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
-                            </div>
-                          </button>
-                        );
-                      })}
+                            </button>
+                          )}
+                          
+                          {/* Show regular options */}
+                          {options.map((option) => {
+                            // Calculate bonus for special offers
+                            let bonusText = null;
+                            if (type === 30) { // Exclusive One-Time Offer
+                              if (option.stars === 0) bonusText = "BONUS: 50";
+                              else if (option.stars === 5) bonusText = "BONUS: 325";
+                              else if (option.stars === 10) bonusText = "BONUS: 325";
+                            } else if (type === 10) { // Limited Weekly Offer
+                              if (option.stars === 0) bonusText = "BONUS: 25";
+                              else if (option.stars === 5) {
+                                if (option.starlet === 100) bonusText = "BONUS: 195";
+                                else bonusText = "BONUS: 675";
+                              }
+                            } else if (type === 20) { // Limited Monthly Offer
+                              if (option.stars === 0) bonusText = "50% VALUE";
+                              else if (option.stars === 5) bonusText = "100% VALUE";
+                            }
+                            
+                            return (
+                              <button 
+                                key={option.id}
+                                className="mk-market-ticket-button" 
+                                onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                              >
+                                <div className="mk-market-ticket-button-image-container">
+                                  <div className="mk-market-ticket-content">
+                                    <div className="mk-market-ticket-icon">
+                                      <img src={starlet} alt="Starlet" />
+                                    </div>
+                                    <div className="mk-market-ticket-info">
+                                      {bonusText && (
+                                        <div className="mk-market-ticket-bonus-text">{bonusText}</div>
+                                      )}
+                                      <div className="mk-market-ticket-text">
+                                        <div className="mk-market-ticket-amount">{option.starlet}</div>
+                                        <div className="mk-market-ticket-label">STARLETS</div>
+                                      </div>
+                                      <div className="mk-market-ticket-bonus">
+                                        <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
