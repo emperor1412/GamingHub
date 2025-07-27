@@ -270,6 +270,20 @@ const Tasks = ({
     const [partnerTasksExpanded, setPartnerTasksExpanded] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
+    // Helper function to extract error message from server response
+    const getErrorMessage = (data, defaultMessage) => {
+        if (data.msg) {
+            return data.msg;
+        } else if (data.message) {
+            return data.message;
+        } else if (data.error) {
+            return data.error;
+        } else if (data.data && typeof data.data === 'string') {
+            return data.data;
+        }
+        return defaultMessage;
+    };
+
     const setupProfileData = async () => {
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
         if (userStarlets) {
@@ -298,6 +312,15 @@ const Tasks = ({
     }
 
     const fetchTaskList = async (depth = 0) => {
+        if (depth > 3) {
+            console.error('Fetch task list failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to load tasks after multiple attempts. Please try again later.'
+            });
+            return;
+        }
+
         try {
             const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
             if (response.ok) {
@@ -319,17 +342,35 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error fetching tasks:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Get Task list error:', data)
+                    const errorMessage = getErrorMessage(data, 'Failed to load tasks. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             }
             else {
                 console.error('Error fetching tasks:', response);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'Network error. Please check your connection and try again.'
+                });
             }
         } catch (error) {
             console.error('Error fetching tasks:', error);
+            await shared.showPopup({
+                type: 0,
+                message: 'An unexpected error occurred while loading tasks. Please try again later.'
+            });
         } finally {
             setLoading(false);
         }
@@ -338,6 +379,10 @@ const Tasks = ({
     const completeTask = useCallback(async (taskId, answerIndex, depth = 0) => { 
         if (depth > 3) {
             console.error('Complete task api failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to complete task after multiple attempts. Please try again later.'
+            });
             return;
         }
 
@@ -370,17 +415,36 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error completing task:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Complete Task error:', data)
+                    // Show error popup for other error codes (like task expired)
+                    const errorMessage = getErrorMessage(data, 'Failed to complete task. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             }
             else {
                 console.error('Error completing task:', response);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'Network error. Please check your connection and try again.'
+                });
             }
         } catch (error) {
             console.error('Error completing task:', error);
+            await shared.showPopup({
+                type: 0,
+                message: 'An unexpected error occurred. Please try again later.'
+            });
         } finally {
             setShowLoading(false);
         }
@@ -389,6 +453,15 @@ const Tasks = ({
     }, []);
 
     const fetchTaskDataAndShow = useCallback(async (task, depth = 0) => {
+        if (depth > 3) {
+            console.error('Fetch task data failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to load task details after multiple attempts. Please try again later.'
+            });
+            return;
+        }
+
         console.log('fetchTaskDataAndShow:', task);
         const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
             method: 'GET',
@@ -413,17 +486,35 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error fetching task data:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Get Task data error:', data)
+                    const errorMessage = getErrorMessage(data, 'Failed to load task details. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             } catch (error) {
                 console.error('Error fetching task data:', error);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'An unexpected error occurred while loading task details. Please try again later.'
+                });
             }
         }
         else {
             console.error('Error fetching task data:', response);
+            await shared.showPopup({
+                type: 0,
+                message: 'Network error. Please check your connection and try again.'
+            });
         }
     }, []);
 

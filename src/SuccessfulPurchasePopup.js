@@ -43,7 +43,7 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
                 <img src={starletIcon} alt="Starlet" />
                 <span>{amount}</span>
               </div>
-              {tickets > 0 && tickets !== undefined && (
+              {tickets > 0 && (
                 <div className="sp-received-item">
                   <img src={ticketIcon} alt="Ticket" className="ticket-icon" />
                   <span>{tickets}</span>
