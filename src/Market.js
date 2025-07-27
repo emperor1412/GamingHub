@@ -292,6 +292,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       setTickets(userTicket.num);
     }
 
+    // Reload buy options to update limited offer status
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+      const data = await response.json();
+      console.log('Refreshed Buy Options Response:', data);
+      if (data.code === 0 && Array.isArray(data.data)) {
+        console.log('Refreshed Buy Options Data:', data.data);
+        setBuyOptions(data.data);
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          // Retry the fetch after login
+          const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && Array.isArray(retryData.data)) {
+            setBuyOptions(retryData.data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh buy options:', error);
+    }
+
     // Check free reward time after profile refresh
     await checkFreeRewardTime();
   };
