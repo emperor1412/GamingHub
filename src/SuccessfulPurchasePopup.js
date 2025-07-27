@@ -16,11 +16,19 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
 
   const handleClaim = async () => {
     try {
-      // Close popup and trigger back button in Buy.js
+      // Close popup and navigate directly to Market
       onClaim(); // Close ConfirmPurchasePopup
-      setShowBuyView(false); // Trigger back button effect
+      
+      // Navigate directly to Market using shared.setActiveTab
+      if (typeof shared.setActiveTab === 'function') {
+        shared.setActiveTab('market');
+      } else {
+        // Fallback: use the old method if setActiveTab is not available
+        setShowBuyView(false);
+      }
     } catch (error) {
       console.error('Error during claim:', error);
+      // Fallback to old method on error
       setShowBuyView(false);
     }
   };

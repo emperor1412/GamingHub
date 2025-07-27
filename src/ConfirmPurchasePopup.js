@@ -133,7 +133,14 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     await shared.getProfileWithRetry();
     
     onConfirm();
-    setShowBuyView(false);
+    
+    // Navigate directly to Market using shared.setActiveTab
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setActiveTab('market');
+    } else {
+      // Fallback: use the old method if setActiveTab is not available
+      setShowBuyView(false);
+    }
   }, [onConfirm, setShowBuyView]);
 
   useEffect(() => {
