@@ -12,7 +12,7 @@ import TasksLearn from './TasksLearn';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
-import { trackTaskFunnel, trackTaskAttempt } from './analytics';
+import { trackTaskFunnel, trackTaskAttempt, trackUserAction } from './analytics';
 /*
 url: /app/taskList
 Request:
@@ -529,12 +529,28 @@ const Tasks = ({
             else {
                 window.open(task.url, '_blank');
             }
+        } else if (task.type === 4) {
+            // Mini app task - open URL like mini game
+            try {
+                // Use Telegram WebApp API to open the mini app directly within Telegram
+                if (window.Telegram?.WebApp?.openTelegramLink) {
+                    // This method will open the link within Telegram without launching a browser
+                    window.Telegram.WebApp.openTelegramLink(task.url);
+                } else {
+                    // Fallback to SDK method if the direct method isn't available
+                    openLink(task.url);
+                }
+            } catch (e) {
+                console.log('Error opening mini app task:', e);
+                // Fallback in case of error
+                openLink(task.url);
+            }
         }
     };
 
     const handleStartTask = useCallback(async (task) => {
         // Track task start
-        trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'start', {
+        trackTaskFunnel(task.id, task.type === 1 ? 'link' : task.type === 4 ? 'mini_app' : 'quiz', 'start', {
             task_name: task.name,
             task_category: task.category === 0 ? 'time_limited' : 'standard'
         }, shared.loginData?.userId);
@@ -557,6 +573,28 @@ const Tasks = ({
             }, shared.loginData?.userId);
 
             completeTask(task.id, 0);
+
+        } else if (task.type === 4) {
+            // Mini app task - open URL like mini game but don't complete task
+            try {
+                trackUserAction('minigame_clicked', {
+                    game_name: task.name,
+                    game_url: task.url,
+                }, shared.loginData?.link);
+                
+                // Use Telegram WebApp API to open the mini app directly within Telegram
+                if (window.Telegram?.WebApp?.openTelegramLink) {
+                    // This method will open the link within Telegram without launching a browser
+                    window.Telegram.WebApp.openTelegramLink(task.url);
+                } else {
+                    // Fallback to SDK method if the direct method isn't available
+                    openLink(task.url);
+                }
+            } catch (e) {
+                console.log('Error opening mini app task:', e);
+                // Fallback in case of error
+                openLink(task.url);
+            }
 
         } else if (task.type === 2 || task.type === 3) {
             // Track quiz task content view
