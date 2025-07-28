@@ -78,7 +78,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState('starlet'); // 'starlet' or 'telegram'
+  const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -290,6 +290,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
     if (userTicket) {
       setTickets(userTicket.num);
+    }
+
+    // Reload buy options to update limited offer status
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+      const data = await response.json();
+      console.log('Refreshed Buy Options Response:', data);
+      if (data.code === 0 && Array.isArray(data.data)) {
+        console.log('Refreshed Buy Options Data:', data.data);
+        setBuyOptions(data.data);
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          // Retry the fetch after login
+          const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && Array.isArray(retryData.data)) {
+            setBuyOptions(retryData.data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh buy options:', error);
     }
 
     // Check free reward time after profile refresh
@@ -572,6 +597,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                           
                           {/* Show regular options */}
                           {options.map((option) => {
+                            // Check if option is available (state 0 = available, 1 = unavailable)
+                            const isAvailable = option.state === 0 && option.canBuy;
+                            
                             // Calculate bonus for special offers
                             let bonusText = null;
                             if (type === 30) { // Exclusive One-Time Offer
@@ -592,28 +620,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                             return (
                               <button 
                                 key={option.id}
-                                className="mk-market-ticket-button" 
-                                onClick={() => handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                className={`mk-market-ticket-button ${!isAvailable ? 'sold-out' : ''}`}
+                                onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                disabled={!isAvailable}
                               >
                                 <div className="mk-market-ticket-button-image-container">
                                   <div className="mk-market-ticket-content">
                                     <div className="mk-market-ticket-icon">
-                                      <img src={starlet} alt="Starlet" />
+                                      <img src={starlet} alt="Starlet" style={{ opacity: isAvailable ? 1 : 0.5 }} />
                                     </div>
                                     <div className="mk-market-ticket-info">
                                       {bonusText && (
-                                        <div className="mk-market-ticket-bonus-text">{bonusText}</div>
+                                        <div className="mk-market-ticket-bonus-text" style={{ opacity: isAvailable ? 1 : 0.5 }}>{bonusText}</div>
                                       )}
                                       <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount">{option.starlet}</div>
-                                        <div className="mk-market-ticket-label">STARLETS</div>
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
                                       </div>
-                                      <div className="mk-market-ticket-bonus">
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                         <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
+                                  <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    {!isAvailable ? 'SOLD OUT' : `${option.stars} TELEGRAM STARS`}
+                                  </div>
                                 </div>
                               </button>
                             );
