@@ -739,6 +739,8 @@ body.mk-market-open {
 
   color:#FFF;
   text-align: center;
+  justify-content: center;
+  align-items: center;
 
   /* APP/Body/Strong/Body-M-Strong */
   font-family: "PP Neue Machina";
