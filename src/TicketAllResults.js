@@ -142,40 +142,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
         }
     };
 
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=2`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                    setShowRewardScreen(true);
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.log('Token expired, attempting to re-login');
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                }
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
-        }
-    };
+    /* Removed claimRewardFromSharingStory function as it's no longer needed */
 
     const handleClaimReward = () => {
         setShowRewardScreen(false);
@@ -280,10 +247,6 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     {showShareStory && (
                                         <button className="sa_share-story-button" onClick={onClickShareStory}>
                                             SHARE TO STORY
-                                            <div className="sa_share-story-reward">
-                                                <span>×40</span>
-                                                <img src={shared.mappingIcon[10020]} alt="Starlet" />
-                                            </div>
                                         </button>
                                     )}
                                     
