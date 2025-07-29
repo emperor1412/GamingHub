@@ -118,12 +118,11 @@ Response:
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/xkD++/9T2na4RgKvFkcBnIokAAbpwqtK6Mrl4EYEZcg=.png';
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
 
             shareStory(url, {
                 text: 'I just scratched a ticket and claimed a reward!',
-              });
+            });
 
             trackStoryShare('ticket', {
                 reward_claimed: true,
@@ -131,7 +130,15 @@ Response:
             }, shared.loginData?.userId);
 
             setShowShareStory(false);
-            claimRewardFromSharingStory();
+            
+            // Complete share story task instead of calling sharingStory API
+            shared.completeShareStoryTask(0).then(taskCompleted => {
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
+            });
         }
     };   
 

@@ -117,20 +117,28 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
     const onClickShareStory = () => {
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2545.png";
 
             shareStory(url, {
-                text: 'I just scratched all my tickets and claimed rewards!',
+                text: 'I just won big with multiple tickets! 🎉',
             });
 
             trackStoryShare('ticket_all', {
-                reward_claimed: true,
-                invite_link: inviteLink,
-                rewards_count: rewards.length
+                total_rewards: calculateTotalRewards(),
+                invite_link: inviteLink
             }, shared.loginData?.userId);
 
             setShowShareStory(false);
-            claimRewardFromSharingStory();
+            
+            // Complete share story task instead of calling sharingStory API
+            shared.completeShareStoryTask(2).then(taskCompleted => {
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                    setShowRewardScreen(true);
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
+            });
         }
     };
 

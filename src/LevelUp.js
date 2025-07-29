@@ -87,11 +87,10 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/d9TU6egFvXYRLHbtZF8DJ4APfhwxBkVTllH+3Vp57zY=.png';
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
 
             shareStory(url, {
-                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! ��`,
+                text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
             });
 
             trackStoryShare('level_up', {
@@ -101,37 +100,12 @@ const LevelUp = ({ onClose }) => {
 
             setShowOverlay(false);
             
-            try {
-                const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Share story API response:', data);
-
-                    if (data.code === 0) {
-                        console.log('Story shared successfully');
-                    } else if (data.code === 102001 || data.code === 102002) {
-                        console.log('Token expired, attempting to re-login');
-                        const loginResult = await shared.login(shared.initData);
-                        if (loginResult.success) {
-                            // Retry the API call after successful re-login
-                            onClickShareStory();
-                        } else {
-                            console.error('Re-login failed:', loginResult.error);
-                        }
-                    } else {
-                        console.error('Share story failed:', data.msg);
-                    }
-                } else {
-                    console.error('Share story request failed:', response);
-                }
-            } catch (error) {
-                console.error('Error sharing story:', error);
+            // Complete share story task instead of calling sharingStory API
+            const taskCompleted = await shared.completeShareStoryTask(1);
+            if (taskCompleted) {
+                console.log('Share story task completed successfully');
+            } else {
+                console.log('No share story task available or task completion failed');
             }
         }
     };

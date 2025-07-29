@@ -376,7 +376,6 @@ const Frens = () => {
     closeOverlay();
 
     if (shareStory.isSupported()) {
-      // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
       const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2542.png";
       shareStory(url, {
         text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
@@ -388,7 +387,14 @@ const Frens = () => {
         trophy_status: selectedTrophy.status
       }, shared.loginData?.userId);
 
-      shareStoryAPI(selectedTrophy.id);
+      // Complete share story task instead of calling sharingStory API
+      shared.completeShareStoryTask('trophy').then(taskCompleted => {
+        if (taskCompleted) {
+          console.log('Share story task completed successfully');
+        } else {
+          console.log('No share story task available or task completion failed');
+        }
+      });
     }
   };
 
