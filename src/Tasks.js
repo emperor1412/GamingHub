@@ -483,7 +483,11 @@ const Tasks = ({
                 const data = await response.json();
                 console.log('Task data:', data);
                 if (data.code === 0) {
-                    setShowLearnTask(data.data);
+                    if (data.data.type === 6) {
+                        setShowWordInputTask(data.data);
+                    } else {
+                        setShowLearnTask(data.data);
+                    }
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task data error:', data)
@@ -626,7 +630,8 @@ const Tasks = ({
                 task_name: task.name
             }, shared.loginData?.userId);
 
-            setShowWordInputTask(task);
+            // Fetch task data for word input task (similar to learn tasks)
+            fetchTaskDataAndShow(task);
         }
     }, [completeTask, fetchTaskDataAndShow]);
 

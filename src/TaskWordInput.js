@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TaskWordInput.css';
 import './TasksLearn.css';
 import shared from './Shared';
 import correct_answer from './images/correct_answer.svg';
 import incorrect_answer from './images/incorrect_answer.svg';
-import { trackTaskFunnel, trackTaskAttempt } from './analytics';
+import { trackTaskFunnel, trackTaskAttempt, trackTaskContent } from './analytics';
 
 const TaskWordInput = ({ task, onClose, onComplete }) => {
+    const [currentStep, setCurrentStep] = useState(0);
     const [inputWord, setInputWord] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showResult, setShowResult] = useState(false);
@@ -59,49 +60,88 @@ const TaskWordInput = ({ task, onClose, onComplete }) => {
         }
     };
 
+    const handleNext = () => {
+        // Track content interaction
+        trackTaskContent(task.id, currentStep, 'next', shared.loginData?.userId);
+
+        if (currentStep < (task.contentList?.length || 0) - 1) {
+            setCurrentStep(currentStep + 1);
+        } else if (currentStep === (task.contentList?.length || 0) - 1) {
+            // Track word input start
+            trackTaskFunnel(task.id, 'word_input', 'word_input_start', {
+                task_name: task.name,
+                content_steps_completed: task.contentList?.length || 0
+            }, shared.loginData?.userId);
+            
+            // Show word input form
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
     const handleTryAgain = () => {
         setShowResult(false);
         setInputWord('');
         setError('');
         setIsCorrect(false);
+        setCurrentStep(0);
     };
 
     const renderContent = () => {
         if (!showResult) {
-            return (
-                <div className="word-input-content">
-                    <div className="quiz-heading">
-                        <h2>{task.name}</h2>
+            // Check if we have contentList and current step is within contentList
+            if (task.contentList && currentStep < task.contentList.length) {
+                // Learning content view (similar to TasksLearn)
+                const content = task.contentList[currentStep];
+                return (
+                    <div className="learn-content">
+                        <div className='quiz-heading'>
+                            <h2>{content.title}</h2>
+                        </div>
+                        <div className='answers-container'>
+                            <div dangerouslySetInnerHTML={{ __html: content.content }} />
+                        </div>
+                        <button className="next-button" onClick={handleNext}>
+                            NEXT
+                        </button>
                     </div>
-                    <div className="task-description">
-                        <p>Please enter the correct word to complete this task:</p>
-                    </div>
-                    
-                    <form onSubmit={handleSubmit} className="word-input-form">
-                        <div className="input-group">
-                            <input
-                                type="text"
-                                value={inputWord}
-                                onChange={(e) => setInputWord(e.target.value)}
-                                placeholder="Enter the word..."
-                                className="word-input"
-                                disabled={isSubmitting}
-                                autoFocus
-                            />
+                );
+            } else {
+                // Word input form view
+                return (
+                    <div className="word-input-content">
+                        <div className="quiz-heading">
+                            <h2>{task.name}</h2>
+                        </div>
+                        <div className="task-description">
+                            <p>{task.question?.heading || "Please enter the correct word to complete this task:"}</p>
                         </div>
                         
-                        {error && <div className="error-message">{error}</div>}
-                        
-                        <button 
-                            type="submit" 
-                            className="next-button"
-                            disabled={isSubmitting || !inputWord.trim()}
-                        >
-                            {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
-                        </button>
-                    </form>
-                </div>
-            );
+                        <form onSubmit={handleSubmit} className="word-input-form">
+                            <div className="input-group">
+                                <input
+                                    type="text"
+                                    value={inputWord}
+                                    onChange={(e) => setInputWord(e.target.value)}
+                                    placeholder="Enter the word..."
+                                    className="word-input"
+                                    disabled={isSubmitting}
+                                    autoFocus
+                                />
+                            </div>
+                            
+                            {error && <div className="error-message">{error}</div>}
+                            
+                            <button 
+                                type="submit" 
+                                className="next-button"
+                                disabled={isSubmitting || !inputWord.trim()}
+                            >
+                                {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
+                            </button>
+                        </form>
+                    </div>
+                );
+            }
         } else {
             return (
                 <div className="result-container">
@@ -158,6 +198,13 @@ const TaskWordInput = ({ task, onClose, onComplete }) => {
             );
         }
     };
+
+    // Track content view on initial render and step changes
+    useEffect(() => {
+        if (task.contentList && currentStep < task.contentList.length) {
+            trackTaskContent(task.id, currentStep, 'view', shared.loginData?.userId);
+        }
+    }, [currentStep, task.id, task.contentList]);
 
     return (
         <div className="tasks-content">
