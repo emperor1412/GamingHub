@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './ConfirmPurchasePopup.css';
+import { t } from './utils/localization';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
@@ -195,38 +196,38 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   <div className="popup-icon">
                     <img src={starlet} alt="Starlet" />
                   </div>
-                  <h2 className="popup-title">CONFIRM</h2>
-                  <div className="popup-subtitle">YOUR PURCHASE</div>
+                  <h2 className="popup-title">{t('CONFIRM')}</h2>
+                  <div className="popup-subtitle">{t('YOUR_PURCHASE')}</div>
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
+                      {t('DO_YOU_WANT_TO_BUY')} <span className="highlight-value">{amount} {t('STARLETS')}</span>
                       {stars > 0 ? (
                         <>
                           {currentOption?.ticket > 0 && (
                             <>
                               <br />
-                              AND <span className="highlight-value">{currentOption.ticket} TICKETS</span>
+                              {t('AND')} <span className="highlight-value">{currentOption.ticket} {t('TICKETS')}</span>
                             </>
                           )}
                           <br />
-                          IN FSL GAME HUB
+                          {t('IN_FSL_GAME_HUB')}
                           <br />
-                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                          {t('FOR')} <span className="highlight-value">{stars} {t('TELEGRAM_STARS')}</span>?
                         </>
                       ) : (
                         <>
                           <br />
-                          AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
+                          {t('AND')} <span className="highlight-value">1 {t('TICKET')}</span> {t('IN_FSL_GAME_HUB')}
                           <br />
-                          FOR <span className="highlight-value">FREE</span>?
+                          {t('FOR')} <span className="highlight-value">{t('FREE')}</span>?
                         </>
                       )}
                     </div>
                   </div>
 
                   <button className="confirm-button" onClick={handleConfirmAndPay}>
-                    CONFIRM & PAY
+                    {t('CONFIRM_AND_PAY')}
                   </button>
                 </div>
               </div>

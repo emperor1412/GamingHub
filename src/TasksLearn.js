@@ -90,7 +90,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         e.preventDefault();
         
         if (!inputWord.trim()) {
-            setError('Please enter a word');
+            setError(t('PLEASE_ENTER_WORD'));
             return;
         }
 
@@ -126,7 +126,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         } catch (error) {
             setIsCorrect(false);
             setShowResult(true);
-            setError('Failed to complete task. Please try again.');
+            setError(t('FAILED_TO_COMPLETE_TASK'));
         } finally {
             setIsSubmitting(false);
         }
@@ -177,9 +177,9 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             <h2>{task.name}</h2>
                         </div>
                         <div className='answers-container'>
-                            <p>Please read the instructions carefully and complete the share story task as described.</p>
+                            <p>{t('SHARE_STORY_INSTRUCTIONS')}</p>
                             <div className="reward-preview">
-                                <p>You will earn:</p>
+                                <p>{t('YOU_WILL_EARN')}:</p>
                                 <div className="reward-amount">
                                     <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Reward" className="reward-icon" />
                                     <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
@@ -187,7 +187,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             </div>
                         </div>
                         <button className="next-button" onClick={onClose}>
-                            BACK
+                            {t('BACK')}
                         </button>
                     </div>
                 );
@@ -209,7 +209,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         type="text"
                                         value={inputWord}
                                         onChange={(e) => setInputWord(e.target.value)}
-                                        placeholder="Enter the word..."
+                                        placeholder={t('ENTER_WORD_PLACEHOLDER')}
                                         className="word-input"
                                         disabled={isSubmitting}
                                         autoFocus
@@ -223,7 +223,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     className="next-button"
                                     disabled={isSubmitting || !inputWord.trim()}
                                 >
-                                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
+                                    {isSubmitting ? t('SUBMITTING') : t('SUBMIT')}
                                 </button>
                             </form>
                         </div>
@@ -285,9 +285,9 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     ))}
                                 </div>
                                 {selectedAnswer !== null && (
-                                    <button className="next-button" onClick={handleNextAnswer}>
-                                        NEXT
-                                    </button>
+                                                                    <button className="next-button" onClick={handleNextAnswer}>
+                                    {t('NEXT')}
+                                </button>
                                 )}
                             </>
                         ) : (
@@ -304,20 +304,20 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         </div>
                                     </div>
                                     <div className="success-content">
-                                        <div className='text-bingo'>BINGO</div>
-                                        <p className='text-complete-quiz'>YOU'VE COMPLETED THE QUIZ!</p>
+                                        <div className='text-bingo'>{t('BINGO')}</div>
+                                        <p className='text-complete-quiz'>{t('QUIZ_COMPLETED')}</p>
                                         <div className="reward-earned">
-                                            <p className='text-you-earn'>YOU'VE EARNED</p>
+                                            <p className='text-you-earn'>{t('YOU_EARNED')}</p>
                                             <div className="reward-amount">
                                                 <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
                                                 <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="tasks-okay-button" onClick={() => {
-                                            onClose();
-                                        }}>
-                                        OKAY
+                                                                            <button className="tasks-okay-button" onClick={() => {
+                                                onClose();
+                                            }}>
+                                        {t('OKAY_BUTTON')}
                                     </button>
                                 </div>
                             ) : (
@@ -335,16 +335,16 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         </div>
                                         {task.type === 3 && (
                                             <div className="better-luck-message">
-                                                <p>Better luck next time!</p>
+                                                <p>{t('BETTER_LUCK_NEXT_TIME')}</p>
                                             </div>
                                         )}
                                     </div>
-                                    <button 
-                                        className={task.type === 3 ? "confirm-button" : "try-again-button"} 
-                                        onClick={task.type === 3 ? onClose : handleTryAgain}
-                                    >
-                                        {task.type === 3 ? "CONFIRM" : "TRY AGAIN"}
-                                    </button>
+                                                                            <button 
+                                            className={task.type === 3 ? "confirm-button" : "try-again-button"} 
+                                            onClick={task.type === 3 ? onClose : handleTryAgain}
+                                        >
+                                            {task.type === 3 ? t('CONFIRM') : t('TRY_AGAIN')}
+                                        </button>
                                 </div>
                             )
                         )}

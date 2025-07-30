@@ -163,7 +163,26 @@ NEXT,NEXT,次へ
 BINGO,BINGO,ビンゴ
 QUIZ_COMPLETED,YOU'VE COMPLETED THE QUIZ!,クイズを完了しました！
 YOU_EARNED,YOU'VE EARNED,獲得しました
-TRY_AGAIN,TRY AGAIN,もう一度挑戦！
+TRY_AGAIN,TRY AGAIN,再試行
+CONFIRM,CONFIRM,確認
+BETTER_LUCK_NEXT_TIME,Better luck next time!,次回は頑張ってね！
+ENTER_WORD_PLACEHOLDER,Enter the word...,単語を入力してください...
+SUBMITTING,SUBMITTING...,送信中...
+SUBMIT,SUBMIT,送信
+PLEASE_ENTER_WORD,Please enter a word,単語を入力してください
+FAILED_TO_COMPLETE_TASK,Failed to complete task. Please try again.,タスクの完了に失敗しました。もう一度お試しください。
+SHARE_STORY_INSTRUCTIONS,Please read the instructions carefully and complete the share story task as described.,説明を注意深く読んで、指示に従ってストーリーシェアタスクを完了してください。
+YOU_WILL_EARN,You will earn,獲得できるもの
+BACK,BACK,戻る
+YOUR_PURCHASE,YOUR PURCHASE,購入内容
+DO_YOU_WANT_TO_BUY,DO YOU WANT TO BUY,購入しますか
+AND,AND,と
+IN_FSL_GAME_HUB,IN FSL GAME HUB,FSLゲームハブで
+FOR,FOR,で
+TELEGRAM_STARS,TELEGRAM STARS,テレグラムスター
+TICKET,TICKET,チケット
+FREE,FREE,無料
+CONFIRM_AND_PAY,CONFIRM & PAY,確認して支払う
 CREATE_FSLID,CREATE A NEW FSL ACCOUNT?,FSLアカウントを新規作成しますか？
 NOT_REGISTER,"THIS EMAIL IS NOT YET REGISTERED, WOULD YOU LIKE TO CREATE A NEW FSL ACCOUNT?",このメールアドレスはまだ登録されていません。新しいFSLアカウントを作成しますか？
 NOTE_MOOAR,"PLEASE NOTE: IF YOU HAVE A 2184 OF MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.",ご注意：2184またはMOOARのFSLアカウントをお持ちの場合は、そのログイン情報でログインできます。
@@ -172,14 +191,4 @@ TIME_REMAINING,Time Remaining,残り時間
 COPY,Copy,コピー
 LOG_OUT,Log out,ログアウト
 DAY_LABEL,DAY,日
-TRY_AGAIN,TRY AGAIN,再試行
-DAILY_TASKS,DAILY TASKS,デイリータスク
-START,START,開始
-ENDS,ENDS,終了
 USER,User,ユーザー
-,,
-,,
-,,
-,,
-,,
-,,I have checked and corrected the parts in this color.　MetaXN
