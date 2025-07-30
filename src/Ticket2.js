@@ -277,7 +277,7 @@ Response:
         <>
             {
             showLoading ? (
-                <div className='loading'>Loading...</div>
+                <div className='loading'>{t('LOADING')}</div>
             )
             : showResult ? (
                 <div className="result-container-ticket2">

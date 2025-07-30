@@ -17,6 +17,7 @@ import calendar from './images/calendar.png';
 import calendar_before_checkin from './images/calendar.png';
 import { trackUserAction } from './analytics';
 import AccountLinkPopup from './AccountLinkPopup';
+import { t } from './utils/localization';
 
 /*url: /app/eventPointData
 Request:
@@ -339,7 +340,7 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
         <div className="eggs_egglet-event-container">
             {loading && (
                 <div className="eggs_loading-overlay">
-                    LOADING...
+                    {t('LOADING')}
                 </div>
             )}
             

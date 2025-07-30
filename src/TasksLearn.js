@@ -6,6 +6,7 @@ import './TasksLearn.css';
 import correct_answer from './images/correct_answer.svg';
 import incorrect_answer from './images/incorrect_answer.svg';
 import { trackTaskFunnel, trackTaskAttempt, trackTaskContent } from './analytics';
+import { t } from './utils/localization';
 
 const TasksLearn = ({ task, onClose, onComplete }) => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -95,7 +96,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                     </div>
                     {/* <img src="https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/SuI1Oopmz+UyFoxEtRyAsfKqTtAKiXqFHoekK9GzbKQ="></img> */}
                     <button className="next-button" onClick={handleNext}>
-                        NEXT
+                        {t('NEXT')}
                     </button>
                 </div>
             );
@@ -123,7 +124,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             </div>
                             {selectedAnswer !== null && (
                                 <button className="next-button" onClick={handleNextAnswer}>
-                                    NEXT
+                                    {t('NEXT')}
                                 </button>
                             )}
                         </>
@@ -141,10 +142,10 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     </div>
                                 </div>
                                 <div className="success-content">
-                                    <div className='text-bingo'>BINGO</div>
-                                    <p className='text-complete-quiz'>YOU'VE COMPLETED THE QUIZ!</p>
+                                    <div className='text-bingo'>{t('BINGO')}</div>
+                                    <p className='text-complete-quiz'>{t('QUIZ_COMPLETED')}</p>
                                     <div className="reward-earned">
-                                        <p className='text-you-earn'>YOU'VE EARNED</p>
+                                        <p className='text-you-earn'>{t('YOU_EARNED')}</p>
                                         <div className="reward-amount">
                                         <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
                                             <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
@@ -157,7 +158,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         // }
                                         onClose();
                                     }}>
-                                    OKAY
+                                    {t('OKAY_BUTTON')}
                                 </button>
                             </div>
                         ) : (
@@ -175,7 +176,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                     </div>
                                 </div>
                                 <button className="try-again-button" onClick={handleTryAgain}>
-                                    TRY AGAIN
+                                    {t('TRY_AGAIN')}
                                 </button>
                             </div>
                         )

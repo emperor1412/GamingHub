@@ -8,6 +8,7 @@ import fsl_point from './images/fsl_point.png';
 import starletIcon from './images/starlet.png';
 import gmtIcon from './images/GMT_1.png';
 import ID_selected from './images/ID_selected.svg';
+import { t } from './utils/localization';
 
 const FSLID = () => {
     const [loading, setLoading] = useState(false);
@@ -173,10 +174,10 @@ const FSLID = () => {
                             </div>
                             <div className="fsl-id-name">
                                 <div className="name-with-level">
-                                    {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || 'User'}
-                                    <span className="level-tag">Lv.{shared.userProfile.level || 0}</span>
+                                    {shared.host_environment === 'telegram' ? shared.telegramUserData?.firstName : shared.userProfile?.displayName || t('USER')}
+                                    <span className="level-tag">{t('LEVEL_ABBR')}.{shared.userProfile.level || 0}</span>
                                     <button className="logout-button" onClick={handleLogout}>
-                                        Log out
+                                        {t('LOG_OUT')}
                                     </button>
                                 </div>
                                 <div className="fsl-id-hash" onClick={() => setShowFullEmail(!showFullEmail)}>
@@ -191,7 +192,7 @@ const FSLID = () => {
                                             copyToClipboard(shared.userProfile.email);
                                         }}
                                     >
-                                        Copy
+                                        {t('COPY')}
                                     </button>
                                 </div>
                             </div>
@@ -261,9 +262,9 @@ const FSLID = () => {
                         {/* <span className="fsl-id-logo-text">FSL ID</span> */}
                     {/* </div> */}
                     <div className="fsl-id-message">
-                        <p className='fsl-id-note-title'>Create a New FSL Account?</p>
-                        <p className='fsl-id-note-1'>THIS EMAIL IS NOT YET REGISTERED. WOULD YOU LIKE TO CREATE A NEW FSL ACCOUNT?</p>
-                        <p className="fsl-id-note">PLEASE NOTE: IF YOU HAVE A GAS HERO OR MOOAR FSL ACCOUNT, YOU CAN LOG IN USING THOSE CREDENTIALS.</p>
+                        <p className='fsl-id-note-title'>{t('CREATE_FSLID')}</p>
+                        <p className='fsl-id-note-1'>{t('NOT_REGISTER')}</p>
+                        <p className="fsl-id-note">{t('NOTE_MOOAR')}</p>
                     </div>
                     <div className="fsl-id-buttons">
                         <button 
@@ -271,14 +272,14 @@ const FSLID = () => {
                             onClick={connectFSLID}
                             disabled={loading}
                         >
-                            SIGN UP
+                            {t('SIGN_UP')}
                         </button>
                         <button 
                             className="fsl-id-connect-button"
                             onClick={connectFSLID}
                             disabled={loading}
                         >
-                            CONNECT FSL ID
+                            {t('CONNECT_FSL_ID')}
                         </button>
                     </div>
                 </div>
@@ -286,6 +287,7 @@ const FSLID = () => {
             {loading && (
                 <div className="bank-step-loading-overlay">
                     <div className="bank-step-loading-spinner"></div>
+                    <div className="bank-step-loading-text">{t('LOADING')}</div>
                 </div>
             )}
         </div>

@@ -191,7 +191,7 @@ function convertCsvToJs() {
             return str;
         }
 
-        const localizationContent = `// Localization utility\nconst translations = ${objectToJs(translations, 2)};\n\n// Get current language from localStorage or default to English\nconst getCurrentLanguage = () => {\n  return localStorage.getItem('language') || 'en';\n};\n\n// Set language\nconst setLanguage = (language) => {\n  localStorage.setItem('language', language);\n  window.location.reload(); // Simple reload to apply changes\n};\n\n// Get translation for a key\nconst t = (key) => {\n  const currentLang = getCurrentLanguage();\n  return translations[currentLang][key] || translations.en[key] || key;\n};\n\n// Export functions\nexport { t, getCurrentLanguage, setLanguage };\n`;
+        const localizationContent = `// Localization utility\nconst translations = ${objectToJs(translations, 2)};\n\n// Get current language from localStorage or default to English\nconst getCurrentLanguage = () => {\n  return localStorage.getItem('language') || 'ja';\n};\n\n// Set language\nconst setLanguage = (language) => {\n  localStorage.setItem('language', language);\n  window.location.reload(); // Simple reload to apply changes\n};\n\n// Get translation for a key\nconst t = (key) => {\n  const currentLang = getCurrentLanguage();\n  return translations[currentLang][key] || translations.en[key] || key;\n};\n\n// Export functions\nexport { t, getCurrentLanguage, setLanguage };\n`;
         
         // Write directly to localization.js
         fs.writeFileSync(CONFIG.localizationJsPath, localizationContent, 'utf8');

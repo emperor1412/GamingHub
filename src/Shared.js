@@ -32,6 +32,7 @@ import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
+import liff from '@line/liff';
 
 import single_star from './images/single_star.svg';
 import single_star_2 from './images/single_star_2.svg';
@@ -555,6 +556,114 @@ data object
             return false;
         }
     },
+
+    // Redirect to GameHubPayment with user data and purchase info
+    redirectToGameHubPayment: (purchaseData) => {
+        const paymentBaseUrl = 'https://hoangdevgames.github.io/GameHubPayment';
+        
+        // Prepare user data for transfer
+        const userData = {
+            fslId: shared.userProfile?.fslId,
+            telegramUID: shared.telegramUserData?.id,
+            telegramUsername: shared.telegramUserData?.username,
+            telegramFirstName: shared.telegramUserData?.firstName,
+            telegramLastName: shared.telegramUserData?.lastName,
+            platform: 'telegram',
+            userProfile: {
+                level: shared.userProfile?.level,
+                pictureIndex: shared.userProfile?.pictureIndex,
+                email: shared.userProfile?.email
+            }
+        };
+
+        // Prepare purchase data
+        const purchaseInfo = {
+            amount: purchaseData.amount,
+            stars: purchaseData.stars,
+            optionId: purchaseData.optionId,
+            productType: 'starlets',
+            currency: 'gmt'
+        };
+
+        // Encode data as URL parameters
+        const params = new URLSearchParams({
+            userData: btoa(JSON.stringify(userData)), // Base64 encode
+            purchaseData: btoa(JSON.stringify(purchaseInfo)),
+            timestamp: Date.now().toString(),
+            source: 'gaminghub'
+        });
+
+        // Construct final URL
+        const redirectUrl = `${paymentBaseUrl}/?${params.toString()}`;
+        
+        console.log('Redirecting to GameHubPayment:', redirectUrl);
+        
+        // Check if running in LINE Mini App
+        if (window.liff && liff.isInClient()) {
+            try {
+                // Use LIFF to open in external browser
+                liff.openWindow({
+                    url: redirectUrl,
+                    external: true
+                });
+                console.log('Opened GameHubPayment in external browser via LIFF');
+            } catch (error) {
+                console.error('Error opening with LIFF, falling back to window.open:', error);
+                // Fallback to window.open
+                window.open(redirectUrl, '_blank');
+            }
+        } else {
+            // For non-LINE environments, use regular window.open
+            window.open(redirectUrl, '_blank');
+        }
+        
+        return redirectUrl;
+    },
+
+    // Verify FSL ID using FSL SDK
+    verifyFSLID: async (fslId) => {
+        try {
+            // First, get a random key from backend
+            const randKeyApi = `${shared.server_url}/api/app/randKey?token=${shared.loginData.token}`;
+            const randKeyResponse = await fetch(randKeyApi);
+            const randKeyData = await randKeyResponse.json();
+            
+            if (randKeyData.code !== 0) {
+                throw new Error('Failed to get random key');
+            }
+            
+            const state = randKeyData.data;
+            
+            // Use FSL Authorization to verify
+            const FSLAuthorization = require('fsl-authorization');
+            const fslAuth = FSLAuthorization.init({
+                responseType: 'code',
+                appKey: 'MiniGame',
+                redirectUri: `${shared.server_url}/api/app/fslCallback`,
+                scope: 'basic,wallet',
+                state: state,
+                usePopup: true,
+                isApp: true,
+                domain: 'https://gm3.joysteps.io/'
+            });
+            
+            // Verify the FSL ID
+            const verificationResult = await fslAuth.verifyFSLID(fslId);
+            
+            return {
+                success: true,
+                verified: verificationResult.verified,
+                userInfo: verificationResult.userInfo
+            };
+            
+        } catch (error) {
+            console.error('FSL ID verification failed:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
 
 };
 
