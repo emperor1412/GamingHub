@@ -743,10 +743,6 @@ const Frens = () => {
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     {t('SHARE_A_STORY')}
-                    <div className="trophy-reward">
-                      <img src={starletIcon} alt="Starlets" className="stat-icon" />
-                      <span>20</span>
-                    </div>
                   </button>
                 </>
               ) : (
