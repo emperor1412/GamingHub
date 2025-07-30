@@ -105,7 +105,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         console.log('Buy Options Response:', data);
         if (data.code === 0 && Array.isArray(data.data)) {
           console.log('Buy Options Data:', data.data);
-          setBuyOptions(data.data);
+          // Filter to only show free options (type 0)
+          const freeOptions = data.data.filter(option => option.type === 0);
+          setBuyOptions(freeOptions);
         } else if (data.code === 102002 || data.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
@@ -115,7 +117,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
             const retryData = await retryResponse.json();
             if (retryData.code === 0 && Array.isArray(retryData.data)) {
-              setBuyOptions(retryData.data);
+              // Filter to only show free options (type 0)
+              const freeOptions = retryData.data.filter(option => option.type === 0);
+              setBuyOptions(freeOptions);
             }
           }
         }
@@ -299,7 +303,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.log('Refreshed Buy Options Response:', data);
       if (data.code === 0 && Array.isArray(data.data)) {
         console.log('Refreshed Buy Options Data:', data.data);
-        setBuyOptions(data.data);
+        // Filter to only show free options (type 0)
+        const freeOptions = data.data.filter(option => option.type === 0);
+        setBuyOptions(freeOptions);
       } else if (data.code === 102002 || data.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
@@ -309,7 +315,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
           const retryData = await retryResponse.json();
           if (retryData.code === 0 && Array.isArray(retryData.data)) {
-            setBuyOptions(retryData.data);
+            // Filter to only show free options (type 0)
+            const freeOptions = retryData.data.filter(option => option.type === 0);
+            setBuyOptions(freeOptions);
           }
         }
       }
