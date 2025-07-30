@@ -64,6 +64,11 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [dailyTaskStatus, setDailyTaskStatus] = useState(1); // Default: completed (disabled)
     const [dailyTaskData, setDailyTaskData] = useState(null);
     
+    // Daily task states
+    const [dailyTaskId, setDailyTaskId] = useState(null);
+    const [dailyTaskStatus, setDailyTaskStatus] = useState(1); // Default: completed (disabled)
+    const [dailyTaskData, setDailyTaskData] = useState(null);
+    
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
 
@@ -293,6 +298,21 @@ Response:
             console.log('Error opening LIFF:', e);
             // Fallback to browser
             window.open(shared.game_link, '_blank');
+        }
+    }
+
+    const onClickDailyTasks = async () => {
+        try {
+            if (dailyTaskId) {
+                // Store the daily task ID in shared object so Tasks component can access it
+                shared.autoStartTaskId = dailyTaskId;
+                // Navigate to Tasks view
+                shared.setActiveTab('tasks');
+            } else {
+                console.log('No daily task available');
+            }
+        } catch (e) {
+            console.error('Error opening daily tasks:', e);
         }
     }
 

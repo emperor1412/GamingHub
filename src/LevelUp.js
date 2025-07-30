@@ -245,7 +245,7 @@ const LevelUp = ({ onClose }) => {
                                 onClickShareStory();
                                 setup();
                             }}>
-                            {t('SHARE_TO_STORY_20')}
+                            {t('SHARE_TO_STORY')}
                         </button>
                         </div>
                         <button className="level-up-okay-button" onClick={handleOverlayClose}>

@@ -8,26 +8,35 @@ import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
+import arrow_2 from './images/arrow_2.svg';
 
 // url: /app/buyOptions
 // Request:
 // Response:
+// type Type_Init = 0;
+//      Type_Weekly = 10;
+//      Type_Month = 20;
+//      Type_OnlyOnce = 30;
 // {
 //     "code": 0,
 //     "data": [
 //         {
-//             "id": 1,
+//             "id": 2001,
 //             "state": 0,
-//             "stars": 1,
-//             "starlet": 10,
-//             "ticket": 1
+//             "type": 20,
+//             "stars": 250,
+//             "starlet": 1950,
+//             "ticket": 0,
+//             "canBuy": true
 //         },
 //         {
-//             "id": 2,
+//             "id": 4,
 //             "state": 0,
-//             "stars": 2,
-//             "starlet": 30,
-//             "ticket": 2
+//             "type": 0,
+//             "stars": 100,
+//             "starlet": 500,
+//             "ticket": 0,
+//             "canBuy": true
 //         }
 //     ]
 // }
@@ -38,7 +47,7 @@ import background from './images/background_2.png';
 // Response:
 // {
 //     "code": 0,
-//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGUvcVgAw"
+//     "data": "https://t.me/$rSx3fmgFAFZgAQAAuXGU/vcVgAw"
 // }
 
 // url: /app/getFreeRewardTime
@@ -69,6 +78,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
+  const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
+  
+  // Category expansion states
+  const [standardPackExpanded, setStandardPackExpanded] = useState(true);
+  const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
+  const [monthlyOfferExpanded, setMonthlyOfferExpanded] = useState(true);
+  const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
 
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
@@ -276,6 +292,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       setTickets(userTicket.num);
     }
 
+    // Reload buy options to update limited offer status
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+      const data = await response.json();
+      console.log('Refreshed Buy Options Response:', data);
+      if (data.code === 0 && Array.isArray(data.data)) {
+        console.log('Refreshed Buy Options Data:', data.data);
+        setBuyOptions(data.data);
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          // Retry the fetch after login
+          const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && Array.isArray(retryData.data)) {
+            setBuyOptions(retryData.data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh buy options:', error);
+    }
+
     // Check free reward time after profile refresh
     await checkFreeRewardTime();
   };
@@ -290,6 +331,23 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   useEffect(() => {
     refreshUserProfile();
   }, []);
+
+  // Add useEffect to listen for data refresh trigger from App component
+  useEffect(() => {
+    // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+    if (shared.userProfile) {
+      console.log('Market: Updating currency display after data refresh');
+      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+      if (userStarlets) {
+        setStarlets(userStarlets.num);
+      }
+
+      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+      if (userTicket) {
+        setTickets(userTicket.num);
+      }
+    }
+  }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
   const handleConfirmPurchase = () => {
     if (!shared.loginData?.fslId) {
@@ -312,6 +370,77 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setSelectedPurchase(null);
     setShowBuyView(false);
   };
+
+  // Helper function to get category title and color based on type
+  const getCategoryInfo = (type) => {
+    switch (type) {
+      case 0:
+        return { title: 'STANDARD PACK', color: '#00FF00', bgColor: 'rgba(0, 255, 0, 0.1)' };
+      case 10:
+        return { title: 'LIMITED WEEKLY OFFER', color: '#FF69B4', bgColor: 'rgba(255, 105, 180, 0.1)' };
+      case 20:
+        return { title: 'LIMITED MONTHLY OFFER', color: '#9370DB', bgColor: 'rgba(147, 112, 219, 0.1)' };
+      case 30:
+        return { title: 'EXCLUSIVE ONE-TIME OFFER', color: '#FFA500', bgColor: 'rgba(255, 165, 0, 0.1)' };
+      default:
+        return { title: 'STANDARD PACK', color: '#00FF00', bgColor: 'rgba(0, 255, 0, 0.1)' };
+    }
+  };
+
+  // Helper function to get expansion state based on type
+  const getExpansionState = (type) => {
+    switch (type) {
+      case 0:
+        return standardPackExpanded;
+      case 10:
+        return weeklyOfferExpanded;
+      case 20:
+        return monthlyOfferExpanded;
+      case 30:
+        return exclusiveOfferExpanded;
+      default:
+        return standardPackExpanded;
+    }
+  };
+
+  // Helper function to set expansion state based on type
+  const setExpansionState = (type, value) => {
+    switch (type) {
+      case 0:
+        setStandardPackExpanded(value);
+        break;
+      case 10:
+        setWeeklyOfferExpanded(value);
+        break;
+      case 20:
+        setMonthlyOfferExpanded(value);
+        break;
+      case 30:
+        setExclusiveOfferExpanded(value);
+        break;
+      default:
+        setStandardPackExpanded(value);
+    }
+  };
+
+  // Group buy options by type
+  const groupedOptions = buyOptions.reduce((acc, option) => {
+    if (!acc[option.type]) {
+      acc[option.type] = [];
+    }
+    acc[option.type].push(option);
+    return acc;
+  }, {});
+
+  // Ensure all category types exist
+  [0, 10, 20, 30].forEach(type => {
+    if (!groupedOptions[type]) {
+      groupedOptions[type] = [];
+    }
+  });
+
+  // Sort categories by type order: 0 (Standard), 30 (Exclusive), 20 (Monthly), 10 (Weekly)
+  const categoryOrder = [0, 30, 20, 10];
 
   if (showBuyView) {
     return (
@@ -371,7 +500,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
                   <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">USERS WHO HAVE FSL ID CONNECTED WILL BE ABLE TO CLAIM 50 STARLETS AND 1 TICKET DAILY</div>
+                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
                 </div>
               </div>
             </div>
