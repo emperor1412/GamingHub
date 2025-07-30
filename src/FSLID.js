@@ -157,7 +157,7 @@ const FSLID = () => {
             state: state,
             usePopup: true, // Popup a window instead of jump to
             isApp: true,
-            domain: 'https://gm3.joysteps.io/'
+            // domain: 'https://gm3.joysteps.io/'
         });
 
         fslAuthorization.signInV2();
