@@ -200,12 +200,12 @@ const Buy = ({
               CLAIM FREE
             </button>
           )}
-          <button 
+          {/* <button 
             className="bmk-payment-button bmk-gmt-button"
             onClick={() => handlePaymentMethod('gmt')}
           >
             PAY WITH SOLANA-GMT
-          </button>
+          </button> */}
         </div>
 
         <ConfirmPurchasePopup

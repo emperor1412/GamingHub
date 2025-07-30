@@ -6,6 +6,7 @@ import mooarLogo from './images/MooAR_Login_Logo.png';
 import loggedInLogo from './images/FSL_MooAR_Logined.png';
 import back from './images/back.svg';
 import shared from './Shared';
+import liff from '@line/liff';
 import { trackUserAction } from './analytics';
 
 const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
@@ -70,8 +71,20 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     // Track event
     trackUserAction('egglet_mooar_link_clicked', {}, shared.loginData?.userId);
     
-    // Open MOOAR login page in a new tab
-    window.open('https://mooar.com/', '_blank');
+    // Open MOOAR login page using LIFF if available, otherwise fallback to window.open
+    try {
+      if (window.liff && liff.isInClient()) {
+        liff.openWindow({
+          url: 'https://mooar.com/',
+          external: true
+        });
+      } else {
+        window.open('https://mooar.com/', '_blank');
+      }
+    } catch (e) {
+      console.log('Error opening MOOAR link:', e);
+      window.open('https://mooar.com/', '_blank');
+    }
   };
 
   return (

@@ -408,37 +408,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                   </div>
                 </div>
               </button>
-
-              {buyOptions.map((option) => (
-                <button 
-                  key={option.id}
-                  className="mk-market-ticket-button" 
-                  onClick={() => 
-                  {
-                    handleStarletPurchase(option.starlet, option.stars, null, option.id)
-                    trackLineConversion('Starlets_Purchase_Click');
-                  }
-                  }
-                >
-                  <div className="mk-market-ticket-button-image-container">
-                    <div className="mk-market-ticket-content">
-                      <div className="mk-market-ticket-icon">
-                        <img src={starlet} alt="Starlet" />
-                      </div>
-                      <div className="mk-market-ticket-info">
-                        <div className="mk-market-ticket-text">
-                          <div className="mk-market-ticket-amount">{option.starlet}</div>
-                          <div className="mk-market-ticket-label">STARLETS</div>
-                        </div>
-                        <div className="mk-market-ticket-bonus">
-                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mk-market-ticket-price">{option.stars} TELEGRAM STARS</div>
-                  </div>
-                </button>
-              ))}
             </div>
           </div>
         </div>
