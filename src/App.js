@@ -230,14 +230,7 @@ function App() {
         } else {
           console.error('Failed to reload app data:', profileResult.error);
           // If retry login failed, we might need to show an error or redirect to login
-          if (popup.open.isAvailable()) {
-            const promise = popup.open({
-              title: 'Error Reloading Data',
-              message: `Failed to reload data: ${profileResult.error}. Please refresh the app.`,
-              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-            });
-            await promise;
-          }
+          alert(`Failed to reload data: ${profileResult.error}. Please refresh the app.`);
         }
       } else {
         console.log('No shared.loginData available for reload');
@@ -245,14 +238,7 @@ function App() {
     } catch (error) {
       console.error('Error reloading app data:', error);
       // Show error popup for unexpected errors
-      if (popup.open.isAvailable()) {
-        const promise = popup.open({
-          title: 'Error',
-          message: 'An unexpected error occurred while reloading data. Please refresh the app.',
-          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
-        });
-        await promise;
-      }
+      alert('An unexpected error occurred while reloading data. Please refresh the app.');
     }
   };
 

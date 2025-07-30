@@ -12,7 +12,7 @@ import TasksLearn from './TasksLearn';
 import liff from '@line/liff';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
-import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion } from './analytics';
+import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion, trackUserAction } from './analytics';
 import { t } from './utils/localization';
 /*
 url: /app/taskList
@@ -537,18 +537,20 @@ const Tasks = ({
         } else if (task.type === 4) {
             // Mini app task - open URL like mini game
             try {
-                // Use Telegram WebApp API to open the mini app directly within Telegram
-                if (window.Telegram?.WebApp?.openTelegramLink) {
-                    // This method will open the link within Telegram without launching a browser
-                    window.Telegram.WebApp.openTelegramLink(task.url);
+                // Use LINE LIFF API to open the mini app
+                if (window.liff && liff.isInClient()) {
+                    liff.openWindow({
+                        url: task.url,
+                        external: true
+                    });
                 } else {
-                    // Fallback to SDK method if the direct method isn't available
-                    openLink(task.url);
+                    // Fallback to regular window.open if not in LINE client
+                    window.open(task.url, '_blank');
                 }
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
-                openLink(task.url);
+                window.open(task.url, '_blank');
             }
         }
     };
@@ -595,18 +597,20 @@ const Tasks = ({
                     game_url: task.url,
                 }, shared.loginData?.link);
                 
-                // Use Telegram WebApp API to open the mini app directly within Telegram
-                if (window.Telegram?.WebApp?.openTelegramLink) {
-                    // This method will open the link within Telegram without launching a browser
-                    window.Telegram.WebApp.openTelegramLink(task.url);
+                // Use LINE LIFF API to open the mini app
+                if (window.liff && liff.isInClient()) {
+                    liff.openWindow({
+                        url: task.url,
+                        external: true
+                    });
                 } else {
-                    // Fallback to SDK method if the direct method isn't available
-                    openLink(task.url);
+                    // Fallback to regular window.open if not in LINE client
+                    window.open(task.url, '_blank');
                 }
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
-                openLink(task.url);
+                window.open(task.url, '_blank');
             }
 
         } else if (task.type === 2 || task.type === 3 || task.type === 5 || task.type === 6) {

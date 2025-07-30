@@ -132,8 +132,6 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         }
     };
 
-
-
     // Track content view on initial render
     useEffect(() => {
         if (task.contentList && currentStep < task.contentList.length) {
@@ -205,46 +203,6 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 <p>{task.question?.heading || "Please enter the correct word to complete this task:"}</p>
                             </div>
                             
-                            {selectedAnswer !== null && (
-                                <button className="next-button" onClick={handleNextAnswer}>
-                                    {t('NEXT')}
-                                </button>
-                            )}
-                        </>
-                    ) : (
-                        isCorrect ? (
-                            <div className="result-container">
-                                <div className="result-icon">
-                                    <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
-                                    <div className='stars' style={{ top: 190, left: 0 }}>
-                                        <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
-                                        <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
-                                        <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
-                                        <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
-                                        <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
-                                    </div>
-                                </div>
-                                <div className="success-content">
-                                    <div className='text-bingo'>{t('BINGO')}</div>
-                                    <p className='text-complete-quiz'>{t('QUIZ_COMPLETED')}</p>
-                                    <div className="reward-earned">
-                                        <p className='text-you-earn'>{t('YOU_EARNED')}</p>
-                                        <div className="reward-amount">
-                                        <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
-                                            <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button className="tasks-okay-button" onClick={() => {
-                                        // if (isCorrect) {
-                                        //     onComplete(task.id);
-                                        // }
-                                        onClose();
-                                    }}>
-                                    {t('OKAY_BUTTON')}
-                                </button>
-                            </div>
-                            
                             <form onSubmit={handleWordSubmit} className="word-input-form">
                                 <div className="input-group">
                                     <input
@@ -273,55 +231,30 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                 } else {
                     return (
                         <div className="result-container">
-                            {isCorrect ? (
-                                <>
-                                    <div className="result-icon">
-                                        <img src={correct_answer} alt="Correct"/>
-                                        <div className='stars' style={{ top: 190, left: 0 }}>
-                                            <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
-                                            <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
-                                            <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
-                                            <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
-                                            <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
-                                        </div>
+                            <div className="result-icon">
+                                <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
+                                <div className='stars' style={{ top: 190, left: 0 }}>
+                                    <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                    <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                    <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                    <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                    <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                </div>
+                            </div>
+                            <div className="success-content">
+                                <div className='text-bingo'>{t('BINGO')}</div>
+                                <p className='text-complete-quiz'>{t('QUIZ_COMPLETED')}</p>
+                                <div className="reward-earned">
+                                    <p className='text-you-earn'>{t('YOU_EARNED')}</p>
+                                    <div className="reward-amount">
+                                        <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
+                                        <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
                                     </div>
-                                    <div className="success-content">
-                                        <div className='text-bingo'>BINGO</div>
-                                        <p className='text-complete-quiz'>YOU'VE COMPLETED THE TASK!</p>
-                                        <div className="reward-earned">
-                                            <p className='text-you-earn'>YOU'VE EARNED</p>
-                                            <div className="reward-amount">
-                                                <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Reward" className="reward-icon" />
-                                                <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button className="tasks-okay-button" onClick={onClose}>
-                                        OKAY
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="fail-content">
-                                        <div className="result-icon">
-                                            <img src={incorrect_answer} alt="Incorrect" className='result-icon-img'/>
-                                            <div className='stars' style={{ top: 219, left: -15 }}>
-                                                <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
-                                                <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
-                                                <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
-                                                <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
-                                                <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
-                                            </div>
-                                        </div>
-                                        <div className="better-luck-message">
-                                            <p>Better luck next time!</p>
-                                        </div>
-                                    </div>
-                                    <button className="try-again-button" onClick={onClose}>
-                                        CONFIRM
-                                    </button>
-                                </>
-                            )}
+                                </div>
+                            </div>
+                            <button className="tasks-okay-button" onClick={onClose}>
+                                {t('OKAY_BUTTON')}
+                            </button>
                         </div>
                     );
                 }
@@ -376,7 +309,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                         <div className="reward-earned">
                                             <p className='text-you-earn'>YOU'VE EARNED</p>
                                             <div className="reward-amount">
-                                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
+                                                <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
                                                 <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
                                             </div>
                                         </div>
