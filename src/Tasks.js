@@ -9,7 +9,6 @@ import calendar from './images/calendar.png';
 // import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import calendar_before_checkin from './images/calendar.png';
 import TasksLearn from './TasksLearn';
-import TaskWordInput from './TaskWordInput';
 import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
@@ -265,7 +264,6 @@ const Tasks = ({
     const [tasksPartner, setTasksPartner] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLearnTask, setShowLearnTask] = useState(null);
-    const [showWordInputTask, setShowWordInputTask] = useState(null);
     const [timeLimitedExpanded, setTimeLimitedExpanded] = useState(true);
     const [standardTasksExpanded, setStandardTasksExpanded] = useState(true);
     const [dailyTasksExpanded, setDailyTasksExpanded] = useState(true);
@@ -483,11 +481,7 @@ const Tasks = ({
                 const data = await response.json();
                 console.log('Task data:', data);
                 if (data.code === 0) {
-                    if (data.data.type === 6) {
-                        setShowWordInputTask(data.data);
-                    } else {
-                        setShowLearnTask(data.data);
-                    }
+                    setShowLearnTask(data.data);
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Get Task data error:', data)
@@ -559,16 +553,14 @@ const Tasks = ({
         }
     };
 
-    const handleWordInputComplete = useCallback(async (task, word) => {
-        const reward = await completeTask(task.id, 0, word);
-        return reward;
-    }, [completeTask]);
+
 
     const handleStartTask = useCallback(async (task) => {
         // Track task start
         let taskType = 'quiz';
         if (task.type === 1) taskType = 'link';
         else if (task.type === 4) taskType = 'mini_app';
+        else if (task.type === 5) taskType = 'share_story';
         else if (task.type === 6) taskType = 'word_input';
         
         trackTaskFunnel(task.id, taskType, 'start', {
@@ -617,20 +609,16 @@ const Tasks = ({
                 openLink(task.url);
             }
 
-        } else if (task.type === 2 || task.type === 3) {
-            // Track quiz task content view
-            trackTaskFunnel(task.id, 'quiz', 'content_view', {
+        } else if (task.type === 2 || task.type === 3 || task.type === 5 || task.type === 6) {
+            // Track task content view based on type
+            let taskType = 'quiz';
+            if (task.type === 5) taskType = 'share_story';
+            else if (task.type === 6) taskType = 'word_input';
+            
+            trackTaskFunnel(task.id, taskType, 'content_view', {
                 task_name: task.name
             }, shared.loginData?.userId);
 
-            fetchTaskDataAndShow(task);
-        } else if (task.type === 6) {
-            // Track word input task start
-            trackTaskFunnel(task.id, 'word_input', 'start', {
-                task_name: task.name
-            }, shared.loginData?.userId);
-
-            // Fetch task data for word input task (similar to learn tasks)
             fetchTaskDataAndShow(task);
         }
     }, [completeTask, fetchTaskDataAndShow]);
@@ -681,7 +669,7 @@ const Tasks = ({
     // Add useEffect to handle auto-start functionality
     useEffect(() => {
         // Check if there's a task to auto-start (from MainView daily tasks button)
-        if (shared.autoStartTaskId && !showLearnTask && !showWordInputTask) {
+        if (shared.autoStartTaskId && !showLearnTask) {
             console.log('Auto-starting task:', shared.autoStartTaskId);
             
             // Find the task in the loaded tasks
@@ -696,7 +684,7 @@ const Tasks = ({
                 handleStartTask(taskToStart);
             }
         }
-    }, [tasksTimeLimited, tasksStandard, tasksDaily, tasksPartner, showLearnTask, showWordInputTask, handleStartTask]);
+    }, [tasksTimeLimited, tasksStandard, tasksDaily, tasksPartner, showLearnTask, handleStartTask]);
 
     // Add useEffect to listen for data refresh trigger from App component
     useEffect(() => {
@@ -724,6 +712,7 @@ const Tasks = ({
                 let taskType = 'quiz';
                 if (task.type === 1) taskType = 'link';
                 else if (task.type === 4) taskType = 'mini_app';
+                else if (task.type === 5) taskType = 'share_story';
                 else if (task.type === 6) taskType = 'word_input';
                 
                 trackTaskFunnel(task.id, taskType, 'view', {
@@ -788,16 +777,17 @@ const Tasks = ({
                 <TasksLearn
                     task={showLearnTask}
                     onClose={() => setShowLearnTask(null)}
-                    onComplete={async (task, answerIndex) => {
-                        const reward = await completeTask(task.id, answerIndex);
-                        return reward;
+                    onComplete={async (task, answerIndex, word) => {
+                        if (task.type === 6) {
+                            // Task type 6: send word parameter
+                            const reward = await completeTask(task.id, 0, word);
+                            return reward;
+                        } else {
+                            // Task type 2, 3, 5: send answerIndex parameter
+                            const reward = await completeTask(task.id, answerIndex);
+                            return reward;
+                        }
                     }}
-                />
-            ) : showWordInputTask ? (
-                <TaskWordInput
-                    task={showWordInputTask}
-                    onClose={() => setShowWordInputTask(null)}
-                    onComplete={handleWordInputComplete}
                 />
             ) : (
                 <>
