@@ -228,38 +228,6 @@ export const lineShare = {
     }
   },
 
-  // Claim reward từ việc share
-  async claimShareReward(type = 'general', depth = 0) {
-    if (depth > 3) {
-      console.error('claimShareReward failed after 3 attempts');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=${type}&platform=line`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.code === 0) {
-          console.log('Share reward claimed successfully');
-          return true;
-        } else if (data.code === 102002 || data.code === 102001) {
-          console.log('Token expired, attempting to re-login');
-          const result = await shared.login(shared.initData);
-          if (result.success) {
-            return this.claimShareReward(type, depth + 1);
-          }
-        }
-      }
-      return false;
-    } catch (error) {
-      console.error('Claim share reward error:', error);
-      throw error;
-    }
-  }
+  // Note: claimShareReward function has been removed as share story rewards are now handled through task type 5
+  // Use shared.completeShareStoryTask() instead for completing share story tasks
 }; 

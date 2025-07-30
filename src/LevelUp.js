@@ -102,37 +102,12 @@ const LevelUp = ({ onClose }) => {
 
                 setShowOverlay(false);
                 
-                try {
-                    const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=1`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('Share story API response:', data);
-
-                        if (data.code === 0) {
-                            console.log('Story shared successfully');
-                        } else if (data.code === 102001 || data.code === 102002) {
-                            console.log('Token expired, attempting to re-login');
-                            const loginResult = await shared.login(shared.initData);
-                            if (loginResult.success) {
-                                // Retry the API call after successful re-login
-                                onClickShareStory();
-                            } else {
-                                console.error('Re-login failed:', loginResult.error);
-                            }
-                        } else {
-                            console.error('Share story failed:', data.msg);
-                        }
-                    } else {
-                        console.error('Share story request failed:', response);
-                    }
-                } catch (error) {
-                    console.error('Error claiming reward:', error);
+                // Complete share story task instead of calling sharingStory API
+                const taskCompleted = await shared.completeShareStoryTask(0);
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
                 }
             }
         } catch (error) {

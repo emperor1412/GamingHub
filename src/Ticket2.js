@@ -74,7 +74,13 @@ Response:
 
             if (success) {
                 setShowShareStory(false);
-                await claimRewardFromSharingStory();
+                // Complete share story task instead of calling sharingStory API
+                const taskCompleted = await shared.completeShareStoryTask(0);
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
             }
         } catch (error) {
             console.error('Error sharing:', error);
