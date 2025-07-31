@@ -292,7 +292,7 @@ Response:
         } catch (e) {
             console.log('Error opening LIFF:', e);
             // Fallback to browser
-            window.open(shared.game_link, '_blank');
+            shared.openExternalLink(shared.game_link);
         }
     }
 
@@ -1046,14 +1046,7 @@ Response:
                                                 banner_name: event.name,
                                                 banner_url: event.url
                                             }, shared.loginData?.link);
-                                            if (window.liff && liff.isInClient()) {
-                                                liff.openWindow({
-                                                    url: event.url,
-                                                    external: true
-                                                });
-                                            } else {
-                                                window.open(event.url, '_blank');
-                                            }
+                                            shared.openExternalLink(event.url);
                                         }
                                     }
                                     catch (e) {

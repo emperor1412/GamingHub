@@ -532,25 +532,16 @@ const Tasks = ({
                     external: true
                 });
             } else {
-                window.open(task.url, '_blank');
+                shared.openExternalLinkWithFallback(task.url);
             }
         } else if (task.type === 4) {
             // Mini app task - open URL like mini game
             try {
-                // Use LINE LIFF API to open the mini app
-                if (window.liff && liff.isInClient()) {
-                    liff.openWindow({
-                        url: task.url,
-                        external: true
-                    });
-                } else {
-                    // Fallback to regular window.open if not in LINE client
-                    window.open(task.url, '_blank');
-                }
+                shared.openExternalLink(task.url);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
-                window.open(task.url, '_blank');
+                shared.openExternalLinkWithFallback(task.url);
             }
         }
     };
@@ -569,14 +560,7 @@ const Tasks = ({
         }, shared.loginData?.userId);
 
         if (task.type === 1) {
-            if (window.liff && liff.isInClient()) {
-                liff.openWindow({
-                    url: task.url,
-                    external: true
-                });
-            } else {
-                window.open(task.url, '_blank');
-            }
+            shared.openExternalLink(task.url);
 
             // Track link task completion attempt
             trackTaskAttempt(task.id, 'link', true, {
@@ -597,20 +581,11 @@ const Tasks = ({
                     game_url: task.url,
                 }, shared.loginData?.link);
                 
-                // Use LINE LIFF API to open the mini app
-                if (window.liff && liff.isInClient()) {
-                    liff.openWindow({
-                        url: task.url,
-                        external: true
-                    });
-                } else {
-                    // Fallback to regular window.open if not in LINE client
-                    window.open(task.url, '_blank');
-                }
+                shared.openExternalLink(task.url);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
-                window.open(task.url, '_blank');
+                shared.openExternalLinkWithFallback(task.url);
             }
 
         } else if (task.type === 2 || task.type === 3 || task.type === 5 || task.type === 6) {

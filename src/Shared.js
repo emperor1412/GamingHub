@@ -428,7 +428,7 @@ data object
                 scope: 'basic', // Grant Scope
                 state: state,
                 usePopup: true, // Popup a window instead of jump to
-                isApp: true,
+                isApp: false, // Set to false to force external browser
                 domain: 'https://gm3.joysteps.io/'
             });
 
@@ -621,11 +621,11 @@ data object
             } catch (error) {
                 console.error('Error opening with LIFF, falling back to window.open:', error);
                 // Fallback to window.open
-                window.open(redirectUrl, '_blank');
+                shared.openExternalLinkWithFallback(redirectUrl);
             }
         } else {
             // For non-LINE environments, use regular window.open
-            window.open(redirectUrl, '_blank');
+            shared.openExternalLinkWithFallback(redirectUrl);
         }
         
         return redirectUrl;
@@ -751,6 +751,42 @@ data object
         }
         
         return false;
+    },
+
+    // Utility function to open links in external browser
+    openExternalLink: (url) => {
+        try {
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: url,
+                    external: true
+                });
+            } else {
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            console.error('Error opening external link:', error);
+            // Fallback to window.open
+            window.open(url, '_blank');
+        }
+    },
+
+    // Utility function to open links in external browser with better error handling
+    openExternalLinkWithFallback: (url) => {
+        try {
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: url,
+                    external: true
+                });
+            } else {
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            console.error('Error opening external link:', error);
+            // Fallback to window.open
+            window.open(url, '_blank');
+        }
     }
 
 };

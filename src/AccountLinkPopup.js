@@ -73,17 +73,10 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     
     // Open MOOAR login page using LIFF if available, otherwise fallback to window.open
     try {
-      if (window.liff && liff.isInClient()) {
-        liff.openWindow({
-          url: 'https://mooar.com/',
-          external: true
-        });
-      } else {
-        window.open('https://mooar.com/', '_blank');
-      }
+      shared.openExternalLink('https://mooar.com/');
     } catch (e) {
       console.log('Error opening MOOAR link:', e);
-      window.open('https://mooar.com/', '_blank');
+      shared.openExternalLink('https://mooar.com/');
     }
   };
 

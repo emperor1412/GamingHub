@@ -275,17 +275,10 @@ Response:
                                     {item.type === 30020 && (
                                         <button className="info-button" onClick={() => {
                                             try {
-                                                if (window.liff && liff.isInClient()) {
-                                                    liff.openWindow({
-                                                        url: 'https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4',
-                                                        external: true
-                                                    });
-                                                } else {
-                                                    window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank');
-                                                }
+                                                shared.openExternalLink('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4');
                                             } catch (e) {
                                                 console.log('Error opening link:', e);
-                                                window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank');
+                                                shared.openExternalLink('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4');
                                             }
                                         }}>
                                             i
