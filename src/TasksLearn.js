@@ -74,6 +74,14 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         if (task.type === 3) {
             const reward = await onComplete(task, selectedAnswer);
             console.log('Reward:', reward);
+            // For task type 3, check if we got a reward (success) or not
+            if (!reward || reward.length === 0) {
+                // Task failed (wrong answer)
+                setIsCorrect(false);
+            } else {
+                // Task succeeded
+                setIsCorrect(true);
+            }
         } else if (correct) {
             // For task type 2, only call completeTask if correct
             trackTaskFunnel(task.id, 'quiz', 'completion', {
