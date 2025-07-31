@@ -508,8 +508,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
               <div className="mk-fsl-connect-content">
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
-                  <div className="mk-connect-title">CONNECT FSL ID</div>
-                  <div className="mk-connect-subtitle">USERS WHO HAVE FSL ID CONNECTED WILL BE ABLE TO CLAIM 50 STARLETS AND 1 TICKET DAILY</div>
+                  <div className="mk-connect-title">{t('CONNECT_FSL_ID')}</div>
+                  <div className="mk-connect-subtitle">{t('MARKET_CONNECT_FSL')}</div>
                 </div>
               </div>
             </div>

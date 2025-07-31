@@ -605,10 +605,22 @@ const Tasks = ({
     const renderTaskCard = (task) => {
         const isDone = task.state === 1;
         const isTimeLimited = task.category === 0;
-        const formattedDate = new Date(task.endTime).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric'
-        });
+        
+        // Get current language for date formatting
+        const currentLang = localStorage.getItem('language') || 'ja';
+        const locale = currentLang === 'ja' ? 'ja-JP' : 'en-US';
+        
+        const date = new Date(task.endTime);
+        const month = date.getMonth(); // 0-11
+        const day = date.getDate();
+        
+        // Use localization for month names
+        const monthNames = {
+            en: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+            ja: [t('JAN'), t('FEB'), t('MAR'), t('APR'), t('MAY'), t('JUN'), t('JUL'), t('AUG'), t('SEP'), t('OCT'), t('NOV'), t('DEC')]
+        };
+        
+        const formattedDate = `${monthNames[currentLang][month]} ${day}`;
 
         return (
             <div className={`task-card ${isDone ? 'done': ''}`} key={task.id}>
