@@ -533,18 +533,12 @@ const Tasks = ({
 
     const handleFinishTaskClicked = async (task) => {
         if (task.type === 1) {
-            if (window.liff && liff.isInClient()) {
-                liff.openWindow({
-                    url: task.url,
-                    external: true
-                });
-            } else {
-                shared.openExternalLinkWithFallback(task.url);
-            }
+            // Task có open link - External browser
+            shared.openExternalLink(task.url);
         } else if (task.type === 4) {
-            // Mini app task - open URL like mini game
+            // Play Tadokami - In-app browser
             try {
-                shared.openExternalLink(task.url);
+                shared.openInAppLink(task.url);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
@@ -567,6 +561,7 @@ const Tasks = ({
         }, shared.loginData?.userId);
 
         if (task.type === 1) {
+            // Task có open link - External browser
             shared.openExternalLink(task.url);
 
             // Track link task completion attempt
@@ -581,14 +576,14 @@ const Tasks = ({
             completeTask(task.id, 0);
 
         } else if (task.type === 4) {
-            // Mini app task - open URL like mini game but don't complete task
+            // Play Tadokami - In-app browser
             try {
                 trackUserAction('minigame_clicked', {
                     game_name: task.name,
                     game_url: task.url,
                 }, shared.loginData?.link);
                 
-                shared.openExternalLink(task.url);
+                shared.openInAppLink(task.url);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
