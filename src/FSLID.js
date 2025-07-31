@@ -149,138 +149,19 @@ const FSLID = () => {
         const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
         console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
-        // Detect if we're in LINE in-app browser
-        const isInApp = /Line/.test(navigator.userAgent) || 
-                       /FB_IAB/.test(navigator.userAgent) || 
-                       /Instagram/.test(navigator.userAgent) ||
-                       /Twitter/.test(navigator.userAgent) ||
-                       /Snapchat/.test(navigator.userAgent);
+        // Initialize FSL Authorization for alpha build with external browser support
+        const fslAuthorization = FSLAuthorization.init({
+            responseType: 'code',
+            appKey: 'yshgTgd6qz9', // Alpha app key
+            redirectUri: REDIRECT_URL,
+            scope: 'basic,wallet,stepn',
+            state: state,
+            usePopup: true,
+            isApp: false, // Set to false to force external browser
+        });
 
-        if (isInApp) {
-            console.log('Detected in-app browser, using escape techniques');
-            
-            // Create the FSL authorization URL manually for alpha build
-            const fslAuthUrl = new URL('https://id.fsl.com/login/fslUsers');
-            fslAuthUrl.searchParams.append('response_type', 'code');
-            fslAuthUrl.searchParams.append('appkey', 'yshgTgd6qz9');
-            fslAuthUrl.searchParams.append('scope', 'basic,wallet,stepn');
-            fslAuthUrl.searchParams.append('state', state);
-            fslAuthUrl.searchParams.append('redirect_uri', REDIRECT_URL);
-            fslAuthUrl.searchParams.append('is_app', '1');
-            fslAuthUrl.searchParams.append('withState', '1');
-            
-            const url = fslAuthUrl.toString();
-            
-            // Try multiple escape techniques based on Paul's Weblog
-            try {
-                // Method 1: Intent URL for Android (most reliable)
-                if (/Android/.test(navigator.userAgent)) {
-                    const intentUrl = `intent:${url}#Intent;end`;
-                    window.location.replace(intentUrl);
-                    
-                    // Fallback: Create a clickable link after 1 second
-                    setTimeout(() => {
-                        const div = document.createElement('div');
-                        div.style.cssText = `
-                            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-                            background: rgba(0,0,0,0.8); z-index: 9999; 
-                            display: flex; flex-direction: column; justify-content: center; 
-                            align-items: center; padding: 20px;
-                        `;
-                        div.innerHTML = `
-                            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 300px;">
-                                <h3 style="margin: 0 0 15px 0; color: #333;">Open in External Browser</h3>
-                                <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">
-                                    Tap the button below to open FSL ID login in your default browser
-                                </p>
-                                <a href="${intentUrl}" target="_blank" 
-                                   style="display: inline-block; background: #007bff; color: white; 
-                                          text-decoration: none; padding: 12px 24px; 
-                                          border-radius: 6px; font-weight: 500;">
-                                    Open in Browser
-                                </a>
-                                <button onclick="this.parentElement.parentElement.remove()" 
-                                        style="display: block; margin-top: 15px; padding: 8px 16px; 
-                                               background: #6c757d; color: white; border: none; 
-                                               border-radius: 4px; cursor: pointer;">
-                                    Cancel
-                                </button>
-                            </div>
-                        `;
-                        document.body.appendChild(div);
-                    }, 1000);
-                }
-                // Method 2: Shortcuts fallback for iOS (hacky but effective)
-                else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-                    const encodedUrl = encodeURIComponent(url);
-                    const randomId = crypto.randomUUID();
-                    const shortcutsUrl = `shortcuts://x-callback-url/run-shortcut?name=${randomId}&x-error=${encodedUrl}`;
-                    
-                    window.location.replace(shortcutsUrl);
-                    
-                    // Fallback: Create a clickable link after 1 second
-                    setTimeout(() => {
-                        const div = document.createElement('div');
-                        div.style.cssText = `
-                            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-                            background: rgba(0,0,0,0.8); z-index: 9999; 
-                            display: flex; flex-direction: column; justify-content: center; 
-                            align-items: center; padding: 20px;
-                        `;
-                        div.innerHTML = `
-                            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 300px;">
-                                <h3 style="margin: 0 0 15px 0; color: #333;">Open in External Browser</h3>
-                                <p style="margin: 0 0 20px 0; color: #666; font-size: 14px;">
-                                    Tap the button below to open FSL ID login in your default browser
-                                </p>
-                                <a href="${shortcutsUrl}" target="_blank" 
-                                   style="display: inline-block; background: #007bff; color: white; 
-                                          text-decoration: none; padding: 12px 24px; 
-                                          border-radius: 6px; font-weight: 500;">
-                                    Open in Browser
-                                </a>
-                                <button onclick="this.parentElement.parentElement.remove()" 
-                                        style="display: block; margin-top: 15px; padding: 8px 16px; 
-                                               background: #6c757d; color: white; border: none; 
-                                               border-radius: 4px; cursor: pointer;">
-                                    Cancel
-                                </button>
-                            </div>
-                        `;
-                        document.body.appendChild(div);
-                    }, 1000);
-                }
-                // Method 3: Direct URL for other cases
-                else {
-                    window.location.replace(url);
-                }
-            } catch (error) {
-                console.error('Error with escape techniques:', error);
-                // Fallback to original method
-                const fslAuthorization = FSLAuthorization.init({
-                    responseType: 'code',
-                    appKey: 'yshgTgd6qz9',
-                    redirectUri: REDIRECT_URL,
-                    scope: 'basic,wallet,stepn',
-                    state: state,
-                    usePopup: true,
-                    isApp: true
-                });
-                fslAuthorization.signInV2();
-            }
-        } else {
-            // Not in in-app browser, use normal method
-            const fslAuthorization = FSLAuthorization.init({
-                responseType: 'code',
-                appKey: 'yshgTgd6qz9',
-                redirectUri: REDIRECT_URL,
-                scope: 'basic,wallet,stepn',
-                state: state,
-                usePopup: true,
-                isApp: true
-            });
-            fslAuthorization.signInV2();
-        }
+        // Use signInV2() method
+        fslAuthorization.signInV2();
     };
 
     return (
