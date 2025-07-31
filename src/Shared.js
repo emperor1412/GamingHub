@@ -428,9 +428,9 @@ data object
                 redirectUri: REDIRECT_URL, // https://xxx.xxx.com
                 scope: 'basic', // Grant Scope
                 state: state,
-                usePopup: true, // Popup a window instead of jump to
+                usePopup: false, // Popup a window instead of jump to
                 isApp: false, // Set to false to force external browser
-                domain: 'https://gm3.joysteps.io/'
+                // domain: 'https://gm3.joysteps.io/'
             });
 
             await fslAuthorization.signInV2();

@@ -153,13 +153,13 @@ const FSLID = () => {
             // Initialize FSL Authorization with external browser support - now returns Promise
             const fslAuthorization = await FSLAuthorization.init({
                 responseType: 'code',
-                appKey: 'LineMiniGame',
+                appKey: 'yshgTgd6qz9',
                 redirectUri: REDIRECT_URL,
                 scope: 'basic,wallet,stepn',
                 state: state,
-                usePopup: true,
-                isApp: true,
-                domain: 'https://gm3.joysteps.io/'
+                usePopup: false,
+                isApp: false,
+                // domain: 'https://gm3.joysteps.io/'
             });
 
             // Use signInV2() method
