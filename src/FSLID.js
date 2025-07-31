@@ -137,7 +137,7 @@ const FSLID = () => {
         getGMTBalance();
     }, []);
 
-    const connectFSLID = () => {
+    const connectFSLID = async () => {
         console.log('Connect FSL ID clicked');
         
         if (!state) {
@@ -149,20 +149,28 @@ const FSLID = () => {
         const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
         console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
-        // Initialize FSL Authorization with external browser support
-        const fslAuthorization = FSLAuthorization.init({
-            responseType: 'code',
-            appKey: 'LineMiniGame',
-            redirectUri: REDIRECT_URL,
-            scope: 'basic,wallet,stepn',
-            state: state,
-            usePopup: true,
-            isApp: true,
-            domain: 'https://gm3.joysteps.io/'
-        });
+        try {
+            // Initialize FSL Authorization with external browser support - now returns Promise
+            const fslAuthorization = await FSLAuthorization.init({
+                responseType: 'code',
+                appKey: 'LineMiniGame',
+                redirectUri: REDIRECT_URL,
+                scope: 'basic,wallet,stepn',
+                state: state,
+                usePopup: true,
+                isApp: true,
+                domain: 'https://gm3.joysteps.io/'
+            });
 
-        // Use signInV2() method
-        fslAuthorization.signInV2();
+            // Use signInV2() method
+            await fslAuthorization.signInV2();
+        } catch (error) {
+            console.error('FSL Authorization initialization failed:', error);
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to initialize FSL ID connection. Please try again.'
+            });
+        }
     };
 
     return (

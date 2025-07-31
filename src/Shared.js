@@ -392,12 +392,14 @@ data object
         const randKeyApi = shared.server_url + `/api/app/randKey?token=${shared.loginData.token}`;
         console.log('RandKey API:', randKeyApi);
 
-        fetch(randKeyApi, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(response => response.json()).then(async data => {
+        try {
+            const response = await fetch(randKeyApi, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
             console.log('RandKey Response:', data);
 
             if (data.code === 102001 || data.code === 102002) {
@@ -405,7 +407,7 @@ data object
                 const loginResult = await shared.login(shared.initData);
                 if (loginResult.success) {
                     console.log('Login success, fetch key again');
-                    shared.signinFSL();
+                    return shared.signinFSL();
                 }
                 else {
                     console.error('Login failed:', loginResult.error);
@@ -414,14 +416,13 @@ data object
                 return;
             }
             
-
             const state = data.data;
-            // return;
             const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
 
             console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
-            const fslAuthorization = FSLAuthorization.init({
+            // Initialize FSL Authorization - now returns Promise
+            const fslAuthorization = await FSLAuthorization.init({
                 responseType: 'code', // 'code' or 'token'
                 appKey: 'LineMiniGame',
                 redirectUri: REDIRECT_URL, // https://xxx.xxx.com
@@ -432,9 +433,12 @@ data object
                 domain: 'https://gm3.joysteps.io/'
             });
 
-            fslAuthorization.signInV2();
+            await fslAuthorization.signInV2();
 
-        });
+        } catch (error) {
+            console.error('FSL signin failed:', error);
+            alert('FSL signin failed: ' + error.message);
+        }
     },
 
     getStarlets : () => {
@@ -631,50 +635,19 @@ data object
         return redirectUrl;
     },
 
-    // Verify FSL ID using FSL SDK
+    // NOTE: verifyFSLID method has been removed in fsl-authorization v1.1.1-beta.55+
+    // The verifyFSLID method is no longer available in the new SDK version
+    // If FSL ID verification is needed, it should be handled server-side
+    
+    /* DEPRECATED - verifyFSLID method removed from new SDK
     verifyFSLID: async (fslId) => {
-        try {
-            // First, get a random key from backend
-            const randKeyApi = `${shared.server_url}/api/app/randKey?token=${shared.loginData.token}`;
-            const randKeyResponse = await fetch(randKeyApi);
-            const randKeyData = await randKeyResponse.json();
-            
-            if (randKeyData.code !== 0) {
-                throw new Error('Failed to get random key');
-            }
-            
-            const state = randKeyData.data;
-            
-            // Use FSL Authorization to verify
-            const FSLAuthorization = require('fsl-authorization');
-            const fslAuth = FSLAuthorization.init({
-                responseType: 'code',
-                appKey: 'MiniGame',
-                redirectUri: `${shared.server_url}/api/app/fslCallback`,
-                scope: 'basic,wallet',
-                state: state,
-                usePopup: true,
-                isApp: true,
-                domain: 'https://gm3.joysteps.io/'
-            });
-            
-            // Verify the FSL ID
-            const verificationResult = await fslAuth.verifyFSLID(fslId);
-            
-            return {
-                success: true,
-                verified: verificationResult.verified,
-                userInfo: verificationResult.userInfo
-            };
-            
-        } catch (error) {
-            console.error('FSL ID verification failed:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+        console.warn('verifyFSLID method is deprecated and removed from fsl-authorization SDK');
+        return {
+            success: false,
+            error: 'verifyFSLID method is no longer supported'
+        };
     },
+    */
 
     // New function to handle share story task completion (type = 5)
     completeShareStoryTask: async (shareType, depth = 0) => {
