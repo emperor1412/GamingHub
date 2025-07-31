@@ -149,110 +149,20 @@ const FSLID = () => {
         const REDIRECT_URL = shared.server_url + '/api/app/lineFslCallback';
         console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
-        // Detect if we're in LINE in-app browser
-        const isInApp = /Line/.test(navigator.userAgent) || 
-                       /FB_IAB/.test(navigator.userAgent) || 
-                       /Instagram/.test(navigator.userAgent) ||
-                       /Twitter/.test(navigator.userAgent) ||
-                       /Snapchat/.test(navigator.userAgent);
+        // Initialize FSL Authorization with external browser support
+        const fslAuthorization = FSLAuthorization.init({
+            responseType: 'code',
+            appKey: 'LineMiniGame',
+            redirectUri: REDIRECT_URL,
+            scope: 'basic,wallet,stepn',
+            state: state,
+            usePopup: true,
+            isApp: false, // Set to false to force external browser
+            domain: 'https://gm3.joysteps.io/'
+        });
 
-        if (isInApp) {
-            console.log('Detected in-app browser, using escape techniques');
-            
-            // Create the FSL authorization URL manually
-            const fslAuthUrl = new URL('https://gm3.joysteps.io/login/fslUsers');
-            fslAuthUrl.searchParams.append('response_type', 'code');
-            fslAuthUrl.searchParams.append('appkey', 'LineMiniGame');
-            fslAuthUrl.searchParams.append('scope', 'basic,wallet,stepn');
-            fslAuthUrl.searchParams.append('state', state);
-            fslAuthUrl.searchParams.append('redirect_uri', REDIRECT_URL);
-            fslAuthUrl.searchParams.append('is_app', '1');
-            fslAuthUrl.searchParams.append('withState', '1');
-            
-            const url = fslAuthUrl.toString();
-            
-            // Try multiple escape techniques
-            try {
-                // Method 1: Intent URL for Android
-                if (/Android/.test(navigator.userAgent)) {
-                    const intentUrl = `intent:${url}#Intent;end`;
-                    window.location.replace(intentUrl);
-                    
-                    // Fallback: Create a clickable link
-                    setTimeout(() => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `
-                            <p style="color: white; text-align: center; margin: 20px;">
-                                Tap the button below to open in your default browser
-                            </p>
-                            <a href="${intentUrl}" target="_blank" 
-                               style="display: block; background: #007bff; color: white; 
-                                      text-decoration: none; padding: 15px; margin: 10px; 
-                                      border-radius: 8px; text-align: center;">
-                                Open in External Browser
-                            </a>
-                        `;
-                        document.body.appendChild(div);
-                    }, 1000);
-                }
-                // Method 2: Shortcuts fallback for iOS
-                else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-                    const encodedUrl = encodeURIComponent(url);
-                    const randomId = crypto.randomUUID();
-                    const shortcutsUrl = `shortcuts://x-callback-url/run-shortcut?name=${randomId}&x-error=${encodedUrl}`;
-                    
-                    window.location.replace(shortcutsUrl);
-                    
-                    // Fallback: Create a clickable link
-                    setTimeout(() => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `
-                            <p style="color: white; text-align: center; margin: 20px;">
-                                Tap the button below to open in your default browser
-                            </p>
-                            <a href="${shortcutsUrl}" target="_blank" 
-                               style="display: block; background: #007bff; color: white; 
-                                      text-decoration: none; padding: 15px; margin: 10px; 
-                                      border-radius: 8px; text-align: center;">
-                                Open in External Browser
-                            </a>
-                        `;
-                        document.body.appendChild(div);
-                    }, 1000);
-                }
-                // Method 3: Direct URL for other cases
-                else {
-                    window.location.replace(url);
-                }
-            } catch (error) {
-                console.error('Error with escape techniques:', error);
-                // Fallback to original method
-                const fslAuthorization = FSLAuthorization.init({
-                    responseType: 'code',
-                    appKey: 'LineMiniGame',
-                    redirectUri: REDIRECT_URL,
-                    scope: 'basic,wallet,stepn',
-                    state: state,
-                    usePopup: false,
-                    isApp: true,
-                    domain: 'https://gm3.joysteps.io/'
-                });
-                fslAuthorization.signInV2();
-            }
-        } else {
-            // Not in in-app browser, use normal method
-            const fslAuthorization = FSLAuthorization.init({
-                responseType: 'code',
-                appKey: 'LineMiniGame',
-                redirectUri: REDIRECT_URL,
-                scope: 'basic,wallet,stepn',
-                state: state,
-                usePopup: true,
-                isApp: true,
-                domain: 'https://gm3.joysteps.io/'
-            });
-            fslAuthorization.signInV2();
-        }
+        // Use signInV2() method
+        fslAuthorization.signInV2();
     };
 
     return (
