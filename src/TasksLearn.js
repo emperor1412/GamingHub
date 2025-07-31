@@ -154,6 +154,24 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         if (task.contentList && currentStep < task.contentList.length) {
             // Learning content view (same for all types)
             const content = task.contentList[currentStep];
+            
+            // Special handling for task type 5 - always show BACK button
+            if (task.type === 5) {
+                return (
+                    <div className="learn-content">
+                        <div className='quiz-heading'>
+                            <h2>{content.title}</h2>
+                        </div>
+                        <div className='answers-container'>
+                            <div dangerouslySetInnerHTML={{ __html: content.content }} />
+                        </div>
+                        <button className="next-button" onClick={onClose}>
+                            BACK
+                        </button>
+                    </div>
+                );
+            }
+            
             return (
                 <div className="learn-content">
                     <div className='quiz-heading'>
@@ -168,7 +186,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                 </div>
             );
         } else if (!task.contentList || task.contentList.length === 0) {
-            // Handle tasks without contentList (type 5, 6) - show interaction directly
+            // Handle tasks without contentList - show interaction directly
             if (task.type === 5) {
                 // Share story task - show content with back button
                 return (
@@ -177,7 +195,9 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                             <h2>{task.name}</h2>
                         </div>
                         <div className='answers-container'>
-                            <p>{t('SHARE_STORY_INSTRUCTIONS')}</p>
+                            {task.question?.heading && (
+                                <div dangerouslySetInnerHTML={{ __html: task.question.heading }} />
+                            )}
                             <div className="reward-preview">
                                 <p>{t('YOU_WILL_EARN')}:</p>
                                 <div className="reward-amount">
@@ -191,8 +211,96 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                         </button>
                     </div>
                 );
+            } else if (task.type === 2 || task.type === 3) {
+                // Quiz tasks without contentList - show quiz directly
+                return (
+                    <div className="quiz-content">
+                        {!showResult ? (
+                            <>
+                                <div className="quiz-heading">
+                                    {task.question?.heading}
+                                </div>                            
+                                <div className='quiz-question'>{task.question?.question}</div>
+                                <div className="answers-container">
+                                    {task.question?.answers?.map((answer, index) => (
+                                        <button
+                                            key={index}
+                                            className={`answer-button ${selectedAnswer === index ? 'selected' : ''}`}
+                                            onClick={() => !showResult && handleAnswerSelect(index)}
+                                            disabled={showResult}
+                                        >
+                                            {answer}
+                                        </button>
+                                    ))}
+                                </div>
+                                {selectedAnswer !== null && (
+                                    <button className="next-button" onClick={handleNextAnswer}>
+                                        NEXT
+                                    </button>
+                                )}
+                            </>
+                        ) : (
+                            isCorrect ? (
+                                <div className="result-container">
+                                    <div className="result-icon">
+                                        <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"}/>
+                                        <div className='stars' style={{ top: 190, left: 0 }}>
+                                            <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                            <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                            <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                            <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                            <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                        </div>
+                                    </div>
+                                    <div className="success-content">
+                                        <div className='text-bingo'>BINGO</div>
+                                        <p className='text-complete-quiz'>YOU'VE COMPLETED THE QUIZ!</p>
+                                        <div className="reward-earned">
+                                            <p className='text-you-earn'>YOU'VE EARNED</p>
+                                            <div className="reward-amount">
+                                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="KM" className="reward-icon" />
+                                                <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button className="tasks-okay-button" onClick={() => {
+                                            onClose();
+                                        }}>
+                                        OKAY
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="result-container">
+                                    <div className="fail-content">
+                                        <div className="result-icon">
+                                            <img src={isCorrect ? correct_answer : incorrect_answer} alt={isCorrect ? "Correct" : "Incorrect"} className='result-icon-img'/>
+                                            <div className='stars' style={{ top: 219, left: -15 }}>
+                                                <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                                <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                                <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                                <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                                <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                            </div>
+                                        </div>
+                                        {task.type === 3 && (
+                                            <div className="better-luck-message">
+                                                <p>Better luck next time!</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <button 
+                                        className={task.type === 3 ? "confirm-button" : "try-again-button"} 
+                                        onClick={task.type === 3 ? onClose : handleTryAgain}
+                                    >
+                                        {task.type === 3 ? "CONFIRM" : "TRY AGAIN"}
+                                    </button>
+                                </div>
+                            )
+                        )}
+                    </div>
+                );
             } else if (task.type === 6) {
-                // Word input form view
+                // Word input tasks without contentList - show form directly
                 if (!showResult) {
                     return (
                         <div className="word-input-content">
@@ -200,7 +308,9 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                                 <h2>{task.name}</h2>
                             </div>
                             <div className="task-description">
-                                <p>{task.question?.heading || "Please enter the correct word to complete this task:"}</p>
+                                {task.question?.heading && (
+                                    <div dangerouslySetInnerHTML={{ __html: task.question.heading }} />
+                                )}
                             </div>
                             
                             <form onSubmit={handleWordSubmit} className="word-input-form">
@@ -350,6 +460,100 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                         )}
                     </div>
                 );
+            } else if (task.type === 6) {
+                // Word input form view - after reading content
+                if (!showResult) {
+                    return (
+                        <div className="word-input-content">
+                            <div className="quiz-heading">
+                                <h2>{task.name}</h2>
+                            </div>
+                            <div className="task-description">
+                                {task.question?.heading && (
+                                    <div dangerouslySetInnerHTML={{ __html: task.question.heading }} />
+                                )}
+                            </div>
+                            
+                            <form onSubmit={handleWordSubmit} className="word-input-form">
+                                <div className="input-group">
+                                    <input
+                                        type="text"
+                                        value={inputWord}
+                                        onChange={(e) => setInputWord(e.target.value)}
+                                        placeholder={t('ENTER_WORD_PLACEHOLDER')}
+                                        className="word-input"
+                                        disabled={isSubmitting}
+                                        autoFocus
+                                    />
+                                </div>
+                                
+                                {error && <div className="error-message">{error}</div>}
+                                
+                                <button 
+                                    type="submit" 
+                                    className="next-button"
+                                    disabled={isSubmitting || !inputWord.trim()}
+                                >
+                                    {isSubmitting ? t('SUBMITTING') : t('SUBMIT')}
+                                </button>
+                            </form>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div className="result-container">
+                            {isCorrect ? (
+                                <>
+                                    <div className="result-icon">
+                                        <img src={correct_answer} alt="Correct"/>
+                                        <div className='stars' style={{ top: 190, left: 0 }}>
+                                            <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                            <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                            <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                            <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                            <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                        </div>
+                                    </div>
+                                    <div className="success-content">
+                                        <div className='text-bingo'>{t('BINGO')}</div>
+                                        <p className='text-complete-quiz'>{t('QUIZ_COMPLETED')}</p>
+                                        <div className="reward-earned">
+                                            <p className='text-you-earn'>{t('YOU_EARNED')}</p>
+                                            <div className="reward-amount">
+                                                <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Reward" className="reward-icon" />
+                                                <span className='reward-amount-text'>{task.rewardList[0]?.amount || 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button className="tasks-okay-button" onClick={onClose}>
+                                        {t('OKAY_BUTTON')}
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="fail-content">
+                                        <div className="result-icon">
+                                            <img src={incorrect_answer} alt="Incorrect" className='result-icon-img'/>
+                                            <div className='stars' style={{ top: 219, left: -15 }}>
+                                                <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                                <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                                <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                                <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                                <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
+                                            </div>
+                                        </div>
+                                        <div className="better-luck-message">
+                                            <p>{t('BETTER_LUCK_NEXT_TIME')}</p>
+                                        </div>
+                                    </div>
+                                    <button className="try-again-button" onClick={onClose}>
+                                        {t('CONFIRM')}
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    );
+                }
             }
         }
     };
