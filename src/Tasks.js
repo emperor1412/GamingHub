@@ -408,10 +408,17 @@ const Tasks = ({
                 const data = await response.json();
                 console.log('Task complete:', data);
                 if (data.code === 0) {
-                    retVal = data.data.rewardList;
-                    await shared.getProfileWithRetry();
-                    setupProfileData();
-                    fetchTaskList();
+                    // Check if the task was completed successfully
+                    if (data.data.success === false) {
+                        // Task failed (wrong answer for type 6, or other failure)
+                        retVal = null;
+                    } else {
+                        // Task succeeded, get reward list
+                        retVal = data.data.rewardList;
+                        await shared.getProfileWithRetry();
+                        setupProfileData();
+                        fetchTaskList();
+                    }
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Complete Task error:', data)
