@@ -339,40 +339,7 @@ const Frens = () => {
     setIsLoading(false);
   };
 
-  // url: /app/sharingTrophy
-
-  const shareStoryAPI = async (trophyId, depth = 0) => {
-    if (depth > 3) {
-      console.error('Share story API failed after 3 attempts');
-      return;
-    }
-    const response = await fetch(`${shared.server_url}/api/app/sharingTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Share story API data:', data);
-      if (data.code === 0) {
-        console.log('Story shared API called success');
-      }
-      else if (data.code === 102002 || data.code === 102001) {
-        console.error('Share story data error:', data.msg);
-        const result = await shared.login(shared.initData);
-        if (result.success) {
-          shareStoryAPI(trophyId, depth + 1);
-        }
-        else {
-          console.error('Login failed:', result.error);
-        }
-      }
-    } else {
-      console.error('Share story API data error:', response);
-    }
-  };
+  /* Removed shareStoryAPI function as it's no longer needed */
 
   const onClickShareStory = async () => {
     console.log('Share story');
@@ -391,7 +358,13 @@ const Frens = () => {
                 trophy_status: selectedTrophy.status
             }, shared.loginData?.userId);
 
-            shareStoryAPI(selectedTrophy.id);
+            // Complete share story task instead of calling sharingStory API
+            const taskCompleted = await shared.completeShareStoryTask(0);
+            if (taskCompleted) {
+                console.log('Share story task completed successfully');
+            } else {
+                console.log('No share story task available or task completion failed');
+            }
         }
     } catch (error) {
         console.error('Error sharing:', error);
@@ -770,10 +743,6 @@ const Frens = () => {
                   </p>
                   <button className="share-story-button" onClick={onClickShareStory}>
                     {t('SHARE_A_STORY')}
-                    <div className="trophy-reward">
-                      <img src={starletIcon} alt="Starlets" className="stat-icon" />
-                      <span>20</span>
-                    </div>
                   </button>
                 </>
               ) : (

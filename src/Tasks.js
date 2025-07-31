@@ -12,7 +12,7 @@ import TasksLearn from './TasksLearn';
 import liff from '@line/liff';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
-import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion } from './analytics';
+import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion, trackUserAction } from './analytics';
 import { t } from './utils/localization';
 /*
 url: /app/taskList
@@ -271,6 +271,20 @@ const Tasks = ({
     const [partnerTasksExpanded, setPartnerTasksExpanded] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
+    // Helper function to extract error message from server response
+    const getErrorMessage = (data, defaultMessage) => {
+        if (data.msg) {
+            return data.msg;
+        } else if (data.message) {
+            return data.message;
+        } else if (data.error) {
+            return data.error;
+        } else if (data.data && typeof data.data === 'string') {
+            return data.data;
+        }
+        return defaultMessage;
+    };
+
     const setupProfileData = async () => {
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
         if (userStarlets) {
@@ -299,6 +313,15 @@ const Tasks = ({
     }
 
     const fetchTaskList = async (depth = 0) => {
+        if (depth > 3) {
+            console.error('Fetch task list failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to load tasks after multiple attempts. Please try again later.'
+            });
+            return;
+        }
+
         try {
             const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
             if (response.ok) {
@@ -320,34 +343,61 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error fetching tasks:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Get Task list error:', data)
+                    const errorMessage = getErrorMessage(data, 'Failed to load tasks. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             }
             else {
                 console.error('Error fetching tasks:', response);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'Network error. Please check your connection and try again.'
+                });
             }
         } catch (error) {
             console.error('Error fetching tasks:', error);
+            await shared.showPopup({
+                type: 0,
+                message: 'An unexpected error occurred while loading tasks. Please try again later.'
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    const completeTask = useCallback(async (taskId, answerIndex, depth = 0) => { 
+    const completeTask = useCallback(async (taskId, answerIndex, word = null, depth = 0) => { 
         if (depth > 3) {
             console.error('Complete task api failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to complete task after multiple attempts. Please try again later.'
+            });
             return;
         }
 
-        console.log(`Will call Complete task:${taskId} - answerIndex: ${answerIndex}`);
+        console.log(`Will call Complete task:${taskId} - answerIndex: ${answerIndex} - word: ${word}`);
         setShowLoading(true);
 
         let retVal;
         try {
-            const response = await fetch(`${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskId}&answerIndex=${answerIndex}`, {
+            let url = `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskId}&answerIndex=${answerIndex}`;
+            if (word) {
+                url += `&word=${encodeURIComponent(word)}`;
+            }
+            
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -371,17 +421,36 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error completing task:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Complete Task error:', data)
+                    // Show error popup for other error codes (like task expired)
+                    const errorMessage = getErrorMessage(data, 'Failed to complete task. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             }
             else {
                 console.error('Error completing task:', response);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'Network error. Please check your connection and try again.'
+                });
             }
         } catch (error) {
             console.error('Error completing task:', error);
+            await shared.showPopup({
+                type: 0,
+                message: 'An unexpected error occurred. Please try again later.'
+            });
         } finally {
             setShowLoading(false);
         }
@@ -390,6 +459,15 @@ const Tasks = ({
     }, []);
 
     const fetchTaskDataAndShow = useCallback(async (task, depth = 0) => {
+        if (depth > 3) {
+            console.error('Fetch task data failed after 3 attempts');
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to load task details after multiple attempts. Please try again later.'
+            });
+            return;
+        }
+
         console.log('fetchTaskDataAndShow:', task);
         const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${task.id}`, {
             method: 'GET',
@@ -414,17 +492,35 @@ const Tasks = ({
                     }
                     else {
                         console.error('Error fetching task data:', result.error);
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Login failed. Please try again later.'
+                        });
                     }
                 }
                 else {
                     console.log('Get Task data error:', data)
+                    const errorMessage = getErrorMessage(data, 'Failed to load task details. Please try again later.');
+                    
+                    await shared.showPopup({
+                        type: 0,
+                        message: errorMessage
+                    });
                 }
             } catch (error) {
                 console.error('Error fetching task data:', error);
+                await shared.showPopup({
+                    type: 0,
+                    message: 'An unexpected error occurred while loading task details. Please try again later.'
+                });
             }
         }
         else {
             console.error('Error fetching task data:', response);
+            await shared.showPopup({
+                type: 0,
+                message: 'Network error. Please check your connection and try again.'
+            });
         }
     }, []);
 
@@ -436,27 +532,35 @@ const Tasks = ({
                     external: true
                 });
             } else {
-                window.open(task.url, '_blank');
+                shared.openExternalLinkWithFallback(task.url);
+            }
+        } else if (task.type === 4) {
+            // Mini app task - open URL like mini game
+            try {
+                shared.openExternalLink(task.url);
+            } catch (e) {
+                console.log('Error opening mini app task:', e);
+                // Fallback in case of error
+                shared.openExternalLinkWithFallback(task.url);
             }
         }
     };
 
     const handleStartTask = useCallback(async (task) => {
         // Track task start
-        trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'start', {
+        let taskType = 'quiz';
+        if (task.type === 1) taskType = 'link';
+        else if (task.type === 4) taskType = 'mini_app';
+        else if (task.type === 5) taskType = 'share_story';
+        else if (task.type === 6) taskType = 'word_input';
+        
+        trackTaskFunnel(task.id, taskType, 'start', {
             task_name: task.name,
             task_category: task.category === 0 ? 'time_limited' : 'standard'
         }, shared.loginData?.userId);
 
         if (task.type === 1) {
-            if (window.liff && liff.isInClient()) {
-                liff.openWindow({
-                    url: task.url,
-                    external: true
-                });
-            } else {
-                window.open(task.url, '_blank');
-            }
+            shared.openExternalLink(task.url);
 
             // Track link task completion attempt
             trackTaskAttempt(task.id, 'link', true, {
@@ -469,9 +573,28 @@ const Tasks = ({
 
             completeTask(task.id, 0);
 
-        } else if (task.type === 2) {
-            // Track quiz task content view
-            trackTaskFunnel(task.id, 'quiz', 'content_view', {
+        } else if (task.type === 4) {
+            // Mini app task - open URL like mini game but don't complete task
+            try {
+                trackUserAction('minigame_clicked', {
+                    game_name: task.name,
+                    game_url: task.url,
+                }, shared.loginData?.link);
+                
+                shared.openExternalLink(task.url);
+            } catch (e) {
+                console.log('Error opening mini app task:', e);
+                // Fallback in case of error
+                shared.openExternalLinkWithFallback(task.url);
+            }
+
+        } else if (task.type === 2 || task.type === 3 || task.type === 5 || task.type === 6) {
+            // Track task content view based on type
+            let taskType = 'quiz';
+            if (task.type === 5) taskType = 'share_story';
+            else if (task.type === 6) taskType = 'word_input';
+            
+            trackTaskFunnel(task.id, taskType, 'content_view', {
                 task_name: task.name
             }, shared.loginData?.userId);
 
@@ -565,7 +688,13 @@ const Tasks = ({
             // Track task list view
             const allTasks = [...tasksTimeLimited, ...tasksStandard];
             allTasks.forEach(task => {
-                trackTaskFunnel(task.id, task.type === 1 ? 'link' : 'quiz', 'view', {
+                let taskType = 'quiz';
+                if (task.type === 1) taskType = 'link';
+                else if (task.type === 4) taskType = 'mini_app';
+                else if (task.type === 5) taskType = 'share_story';
+                else if (task.type === 6) taskType = 'word_input';
+                
+                trackTaskFunnel(task.id, taskType, 'view', {
                     task_name: task.name,
                     task_category: task.category === 0 ? 'time_limited' : 'standard',
                     task_state: task.state // 0: not done, 1: done
@@ -627,9 +756,16 @@ const Tasks = ({
                 <TasksLearn
                     task={showLearnTask}
                     onClose={() => setShowLearnTask(null)}
-                    onComplete={async (task, answerIndex) => {
-                        const reward = await completeTask(task.id, answerIndex);
-                        return reward;
+                    onComplete={async (task, answerIndex, word) => {
+                        if (task.type === 6) {
+                            // Task type 6: send word parameter
+                            const reward = await completeTask(task.id, 0, word);
+                            return reward;
+                        } else {
+                            // Task type 2, 3, 5: send answerIndex parameter
+                            const reward = await completeTask(task.id, answerIndex);
+                            return reward;
+                        }
                     }}
                 />
             ) : (

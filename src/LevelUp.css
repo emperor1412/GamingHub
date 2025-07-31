@@ -426,6 +426,9 @@
     font-style: italic;
     font-weight: 800;
     line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Create gradient border using pseudo-element */

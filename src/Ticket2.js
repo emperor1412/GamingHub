@@ -10,7 +10,7 @@ import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; //
 import nothing from './images/background_no_reward.png'; // Adjust path as needed
 
 // import km from './images/km.svg';
-import km from './images/starlet.png';
+// import km from './images/starlet.png'; // No longer needed after removing share story reward display
 
 import fail_animation_frame_0 from './images/FSL Games UI 2-10.png';
 import fail_animation_frame_1 from './images/FSL Games UI 2-09.png';
@@ -61,59 +61,7 @@ Response:
     ]
 }
 
-url: /app/sharingTicket
-Request:
-Response:
-{
-    "code": 0,
-    "data": 200 //Reward granted
-}
-*/
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Claim reward from sharing story data:', data);
-
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.error('Claim reward from sharing story error:', data.msg);
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                    else {
-                        console.error('Login failed:', result.error);
-                    }
-                }
-                else {
-                    console.error('Claim reward from sharing story error:', response);
-                }
-            }
-            else {
-                console.error('Claim reward from sharing story error:', response);
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
-        }
-    };
+/* Removed claimRewardFromSharingStory function as it's no longer needed */
 
     const onClickShareStory = async () => {
         console.log('Share story');
@@ -126,7 +74,13 @@ Response:
 
             if (success) {
                 setShowShareStory(false);
-                await claimRewardFromSharingStory();
+                // Complete share story task instead of calling sharingStory API
+                const taskCompleted = await shared.completeShareStoryTask(0);
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
             }
         } catch (error) {
             console.error('Error sharing:', error);
@@ -325,10 +279,6 @@ Response:
                             {showShareStory && (
                                 <button className="share-button" onClick={() => onClickShareStory()}>
                                     {t('SHARE_TO_STORY')}
-                                    <div className='share-story-reward'>
-                                        <img src={km} alt="KM" className='share-story-reward-starlet'/>
-                                        <span className='share-story-reward-text'>20</span>
-                                    </div>
                                 </button>
                             )}
 

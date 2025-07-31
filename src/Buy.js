@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Buy.css';
 import shared from './Shared';
+import { t } from './utils/localization';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import { trackUserAction } from './analytics';
@@ -147,7 +148,7 @@ const Buy = ({
         </header>
 
         <div className="bmk-buy-title">
-          <span>BUY</span>
+          <span>{t('BUY')}</span>
         </div>
 
         <div className="bmk-buy-content">
@@ -165,14 +166,14 @@ const Buy = ({
               <div className="bmk-item-details">
                 <div className="bmk-item-detail-box">
                   <div className="bmk-item-amount">
-                    <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
+                    <span className="x-mark">x</span>{selectedPurchase?.amount} {t('STARLETS_TEXT')}
                   </div>
                 </div>
-                {(selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1) && (
+                {(selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1) > 0 && (
                   <div className="bmk-item-detail-box">
-                    <div className="bmk-item-amount">
-                      <span className="x-mark">x</span>{selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1} TICKETS
-                    </div>
+                                      <div className="bmk-item-amount">
+                    <span className="x-mark">x</span>{selectedPurchase?.optionId !== 'free' ? currentOption?.ticket : 1} {t('TICKETS_TEXT')}
+                  </div>
                   </div>
                 )}
               </div>
@@ -180,7 +181,7 @@ const Buy = ({
           </div>
 
           <div className="bmk-item-description">
-            USE STARLETS TO LEVEL UP YOUR ACCOUNT AND UNLOCK SPECIAL FEATURES WITHIN FSL GAME HUB
+            {t('BUY_DESCRIPTION')}
           </div>
         </div>
 
@@ -190,14 +191,14 @@ const Buy = ({
               className="bmk-payment-button bmk-stars-button"
               onClick={() => handlePaymentMethod('stars')}
             >
-              PAY WITH {selectedPurchase?.stars} STARS
+              {t('PAY_WITH_STARS')} {selectedPurchase?.stars} {t('STARS')}
             </button>
           ) : (
             <button 
               className="bmk-payment-button bmk-stars-button"
               onClick={() => handlePaymentMethod('free')}
             >
-              CLAIM FREE
+              {t('CLAIM_FREE')}
             </button>
           )}
           {/* <button 

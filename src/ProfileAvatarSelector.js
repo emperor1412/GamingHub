@@ -239,26 +239,12 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
 
             <div className="avatar-footer">
               <button className="footer-button" onClick={() => {
-                if (window.liff && liff.isInClient()) {
-                  liff.openWindow({
-                    url: "https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4",
-                    external: true
-                  });
-                } else {
-                  window.open("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4", '_blank');
-                }
+                shared.openExternalLink("https://www.notion.so/fsl-web3/Terms-of-Use-17395c775fea803f8a29cf876e98ef0b?pvs=4");
               }}>
                 {t('TERMS_AND_CONDITIONS')}
               </button>
               <button className="footer-button" onClick={() => {
-                if (window.liff && liff.isInClient()) {
-                  liff.openWindow({
-                    url: "https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4",
-                    external: true
-                  });
-                } else {
-                  window.open("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4", '_blank');
-                }
+                shared.openExternalLink("https://www.notion.so/fsl-web3/Privacy-Policy-17395c775fea803b8487e8c2a844de53?pvs=4");
               }}>
                 {t('PRIVACY_POLICY')}
               </button>

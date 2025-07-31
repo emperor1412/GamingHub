@@ -118,17 +118,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         // Handle find out more action
         // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
         try {
-            if (window.liff && liff.isInClient()) {
-                liff.openWindow({
-                    url: "https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4",
-                    external: true
-                });
-            } else {
-                window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
-            }
+            shared.openExternalLink("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4");
         } catch (e) {
             console.log('Error opening link:', e);
-            window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+            shared.openExternalLink("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4");
         }
     };
 
@@ -208,51 +201,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         setUp();
     }, []);
 
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Claim reward from sharing story data:', data);
-
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.error('Claim reward from sharing story error:', data.msg);
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                    else {
-                        console.error('Login failed:', result.error);
-                    }
-                }
-                else {
-                    console.error('Claim reward from sharing story error:', response);
-                }
-            }
-            else {
-                console.error('Claim reward from sharing story error:', response);
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
-        }
-    };
+    /* Removed claimRewardFromSharingStory function as it's no longer needed */
 
     const onClickShareStory = async () => {
         console.log('Share story');
@@ -269,7 +218,14 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     bank_steps_status: shared.userProfile.fslId !== 0 ? 'connected' : 'not_connected'
                 }, shared.loginData?.userId);
 
-                await claimRewardFromSharingStory();
+                // Complete share story task instead of calling sharingStory API
+                const taskCompleted = await shared.completeShareStoryTask(0);
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
+                
                 setShowOverlayClaimSuccess(false);
             }
         } catch (error) {

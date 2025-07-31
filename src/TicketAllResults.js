@@ -25,14 +25,8 @@ import { t } from './utils/localization';
 
 💡
 
-url: /app/sharingStory
-Request:
-type int 0.ticket, 1.levelUp 2.ticketAll
-Response:
-{
-"code": 0,
-"data": 200
-}
+Note: sharingStory API has been replaced with task type 5 completion
+Share story rewards are now handled through task completion instead of direct API calls
 */
 
 
@@ -125,45 +119,16 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
             if (success) {
                 setShowShareStory(false);
-                await claimRewardFromSharingStory();
+                // Complete share story task instead of calling sharingStory API
+                const taskCompleted = await shared.completeShareStoryTask(0);
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
             }
         } catch (error) {
             console.error('Error sharing:', error);
-        }
-    };
-
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=2`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                    setShowRewardScreen(true);
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.log('Token expired, attempting to re-login');
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                }
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
         }
     };
 
@@ -270,10 +235,6 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     {showShareStory && (
                                         <button className="sa_share-story-button" onClick={onClickShareStory}>
                                             {t('SHARE_TO_STORY')}
-                                            <div className="sa_share-story-reward">
-                                                <span>×40</span>
-                                                <img src={shared.mappingIcon[10020]} alt="Starlet" />
-                                            </div>
                                         </button>
                                     )}
                                     
