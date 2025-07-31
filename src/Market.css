@@ -5,6 +5,7 @@ body.mk-market-open {
   position: fixed;
   width: 100%;
   height: 100%;
+  touch-action: none; /* Thêm dòng này */
 }
 
 .mk-market-container {
@@ -20,6 +21,7 @@ body.mk-market-open {
   overflow-y: auto;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y; /* Thêm dòng này */
   
   /* Hide scrollbars while maintaining functionality */
   scrollbar-width: none;  /* Firefox */
@@ -678,8 +680,9 @@ body.mk-market-open {
   display: flex;
   flex-direction: column;
   height: fit-content;
-  overscroll-behavior: contain;
+  overscroll-behavior: none; /* Thay đổi từ contain thành none */
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y; /* Thêm dòng này */
 
   /* Add mask gradient for soft scroll boundary */
   -webkit-mask-image: linear-gradient(
