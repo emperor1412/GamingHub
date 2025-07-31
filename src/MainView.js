@@ -284,11 +284,8 @@ Response:
 
             trackLineConversion('Tadokami_Game_Click');
             
-            // Open LIFF URL
-            liff.openWindow({
-                url: shared.game_link,
-                external: false
-            });
+            // Main view banner - External browser
+            shared.openInAppLink(shared.game_link);
         } catch (e) {
             console.log('Error opening LIFF:', e);
             // Fallback to browser

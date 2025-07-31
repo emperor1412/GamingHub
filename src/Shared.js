@@ -760,6 +760,24 @@ data object
             // Fallback to window.open
             window.open(url, '_blank');
         }
+    },
+
+    // Utility function to open links in in-app browser
+    openInAppLink: (url) => {
+        try {
+            if (window.liff && liff.isInClient()) {
+                liff.openWindow({
+                    url: url,
+                    external: false
+                });
+            } else {
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            console.error('Error opening in-app link:', error);
+            // Fallback to window.open
+            window.open(url, '_blank');
+        }
     }
 
 };
