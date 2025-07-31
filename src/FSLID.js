@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import shared from './Shared';
 import './FSLID.css';
 import FSLAuthorization from 'fsl-authorization';
+import liff from '@line/liff';
 // import fsl_logo from './images/fsl_logo.png';
 import fsl_logo from './images/FSLID_Masterlogo_logo_version1_color_white_nobg.png';
 import fsl_point from './images/fsl_point.png';
@@ -137,6 +138,26 @@ const FSLID = () => {
         getGMTBalance();
     }, []);
 
+    // Helper function to detect LINE environment
+    const isLineEnvironment = () => {
+        return window.liff && liff.isInClient();
+    };
+
+    // Helper function to build FSL login URL manually
+    const buildFSLLoginUrl = (state, redirectUrl) => {
+        const fslLoginUrl = new URL('https://gm3.joysteps.io/login/fslUsers');
+        fslLoginUrl.searchParams.append('response_type', 'code');
+        fslLoginUrl.searchParams.append('appkey', 'LineMiniGame');
+        fslLoginUrl.searchParams.append('scope', 'basic,wallet,stepn');
+        fslLoginUrl.searchParams.append('state', state);
+        fslLoginUrl.searchParams.append('is_app', '1');
+        fslLoginUrl.searchParams.append('withState', '1');
+        fslLoginUrl.searchParams.append('use_popup', '1');
+        fslLoginUrl.searchParams.append('redirect_uri', redirectUrl);
+        
+        return fslLoginUrl.toString();
+    };
+
     const connectFSLID = async () => {
         console.log('Connect FSL ID clicked');
         
@@ -150,22 +171,53 @@ const FSLID = () => {
         console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
 
         try {
-            // Initialize FSL Authorization with external browser support - now returns Promise
-            const fslAuthorization = await FSLAuthorization.init({
-                responseType: 'code',
-                appKey: 'LineMiniGame',
-                redirectUri: REDIRECT_URL,
-                scope: 'basic,wallet,stepn',
-                state: state,
-                usePopup: true,
-                isApp: true,
-                domain: 'https://gm3.joysteps.io/'
-            });
+            // Check if we're in LINE environment
+            if (isLineEnvironment()) {
+                console.log('Detected LINE environment, using LIFF to open external browser');
+                
+                // Build FSL login URL manually
+                const loginUrl = buildFSLLoginUrl(state, REDIRECT_URL);
+                console.log('FSL Login URL for LINE:', loginUrl);
 
-            // Use signInV2() method
-            await fslAuthorization.signInV2();
+                // Use LIFF to open in external browser
+                await liff.openWindow({
+                    url: loginUrl,
+                    external: true
+                });
+                
+                console.log('Opened FSL login in external browser via LIFF');
+            } else {
+                console.log('Non-LINE environment, using original FSL SDK');
+                
+                // Use original FSL SDK for non-LINE environments
+                const fslAuthorization = await FSLAuthorization.init({
+                    responseType: 'code',
+                    appKey: 'LineMiniGame',
+                    redirectUri: REDIRECT_URL,
+                    scope: 'basic,wallet,stepn',
+                    state: state,
+                    usePopup: true,
+                    isApp: true,
+                    domain: 'https://gm3.joysteps.io/'
+                });
+
+                // Use signInV2() method
+                await fslAuthorization.signInV2();
+            }
         } catch (error) {
             console.error('FSL Authorization initialization failed:', error);
+            
+            // Fallback: try to open URL directly if LIFF fails
+            if (isLineEnvironment()) {
+                try {
+                    const loginUrl = buildFSLLoginUrl(state, REDIRECT_URL);
+                    console.log('LIFF failed, trying window.open as fallback');
+                    window.open(loginUrl, '_blank');
+                } catch (fallbackError) {
+                    console.error('Fallback also failed:', fallbackError);
+                }
+            }
+            
             await shared.showPopup({
                 type: 0,
                 message: 'Failed to initialize FSL ID connection. Please try again.'
