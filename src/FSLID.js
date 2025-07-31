@@ -156,7 +156,7 @@ const FSLID = () => {
             redirectUri: REDIRECT_URL,
             scope: 'basic,wallet,stepn',
             state: state,
-            usePopup: true,
+            usePopup: false,
             isApp: false, // Set to false to force external browser
             domain: 'https://gm3.joysteps.io/'
         });
