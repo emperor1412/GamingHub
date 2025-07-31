@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './SuccessfulPurchasePopup.css';
+import { t } from './utils/localization';
 import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
@@ -41,11 +42,11 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
             <img src={starletIcon} alt="Starlet" />
           </div>
           
-          <h2 className="sp-popup-title">PURCHASE</h2>
-          <div className="sp-popup-subtitle">SUCCESSFUL</div>
+          <h2 className="sp-popup-title">{t('PURCHASE')}</h2>
+          <div className="sp-popup-subtitle">{t('SUCCESSFUL')}</div>
           
           <div className="sp-received-section">
-            <div className="sp-received-text">YOU RECEIVED</div>
+            <div className="sp-received-text">{t('YOU_RECEIVED')}</div>
             <div className="sp-received-items">
               <div className="sp-received-item">
                 <img src={starletIcon} alt="Starlet" />
@@ -64,7 +65,7 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
             className="sp-claim-button" 
             onClick={handleClaim}
           >
-            CLAIM
+            {t('CLAIM')}
           </button>
         </div>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Market.css';
 import { trackLineConversion, trackUserAction } from './analytics';
 import shared from './Shared';
+import { t } from './utils/localization';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
@@ -222,9 +223,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         // Show success popup
         if (window.Telegram?.WebApp?.showPopup) {
           await window.Telegram.WebApp.showPopup({
-            title: 'Success',
-            message: 'You have successfully claimed your free reward!',
-            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+            title: t('SUCCESS'),
+            message: t('SUCCESSFULLY_CLAIMED_FREE_REWARD'),
+            buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
           });
         }
       } else if (data.code === 102002 || data.code === 102001) {
@@ -250,9 +251,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
             if (window.Telegram?.WebApp?.showPopup) {
               await window.Telegram.WebApp.showPopup({
-                title: 'Success',
-                message: 'You have successfully claimed your free reward!',
-                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+                title: t('SUCCESS'),
+                message: t('SUCCESSFULLY_CLAIMED_FREE_REWARD'),
+                buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
               });
             }
           }
@@ -262,9 +263,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.error('Failed to claim free reward:', error);
       if (window.Telegram?.WebApp?.showPopup) {
         await window.Telegram.WebApp.showPopup({
-          title: 'Error',
-          message: 'Failed to claim free reward. Please try again.',
-          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          title: t('ERROR'),
+          message: t('FAILED_TO_CLAIM_FREE_REWARD'),
+          buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
         });
       }
     }
@@ -478,7 +479,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           />
         </button>
         <div className="stat-item-main-text" onClick={() => setShowProfileView(true)}>
-          GM {shared.telegramUserData?.firstName || 'User'}!
+          {t('GM_GREETING')} {shared.telegramUserData?.firstName || t('USER')}!
         </div>
         <div className="stats-main">
           <button 
@@ -500,15 +501,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
       <div className="mk-market-container">
         <div className="mk-market-content">
-          <div className="mk-market-title">MARKET</div>
+          <div className="mk-market-title">{t('MARKET')}</div>
 
           {!shared.userProfile?.fslId && (
             <div className="mk-fsl-connect-section" onClick={handleConnectFSLID}>
               <div className="mk-fsl-connect-content">
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
-                  <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
+                  <div className="mk-connect-title">CONNECT FSL ID</div>
+                  <div className="mk-connect-subtitle">USERS WHO HAVE FSL ID CONNECTED WILL BE ABLE TO CLAIM 50 STARLETS AND 1 TICKET DAILY</div>
                 </div>
               </div>
             </div>
@@ -533,15 +534,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     <div className="mk-market-ticket-info">
                       <div className="mk-market-ticket-text">
                         <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
-                        <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                        <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>{t('STARLETS_TEXT')}</div>
                       </div>
                       <div className="mk-market-ticket-bonus">
-                        <span>X1</span>&nbsp;<span>TICKETS</span>
+                        <span>X1</span>&nbsp;<span>{t('TICKETS_TEXT')}</span>
                       </div>
                     </div>
                   </div>
                   <div className="mk-market-ticket-price">
-                    {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                    {isFreeItemClaimed ? t('SOLD_OUT') : t('FREE')}
                   </div>
                 </div>
               </button>

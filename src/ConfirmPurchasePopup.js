@@ -59,9 +59,9 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     if (window.Telegram?.WebApp?.showPopup) {
       try {
         await window.Telegram.WebApp.showPopup({
-          title: 'Error',
+          title: t('ERROR'),
           message: message,
-          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
         });
       } catch (error) {
         console.error('Failed to show popup:', error);
@@ -119,7 +119,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
       }
     } catch (error) {
       console.error('Purchase failed:', error);
-      await showError('Unable to process payment. Please try again.');
+      await showError(t('UNABLE_TO_PROCESS_PAYMENT'));
     } finally {
       setIsProcessing(false);
     }
