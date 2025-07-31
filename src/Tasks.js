@@ -417,8 +417,9 @@ const Tasks = ({
                         retVal = data.data.rewardList;
                         await shared.getProfileWithRetry();
                         setupProfileData();
-                        fetchTaskList();
                     }
+                    // Always reload task list regardless of success/failure
+                    fetchTaskList();
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('Complete Task error:', data)
