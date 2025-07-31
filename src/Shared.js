@@ -423,7 +423,7 @@ data object
 
             const fslAuthorization = FSLAuthorization.init({
                 responseType: 'code', // 'code' or 'token'
-                appKey: 'LineMiniGame',
+                appKey: 'yshgTgd6qz9',
                 redirectUri: REDIRECT_URL, // https://xxx.xxx.com
                 scope: 'basic', // Grant Scope
                 state: state,
