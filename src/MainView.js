@@ -296,6 +296,19 @@ Response:
     const onClickDailyTasks = async () => {
         try {
             if (dailyTaskId) {
+                // Check if task has expired
+                if (dailyTaskData && dailyTaskData.endTime) {
+                    const currentTime = Date.now();
+                    if (currentTime > dailyTaskData.endTime) {
+                        // Task has expired, show popup
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Task has expired'
+                        });
+                        return;
+                    }
+                }
+                
                 // Store the daily task ID in shared object so Tasks component can access it
                 shared.autoStartTaskId = dailyTaskId;
                 // Navigate to Tasks view
