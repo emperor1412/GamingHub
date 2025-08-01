@@ -216,7 +216,9 @@ const translations = {
     GM_GREETING: "GM",
     SUCCESS: "SUCCESS",
     ERROR: "ERROR",
-    UNABLE_TO_PROCESS_PAYMENT: "nan"
+    UNABLE_TO_PROCESS_PAYMENT: "nan",
+    CONFIRM_PURCHASE_MESSAGE: "DO YOU WANT TO BUY {starlets} STARLETS{andTickets} IN FSL GAME HUB FOR {price}?",
+    CONFIRM_FREE_PURCHASE_MESSAGE: "DO YOU WANT TO BUY {starlets} STARLETS AND 1 TICKET IN FSL GAME HUB FOR FREE?"
   },
   ja: {
     MY_TICKETS: "マイチケット",
@@ -415,7 +417,7 @@ const translations = {
     YOUR_PURCHASE: "あなたの購入内容",
     DO_YOU_WANT_TO_BUY: "購入しますか？",
     AND: "と",
-    IN_FSL_GAME_HUB: "FSLゲームハブ内",
+    IN_FSL_GAME_HUB: "FSLゲームハブ",
     FOR: "で",
     TICKET: "チケット",
     CONFIRM_AND_PAY: "確認して支払う",
@@ -434,7 +436,9 @@ const translations = {
     GM_GREETING: "GM",
     SUCCESS: "完了",
     ERROR: "エラー",
-    UNABLE_TO_PROCESS_PAYMENT: "無効な値"
+    UNABLE_TO_PROCESS_PAYMENT: "無効な値",
+    CONFIRM_PURCHASE_MESSAGE: "FSLゲームハブで{starlets}スターレット{andTickets}を{price}で購入しますか？",
+    CONFIRM_FREE_PURCHASE_MESSAGE: "FSLゲームハブで{starlets}スターレットと1チケットを無料で購入しますか？"
   }
 };
 
@@ -450,9 +454,19 @@ const setLanguage = (language) => {
 };
 
 // Get translation for a key
-const t = (key) => {
+const t = (key, placeholders = {}) => {
   const currentLang = getCurrentLanguage();
-  return translations[currentLang][key] || translations.en[key] || key;
+  let translation = translations[currentLang][key] || translations.en[key] || key;
+  
+  // Replace placeholders if provided
+  if (placeholders && Object.keys(placeholders).length > 0) {
+    Object.keys(placeholders).forEach(placeholder => {
+      const regex = new RegExp(`{${placeholder}}`, 'g');
+      translation = translation.replace(regex, placeholders[placeholder]);
+    });
+  }
+  
+  return translation;
 };
 
 // Export functions

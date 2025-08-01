@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './ConfirmPurchasePopup.css';
-import { t } from './utils/localization';
+import { t, getCurrentLanguage } from './utils/localization';
 import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
@@ -201,26 +201,47 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      {t('DO_YOU_WANT_TO_BUY')} <span className="highlight-value">{amount} {t('STARLETS')}</span>
                       {stars > 0 ? (
                         <>
-                          {currentOption?.ticket > 0 && (
+                          {getCurrentLanguage() === 'ja' ? (
                             <>
+                              FSLゲームハブで<span className="highlight-value">{amount} スターレット</span>
+                              {currentOption?.ticket > 0 && (
+                                <>と<span className="highlight-value">{currentOption.ticket} チケット</span></>
+                              )}
+                              を<span className="highlight-value">{stars} {t('TELEGRAM_STARS')}</span>で購入しますか？
+                            </>
+                          ) : (
+                            <>
+                              {t('DO_YOU_WANT_TO_BUY')} <span className="highlight-value">{amount} {t('STARLETS')}</span>
+                              {currentOption?.ticket > 0 && (
+                                <>
+                                  <br />
+                                  {t('AND')} <span className="highlight-value">{currentOption.ticket} {t('TICKETS')}</span>
+                                </>
+                              )}
                               <br />
-                              {t('AND')} <span className="highlight-value">{currentOption.ticket} {t('TICKETS')}</span>
+                              {t('IN_FSL_GAME_HUB')}
+                              <br />
+                              {t('FOR')} <span className="highlight-value">{stars} {t('TELEGRAM_STARS')}</span>?
                             </>
                           )}
-                          <br />
-                          {t('IN_FSL_GAME_HUB')}
-                          <br />
-                          {t('FOR')} <span className="highlight-value">{stars} {t('TELEGRAM_STARS')}</span>?
                         </>
                       ) : (
                         <>
-                          <br />
-                          {t('AND')} <span className="highlight-value">1 {t('TICKET')}</span> {t('IN_FSL_GAME_HUB')}
-                          <br />
-                          {t('FOR')} <span className="highlight-value">{t('FREE')}</span>?
+                          {getCurrentLanguage() === 'ja' ? (
+                            <>
+                              FSLゲームハブで<span className="highlight-value">{amount} スターレット</span>と<span className="highlight-value">1 チケット</span>を<span className="highlight-value">{t('FREE')}</span>で購入しますか？
+                            </>
+                          ) : (
+                            <>
+                              {t('DO_YOU_WANT_TO_BUY')} <span className="highlight-value">{amount} {t('STARLETS')}</span>
+                              <br />
+                              {t('AND')} <span className="highlight-value">1 {t('TICKET')}</span> {t('IN_FSL_GAME_HUB')}
+                              <br />
+                              {t('FOR')} <span className="highlight-value">{t('FREE')}</span>?
+                            </>
+                          )}
                         </>
                       )}
                     </div>
