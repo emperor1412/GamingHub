@@ -460,6 +460,26 @@ body.mk-market-open {
   margin-bottom: 0px;
 }
 
+.mk-market-ticket-bonus-corner {
+  position: absolute;
+  z-index: 10;
+  background: blue;
+  /* border: 1px solid #0000FF; */
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mk-market-ticket-bonus-corner-text {
+  font-family: "PP Neue Machina";
+  font-size: 8px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  padding-top: 2px;
+}
+
 .mk-market-ticket-button-image-container {
   position: relative;
   width: 100%;
@@ -514,10 +534,23 @@ body.mk-market-open {
 
 .mk-market-ticket-amount {
   font-family: "PP Neue Machina";
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   color: white;
   line-height: 1;
+}
+
+/* Responsive font size for different screen sizes */
+@media screen and (min-width: 400px) {
+  .mk-market-ticket-amount {
+    font-size: 28px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .mk-market-ticket-amount {
+    font-size: 32px;
+  }
 }
 
 .mk-market-ticket-label {

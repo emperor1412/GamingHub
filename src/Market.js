@@ -624,6 +624,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                                 onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
                                 disabled={!isAvailable}
                               >
+                                {/* Bonus box in top-left corner */}
+                                {option.bonus > 0 && type !== 0 && (
+                                  <div className="mk-market-ticket-bonus-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    <div className="mk-market-ticket-bonus-corner-text">
+                                      {type === 20 ? `${option.bonusPercentage}% VALUE` : `BONUS: ${option.bonus}`}
+                                    </div>
+                                  </div>
+                                )}
                                 <div className="mk-market-ticket-button-image-container">
                                   <div className="mk-market-ticket-content">
                                     <div className="mk-market-ticket-icon">
