@@ -540,6 +540,83 @@ data object
             });
             await promise;
         }
+    },
+
+    // New function to handle share story task completion (type = 5)
+    completeShareStoryTask: async (shareType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Complete share story task failed after 3 attempts');
+            return false;
+        }
+
+        try {
+            // First, get the task list to find available type = 5 tasks
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                if (data.code === 0) {
+                    // Find available type = 5 tasks that are not completed
+                    const availableShareTasks = data.data.filter(task => 
+                        task.type === 5 && 
+                        task.state === 0 && 
+                        task.endTime > Date.now()
+                    );
+
+                    if (availableShareTasks.length > 0) {
+                        // Complete the first available share task
+                        const taskToComplete = availableShareTasks[0];
+                        console.log('Completing share story task:', taskToComplete.id);
+                        
+                        const completeResponse = await fetch(
+                            `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskToComplete.id}&answerIndex=0`, 
+                            {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+
+                        if (completeResponse.ok) {
+                            const completeData = await completeResponse.json();
+                            
+                            if (completeData.code === 0) {
+                                console.log('Share story task completed successfully');
+                                // Refresh user profile to get updated rewards
+                                await shared.getProfileWithRetry();
+                                return true;
+                            } else if (completeData.code === 102001 || completeData.code === 102002) {
+                                console.log('Token expired, attempting to re-login');
+                                const result = await shared.login(shared.initData);
+                                if (result.success) {
+                                    return shared.completeShareStoryTask(shareType, depth + 1);
+                                }
+                            } else {
+                                console.error('Complete share story task failed:', completeData);
+                            }
+                        }
+                    } else {
+                        console.log('No available share story tasks found');
+                    }
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return shared.completeShareStoryTask(shareType, depth + 1);
+                    }
+                } else {
+                    console.error('Get task list failed:', data);
+                }
+            } else {
+                console.error('Get task list request failed:', response);
+            }
+        } catch (error) {
+            console.error('Error completing share story task:', error);
+        }
+        
+        return false;
     }
 
 };

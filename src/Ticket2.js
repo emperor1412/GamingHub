@@ -10,7 +10,7 @@ import scratch_foreground from './images/FSL Games Scratch Animation-01.png'; //
 import nothing from './images/background_no_reward.png'; // Adjust path as needed
 
 // import km from './images/km.svg';
-import km from './images/starlet.png';
+// import km from './images/starlet.png'; // No longer needed after removing share story reward display
 
 import fail_animation_frame_0 from './images/FSL Games UI 2-10.png';
 import fail_animation_frame_1 from './images/FSL Games UI 2-09.png';
@@ -59,71 +59,18 @@ Response:
     ]
 }
 
-url: /app/sharingTicket
-Request:
-Response:
-{
-    "code": 0,
-    "data": 200 //Reward granted
-}
-*/
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=0`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Claim reward from sharing story data:', data);
-
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.error('Claim reward from sharing story error:', data.msg);
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                    else {
-                        console.error('Login failed:', result.error);
-                    }
-                }
-                else {
-                    console.error('Claim reward from sharing story error:', response);
-                }
-            }
-            else {
-                console.error('Claim reward from sharing story error:', response);
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
-        }
-    };
+/* Removed claimRewardFromSharingStory function as it's no longer needed */
 
     const onClickShareStory = () => {
         console.log('Share story');
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/xkD++/9T2na4RgKvFkcBnIokAAbpwqtK6Mrl4EYEZcg=.png';
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
 
             shareStory(url, {
                 text: 'I just scratched a ticket and claimed a reward!',
-              });
+            });
 
             trackStoryShare('ticket', {
                 reward_claimed: true,
@@ -131,7 +78,15 @@ Response:
             }, shared.loginData?.userId);
 
             setShowShareStory(false);
-            claimRewardFromSharingStory();
+            
+            // Complete share story task instead of calling sharingStory API
+            shared.completeShareStoryTask(0).then(taskCompleted => {
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                } else {
+                    console.log('No share story task available or task completion failed');
+                }
+            });
         }
     };   
 
@@ -334,10 +289,6 @@ Response:
                             {showShareStory && (
                                 <button className="share-button" onClick={() => onClickShareStory()}>
                                     SHARE TO STORY
-                                    <div className='share-story-reward'>
-                                        <img src={km} alt="KM" className='share-story-reward-starlet'/>
-                                        <span className='share-story-reward-text'>20</span>
-                                    </div>
                                 </button>
                             )}
 

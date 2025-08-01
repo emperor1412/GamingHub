@@ -89,17 +89,6 @@ body.mk-market-open {
   margin-top: 4px;
 }
 
-.mk-market-content {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding-bottom: 80px;
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  overscroll-behavior: none;
-}
-
 .mk-market-title {
   text-align: center;
   font-size: clamp(72px, 15vw, 90px);
@@ -208,64 +197,203 @@ body.mk-market-open {
   opacity: 0.8;
 }
 
-.mk-scrollable-market-content {
-  flex: 1;
-  overflow-y: auto;
-  padding-top: 15%;
-  padding-bottom: 10%;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  overscroll-behavior: none;
-  height: calc(100vh - 250px);
+/* REMOVED OLD CSS - Using new Frens.js layout instead */
 
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  overflow: -moz-scrollbars-none;
-  
-  /* Additional WebView-specific properties */
-  -webkit-overflow-scrolling: touch;
-
-  /* Add mask gradient for soft scroll boundary */
-  -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(0, 0, 0, 0.1) 6%,
-      black 10%,
-      black 88%,
-      rgba(0, 0, 0, 0.1) 92%,
-      transparent 100%
-  );
-  mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(0, 0, 0, 0.1) 6%,
-      black 10%,
-      black 88%,
-      rgba(0, 0, 0, 0.1) 92%,
-      transparent 100%
-  );
+/* Market Section Styles - Updated for new layout */
+.mk-market-section {
+  margin-bottom: 16px;
+  padding: 0 0; /* Remove side padding since container handles it */
+  width: 100%;
 }
 
-/* Hide WebKit scrollbars */
-.mk-scrollable-market-content::-webkit-scrollbar,
-.mk-scrollable-market-content::-webkit-scrollbar-thumb,
-.mk-scrollable-market-content::-webkit-scrollbar-track {
-  width: 0 !important;
-  height: 0 !important;
-  background-color: transparent !important;
-  display: none !important;
+.mk-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  /* border-radius: 8px 8px 0 0; */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  border-bottom: none;
+  background: transparent; /* Remove background, will use elliptical background for text */
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  /* Remove margin since container handles padding */
+  margin-left: 0;
+  margin-right: 0;
+  /* Ensure proper border styling */
+  box-sizing: border-box;
+}
+
+.mk-section-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent; /* Remove background */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* border-radius: 8px 8px 0 0; */
+}
+
+.mk-section-header:hover::before {
+  opacity: 1;
+}
+
+/* Corner borders for section header */
+.mk-section-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  /* border-radius: 8px 8px 0 0; */
+}
+
+.mk-section-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spread title and arrow to opposite ends */
+  padding: 4px 16px;
+  border-radius: 20px; /* Make it elliptical */
+  width: 100%; /* Extend to full width */
+  box-sizing: border-box;
+  /* Scale up to 1.2x without changing position */
+  transform: scaleX(1.075);
+  transform-origin: center;
+}
+
+.mk-section-title {
+  font-family: "PP Neue Machina";
+  font-size: 15px;
+  font-weight: 700;
+  color: black; /* Change to black text */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+  text-shadow: none; /* Remove text shadow for black text */
+  /* Remove individual background and padding since it's now in container */
+  display: inline-block;
+}
+
+.mk-section-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  filter: brightness(0); /* Change to black arrow */
+  position: relative;
+  z-index: 1;
+  /* Remove individual background styling */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Prevent arrow from shrinking */
+}
+
+.mk-section-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.mk-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  border-top: none;
+  /* border-radius: 0 0 8px 8px; */
+  backdrop-filter: blur(5px);
+  /* Remove side padding to match header width */
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  /* Remove margin since container handles padding */
+  margin-left: 0;
+  margin-right: 0;
+  /* Ensure proper border styling */
+  box-sizing: border-box;
+}
+
+/* Corner borders for section content */
+.mk-section-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  /* border-radius: 0 0 8px 8px; */
+}
+
+/* Corner border elements */
+.mk-corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: white;
+  z-index: 2;
+}
+
+.mk-top-left {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.mk-top-right {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.mk-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.mk-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.mk-section-content.expanded {
+  max-height: 1000px;
+  padding: 16px 16px; /* Adjust padding to match container */
 }
 
 .mk-starlet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  padding: 0 26px;
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+/* Responsive grid adjustments */
+@media screen and (max-width: 400px) {
+  .mk-starlet-grid {
+    grid-template-columns: repeat(2, 1fr); /* Keep 2 columns even on small screens */
+    gap: 8px;
+  }
+  
+  .mk-section-content.expanded {
+    padding: 12px 12px; /* Reduce padding on small screens */
+  }
 }
 
 .mk-starlet-item {
@@ -332,6 +460,26 @@ body.mk-market-open {
   margin-bottom: 0px;
 }
 
+.mk-market-ticket-bonus-corner {
+  position: absolute;
+  z-index: 10;
+  background: blue;
+  /* border: 1px solid #0000FF; */
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mk-market-ticket-bonus-corner-text {
+  font-family: "PP Neue Machina";
+  font-size: 8px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  padding-top: 2px;
+}
+
 .mk-market-ticket-button-image-container {
   position: relative;
   width: 100%;
@@ -386,10 +534,23 @@ body.mk-market-open {
 
 .mk-market-ticket-amount {
   font-family: "PP Neue Machina";
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   color: white;
   line-height: 1;
+}
+
+/* Responsive font size for different screen sizes */
+@media screen and (min-width: 400px) {
+  .mk-market-ticket-amount {
+    font-size: 28px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .mk-market-ticket-amount {
+    font-size: 32px;
+  }
 }
 
 .mk-market-ticket-label {
@@ -467,6 +628,17 @@ body.mk-market-open {
   padding-left: 4px;
 }
 
+.mk-market-ticket-bonus-text {
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: 700;
+  color: #FFD700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
 /* Ensure all children in market container have consistent overscroll behavior */
 .mk-market-container * {
   overscroll-behavior: inherit;
@@ -488,4 +660,173 @@ body.mk-market-open {
   .mk-market-top-bar {
     width: 100%;
   }
+} 
+
+/* Market Content - Copy from Frens.js layout */
+.mk-market-content {
+  flex: 1;
+  overflow-x: hidden;
+  padding-top: 10px;
+  padding-bottom: 91px;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  height: 100vh;
+  margin-top: 0;
+  overscroll-behavior: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mk-market-inner-content {
+  max-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 10px;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  box-sizing: border-box;
+  padding-top: 12px;
+}
+
+.mk-market-tab-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 300px;
+  position: relative;
+  border: 2px solid #0000FF;
+  border-radius: 12px;
+  background: #292929;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+.mk-scrollable-market-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  /* Add mask gradient for soft scroll boundary */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+}
+
+/* Hide WebKit scrollbars */
+.mk-scrollable-market-content::-webkit-scrollbar,
+.mk-scrollable-market-content::-webkit-scrollbar-thumb,
+.mk-scrollable-market-content::-webkit-scrollbar-track {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    display: none !important;
+}
+
+/* Ensure child elements also hide scrollbars */
+.mk-scrollable-market-content * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-scrollable-market-content *::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Tabs - Copy exactly from Frens.js */
+.mk-tabs {
+  display: flex;
+  gap: 16px;
+  padding: 0px;
+  flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.mk-tab {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  opacity: 0.6;
+  position: relative;
+  width: 50%;
+
+  color:#FFF;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  /* APP/Body/Strong/Body-M-Strong */
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.mk-tab.active {
+  opacity: 1;
+}
+
+.mk-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 2px;
+  background: #0000FF;
+} 
+
+/* Starlet Packages Placeholder */
+.mk-starlet-packages-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  width: 100%;
+}
+
+.mk-placeholder-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.mk-placeholder-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.mk-placeholder-subtext {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
 } 

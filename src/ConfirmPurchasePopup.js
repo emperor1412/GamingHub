@@ -133,7 +133,14 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     await shared.getProfileWithRetry();
     
     onConfirm();
-    setShowBuyView(false);
+    
+    // Navigate directly to Market using shared.setActiveTab
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setActiveTab('market');
+    } else {
+      // Fallback: use the old method if setActiveTab is not available
+      setShowBuyView(false);
+    }
   }, [onConfirm, setShowBuyView]);
 
   useEffect(() => {
@@ -196,8 +203,14 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                       DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
                       {stars > 0 ? (
                         <>
+                          {currentOption?.ticket > 0 && (
+                            <>
+                              <br />
+                              AND <span className="highlight-value">{currentOption.ticket} TICKETS</span>
+                            </>
+                          )}
                           <br />
-                          AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
+                          IN FSL GAME HUB
                           <br />
                           FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
                         </>
