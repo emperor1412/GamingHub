@@ -231,29 +231,10 @@
     border: none;
     color: white;
     position: relative;
-    justify-content: left;
-    padding-left: 32px;
     font-size: 14px;
 }
 
-.sa_share-story-reward {
-    position: absolute;
-    right: 24px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.sa_share-story-reward span {
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.sa_share-story-reward img {
-    width: 22px;
-    height: 22px;
-}
+/* Removed share story reward styling as it's no longer needed */
 
 .sa_claim-all-button {
     background: linear-gradient(90deg, #0000FF, #FF00FF);

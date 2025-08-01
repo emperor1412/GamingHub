@@ -148,33 +148,10 @@
     background: #0000FF;
     position: relative;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
-.share-story-reward {
-    position: absolute;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.share-story-reward-starlet {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-}
-
-.share-story-reward-text {
-    margin-left: 5px;
-    color: #FFF;
-    font-family: "PP Neue Machina";
-    font-size: 16px;
-    font-style: italic;
-    font-weight: 800;
-    line-height: normal;
-    text-transform: uppercase;
-}
+/* Removed share story reward styling as it's no longer needed */
 
 .points {
     position: absolute;
