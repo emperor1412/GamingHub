@@ -447,27 +447,30 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     switch (propId) {
       case 60010:
         return { 
-          name: '50$', 
+          name: '$50', 
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
-          useBackground: false
+          useBackground: false,
+          productId: 'gmt-50'
         };
       case 60020:
         return { 
-          name: '100$', 
+          name: '$100', 
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
-          useBackground: false
+          useBackground: false,
+          productId: 'gmt-100'
         };
       case 60030:
         return { 
-          name: '200$', 
+          name: '$200', 
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
-          useBackground: false
+          useBackground: false,
+          productId: 'gmt-200'
         };
       case 70010:
         return { 
@@ -786,7 +789,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                         return (
                           <button 
                             key={product.id}
-                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''}`}
+                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
                             onClick={() => isAvailable && console.log('Purchase starlet product:', product.id)}
                             disabled={!isAvailable}
                           >

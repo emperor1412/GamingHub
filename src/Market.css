@@ -945,6 +945,22 @@ body.mk-market-open {
   z-index: 5;
 }
 
+/* GMT Product Specific Font Sizes */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-amount {
+  font-size: 28px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
+
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-amount {
+  font-size: 30px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
+
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-amount {
+  font-size: 32px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
+
 /* Starlet Packages Placeholder */
 .mk-starlet-packages-placeholder {
   display: flex;
