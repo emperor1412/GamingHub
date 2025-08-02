@@ -310,6 +310,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setShowBuyView(true);
   };
 
+  const handleStarletProductPurchase = (product) => {
+    const productInfo = getStarletProductInfo(product.prop);
+    const purchaseData = { 
+      amount: product.starlet,
+      stars: 0, // Starlet products are bought with starlets, not telegram stars
+      productId: product.id,
+      productName: productInfo.name,
+      isStarletProduct: true
+    };
+    console.log('Market handleStarletProductPurchase:', { product, productInfo, purchaseData });
+    setSelectedPurchase(purchaseData);
+    setIsPopupOpen(true);
+  };
+
   const refreshUserProfile = async () => {
     await shared.getProfileWithRetry();
     const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
@@ -790,7 +804,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                           <button 
                             key={product.id}
                             className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
-                            onClick={() => isAvailable && console.log('Purchase starlet product:', product.id)}
+                            onClick={() => isAvailable && handleStarletProductPurchase(product)}
                             disabled={!isAvailable}
                           >
                             {/* Limit corner in top-right for starlet products */}
@@ -858,6 +872,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           </div>
         </div>
       </div>
+
+      <ConfirmPurchasePopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        amount={selectedPurchase?.amount}
+        stars={selectedPurchase?.stars}
+        optionId={selectedPurchase?.optionId}
+        productId={selectedPurchase?.productId}
+        productName={selectedPurchase?.productName}
+        isStarletProduct={selectedPurchase?.isStarletProduct}
+        onConfirm={handleConfirmPurchase}
+        setShowProfileView={setShowProfileView}
+        setShowBuyView={setShowBuyView}
+      />
     </>
   );
 };
