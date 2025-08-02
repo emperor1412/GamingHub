@@ -799,6 +799,105 @@ body.mk-market-open {
   background: #0000FF;
 } 
 
+/* Starlet Products Container */
+.mk-starlet-products-container {
+  width: 100%;
+  padding: 16px 0;
+}
+
+.mk-starlet-product {
+  /* Allow overflow for oversized icons */
+  overflow: visible !important;
+  position: relative;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container {
+  overflow: visible !important;
+  position: relative;
+}
+
+.mk-starlet-product .mk-market-ticket-content {
+  overflow: visible !important;
+}
+
+/* Oversized icon for starlet products */
+.mk-starlet-product .mk-market-ticket-icon {
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.mk-starlet-product .mk-market-ticket-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Ensure text content has higher z-index than icon */
+.mk-starlet-product .mk-market-ticket-info {
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-amount {
+  font-size: 12px;
+  color: #FFF;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-price {
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-bonus {
+  display: none !important;
+}
+
+/* Starlet Limit Corner - positioned at top-right */
+.mk-starlet-limit-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background: blue;
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mk-starlet-limit-corner-text {
+  font-family: "PP Neue Machina";
+  font-size: 8px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.mk-starlet-product .mk-market-ticket-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 5;
+}
+
 /* Starlet Packages Placeholder */
 .mk-starlet-packages-placeholder {
   display: flex;

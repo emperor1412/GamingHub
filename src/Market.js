@@ -4,6 +4,7 @@ import { trackUserAction } from './analytics';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
+import gmtCard from './images/gmtCard.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
@@ -79,6 +80,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
   const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
+  const [starletProducts, setStarletProducts] = useState([]);
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -124,7 +126,34 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       }
     };
 
+    const fetchStarletProducts = async () => {
+      try {
+        const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+        const data = await response.json();
+        console.log('Starlet Products Response:', data);
+        if (data.code === 0 && Array.isArray(data.data)) {
+          console.log('Starlet Products Data:', data.data);
+          setStarletProducts(data.data);
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            // Retry the fetch after login
+            const retryResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && Array.isArray(retryData.data)) {
+              setStarletProducts(retryData.data);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch starlet products:', error);
+      }
+    };
+
     fetchBuyOptions();
+    fetchStarletProducts();
   }, []);
 
   useEffect(() => {
@@ -317,6 +346,31 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.error('Failed to refresh buy options:', error);
     }
 
+    // Reload starlet products to update stock and purchased quantities
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+      const data = await response.json();
+      console.log('Refreshed Starlet Products Response:', data);
+      if (data.code === 0 && Array.isArray(data.data)) {
+        console.log('Refreshed Starlet Products Data:', data.data);
+        setStarletProducts(data.data);
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          // Retry the fetch after login
+          const retryResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && Array.isArray(retryData.data)) {
+            setStarletProducts(retryData.data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh starlet products:', error);
+    }
+
     // Check free reward time after profile refresh
     await checkFreeRewardTime();
   };
@@ -384,6 +438,54 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         return { title: 'EXCLUSIVE ONE-TIME OFFER', color: '#FFA500', bgColor: 'rgba(255, 165, 0, 0.1)' };
       default:
         return { title: 'STANDARD PACK', color: '#00FF00', bgColor: 'rgba(0, 255, 0, 0.1)' };
+    }
+  };
+
+  // Helper function to get starlet product info based on prop ID
+  const getStarletProductInfo = (propId) => {
+    switch (propId) {
+      case 60010:
+        return { 
+          name: 'GMT Pay 50 Card', 
+          icon: gmtCard,
+          description: 'GMT Payment Card',
+          category: 'Payment Cards'
+        };
+      case 60020:
+        return { 
+          name: 'GMT Pay 100 Card', 
+          icon: gmtCard,
+          description: 'GMT Payment Card',
+          category: 'Payment Cards'
+        };
+      case 60030:
+        return { 
+          name: 'GMT Pay 200 Card', 
+          icon: gmtCard,
+          description: 'GMT Payment Card',
+          category: 'Payment Cards'
+        };
+      case 70010:
+        return { 
+          name: 'Merch Coupon $79', 
+          icon: starlet,
+          description: 'Merchandise Coupon',
+          category: 'Merchandise'
+        };
+      case 70020:
+        return { 
+          name: 'Merch Coupon $199', 
+          icon: starlet,
+          description: 'Merchandise Coupon',
+          category: 'Merchandise'
+        };
+      default:
+        return { 
+          name: 'Unknown Product', 
+          icon: starlet,
+          description: 'Product',
+          category: 'Other'
+        };
     }
   };
 
@@ -666,10 +768,68 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 )}
                 
                 {activeTab === 'starlet' && (
-                  <div className="mk-starlet-packages-placeholder">
-                    <div className="mk-placeholder-content">
-                      <div className="mk-placeholder-text">STARLET PACKAGES</div>
-                      <div className="mk-placeholder-subtext">Coming Soon</div>
+                  <div className="mk-starlet-products-container">
+                    <div className="mk-starlet-grid">
+                      {starletProducts.map((product) => {
+                        const productInfo = getStarletProductInfo(product.prop);
+                        const isAvailable = product.state === 0 && product.stock > 0 && product.purchasedQuantity < product.limitNum;
+                        const isLimitReached = product.purchasedQuantity >= product.limitNum;
+                        const isOutOfStock = product.stock <= 0;
+                        
+                        return (
+                          <button 
+                            key={product.id}
+                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''}`}
+                            onClick={() => isAvailable && console.log('Purchase starlet product:', product.id)}
+                            disabled={!isAvailable}
+                          >
+                            {/* Limit corner in top-right for starlet products */}
+                            <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                              <div className="mk-starlet-limit-corner-text">
+                                {product.purchasedQuantity}/{product.limitNum}
+                              </div>
+                            </div>
+                            <div className="mk-market-ticket-button-image-container">
+                              <div className="mk-market-ticket-content">
+                                <div className="mk-market-ticket-icon">
+                                  <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                </div>
+                                <div className="mk-market-ticket-info">
+                                  <div className="mk-market-ticket-text">
+                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.name}</div>
+                                    <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div>
+                                  </div>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    <span>Stock:</span>&nbsp;<span>{product.stock}</span>
+                                  </div>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
+                                  </div>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                {isOutOfStock ? 'OUT OF STOCK' : 
+                                 isLimitReached ? 'LIMIT REACHED' : 
+                                 !isAvailable ? 'UNAVAILABLE' : 
+                                 `${product.starlet} STARLETS`}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                      
+                      {/* Show message if no products available */}
+                      {starletProducts.length === 0 && (
+                        <div className="mk-starlet-packages-placeholder">
+                          <div className="mk-placeholder-content">
+                            <div className="mk-placeholder-text">STARLET PACKAGES</div>
+                            <div className="mk-placeholder-subtext">No products available</div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
