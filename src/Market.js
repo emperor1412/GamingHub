@@ -5,6 +5,7 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import gmtCard from './images/gmtCard.png';
+import merchCouponBg from './images/merch_coupon_bg.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
@@ -446,45 +447,51 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     switch (propId) {
       case 60010:
         return { 
-          name: 'GMT Pay 50 Card', 
+          name: '50$', 
           icon: gmtCard,
           description: 'GMT Payment Card',
-          category: 'Payment Cards'
+          category: 'Payment Cards',
+          useBackground: false
         };
       case 60020:
         return { 
-          name: 'GMT Pay 100 Card', 
+          name: '100$', 
           icon: gmtCard,
           description: 'GMT Payment Card',
-          category: 'Payment Cards'
+          category: 'Payment Cards',
+          useBackground: false
         };
       case 60030:
         return { 
-          name: 'GMT Pay 200 Card', 
+          name: '200$', 
           icon: gmtCard,
           description: 'GMT Payment Card',
-          category: 'Payment Cards'
+          category: 'Payment Cards',
+          useBackground: false
         };
       case 70010:
         return { 
-          name: 'Merch Coupon $79', 
-          icon: starlet,
+          name: '$79 Merch Coupon', 
+          backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
-          category: 'Merchandise'
+          category: 'Merchandise',
+          useBackground: true
         };
       case 70020:
         return { 
-          name: 'Merch Coupon $199', 
-          icon: starlet,
+          name: '$199 Merch Coupon', 
+          backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
-          category: 'Merchandise'
+          category: 'Merchandise',
+          useBackground: true
         };
       default:
         return { 
           name: 'Unknown Product', 
           icon: starlet,
           description: 'Product',
-          category: 'Other'
+          category: 'Other',
+          useBackground: false
         };
     }
   };
@@ -789,15 +796,25 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                                 {product.purchasedQuantity}/{product.limitNum}
                               </div>
                             </div>
-                            <div className="mk-market-ticket-button-image-container">
+                            <div 
+                              className="mk-market-ticket-button-image-container"
+                              style={productInfo.useBackground ? {
+                                backgroundImage: `url(${productInfo.backgroundImage})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'calc(50% + 50px) center',
+                                backgroundRepeat: 'no-repeat'
+                              } : {}}
+                            >
                               <div className="mk-market-ticket-content">
-                                <div className="mk-market-ticket-icon">
-                                  <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
-                                </div>
+                                {!productInfo.useBackground && (
+                                  <div className="mk-market-ticket-icon">
+                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                  </div>
+                                )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
                                     <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.name}</div>
-                                    <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div>
+                                    {/* <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div> */}
                                   </div>
                                   <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Stock:</span>&nbsp;<span>{product.stock}</span>

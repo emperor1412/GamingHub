@@ -811,6 +811,53 @@ body.mk-market-open {
   position: relative;
 }
 
+/* Special styling for merchandise coupons with background image */
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] {
+  position: relative;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background: rgba(0, 0, 0, 0.02); */
+  z-index: 1;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-content {
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+  text-align: center;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-amount {
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 3px rgba(0, 0, 0, 0.9);
+  color: #FFF !important;
+  width: 50%;
+  word-wrap: break-word;
+  line-height: 1.1;
+  font-weight: 900 !important;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-label {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
 .mk-starlet-product .mk-market-ticket-button-image-container {
   overflow: visible !important;
   position: relative;
