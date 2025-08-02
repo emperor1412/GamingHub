@@ -751,6 +751,35 @@ body.mk-market-open {
   display: none !important;
 }
 
+/* Hide scrollbars for all Market containers */
+.mk-market-container,
+.mk-market-content,
+.mk-market-inner-content,
+.mk-starlet-grid,
+.mk-starlet-products-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-market-container::-webkit-scrollbar,
+.mk-market-content::-webkit-scrollbar,
+.mk-market-inner-content::-webkit-scrollbar,
+.mk-starlet-grid::-webkit-scrollbar,
+.mk-starlet-products-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide body scrollbar when Market is open */
+body.mk-market-open {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden;
+}
+
+body.mk-market-open::-webkit-scrollbar {
+  display: none !important;
+}
+
 /* Tabs - Copy exactly from Frens.js */
 .mk-tabs {
   display: flex;
