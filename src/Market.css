@@ -453,6 +453,7 @@ body.mk-market-open {
 .mk-market-ticket-button {
   position: relative;
   width: 100%;
+  height: 100%;
   border: none;
   background: transparent;
   padding: 0;
@@ -483,6 +484,7 @@ body.mk-market-open {
 .mk-market-ticket-button-image-container {
   position: relative;
   width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid #0000FF;
   display: flex;
@@ -496,7 +498,8 @@ body.mk-market-open {
   background: rgba(0, 0, 0, 0.5);
   gap: 8px;
   border-bottom: 1px solid #0000FF;
-  height: 55px;
+  flex: 1;
+  min-height: 55px;
   backdrop-filter: blur(5px);
 }
 
@@ -584,7 +587,8 @@ body.mk-market-open {
 }
 
 .mk-market-ticket-price {
-  height: 20px;
+  min-height: 20px;
+  height: 25%;
   background: #0000FF;
   color: white;
   display: flex;
@@ -834,10 +838,17 @@ body.mk-market-open::-webkit-scrollbar {
   padding: 16px 0;
 }
 
+/* Starlet tab specific grid gap */
+.mk-starlet-products-container .mk-starlet-grid {
+  gap: 24px 16px; /* 24px row gap, 16px column gap for starlet tab */
+}
+
 .mk-starlet-product {
   /* Allow overflow for oversized icons */
   overflow: visible !important;
   position: relative;
+  aspect-ratio: 160/94;
+  width: 100%;
 }
 
 /* Special styling for merchandise coupons with background image */
@@ -898,12 +909,12 @@ body.mk-market-open::-webkit-scrollbar {
 
 /* Oversized icon for starlet products */
 .mk-starlet-product .mk-market-ticket-icon {
-  width: 90px;
-  height: 90px;
+  width: 60%;
+  height: 60%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.5);
+  transform: translate(-50%, -50%) scale(2.5);
   z-index: 2;
   overflow: visible;
   pointer-events: none;
