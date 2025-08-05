@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GamingHub/static/css/main.3b8492a1.css",
-    "main.js": "/GamingHub/static/js/main.fb765a3a.js",
+    "main.css": "/GamingHub/static/css/main.272ff89d.css",
+    "main.js": "/GamingHub/static/js/main.0ccd478c.js",
     "static/js/453.589b9bb9.chunk.js": "/GamingHub/static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "/GamingHub/static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "/GamingHub/static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -109,6 +109,7 @@
     "static/media/lv4.png": "/GamingHub/static/media/lv4.8270aa7f7a5887fcf5e0.png",
     "static/media/MooAR_Login_Logo.png": "/GamingHub/static/media/MooAR_Login_Logo.b5c247a4297785ae1cc2.png",
     "static/media/one_shot.png": "/GamingHub/static/media/one_shot.2827c4f3c969098979d4.png",
+    "static/media/gmtCard.png": "/GamingHub/static/media/gmtCard.04c30cce34d0cc2676da.png",
     "static/media/trophy_4_200px.png": "/GamingHub/static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
     "static/media/scratch_ticket_button_bg.png": "/GamingHub/static/media/scratch_ticket_button_bg.3705505d8149e8301700.png",
     "static/media/trophy_5_200px.png": "/GamingHub/static/media/trophy_5_200px.964e7c89e15a2f054472.png",
@@ -175,12 +176,12 @@
     "static/media/selected_avatar.svg": "/GamingHub/static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "/GamingHub/static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "/GamingHub/static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.3b8492a1.css.map": "/GamingHub/static/css/main.3b8492a1.css.map",
-    "main.fb765a3a.js.map": "/GamingHub/static/js/main.fb765a3a.js.map",
+    "main.272ff89d.css.map": "/GamingHub/static/css/main.272ff89d.css.map",
+    "main.0ccd478c.js.map": "/GamingHub/static/js/main.0ccd478c.js.map",
     "453.589b9bb9.chunk.js.map": "/GamingHub/static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3b8492a1.css",
-    "static/js/main.fb765a3a.js"
+    "static/css/main.272ff89d.css",
+    "static/js/main.0ccd478c.js"
   ]
 }
