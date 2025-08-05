@@ -757,9 +757,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                                         <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
                                         <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
                                       </div>
-                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                        <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
-                                      </div>
+                                      {option.ticket > 0 && (
+                                        <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                   <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
