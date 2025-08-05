@@ -453,6 +453,7 @@ body.mk-market-open {
 .mk-market-ticket-button {
   position: relative;
   width: 100%;
+  height: 100%;
   border: none;
   background: transparent;
   padding: 0;
@@ -483,6 +484,7 @@ body.mk-market-open {
 .mk-market-ticket-button-image-container {
   position: relative;
   width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid #0000FF;
   display: flex;
@@ -496,7 +498,8 @@ body.mk-market-open {
   background: rgba(0, 0, 0, 0.5);
   gap: 8px;
   border-bottom: 1px solid #0000FF;
-  height: 55px;
+  flex: 1;
+  min-height: 55px;
   backdrop-filter: blur(5px);
 }
 
@@ -584,7 +587,8 @@ body.mk-market-open {
 }
 
 .mk-market-ticket-price {
-  height: 20px;
+  min-height: 20px;
+  height: 25%;
   background: #0000FF;
   color: white;
   display: flex;
@@ -751,6 +755,35 @@ body.mk-market-open {
   display: none !important;
 }
 
+/* Hide scrollbars for all Market containers */
+.mk-market-container,
+.mk-market-content,
+.mk-market-inner-content,
+.mk-starlet-grid,
+.mk-starlet-products-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-market-container::-webkit-scrollbar,
+.mk-market-content::-webkit-scrollbar,
+.mk-market-inner-content::-webkit-scrollbar,
+.mk-starlet-grid::-webkit-scrollbar,
+.mk-starlet-products-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide body scrollbar when Market is open */
+body.mk-market-open {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden;
+}
+
+body.mk-market-open::-webkit-scrollbar {
+  display: none !important;
+}
+
 /* Tabs - Copy exactly from Frens.js */
 .mk-tabs {
   display: flex;
@@ -798,6 +831,175 @@ body.mk-market-open {
   height: 2px;
   background: #0000FF;
 } 
+
+/* Starlet Products Container */
+.mk-starlet-products-container {
+  width: 100%;
+  padding: 16px 0;
+}
+
+/* Starlet tab specific grid gap */
+.mk-starlet-products-container .mk-starlet-grid {
+  gap: 24px 16px; /* 24px row gap, 16px column gap for starlet tab */
+}
+
+.mk-starlet-product {
+  /* Allow overflow for oversized icons */
+  overflow: visible !important;
+  position: relative;
+  aspect-ratio: 160/94;
+  width: 100%;
+}
+
+/* Special styling for merchandise coupons with background image */
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] {
+  position: relative;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background: rgba(0, 0, 0, 0.02); */
+  z-index: 1;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-content {
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+  text-align: center;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-amount {
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 3px rgba(0, 0, 0, 0.9);
+  color: #FFF !important;
+  width: 50%;
+  word-wrap: break-word;
+  line-height: 1.1;
+  font-weight: 900 !important;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container[style*="background-image"] .mk-market-ticket-label {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mk-starlet-product .mk-market-ticket-button-image-container {
+  overflow: visible !important;
+  position: relative;
+}
+
+.mk-starlet-product .mk-market-ticket-content {
+  overflow: visible !important;
+}
+
+/* Oversized icon for starlet products */
+.mk-starlet-product .mk-market-ticket-icon {
+  width: 60%;
+  height: 60%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2.5);
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.mk-starlet-product .mk-market-ticket-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Ensure text content has higher z-index than icon */
+.mk-starlet-product .mk-market-ticket-info {
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-amount {
+  font-size: 12px;
+  color: #FFF;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-price {
+  position: relative;
+  z-index: 5;
+}
+
+.mk-starlet-product .mk-market-ticket-bonus {
+  display: none !important;
+}
+
+/* Starlet Limit Corner - positioned at top-right */
+.mk-starlet-limit-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background: blue;
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mk-starlet-limit-corner-text {
+  font-family: "PP Neue Machina";
+  font-size: 8px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.mk-starlet-product .mk-market-ticket-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 5;
+}
+
+/* GMT Product Specific Font Sizes */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-amount {
+  font-size: 28px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
+
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-amount {
+  font-size: 30px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
+
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-amount {
+  font-size: 32px !important;
+  transform: rotate(15deg) translate(14px, 12px);
+}
 
 /* Starlet Packages Placeholder */
 .mk-starlet-packages-placeholder {
