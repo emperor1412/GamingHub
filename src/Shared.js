@@ -587,9 +587,17 @@ data object
             userProfile: {
                 level: shared.userProfile?.level,
                 pictureIndex: shared.userProfile?.pictureIndex,
-                email: shared.userProfile?.email
+                email: shared.userProfile?.email,
+                evmAddr: shared.userProfile?.evmAddr,  // Add EVM wallet address
+                solAddr: shared.userProfile?.solAddr   // Add Solana wallet address
             }
         };
+
+        // Debug: Log wallet addresses being passed
+        console.log('🔗 Redirecting to GameHubPayment with wallet addresses:');
+        console.log('  EVM Address:', userData.userProfile.evmAddr);
+        console.log('  Solana Address:', userData.userProfile.solAddr);
+        console.log('  Full userData:', userData);
 
         // Prepare purchase data
         const purchaseInfo = {
