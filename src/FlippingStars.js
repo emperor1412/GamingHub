@@ -152,10 +152,6 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
       {/* Flip button */}
       <button className="fc_flip-btn">
-        <div className="fc_corner fc_corner-top-left"></div>
-        <div className="fc_corner fc_corner-top-right"></div>
-        <div className="fc_corner fc_corner-bottom-left"></div>
-        <div className="fc_corner fc_corner-bottom-right"></div>
         <div className="fc_flip-content">FLIP</div>
       </button>
 
