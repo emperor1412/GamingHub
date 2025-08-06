@@ -29,6 +29,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [headsCount, setHeadsCount] = useState(0);
   const [tailsCount, setTailsCount] = useState(0);
   const [currentStreak, setCurrentStreak] = useState({ side: 'HEADS', count: 5 });
+  const [totalFlips, setTotalFlips] = useState(0);
+  const [autoFlip, setAutoFlip] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -85,6 +87,22 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {/* Logo */}
       <div className="fc_logo-container">
         <img src={flippingStarsLogo} alt="Flipping Stars" className="fc_logo-image" />
+      </div>
+
+      {/* Total Flips and Auto Flip Controls */}
+      <div className="fc_flip-controls">
+        <div className="fc_total-flips">
+          <span className="fc_total-flips-label">TOTAL FLIPS</span>
+          <span className="fc_total-flips-count">{totalFlips.toLocaleString().padStart(8, '0')}</span>
+        </div>
+        <button 
+          className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
+          onClick={() => setAutoFlip(!autoFlip)}
+        >
+          <span className="fc_auto-flip-text">AUTO FLIP</span>
+          <span className="fc_auto-flip-separator">|</span>
+          <span className="fc_auto-flip-status">{autoFlip ? 'ON' : 'OFF'}</span>
+        </button>
       </div>
 
       {/* Coin face selection */}

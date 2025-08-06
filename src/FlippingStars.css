@@ -113,6 +113,111 @@ body {
           drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
 }
 
+/* Flip Controls */
+.fc_flip-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  gap: 12px;
+}
+
+.fc_total-flips {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 4px 8px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+}
+
+.fc_total-flips-label {
+  font-family: "PP Neue Machina";
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_total-flips-count {
+  font-family: "PP Neue Machina";
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_auto-flip-toggle {
+  position: relative;
+  padding: 4px 8px;
+  background-color: #848484;
+  border: 1px solid #848484;
+  /* color: white; */
+  cursor: pointer;
+  font-family: "PP Neue Machina";
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  /* transition: all 0.2s ease; */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 8px; */
+  min-width: 97px;
+  height: 20px;
+}
+
+.fc_auto-flip-text {
+  font-size: 10px;
+  opacity: 0.9;
+  color: white;
+}
+
+.fc_auto-flip-separator {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 2px; 
+  margin-right: 2px;
+  color: white;
+
+}
+
+.fc_auto-flip-status {
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on {
+  border-color: #00ff00;
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-status {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-text {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-separator {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.fc_auto-flip-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
 .fc_coin-select {
   display: flex;
   justify-content: space-around;
