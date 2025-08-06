@@ -53,6 +53,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
+import FlippingStars from './FlippingStars';
 
 
 function App() {
@@ -82,6 +83,7 @@ function App() {
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
+  const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
 
@@ -510,6 +512,12 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  const handleFlippingStarsClose = () => {
+    handleOverlayClose('flippingstars');
+    setShowFlippingStarsView(false);
+    setActiveTab('home');
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
@@ -522,6 +530,7 @@ const bind_fslid = async () => {
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
+          setShowFlippingStarsView={setShowFlippingStarsView}
           getProfileData={getProfileData}
         />;      
       case 'tasks':
@@ -554,6 +563,7 @@ const bind_fslid = async () => {
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
+          setShowFlippingStarsView={setShowFlippingStarsView}
           getProfileData={getProfileData}
         />;
     }
@@ -664,6 +674,15 @@ const bind_fslid = async () => {
             setActiveTab('fslid');
           }} 
           onClose={handleBankStepsClose}
+        />
+      )
+      : showFlippingStarsView ?
+      (
+        <FlippingStars 
+          onClose={handleFlippingStarsClose}
+          setShowProfileView={setShowProfileView}
+          setActiveTab={setActiveTab}
+          userProfile={userProfile}
         />
       )
       :

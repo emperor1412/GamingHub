@@ -40,7 +40,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
@@ -934,6 +934,17 @@ Response:
                             alt="Locker"
                             className="locker-icon"
                         /> */}
+                    </button>
+
+                    <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <div className="flipping-stars-card-bg">
+                                <div className="flipping-stars-title">FLIPPING STARS</div>
+                                <div className="flipping-stars-subtitle">Flip coins & win rewards!</div>
+                            </div>
+                            <div className='ticket-button-container-border'></div>
+                            <div className='check-out-button'>PLAY NOW</div>
+                        </div>
                     </button>
                 </section>
 

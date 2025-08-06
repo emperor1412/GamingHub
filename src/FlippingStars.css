@@ -1,0 +1,383 @@
+body {
+  margin: 0;
+  font-family: 'Arial Black', sans-serif;
+  background-color: #000;
+  color: white;
+}
+
+/* Stats Header Styles - matching MainView.css */
+.fc_stats-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 1);
+  height: 60px;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.fc_profile-pic-main img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.fc_profile-pic-main {
+  margin-left: 10px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.fc_stats-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  flex: 1;
+}
+
+.fc_stat-item-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.fc_stat-item-main:hover {
+  opacity: 0.8;
+}
+
+.fc_stat-item-main img {
+  width: 24px;
+  height: 24px;
+}
+
+.fc_stat-item-main-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.fc_app {
+  width: 390px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 80px; /* Add space for fixed header */
+  padding-bottom: 100px; /* Add space for fixed bottom navigation */
+  box-sizing: border-box;
+}
+
+
+
+/* Logo Container */
+.fc_logo-container {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+}
+
+.fc_logo-image {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 246, 0.5)) 
+          drop-shadow(0 0 20px rgba(0, 255, 255, 0.3));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.fc_logo-image:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 15px rgba(255, 0, 246, 0.8)) 
+          drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+}
+
+.fc_coin-select {
+  display: flex;
+  justify-content: space-around;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.fc_coin-button {
+  position: relative;
+  padding: 16px 24px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc_coin-content {
+  position: relative;
+  z-index: 1;
+}
+
+.fc_coin-button.fc_selected {
+  background-color: rgba(0, 0, 255, 0.3);
+  color: #00ffff;
+}
+
+.fc_coin-button.fc_selected .fc_corner {
+  border-color: #00ffff;
+}
+
+.fc_coin-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.fc_coin-button:hover .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_streak {
+  text-align: center;
+  margin: 10px 0;
+  color: #ff00aa;
+}
+
+.fc_bet-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+  padding: 0 10px;
+}
+
+/* Corner border elements - matching Market.css */
+.fc_corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: white;
+  z-index: 2;
+}
+
+.fc_corner-top-left {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.fc_corner-top-right {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.fc_corner-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid white;
+  border-left: 1.5px solid white;
+}
+
+.fc_corner-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid white;
+  border-right: 1.5px solid white;
+}
+
+.fc_bet-button {
+  position: relative;
+  padding: 12px 8px;
+  font-size: 14px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+  font-family: "PP Neue Machina";
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc_bet-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.fc_bet-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.fc_bet-starlet-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.fc_bet-button.fc_selected {
+  background-color: rgba(0, 0, 255, 0.3);
+  color: #00ffff;
+}
+
+.fc_bet-button.fc_selected .fc_corner {
+  border-color: #00ffff;
+}
+
+.fc_bet-button.fc_all-in {
+  color: #ff00aa;
+  font-weight: 700;
+}
+
+.fc_bet-button.fc_all-in .fc_corner {
+  border-color: #ff00aa;
+}
+
+.fc_bet-button.fc_disabled {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.fc_bet-button.fc_disabled .fc_corner {
+  border-color: #555;
+}
+
+.fc_bet-button:hover:not(.fc_disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.fc_bet-button:hover:not(.fc_disabled) .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_flip-btn {
+  position: relative;
+  margin-top: 30px;
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 85, 255, 0.3);
+}
+
+.fc_flip-content {
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1em;
+}
+
+.fc_flip-btn:hover {
+  background: linear-gradient(135deg, #0066ff, #0044dd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 85, 255, 0.4);
+}
+
+.fc_flip-btn:hover .fc_corner {
+  border-color: #00ffff;
+}
+
+.fc_flip-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 85, 255, 0.2);
+}
+
+/* Bottom Navigation - matching main app style */
+.fc_bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 0;
+  backdrop-filter: blur(10px);
+  touch-action: auto;
+  z-index: 1001;
+  height: 80px;
+  pointer-events: auto;
+}
+
+.fc_bottom-nav button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  touch-action: auto;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+
+.fc_bottom-nav button:hover {
+  opacity: 0.8;
+}
+
+.fc_bottom-nav button img {
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+}
+
+.fc_bottom-nav button.fc_active {
+  color: #8B5CF6;
+}
