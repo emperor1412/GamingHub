@@ -16,6 +16,7 @@ import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
 import my_ticket from './images/my_ticket.png';
+import flipping_stars from './images/FlippingStarBanner.png';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
@@ -936,7 +937,7 @@ Response:
                         /> */}
                     </button>
 
-                    <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
+                    {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='locked-card-image-container'>
                             <div className="flipping-stars-card-bg">
                                 <div className="flipping-stars-title">FLIPPING STARS</div>
@@ -944,6 +945,35 @@ Response:
                             </div>
                             <div className='ticket-button-container-border'></div>
                             <div className='check-out-button'>PLAY NOW</div>
+                        </div>
+                    </button> */}
+                </section>
+
+                <section className="tickets-section">
+                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
+                        <img
+                            // src={Frame4556}
+                            src = {my_ticket}
+                            alt="My Tickets"
+                            className="ticket-card-image-main"
+                        />
+                    </button> */}
+
+                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={flipping_stars}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            {/* <div className='ticket-button-container-border'></div>
+                            <div className="ticket-button-content">
+                                <h3 className="event-card-title">MY TICKETS</h3>
+                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                                <div className="check-out-button ticket">
+                                    Scratch Tickets
+                                </div>
+                            </div> */}
                         </div>
                     </button>
                 </section>

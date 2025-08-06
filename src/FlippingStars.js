@@ -182,19 +182,34 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             </div>
           </button>
         ))}
-        <button className="fc_bet-button fc_all-in">
+        <button 
+          className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
+          onClick={() => setSelectedBet('all-in')}
+        >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
-          <div className="fc_bet-content">ALL IN</div>
+          <div className="fc_bet-content fc_all-in-content">
+            <div className="fc_all-in-title">ALL IN</div>
+            <div className="fc_all-in-details">
+              <span className="fc_all-in-percent">.01% X10</span>
+              <img src={starlet} alt="starlet" className="fc_all-in-starlet" />
+            </div>
+          </div>
         </button>
-        <button className="fc_bet-button">
+        <button 
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
+          onClick={() => setSelectedBet('custom')}
+        >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
-          <div className="fc_bet-content">CUSTOM</div>
+          <div className="fc_bet-content fc_custom-content">
+            <div className="fc_custom-amount-display">0000</div>
+            <div className="fc_custom-text">CUSTOM AMOUNT</div>
+          </div>
         </button>
         <button className="fc_bet-button fc_disabled">
           <div className="fc_corner fc_corner-top-left"></div>

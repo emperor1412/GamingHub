@@ -448,13 +448,52 @@ body {
   z-index: 0;
 }
 
+/* All In Button Styles */
 .fc_bet-button.fc_all-in {
-  color: #ff00aa;
-  font-weight: 700;
+  min-height: 50px;
+  padding: 12px 8px;
 }
 
-.fc_bet-button.fc_all-in .fc_corner {
-  border-color: #ff00aa;
+.fc_all-in-content {
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc_all-in-title {
+  font-family: "PP Neue Machina";
+  font-size: 18.5px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+}
+
+.fc_all-in-details {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.fc_all-in-percent {
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+}
+
+.fc_all-in-starlet {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+/* Double or Nothing Button Styles */
+.fc_bet-button.fc_disabled .fc_bet-content {
+  font-size: 13px;
+  line-height: 1.2;
 }
 
 .fc_bet-button.fc_disabled {
@@ -475,6 +514,39 @@ body {
 
 .fc_bet-button:hover:not(.fc_disabled) .fc_corner {
   border-color: #ffffff;
+}
+
+/* Custom Amount Button Styles */
+.fc_bet-button.fc_custom-amount {
+  min-height: 50px;
+  padding: 12px 8px;
+}
+
+.fc_custom-content {
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc_custom-amount-display {
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.fc_custom-text {
+  font-family: "PP Neue Machina";
+  font-size: 8px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  /* letter-spacing: 0.05em; */
 }
 
 .fc_flip-btn {
