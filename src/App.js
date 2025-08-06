@@ -53,7 +53,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
-import FlipCoin from './components/FlipCoin';
+import FlipCoin from './FlipCoin';
 
 
 function App() {
