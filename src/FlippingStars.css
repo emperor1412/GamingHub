@@ -117,8 +117,10 @@ body {
   display: flex;
   justify-content: space-around;
   gap: 40px;
-  margin-top: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
   padding: 0 20px;
+  align-items: center;
 }
 
 .fc_coin-button {
@@ -138,11 +140,77 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 
 .fc_coin-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc_coin-counter-wrapper {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.fc_coin-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.fc_coin-counter {
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fc_coin-title {
+  font-family: "PP Neue Machina";
+  font-size: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.fc_coin-streak-wrapper {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fc_coin-streak {
+  font-family: "PP Neue Machina";
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+  background: #FF00F6;
+  padding: 0px 8px;
+  border-radius: 15px;
+}
+
+.fc_coin-streak-multiplier {
+  font-family: "PP Neue Machina";
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
 
@@ -173,11 +241,7 @@ body {
   border-color: #ffffff;
 }
 
-.fc_streak {
-  text-align: center;
-  margin: 10px 0;
-  color: #ff00aa;
-}
+/* Removed global streak - now handled per button */
 
 .fc_bet-buttons {
   display: grid;

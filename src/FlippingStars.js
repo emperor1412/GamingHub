@@ -4,6 +4,8 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
+import headsCounterLogo from './images/HeadsCounterLogo.png';
+import tailsCounterLogo from './images/TailsCounterLogo.png';
 
 // Navigation icons
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -24,6 +26,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedBet, setSelectedBet] = useState(10);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
+  const [headsCount, setHeadsCount] = useState(0);
+  const [tailsCount, setTailsCount] = useState(0);
+  const [currentStreak, setCurrentStreak] = useState({ side: 'HEADS', count: 5 });
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -88,24 +93,56 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           className={`fc_coin-button ${selectedSide === 'HEADS' ? 'fc_selected' : ''}`}
           onClick={() => setSelectedSide('HEADS')}
         >
+          {/* Counter positioned above button */}
+          <div className="fc_coin-counter-wrapper">
+            <img src={headsCounterLogo} alt="Heads Logo" className="fc_coin-logo" />
+            <span className="fc_coin-counter">{headsCount}</span>
+          </div>
+          
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
-          <div className="fc_coin-content">HEADS</div>
+          <div className="fc_coin-content">
+            <div className="fc_coin-title">HEADS</div>
+          </div>
+          
+          {/* Streak positioned below button */}
+          {currentStreak.side === 'HEADS' && currentStreak.count > 0 && (
+            <div className="fc_coin-streak-wrapper">
+              <div className="fc_coin-streak">STREAK</div>
+              <div className="fc_coin-streak-multiplier">X{currentStreak.count}</div>
+            </div>
+          )}
         </button>
+        
         <button
           className={`fc_coin-button ${selectedSide === 'TAILS' ? 'fc_selected' : ''}`}
           onClick={() => setSelectedSide('TAILS')}
         >
+          {/* Counter positioned above button */}
+          <div className="fc_coin-counter-wrapper">
+            <img src={tailsCounterLogo} alt="Tails Logo" className="fc_coin-logo" />
+            <span className="fc_coin-counter">{tailsCount}</span>
+          </div>
+          
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
-          <div className="fc_coin-content">TAILS</div>
+          <div className="fc_coin-content">
+            <div className="fc_coin-title">TAILS</div>
+          </div>
+          
+          {/* Streak positioned below button */}
+          {currentStreak.side === 'TAILS' && currentStreak.count > 0 && (
+            <div className="fc_coin-streak-wrapper">
+              <div className="fc_coin-streak">STREAK</div>
+              <div className="fc_coin-streak-multiplier">X{currentStreak.count}</div>
+            </div>
+          )}
         </button>
       </div>
-      <div className="fc_streak">STREAK x5</div>
 
       {/* Bet buttons */}
       <div className="fc_bet-buttons">
