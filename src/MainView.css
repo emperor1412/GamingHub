@@ -738,3 +738,52 @@
     top: unset;
     position: static;
 }
+
+/* Flip Coin Button Styles */
+.flip-coin-button {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border: 2px solid #FF8C00;
+    transition: all 0.3s ease;
+}
+
+.flip-coin-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, #FFA500, #FFD700);
+}
+
+.flip-coin-icon {
+    font-size: 48px;
+    text-align: center;
+    margin: 20px 0;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    animation: coinShine 2s ease-in-out infinite;
+}
+
+@keyframes coinShine {
+    0%, 100% {
+        transform: scale(1) rotateY(0deg);
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    50% {
+        transform: scale(1.1) rotateY(180deg);
+        filter: drop-shadow(2px 2px 8px rgba(255, 215, 0, 0.6));
+    }
+}
+
+.flip-coin-button .ticket-button-content {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.flip-coin-button .event-card-title {
+    color: #8B4513;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.flip-coin-button .event-card-subtitle {
+    color: #654321;
+    font-weight: 600;
+}

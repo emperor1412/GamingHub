@@ -53,6 +53,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
+import FlipCoin from './components/FlipCoin';
 
 
 function App() {
@@ -84,6 +85,8 @@ function App() {
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
+  const [showFlipCoin, setShowFlipCoin] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -510,7 +513,39 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  const handleFlipCoin = () => {
+    setShowFlipCoin(true);
+    setIsFlipping(true);
+    
+    // Simulate flip completion after 3 seconds
+    setTimeout(() => {
+      setIsFlipping(false);
+      // Handle flip result here
+    }, 3000);
+  };
+
+  const handleFlipComplete = (result) => {
+    console.log('Flip result:', result);
+    setShowFlipCoin(false);
+    // Handle the flip result (heads/tails)
+  };
+
+  const handleFlipClose = () => {
+    setShowFlipCoin(false);
+    setIsFlipping(false);
+  };
+
   const renderActiveView = () => {
+    if (showFlipCoin) {
+      return (
+        <FlipCoin 
+          onFlipComplete={handleFlipComplete}
+          isFlipping={isFlipping}
+          onClose={handleFlipClose}
+        />
+      );
+    }
+    
     switch (activeTab) {
       case 'home':
         return <MainView 
@@ -523,6 +558,7 @@ const bind_fslid = async () => {
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
           getProfileData={getProfileData}
+          onFlipCoin={handleFlipCoin}
         />;      
       case 'tasks':
         return <Tasks 
@@ -555,6 +591,7 @@ const bind_fslid = async () => {
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
           getProfileData={getProfileData}
+          onFlipCoin={handleFlipCoin}
         />;
     }
   };

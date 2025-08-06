@@ -40,7 +40,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData, onFlipCoin}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
@@ -859,7 +859,7 @@ Response:
             </header>
 
             <div className="scrollable-content">
-            <section className="tickets-section">
+                            <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -872,6 +872,17 @@ Response:
                                 {/* <h3 className="event-card-title">TADOKAMI</h3>
                                 <p className="event-card-subtitle">Is now live</p> */}
                             {/* </div> */}
+                        </div>
+                    </button>
+                    
+                    <button className="ticket-button flip-coin-button" onClick={onFlipCoin}>
+                        <div className='ticket-button-image-container'>
+                            <div className="flip-coin-icon">🪙</div>
+                            <div className='ticket-button-container-border'></div>
+                            <div className="ticket-button-content">
+                                <h3 className="event-card-title">FLIP COIN</h3>
+                                <p className="event-card-subtitle">3D Animation</p>
+                            </div>
                         </div>
                     </button>
                 </section>
