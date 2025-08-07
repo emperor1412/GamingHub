@@ -1253,3 +1253,168 @@ body::-webkit-scrollbar-track,
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* Flip Result Overlay Styles */
+.fc_flip-result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_flip-result-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #000FEF;
+  border-radius: 20px;
+}
+
+.fc_flip-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.fc_flip-result-header h3 {
+  font-family: "PP Neue Machina";
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.fc_flip-result-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.fc_flip-result-close:hover {
+  transform: scale(1.1);
+}
+
+.fc_flip-result-close img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.fc_flip-result-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.fc_flip-result-details p {
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fc_flip-result-bet-amount,
+.fc_flip-result-reward {
+  color: #FF00F6;
+  text-shadow: 0 0 10px rgba(255, 0, 246, 0.5);
+}
+
+.fc_flip-result-actual-result {
+  color: #00FFFF;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_flip-result-win-loss {
+  font-size: 24px;
+  font-weight: 800;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.fc_flip-result-win-loss.win {
+  color: #00FF00;
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.fc_flip-result-win-loss.loss {
+  color: #FF0000;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+}
+
+.fc_flip-result-ok-btn {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.fc_flip-result-ok-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_flip-result-ok-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Loading state for flip button */
+.fc_flip-btn-loading {
+  background: linear-gradient(135deg, #555, #333) !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+.fc_flip-btn-loading:hover {
+  transform: none !important;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+.fc_flip-btn:disabled {
+  cursor: not-allowed;
+}

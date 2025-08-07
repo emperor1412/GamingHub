@@ -617,6 +617,78 @@ data object
         }
         
         return false;
+    },
+
+    // New function to handle coin flip game
+    flipCoin: async (isHeads, betAmount, depth = 0) => {
+        if (depth > 3) {
+            console.error('Flip coin failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Flip coin params:', { head: isHeads, amount: betAmount });
+
+            const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('Flip coin Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Flip coin data:', data);
+
+                if (data.code === 0) {
+                    // Refresh user profile to get updated starlets
+                    await shared.getProfileWithRetry();
+                    
+                    return {
+                        success: true,
+                        data: data.data,
+                        isWin: data.data.success,
+                        reward: data.data.reward
+                    };
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return shared.flipCoin(isHeads, betAmount, depth + 1);
+                    } else {
+                        return {
+                            success: false,
+                            error: 'Token expired and re-login failed',
+                            data: data
+                        };
+                    }
+                } else {
+                    return {
+                        success: false,
+                        error: data.msg || 'Flip coin failed',
+                        data: data
+                    };
+                }
+            } else {
+                return {
+                    success: false,
+                    error: 'Flip coin request failed',
+                    data: null
+                };
+            }
+        } catch (error) {
+            console.error('Flip coin error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
+        }
     }
 
 };

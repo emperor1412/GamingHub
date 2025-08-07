@@ -38,6 +38,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [customAmount, setCustomAmount] = useState('');
   const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
   const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
+  
+  // New states for flip functionality
+  const [isFlipping, setIsFlipping] = useState(false);
+  const [lastFlipResult, setLastFlipResult] = useState(null);
+  const [showFlipResult, setShowFlipResult] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -55,7 +60,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     };
 
     setupProfileData();
-  }, []);
+  }, [shared.userProfile]); // Add dependency to refresh when userProfile changes
 
   useEffect(() => {
     // Show welcome overlay when totalFlips is 0
@@ -79,11 +84,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleWelcomeClose = () => {
     setShowWelcome(false);
     // Set totalFlips to 1 so welcome doesn't show again
-    setTotalFlips(1);
+    setTotalFlips(0);
   };
 
   const handleAllInClick = () => {
-    setShowAllInConfirm(true);
+    // Disabled for now
+    return;
   };
 
   const handleAllInConfirm = () => {
@@ -97,7 +103,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomClick = () => {
-    setShowCustomConfirm(true);
+    // Disabled for now
+    return;
   };
 
   const handleCustomConfirm = () => {
@@ -150,6 +157,117 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleAutoFlipCancel = () => {
     setShowAutoFlipOverlay(false);
     setSelectedAutoFlipCount(null);
+  };
+
+  // New function to handle coin flip
+  const handleFlip = async () => {
+    if (isFlipping) return; // Prevent multiple clicks
+    
+    // Validate bet amount - only handle regular bet amounts for now
+    let betAmount = selectedBet;
+    if (typeof selectedBet !== 'number') {
+      await shared.showPopup({
+        type: 0,
+        title: 'Invalid Bet',
+        message: 'Please select a valid bet amount'
+      });
+      return;
+    }
+    
+    if (betAmount <= 0) {
+      await shared.showPopup({
+        type: 0,
+        title: 'Invalid Bet',
+        message: 'Please select a valid bet amount'
+      });
+      return;
+    }
+    
+    if (betAmount > starlets) {
+      await shared.showPopup({
+        type: 0,
+        title: 'Insufficient Starlets',
+        message: 'You don\'t have enough Starlets for this bet'
+      });
+      return;
+    }
+    
+    setIsFlipping(true);
+    
+    try {
+      const isHeads = selectedSide === 'HEADS';
+      const result = await shared.flipCoin(isHeads, betAmount);
+      
+      if (result.success) {
+        // Update flip result
+        setLastFlipResult({
+          isWin: result.isWin,
+          reward: result.reward,
+          betAmount: betAmount,
+          selectedSide: selectedSide,
+          actualResult: result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS')
+        });
+        
+        // Update counters
+        setTotalFlips(prev => prev + 1);
+        
+        if (result.isWin) {
+          // Update streak
+          if (currentStreak.side === selectedSide) {
+            setCurrentStreak(prev => ({ ...prev, count: prev.count + 1 }));
+          } else {
+            setCurrentStreak({ side: selectedSide, count: 1 });
+          }
+          
+          // Update heads/tails count
+          if (selectedSide === 'HEADS') {
+            setHeadsCount(prev => prev + 1);
+          } else {
+            setTailsCount(prev => prev + 1);
+          }
+        } else {
+          // Reset streak on loss
+          setCurrentStreak({ side: selectedSide, count: 0 });
+          
+          // Update heads/tails count for the actual result
+          const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
+          if (actualResult === 'HEADS') {
+            setHeadsCount(prev => prev + 1);
+          } else {
+            setTailsCount(prev => prev + 1);
+          }
+        }
+        
+        // Update starlets from shared
+        const updatedStarlets = shared.getStarlets();
+        setStarlets(updatedStarlets);
+        
+        // Show result
+        setShowFlipResult(true);
+        
+        // Hide result after 3 seconds
+        setTimeout(() => {
+          setShowFlipResult(false);
+          setLastFlipResult(null);
+        }, 3000);
+        
+      } else {
+        await shared.showPopup({
+          type: 0,
+          title: 'Flip Failed',
+          message: result.error || 'Failed to flip coin'
+        });
+      }
+    } catch (error) {
+      console.error('Flip error:', error);
+      await shared.showPopup({
+        type: 0,
+        title: 'Error',
+        message: 'An error occurred while flipping'
+      });
+    } finally {
+      setIsFlipping(false);
+    }
   };
 
   return (
@@ -463,8 +581,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </button>
         ))}
         <button 
-          className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
+          className={`fc_bet-button fc_all-in fc_disabled ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
           onClick={handleAllInClick}
+          disabled
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -479,8 +598,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
+          className={`fc_bet-button fc_custom-amount fc_disabled ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
           onClick={handleCustomClick}
+          disabled
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -501,9 +621,32 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </div>
 
       {/* Flip button */}
-      <button className="fc_flip-btn">
-        <div className="fc_flip-content">FLIP</div>
+      <button className={`fc_flip-btn ${isFlipping ? 'fc_flip-btn-loading' : ''}`} onClick={handleFlip} disabled={isFlipping}>
+        <div className="fc_flip-content">
+          {isFlipping ? 'FLIPPING...' : 'FLIP'}
+        </div>
       </button>
+
+      {/* Flip Result Overlay */}
+      {showFlipResult && lastFlipResult && (
+        <div className="fc_flip-result-overlay">
+          <div className="fc_flip-result-content">
+            <div className="fc_flip-result-header">
+              <h3>FLIP RESULT</h3>
+              <button className="fc_flip-result-close" onClick={() => setShowFlipResult(false)}>
+                <img src={exitButton} alt="Close" />
+              </button>
+            </div>
+            <div className="fc_flip-result-details">
+              <p>You bet: <span className="fc_flip-result-bet-amount">{lastFlipResult.betAmount}</span></p>
+              <p>You won: <span className="fc_flip-result-reward">{lastFlipResult.reward}</span></p>
+              <p>Actual result: <span className="fc_flip-result-actual-result">{lastFlipResult.actualResult}</span></p>
+                             <p>Win/Loss: <span className={`fc_flip-result-win-loss ${lastFlipResult.isWin ? 'win' : 'loss'}`}>{lastFlipResult.isWin ? 'WIN' : 'LOSS'}</span></p>
+            </div>
+            <button className="fc_flip-result-ok-btn" onClick={() => setShowFlipResult(false)}>OK</button>
+          </div>
+        </div>
+      )}
 
       {/* Bottom nav */}
       <nav className="fc_bottom-nav">
