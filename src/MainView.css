@@ -315,7 +315,7 @@
     background: transparent;
     padding: 0;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .egglet-button {
@@ -348,6 +348,43 @@
     height: 190px;
     object-fit: cover;
     transform: scale(1.);
+}
+
+/* Total Flips Counter for Ticket Button */
+.ticket-total-flips {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #000FEF;
+    padding: 2px 12px;
+    border: 1px solid rgba(0, 15, 239, 0.4);
+    z-index: 10;
+    pointer-events: none;
+    white-space: nowrap;
+    min-width: max-content;
+}
+
+.ticket-total-flips-label {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FF00F6;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.ticket-total-flips-count {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFF;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .egglet-button-image {
@@ -737,4 +774,56 @@
     transform: none;
     top: unset;
     position: static;
+}
+
+/* Flipping Stars Card Styles */
+.flipping-stars-card-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f97316 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.flipping-stars-card-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.flipping-stars-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin-bottom: 8px;
+    z-index: 1;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+.flipping-stars-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    z-index: 1;
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
