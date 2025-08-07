@@ -34,6 +34,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
   const [showCustomConfirm, setShowCustomConfirm] = useState(false);
+  const [customAmount, setCustomAmount] = useState('');
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -97,9 +98,28 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
+    if (customAmount && customAmount !== '0') {
+      setShowCustomConfirm(false);
+      setSelectedBet(parseInt(customAmount));
+    }
+  };
+
+  const handleKeypadInput = (value) => {
+    if (value === 'delete') {
+      setCustomAmount(prev => prev.slice(0, -1));
+    } else if (value === 'confirm') {
+      handleCustomConfirm();
+    } else {
+      // Limit to 6 digits
+      if (customAmount.length < 6) {
+        setCustomAmount(prev => prev + value);
+      }
+    }
+  };
+
+  const handleCustomCancel = () => {
     setShowCustomConfirm(false);
-    setSelectedBet('custom');
-    // Here you can add the actual ALL IN logic
+    setCustomAmount('');
   };
 
   return (
@@ -197,10 +217,36 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {/* Custom Confirmation Overlay */}
       {showCustomConfirm && (
         <div className="fc_custom-overlay">
-          <div className="fc_custom-overlay-content">     
-
-
-            {/* Buttons */}
+          <div className="fc_custom-overlay-content">
+            {/* Number Keyboard */}
+            <div className="fc_keyboard">
+              <div className="fc_keyboard-shadow">
+                <div className="fc_keyboard-container">
+                  <input 
+                    type="text" 
+                    className="fc_custom-display" 
+                    value={customAmount || '0'} 
+                    readOnly 
+                  />
+                  <div className="fc_keyboard-grid">
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('1')}>1</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('2')}>2</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('3')}>3</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('4')}>4</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('5')}>5</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('6')}>6</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('7')}>7</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('8')}>8</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('9')}>9</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('delete')}>⌫</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('0')}>0</button>
+                    <button className="fc_keyboard-key" onClick={() => handleKeypadInput('confirm')}>✔</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* SET Button */}
             <div className="fc_custom-buttons">
               <button className="fc_custom-btn fc_custom-set" onClick={handleCustomConfirm}>
                 <div className="fc_flip-content">SET</div>
@@ -365,7 +411,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
           <div className="fc_bet-content fc_custom-content">
-            <div className="fc_custom-amount-display">0000</div>
+            <div className="fc_custom-amount-display">{typeof selectedBet === 'number' && selectedBet !== 1 && selectedBet !== 10 && selectedBet !== 20 && selectedBet !== 50 && selectedBet !== 100 && selectedBet !== 500 ? selectedBet.toString().padStart(4, '0') : '0000'}</div>
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>

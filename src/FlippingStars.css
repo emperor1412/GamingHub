@@ -971,7 +971,7 @@ body::-webkit-scrollbar-track,
   backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   overflow: hidden;
 }
@@ -979,12 +979,11 @@ body::-webkit-scrollbar-track,
 .fc_custom-overlay-content {
   width: 390px;
   max-width: calc(100% - 40px);
-  padding: 40px 20px;
+  padding: 40px 20px 70px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 30px;
 }
 
 .fc_custom-buttons {
@@ -1025,4 +1024,76 @@ body::-webkit-scrollbar-track,
 .fc_custom-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Number Keyboard Styles */
+.fc_keyboard {
+  text-align: center;
+  width: 85%;
+  transform: scale(0.8);
+}
+
+.fc_keyboard-shadow {
+  position: relative;
+  display: inline-block;
+}
+
+/* Pink "shadow" background */
+.fc_keyboard-shadow::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 100%;
+  height: 100%;
+  background: #FF00F6;
+  z-index: 0;
+}
+
+.fc_keyboard-container {
+  position: relative;
+  background: #FFFFFF;
+  z-index: 1;
+}
+
+.fc_custom-display {
+  width: 100%;
+  font-size: 2rem;
+  text-align: right;
+  padding: 8px;
+  border: none;
+  outline: none;
+  border-bottom: 4px solid #000FEF;
+  font-family: "PP Neue Machina";
+  font-weight: 700;
+  color: #000000;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.fc_keyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: #000FEF;
+}
+
+.fc_keyboard-key {
+  font-size: 1.5rem;
+  border: none;
+  background: #FFFFFF;
+  cursor: pointer;
+  font-family: "PP Neue Machina";
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  padding: 16px;
+}
+
+.fc_keyboard-key:hover {
+  background: #F0F0F0;
+}
+
+.fc_keyboard-key:active {
+  background: #E0E0E0;
 }
