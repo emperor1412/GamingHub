@@ -29,7 +29,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
   const [tailsCount, setTailsCount] = useState(0);
-  const [currentStreak, setCurrentStreak] = useState({ side: 'HEADS', count: 5 });
+  // Thay đổi logic streak - chỉ lưu count, không lưu side
+  const [currentStreak, setCurrentStreak] = useState(0);
   const [totalFlips, setTotalFlips] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -252,11 +253,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setTotalFlips(prev => prev + 1);
         
         if (result.isWin) {
-          if (currentStreak.side === selectedSide) {
-            setCurrentStreak(prev => ({ ...prev, count: prev.count + 1 }));
-          } else {
-            setCurrentStreak({ side: selectedSide, count: 1 });
-          }
+          // Cập nhật streak - tăng lên 1 khi thắng
+          setCurrentStreak(prev => prev + 1);
           
           if (selectedSide === 'HEADS') {
             setHeadsCount(prev => prev + 1);
@@ -264,7 +262,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setTailsCount(prev => prev + 1);
           }
         } else {
-          setCurrentStreak({ side: selectedSide, count: 0 });
+          // Reset streak về 0 khi thua
+          setCurrentStreak(0);
           
           const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
           if (actualResult === 'HEADS') {
@@ -360,12 +359,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setTotalFlips(prev => prev + 1);
         
         if (result.isWin) {
-          // Update streak
-          if (currentStreak.side === selectedSide) {
-            setCurrentStreak(prev => ({ ...prev, count: prev.count + 1 }));
-          } else {
-            setCurrentStreak({ side: selectedSide, count: 1 });
-          }
+          // Cập nhật streak - tăng lên 1 khi thắng
+          setCurrentStreak(prev => prev + 1);
           
           // Update heads/tails count
           if (selectedSide === 'HEADS') {
@@ -374,8 +369,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setTailsCount(prev => prev + 1);
           }
         } else {
-          // Reset streak on loss
-          setCurrentStreak({ side: selectedSide, count: 0 });
+          // Reset streak về 0 khi thua
+          setCurrentStreak(0);
           
           // Update heads/tails count for the actual result
           const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
@@ -677,7 +672,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
       </div>
 
-      {/* Coin face selection */}
+      {/* Coin face selection - cập nhật hiển thị streak */}
       <div className="fc_coin-select">
         <button
           className={`fc_coin-button ${selectedSide === 'HEADS' ? 'fc_selected' : ''}`}
@@ -697,11 +692,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_coin-title">HEADS</div>
           </div>
           
-          {/* Streak positioned below button */}
-          {currentStreak.side === 'HEADS' && currentStreak.count > 0 && (
+          {/* Streak hiển thị khi button được chọn và có streak > 0 */}
+          {selectedSide === 'HEADS' && currentStreak > 0 && (
             <div className="fc_coin-streak-wrapper">
               <div className="fc_coin-streak">STREAK</div>
-              <div className="fc_coin-streak-multiplier">X{currentStreak.count}</div>
+              <div className="fc_coin-streak-multiplier">X{currentStreak}</div>
             </div>
           )}
         </button>
@@ -724,11 +719,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_coin-title">TAILS</div>
           </div>
           
-          {/* Streak positioned below button */}
-          {currentStreak.side === 'TAILS' && currentStreak.count > 0 && (
+          {/* Streak hiển thị khi button được chọn và có streak > 0 */}
+          {selectedSide === 'TAILS' && currentStreak > 0 && (
             <div className="fc_coin-streak-wrapper">
               <div className="fc_coin-streak">STREAK</div>
-              <div className="fc_coin-streak-multiplier">X{currentStreak.count}</div>
+              <div className="fc_coin-streak-multiplier">X{currentStreak}</div>
             </div>
           )}
         </button>
