@@ -33,6 +33,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
+  const [showCustomConfirm, setShowCustomConfirm] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -59,7 +60,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
-    if (showWelcome || showAllInConfirm) {
+    if (showWelcome || showAllInConfirm || showCustomConfirm) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -69,7 +70,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome, showAllInConfirm]);
+  }, [showWelcome, showAllInConfirm, showCustomConfirm]);
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
@@ -89,6 +90,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAllInCancel = () => {
     setShowAllInConfirm(false);
+  };
+
+  const handleCustomClick = () => {
+    setShowCustomConfirm(true);
+  };
+
+  const handleCustomConfirm = () => {
+    setShowCustomConfirm(false);
+    setSelectedBet('custom');
+    // Here you can add the actual ALL IN logic
   };
 
   return (
@@ -177,6 +188,22 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               </button>
               <button className="fc_allin-btn fc_allin-yes" onClick={handleAllInConfirm}>
                 <div className="fc_flip-content">YES</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Confirmation Overlay */}
+      {showCustomConfirm && (
+        <div className="fc_custom-overlay">
+          <div className="fc_custom-overlay-content">     
+
+
+            {/* Buttons */}
+            <div className="fc_custom-buttons">
+              <button className="fc_custom-btn fc_custom-set" onClick={handleCustomConfirm}>
+                <div className="fc_flip-content">SET</div>
               </button>
             </div>
           </div>
@@ -331,7 +358,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
         <button 
           className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
-          onClick={() => setSelectedBet('custom')}
+          onClick={handleCustomClick}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
