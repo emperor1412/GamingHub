@@ -128,7 +128,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleAutoFlipClick = () => {
-    setShowAutoFlipOverlay(true);
+    if (autoFlip) {
+      // If auto flip is ON, turn it OFF
+      setAutoFlip(false);
+      setSelectedAutoFlipCount(null);
+    } else {
+      // If auto flip is OFF, show overlay to select options
+      setShowAutoFlipOverlay(true);
+    }
   };
 
   const handleAutoFlipConfirm = () => {
