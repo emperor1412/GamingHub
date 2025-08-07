@@ -569,12 +569,40 @@ body::-webkit-scrollbar-track,
   border-color: #555;
 }
 
-.fc_bet-button:hover:not(.fc_disabled) {
+/* Insufficient funds styling - dimmed buttons when user doesn't have enough starlets */
+.fc_bet-button.fc_insufficient-funds {
+  opacity: 0.4;
+  filter: grayscale(0.8);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.fc_bet-button.fc_insufficient-funds .fc_corner {
+  border-color: #555;
+  opacity: 0.2;
+}
+
+.fc_bet-button.fc_insufficient-funds .fc_bet-content {
+  opacity: 0.6;
+}
+
+.fc_bet-button.fc_insufficient-funds:hover {
+  transform: none;
+  filter: grayscale(0.8);
+  background-color: transparent;
+}
+
+.fc_bet-button.fc_insufficient-funds:hover .fc_corner {
+  border-color: #555;
+  opacity: 0.2;
+}
+
+.fc_bet-button:hover:not(.fc_disabled):not(.fc_insufficient-funds) {
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-1px);
 }
 
-.fc_bet-button:hover:not(.fc_disabled) .fc_corner {
+.fc_bet-button:hover:not(.fc_disabled):not(.fc_insufficient-funds) .fc_corner {
   border-color: #ffffff;
 }
 
@@ -1436,4 +1464,26 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-btn:disabled {
   cursor: not-allowed;
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets {
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  opacity: 1;
+  cursor: pointer;
+  transform: none;
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets:hover {
+  background: linear-gradient(135deg, #FF0080, #FF00F6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 246, 0.7);
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets:hover .fc_corner {
+  border-color: #FF00F6;
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets .fc_flip-content {
+  font-size: 20px;
 }

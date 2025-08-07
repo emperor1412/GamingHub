@@ -55,6 +55,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Thay thế shouldStopAutoFlip state bằng useRef
   const shouldStopAutoFlipRef = useRef(false);
 
+  // Function to check if a bet amount is affordable
+  const isBetAffordable = (betAmount) => {
+    if (betAmount === 'all-in') {
+      return starlets > 0; // All-in is always affordable if user has any starlets
+    } else if (betAmount === 'custom') {
+      const customBet = parseInt(customAmount) || 0;
+      return customBet > 0 && customBet <= starlets;
+    } else if (typeof betAmount === 'number') {
+      return betAmount <= starlets;
+    } else {
+      return false; // Invalid bet amount
+    }
+  };
+
   useEffect(() => {
     const setupProfileData = async () => {
       if (shared.userProfile) {
@@ -178,6 +192,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipConfirm = () => {
     if (selectedAutoFlipCount !== null) {
+      // Check if the selected bet is affordable before starting auto flip
+      if (!isBetAffordable(selectedBet)) {
+        shared.showPopup({
+          type: 0,
+          title: 'Insufficient Starlets',
+          message: 'You don\'t have enough Starlets for the selected bet amount'
+        });
+        return;
+      }
+      
       console.log('Starting auto flip with count:', selectedAutoFlipCount);
       setAutoFlip(true);
       setAutoFlipTarget(selectedAutoFlipCount);
@@ -616,9 +640,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             {/* Confirm Button */}
             <div className="fc_autoflip-buttons">
               <button 
-                className={`fc_autoflip-btn fc_autoflip-confirm ${selectedAutoFlipCount ? '' : 'fc_disabled'}`} 
+                className={`fc_autoflip-btn fc_autoflip-confirm ${selectedAutoFlipCount && isBetAffordable(selectedBet) ? '' : 'fc_disabled'}`} 
                 onClick={handleAutoFlipConfirm}
-                disabled={!selectedAutoFlipCount}
+                disabled={!selectedAutoFlipCount || !isBetAffordable(selectedBet)}
               >
                 <div className="fc_flip-content">
                   {selectedAutoFlipCount === 'infinite' ? 'FLIP ∞' : 
@@ -747,8 +771,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         {betOptions.map((bet) => (
           <button
             key={bet}
-            className={`fc_bet-button ${selectedBet === bet ? 'fc_selected' : ''}`}
-            onClick={() => setSelectedBet(bet)}
+            className={`fc_bet-button ${selectedBet === bet ? 'fc_selected' : ''} ${!isBetAffordable(bet) ? 'fc_insufficient-funds' : ''}`}
+            onClick={() => isBetAffordable(bet) && setSelectedBet(bet)}
+            disabled={!isBetAffordable(bet)}
           >
             {/* Corner borders */}
             <div className="fc_corner fc_corner-top-left"></div>
@@ -763,8 +788,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </button>
         ))}
         <button 
-          className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
-          onClick={handleAllInClick}
+          className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''} ${!isBetAffordable('all-in') ? 'fc_insufficient-funds' : ''}`}
+          onClick={isBetAffordable('all-in') ? handleAllInClick : undefined}
+          disabled={!isBetAffordable('all-in')}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -779,8 +805,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
-          onClick={handleCustomClick}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${!isBetAffordable('custom') ? 'fc_insufficient-funds' : ''}`}
+          onClick={isBetAffordable('custom') ? handleCustomClick : undefined}
+          disabled={!isBetAffordable('custom')}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -802,13 +829,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
       {/* Flip button */}
       <button 
-        className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
-        onClick={handleFlip} 
+        className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''} ${!isBetAffordable(selectedBet) ? 'fc_flip-btn-buy-starlets' : ''}`} 
+        onClick={!isBetAffordable(selectedBet) ? () => {
+          if (onClose) onClose();
+          if (setActiveTab) setActiveTab('market');
+        } : handleFlip} 
         disabled={isFlipping || isAutoFlipping}
       >
         <div className="fc_flip-content">
           {isFlipping ? 'FLIPPING...' : 
            isAutoFlipping ? `AUTO FLIP ${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget}` : 
+           !isBetAffordable(selectedBet) ? 'BUY MORE STARLETS' :
            'FLIP'}
         </div>
       </button>
