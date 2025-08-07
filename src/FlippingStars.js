@@ -98,10 +98,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
-    if (customAmount && customAmount !== '0') {
-      setShowCustomConfirm(false);
-      setSelectedBet(parseInt(customAmount));
-    }
+    const finalAmount = customAmount || '0';
+    setShowCustomConfirm(false);
+    setSelectedBet('custom');
+    setCustomAmount(finalAmount);
+    console.log('Custom amount set:', finalAmount); // Debug log
   };
 
   const handleKeypadInput = (value) => {
@@ -112,14 +113,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     } else {
       // Limit to 6 digits
       if (customAmount.length < 6) {
-        setCustomAmount(prev => prev + value);
+        setCustomAmount(prev => {
+          // If current value is "0", replace it instead of appending
+          if (prev === '0') {
+            return value;
+          }
+          return prev + value;
+        });
       }
     }
-  };
-
-  const handleCustomCancel = () => {
-    setShowCustomConfirm(false);
-    setCustomAmount('');
   };
 
   return (
@@ -411,7 +413,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
           <div className="fc_bet-content fc_custom-content">
-            <div className="fc_custom-amount-display">{typeof selectedBet === 'number' && selectedBet !== 1 && selectedBet !== 10 && selectedBet !== 20 && selectedBet !== 50 && selectedBet !== 100 && selectedBet !== 500 ? selectedBet.toString().padStart(4, '0') : '0000'}</div>
+            <div className="fc_custom-amount-display">{customAmount ? customAmount.padStart(4, '0') : '0000'}</div>
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
