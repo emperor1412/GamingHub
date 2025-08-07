@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
@@ -48,7 +48,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [autoFlipCount, setAutoFlipCount] = useState(0);
   const [autoFlipTarget, setAutoFlipTarget] = useState(0);
   const [isAutoFlipping, setIsAutoFlipping] = useState(false);
-  const [shouldStopAutoFlip, setShouldStopAutoFlip] = useState(false);
+  // Thêm ref để lưu timeout ID
+  const autoFlipTimeoutRef = useRef(null);
+  
+  // Thay thế shouldStopAutoFlip state bằng useRef
+  const shouldStopAutoFlipRef = useRef(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -79,10 +83,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       isAutoFlipping,
       autoFlip,
       autoFlipTarget,
-      autoFlipCount,
-      shouldStopAutoFlip
+      autoFlipCount
     });
-  }, [isAutoFlipping, autoFlip, autoFlipTarget, autoFlipCount, shouldStopAutoFlip]);
+  }, [isAutoFlipping, autoFlip, autoFlipTarget, autoFlipCount]);
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
@@ -153,8 +156,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipClick = () => {
     if (isAutoFlipping) {
-      // If auto flipping is in progress, stop it by setting flag
-      setShouldStopAutoFlip(true);
+      // Clear timeout và dừng ngay lập tức
+      if (autoFlipTimeoutRef.current) {
+        clearTimeout(autoFlipTimeoutRef.current);
+        autoFlipTimeoutRef.current = null;
+      }
+      setIsAutoFlipping(false);
+      setAutoFlip(false);
+      setAutoFlipTarget(0);
+      setAutoFlipCount(0);
     } else if (autoFlip) {
       // If auto flip is ON but not currently flipping, turn it OFF
       setAutoFlip(false);
@@ -189,19 +199,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     if (isAutoFlipping) return;
     
     console.log('Setting up auto flip...');
-    setShouldStopAutoFlip(false);
+    shouldStopAutoFlipRef.current = false; // Reset flag
     let currentCount = 0;
     
     const performAutoFlip = async () => {
-      console.log('performAutoFlip called, currentCount:', currentCount, 'targetCount:', targetCount, 'shouldStopAutoFlip:', shouldStopAutoFlip);
+      console.log('performAutoFlip called, currentCount:', currentCount, 'targetCount:', targetCount, 'shouldStopAutoFlip:', shouldStopAutoFlipRef.current);
+      
       // Check if user wants to stop auto flip
-      if (shouldStopAutoFlip) {
+      if (shouldStopAutoFlipRef.current) {
         console.log('Stopping auto flip due to shouldStopAutoFlip flag');
         setIsAutoFlipping(false);
         setAutoFlip(false);
         setAutoFlipTarget(0);
         setAutoFlipCount(0);
-        setShouldStopAutoFlip(false);
+        shouldStopAutoFlipRef.current = false;
         return;
       }
       
@@ -268,12 +279,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setStarlets(updatedStarlets);
         
         // Continue auto flip after a short delay
-        setTimeout(() => {
-          // Check again before continuing
-          if (!shouldStopAutoFlip) {
-            performAutoFlip();
-          }
-        }, 1000); // 1 second delay between flips
+        autoFlipTimeoutRef.current = setTimeout(() => {
+          performAutoFlip();
+        }, 1000);
         
       } else {
         // Stop auto flip on error
@@ -409,6 +417,27 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setIsFlipping(false);
     }
   };
+
+  // Thêm useEffect để theo dõi shouldStopAutoFlip
+  useEffect(() => {
+    if (shouldStopAutoFlipRef.current && isAutoFlipping) {
+      console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+      setIsAutoFlipping(false);
+      setAutoFlip(false);
+      setAutoFlipTarget(0);
+      setAutoFlipCount(0);
+      shouldStopAutoFlipRef.current = false;
+    }
+  }, [isAutoFlipping]);
+
+  // Cleanup khi component unmount
+  useEffect(() => {
+    return () => {
+      if (autoFlipTimeoutRef.current) {
+        clearTimeout(autoFlipTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="fc_app">
