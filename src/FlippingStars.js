@@ -32,6 +32,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [totalFlips, setTotalFlips] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showAllInConfirm, setShowAllInConfirm] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -57,8 +58,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   }, [totalFlips]);
 
   useEffect(() => {
-    // Prevent body scroll when welcome overlay is shown
-    if (showWelcome) {
+    // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
+    if (showWelcome || showAllInConfirm) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -68,12 +69,26 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome]);
+  }, [showWelcome, showAllInConfirm]);
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
     // Set totalFlips to 1 so welcome doesn't show again
     setTotalFlips(1);
+  };
+
+  const handleAllInClick = () => {
+    setShowAllInConfirm(true);
+  };
+
+  const handleAllInConfirm = () => {
+    setShowAllInConfirm(false);
+    setSelectedBet('all-in');
+    // Here you can add the actual ALL IN logic
+  };
+
+  const handleAllInCancel = () => {
+    setShowAllInConfirm(false);
   };
 
   return (
@@ -141,6 +156,29 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <button className="fc_welcome-lfg-btn" onClick={handleWelcomeClose}>
               <div className="fc_flip-content">LFG!</div>
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ALL IN Confirmation Overlay */}
+      {showAllInConfirm && (
+        <div className="fc_allin-overlay">
+          <div className="fc_allin-content">
+            {/* ALL IN Text */}
+            <div className="fc_allin-title">ALL IN!</div>
+            
+            {/* ARE YOU SURE Section */}
+            <div className="fc_allin-question">ARE YOU SURE?</div>
+            
+            {/* Buttons */}
+            <div className="fc_allin-buttons">
+              <button className="fc_allin-btn fc_allin-no" onClick={handleAllInCancel}>
+                <div className="fc_flip-content">NO</div>
+              </button>
+              <button className="fc_allin-btn fc_allin-yes" onClick={handleAllInConfirm}>
+                <div className="fc_flip-content">YES</div>
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -277,7 +315,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         ))}
         <button 
           className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
-          onClick={() => setSelectedBet('all-in')}
+          onClick={handleAllInClick}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
