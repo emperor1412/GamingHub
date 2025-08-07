@@ -975,6 +975,11 @@ Response:
                                 </div>
                             </div> */}
                         </div>
+                        {/* Total Flips Counter */}
+                        <div className="ticket-total-flips">
+                            <span className="ticket-total-flips-label">TOTAL FLIPS</span>
+                            <span className="ticket-total-flips-count">00000000</span>
+                        </div>
                     </button>
                 </section>
 
