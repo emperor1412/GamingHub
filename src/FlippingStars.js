@@ -6,6 +6,7 @@ import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
+import exitButton from './images/ExitButton.png';
 
 // Navigation icons
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -35,6 +36,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
   const [showCustomConfirm, setShowCustomConfirm] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
+  const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
+  const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -61,7 +64,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
-    if (showWelcome || showAllInConfirm || showCustomConfirm) {
+    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -71,7 +74,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome, showAllInConfirm, showCustomConfirm]);
+  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay]);
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
@@ -122,6 +125,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         });
       }
     }
+  };
+
+  const handleAutoFlipClick = () => {
+    setShowAutoFlipOverlay(true);
+  };
+
+  const handleAutoFlipConfirm = () => {
+    if (selectedAutoFlipCount !== null) {
+      setAutoFlip(true);
+      setShowAutoFlipOverlay(false);
+      // Here you can add the actual auto flip logic with the selected count
+      console.log('Auto flip confirmed with count:', selectedAutoFlipCount);
+    }
+  };
+
+  const handleAutoFlipCancel = () => {
+    setShowAutoFlipOverlay(false);
+    setSelectedAutoFlipCount(null);
   };
 
   return (
@@ -258,6 +279,52 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </div>
       )}
 
+      {/* Auto Flip Overlay */}
+      {showAutoFlipOverlay && (
+        <div className="fc_autoflip-overlay">
+          <div className="fc_autoflip-content">
+            {/* Close Button */}
+            <div className="fc_autoflip-header">
+              <button className="fc_autoflip-close" onClick={handleAutoFlipCancel}>
+                <img src={exitButton} alt="Close" className="fc_autoflip-close-icon" />
+              </button>
+            </div>
+            
+            {/* Number of flips selection */}
+            <div className="fc_autoflip-options">
+              {[10, 20, 30, 40, 50].map((count) => (
+                <button
+                  key={count}
+                  className={`fc_autoflip-option ${selectedAutoFlipCount === count ? 'fc_selected' : ''}`}
+                  onClick={() => setSelectedAutoFlipCount(count)}
+                >
+                  <div className="fc_autoflip-option-content">X{count}</div>
+                </button>
+              ))}
+              
+              {/* Infinite option */}
+              <button
+                className={`fc_autoflip-option fc_autoflip-infinite ${selectedAutoFlipCount === 'infinite' ? 'fc_selected' : ''}`}
+                onClick={() => setSelectedAutoFlipCount('infinite')}
+              >
+                <div className="fc_autoflip-option-content">∞</div>
+              </button>
+            </div>
+            
+            {/* Confirm Button */}
+            <div className="fc_autoflip-buttons">
+              <button 
+                className={`fc_autoflip-btn fc_autoflip-confirm ${selectedAutoFlipCount ? '' : 'fc_disabled'}`} 
+                onClick={handleAutoFlipConfirm}
+                disabled={!selectedAutoFlipCount}
+              >
+                <div className="fc_flip-content">CONFIRM</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header - matching Market.js stats-header */}
       <header className="fc_stats-header">
         <button 
@@ -303,7 +370,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </div>
         <button 
           className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
-          onClick={() => setAutoFlip(!autoFlip)}
+          onClick={handleAutoFlipClick}
         >
           <span className="fc_auto-flip-text">AUTO FLIP</span>
           <span className="fc_auto-flip-separator">|</span>
