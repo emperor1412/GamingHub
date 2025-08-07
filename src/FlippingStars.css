@@ -261,6 +261,17 @@ body::-webkit-scrollbar-track,
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
+.fc_auto-flip-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fc_auto-flip-toggle:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .fc_coin-select {
   display: flex;
   justify-content: space-around;

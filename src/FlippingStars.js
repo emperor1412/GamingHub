@@ -43,6 +43,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [isFlipping, setIsFlipping] = useState(false);
   const [lastFlipResult, setLastFlipResult] = useState(null);
   const [showFlipResult, setShowFlipResult] = useState(false);
+  
+  // Auto flip states
+  const [autoFlipCount, setAutoFlipCount] = useState(0);
+  const [autoFlipTarget, setAutoFlipTarget] = useState(0);
+  const [isAutoFlipping, setIsAutoFlipping] = useState(false);
+  const [shouldStopAutoFlip, setShouldStopAutoFlip] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -66,6 +72,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Show welcome overlay when totalFlips is 0
     setShowWelcome(totalFlips === 0);
   }, [totalFlips]);
+
+  useEffect(() => {
+    // Debug auto flip state changes
+    console.log('Auto flip state changed:', {
+      isAutoFlipping,
+      autoFlip,
+      autoFlipTarget,
+      autoFlipCount,
+      shouldStopAutoFlip
+    });
+  }, [isAutoFlipping, autoFlip, autoFlipTarget, autoFlipCount, shouldStopAutoFlip]);
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
@@ -135,8 +152,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleAutoFlipClick = () => {
-    if (autoFlip) {
-      // If auto flip is ON, turn it OFF
+    if (isAutoFlipping) {
+      // If auto flipping is in progress, stop it by setting flag
+      setShouldStopAutoFlip(true);
+    } else if (autoFlip) {
+      // If auto flip is ON but not currently flipping, turn it OFF
       setAutoFlip(false);
       setSelectedAutoFlipCount(null);
     } else {
@@ -147,16 +167,136 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipConfirm = () => {
     if (selectedAutoFlipCount !== null) {
+      console.log('Starting auto flip with count:', selectedAutoFlipCount);
       setAutoFlip(true);
+      setAutoFlipTarget(selectedAutoFlipCount);
+      setAutoFlipCount(0);
       setShowAutoFlipOverlay(false);
-      // Here you can add the actual auto flip logic with the selected count
-      console.log('Auto flip confirmed with count:', selectedAutoFlipCount);
+      
+      // Start auto flipping immediately
+      startAutoFlip(selectedAutoFlipCount);
     }
   };
 
   const handleAutoFlipCancel = () => {
     setShowAutoFlipOverlay(false);
     setSelectedAutoFlipCount(null);
+  };
+
+  // Function to start auto flipping
+  const startAutoFlip = async (targetCount) => {
+    console.log('startAutoFlip called with targetCount:', targetCount, 'isAutoFlipping:', isAutoFlipping);
+    if (isAutoFlipping) return;
+    
+    console.log('Setting up auto flip...');
+    setShouldStopAutoFlip(false);
+    let currentCount = 0;
+    
+    const performAutoFlip = async () => {
+      console.log('performAutoFlip called, currentCount:', currentCount, 'targetCount:', targetCount, 'shouldStopAutoFlip:', shouldStopAutoFlip);
+      // Check if user wants to stop auto flip
+      if (shouldStopAutoFlip) {
+        console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+        setIsAutoFlipping(false);
+        setAutoFlip(false);
+        setAutoFlipTarget(0);
+        setAutoFlipCount(0);
+        setShouldStopAutoFlip(false);
+        return;
+      }
+      
+      if (currentCount >= targetCount && targetCount !== 'infinite') {
+        // Auto flip completed
+        console.log('Auto flip completed');
+        setIsAutoFlipping(false);
+        setAutoFlip(false);
+        setAutoFlipTarget(0);
+        setAutoFlipCount(0);
+        return;
+      }
+      
+      // Check if user has enough starlets
+      if (starlets < selectedBet) {
+        await shared.showPopup({
+          type: 0,
+          title: 'Insufficient Starlets',
+          message: 'Auto flip stopped due to insufficient Starlets'
+        });
+        setIsAutoFlipping(false);
+        setAutoFlip(false);
+        setAutoFlipTarget(0);
+        setAutoFlipCount(0);
+        return;
+      }
+      
+      // Perform single flip
+      const isHeads = selectedSide === 'HEADS';
+      const result = await shared.flipCoin(isHeads, selectedBet);
+      
+      if (result.success) {
+        currentCount++;
+        setAutoFlipCount(currentCount);
+        
+        // Update counters and UI (same as handleFlip)
+        setTotalFlips(prev => prev + 1);
+        
+        if (result.isWin) {
+          if (currentStreak.side === selectedSide) {
+            setCurrentStreak(prev => ({ ...prev, count: prev.count + 1 }));
+          } else {
+            setCurrentStreak({ side: selectedSide, count: 1 });
+          }
+          
+          if (selectedSide === 'HEADS') {
+            setHeadsCount(prev => prev + 1);
+          } else {
+            setTailsCount(prev => prev + 1);
+          }
+        } else {
+          setCurrentStreak({ side: selectedSide, count: 0 });
+          
+          const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
+          if (actualResult === 'HEADS') {
+            setHeadsCount(prev => prev + 1);
+          } else {
+            setTailsCount(prev => prev + 1);
+          }
+        }
+        
+        // Update starlets
+        const updatedStarlets = shared.getStarlets();
+        setStarlets(updatedStarlets);
+        
+        // Continue auto flip after a short delay
+        setTimeout(() => {
+          // Check again before continuing
+          if (!shouldStopAutoFlip) {
+            performAutoFlip();
+          }
+        }, 1000); // 1 second delay between flips
+        
+      } else {
+        // Stop auto flip on error
+        await shared.showPopup({
+          type: 0,
+          title: 'Auto Flip Error',
+          message: result.error || 'Auto flip stopped due to an error'
+        });
+        setIsAutoFlipping(false);
+        setAutoFlip(false);
+        setAutoFlipTarget(0);
+        setAutoFlipCount(0);
+      }
+    };
+    
+    // Set auto flip state and start the process
+    setIsAutoFlipping(true);
+    setAutoFlip(true);
+    setAutoFlipTarget(targetCount);
+    setAutoFlipCount(0);
+    
+    // Start the auto flip process
+    performAutoFlip();
   };
 
   // New function to handle coin flip
@@ -443,7 +583,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 onClick={handleAutoFlipConfirm}
                 disabled={!selectedAutoFlipCount}
               >
-                <div className="fc_flip-content">CONFIRM</div>
+                <div className="fc_flip-content">
+                  {selectedAutoFlipCount === 'infinite' ? 'FLIP ∞' : 
+                   selectedAutoFlipCount ? `FLIP X${selectedAutoFlipCount}` : 'FLIP'}
+                </div>
               </button>
             </div>
           </div>
@@ -499,7 +642,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         >
           <span className="fc_auto-flip-text">AUTO FLIP</span>
           <span className="fc_auto-flip-separator">|</span>
-          <span className="fc_auto-flip-status">{autoFlip ? 'ON' : 'OFF'}</span>
+          <span className="fc_auto-flip-status">
+            {autoFlip ? 'ON' : 'OFF'}
+          </span>
         </button>
       </div>
 
@@ -621,9 +766,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </div>
 
       {/* Flip button */}
-      <button className={`fc_flip-btn ${isFlipping ? 'fc_flip-btn-loading' : ''}`} onClick={handleFlip} disabled={isFlipping}>
+      <button 
+        className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
+        onClick={handleFlip} 
+        disabled={isFlipping || isAutoFlipping}
+      >
         <div className="fc_flip-content">
-          {isFlipping ? 'FLIPPING...' : 'FLIP'}
+          {isFlipping ? 'FLIPPING...' : 
+           isAutoFlipping ? `AUTO FLIP ${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget}` : 
+           'FLIP'}
         </div>
       </button>
 
