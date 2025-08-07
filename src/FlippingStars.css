@@ -640,3 +640,146 @@ body {
 .fc_bottom-nav button.fc_active {
   color: #8B5CF6;
 }
+
+/* Welcome Overlay Styles */
+.fc_welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.fc_welcome-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  min-height: fit-content;
+  margin: auto 0;
+}
+
+.fc_welcome-title {
+  font-family: "PP Neue Machina";
+  font-size: 32px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_welcome-logo-container {
+  margin: 0px 10px;
+}
+
+.fc_welcome-logo-image {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+}
+
+.fc_welcome-pick-text {
+  font-family: "PP Neue Machina";
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.fc_welcome-bet-demo {
+  display: flex;
+  justify-content: center;
+}
+
+.fc_welcome-bet-button {
+  pointer-events: none !important;
+  cursor: default !important;
+  width: 80px;
+  min-height: 30px;
+}
+
+.fc_welcome-select-text {
+  font-family: "PP Neue Machina";
+  font-size: 24px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 20px 0 0px 0;
+}
+
+.fc_welcome-coin-demo {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+}
+
+.fc_welcome-coin-button {
+  pointer-events: none !important;
+  cursor: default !important;
+  flex: none;
+  width: 80px;
+  min-height: 30px;
+}
+
+.fc_welcome-flip-text {
+  font-family: "PP Neue Machina";
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.fc_welcome-win-text {
+  background-color: blue;
+  padding: 0px 6px;
+}
+
+.fc_welcome-lfg-btn {
+  position: relative;
+  width: calc(100% - 40px);
+  max-width: 350px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  margin-top: 30px;
+}
+
+.fc_welcome-lfg-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_welcome-lfg-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}

@@ -31,6 +31,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [currentStreak, setCurrentStreak] = useState({ side: 'HEADS', count: 5 });
   const [totalFlips, setTotalFlips] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     const setupProfileData = async () => {
@@ -50,8 +51,100 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setupProfileData();
   }, []);
 
+  useEffect(() => {
+    // Show welcome overlay when totalFlips is 0
+    setShowWelcome(totalFlips === 0);
+  }, [totalFlips]);
+
+  useEffect(() => {
+    // Prevent body scroll when welcome overlay is shown
+    if (showWelcome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showWelcome]);
+
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+    // Set totalFlips to 1 so welcome doesn't show again
+    setTotalFlips(1);
+  };
+
   return (
     <div className="fc_app">
+      {/* Welcome Overlay */}
+      {showWelcome && (
+        <div className="fc_welcome-overlay">
+          <div className="fc_welcome-content">
+            {/* Welcome Text */}
+            <div className="fc_welcome-title">WELCOME TO</div>
+            
+            {/* Logo */}
+            <div className="fc_welcome-logo-container">
+              <img src={flippingStarsLogo} alt="Flipping Stars" className="fc_welcome-logo-image" />
+            </div>
+            
+            
+            
+            {/* Bet Button Demo (non-interactive) */}
+            <div className="fc_welcome-bet-demo">
+              <div className="fc_bet-button fc_selected fc_welcome-bet-button">
+                <div className="fc_corner fc_corner-top-left"></div>
+                <div className="fc_corner fc_corner-top-right"></div>
+                <div className="fc_corner fc_corner-bottom-left"></div>
+                <div className="fc_corner fc_corner-bottom-right"></div>
+                <div className="fc_bet-content">
+                  <span className="fc_bet-amount">10</span>
+                  <img src={starlet} alt="starlet" className="fc_bet-starlet-icon" />
+                </div>
+              </div>
+            </div>
+
+            {/* Pick Value Text */}
+            <div className="fc_welcome-pick-text">PICK THE VALUE YOU<br/>WANT TO STAKE</div>
+            
+            {/* Select Text */}
+            <div className="fc_welcome-select-text">SELECT</div>
+            
+            {/* Coin Selection Demo (non-interactive) */}
+            <div className="fc_welcome-coin-demo">
+              <div className="fc_coin-button fc_selected fc_welcome-coin-button">
+                <div className="fc_corner fc_corner-top-left"></div>
+                <div className="fc_corner fc_corner-top-right"></div>
+                <div className="fc_corner fc_corner-bottom-left"></div>
+                <div className="fc_corner fc_corner-bottom-right"></div>
+                <div className="fc_coin-content">
+                  <div className="fc_coin-title">HEADS</div>
+                </div>
+              </div>
+              <div className="fc_coin-button fc_welcome-coin-button">
+                <div className="fc_corner fc_corner-top-left"></div>
+                <div className="fc_corner fc_corner-top-right"></div>
+                <div className="fc_corner fc_corner-bottom-left"></div>
+                <div className="fc_corner fc_corner-bottom-right"></div>
+                <div className="fc_coin-content">
+                  <div className="fc_coin-title">TAILS</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Press Flip Text */}
+            <div className="fc_welcome-flip-text">PRESS FLIP AND<br/><span className="fc_welcome-win-text">WIN STARLETS</span></div>
+            
+            {/* LFG Button */}
+            <button className="fc_welcome-lfg-btn" onClick={handleWelcomeClose}>
+              <div className="fc_flip-content">LFG!</div>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header - matching Market.js stats-header */}
       <header className="fc_stats-header">
         <button 
