@@ -538,6 +538,14 @@ body::-webkit-scrollbar-track,
   text-transform: uppercase;
 }
 
+.fc_all-in-amount {
+  font-family: "PP Neue Machina";
+  font-size: 10px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+}
+
 .fc_all-in-starlet {
   width: 12px;
   height: 12px;

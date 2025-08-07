@@ -109,8 +109,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleAllInClick = () => {
-    // Disabled for now
-    return;
+    // Enable ALL IN functionality
+    setShowAllInConfirm(true);
   };
 
   const handleAllInConfirm = () => {
@@ -124,8 +124,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomClick = () => {
-    // Disabled for now
-    return;
+    // Enable Custom Amount functionality
+    setShowCustomConfirm(true);
   };
 
   const handleCustomConfirm = () => {
@@ -227,8 +227,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
+      // Calculate bet amount for auto flip
+      let betAmount = selectedBet;
+      if (selectedBet === 'all-in') {
+        betAmount = starlets;
+      } else if (selectedBet === 'custom') {
+        betAmount = parseInt(customAmount) || 0;
+      }
+      
       // Check if user has enough starlets
-      if (starlets < selectedBet) {
+      if (starlets < betAmount) {
         await shared.showPopup({
           type: 0,
           title: 'Insufficient Starlets',
@@ -243,7 +251,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       
       // Perform single flip
       const isHeads = selectedSide === 'HEADS';
-      const result = await shared.flipCoin(isHeads, selectedBet);
+      const result = await shared.flipCoin(isHeads, betAmount);
       
       if (result.success) {
         currentCount++;
@@ -310,9 +318,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleFlip = async () => {
     if (isFlipping) return; // Prevent multiple clicks
     
-    // Validate bet amount - only handle regular bet amounts for now
+    // Validate bet amount - handle regular bet amounts, ALL IN, and Custom Amount
     let betAmount = selectedBet;
-    if (typeof selectedBet !== 'number') {
+    
+    if (selectedBet === 'all-in') {
+      betAmount = starlets; // Use all available starlets
+    } else if (selectedBet === 'custom') {
+      betAmount = parseInt(customAmount) || 0;
+    } else if (typeof selectedBet !== 'number') {
       await shared.showPopup({
         type: 0,
         title: 'Invalid Bet',
@@ -750,9 +763,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </button>
         ))}
         <button 
-          className={`fc_bet-button fc_all-in fc_disabled ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
+          className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''}`}
           onClick={handleAllInClick}
-          disabled
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -761,22 +773,21 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <div className="fc_bet-content fc_all-in-content">
             <div className="fc_all-in-title">ALL IN</div>
             <div className="fc_all-in-details">
-              <span className="fc_all-in-percent">.01% X10</span>
+              <span className="fc_all-in-amount">{selectedBet === 'all-in' ? starlets : 'ALL'}</span>
               <img src={starlet} alt="starlet" className="fc_all-in-starlet" />
             </div>
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount fc_disabled ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''}`}
           onClick={handleCustomClick}
-          disabled
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
           <div className="fc_bet-content fc_custom-content">
-            <div className="fc_custom-amount-display">{customAmount ? customAmount.padStart(4, '0') : '0000'}</div>
+            <div className="fc_custom-amount-display">{selectedBet === 'custom' && customAmount ? customAmount.padStart(4, '0') : '0000'}</div>
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
