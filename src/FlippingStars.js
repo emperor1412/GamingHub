@@ -168,13 +168,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAllInConfirm = () => {
     setShowAllInConfirm(false);
-    setSelectedBet('all-in');
     setUseDoubleNext(false);
-    // Here you can add the actual ALL IN logic
+    // Select ALL IN for UI highlight and flip immediately with all current starlets
+    setSelectedBet('all-in');
+    handleFlip({ betAmount: starlets });
   };
 
   const handleAllInCancel = () => {
     setShowAllInConfirm(false);
+    // Clear any bet selection (unselect all buttons)
+    setSelectedBet(null);
+    setUseDoubleNext(false);
   };
 
   const handleCustomClick = () => {
@@ -399,30 +403,34 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   // New function to handle coin flip
-  const handleFlip = async () => {
+  const handleFlip = async (options = {}) => {
     if (isFlipping) return; // Prevent multiple clicks
     
     // Validate bet amount - handle regular bet amounts, ALL IN, and Custom Amount
     let betAmount;
-    if (selectedBet === 'double') {
-      betAmount = lastWinAmount || 0;
+    if (options && options.betAmount != null) {
+      betAmount = options.betAmount;
     } else {
-      betAmount = selectedBet;
-    }
-    
-    if (selectedBet === 'all-in') {
-      betAmount = starlets; // Use all available starlets
-    } else if (selectedBet === 'custom') {
-      betAmount = parseInt(customAmount) || 0;
-    } else if (selectedBet === 'double') {
-      // already set from lastWinAmount
-    } else if (typeof selectedBet !== 'number') {
-      await shared.showPopup({
-        type: 0,
-        title: 'Invalid Bet',
-        message: 'Please select a valid bet amount'
-      });
-      return;
+      if (selectedBet === 'double') {
+        betAmount = lastWinAmount || 0;
+      } else {
+        betAmount = selectedBet;
+      }
+      
+      if (selectedBet === 'all-in') {
+        betAmount = starlets; // Use all available starlets
+      } else if (selectedBet === 'custom') {
+        betAmount = parseInt(customAmount) || 0;
+      } else if (selectedBet === 'double') {
+        // already set from lastWinAmount
+      } else if (typeof selectedBet !== 'number') {
+        await shared.showPopup({
+          type: 0,
+          title: 'Invalid Bet',
+          message: 'Please select a valid bet amount'
+        });
+        return;
+      }
     }
     
     if (betAmount <= 0) {
