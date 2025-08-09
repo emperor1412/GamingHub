@@ -4,7 +4,7 @@ import { useAnimations, Environment, Center } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 
-function Coin({ scale = 1, onFinished }) {
+function Coin({ scale = 1, onFinished, loop = true }) {
   const group = useRef();
   // Use absolute path because gltf is in public/
   const gltf = useLoader(GLTFLoader, '/video_game_coin/scene.gltf');
@@ -37,15 +37,22 @@ function Coin({ scale = 1, onFinished }) {
     if (!action) return;
 
     action.reset();
-    action.setLoop(THREE.LoopOnce, 1);
-    action.clampWhenFinished = true;
+    if (loop) {
+      action.setLoop(THREE.LoopRepeat, Infinity);
+      action.clampWhenFinished = false;
+    } else {
+      action.setLoop(THREE.LoopOnce, 1);
+      action.clampWhenFinished = true;
+    }
 
     const done = () => onFinished && onFinished();
-    mixer.addEventListener('finished', done);
+    if (!loop) {
+      mixer.addEventListener('finished', done);
+    }
     action.play();
 
     return () => {
-      mixer.removeEventListener('finished', done);
+      if (!loop) mixer.removeEventListener('finished', done);
     };
   }, [actions, names, mixer, onFinished]);
 
@@ -58,7 +65,7 @@ function Coin({ scale = 1, onFinished }) {
   );
 }
 
-export default function FlipCoin3D({ onFinished, scale = 2 }) {
+export default function FlipCoin3D({ onFinished, scale = 2, loop = true }) {
   return (
     <Canvas
       gl={{ alpha: true, antialias: true }}
@@ -73,7 +80,7 @@ export default function FlipCoin3D({ onFinished, scale = 2 }) {
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
       <Suspense fallback={null}>
-        <Coin onFinished={onFinished} scale={scale} />
+        <Coin onFinished={onFinished} scale={scale} loop={loop} />
         <Environment preset="sunset" background={false} />
       </Suspense>
     </Canvas>

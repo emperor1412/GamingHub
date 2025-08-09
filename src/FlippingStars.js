@@ -68,6 +68,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [show3D, setShow3D] = useState(false);
   const pendingResultRef = useRef(null);
   const animationDoneRef = useRef(false);
+  const pendingBetRef = useRef(0);
+  const pendingSideRef = useRef('HEADS');
+  const manualFlipTimerRef = useRef(null);
 
   // Double or Nothing states
   const [lastWinAmount, setLastWinAmount] = useState(0);
@@ -90,7 +93,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     logoTimeoutRef.current = setTimeout(() => {
       setLogoImage(flippingStarsLogo);
       setWinReward(null);
-    }, 4000);
+    }, 10000);
   };
 
   // Function to check if a bet amount is affordable
@@ -172,13 +175,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleAllInClick = () => {
     // Enable ALL IN functionality
     setShowAllInConfirm(true);
+    // Clear any selected bet so no button is in selected state
+    setSelectedBet(null);
   };
 
   const handleAllInConfirm = () => {
     setShowAllInConfirm(false);
     setUseDoubleNext(false);
+    // Ensure no bet button is selected even after confirming
+    setSelectedBet(null);
     // Select ALL IN for UI highlight and flip immediately with all current starlets
-    setSelectedBet('all-in');
     handleFlip({ betAmount: starlets });
   };
 
@@ -423,7 +429,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // New function to handle coin flip
   const handleFlip = async (options = {}) => {
     if (isFlipping) return; // Prevent multiple clicks
-    
+
     // Validate bet amount - handle regular bet amounts, ALL IN, and Custom Amount
     let betAmount;
     if (options && options.betAmount != null) {
@@ -434,7 +440,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       } else {
         betAmount = selectedBet;
       }
-      
+
       if (selectedBet === 'all-in') {
         betAmount = starlets; // Use all available starlets
       } else if (selectedBet === 'custom') {
@@ -450,7 +456,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
     }
-    
+
     if (betAmount <= 0) {
       await shared.showPopup({
         type: 0,
@@ -459,7 +465,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       });
       return;
     }
-    
+
     if (betAmount > starlets) {
       await shared.showPopup({
         type: 0,
@@ -468,24 +474,38 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       });
       return;
     }
-    
+
+    // Store pending info and start animation; API will be called after 1.5s while animation keeps looping
+    pendingBetRef.current = betAmount;
+    pendingSideRef.current = selectedSide;
+
     // Show 3D overlay for manual flip only and reset animation state
     animationDoneRef.current = false;
     setShow3D(true);
     setIsFlipping(true);
-    
-    try {
-      const isHeads = selectedSide === 'HEADS';
-      const result = await shared.flipCoin(isHeads, betAmount);
-      
-      if (result.success) {
-        // Update counters
-        setTotalFlips(prev => prev + 1);
-        
-        // Tính kết quả thực tế của coin
-        const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
 
-        // Cập nhật streak theo kết quả thực tế
+    // Schedule server call after 1.5s; keep the 3D animation running until result arrives
+    if (manualFlipTimerRef.current) {
+      clearTimeout(manualFlipTimerRef.current);
+    }
+    manualFlipTimerRef.current = setTimeout(() => {
+      performServerFlip();
+    }, 1500);
+  };
+
+  // Call server after delay; keep 3D anim visible until result is in, then update logo and hide 3D
+  const performServerFlip = async () => {
+    try {
+      const isHeads = pendingSideRef.current === 'HEADS';
+      const betAmount = pendingBetRef.current || 0;
+      const result = await shared.flipCoin(isHeads, betAmount);
+
+      if (result.success) {
+        setTotalFlips(prev => prev + 1);
+
+        const chosenSide = pendingSideRef.current;
+        const actualResult = result.isWin ? chosenSide : (chosenSide === 'HEADS' ? 'TAILS' : 'HEADS');
+
         if (streakSideRef.current === actualResult) {
           streakCountRef.current += 1;
         } else {
@@ -495,69 +515,48 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setStreakSide(streakSideRef.current);
         setStreakCount(streakCountRef.current);
 
-        // Cập nhật bộ đếm HEADS/TAILS theo kết quả thực tế
         if (actualResult === 'HEADS') {
           setHeadsCount(prev => prev + 1);
         } else {
           setTailsCount(prev => prev + 1);
         }
-        
-        // Defer starlets update until 3D animation finishes
-        
-        // Defer showing win/lose until 3D animation finishes
-        pendingResultRef.current = result;
-        if (animationDoneRef.current) {
-          showResultOnLogo(result.isWin, result.reward);
-          pendingResultRef.current = null;
-          setIsFlipping(false);
-        }
 
-        // Update Double or Nothing availability for next flip
+        // Show win/lose on logo and reward overlay first
+        showResultOnLogo(result.isWin, result.reward);
+
         if (result.isWin && result.reward > 0) {
           setLastWinAmount(result.reward);
           setCanDouble(true);
         } else {
           setCanDouble(false);
-          // If user had selected Double but lost, revert to default bet
           if (selectedBet === 'double') {
             setSelectedBet(betOptions[0]);
           }
         }
-        
+
+        const updatedStarlets = shared.getStarlets();
+        setStarlets(updatedStarlets);
       } else {
-        setShow3D(false);
         await shared.showPopup({
           type: 0,
           title: 'Flip Failed',
           message: result.error || 'Failed to flip coin'
         });
-        setIsFlipping(false);
       }
     } catch (error) {
       console.error('Flip error:', error);
-      setShow3D(false);
       await shared.showPopup({
         type: 0,
         title: 'Error',
         message: 'An error occurred while flipping'
       });
+    } finally {
+      // Hide 3D slightly after updating logo to prevent any flicker of the base logo
+      setTimeout(() => setShow3D(false), 50);
+      animationDoneRef.current = true;
       setIsFlipping(false);
+      pendingBetRef.current = 0;
     }
-  };
-
-  // Called when 3D animation finishes
-  const handle3DFinished = () => {
-    setShow3D(false);
-    animationDoneRef.current = true;
-    const result = pendingResultRef.current;
-    pendingResultRef.current = null;
-    if (result) {
-      showResultOnLogo(result.isWin, result.reward);
-      // Update starlets only after animation & result shown
-      const updatedStarlets = shared.getStarlets();
-      setStarlets(updatedStarlets);
-    }
-    setIsFlipping(false);
   };
 
   // Thêm useEffect để theo dõi shouldStopAutoFlip
@@ -580,6 +579,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
       if (logoTimeoutRef.current) {
         clearTimeout(logoTimeoutRef.current);
+      }
+      if (manualFlipTimerRef.current) {
+        clearTimeout(manualFlipTimerRef.current);
       }
     };
   }, []);
@@ -828,7 +830,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       <div className={`fc_logo-container ${show3D ? 'fc_logo-elevated' : ''} ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
         {show3D && (
           <div className="fc_logo-3d">
-            <FlipCoin3D onFinished={handle3DFinished} scale={1.5} />
+            <FlipCoin3D loop={true} scale={1.5} />
           </div>
         )}
         {!show3D && (
