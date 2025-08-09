@@ -29,8 +29,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
   const [tailsCount, setTailsCount] = useState(0);
-  // Thay đổi logic streak - chỉ lưu count, không lưu side
-  const [currentStreak, setCurrentStreak] = useState(0);
+  // Streak theo kết quả thực tế (HEADS/TAILS) và số lần liên tiếp
+  const [streakSide, setStreakSide] = useState(null);
+  const [streakCount, setStreakCount] = useState(0);
+  const streakSideRef = useRef(null);
+  const streakCountRef = useRef(0);
   const [totalFlips, setTotalFlips] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -284,25 +287,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Update counters and UI (same as handleFlip)
         setTotalFlips(prev => prev + 1);
         
-        if (result.isWin) {
-          // Cập nhật streak - tăng lên 1 khi thắng
-          setCurrentStreak(prev => prev + 1);
-          
-          if (selectedSide === 'HEADS') {
-            setHeadsCount(prev => prev + 1);
-          } else {
-            setTailsCount(prev => prev + 1);
-          }
+        // Tính kết quả thực tế của coin
+        const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
+
+        // Cập nhật streak theo kết quả thực tế
+        if (streakSideRef.current === actualResult) {
+          streakCountRef.current += 1;
         } else {
-          // Reset streak về 0 khi thua
-          setCurrentStreak(0);
-          
-          const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
-          if (actualResult === 'HEADS') {
-            setHeadsCount(prev => prev + 1);
-          } else {
-            setTailsCount(prev => prev + 1);
-          }
+          streakSideRef.current = actualResult;
+          streakCountRef.current = 1;
+        }
+        setStreakSide(streakSideRef.current);
+        setStreakCount(streakCountRef.current);
+
+        // Cập nhật bộ đếm HEADS/TAILS theo kết quả thực tế
+        if (actualResult === 'HEADS') {
+          setHeadsCount(prev => prev + 1);
+        } else {
+          setTailsCount(prev => prev + 1);
         }
         
         // Update starlets
@@ -395,27 +397,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Update counters
         setTotalFlips(prev => prev + 1);
         
-        if (result.isWin) {
-          // Cập nhật streak - tăng lên 1 khi thắng
-          setCurrentStreak(prev => prev + 1);
-          
-          // Update heads/tails count
-          if (selectedSide === 'HEADS') {
-            setHeadsCount(prev => prev + 1);
-          } else {
-            setTailsCount(prev => prev + 1);
-          }
+        // Tính kết quả thực tế của coin
+        const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
+
+        // Cập nhật streak theo kết quả thực tế
+        if (streakSideRef.current === actualResult) {
+          streakCountRef.current += 1;
         } else {
-          // Reset streak về 0 khi thua
-          setCurrentStreak(0);
-          
-          // Update heads/tails count for the actual result
-          const actualResult = selectedSide === 'HEADS' ? 'TAILS' : 'HEADS';
-          if (actualResult === 'HEADS') {
-            setHeadsCount(prev => prev + 1);
-          } else {
-            setTailsCount(prev => prev + 1);
-          }
+          streakSideRef.current = actualResult;
+          streakCountRef.current = 1;
+        }
+        setStreakSide(streakSideRef.current);
+        setStreakCount(streakCountRef.current);
+
+        // Cập nhật bộ đếm HEADS/TAILS theo kết quả thực tế
+        if (actualResult === 'HEADS') {
+          setHeadsCount(prev => prev + 1);
+        } else {
+          setTailsCount(prev => prev + 1);
         }
         
         // Update starlets from shared
@@ -472,7 +471,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   }, []);
 
   return (
-    <div className="fc_app">
+    <div className={`fc_app ${isAutoFlipping ? 'is-auto-flipping' : ''}`}>
       {/* Welcome Overlay */}
       {showWelcome && (
         <div className="fc_welcome-overlay">
@@ -714,6 +713,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         <button
           className={`fc_coin-button ${selectedSide === 'HEADS' ? 'fc_selected' : ''}`}
           onClick={() => setSelectedSide('HEADS')}
+          disabled={isAutoFlipping}
         >
           {/* Counter positioned above button */}
           <div className="fc_coin-counter-wrapper">
@@ -729,11 +729,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_coin-title">HEADS</div>
           </div>
           
-          {/* Streak hiển thị khi button được chọn và có streak > 0 */}
-          {selectedSide === 'HEADS' && currentStreak > 0 && (
+          {/* Streak hiển thị khi HEADS ra ≥ 3 lần liên tiếp */}
+          {streakSide === 'HEADS' && streakCount >= 3 && (
             <div className="fc_coin-streak-wrapper">
               <div className="fc_coin-streak">STREAK</div>
-              <div className="fc_coin-streak-multiplier">X{currentStreak}</div>
+              <div className="fc_coin-streak-multiplier">X{streakCount}</div>
             </div>
           )}
         </button>
@@ -741,6 +741,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         <button
           className={`fc_coin-button ${selectedSide === 'TAILS' ? 'fc_selected' : ''}`}
           onClick={() => setSelectedSide('TAILS')}
+          disabled={isAutoFlipping}
         >
           {/* Counter positioned above button */}
           <div className="fc_coin-counter-wrapper">
@@ -756,11 +757,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_coin-title">TAILS</div>
           </div>
           
-          {/* Streak hiển thị khi button được chọn và có streak > 0 */}
-          {selectedSide === 'TAILS' && currentStreak > 0 && (
+          {/* Streak hiển thị khi TAILS ra ≥ 3 lần liên tiếp */}
+          {streakSide === 'TAILS' && streakCount >= 3 && (
             <div className="fc_coin-streak-wrapper">
               <div className="fc_coin-streak">STREAK</div>
-              <div className="fc_coin-streak-multiplier">X{currentStreak}</div>
+              <div className="fc_coin-streak-multiplier">X{streakCount}</div>
             </div>
           )}
         </button>
@@ -772,8 +773,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <button
             key={bet}
             className={`fc_bet-button ${selectedBet === bet ? 'fc_selected' : ''} ${!isBetAffordable(bet) ? 'fc_insufficient-funds' : ''}`}
-            onClick={() => isBetAffordable(bet) && setSelectedBet(bet)}
-            disabled={!isBetAffordable(bet)}
+            onClick={() => {
+              if (isAutoFlipping) return;
+              if (isBetAffordable(bet)) setSelectedBet(bet);
+            }}
+            disabled={isAutoFlipping || !isBetAffordable(bet)}
           >
             {/* Corner borders */}
             <div className="fc_corner fc_corner-top-left"></div>
@@ -789,8 +793,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         ))}
         <button 
           className={`fc_bet-button fc_all-in ${selectedBet === 'all-in' ? 'fc_selected' : ''} ${!isBetAffordable('all-in') ? 'fc_insufficient-funds' : ''}`}
-          onClick={isBetAffordable('all-in') ? handleAllInClick : undefined}
-          disabled={!isBetAffordable('all-in')}
+          onClick={isBetAffordable('all-in') && !isAutoFlipping ? handleAllInClick : undefined}
+          disabled={isAutoFlipping || !isBetAffordable('all-in')}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -806,8 +810,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
         <button 
           className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets === 0 ? 'fc_insufficient-funds' : ''}`}
-          onClick={starlets > 0 ? handleCustomClick : undefined}
-          disabled={starlets === 0}
+          onClick={starlets > 0 && !isAutoFlipping ? handleCustomClick : undefined}
+          disabled={isAutoFlipping || starlets === 0}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>

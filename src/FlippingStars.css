@@ -302,6 +302,20 @@ body::-webkit-scrollbar-track,
   overflow: visible;
 }
 
+/* Dim and disable interactions while auto flipping */
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected),
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected) {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+  cursor: not-allowed;
+}
+
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected):hover,
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected):hover {
+  transform: none;
+  background-color: rgba(0,0,0,0.3);
+}
+
 .fc_coin-content {
   position: relative;
   z-index: 1;
