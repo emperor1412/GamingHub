@@ -305,16 +305,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
-      // Calculate bet amount for auto flip
+      // Calculate bet amount for auto flip using latest starlets from profile
+      const currentStarlets = shared.getStarlets();
       let betAmount = selectedBet;
       if (selectedBet === 'all-in') {
-        betAmount = starlets;
+        betAmount = currentStarlets;
       } else if (selectedBet === 'custom') {
         betAmount = parseInt(customAmount) || 0;
       }
-      
+
       // Check if user has enough starlets
-      if (starlets < betAmount) {
+      if (currentStarlets < betAmount) {
         await shared.showPopup({
           type: 0,
           title: 'Insufficient Starlets',
@@ -324,6 +325,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setAutoFlip(false);
         setAutoFlipTarget(0);
         setAutoFlipCount(0);
+        // Auto-select the largest affordable numeric bet (exclude 'custom' and 'all-in')
+        selectLargestAffordableBet(currentStarlets);
         return;
       }
       
@@ -389,6 +392,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setAutoFlip(false);
         setAutoFlipTarget(0);
         setAutoFlipCount(0);
+        // If server error indicates insufficient starlets, choose best affordable bet
+        const errMsg = (result && result.error) || '';
+        const errCode = result && result.data && result.data.code;
+        if (errCode === 210001 || /not have enough starlets/i.test(errMsg)) {
+          const refreshedStarlets = shared.getStarlets();
+          selectLargestAffordableBet(refreshedStarlets);
+        }
       }
     };
     
@@ -573,6 +583,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     if (selectedBet === 'double') return lastWinAmount || 0;
     if (typeof selectedBet === 'number') return selectedBet;
     return 0;
+  };
+
+  // Select the largest affordable numeric bet (exclude 'custom' and 'all-in')
+  const selectLargestAffordableBet = (balance) => {
+    const affordableBets = betOptions.filter((b) => typeof b === 'number' && b <= balance);
+    if (affordableBets.length > 0) {
+      const bestBet = Math.max(...affordableBets);
+      setSelectedBet(bestBet);
+    } else {
+      setSelectedBet(null);
+    }
   };
 
   const currentBetAmount = getNumericBetAmount();
