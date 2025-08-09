@@ -143,7 +143,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
-    const finalAmount = customAmount || '0';
+    // Clamp to available starlets
+    const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
+    const finalAmount = amountNum.toString();
     setShowCustomConfirm(false);
     setSelectedBet('custom');
     setCustomAmount(finalAmount);
@@ -156,16 +158,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     } else if (value === 'confirm') {
       handleCustomConfirm();
     } else {
-      // Limit to 6 digits
-      if (customAmount.length < 6) {
-        setCustomAmount(prev => {
-          // If current value is "0", replace it instead of appending
-          if (prev === '0') {
-            return value;
-          }
-          return prev + value;
-        });
-      }
+      // Limit to 6 digits and clamp to available starlets
+      setCustomAmount(prev => {
+        if ((prev || '').length >= 6) return prev;
+        const nextRaw = prev === '0' ? value : (prev || '') + value;
+        let nextNum = parseInt(nextRaw) || 0;
+        if (nextNum > starlets) nextNum = starlets;
+        return nextNum.toString();
+      });
     }
   };
 
@@ -805,9 +805,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${!isBetAffordable('custom') ? 'fc_insufficient-funds' : ''}`}
-          onClick={isBetAffordable('custom') ? handleCustomClick : undefined}
-          disabled={!isBetAffordable('custom')}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets === 0 ? 'fc_insufficient-funds' : ''}`}
+          onClick={starlets > 0 ? handleCustomClick : undefined}
+          disabled={starlets === 0}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
