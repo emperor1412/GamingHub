@@ -157,6 +157,7 @@ body::-webkit-scrollbar-track,
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  transform: translateY(-8px); /* raise a bit */
 }
 
 .fc_logo-3d canvas {

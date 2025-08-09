@@ -443,7 +443,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       return;
     }
     
-    // Show 3D overlay for manual flip only
+    // Show 3D overlay for manual flip only and reset animation state
+    animationDoneRef.current = false;
     setShow3D(true);
     setIsFlipping(true);
     
@@ -475,9 +476,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           setTailsCount(prev => prev + 1);
         }
         
-        // Update starlets from shared
-        const updatedStarlets = shared.getStarlets();
-        setStarlets(updatedStarlets);
+        // Defer starlets update until 3D animation finishes
         
         // Defer showing win/lose until 3D animation finishes
         pendingResultRef.current = result;
@@ -528,6 +527,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     pendingResultRef.current = null;
     if (result) {
       showResultOnLogo(result.isWin, result.reward);
+      // Update starlets only after animation & result shown
+      const updatedStarlets = shared.getStarlets();
+      setStarlets(updatedStarlets);
     }
     setIsFlipping(false);
   };
@@ -778,7 +780,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <FlipCoin3D onFinished={handle3DFinished} />
           </div>
         )}
-        <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
+        {!show3D && (
+          <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
+        )}
         {winReward !== null && (
           <div className="fc_win-reward-overlay">
             <img src={starlet} alt="starlet" className="fc_win-reward-icon" />
