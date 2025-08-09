@@ -828,21 +828,37 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </div>
 
       {/* Flip button */}
-      <button 
-        className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''} ${!isBetAffordable(selectedBet) ? 'fc_flip-btn-buy-starlets' : ''}`} 
-        onClick={!isBetAffordable(selectedBet) ? () => {
-          if (onClose) onClose();
-          if (setActiveTab) setActiveTab('market');
-        } : handleFlip} 
-        disabled={isFlipping || isAutoFlipping}
-      >
-        <div className="fc_flip-content">
-          {isFlipping ? 'FLIPPING...' : 
-           isAutoFlipping ? `AUTO FLIP ${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget}` : 
-           !isBetAffordable(selectedBet) ? 'BUY MORE STARLETS' :
-           'FLIP'}
-        </div>
-      </button>
+      {!
+        isBetAffordable(selectedBet)
+        ? (
+          <div className="fc_flip-btn-container">
+            <button className={`fc_flip-btn fc_flip-btn-insufficient`} disabled>
+              <div className="fc_flip-content">NOT ENOUGH STARLETS</div>
+            </button>
+            <button
+              className="fc_buy-more-btn"
+              onClick={() => {
+                if (onClose) onClose();
+                if (setActiveTab) setActiveTab('market');
+              }}
+            >
+              <div className="fc_flip-content">BUY MORE</div>
+            </button>
+          </div>
+        ) : (
+          <button 
+            className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
+            onClick={handleFlip}
+            disabled={isFlipping || isAutoFlipping}
+          >
+            <div className="fc_flip-content">
+              {isFlipping ? 'FLIPPING...' : 
+               isAutoFlipping ? `AUTO FLIP ${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget}` : 
+               'FLIP'}
+            </div>
+          </button>
+        )
+      }
 
       {/* Flip Result Overlay */}
       {showFlipResult && lastFlipResult && (

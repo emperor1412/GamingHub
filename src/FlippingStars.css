@@ -1487,3 +1487,49 @@ body::-webkit-scrollbar-track,
 .fc_flip-btn.fc_flip-btn-buy-starlets .fc_flip-content {
   font-size: 20px;
 }
+
+/* Insufficient state container */
+.fc_flip-btn-container {
+  position: relative;
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.fc_flip-btn-insufficient {
+  background: #5c5c5c !important;
+  cursor: not-allowed !important;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+}
+
+.fc_flip-btn-insufficient .fc_flip-content {
+  font-size: 20px;
+  letter-spacing: normal;
+}
+
+.fc_buy-more-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -12px;
+  padding: 4px 18px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-family: "PP Neue Machina";
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
+  z-index: 5;
+}
+
+.fc_buy-more-btn:hover {
+  background: linear-gradient(135deg, #FF0080, #FF00F6);
+  transform: translateX(-50%) translateY(-2px);
+}
