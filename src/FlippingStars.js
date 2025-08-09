@@ -777,7 +777,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       <div className={`fc_logo-container ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
         {show3D && (
           <div className="fc_logo-3d">
-            <FlipCoin3D onFinished={handle3DFinished} />
+            <FlipCoin3D onFinished={handle3DFinished} scale={1.5} />
           </div>
         )}
         {!show3D && (

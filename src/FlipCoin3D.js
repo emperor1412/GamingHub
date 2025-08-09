@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { useAnimations, Environment } from '@react-three/drei';
+import { useAnimations, Environment, Center } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 
@@ -49,10 +49,16 @@ function Coin({ scale = 1, onFinished }) {
     };
   }, [actions, names, mixer, onFinished]);
 
-  return <primitive ref={group} object={gltf.scene} scale={scale} />;
+  return (
+    <Center>
+      <group ref={group} scale={scale}>
+        <primitive object={gltf.scene} />
+      </group>
+    </Center>
+  );
 }
 
-export default function FlipCoin3D({ onFinished }) {
+export default function FlipCoin3D({ onFinished, scale = 2 }) {
   return (
     <Canvas
       gl={{ alpha: true, antialias: true }}
@@ -67,7 +73,7 @@ export default function FlipCoin3D({ onFinished }) {
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
       <Suspense fallback={null}>
-        <Coin onFinished={onFinished} />
+        <Coin onFinished={onFinished} scale={scale} />
         <Environment preset="sunset" background={false} />
       </Suspense>
     </Canvas>

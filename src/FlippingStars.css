@@ -142,6 +142,8 @@ body::-webkit-scrollbar-track,
   text-align: center;
   padding: 20px;
   position: relative;
+  z-index: 3000; /* ensure logo stack is above other in-flow content */
+  overflow: visible; /* allow 3D canvas to extend beyond container */
   /* Fix a consistent height to avoid layout shift when swapping images */
   min-height: 220px; /* matches roughly 350px image max-width with aspect spacing */
   display: flex;
@@ -152,17 +154,22 @@ body::-webkit-scrollbar-track,
 /* 3D overlay on top of the logo */
 .fc_logo-3d {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: 180%;
+  height: 180%;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transform: translateY(-8px); /* raise a bit */
+  transform: translate(-50%, -50%);
+  z-index: 3001; /* above logo image and any siblings inside container */
 }
 
 .fc_logo-3d canvas {
   width: 100% !important;
   height: 100% !important;
+  pointer-events: none !important; /* ensure underlying buttons remain clickable */
 }
 
 .fc_logo-image {
