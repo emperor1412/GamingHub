@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
+import FlipCoin3D from './FlipCoin3D';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
@@ -61,6 +62,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   
   // Thay thế shouldStopAutoFlip state bằng useRef
   const shouldStopAutoFlipRef = useRef(false);
+
+  // 3D animation overlay state and pending result
+  const [show3D, setShow3D] = useState(false);
+  const pendingResultRef = useRef(null);
+  const animationDoneRef = useRef(false);
 
   // Double or Nothing states
   const [lastWinAmount, setLastWinAmount] = useState(0);
@@ -437,6 +443,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       return;
     }
     
+    // Show 3D overlay for manual flip only
+    setShow3D(true);
     setIsFlipping(true);
     
     try {
@@ -471,8 +479,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
         
-        // Change logo for 4 seconds and overlay reward if win
-        showResultOnLogo(result.isWin, result.reward);
+        // Defer showing win/lose until 3D animation finishes
+        pendingResultRef.current = result;
+        if (animationDoneRef.current) {
+          showResultOnLogo(result.isWin, result.reward);
+          pendingResultRef.current = null;
+          setIsFlipping(false);
+        }
 
         // Update Double or Nothing availability for next flip
         if (result.isWin && result.reward > 0) {
@@ -487,22 +500,36 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         }
         
       } else {
+        setShow3D(false);
         await shared.showPopup({
           type: 0,
           title: 'Flip Failed',
           message: result.error || 'Failed to flip coin'
         });
+        setIsFlipping(false);
       }
     } catch (error) {
       console.error('Flip error:', error);
+      setShow3D(false);
       await shared.showPopup({
         type: 0,
         title: 'Error',
         message: 'An error occurred while flipping'
       });
-    } finally {
       setIsFlipping(false);
     }
+  };
+
+  // Called when 3D animation finishes
+  const handle3DFinished = () => {
+    setShow3D(false);
+    animationDoneRef.current = true;
+    const result = pendingResultRef.current;
+    pendingResultRef.current = null;
+    if (result) {
+      showResultOnLogo(result.isWin, result.reward);
+    }
+    setIsFlipping(false);
   };
 
   // Thêm useEffect để theo dõi shouldStopAutoFlip
@@ -746,6 +773,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
       {/* Logo */}
       <div className={`fc_logo-container ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
+        {show3D && (
+          <div className="fc_logo-3d">
+            <FlipCoin3D onFinished={handle3DFinished} />
+          </div>
+        )}
         <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
         {winReward !== null && (
           <div className="fc_win-reward-overlay">

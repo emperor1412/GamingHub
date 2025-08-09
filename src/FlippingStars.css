@@ -149,6 +149,21 @@ body::-webkit-scrollbar-track,
   justify-content: center;
 }
 
+/* 3D overlay on top of the logo */
+.fc_logo-3d {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fc_logo-3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .fc_logo-image {
   width: 100%;
   max-width: 350px;
