@@ -62,6 +62,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Thay thế shouldStopAutoFlip state bằng useRef
   const shouldStopAutoFlipRef = useRef(false);
 
+  // Double or Nothing states
+  const [lastWinAmount, setLastWinAmount] = useState(0);
+  const [canDouble, setCanDouble] = useState(false);
+  const [useDoubleNext, setUseDoubleNext] = useState(false);
+
   // Helper: show result on logo for 4 seconds
   const showResultOnLogo = (isWin, rewardAmount) => {
     if (logoTimeoutRef.current) {
@@ -85,6 +90,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const isBetAffordable = (betAmount) => {
     if (betAmount === 'all-in') {
       return starlets > 0; // All-in is always affordable if user has any starlets
+    } else if (betAmount === 'double') {
+      return canDouble && lastWinAmount > 0 && lastWinAmount <= starlets;
     } else if (betAmount === 'custom') {
       const customBet = parseInt(customAmount) || 0;
       return customBet > 0 && customBet <= starlets;
@@ -156,6 +163,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleAllInConfirm = () => {
     setShowAllInConfirm(false);
     setSelectedBet('all-in');
+    setUseDoubleNext(false);
     // Here you can add the actual ALL IN logic
   };
 
@@ -175,6 +183,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setShowCustomConfirm(false);
     setSelectedBet('custom');
     setCustomAmount(finalAmount);
+    setUseDoubleNext(false);
     console.log('Custom amount set:', finalAmount); // Debug log
   };
 
@@ -218,6 +227,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipConfirm = () => {
     if (selectedAutoFlipCount !== null) {
+      if (selectedBet === 'double') {
+        shared.showPopup({
+          type: 0,
+          title: 'Not Supported',
+          message: 'Double or Nothing cannot be used with Auto Flip'
+        });
+        return;
+      }
       // Check if the selected bet is affordable before starting auto flip
       if (!isBetAffordable(selectedBet)) {
         shared.showPopup({
@@ -233,6 +250,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setAutoFlipTarget(selectedAutoFlipCount);
       setAutoFlipCount(0);
       setShowAutoFlipOverlay(false);
+      setUseDoubleNext(false);
       
       // Start auto flipping immediately
       startAutoFlip(selectedAutoFlipCount);
@@ -335,6 +353,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setStarlets(updatedStarlets);
         // Update logo to reflect win/lose
         showResultOnLogo(result.isWin, result.reward);
+
+        // Update Double or Nothing availability
+        if (result.isWin && result.reward > 0) {
+          setLastWinAmount(result.reward);
+          setCanDouble(true);
+        } else {
+          setCanDouble(false);
+          setUseDoubleNext(false);
+        }
         
         // Continue auto flip after a short delay
         autoFlipTimeoutRef.current = setTimeout(() => {
@@ -370,12 +397,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     if (isFlipping) return; // Prevent multiple clicks
     
     // Validate bet amount - handle regular bet amounts, ALL IN, and Custom Amount
-    let betAmount = selectedBet;
+    let betAmount;
+    if (selectedBet === 'double') {
+      betAmount = lastWinAmount || 0;
+    } else {
+      betAmount = selectedBet;
+    }
     
     if (selectedBet === 'all-in') {
       betAmount = starlets; // Use all available starlets
     } else if (selectedBet === 'custom') {
       betAmount = parseInt(customAmount) || 0;
+    } else if (selectedBet === 'double') {
+      // already set from lastWinAmount
     } else if (typeof selectedBet !== 'number') {
       await shared.showPopup({
         type: 0,
@@ -439,6 +473,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         
         // Change logo for 4 seconds and overlay reward if win
         showResultOnLogo(result.isWin, result.reward);
+
+        // Update Double or Nothing availability for next flip
+        if (result.isWin && result.reward > 0) {
+          setLastWinAmount(result.reward);
+          setCanDouble(true);
+        } else {
+          setCanDouble(false);
+          // If user had selected Double but lost, revert to default bet
+          if (selectedBet === 'double') {
+            setSelectedBet(betOptions[0]);
+          }
+        }
         
       } else {
         await shared.showPopup({
@@ -841,7 +887,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
-        <button className="fc_bet-button fc_disabled">
+        <button 
+          className={`fc_bet-button fc_double-button ${selectedBet === 'double' ? 'fc_selected' : ''} ${(canDouble && lastWinAmount > 0 && lastWinAmount <= starlets) ? '' : 'fc_insufficient-funds'}`}
+          onClick={() => {
+            if (isAutoFlipping) return;
+            if (!canDouble) return;
+            if (lastWinAmount <= 0 || lastWinAmount > starlets) return;
+            setSelectedBet('double');
+          }}
+          disabled={isAutoFlipping || !canDouble || lastWinAmount <= 0 || lastWinAmount > starlets}
+        >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>

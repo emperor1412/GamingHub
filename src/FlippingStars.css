@@ -623,6 +623,24 @@ body::-webkit-scrollbar-track,
   border-color: #555;
 }
 
+/* Double or Nothing separate button styling */
+.fc_bet-button.fc_double-button.fc_selected .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_bet-button.fc_double-button.fc_selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 12px);
+  height: calc(100% - 20px);
+  background: #000FEF;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 3% 100%);
+  z-index: 0;
+}
+
 /* Insufficient funds styling - dimmed buttons when user doesn't have enough starlets */
 .fc_bet-button.fc_insufficient-funds {
   opacity: 0.4;
