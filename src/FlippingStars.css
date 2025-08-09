@@ -140,8 +140,13 @@ body::-webkit-scrollbar-track,
 /* Logo Container */
 .fc_logo-container {
   text-align: center;
-  margin-bottom: 20px;
   padding: 20px;
+  position: relative;
+  /* Fix a consistent height to avoid layout shift when swapping images */
+  min-height: 220px; /* matches roughly 350px image max-width with aspect spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fc_logo-image {
@@ -155,6 +160,41 @@ body::-webkit-scrollbar-track,
   transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(255, 0, 246, 0.8)) 
           drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+}
+
+/* Reduce surrounding padding while showing win/lose to keep visual balance */
+.fc_logo-container.fc_logo-result {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Win reward overlay over the logo */
+.fc_win-reward-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  border: 2px solid #FF00F6;
+  border-radius: 12px;
+}
+
+.fc_win-reward-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.fc_win-reward-amount {
+  font-family: "PP Neue Machina";
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
 }
 
 /* Flip Controls */

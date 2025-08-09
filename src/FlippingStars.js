@@ -4,6 +4,8 @@ import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
+import winFlippinStar from './images/WinFlippinStar.png';
+import loseFlippinStar from './images/LoseFlippinStar.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
@@ -45,8 +47,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   
   // New states for flip functionality
   const [isFlipping, setIsFlipping] = useState(false);
-  const [lastFlipResult, setLastFlipResult] = useState(null);
-  const [showFlipResult, setShowFlipResult] = useState(false);
+  // Logo swap and reward overlay
+  const [logoImage, setLogoImage] = useState(flippingStarsLogo);
+  const [winReward, setWinReward] = useState(null);
+  const logoTimeoutRef = useRef(null);
   
   // Auto flip states
   const [autoFlipCount, setAutoFlipCount] = useState(0);
@@ -57,6 +61,25 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   
   // Thay thế shouldStopAutoFlip state bằng useRef
   const shouldStopAutoFlipRef = useRef(false);
+
+  // Helper: show result on logo for 4 seconds
+  const showResultOnLogo = (isWin, rewardAmount) => {
+    if (logoTimeoutRef.current) {
+      clearTimeout(logoTimeoutRef.current);
+      logoTimeoutRef.current = null;
+    }
+    if (isWin) {
+      setLogoImage(winFlippinStar);
+      setWinReward(rewardAmount || 0);
+    } else {
+      setLogoImage(loseFlippinStar);
+      setWinReward(null);
+    }
+    logoTimeoutRef.current = setTimeout(() => {
+      setLogoImage(flippingStarsLogo);
+      setWinReward(null);
+    }, 4000);
+  };
 
   // Function to check if a bet amount is affordable
   const isBetAffordable = (betAmount) => {
@@ -310,6 +333,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Update starlets
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
+        // Update logo to reflect win/lose
+        showResultOnLogo(result.isWin, result.reward);
         
         // Continue auto flip after a short delay
         autoFlipTimeoutRef.current = setTimeout(() => {
@@ -385,15 +410,6 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount);
       
       if (result.success) {
-        // Update flip result
-        setLastFlipResult({
-          isWin: result.isWin,
-          reward: result.reward,
-          betAmount: betAmount,
-          selectedSide: selectedSide,
-          actualResult: result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS')
-        });
-        
         // Update counters
         setTotalFlips(prev => prev + 1);
         
@@ -421,14 +437,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
         
-        // Show result
-        setShowFlipResult(true);
-        
-        // Hide result after 3 seconds
-        setTimeout(() => {
-          setShowFlipResult(false);
-          setLastFlipResult(null);
-        }, 3000);
+        // Change logo for 4 seconds and overlay reward if win
+        showResultOnLogo(result.isWin, result.reward);
         
       } else {
         await shared.showPopup({
@@ -466,6 +476,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       if (autoFlipTimeoutRef.current) {
         clearTimeout(autoFlipTimeoutRef.current);
+      }
+      if (logoTimeoutRef.current) {
+        clearTimeout(logoTimeoutRef.current);
       }
     };
   }, []);
@@ -686,8 +699,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </header>
 
       {/* Logo */}
-      <div className="fc_logo-container">
-        <img src={flippingStarsLogo} alt="Flipping Stars" className="fc_logo-image" />
+      <div className={`fc_logo-container ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
+        <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
+        {winReward !== null && (
+          <div className="fc_win-reward-overlay">
+            <img src={starlet} alt="starlet" className="fc_win-reward-icon" />
+            <span className="fc_win-reward-amount">+{winReward}</span>
+          </div>
+        )}
       </div>
 
       {/* Total Flips and Auto Flip Controls */}
@@ -864,26 +883,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         )
       }
 
-      {/* Flip Result Overlay */}
-      {showFlipResult && lastFlipResult && (
-        <div className="fc_flip-result-overlay">
-          <div className="fc_flip-result-content">
-            <div className="fc_flip-result-header">
-              <h3>FLIP RESULT</h3>
-              <button className="fc_flip-result-close" onClick={() => setShowFlipResult(false)}>
-                <img src={exitButton} alt="Close" />
-              </button>
-            </div>
-            <div className="fc_flip-result-details">
-              <p>You bet: <span className="fc_flip-result-bet-amount">{lastFlipResult.betAmount}</span></p>
-              <p>You won: <span className="fc_flip-result-reward">{lastFlipResult.reward}</span></p>
-              <p>Actual result: <span className="fc_flip-result-actual-result">{lastFlipResult.actualResult}</span></p>
-                             <p>Win/Loss: <span className={`fc_flip-result-win-loss ${lastFlipResult.isWin ? 'win' : 'loss'}`}>{lastFlipResult.isWin ? 'WIN' : 'LOSS'}</span></p>
-            </div>
-            <button className="fc_flip-result-ok-btn" onClick={() => setShowFlipResult(false)}>OK</button>
-          </div>
-        </div>
-      )}
+      {/* Flip result popup removed: handled by logo swap and reward overlay */}
 
       {/* Bottom nav */}
       <nav className="fc_bottom-nav">
