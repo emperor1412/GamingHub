@@ -142,13 +142,17 @@ body::-webkit-scrollbar-track,
   text-align: center;
   padding: 20px;
   position: relative;
-  z-index: 3000; /* ensure logo stack is above other in-flow content */
   overflow: visible; /* allow 3D canvas to extend beyond container */
   /* Fix a consistent height to avoid layout shift when swapping images */
   min-height: 220px; /* matches roughly 350px image max-width with aspect spacing */
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Elevate only when 3D is showing; keep below global overlays (z 2000) */
+.fc_logo-container.fc_logo-elevated { 
+  z-index: 1500;
 }
 
 /* 3D overlay on top of the logo */
@@ -163,7 +167,7 @@ body::-webkit-scrollbar-track,
   justify-content: center;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 3001; /* above logo image and any siblings inside container */
+  z-index: 1501; /* above logo image and any siblings inside container */
 }
 
 .fc_logo-3d canvas {
@@ -663,6 +667,30 @@ body::-webkit-scrollbar-track,
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 3% 100%);
   z-index: 0;
 }
+
+/* Double or Nothing content two-line layout */
+.fc_double-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  gap: 2px;
+}
+
+.fc_double-line1,
+.fc_double-line2 {
+  font-family: "PP Neue Machina";
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Slightly smaller so it fits 2 lines nicely */
+.fc_double-line1 { font-size: 12px; }
+.fc_double-line2 { font-size: 13px; }
+
+/* Purple word for DOUBLE, white for OR */
+.fc_double-word { color: #FF00F6; }
+.fc_double-or { color: #FFFFFF; }
 
 /* Insufficient funds styling - dimmed buttons when user doesn't have enough starlets */
 .fc_bet-button.fc_insufficient-funds {
@@ -1559,6 +1587,16 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-btn:disabled {
   cursor: not-allowed;
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* remove hover highlight when disabled */
+.fc_flip-btn:disabled:hover {
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .fc_flip-btn.fc_flip-btn-buy-starlets {

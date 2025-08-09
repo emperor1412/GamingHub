@@ -558,6 +558,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     };
   }, []);
 
+  // Helper to compute numeric bet amount for current selection
+  const getNumericBetAmount = () => {
+    if (selectedBet === 'all-in') return starlets;
+    if (selectedBet === 'custom') return parseInt(customAmount) || 0;
+    if (selectedBet === 'double') return lastWinAmount || 0;
+    if (typeof selectedBet === 'number') return selectedBet;
+    return 0;
+  };
+
+  const currentBetAmount = getNumericBetAmount();
+  const isValidPositiveBet = currentBetAmount > 0;
+  const hasEnoughStarlets = isValidPositiveBet && starlets >= currentBetAmount;
+  const shouldShowInsufficient = isValidPositiveBet && !hasEnoughStarlets;
+
   return (
     <div className={`fc_app ${isAutoFlipping ? 'is-auto-flipping' : ''}`}>
       {/* Welcome Overlay */}
@@ -774,7 +788,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </header>
 
       {/* Logo */}
-      <div className={`fc_logo-container ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
+      <div className={`fc_logo-container ${show3D ? 'fc_logo-elevated' : ''} ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
         {show3D && (
           <div className="fc_logo-3d">
             <FlipCoin3D onFinished={handle3DFinished} scale={1.5} />
@@ -904,7 +918,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <div className="fc_bet-content fc_all-in-content">
             <div className="fc_all-in-title">ALL IN</div>
             <div className="fc_all-in-details">
-              <span className="fc_all-in-amount">{selectedBet === 'all-in' ? starlets : 'ALL'}</span>
+              <span className="fc_all-in-percent">.01%</span>
+              <span className="fc_all-in-amount">X10</span>
               <img src={starlet} alt="starlet" className="fc_all-in-starlet" />
             </div>
           </div>
@@ -937,14 +952,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <div className="fc_corner fc_corner-top-right"></div>
           <div className="fc_corner fc_corner-bottom-left"></div>
           <div className="fc_corner fc_corner-bottom-right"></div>
-          <div className="fc_bet-content">DOUBLE OR NOTHING</div>
+          <div className="fc_bet-content fc_double-content">
+            <div className="fc_double-line1"><span className="fc_double-word">DOUBLE</span> <span className="fc_double-or">OR</span></div>
+            <div className="fc_double-line2">NOTHING</div>
+          </div>
         </button>
       </div>
 
       {/* Flip button */}
-      {!
-        isBetAffordable(selectedBet)
-        ? (
+      { shouldShowInsufficient ? (
           <div className="fc_flip-btn-container">
             <button className={`fc_flip-btn fc_flip-btn-insufficient`} disabled>
               <div className="fc_flip-content">NOT ENOUGH STARLETS</div>
@@ -963,7 +979,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <button 
             className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
             onClick={handleFlip}
-            disabled={isFlipping || isAutoFlipping}
+            disabled={isFlipping || isAutoFlipping || !isValidPositiveBet}
           >
             <div className="fc_flip-content">
               {isFlipping ? 'FLIPPING...' : 
