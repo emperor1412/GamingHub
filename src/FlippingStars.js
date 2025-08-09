@@ -24,6 +24,7 @@ import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
 const betOptions = [1, 10, 20, 50, 100, 500];
+const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
@@ -126,10 +127,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setupProfileData();
   }, [shared.userProfile]); // Add dependency to refresh when userProfile changes
 
+  // Show welcome overlay only once per app session
   useEffect(() => {
-    // Show welcome overlay when totalFlips is 0
-    setShowWelcome(totalFlips === 0);
-  }, [totalFlips]);
+    try {
+      const shown = sessionStorage.getItem(WELCOME_FLAG_KEY);
+      if (!shown) {
+        setShowWelcome(true);
+        sessionStorage.setItem(WELCOME_FLAG_KEY, '1');
+      }
+    } catch (e) {
+      // Fallback if sessionStorage is unavailable
+      setShowWelcome(true);
+    }
+  }, []);
 
   useEffect(() => {
     // Debug auto flip state changes
@@ -157,8 +167,6 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
-    // Set totalFlips to 1 so welcome doesn't show again
-    setTotalFlips(0);
   };
 
   const handleAllInClick = () => {
