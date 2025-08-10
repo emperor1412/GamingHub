@@ -291,12 +291,12 @@ const bind_fslid = async () => {
   // Focus/Unfocus detection
   useEffect(() => {
     const handleFocus = () => {
-      console.log('App focused');
+      // console.log('App focused');
       
       // Check if app was unfocused for more than 60 seconds
       if (unfocusTimeRef.current) {
         const unfocusDuration = Date.now() - unfocusTimeRef.current;
-        console.log(`App was unfocused for ${unfocusDuration}ms`);
+        // console.log(`App was unfocused for ${unfocusDuration}ms`);
         
         if (unfocusDuration > FOCUS_TIMEOUT) {
           console.log('App was unfocused for more than 60s, reloading data...');
@@ -308,9 +308,9 @@ const bind_fslid = async () => {
     };
 
     const handleUnfocus = () => {
-      console.log('App unfocused');
-      console.log('loginData at unfocus:', loginData);
-      console.log('shared.loginData at unfocus:', shared.loginData);
+      // console.log('App unfocused');
+      // console.log('loginData at unfocus:', loginData);
+      // console.log('shared.loginData at unfocus:', shared.loginData);
       unfocusTimeRef.current = Date.now();
     };
 
