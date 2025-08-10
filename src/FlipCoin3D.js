@@ -6,8 +6,8 @@ import * as THREE from 'three';
 
 function Coin({ scale = 1, onFinished, loop = true }) {
   const group = useRef();
-  // Use absolute path because gltf is in public/
-  const gltf = useLoader(GLTFLoader, '/video_game_coin/scene.gltf');
+  // Use relative path for better compatibility
+  const gltf = useLoader(GLTFLoader, './video_game_coin/scene.gltf');
   // Ensure materials use correct color space
   useEffect(() => {
     if (!gltf || !gltf.scene) return;
