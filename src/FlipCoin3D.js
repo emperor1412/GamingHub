@@ -1,17 +1,20 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { useAnimations, Environment, Center } from '@react-three/drei';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Canvas } from '@react-three/fiber';
+import { useAnimations, Environment, Center, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Preload the model for better performance
+useGLTF.preload('/video_game_coin/scene.gltf');
 
 function Coin({ scale = 1, onFinished, loop = true }) {
   const group = useRef();
-  // Use absolute path because gltf is in public/
-  const gltf = useLoader(GLTFLoader, '/video_game_coin/scene.gltf');
+  // Use useGLTF for automatic caching instead of useLoader
+  const { scene, animations } = useGLTF('/video_game_coin/scene.gltf');
+  
   // Ensure materials use correct color space
   useEffect(() => {
-    if (!gltf || !gltf.scene) return;
-    gltf.scene.traverse((obj) => {
+    if (!scene) return;
+    scene.traverse((obj) => {
       if (obj.isMesh && obj.material) {
         const mat = obj.material;
         if (Array.isArray(mat)) {
@@ -27,8 +30,9 @@ function Coin({ scale = 1, onFinished, loop = true }) {
         }
       }
     });
-  }, [gltf]);
-  const { actions, names, mixer } = useAnimations(gltf.animations, group);
+  }, [scene]);
+  
+  const { actions, names, mixer } = useAnimations(animations, group);
 
   useEffect(() => {
     if (!actions || !names || names.length === 0) return;
@@ -54,12 +58,12 @@ function Coin({ scale = 1, onFinished, loop = true }) {
     return () => {
       if (!loop) mixer.removeEventListener('finished', done);
     };
-  }, [actions, names, mixer, onFinished]);
+  }, [actions, names, mixer, onFinished, loop]);
 
   return (
     <Center>
       <group ref={group} scale={scale}>
-        <primitive object={gltf.scene} />
+        <primitive object={scene} />
       </group>
     </Center>
   );
