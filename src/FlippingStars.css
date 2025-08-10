@@ -143,18 +143,28 @@ body::-webkit-scrollbar-track,
   padding: 20px 20px 0 20px;
   position: relative;
   overflow: visible; /* allow 3D canvas to extend beyond container */
-  /* Use aspect-ratio to maintain proportions while preventing layout shift */
+  /* Use fixed dimensions instead of aspect-ratio for better consistency */
+  width: 350px;
+  height: 260px;
   max-width: 350px;
-  aspect-ratio: 350 / 260;
+  max-height: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto; /* Ensure horizontal centering */
+  box-sizing: border-box; /* Ensure padding is included in dimensions */
 }
 
 /* Elevate only when 3D is showing; keep below global overlays (z 2000) */
 .fc_logo-container.fc_logo-elevated { 
   z-index: 1500;
+  /* Maintain exact same dimensions and spacing */
+  width: 350px;
+  height: 260px;
+  max-width: 350px;
+  max-height: 260px;
+  padding: 20px 20px 0 20px;
+  margin: 0 auto;
 }
 
 /* 3D overlay on top of the logo */
@@ -191,9 +201,27 @@ body::-webkit-scrollbar-track,
           drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
 }
 
-/* Keep consistent padding for all logo states */
+/* Keep consistent padding and dimensions for all logo states */
 .fc_logo-container.fc_logo-result {
   padding: 20px 20px 0 20px;
+  width: 350px;
+  height: 260px;
+  max-width: 350px;
+  max-height: 260px;
+  margin: 0 auto;
+}
+
+/* Ensure all logo container states have identical dimensions */
+.fc_logo-container,
+.fc_logo-container.fc_logo-elevated,
+.fc_logo-container.fc_logo-result {
+  width: 350px;
+  height: 260px;
+  max-width: 350px;
+  max-height: 260px;
+  padding: 20px 20px 0 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Win reward progress bar - new design */
