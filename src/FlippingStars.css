@@ -140,14 +140,48 @@ body::-webkit-scrollbar-track,
 /* Logo Container */
 .fc_logo-container {
   text-align: center;
-  margin-bottom: 20px;
   padding: 20px;
+  position: relative;
+  overflow: visible; /* allow 3D canvas to extend beyond container */
+  /* Use aspect-ratio to maintain proportions while preventing layout shift */
+  max-width: 350px;
+  aspect-ratio: 350 / 260;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Ensure horizontal centering */
+}
+
+/* Elevate only when 3D is showing; keep below global overlays (z 2000) */
+.fc_logo-container.fc_logo-elevated { 
+  z-index: 1500;
+}
+
+/* 3D overlay on top of the logo */
+.fc_logo-3d {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180%;
+  height: 180%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1501; /* above logo image and any siblings inside container */
+}
+
+.fc_logo-3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important; /* ensure underlying buttons remain clickable */
 }
 
 .fc_logo-image {
   width: 100%;
-  max-width: 350px;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -155,6 +189,168 @@ body::-webkit-scrollbar-track,
   transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(255, 0, 246, 0.8)) 
           drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+}
+
+/* Keep consistent padding for all logo states */
+.fc_logo-container.fc_logo-result {
+  padding: 20px;
+}
+
+/* Win reward progress bar - new design */
+.fc_win-reward-progress {
+  position: absolute;
+  top: 75%; /* Position below the logo, not above */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px; /* Reduced width - shorter progress bar */
+  height: 40px; /* Keep height the same */
+  z-index: 1400; /* Below logo image to ensure proper layering */
+  animation: progressBarSlideIn 0.5s ease-out;
+}
+
+@keyframes progressBarSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.fc_progress-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #FF00F6 0%, #8A2BE2 100%);
+  border-radius: 20px; /* Smaller border radius for smaller bar */
+  position: relative;
+  overflow: visible; /* Allow starlet to overflow */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Smaller shadow for smaller bar */
+}
+
+.fc_progress-numbers {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the single number */
+  flex: 1;
+  padding: 0 8px; /* Even smaller padding for shorter bar */
+}
+
+.fc_progress-number {
+  font-family: "PP Neue Machina";
+  font-size: 20px; /* Slightly larger font to fill the shorter bar */
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  animation: numberPopIn 0.6s ease-out;
+  /* Center the single number */
+  text-align: center;
+}
+
+@keyframes numberPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fc_progress-starlet {
+  width: 60px; /* Much larger than progress bar height (40px) */
+  height: 60px; /* Much larger than progress bar height (40px) */
+  background: transparent; /* Remove background, keep transparent */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  /* Position to overflow the progress bar */
+  margin-top: -10px; /* Move up to overlap with progress bar */
+  /* Ensure perfect centering within progress bar */
+  position: absolute;
+  right: -10px; /* Position to center of progress bar */
+  top: 0px; /* Fine-tuned position to center within progress bar */
+  transform: none; /* Remove transform to use fixed positioning */
+}
+
+.fc_progress-starlet-icon {
+  width: 48px; /* Much larger icon - almost fills the container */
+  height: 48px; /* Much larger icon - almost fills the container */
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.fc_progress-starlet:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
+}
+
+.fc_progress-starlet:hover .fc_progress-starlet-icon {
+  transform: rotate(15deg);
+}
+
+
+
+.fc_progress-starlet:hover .fc_progress-starlet-icon {
+  transform: rotate(15deg);
+}
+
+/* Responsive design for progress bar */
+@media (max-width: 768px) {
+  .fc_win-reward-progress {
+    width: 140px;
+    height: 35px;
+  }
+  
+  .fc_progress-number {
+    font-size: 22px;
+  }
+  
+  .fc_progress-starlet {
+    width: 50px;
+    height: 50px;
+    margin-top: -8px;
+    right: -25px; /* Adjust for smaller progress bar */
+    top: -2px; /* Center icon's center on progress bar center: (35-50)/2 = -7.5, but with margin-top: -8px, so top: -2px */
+  }
+  
+  .fc_progress-starlet-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fc_win-reward-progress {
+    width: 120px;
+    height: 30px;
+  }
+  
+  .fc_progress-number {
+    font-size: 22px;
+  }
+  
+  .fc_progress-starlet {
+    width: 45px;
+    height: 45px;
+    margin-top: -7px;
+    right: -22px; /* Adjust for smaller progress bar */
+    top: -2px; /* Center icon's center on progress bar center: (30-45)/2 = -7.5, but with margin-top: -7px, so top: -2px */
+  }
+  
+  .fc_progress-starlet-icon {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* Flip Controls */
@@ -300,6 +496,20 @@ body::-webkit-scrollbar-track,
   align-items: center;
   justify-content: center;
   overflow: visible;
+}
+
+/* Dim and disable interactions while auto flipping */
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected),
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected) {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+  cursor: not-allowed;
+}
+
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected):hover,
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected):hover {
+  transform: none;
+  background-color: rgba(0,0,0,0.3);
 }
 
 .fc_coin-content {
@@ -568,6 +778,48 @@ body::-webkit-scrollbar-track,
 .fc_bet-button.fc_disabled .fc_corner {
   border-color: #555;
 }
+
+/* Double or Nothing separate button styling */
+.fc_bet-button.fc_double-button.fc_selected .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_bet-button.fc_double-button.fc_selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 12px);
+  height: calc(100% - 20px);
+  background: #000FEF;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 3% 100%);
+  z-index: 0;
+}
+
+/* Double or Nothing content two-line layout */
+.fc_double-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  gap: 2px;
+}
+
+.fc_double-line1,
+.fc_double-line2 {
+  font-family: "PP Neue Machina";
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Slightly smaller so it fits 2 lines nicely */
+.fc_double-line1 { font-size: 12px; }
+.fc_double-line2 { font-size: 13px; }
+
+/* Purple word for DOUBLE, white for OR */
+.fc_double-word { color: #FF00F6; }
+.fc_double-or { color: #FFFFFF; }
 
 /* Insufficient funds styling - dimmed buttons when user doesn't have enough starlets */
 .fc_bet-button.fc_insufficient-funds {
@@ -1464,6 +1716,16 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-btn:disabled {
   cursor: not-allowed;
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* remove hover highlight when disabled */
+.fc_flip-btn:disabled:hover {
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .fc_flip-btn.fc_flip-btn-buy-starlets {
@@ -1486,4 +1748,50 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-btn.fc_flip-btn-buy-starlets .fc_flip-content {
   font-size: 20px;
+}
+
+/* Insufficient state container */
+.fc_flip-btn-container {
+  position: relative;
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.fc_flip-btn-insufficient {
+  background: #5c5c5c !important;
+  cursor: not-allowed !important;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+}
+
+.fc_flip-btn-insufficient .fc_flip-content {
+  font-size: 20px;
+  letter-spacing: normal;
+}
+
+.fc_buy-more-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -12px;
+  padding: 4px 18px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-family: "PP Neue Machina";
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
+  z-index: 5;
+}
+
+.fc_buy-more-btn:hover {
+  background: linear-gradient(135deg, #FF0080, #FF00F6);
+  transform: translateX(-50%) translateY(-2px);
 }

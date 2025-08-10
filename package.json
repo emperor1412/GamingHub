@@ -8,12 +8,15 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@react-three/drei": "^9.103.0",
+    "@react-three/fiber": "^8.15.21",
     "firebase": "^11.2.0",
     "fsl-authorization": "^1.1.1-beta.23",
     "next-scratchcard": "^0.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "three": "^0.160.0",
     "web-vitals": "^2.1.4",
     "web3": "^4.16.0"
   },
@@ -44,7 +47,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://emperor1412.github.io/GamingHub/",
+  "homepage": ".",
   "devDependencies": {
     "gh-pages": "^6.2.0"
   }
