@@ -95,7 +95,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   // Function to show result on logo for 4 seconds
-  const showResultOnLogo = (isWin, rewardAmount) => {
+  const showResultOnLogo = (isWin, rewardAmount, duration = 10000) => {
     if (logoTimeoutRef.current) {
       clearTimeout(logoTimeoutRef.current);
       logoTimeoutRef.current = null;
@@ -107,10 +107,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setLogoImage(loseFlippinStar);
       setWinReward(null);
     }
-    logoTimeoutRef.current = setTimeout(() => {
-      setLogoImage(flippingStarsLogo);
-      setWinReward(null);
-    }, 10000);
+    
+    // Only set logo timeout if auto flip is not being stopped
+    if (!shouldStopAutoFlipRef.current) {
+      logoTimeoutRef.current = setTimeout(() => {
+        // Check again before resetting logo
+        if (!shouldStopAutoFlipRef.current) {
+          setLogoImage(flippingStarsLogo);
+          setWinReward(null);
+        }
+      }, duration);
+    }
   };
 
   // Function to check if a bet amount is affordable
@@ -303,6 +310,41 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setSelectedAutoFlipCount(null);
   };
 
+  const handleStopAutoFlip = () => {
+    console.log('Stopping auto flip...');
+    shouldStopAutoFlipRef.current = true;
+    
+    // Clear any pending timeouts
+    if (autoFlipTimeoutRef.current) {
+      clearTimeout(autoFlipTimeoutRef.current);
+      autoFlipTimeoutRef.current = null;
+    }
+    if (manualFlipTimerRef.current) {
+      clearTimeout(manualFlipTimerRef.current);
+      manualFlipTimerRef.current = null;
+    }
+    if (logoTimeoutRef.current) {
+      clearTimeout(logoTimeoutRef.current);
+      logoTimeoutRef.current = null;
+    }
+    
+    // Reset states
+    setIsAutoFlipping(false);
+    setAutoFlip(false);
+    setAutoFlipTarget(0);
+    setAutoFlipCount(0);
+    setShow3D(false);
+    setIsFlipping(false);
+    
+    // Reset logo to default
+    setLogoImage(flippingStarsLogo);
+    setWinReward(null);
+    
+    // Auto-select the largest affordable numeric bet when stopping
+    const currentStarlets = shared.getStarlets();
+    selectLargestAffordableBet(currentStarlets);
+  };
+
   // Function to start auto flipping
   const startAutoFlip = async (targetCount) => {
     console.log('startAutoFlip called with targetCount:', targetCount, 'isAutoFlipping:', isAutoFlipping);
@@ -365,76 +407,148 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
-      // Perform single flip
-      const isHeads = selectedSide === 'HEADS';
-      const result = await shared.flipCoin(isHeads, betAmount);
+      // Show 3D animation for auto flip (same as manual flip)
+      setShow3D(true);
+      setIsFlipping(true);
       
-      if (result.success) {
-        currentCount++;
-        setAutoFlipCount(currentCount);
-        
-        // Update counters and UI (same as handleFlip)
-        setTotalFlips(prev => prev + 1);
-        
-        // Tính kết quả thực tế của coin
-        const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
-
-        // Cập nhật streak theo kết quả thực tế
-        if (streakSideRef.current === actualResult) {
-          streakCountRef.current += 1;
-        } else {
-          streakSideRef.current = actualResult;
-          streakCountRef.current = 1;
-        }
-        setStreakSide(streakSideRef.current);
-        setStreakCount(streakCountRef.current);
-
-        // Cập nhật bộ đếm HEADS/TAILS theo kết quả thực tế
-        if (actualResult === 'HEADS') {
-          setHeadsCount(prev => prev + 1);
-        } else {
-          setTailsCount(prev => prev + 1);
-        }
-        
-        // Update starlets
-        const updatedStarlets = shared.getStarlets();
-        setStarlets(updatedStarlets);
-        // Update logo to reflect win/lose
-        showResultOnLogo(result.isWin, result.reward);
-
-        // Update Double or Nothing availability
-        if (result.isWin && result.reward > 0) {
-          setLastWinAmount(result.reward);
-          setCanDouble(true);
-        } else {
-          setCanDouble(false);
-          setUseDoubleNext(false);
-        }
-        
-        // Continue auto flip after a short delay
-        autoFlipTimeoutRef.current = setTimeout(() => {
-          performAutoFlip();
-        }, 1000);
-        
-      } else {
-        // Stop auto flip on error
-        await shared.showPopup({
-          type: 0,
-          title: 'Auto Flip Error',
-          message: result.error || 'Auto flip stopped due to an error'
-        });
-        setIsAutoFlipping(false);
-        setAutoFlip(false);
-        setAutoFlipTarget(0);
-        setAutoFlipCount(0);
-        // If server error indicates insufficient starlets, choose best affordable bet
-        const errMsg = (result && result.error) || '';
-        const errCode = result && result.data && result.data.code;
-        if (errCode === 210001 || /not have enough starlets/i.test(errMsg)) {
-          const refreshedStarlets = shared.getStarlets();
-          selectLargestAffordableBet(refreshedStarlets);
-        }
+      // Store pending info for auto flip
+      pendingBetRef.current = betAmount;
+      pendingSideRef.current = selectedSide;
+      
+      // Schedule server call after 1.5s (same as manual flip)
+      if (manualFlipTimerRef.current) {
+        clearTimeout(manualFlipTimerRef.current);
       }
+      manualFlipTimerRef.current = setTimeout(async () => {
+        // Check if user wants to stop before proceeding
+        if (shouldStopAutoFlipRef.current) {
+          console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+          setIsAutoFlipping(false);
+          setAutoFlip(false);
+          setAutoFlipTarget(0);
+          setAutoFlipCount(0);
+          setShow3D(false);
+          setIsFlipping(false);
+          shouldStopAutoFlipRef.current = false;
+          return;
+        }
+        try {
+          // Perform single flip
+          const isHeads = pendingSideRef.current === 'HEADS';
+          const betAmount = pendingBetRef.current || 0;
+          const result = await shared.flipCoin(isHeads, betAmount);
+          
+          if (result.success) {
+            currentCount++;
+            setAutoFlipCount(currentCount);
+            
+            // Update counters and UI (same as handleFlip)
+            setTotalFlips(prev => prev + 1);
+            
+            // Tính kết quả thực tế của coin
+            const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
+
+            // Cập nhật streak theo kết quả thực tế
+            if (streakSideRef.current === actualResult) {
+              streakCountRef.current += 1;
+            } else {
+              streakSideRef.current = actualResult;
+              streakCountRef.current = 1;
+            }
+            setStreakSide(streakSideRef.current);
+            setStreakCount(streakCountRef.current);
+
+            // Cập nhật bộ đếm HEADS/TAILS theo kết quả thực tế
+            if (actualResult === 'HEADS') {
+              setHeadsCount(prev => prev + 1);
+            } else {
+              setTailsCount(prev => prev + 1);
+            }
+            
+            // Update starlets
+            const updatedStarlets = shared.getStarlets();
+            setStarlets(updatedStarlets);
+            
+            // Update logo to reflect win/lose (show for 2 seconds in auto flip)
+            showResultOnLogo(result.isWin, result.reward, 2000);
+            
+            // Check if user wants to stop while showing result
+            if (shouldStopAutoFlipRef.current) {
+              console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+              setIsAutoFlipping(false);
+              setAutoFlip(false);
+              setAutoFlipTarget(0);
+              setAutoFlipCount(0);
+              setShow3D(false);
+              setIsFlipping(false);
+              shouldStopAutoFlipRef.current = false;
+              return;
+            }
+
+            // Update Double or Nothing availability
+            if (result.isWin && result.reward > 0) {
+              setLastWinAmount(result.reward);
+              setCanDouble(true);
+            } else {
+              setCanDouble(false);
+              setUseDoubleNext(false);
+            }
+            
+            // Hide 3D animation after showing result
+            setTimeout(() => setShow3D(false), 50);
+            setIsFlipping(false);
+            
+            // Wait 2 seconds before continuing auto flip (logo will show win/lose during this time)
+            autoFlipTimeoutRef.current = setTimeout(() => {
+              // Check again if user wants to stop before continuing
+              if (shouldStopAutoFlipRef.current) {
+                console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+                setIsAutoFlipping(false);
+                setAutoFlip(false);
+                setAutoFlipTarget(0);
+                setAutoFlipCount(0);
+                shouldStopAutoFlipRef.current = false;
+                return;
+              }
+              performAutoFlip();
+            }, 2000);
+            
+          } else {
+            // Stop auto flip on error
+            await shared.showPopup({
+              type: 0,
+              title: 'Auto Flip Error',
+              message: result.error || 'Auto flip stopped due to an error'
+            });
+            setIsAutoFlipping(false);
+            setAutoFlip(false);
+            setAutoFlipTarget(0);
+            setAutoFlipCount(0);
+            setShow3D(false);
+            setIsFlipping(false);
+            // If server error indicates insufficient starlets, choose best affordable bet
+            const errMsg = (result && result.error) || '';
+            const errCode = result && result.data && result.data.code;
+            if (errCode === 210001 || /not have enough starlets/i.test(errMsg)) {
+              const refreshedStarlets = shared.getStarlets();
+              selectLargestAffordableBet(refreshedStarlets);
+            }
+          }
+        } catch (error) {
+          console.error('Auto flip error:', error);
+          await shared.showPopup({
+            type: 0,
+            title: 'Error',
+            message: 'An error occurred during auto flip'
+          });
+          setIsAutoFlipping(false);
+          setAutoFlip(false);
+          setAutoFlipTarget(0);
+          setAutoFlipCount(0);
+          setShow3D(false);
+          setIsFlipping(false);
+        }
+      }, 1500);
     };
     
     // Set auto flip state and start the process
@@ -1048,12 +1162,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         ) : (
           <button 
             className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
-            onClick={handleFlip}
-            disabled={isFlipping || isAutoFlipping || !isValidPositiveBet}
+            onClick={isAutoFlipping ? handleStopAutoFlip : handleFlip}
+            disabled={isFlipping || (!isAutoFlipping && !isValidPositiveBet)}
           >
             <div className="fc_flip-content">
-              {isFlipping ? 'FLIPPING...' : 
-               isAutoFlipping ? `AUTO FLIP ${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget}` : 
+              { isAutoFlipping ? `AUTO FLIP (${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget})` : 
+               isFlipping ? 'FLIPPING...' :
                'FLIP'}
             </div>
           </button>
