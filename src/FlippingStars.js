@@ -28,7 +28,7 @@ const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
-  const [selectedBet, setSelectedBet] = useState(10);
+  const [selectedBet, setSelectedBet] = useState(1);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
