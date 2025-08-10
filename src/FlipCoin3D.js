@@ -42,7 +42,7 @@ export const cleanupCachedModels = () => {
 
 // Preloader component to ensure model is loaded early
 function ModelPreloader() {
-  const { scene, animations } = useGLTF('/video_game_coin/scene.gltf');
+  const { scene, animations } = useGLTF('./video_game_coin/scene.gltf');
   
   useEffect(() => {
     if (scene && animations && !cachedModel) {
