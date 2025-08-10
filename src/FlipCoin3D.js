@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useAnimations, Environment, Center, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -136,6 +136,8 @@ function Coin({ scale = 1, onFinished, loop = true, visible = true }) {
   const [modelData, setModelData] = React.useState(null);
   const [error, setError] = React.useState(null);
   const currentActionRef = useRef(null);
+  const animationStartedRef = useRef(false);
+  const sceneRef = useRef(null); // Store the cloned scene
   
   // Load model data
   useEffect(() => {
@@ -147,10 +149,17 @@ function Coin({ scale = 1, onFinished, loop = true, visible = true }) {
       });
   }, []);
   
-  // Ensure materials use correct color space
+  // Ensure materials use correct color space and clone scene once
   useEffect(() => {
     if (!modelData?.scene) return;
-    modelData.scene.traverse((obj) => {
+    
+    // Only clone once and store reference
+    if (!sceneRef.current) {
+      sceneRef.current = modelData.scene.clone();
+      console.log('Scene cloned and stored');
+    }
+    
+    sceneRef.current.traverse((obj) => {
       if (obj.isMesh && obj.material) {
         const mat = obj.material;
         if (Array.isArray(mat)) {
@@ -170,13 +179,50 @@ function Coin({ scale = 1, onFinished, loop = true, visible = true }) {
   
   const { actions, names, mixer } = useAnimations(modelData?.animations || [], group);
 
+  // Debug animation names
+  useEffect(() => {
+    if (names && names.length > 0) {
+      console.log('Available animation names:', names);
+      console.log('Available actions:', Object.keys(actions));
+    }
+  }, [names, actions]);
+
+  // Update animation mixer every frame - CRITICAL for animations to work
+  useFrame((state, delta) => {
+    if (mixer) {
+      mixer.update(delta);
+      
+      // Debug: log animation state occasionally
+      if (Math.random() < 0.01) { // Log ~1% of frames
+        if (currentActionRef.current) {
+          console.log('Animation state:', {
+            isRunning: currentActionRef.current.isRunning(),
+            paused: currentActionRef.current.paused,
+            time: currentActionRef.current.time,
+            loop: currentActionRef.current.loop
+          });
+        }
+      }
+    }
+  });
+
   // Function to restart animation
   const restartAnimation = useCallback(() => {
-    if (!actions || !names || names.length === 0) return;
+    if (!actions || !names || names.length === 0) {
+      console.log('No actions or names available for animation');
+      return;
+    }
     
-    const clipName = actions['Action'] ? 'Action' : names[0];
-    const action = actions[clipName];
-    if (!action) return;
+    // Use the first available animation
+    const actionName = names[0];
+    const action = actions[actionName];
+    
+    if (!action) {
+      console.warn('No animation action found. Available:', Object.keys(actions));
+      return;
+    }
+
+    console.log('Starting animation:', actionName, 'Loop:', loop, 'Visible:', visible);
 
     // Stop current action if running
     if (currentActionRef.current && currentActionRef.current.isRunning()) {
@@ -198,28 +244,67 @@ function Coin({ scale = 1, onFinished, loop = true, visible = true }) {
 
     // Play the action
     action.play();
-  }, [actions, names, loop]);
-
-  useEffect(() => {
-    if (!actions || !names || names.length === 0) return;
+    animationStartedRef.current = true;
     
-    if (visible) {
-      // Start animation when becoming visible
-      restartAnimation();
-    } else {
-      // Stop animation when becoming invisible
+    console.log('Animation started successfully');
+  }, [actions, names, loop, visible]);
+
+  // Simple animation control based on visibility
+  useEffect(() => {
+    if (visible && actions && names && names.length > 0) {
+      // Only start if animation hasn't started or was stopped
+      if (!animationStartedRef.current || !currentActionRef.current?.isRunning()) {
+        const timer = setTimeout(() => {
+          restartAnimation();
+        }, 100);
+        
+        return () => clearTimeout(timer);
+      }
+    } else if (!visible) {
+      // Don't stop animation when becoming invisible, just pause it
       if (currentActionRef.current && currentActionRef.current.isRunning()) {
-        currentActionRef.current.stop();
+        currentActionRef.current.paused = true;
+        console.log('Animation paused due to visibility change');
       }
     }
+  }, [visible, actions, names, restartAnimation]);
 
-    return () => {
-      // Cleanup when component unmounts
-      if (currentActionRef.current && currentActionRef.current.isRunning()) {
-        currentActionRef.current.stop();
+  // Resume animation when becoming visible again
+  useEffect(() => {
+    if (visible && currentActionRef.current && animationStartedRef.current) {
+      if (currentActionRef.current.paused) {
+        currentActionRef.current.paused = false;
+        console.log('Animation resumed');
       }
-    };
-  }, [visible, restartAnimation]);
+    }
+  }, [visible]);
+
+  // Ensure animation keeps running
+  useEffect(() => {
+    if (visible && actions && names && names.length > 0 && currentActionRef.current) {
+      // If animation is not running and not paused, restart it
+      if (!currentActionRef.current.isRunning() && !currentActionRef.current.paused) {
+        console.log('Animation stopped unexpectedly, restarting...');
+        const timer = setTimeout(() => {
+          restartAnimation();
+        }, 100);
+        
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [visible, actions, names, restartAnimation]);
+
+  // Debug animation state changes
+  useEffect(() => {
+    if (currentActionRef.current) {
+      console.log('Animation state changed:', {
+        isRunning: currentActionRef.current.isRunning(),
+        paused: currentActionRef.current.paused,
+        time: currentActionRef.current.time,
+        visible: visible
+      });
+    }
+  }, [visible]);
 
   // Handle onFinished callback for non-looping animations
   useEffect(() => {
@@ -234,12 +319,12 @@ function Coin({ scale = 1, onFinished, loop = true, visible = true }) {
   }, [mixer, loop, onFinished]);
 
   // Don't render if not visible, model not loaded, or error occurred
-  if (!visible || !modelData || error) return null;
+  if (!visible || !modelData || error || !sceneRef.current) return null;
 
   return (
     <Center>
       <group ref={group} scale={scale}>
-        <primitive object={modelData.scene.clone()} />
+        <primitive object={sceneRef.current} />
       </group>
     </Center>
   );
