@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
-import FlipCoin3D from './FlipCoin3D';
+import FlipCoin3D, { CoinModelPreloader } from './FlipCoin3D';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
@@ -964,16 +964,22 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </div>
       </header>
 
+      {/* Preload 3D model early */}
+      <CoinModelPreloader />
+
       {/* Logo */}
       <div className={`fc_logo-container ${show3D ? 'fc_logo-elevated' : ''} ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
-        {show3D && (
-          <div className="fc_logo-3d">
-            <FlipCoin3D loop={true} scale={1.5} />
-          </div>
-        )}
-        {!show3D && (
-          <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
-        )}
+        {/* Always render FlipCoin3D but control visibility */}
+        <div className="fc_logo-3d" style={{ display: show3D ? 'block' : 'none' }}>
+          <FlipCoin3D loop={true} scale={1.5} visible={show3D} />
+        </div>
+        {/* Show image when 3D is not visible */}
+        <img 
+          src={logoImage} 
+          alt="Flipping Stars" 
+          className="fc_logo-image" 
+          style={{ display: !show3D ? 'block' : 'none' }}
+        />
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
         {winReward !== null && (
           <div className="fc_win-reward-progress">
