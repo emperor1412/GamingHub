@@ -77,7 +77,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
 
-  // Helper: show result on logo for 4 seconds
+  // Function to format win reward into 4 digits for display
+  const formatWinReward = (amount) => {
+    if (!amount) return ['0', '0', '0', '0'];
+    
+    // Convert to string and ensure it's a number
+    const num = parseInt(amount) || 0;
+    const str = num.toString();
+    
+    // If number is larger than 4 digits, show last 4 digits
+    if (str.length > 4) {
+      return str.slice(-4).split('');
+    }
+    
+    // Pad with leading zeros to make it 4 digits
+    return str.padStart(4, '0').split('');
+  };
+
+  // Function to show result on logo for 4 seconds
   const showResultOnLogo = (isWin, rewardAmount) => {
     if (logoTimeoutRef.current) {
       clearTimeout(logoTimeoutRef.current);
@@ -293,6 +310,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     
     console.log('Setting up auto flip...');
     shouldStopAutoFlipRef.current = false; // Reset flag
+    
+    // Reset win reward overlay immediately when starting auto flip
+    setWinReward(null);
+    
     let currentCount = 0;
     
     const performAutoFlip = async () => {
@@ -429,6 +450,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // New function to handle coin flip
   const handleFlip = async (options = {}) => {
     if (isFlipping) return; // Prevent multiple clicks
+
+    // Reset win reward overlay immediately when starting new flip
+    setWinReward(null);
 
     // Validate bet amount - handle regular bet amounts, ALL IN, and Custom Amount
     let betAmount;
@@ -836,10 +860,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         {!show3D && (
           <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
         )}
+        {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
         {winReward !== null && (
-          <div className="fc_win-reward-overlay">
-            <img src={starlet} alt="starlet" className="fc_win-reward-icon" />
-            <span className="fc_win-reward-amount">+{winReward}</span>
+          <div className="fc_win-reward-progress">
+            <div className="fc_progress-bar">
+              <div className="fc_progress-numbers">
+                <span className="fc_progress-number">{winReward}</span>
+              </div>
+              <div className="fc_progress-starlet">
+                <img src={starlet} alt="starlet" className="fc_progress-starlet-icon" />
+              </div>
+            </div>
           </div>
         )}
       </div>
