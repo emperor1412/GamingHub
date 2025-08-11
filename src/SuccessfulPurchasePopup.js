@@ -50,7 +50,7 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
             </div>
             <div className="sp-received-items">
               {isStarletProduct ? (
-                <div className="sp-received-item">
+                <div className="sp-received-item starlet-product">
                   <span>{productName}</span>
                 </div>
               ) : (
