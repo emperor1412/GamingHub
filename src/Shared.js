@@ -764,9 +764,12 @@ data object
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
                 if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
-                if (!task.url) return false;
+                if (!task.taskHuntData) return false;
+
                 try {
-                    const payload = JSON.parse(task.url);
+                    const payload = typeof task.taskHuntData === 'string'
+                        ? JSON.parse(task.taskHuntData)
+                        : task.taskHuntData;
                     return Number(payload?.treasureHuntType) === Number(treasureHuntType);
                 } catch (e) {
                     return false;
@@ -780,11 +783,44 @@ data object
 
             // Parse redirectUrl
             let redirectUrl = '';
+            let huntPayload = null;
             try {
-                const payload = JSON.parse(candidate.url);
-                redirectUrl = payload?.redirectUrl || '';
+                huntPayload = typeof candidate.taskHuntData === 'string'
+                    ? JSON.parse(candidate.taskHuntData)
+                    : candidate.taskHuntData;
             } catch (e) {
-                console.error('Failed to parse task url JSON for treasure hunt task:', e);
+                huntPayload = null;
+            }
+
+            // Prefer redirectUrl from taskHuntData
+            if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
+                redirectUrl = huntPayload.redirectUrl;
+            }
+
+            // Fallback: try to extract from candidate.url (can be JSON string or direct URL)
+            if (!redirectUrl && candidate.url) {
+                try {
+                    if (typeof candidate.url === 'string') {
+                        // Try JSON first
+                        try {
+                            const urlPayload = JSON.parse(candidate.url);
+                            if (typeof urlPayload?.redirectUrl === 'string') {
+                                redirectUrl = urlPayload.redirectUrl;
+                            }
+                        } catch (ignore) {
+                            // Not JSON, treat as direct URL if it looks like a URL
+                            if (/^https?:\/\//i.test(candidate.url)) {
+                                redirectUrl = candidate.url;
+                            }
+                        }
+                    } else if (typeof candidate.url === 'object' && candidate.url !== null) {
+                        if (typeof candidate.url.redirectUrl === 'string') {
+                            redirectUrl = candidate.url.redirectUrl;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to parse candidate.url for treasure hunt task:', e);
+                }
             }
 
             // Complete the task
@@ -819,9 +855,24 @@ data object
             // Optionally refresh profile
             try { await shared.getProfileWithRetry(); } catch (e) {}
 
-            // Open redirect URL externally if present
+            // Open redirect URL externally if present (ensure id/appid present)
             if (redirectUrl && typeof redirectUrl === 'string') {
-                shared.openExternalLinkWithFallback(redirectUrl);
+                try {
+                    const urlObj = new URL(redirectUrl, window.location.origin);
+                    const ensureParam = (key, value) => {
+                        if (!urlObj.searchParams.get(key) && value) {
+                            urlObj.searchParams.set(key, value);
+                        }
+                    };
+
+                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
+                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+
+                    shared.openExternalLinkWithFallback(urlObj.toString());
+                } catch (e) {
+                    console.error('Failed to construct redirect URL, opening raw value:', e);
+                    shared.openExternalLinkWithFallback(redirectUrl);
+                }
             }
 
             return true;
