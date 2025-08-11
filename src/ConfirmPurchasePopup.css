@@ -100,7 +100,7 @@
   font-size: 14px;
 }
 
-.confirm-button {
+.cfp_confirm-button {
   background: #0000FF;
   color: white;
   border: none;
@@ -119,7 +119,7 @@
   justify-content: center;
 }
 
-.confirm-button:hover {
+.cfp_confirm-button:hover {
   background: #0000CC;
 }
 

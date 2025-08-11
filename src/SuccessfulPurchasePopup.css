@@ -134,6 +134,12 @@
   margin-top: 0;
 }
 
+/* Bỏ dấu x cho GMT Payment Card (Starlet products) */
+.sp-received-item.starlet-product span::before {
+  content: '';
+  margin-right: 0;
+}
+
 .sp-floating-stars {
   position: absolute;
   width: 100%;

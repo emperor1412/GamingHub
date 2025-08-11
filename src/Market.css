@@ -501,6 +501,13 @@ body.mk-market-open {
   flex: 1;
   min-height: 55px;
   backdrop-filter: blur(5px);
+  position: relative;
+  background: linear-gradient(
+    225deg, /* hướng để màu nằm ở góc phải trên */
+    rgba(0, 15, 239, 1) 0%, 
+    rgba(0, 15, 239, 0) 66%
+  );
+
 }
 
 .mk-market-ticket-icon {
@@ -604,10 +611,6 @@ body.mk-market-open {
   transition: transform 0.2s ease;
 }
 
-.mk-market-ticket-button:hover .mk-market-ticket-content {
-  background: rgba(0, 0, 255, 0.1);
-}
-
 .mk-market-ticket-button.sold-out {
   cursor: not-allowed;
   opacity: 0.7;
@@ -688,9 +691,11 @@ body.mk-market-open {
   flex-direction: column;
   padding: 0px 10px;
   overflow-x: hidden;
+  overflow-y: auto;
   overscroll-behavior: none;
   box-sizing: border-box;
   padding-top: 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mk-market-tab-container {
@@ -705,6 +710,61 @@ body.mk-market-open {
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 5px;
+}
+
+/* Ensure tab container allows scrolling for starlet tab */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  height: auto;
+  min-height: 400px;
+}
+
+/* When starlet tab is active, ensure proper scrolling */
+.mk-market-tab-container[data-active-tab="starlet"] .mk-scrollable-market-content {
+  overflow: visible;
+  height: auto;
+  min-height: 0;
+}
+
+/* Ensure starlet tab content takes full height and can scroll */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* Ensure starlet tab content can scroll properly */
+.mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  height: auto;
+  min-height: 400px;
+  max-height: 70vh;
+  padding-bottom: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Ensure proper touch scrolling for starlet tab */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  position: relative;
+  z-index: 1;
+  will-change: scroll-position;
+  transform: translateZ(0);
 }
 
 .mk-scrollable-market-content {
@@ -836,11 +896,30 @@ body.mk-market-open::-webkit-scrollbar {
 .mk-starlet-products-container {
   width: 100%;
   padding: 16px 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  min-height: 400px;
 }
 
 /* Starlet tab specific grid gap */
 .mk-starlet-products-container .mk-starlet-grid {
   gap: 24px 16px; /* 24px row gap, 16px column gap for starlet tab */
+}
+
+/* Ensure starlet tab content can scroll properly */
+.mk-starlet-products-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-starlet-products-container::-webkit-scrollbar,
+.mk-starlet-products-container::-webkit-scrollbar-thumb,
+.mk-starlet-products-container::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
 }
 
 .mk-starlet-product {
@@ -914,7 +993,7 @@ body.mk-market-open::-webkit-scrollbar {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(2.5);
+  transform: translate(-50%, -50%) scale(2.4);
   z-index: 2;
   overflow: visible;
   pointer-events: none;
@@ -983,6 +1062,54 @@ body.mk-market-open::-webkit-scrollbar {
   text-transform: uppercase;
   position: relative;
   z-index: 5;
+}
+
+/* GMT Pay Card background only for GMT packages */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content {
+  background: linear-gradient(
+    225deg,
+    rgba(255, 0, 246, 1) 0%,
+    rgba(255, 0, 246, 0) 66%
+  );
+}
+
+/* Decorative starlets for GMT pay card only */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content::before,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content::before,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url('./images/starlet.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content::after,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content::after,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  top: 70%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background-image: url('./images/starlet.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  pointer-events: none;
+  z-index: 4;
 }
 
 /* GMT Product Specific Font Sizes */

@@ -9,7 +9,7 @@ import shared from './Shared';
 
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -117,10 +117,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
               };
             } else {
               console.log('Retry failed:', retryData);
+              await showError(retryData.msg || 'Payment failed. Please try again.');
+              return;
             }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
           }
         } else {
           console.log('API call failed:', data);
+          await showError(data.msg || 'Payment failed. Please try again.');
+          return;
         }
       } else if (optionId === 'free') {
         const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
@@ -143,8 +150,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                 initialStarlets: 50,
                 tickets: 1
               };
+            } else {
+              await showError(retryData.msg || 'Claim failed. Please try again.');
+              return;
             }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
           }
+        } else {
+          await showError(data.msg || 'Claim failed. Please try again.');
+          return;
         }
       } else {
         result = await handleStarletsPurchase({ 
@@ -164,16 +180,21 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           isStarletProduct: result.isStarletProduct
         });
         setShowSuccessPopup(true);
+        
+        // Call onPurchaseComplete for starlet products to trigger market reload
+        if (result.isStarletProduct && onPurchaseComplete) {
+          onPurchaseComplete();
+        }
       } else if (result?.status === "cancelled") {
         onClose();
       }
     } catch (error) {
       console.error('Purchase failed:', error);
-      await showError('Unable to process payment. Please try again.');
+      await showError(error?.message || 'Unable to process payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose]);
+  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose, onPurchaseComplete]);
 
   const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);
@@ -290,7 +311,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                     </div>
                   </div>
 
-                  <button className="confirm-button" onClick={handleConfirmAndPay}>
+                  <button className="cfp_confirm-button" onClick={handleConfirmAndPay}>
                     CONFIRM & PAY
                   </button>
                 </div>

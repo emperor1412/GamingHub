@@ -83,6 +83,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
   const [starletProducts, setStarletProducts] = useState([]);
   
+  // Add state to track GMT/starlet product purchase completion
+  const [isStarletPurchaseComplete, setIsStarletPurchaseComplete] = useState(false);
+  
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
   const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
@@ -418,7 +421,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
-  const handleConfirmPurchase = () => {
+  // Add useEffect to watch for starlet purchase completion and reload market content
+  useEffect(() => {
+    if (isStarletPurchaseComplete) {
+      console.log('Market: Starlet purchase completed, reloading market content');
+      refreshUserProfile();
+      setActiveTab('starlet');
+      setIsStarletPurchaseComplete(false); // Reset the flag
+    }
+  }, [isStarletPurchaseComplete]);
+
+  const handleConfirmPurchase = async () => {
+    const wasStarletProduct = !!selectedPurchase?.isStarletProduct;
     if (!shared.loginData?.fslId) {
       setIsPopupOpen(false);
       setSelectedPurchase(null);
@@ -438,6 +452,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);
+
+    // After purchasing a Starlet product (e.g., GMT packages), trigger reload
+    if (wasStarletProduct) {
+      setIsStarletPurchaseComplete(true);
+    }
   };
 
   // Helper function to get category title and color based on type
@@ -633,7 +652,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           )}
           
           <div className="mk-market-inner-content">
-            <div className="mk-market-tab-container">
+            <div className="mk-market-tab-container" data-active-tab={activeTab}>
               <div className="mk-tabs">
                 <button
                   className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
@@ -801,16 +820,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                         const isAvailable = product.state === 0 && product.stock > 0 && product.purchasedQuantity < product.limitNum;
                         const isLimitReached = product.purchasedQuantity >= product.limitNum;
                         const isOutOfStock = product.stock <= 0;
+                        const hasFSLID = !!shared.userProfile?.fslId;
                         
                         return (
                           <button 
                             key={product.id}
-                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
-                            onClick={() => isAvailable && handleStarletProductPurchase(product)}
-                            disabled={!isAvailable}
+                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable || !hasFSLID ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
+                            onClick={() => (isAvailable && hasFSLID) && handleStarletProductPurchase(product)}
+                            disabled={!isAvailable || !hasFSLID}
                           >
                             {/* Limit corner in top-right for starlet products */}
-                            <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                            <div className="mk-starlet-limit-corner" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
                               <div className="mk-starlet-limit-corner-text">
                                 {product.purchasedQuantity}/{product.limitNum}
                               </div>
@@ -827,27 +847,28 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                               <div className="mk-market-ticket-content">
                                 {!productInfo.useBackground && (
                                   <div className="mk-market-ticket-icon">
-                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }} />
                                   </div>
                                 )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.name}</div>
-                                    {/* <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div> */}
+                                    <div className="mk-market-ticket-amount" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.name}</div>
+                                    {/* <div className="mk-market-ticket-label" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.description}</div> */}
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
                                     <span>Stock:</span>&nbsp;<span>{product.stock}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
                                     <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
                                     <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
                                   </div>
                                 </div>
                               </div>
-                              <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                {isOutOfStock ? 'OUT OF STOCK' : 
+                              <div className="mk-market-ticket-price" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                {!hasFSLID ? 'CONNECT FSL ID' : 
+                                 isOutOfStock ? 'OUT OF STOCK' : 
                                  isLimitReached ? 'LIMIT REACHED' : 
                                  !isAvailable ? 'UNAVAILABLE' : 
                                  `${product.starlet} STARLETS`}
@@ -887,6 +908,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         onConfirm={handleConfirmPurchase}
         setShowProfileView={setShowProfileView}
         setShowBuyView={setShowBuyView}
+        onPurchaseComplete={() => setIsStarletPurchaseComplete(true)}
       />
     </>
   );
