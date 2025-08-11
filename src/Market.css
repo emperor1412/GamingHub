@@ -501,6 +501,7 @@ body.mk-market-open {
   flex: 1;
   min-height: 55px;
   backdrop-filter: blur(5px);
+  position: relative;
   background: linear-gradient(
     225deg, /* hướng để màu nằm ở góc phải trên */
     rgba(0, 15, 239, 1) 0%, 
@@ -996,6 +997,43 @@ body.mk-market-open::-webkit-scrollbar {
     rgba(255, 0, 246, 1) 0%,
     rgba(255, 0, 246, 0) 66%
   );
+}
+
+/* Decorative starlets for GMT pay card only */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content::before,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content::before,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url('./images/starlet.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content::after,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content::after,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  top: 70%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background-image: url('./images/starlet.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  pointer-events: none;
+  z-index: 4;
 }
 
 /* GMT Product Specific Font Sizes */
