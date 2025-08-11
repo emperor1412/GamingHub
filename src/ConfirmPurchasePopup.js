@@ -9,7 +9,7 @@ import shared from './Shared';
 
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -180,6 +180,11 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           isStarletProduct: result.isStarletProduct
         });
         setShowSuccessPopup(true);
+        
+        // Call onPurchaseComplete for starlet products to trigger market reload
+        if (result.isStarletProduct && onPurchaseComplete) {
+          onPurchaseComplete();
+        }
       } else if (result?.status === "cancelled") {
         onClose();
       }
@@ -189,7 +194,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose]);
+  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose, onPurchaseComplete]);
 
   const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);

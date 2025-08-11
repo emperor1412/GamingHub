@@ -917,7 +917,7 @@ body.mk-market-open::-webkit-scrollbar {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(2.5);
+  transform: translate(-50%, -50%) scale(2.4);
   z-index: 2;
   overflow: visible;
   pointer-events: none;

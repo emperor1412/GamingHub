@@ -83,6 +83,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
   const [starletProducts, setStarletProducts] = useState([]);
   
+  // Add state to track GMT/starlet product purchase completion
+  const [isStarletPurchaseComplete, setIsStarletPurchaseComplete] = useState(false);
+  
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
   const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
@@ -418,7 +421,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
-  const handleConfirmPurchase = () => {
+  // Add useEffect to watch for starlet purchase completion and reload market content
+  useEffect(() => {
+    if (isStarletPurchaseComplete) {
+      console.log('Market: Starlet purchase completed, reloading market content');
+      refreshUserProfile();
+      setActiveTab('starlet');
+      setIsStarletPurchaseComplete(false); // Reset the flag
+    }
+  }, [isStarletPurchaseComplete]);
+
+  const handleConfirmPurchase = async () => {
+    const wasStarletProduct = !!selectedPurchase?.isStarletProduct;
     if (!shared.loginData?.fslId) {
       setIsPopupOpen(false);
       setSelectedPurchase(null);
@@ -438,6 +452,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);
+
+    // After purchasing a Starlet product (e.g., GMT packages), trigger reload
+    if (wasStarletProduct) {
+      setIsStarletPurchaseComplete(true);
+    }
   };
 
   // Helper function to get category title and color based on type
@@ -887,6 +906,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         onConfirm={handleConfirmPurchase}
         setShowProfileView={setShowProfileView}
         setShowBuyView={setShowBuyView}
+        onPurchaseComplete={() => setIsStarletPurchaseComplete(true)}
       />
     </>
   );
