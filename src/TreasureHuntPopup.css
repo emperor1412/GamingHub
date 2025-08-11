@@ -1,0 +1,114 @@
+.th-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.th-popup-container {
+  width: 100%;
+  max-width: 250px;
+  background: #000;
+  border: 1px solid #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  position: relative;
+  margin: 0 26px;
+  overflow: visible;
+}
+
+.th-popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.th-popup-icon {
+  width: 70px;
+  height: 70px;
+  background: #0000FF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.th-popup-icon img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.th-popup-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.th-popup-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: -10px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  background: #FFFFFF;
+  color: #0000FF;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.th-received-section {
+  margin: 12px 0 20px;
+  width: 100%;
+}
+
+.th-received-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.th-get-reward-button {
+  background: #0000FF;
+  color: white;
+  border: none;
+  padding: 0;
+  height: 38px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  width: 100%;
+  font-family: "PP Neue Machina", sans-serif;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.th-get-reward-button:hover {
+  background: #0000CC;
+}
+
+@media screen and (max-width: 500px) {
+  .th-popup-container {
+    width: 100%;
+  }
+}

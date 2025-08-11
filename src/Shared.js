@@ -882,6 +882,248 @@ data object
         }
     },
 
+    // Complete treasure hunt task but do NOT open the link; return the redirect URL
+    completeTreasureHuntTaskSilent: async (treasureHuntType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Complete treasure hunt task (silent) failed after 3 attempts');
+            return '';
+        }
+
+        try {
+            // Fetch task list
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            if (!response.ok) {
+                console.error('Get task list request failed:', response);
+                return '';
+            }
+
+            const data = await response.json();
+            if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return shared.completeTreasureHuntTaskSilent(treasureHuntType, depth + 1);
+                }
+                return '';
+            }
+
+            if (data.code !== 0) {
+                console.error('Get task list failed:', data);
+                return '';
+            }
+
+            // Find first available type=7 task with matching treasureHuntType
+            const now = Date.now();
+            const candidate = (data.data || []).find((task) => {
+                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (!task.taskHuntData) return false;
+
+                try {
+                    const payload = typeof task.taskHuntData === 'string'
+                        ? JSON.parse(task.taskHuntData)
+                        : task.taskHuntData;
+                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                } catch (e) {
+                    return false;
+                }
+            });
+
+            if (!candidate) {
+                console.log('No matching treasure hunt task found for type:', treasureHuntType);
+                return '';
+            }
+
+            // Parse redirectUrl
+            let redirectUrl = '';
+            let huntPayload = null;
+            try {
+                huntPayload = typeof candidate.taskHuntData === 'string'
+                    ? JSON.parse(candidate.taskHuntData)
+                    : candidate.taskHuntData;
+            } catch (e) {
+                huntPayload = null;
+            }
+
+            if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
+                redirectUrl = huntPayload.redirectUrl;
+            }
+            if (!redirectUrl && candidate.url) {
+                try {
+                    if (typeof candidate.url === 'string') {
+                        try {
+                            const urlPayload = JSON.parse(candidate.url);
+                            if (typeof urlPayload?.redirectUrl === 'string') {
+                                redirectUrl = urlPayload.redirectUrl;
+                            }
+                        } catch (ignore) {
+                            if (/^https?:\/\//i.test(candidate.url)) {
+                                redirectUrl = candidate.url;
+                            }
+                        }
+                    } else if (typeof candidate.url === 'object' && candidate.url !== null) {
+                        if (typeof candidate.url.redirectUrl === 'string') {
+                            redirectUrl = candidate.url.redirectUrl;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to parse candidate.url for treasure hunt task:', e);
+                }
+            }
+
+            // Complete the task
+            const completeResponse = await fetch(
+                `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${candidate.id}&answerIndex=0`,
+                {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
+
+            if (!completeResponse.ok) {
+                console.error('Complete treasure hunt task request failed:', completeResponse);
+                return '';
+            }
+
+            const completeData = await completeResponse.json();
+            if (completeData.code === 102001 || completeData.code === 102002) {
+                console.log('Token expired on complete, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return shared.completeTreasureHuntTaskSilent(treasureHuntType, depth + 1);
+                }
+                return '';
+            }
+
+            if (completeData.code !== 0) {
+                console.error('Complete treasure hunt task failed:', completeData);
+                return '';
+            }
+
+            try { await shared.getProfileWithRetry(); } catch (e) {}
+
+            if (redirectUrl) {
+                try {
+                    const urlObj = new URL(redirectUrl, window.location.origin);
+                    const ensureParam = (key, value) => {
+                        if (!urlObj.searchParams.get(key) && value) {
+                            urlObj.searchParams.set(key, value);
+                        }
+                    };
+                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
+                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    return urlObj.toString();
+                } catch (e) {
+                    return redirectUrl;
+                }
+            }
+
+            return '';
+        } catch (error) {
+            console.error('Error completing treasure hunt task (silent):', error);
+            return '';
+        }
+    },
+
+    // Resolve treasure hunt redirect URL without opening it
+    getTreasureHuntRedirectUrl: async (treasureHuntType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Get treasure hunt redirect URL failed after 3 attempts');
+            return '';
+        }
+
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            if (!response.ok) {
+                console.error('Get task list request failed:', response);
+                return '';
+            }
+
+            const data = await response.json();
+            if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return shared.getTreasureHuntRedirectUrl(treasureHuntType, depth + 1);
+                }
+                return '';
+            }
+
+            if (data.code !== 0) {
+                console.error('Get task list failed:', data);
+                return '';
+            }
+
+            const now = Date.now();
+            const candidate = (data.data || []).find((task) => {
+                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (!task.taskHuntData) return false;
+                try {
+                    const payload = typeof task.taskHuntData === 'string' ? JSON.parse(task.taskHuntData) : task.taskHuntData;
+                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                } catch (e) {
+                    return false;
+                }
+            });
+
+            if (!candidate) return '';
+
+            let redirectUrl = '';
+            let huntPayload = null;
+            try {
+                huntPayload = typeof candidate.taskHuntData === 'string' ? JSON.parse(candidate.taskHuntData) : candidate.taskHuntData;
+            } catch (e) {
+                huntPayload = null;
+            }
+
+            if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
+                redirectUrl = huntPayload.redirectUrl;
+            }
+            if (!redirectUrl && candidate.url) {
+                try {
+                    if (typeof candidate.url === 'string') {
+                        try {
+                            const urlPayload = JSON.parse(candidate.url);
+                            if (typeof urlPayload?.redirectUrl === 'string') {
+                                redirectUrl = urlPayload.redirectUrl;
+                            }
+                        } catch (ignore) {
+                            if (/^https?:\/\//i.test(candidate.url)) {
+                                redirectUrl = candidate.url;
+                            }
+                        }
+                    } else if (typeof candidate.url === 'object' && candidate.url !== null) {
+                        if (typeof candidate.url.redirectUrl === 'string') {
+                            redirectUrl = candidate.url.redirectUrl;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to parse candidate.url for treasure hunt task:', e);
+                }
+            }
+
+            if (redirectUrl) {
+                try {
+                    const urlObj = new URL(redirectUrl, window.location.origin);
+                    const ensureParam = (key, value) => {
+                        if (!urlObj.searchParams.get(key) && value) {
+                            urlObj.searchParams.set(key, value);
+                        }
+                    };
+                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
+                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    return urlObj.toString();
+                } catch (e) {
+                    return redirectUrl;
+                }
+            }
+
+            return '';
+        } catch (error) {
+            console.error('Error resolving treasure hunt redirect URL:', error);
+            return '';
+        }
+    },
+
     // Utility function to open links in external browser
     openExternalLink: (url) => {
         try {
