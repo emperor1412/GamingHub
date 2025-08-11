@@ -691,9 +691,11 @@ body.mk-market-open {
   flex-direction: column;
   padding: 0px 10px;
   overflow-x: hidden;
+  overflow-y: auto;
   overscroll-behavior: none;
   box-sizing: border-box;
   padding-top: 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mk-market-tab-container {
@@ -708,6 +710,61 @@ body.mk-market-open {
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 5px;
+}
+
+/* Ensure tab container allows scrolling for starlet tab */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  height: auto;
+  min-height: 400px;
+}
+
+/* When starlet tab is active, ensure proper scrolling */
+.mk-market-tab-container[data-active-tab="starlet"] .mk-scrollable-market-content {
+  overflow: visible;
+  height: auto;
+  min-height: 0;
+}
+
+/* Ensure starlet tab content takes full height and can scroll */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* Ensure starlet tab content can scroll properly */
+.mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  height: auto;
+  min-height: 400px;
+  max-height: 70vh;
+  padding-bottom: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Ensure proper touch scrolling for starlet tab */
+.mk-market-tab-container[data-active-tab="starlet"] {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  position: relative;
+  z-index: 1;
+  will-change: scroll-position;
+  transform: translateZ(0);
 }
 
 .mk-scrollable-market-content {
@@ -839,11 +896,30 @@ body.mk-market-open::-webkit-scrollbar {
 .mk-starlet-products-container {
   width: 100%;
   padding: 16px 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  min-height: 400px;
 }
 
 /* Starlet tab specific grid gap */
 .mk-starlet-products-container .mk-starlet-grid {
   gap: 24px 16px; /* 24px row gap, 16px column gap for starlet tab */
+}
+
+/* Ensure starlet tab content can scroll properly */
+.mk-starlet-products-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mk-starlet-products-container::-webkit-scrollbar,
+.mk-starlet-products-container::-webkit-scrollbar-thumb,
+.mk-starlet-products-container::-webkit-scrollbar-track {
+  width: 0 !important;
+  height: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
 }
 
 .mk-starlet-product {

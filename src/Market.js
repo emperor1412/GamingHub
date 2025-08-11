@@ -652,7 +652,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           )}
           
           <div className="mk-market-inner-content">
-            <div className="mk-market-tab-container">
+            <div className="mk-market-tab-container" data-active-tab={activeTab}>
               <div className="mk-tabs">
                 <button
                   className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
