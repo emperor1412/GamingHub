@@ -9,7 +9,7 @@ import shared from './Shared';
 
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConfirm, setShowProfileView, setShowBuyView }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -72,10 +72,57 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
   }, [onClose]);
 
   const handleConfirmAndPay = useCallback(async () => {
+    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName });
     setIsProcessing(true);
     try {
       let result;
-      if (optionId === 'free') {
+      if (isStarletProduct && productId) {
+        console.log('Making starlet product purchase API call...');
+        // Handle starlet product purchase
+        const response = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        console.log('API response:', data);
+        if (data.code === 0) {
+          result = {
+            status: "paid",
+            productName: productName,
+            amount: amount,
+            isStarletProduct: true
+          };
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                productId: productId
+              })
+            });
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0) {
+              result = {
+                status: "paid",
+                productName: productName,
+                amount: amount,
+                isStarletProduct: true
+              };
+            } else {
+              console.log('Retry failed:', retryData);
+            }
+          }
+        } else {
+          console.log('API call failed:', data);
+        }
+      } else if (optionId === 'free') {
         const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
         const data = await response.json();
         if (data.code === 0 && data.data.success) {
@@ -107,10 +154,14 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
         });
       }
 
+      console.log('Final result:', result);
       if (result?.status === "paid") {
         setPurchaseData({ 
           initialStarlets: result.initialStarlets,
-          tickets: result.tickets
+          tickets: result.tickets,
+          productName: result.productName,
+          amount: result.amount,
+          isStarletProduct: result.isStarletProduct
         });
         setShowSuccessPopup(true);
       } else if (result?.status === "cancelled") {
@@ -122,7 +173,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, optionId, showError, onClose]);
+  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose]);
 
   const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);
@@ -181,8 +232,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
             <SuccessfulPurchasePopup 
               isOpen={true}
               onClaim={handleClaim}
-              amount={amount}
+              amount={purchaseData?.isStarletProduct ? null : amount}
               tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
+              productName={purchaseData?.productName}
+              isStarletProduct={purchaseData?.isStarletProduct}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
@@ -200,26 +253,38 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-                      {stars > 0 ? (
+                      {isStarletProduct ? (
                         <>
-                          {currentOption?.ticket > 0 && (
-                            <>
-                              <br />
-                              AND <span className="highlight-value">{currentOption.ticket} TICKETS</span>
-                            </>
-                          )}
+                          DO YOU WANT TO BUY <span className="highlight-value">{productName}</span>
                           <br />
                           IN FSL GAME HUB
                           <br />
-                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                          FOR <span className="highlight-value">{amount} STARLETS</span>?
                         </>
                       ) : (
                         <>
-                          <br />
-                          AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
-                          <br />
-                          FOR <span className="highlight-value">FREE</span>?
+                          DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
+                          {stars > 0 ? (
+                            <>
+                              {currentOption?.ticket > 0 && (
+                                <>
+                                  <br />
+                                  AND <span className="highlight-value">{currentOption.ticket} TICKETS</span>
+                                </>
+                              )}
+                              <br />
+                              IN FSL GAME HUB
+                              <br />
+                              FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                            </>
+                          ) : (
+                            <>
+                              <br />
+                              AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
+                              <br />
+                              FOR <span className="highlight-value">FREE</span>?
+                            </>
+                          )}
                         </>
                       )}
                     </div>
