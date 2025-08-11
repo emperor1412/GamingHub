@@ -217,6 +217,13 @@ Response:
             }, 0);
         }
 
+        // After scratch completion, try to complete treasure hunt task type=7 with treasureHuntType=3
+        try {
+            await shared.completeTreasureHuntTask(3);
+        } catch (e) {
+            console.log('Treasure hunt completion error:', e);
+        }
+
 
     };
 

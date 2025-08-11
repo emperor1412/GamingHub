@@ -126,6 +126,10 @@ const shared = {
     GMT_Polygon: 0,
     getGMT: false,
 
+    taskId: null,
+    treasureHuntId: null,
+    treasureHuntAppId: null,
+
     // Add these to the shared object
     starImages: {
         star1: single_star,
@@ -724,6 +728,107 @@ data object
         }
         
         return false;
+    },
+
+    // Complete treasure hunt task (type = 7) and open redirect URL externally
+    completeTreasureHuntTask: async (treasureHuntType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Complete treasure hunt task failed after 3 attempts');
+            return false;
+        }
+
+        try {
+            // Fetch task list
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            if (!response.ok) {
+                console.error('Get task list request failed:', response);
+                return false;
+            }
+
+            const data = await response.json();
+            if (data.code === 102001 || data.code === 102002) {
+                console.log('Token expired, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return shared.completeTreasureHuntTask(treasureHuntType, depth + 1);
+                }
+                return false;
+            }
+
+            if (data.code !== 0) {
+                console.error('Get task list failed:', data);
+                return false;
+            }
+
+            // Find first available type=7 task with matching treasureHuntType
+            const now = Date.now();
+            const candidate = (data.data || []).find((task) => {
+                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (!task.url) return false;
+                try {
+                    const payload = JSON.parse(task.url);
+                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                } catch (e) {
+                    return false;
+                }
+            });
+
+            if (!candidate) {
+                console.log('No matching treasure hunt task found for type:', treasureHuntType);
+                return false;
+            }
+
+            // Parse redirectUrl
+            let redirectUrl = '';
+            try {
+                const payload = JSON.parse(candidate.url);
+                redirectUrl = payload?.redirectUrl || '';
+            } catch (e) {
+                console.error('Failed to parse task url JSON for treasure hunt task:', e);
+            }
+
+            // Complete the task
+            const completeResponse = await fetch(
+                `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${candidate.id}&answerIndex=0`,
+                {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
+
+            if (!completeResponse.ok) {
+                console.error('Complete treasure hunt task request failed:', completeResponse);
+                return false;
+            }
+
+            const completeData = await completeResponse.json();
+            if (completeData.code === 102001 || completeData.code === 102002) {
+                console.log('Token expired on complete, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    return shared.completeTreasureHuntTask(treasureHuntType, depth + 1);
+                }
+                return false;
+            }
+
+            if (completeData.code !== 0) {
+                console.error('Complete treasure hunt task failed:', completeData);
+                return false;
+            }
+
+            // Optionally refresh profile
+            try { await shared.getProfileWithRetry(); } catch (e) {}
+
+            // Open redirect URL externally if present
+            if (redirectUrl && typeof redirectUrl === 'string') {
+                shared.openExternalLinkWithFallback(redirectUrl);
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error completing treasure hunt task:', error);
+            return false;
+        }
     },
 
     // Utility function to open links in external browser
