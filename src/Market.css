@@ -501,6 +501,12 @@ body.mk-market-open {
   flex: 1;
   min-height: 55px;
   backdrop-filter: blur(5px);
+  background: linear-gradient(
+    225deg, /* hướng để màu nằm ở góc phải trên */
+    rgba(0, 15, 239, 1) 0%, 
+    rgba(0, 15, 239, 0) 66%
+  );
+
 }
 
 .mk-market-ticket-icon {
@@ -602,10 +608,6 @@ body.mk-market-open {
 .mk-market-ticket-button:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease;
-}
-
-.mk-market-ticket-button:hover .mk-market-ticket-content {
-  background: rgba(0, 0, 255, 0.1);
 }
 
 .mk-market-ticket-button.sold-out {
@@ -983,6 +985,17 @@ body.mk-market-open::-webkit-scrollbar {
   text-transform: uppercase;
   position: relative;
   z-index: 5;
+}
+
+/* GMT Pay Card background only for GMT packages */
+.mk-starlet-product.product-gmt-50 .mk-market-ticket-content,
+.mk-starlet-product.product-gmt-100 .mk-market-ticket-content,
+.mk-starlet-product.product-gmt-200 .mk-market-ticket-content {
+  background: linear-gradient(
+    225deg,
+    rgba(255, 0, 246, 1) 0%,
+    rgba(255, 0, 246, 0) 66%
+  );
 }
 
 /* GMT Product Specific Font Sizes */
