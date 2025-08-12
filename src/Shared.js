@@ -960,33 +960,11 @@ data object
                 return '';
             }
 
-            // Parse redirectUrl
+            // Parse redirectUrl from validated huntPayload only
             let redirectUrl = '';
 
             if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
                 redirectUrl = huntPayload.redirectUrl;
-            }
-            if (!redirectUrl && candidate.url) {
-                try {
-                    if (typeof candidate.url === 'string') {
-                        try {
-                            const urlPayload = JSON.parse(candidate.url);
-                            if (typeof urlPayload?.redirectUrl === 'string') {
-                                redirectUrl = urlPayload.redirectUrl;
-                            }
-                        } catch (ignore) {
-                            if (/^https?:\/\//i.test(candidate.url)) {
-                                redirectUrl = candidate.url;
-                            }
-                        }
-                    } else if (typeof candidate.url === 'object' && candidate.url !== null) {
-                        if (typeof candidate.url.redirectUrl === 'string') {
-                            redirectUrl = candidate.url.redirectUrl;
-                        }
-                    }
-                } catch (e) {
-                    console.error('Failed to parse candidate.url for treasure hunt task:', e);
-                }
             }
 
             // Complete the task
@@ -1096,28 +1074,6 @@ data object
 
             if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
                 redirectUrl = huntPayload.redirectUrl;
-            }
-            if (!redirectUrl && candidate.url) {
-                try {
-                    if (typeof candidate.url === 'string') {
-                        try {
-                            const urlPayload = JSON.parse(candidate.url);
-                            if (typeof urlPayload?.redirectUrl === 'string') {
-                                redirectUrl = urlPayload.redirectUrl;
-                            }
-                        } catch (ignore) {
-                            if (/^https?:\/\//i.test(candidate.url)) {
-                                redirectUrl = candidate.url;
-                            }
-                        }
-                    } else if (typeof candidate.url === 'object' && candidate.url !== null) {
-                        if (typeof candidate.url.redirectUrl === 'string') {
-                            redirectUrl = candidate.url.redirectUrl;
-                        }
-                    }
-                } catch (e) {
-                    console.error('Failed to parse candidate.url for treasure hunt task:', e);
-                }
             }
 
             if (redirectUrl) {
