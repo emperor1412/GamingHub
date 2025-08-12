@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.39b1d017.css",
-    "main.js": "./static/js/main.4a682762.js",
+    "main.css": "./static/css/main.13323b4b.css",
+    "main.js": "./static/js/main.d8eba3fd.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -93,6 +93,7 @@
     "static/media/x-icon.svg": "./static/media/x-icon.699021517046322407f2ca01239e5315.svg",
     "static/media/Egglet_Image_1.png": "./static/media/Egglet_Image_1.c897b94fb142c796a62c.png",
     "static/media/Meet Marty 1.png": "./static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
+    "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.1f7ec3e9f4e4d6ed3d3c.png",
     "static/media/lv9.png": "./static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "./static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
@@ -111,7 +112,6 @@
     "static/media/WinFlippinStar.png": "./static/media/WinFlippinStar.17523dfd1c575760ef9a.png",
     "static/media/MooAR_Login_Logo.png": "./static/media/MooAR_Login_Logo.b5c247a4297785ae1cc2.png",
     "static/media/one_shot.png": "./static/media/one_shot.2827c4f3c969098979d4.png",
-    "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.eb36f7eb69131e4667c4.png",
     "static/media/gmtCard.png": "./static/media/gmtCard.04c30cce34d0cc2676da.png",
     "static/media/trophy_4_200px.png": "./static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
     "static/media/Flipping_stars.png": "./static/media/Flipping_stars.ccfc603820579a196631.png",
@@ -180,12 +180,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.39b1d017.css.map": "./static/css/main.39b1d017.css.map",
-    "main.4a682762.js.map": "./static/js/main.4a682762.js.map",
+    "main.13323b4b.css.map": "./static/css/main.13323b4b.css.map",
+    "main.d8eba3fd.js.map": "./static/js/main.d8eba3fd.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.39b1d017.css",
-    "static/js/main.4a682762.js"
+    "static/css/main.13323b4b.css",
+    "static/js/main.d8eba3fd.js"
   ]
 }
