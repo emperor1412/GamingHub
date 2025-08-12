@@ -933,8 +933,7 @@ data object
                 return '';
             }
 
-            // Parse redirectUrl
-            let redirectUrl = '';
+            // Parse taskHuntData to get huntPayload
             let huntPayload = null;
             try {
                 huntPayload = typeof candidate.taskHuntData === 'string'
@@ -943,6 +942,26 @@ data object
             } catch (e) {
                 huntPayload = null;
             }
+
+            // Validate appid and id before completing the task
+            if (!huntPayload?.appid || !huntPayload?.id) {
+                console.error('Missing app ID or ID in treasure hunt task data');
+                return '';
+            }
+
+            if (huntPayload.appid !== shared.treasureHuntAppId || huntPayload.id !== shared.treasureHuntId) {
+                console.error('App ID or ID mismatch for treasure hunt task. Expected:', {
+                    appid: shared.treasureHuntAppId,
+                    id: shared.treasureHuntId
+                }, 'Got:', {
+                    appid: huntPayload.appid,
+                    id: huntPayload.id
+                });
+                return '';
+            }
+
+            // Parse redirectUrl
+            let redirectUrl = '';
 
             if (huntPayload && typeof huntPayload?.redirectUrl === 'string') {
                 redirectUrl = huntPayload.redirectUrl;
@@ -1009,8 +1028,8 @@ data object
                             urlObj.searchParams.set(key, value);
                         }
                     };
-                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
-                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    ensureParam('id', huntPayload.id);
+                    ensureParam('appid', huntPayload.appid);
                     return urlObj.toString();
                 } catch (e) {
                     return redirectUrl;
