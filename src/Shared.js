@@ -1028,14 +1028,14 @@ data object
     getTreasureHuntRedirectUrl: async (treasureHuntType, depth = 0) => {
         if (depth > 3) {
             console.error('Get treasure hunt redirect URL failed after 3 attempts');
-            return '';
+            return null;
         }
 
         try {
             const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
             if (!response.ok) {
                 console.error('Get task list request failed:', response);
-                return '';
+                return null;
             }
 
             const data = await response.json();
@@ -1045,12 +1045,12 @@ data object
                 if (result.success) {
                     return shared.getTreasureHuntRedirectUrl(treasureHuntType, depth + 1);
                 }
-                return '';
+                return null;
             }
 
             if (data.code !== 0) {
                 console.error('Get task list failed:', data);
-                return '';
+                return null;
             }
 
             const now = Date.now();
@@ -1074,7 +1074,7 @@ data object
 
             if (!candidate) {
                 console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
-                return '';
+                return null;
             }
 
             let redirectUrl = '';
@@ -1099,16 +1099,24 @@ data object
                     };
                     ensureParam('id', huntPayload?.id || shared.treasureHuntId);
                     ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
-                    return urlObj.toString();
+                    
+                    // Trả về object chứa cả redirectUrl và taskId
+                    return {
+                        redirectUrl: urlObj.toString(),
+                        taskId: candidate.id  // Thêm taskId của treasure hunt task
+                    };
                 } catch (e) {
-                    return redirectUrl;
+                    return {
+                        redirectUrl: redirectUrl,
+                        taskId: candidate.id
+                    };
                 }
             }
 
-            return '';
+            return null;
         } catch (error) {
             console.error('Error resolving treasure hunt redirect URL:', error);
-            return '';
+            return null;
         }
     },
 

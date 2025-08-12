@@ -600,16 +600,18 @@ const Tasks = ({
                 // Tìm treasure hunt task type 7 với treasureHuntType = 2
                 let enhancedUrl = task.url;
                 try {
-                    const treasureHuntUrl = await shared.getTreasureHuntRedirectUrl(2);
-                    if (treasureHuntUrl) {
-                        // Thêm redirectUrl vào link của task type 4
+                    // Lấy cả redirectUrl và taskId của treasure hunt task
+                    const treasureHuntData = await shared.getTreasureHuntRedirectUrl(2);
+                    if (treasureHuntData && treasureHuntData.redirectUrl) {
+                        // Thêm cả redirectUrl và taskId vào link của task type 4
                         const urlObj = new URL(task.url);
-                        urlObj.searchParams.set('redirectUrl', treasureHuntUrl);
+                        urlObj.searchParams.set('redirectUrl', treasureHuntData.redirectUrl);
+                        urlObj.searchParams.set('treasureHuntTaskId', treasureHuntData.taskId);
                         enhancedUrl = urlObj.toString();
-                        console.log('Enhanced URL with treasure hunt redirectUrl:', enhancedUrl);
+                        console.log('Enhanced URL with treasure hunt data:', enhancedUrl);
                     }
                 } catch (e) {
-                    console.log('Error getting treasure hunt redirectUrl:', e);
+                    console.log('Error getting treasure hunt data:', e);
                 }
                 
                 trackUserAction('minigame_clicked', {
