@@ -620,7 +620,7 @@ data object
     },
 
     // New function to handle coin flip game
-    flipCoin: async (isHeads, betAmount, depth = 0) => {
+    flipCoin: async (isHeads, betAmount, allin = false, depth = 0) => {
         if (depth > 3) {
             console.error('Flip coin failed after 3 attempts');
             return {
@@ -630,9 +630,9 @@ data object
         }
 
         try {
-            console.log('Flip coin params:', { head: isHeads, amount: betAmount });
+            console.log('Flip coin params:', { head: isHeads, amount: betAmount, allin: allin });
 
-            const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}`, {
+            const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -659,7 +659,7 @@ data object
                     console.log('Token expired, attempting to re-login');
                     const result = await shared.login(shared.initData);
                     if (result.success) {
-                        return shared.flipCoin(isHeads, betAmount, depth + 1);
+                        return shared.flipCoin(isHeads, betAmount, allin, depth + 1);
                     } else {
                         return {
                             success: false,

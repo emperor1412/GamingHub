@@ -70,6 +70,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const animationDoneRef = useRef(false);
   const pendingBetRef = useRef(0);
   const pendingSideRef = useRef('HEADS');
+  const pendingAllInRef = useRef(false);
   const manualFlipTimerRef = useRef(null);
 
   // Double or Nothing states
@@ -209,7 +210,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Ensure no bet button is selected even after confirming
     setSelectedBet(null);
     // Select ALL IN for UI highlight and flip immediately with all current starlets
-    handleFlip({ betAmount: starlets });
+    handleFlip({ betAmount: starlets, allin: true });
   };
 
   const handleAllInCancel = () => {
@@ -229,7 +230,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
     const finalAmount = amountNum.toString();
     setShowCustomConfirm(false);
-    setSelectedBet('custom');
+    
+    // If custom amount is 0, select the first bet option (1 starlet)
+    if (amountNum === 0) {
+      setSelectedBet(1);
+    } else {
+      setSelectedBet('custom');
+    }
+    
     setCustomAmount(finalAmount);
     setUseDoubleNext(false);
     console.log('Custom amount set:', finalAmount); // Debug log
@@ -436,7 +444,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           // Perform single flip
           const isHeads = pendingSideRef.current === 'HEADS';
           const betAmount = pendingBetRef.current || 0;
-          const result = await shared.flipCoin(isHeads, betAmount);
+          const result = await shared.flipCoin(isHeads, betAmount, false); // Auto flip is never all-in
           
           if (result.success) {
             currentCount++;
@@ -616,6 +624,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Store pending info and start animation; API will be called after 1.5s while animation keeps looping
     pendingBetRef.current = betAmount;
     pendingSideRef.current = selectedSide;
+    // Store allin flag if it's an all-in bet
+    pendingAllInRef.current = options.allin || false;
 
     // Show 3D overlay for manual flip only and reset animation state
     animationDoneRef.current = false;
@@ -636,7 +646,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     try {
       const isHeads = pendingSideRef.current === 'HEADS';
       const betAmount = pendingBetRef.current || 0;
-      const result = await shared.flipCoin(isHeads, betAmount);
+      const allin = pendingAllInRef.current || false;
+      const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
         setTotalFlips(prev => prev + 1);
@@ -694,6 +705,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       animationDoneRef.current = true;
       setIsFlipping(false);
       pendingBetRef.current = 0;
+      pendingAllInRef.current = false;
     }
   };
 
