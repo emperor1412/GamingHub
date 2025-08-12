@@ -471,7 +471,7 @@ const Tasks = ({
 
     const attemptTreasureHuntPopup = useCallback(async () => {
         try {
-            const url = await shared.completeTreasureHuntTaskSilent(3);
+            const url = await shared.completeTreasureHuntTaskSilent(1);
             if (url) {
                 setTreasureRedirectUrl(url);
                 setShowTreasureHuntPopup(true);
