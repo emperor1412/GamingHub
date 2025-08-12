@@ -604,10 +604,12 @@ const Tasks = ({
                     const treasureHuntData = await shared.getTreasureHuntRedirectUrl(2);
                     if (treasureHuntData && treasureHuntData.redirectUrl) {
                         // Thêm cả redirectUrl và taskId vào link của task type 4
-                        const urlObj = new URL(task.url);
-                        urlObj.searchParams.set('redirectUrl', treasureHuntData.redirectUrl);
-                        urlObj.searchParams.set('treasureHuntTaskId', treasureHuntData.taskId);
-                        enhancedUrl = urlObj.toString();
+                        // Sử dụng format __ để ngăn cách parameter như trong index.html
+                        const separator = task.url.includes('?') ? '&' : '?';
+                        const redirectUrlParam = `redirectUrl_${encodeURIComponent(treasureHuntData.redirectUrl)}`;
+                        const treasureHuntTaskIdParam = `treasureHuntTaskId_${treasureHuntData.taskId}`;
+                        
+                        enhancedUrl = `${task.url}${separator}startParam=${redirectUrlParam}__${treasureHuntTaskIdParam}`;
                         console.log('Enhanced URL with treasure hunt data:', enhancedUrl);
                     }
                 } catch (e) {
