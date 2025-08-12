@@ -204,8 +204,6 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     // Refresh user profile
     await shared.getProfileWithRetry();
     
-    onConfirm();
-    
     // Navigate directly to Market using shared.setActiveTab
     if (typeof shared.setActiveTab === 'function') {
       shared.setActiveTab('market');
@@ -213,7 +211,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
       // Fallback: use the old method if setActiveTab is not available
       setShowBuyView(false);
     }
-  }, [onConfirm, setShowBuyView]);
+  }, [setShowBuyView]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -253,6 +251,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
             <SuccessfulPurchasePopup 
               isOpen={true}
               onClaim={handleClaim}
+              onClose={onClose}
               amount={purchaseData?.isStarletProduct ? null : amount}
               tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
               productName={purchaseData?.productName}

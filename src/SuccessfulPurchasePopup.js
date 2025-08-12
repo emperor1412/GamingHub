@@ -4,7 +4,7 @@ import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tickets, productName, isStarletProduct }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyView, tickets, productName, isStarletProduct }) => {
   useEffect(() => {
     // Clean up payment_success when component unmounts
     return () => {
@@ -16,19 +16,22 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, amount, setShowBuyView, tick
 
   const handleClaim = async () => {
     try {
-      // Close popup and navigate directly to Market
-      onClaim(); // Close ConfirmPurchasePopup
+      // Đóng ConfirmPurchasePopup trước
+      if (onClose) {
+        onClose();
+      }
       
-      // Navigate directly to Market using shared.setActiveTab
+      // Refresh user profile
+      await shared.getProfileWithRetry();
+      
+      // Navigate directly to Market
       if (typeof shared.setActiveTab === 'function') {
         shared.setActiveTab('market');
       } else {
-        // Fallback: use the old method if setActiveTab is not available
         setShowBuyView(false);
       }
     } catch (error) {
       console.error('Error during claim:', error);
-      // Fallback to old method on error
       setShowBuyView(false);
     }
   };
