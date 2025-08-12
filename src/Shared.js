@@ -760,7 +760,7 @@ data object
                 return false;
             }
 
-            // Find first available type=7 task with matching treasureHuntType
+            // Find first available type=7 task with matching treasureHuntType, appid, and id
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
                 if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
@@ -770,14 +770,21 @@ data object
                     const payload = typeof task.taskHuntData === 'string'
                         ? JSON.parse(task.taskHuntData)
                         : task.taskHuntData;
-                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                    
+                    // Check if treasureHuntType matches
+                    if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
+                    
+                    // Check if appid and id match the stored values
+                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    
+                    return true;
                 } catch (e) {
                     return false;
                 }
             });
 
             if (!candidate) {
-                console.log('No matching treasure hunt task found for type:', treasureHuntType);
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
                 return false;
             }
 
@@ -912,7 +919,7 @@ data object
                 return '';
             }
 
-            // Find first available type=7 task with matching treasureHuntType
+            // Find first available type=7 task with matching treasureHuntType, appid, and id
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
                 if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
@@ -922,14 +929,21 @@ data object
                     const payload = typeof task.taskHuntData === 'string'
                         ? JSON.parse(task.taskHuntData)
                         : task.taskHuntData;
-                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                    
+                    // Check if treasureHuntType matches
+                    if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
+                    
+                    // Check if appid and id match the stored values
+                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    
+                    return true;
                 } catch (e) {
                     return false;
                 }
             });
 
             if (!candidate) {
-                console.log('No matching treasure hunt task found for type:', treasureHuntType);
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
                 return '';
             }
 
@@ -943,20 +957,9 @@ data object
                 huntPayload = null;
             }
 
-            // Validate appid and id before completing the task
+            // Validate appid and id (should already be validated above, but double-check)
             if (!huntPayload?.appid || !huntPayload?.id) {
                 console.error('Missing app ID or ID in treasure hunt task data');
-                return '';
-            }
-
-            if (huntPayload.appid !== shared.treasureHuntAppId || huntPayload.id !== shared.treasureHuntId) {
-                console.error('App ID or ID mismatch for treasure hunt task. Expected:', {
-                    appid: shared.treasureHuntAppId,
-                    id: shared.treasureHuntId
-                }, 'Got:', {
-                    appid: huntPayload.appid,
-                    id: huntPayload.id
-                });
                 return '';
             }
 
@@ -1056,13 +1059,23 @@ data object
                 if (!task.taskHuntData) return false;
                 try {
                     const payload = typeof task.taskHuntData === 'string' ? JSON.parse(task.taskHuntData) : task.taskHuntData;
-                    return Number(payload?.treasureHuntType) === Number(treasureHuntType);
+                    
+                    // Check if treasureHuntType matches
+                    if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
+                    
+                    // Check if appid and id match the stored values
+                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    
+                    return true;
                 } catch (e) {
                     return false;
                 }
             });
 
-            if (!candidate) return '';
+            if (!candidate) {
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
+                return '';
+            }
 
             let redirectUrl = '';
             let huntPayload = null;
