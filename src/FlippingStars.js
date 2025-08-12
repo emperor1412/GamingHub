@@ -1,3 +1,11 @@
+/*
+ * FlippingStars.js - Coin Flipping Game Component
+ * 
+ * This component uses PP Neue Machina Inktrap font variant for all text elements.
+ * Font configuration is handled in FlippingStars.css with @font-face declarations
+ * and CSS custom properties for consistent typography.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
