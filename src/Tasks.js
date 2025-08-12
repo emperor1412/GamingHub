@@ -597,12 +597,27 @@ const Tasks = ({
         } else if (task.type === 4) {
             // Play Tadokami - In-app browser
             try {
+                // Tìm treasure hunt task type 7 với treasureHuntType = 2
+                let enhancedUrl = task.url;
+                try {
+                    const treasureHuntUrl = await shared.getTreasureHuntRedirectUrl(2);
+                    if (treasureHuntUrl) {
+                        // Thêm redirectUrl vào link của task type 4
+                        const urlObj = new URL(task.url);
+                        urlObj.searchParams.set('redirectUrl', treasureHuntUrl);
+                        enhancedUrl = urlObj.toString();
+                        console.log('Enhanced URL with treasure hunt redirectUrl:', enhancedUrl);
+                    }
+                } catch (e) {
+                    console.log('Error getting treasure hunt redirectUrl:', e);
+                }
+                
                 trackUserAction('minigame_clicked', {
                     game_name: task.name,
-                    game_url: task.url,
+                    game_url: enhancedUrl,
                 }, shared.loginData?.link);
                 
-                shared.openInAppLink(task.url);
+                shared.openInAppLink(enhancedUrl);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
