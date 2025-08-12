@@ -1794,6 +1794,7 @@ body::-webkit-scrollbar-track,
   margin: 0;
   z-index: 1;
   position: relative; /* Keep relative positioning within container */
+  bottom: -28px;
 }
 
 .fc_flip-btn-insufficient .fc_flip-content {

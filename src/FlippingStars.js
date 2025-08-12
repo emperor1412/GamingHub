@@ -230,7 +230,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
     const finalAmount = amountNum.toString();
     setShowCustomConfirm(false);
-    setSelectedBet('custom');
+    
+    // If custom amount is 0, select the first bet option (1 starlet)
+    if (amountNum === 0) {
+      setSelectedBet(1);
+    } else {
+      setSelectedBet('custom');
+    }
+    
     setCustomAmount(finalAmount);
     setUseDoubleNext(false);
     console.log('Custom amount set:', finalAmount); // Debug log
