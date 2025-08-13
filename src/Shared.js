@@ -866,19 +866,23 @@ data object
             if (redirectUrl && typeof redirectUrl === 'string') {
                 try {
                     const urlObj = new URL(redirectUrl, window.location.origin);
-                    const ensureParam = (key, value) => {
-                        if (!urlObj.searchParams.get(key) && value) {
-                            urlObj.searchParams.set(key, value);
-                        }
-                    };
-
-                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
-                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    
+                    // Luôn thêm id và appid vào URL
+                    // id: lấy từ URL khi user mở app (shared.treasureHuntId)
+                    // appid: lấy từ taskHuntData trả về từ server
+                    urlObj.searchParams.set('id', shared.treasureHuntId);
+                    urlObj.searchParams.set('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    
+                    // Kiểm tra xem có đủ cả id và appid không
+                    if (!shared.treasureHuntId || !huntPayload?.appid) {
+                        console.error('Missing required parameters: id or appid, cannot open redirect URL');
+                        return false;
+                    }
 
                     shared.openExternalLinkWithFallback(urlObj.toString());
                 } catch (e) {
-                    console.error('Failed to construct redirect URL, opening raw value:', e);
-                    shared.openExternalLinkWithFallback(redirectUrl);
+                    console.error('Failed to construct redirect URL:', e);
+                    return false;
                 }
             }
 
@@ -1004,16 +1008,23 @@ data object
             if (redirectUrl) {
                 try {
                     const urlObj = new URL(redirectUrl, window.location.origin);
-                    const ensureParam = (key, value) => {
-                        if (!urlObj.searchParams.get(key) && value) {
-                            urlObj.searchParams.set(key, value);
-                        }
-                    };
-                    ensureParam('id', huntPayload.id);
-                    ensureParam('appid', huntPayload.appid);
+                    
+                    // Luôn thêm id và appid vào URL
+                    // id: lấy từ URL khi user mở app (shared.treasureHuntId)
+                    // appid: lấy từ taskHuntData trả về từ server
+                    urlObj.searchParams.set('id', shared.treasureHuntId);
+                    urlObj.searchParams.set('appid', huntPayload.appid);
+                    
+                    // Kiểm tra xem có đủ cả id và appid không
+                    if (!shared.treasureHuntId || !huntPayload.appid) {
+                        console.error('Missing required parameters: id or appid, cannot return redirect URL');
+                        return '';
+                    }
+                    
                     return urlObj.toString();
                 } catch (e) {
-                    return redirectUrl;
+                    console.error('Error constructing redirect URL:', e);
+                    return '';
                 }
             }
 
@@ -1092,14 +1103,18 @@ data object
             if (redirectUrl) {
                 try {
                     const urlObj = new URL(redirectUrl, window.location.origin);
-                    const ensureParam = (key, value) => {
-                        if (!urlObj.searchParams.get(key) && value) {
-                            urlObj.searchParams.set(key, value);
-                        }
-                    };
-                    // Use id from huntPayload if available, otherwise use shared.treasureHuntId
-                    ensureParam('id', huntPayload?.id || shared.treasureHuntId);
-                    ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    
+                    // Luôn thêm id và appid vào URL
+                    // id: lấy từ URL khi user mở app (shared.treasureHuntId)
+                    // appid: lấy từ taskHuntData trả về từ server
+                    urlObj.searchParams.set('id', shared.treasureHuntId);
+                    urlObj.searchParams.set('appid', huntPayload?.appid || shared.treasureHuntAppId);
+                    
+                    // Kiểm tra xem có đủ cả id và appid không
+                    if (!shared.treasureHuntId || !huntPayload?.appid) {
+                        console.error('Missing required parameters: id or appid');
+                        return null;
+                    }
                     
                     // Trả về object chứa cả redirectUrl và taskId
                     return {
@@ -1107,10 +1122,8 @@ data object
                         taskId: candidate.id  // Thêm taskId của treasure hunt task
                     };
                 } catch (e) {
-                    return {
-                        redirectUrl: redirectUrl,
-                        taskId: candidate.id
-                    };
+                    console.error('Error constructing redirect URL:', e);
+                    return null;
                 }
             }
 
