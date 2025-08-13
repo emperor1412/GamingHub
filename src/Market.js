@@ -822,20 +822,56 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     <div className="mk-starlet-grid">
                       {starletProducts.map((product) => {
                         const productInfo = getStarletProductInfo(product.prop);
-                        const isAvailable = product.state === 0 && product.stock > 0 && product.purchasedQuantity < product.limitNum;
-                        const isLimitReached = product.purchasedQuantity >= product.limitNum;
-                        const isOutOfStock = product.stock <= 0;
                         const hasFSLID = !!shared.userProfile?.fslId;
+                        const userLevel = shared.userProfile?.level || 0;
+                        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                        
+                        // Check conditions in order of priority
+                        let isDisabled = false;
+                        let disabledReason = '';
+                        
+                        // 1. FSL ID not connected
+                        if (!hasFSLID) {
+                          isDisabled = true;
+                          disabledReason = 'FSL ID NOT CONNECTED';
+                        }
+                        // 2. Level requirement (Level 10)
+                        else if (userLevel < 10) {
+                          isDisabled = true;
+                          disabledReason = 'LEVEL 10 REQUIRED';
+                        }
+                        // 3. Out of stock
+                        else if (product.stock <= 0) {
+                          isDisabled = true;
+                          disabledReason = 'OUT OF STOCK';
+                        }
+                        // 4. Not enough starlets
+                        else if (userStarlets < product.starlet) {
+                          isDisabled = true;
+                          disabledReason = 'NOT ENOUGH STARLETS';
+                        }
+                        // 5. Limit reached
+                        else if (product.purchasedQuantity >= product.limitNum) {
+                          isDisabled = true;
+                          disabledReason = 'LIMIT REACHED';
+                        }
+                        // 6. Product state unavailable
+                        else if (product.state !== 0) {
+                          isDisabled = true;
+                          disabledReason = 'UNAVAILABLE';
+                        }
+                        
+                        const isAvailable = !isDisabled;
                         
                         return (
                           <button 
                             key={product.id}
-                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable || !hasFSLID ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
-                            onClick={() => (isAvailable && hasFSLID) && handleStarletProductPurchase(product)}
-                            disabled={!isAvailable || !hasFSLID}
+                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
+                            onClick={() => isAvailable && handleStarletProductPurchase(product)}
+                            disabled={!isAvailable}
                           >
                             {/* Limit corner in top-right for starlet products */}
-                            <div className="mk-starlet-limit-corner" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                            <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                               <div className="mk-starlet-limit-corner-text">
                                 {product.purchasedQuantity}/{product.limitNum}
                               </div>
@@ -852,31 +888,27 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                               <div className="mk-market-ticket-content">
                                 {!productInfo.useBackground && (
                                   <div className="mk-market-ticket-icon">
-                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }} />
+                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
                                   </div>
                                 )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
-                                    {/* <div className="mk-market-ticket-label" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.description}</div> */}
+                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
+                                    {/* <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div> */}
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Stock:</span>&nbsp;<span>{product.stock}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
                                   </div>
                                 </div>
                               </div>
-                              <div className="mk-market-ticket-price" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
-                                {!hasFSLID ? 'CONNECT FSL ID' : 
-                                 isOutOfStock ? 'OUT OF STOCK' : 
-                                 isLimitReached ? 'LIMIT REACHED' : 
-                                 !isAvailable ? 'UNAVAILABLE' : 
-                                 `${product.starlet} STARLETS`}
+                              <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                {isAvailable ? `${product.starlet} STARLETS` : disabledReason}
                               </div>
                             </div>
                           </button>
