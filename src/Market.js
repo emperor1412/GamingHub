@@ -421,11 +421,112 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
-  // Add useEffect to watch for starlet purchase completion and reload market content
+  // Add new function to refresh only a specific starlet product
+  const refreshStarletProduct = async (productId) => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+      const data = await response.json();
+      console.log('Refreshed Starlet Product Response:', data);
+      if (data.code === 0 && data.data) {
+        console.log('Refreshed Starlet Product Data:', data.data);
+        // Update the specific product in starletProducts array
+        setStarletProducts(prevProducts => 
+          prevProducts.map(product => 
+            product.id === productId ? data.data : product
+          )
+        );
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && retryData.data) {
+            setStarletProducts(prevProducts => 
+              prevProducts.map(product => 
+                product.id === productId ? retryData.data : product
+              )
+            );
+          } else {
+            // Show error popup for retry failure
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Error',
+                message: 'Failed to refresh product data. Please try again.',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
+          }
+        } else {
+          // Show error popup for login failure
+          if (window.Telegram?.WebApp?.showPopup) {
+            await window.Telegram.WebApp.showPopup({
+              title: 'Error',
+              message: 'Session expired. Please try again.',
+              buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+            });
+          }
+        }
+      } else {
+        // Show error popup for API error
+        if (window.Telegram?.WebApp?.showPopup) {
+          await window.Telegram.WebApp.showPopup({
+            title: 'Error',
+            message: data.msg || 'Failed to refresh product data. Please try again.',
+            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh starlet product:', error);
+      // Show error popup for network/other errors
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Network error. Please check your connection and try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
+    }
+  };
+
+  // Add new function to refresh user profile only (without reloading market content)
+  const refreshUserProfileOnly = async () => {
+    try {
+      await shared.getProfileWithRetry();
+      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+      if (userStarlets) {
+        setStarlets(userStarlets.num);
+      }
+
+      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+      if (userTicket) {
+        setTickets(userTicket.num);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+      // Show error popup for profile refresh failure
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Failed to refresh user data. Please try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
+    }
+  };
+
+  // Add useEffect to watch for starlet purchase completion and reload only the specific product
   useEffect(() => {
     if (isStarletPurchaseComplete) {
-      console.log('Market: Starlet purchase completed, reloading market content');
-      refreshUserProfile();
+      console.log('Market: Starlet purchase completed, refreshing specific product and user profile');
+      // Refresh user profile to update starlets count
+      refreshUserProfileOnly();
+      // Refresh only the specific product that was purchased
+      if (selectedPurchase?.productId) {
+        refreshStarletProduct(selectedPurchase.productId);
+      }
       setActiveTab('starlet');
       setIsStarletPurchaseComplete(false); // Reset the flag
     }
@@ -480,7 +581,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     switch (propId) {
       case 60010:
         return { 
-          name: '$50', 
+          name: '$50 GMT PAY CARD', 
+          displayAmount: '$50',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -489,7 +591,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60020:
         return { 
-          name: '$100', 
+          name: '$100 GMT PAY CARD', 
+          displayAmount: '$100',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -498,7 +601,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60030:
         return { 
-          name: '$200', 
+          name: '$200 GMT PAY CARD', 
+          displayAmount: '$200',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -507,7 +611,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70010:
         return { 
-          name: '$79 Merch Coupon', 
+          name: '$79 MERCH COUPON', 
+          displayAmount: '$79 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -515,7 +620,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70020:
         return { 
-          name: '$199 Merch Coupon', 
+          name: '$199 MERCH COUPON', 
+          displayAmount: '$199 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -817,20 +923,56 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                     <div className="mk-starlet-grid">
                       {starletProducts.map((product) => {
                         const productInfo = getStarletProductInfo(product.prop);
-                        const isAvailable = product.state === 0 && product.stock > 0 && product.purchasedQuantity < product.limitNum;
-                        const isLimitReached = product.purchasedQuantity >= product.limitNum;
-                        const isOutOfStock = product.stock <= 0;
                         const hasFSLID = !!shared.userProfile?.fslId;
+                        const userLevel = shared.userProfile?.level || 0;
+                        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                        
+                        // Check conditions in order of priority
+                        let isDisabled = false;
+                        let disabledReason = '';
+                        
+                        // 1. FSL ID not connected
+                        if (!hasFSLID) {
+                          isDisabled = true;
+                          disabledReason = 'FSL ID NOT CONNECTED';
+                        }
+                        // 2. Level requirement (Level 10)
+                        else if (userLevel < 10) {
+                          isDisabled = true;
+                          disabledReason = 'LEVEL 10 REQUIRED';
+                        }
+                        // 3. Out of stock
+                        else if (product.stock <= 0) {
+                          isDisabled = true;
+                          disabledReason = 'OUT OF STOCK';
+                        }
+                        // 4. Not enough starlets
+                        else if (userStarlets < product.starlet) {
+                          isDisabled = true;
+                          disabledReason = 'NOT ENOUGH STARLETS';
+                        }
+                        // 5. Limit reached
+                        else if (product.purchasedQuantity >= product.limitNum) {
+                          isDisabled = true;
+                          disabledReason = 'LIMIT REACHED';
+                        }
+                        // 6. Product state unavailable
+                        else if (product.state !== 0) {
+                          isDisabled = true;
+                          disabledReason = 'UNAVAILABLE';
+                        }
+                        
+                        const isAvailable = !isDisabled;
                         
                         return (
                           <button 
                             key={product.id}
-                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable || !hasFSLID ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
-                            onClick={() => (isAvailable && hasFSLID) && handleStarletProductPurchase(product)}
-                            disabled={!isAvailable || !hasFSLID}
+                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
+                            onClick={() => isAvailable && handleStarletProductPurchase(product)}
+                            disabled={!isAvailable}
                           >
                             {/* Limit corner in top-right for starlet products */}
-                            <div className="mk-starlet-limit-corner" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                            <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                               <div className="mk-starlet-limit-corner-text">
                                 {product.purchasedQuantity}/{product.limitNum}
                               </div>
@@ -847,31 +989,27 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                               <div className="mk-market-ticket-content">
                                 {!productInfo.useBackground && (
                                   <div className="mk-market-ticket-icon">
-                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }} />
+                                    <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
                                   </div>
                                 )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.name}</div>
-                                    {/* <div className="mk-market-ticket-label" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.description}</div> */}
+                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
+                                    {/* <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div> */}
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Stock:</span>&nbsp;<span>{product.stock}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
                                   </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
+                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                     <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
                                   </div>
                                 </div>
                               </div>
-                              <div className="mk-market-ticket-price" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
-                                {!hasFSLID ? 'CONNECT FSL ID' : 
-                                 isOutOfStock ? 'OUT OF STOCK' : 
-                                 isLimitReached ? 'LIMIT REACHED' : 
-                                 !isAvailable ? 'UNAVAILABLE' : 
-                                 `${product.starlet} STARLETS`}
+                              <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                {isAvailable ? `${product.starlet} STARLETS` : disabledReason}
                               </div>
                             </div>
                           </button>

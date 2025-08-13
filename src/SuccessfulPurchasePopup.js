@@ -4,7 +4,7 @@ import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyView, tickets, productName, isStarletProduct }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyView, tickets, productName, isStarletProduct, packageType, packageValue }) => {
   useEffect(() => {
     // Clean up payment_success when component unmounts
     return () => {
@@ -47,31 +47,56 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyV
           <h2 className="sp-popup-title">PURCHASE</h2>
           <div className="sp-popup-subtitle">SUCCESSFUL</div>
           
-          <div className="sp-received-section">
-            <div className="sp-received-text">
-              {isStarletProduct ? 'YOU PURCHASED' : 'YOU RECEIVED'}
-            </div>
-            <div className="sp-received-items">
-              {isStarletProduct ? (
-                <div className="sp-received-item starlet-product">
-                  <span>{productName}</span>
+          {isStarletProduct ? (
+            <div className="sp-scrollable-content">
+              <div className="sp-received-section">
+                <div className="sp-received-text">
+                  YOU PURCHASED
                 </div>
-              ) : (
-                <>
-                  <div className="sp-received-item">
-                    <img src={starletIcon} alt="Starlet" />
-                    <span>{amount}</span>
+                <div className="sp-received-items">
+                  <div className="sp-received-item starlet-product">
+                    <span>{productName}</span>
                   </div>
-                  {tickets > 0 && (
-                    <div className="sp-received-item">
-                      <img src={ticketIcon} alt="Ticket" className="ticket-icon" />
-                      <span>{tickets}</span>
-                    </div>
+                </div>
+              </div>
+
+              <div className="sp-payment-confirmation">
+                <p>Your payment has been confirmed.</p>
+                <p>You'll receive an email from <strong>FSL</strong> within the next 48 hours, sent to your FSL ID email address.</p>
+                <p>This email will contain:</p>
+                <ul>
+                  {packageType === 'merch' ? (
+                    <li>Your <strong>${packageValue} merch coupon code</strong></li>
+                  ) : packageType === 'gmt' ? (
+                    <li>Instructions on how to claim your <strong>${packageValue} GMT Pay card</strong></li>
+                  ) : (
+                    <>
+                      <li>Your <strong>merch coupon code</strong>, or</li>
+                      <li>Instructions on how to claim your <strong>GMT Pay card</strong>.</li>
+                    </>
                   )}
-                </>
-              )}
+                </ul>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="sp-received-section">
+              <div className="sp-received-text">
+                YOU RECEIVED
+              </div>
+              <div className="sp-received-items">
+                <div className="sp-received-item">
+                  <img src={starletIcon} alt="Starlet" />
+                  <span>{amount}</span>
+                </div>
+                {tickets > 0 && (
+                  <div className="sp-received-item">
+                    <img src={ticketIcon} alt="Ticket" className="ticket-icon" />
+                    <span>{tickets}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <button 
             className="sp-claim-button" 

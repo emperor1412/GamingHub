@@ -218,15 +218,8 @@ body::-webkit-scrollbar-track,
   padding-bottom: 165px; /* Increased space for fixed bottom navigation and flip button */
   box-sizing: border-box;
   background-color: #000;
-  overflow-x: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden; /* Disable all scrolling */
   min-height: 100vh; /* Ensure minimum height to fill viewport */
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  overflow: -moz-scrollbars-none;
 }
 
 
@@ -300,6 +293,37 @@ body::-webkit-scrollbar-track,
   height: 40px; /* Keep height the same */
   z-index: 1400; /* Below logo image to ensure proper layering */
   animation: progressBarSlideIn 0.5s ease-out;
+}
+
+/* WIN/LOSE text styling */
+.fc_win-lose-text {
+  position: absolute;
+  top: 70%; /* Position below fc_win-reward-progress (which is at 75%) */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1399; /* Below fc_win-reward-progress (which is at 1400) */
+  text-align: center;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 107.37px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: transparent; /* Make text transparent so only stroke is visible */
+  animation: winLoseTextSlideIn 0.5s ease-out;
+  pointer-events: none; /* Prevent text from blocking interactions */
+}
+
+@keyframes winLoseTextSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 @keyframes progressBarSlideIn {
