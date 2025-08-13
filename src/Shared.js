@@ -591,17 +591,38 @@ data object
             userProfile: {
                 level: shared.userProfile?.level,
                 pictureIndex: shared.userProfile?.pictureIndex,
-                email: shared.userProfile?.email
+                email: shared.userProfile?.email,
+                evmAddr: shared.userProfile?.evmAddr,  // Add EVM wallet address
+                solAddr: shared.userProfile?.solAddr   // Add Solana wallet address
             }
         };
 
+        // Debug: Log wallet addresses being passed
+        console.log('🔗 Redirecting to GameHubPayment with wallet addresses:');
+        console.log('  EVM Address:', userData.userProfile.evmAddr);
+        console.log('  Solana Address:', userData.userProfile.solAddr);
+        console.log('  Full userData:', userData);
+        
+        // Debug: Log purchase calculation
+        console.log('💰 Purchase Calculation:');
+        console.log('  Starlets to buy:', purchaseData.amount);
+        console.log('  Stars required:', purchaseData.stars);
+        console.log('  GGUSD to pay:', ggusdAmount);
+        console.log('  Conversion rate: 1 Star =', starsToGGUSDRate, 'GGUSD');
+
         // Prepare purchase data
+        // Calculate GGUSD amount based on stars to GGUSD conversion rate
+        // Assuming 1 Star = 1 GGUSD (adjust this rate as needed)
+        const starsToGGUSDRate = 1; // 1 Star = 1 GGUSD
+        const ggusdAmount = purchaseData.stars * starsToGGUSDRate;
+        
         const purchaseInfo = {
-            amount: purchaseData.amount,
-            stars: purchaseData.stars,
+            amount: purchaseData.amount, // Number of Starlets to purchase
+            stars: purchaseData.stars,   // Number of Stars required
+            ggusdAmount: ggusdAmount,    // Number of GGUSD to pay
             optionId: purchaseData.optionId,
             productType: 'starlets',
-            currency: 'gmt'
+            currency: 'ggusd'
         };
 
         // Encode data as URL parameters

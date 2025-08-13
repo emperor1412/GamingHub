@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Market.css';
-import { trackLineConversion, trackUserAction } from './analytics';
+import { trackUserAction } from './analytics';
 import shared from './Shared';
-import { t } from './utils/localization';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
@@ -106,9 +105,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         console.log('Buy Options Response:', data);
         if (data.code === 0 && Array.isArray(data.data)) {
           console.log('Buy Options Data:', data.data);
-          // Filter to only show free options (type 0)
-          const freeOptions = data.data.filter(option => option.type === 0);
-          setBuyOptions(freeOptions);
+          setBuyOptions(data.data);
         } else if (data.code === 102002 || data.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
@@ -118,9 +115,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
             const retryData = await retryResponse.json();
             if (retryData.code === 0 && Array.isArray(retryData.data)) {
-              // Filter to only show free options (type 0)
-              const freeOptions = retryData.data.filter(option => option.type === 0);
-              setBuyOptions(freeOptions);
+              setBuyOptions(retryData.data);
             }
           }
         }
@@ -223,9 +218,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         // Show success popup
         if (window.Telegram?.WebApp?.showPopup) {
           await window.Telegram.WebApp.showPopup({
-            title: t('SUCCESS'),
-            message: t('SUCCESSFULLY_CLAIMED_FREE_REWARD'),
-            buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
+            title: 'Success',
+            message: 'You have successfully claimed your free reward!',
+            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
           });
         }
       } else if (data.code === 102002 || data.code === 102001) {
@@ -251,9 +246,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
             if (window.Telegram?.WebApp?.showPopup) {
               await window.Telegram.WebApp.showPopup({
-                title: t('SUCCESS'),
-                message: t('SUCCESSFULLY_CLAIMED_FREE_REWARD'),
-                buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
+                title: 'Success',
+                message: 'You have successfully claimed your free reward!',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
               });
             }
           }
@@ -263,9 +258,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.error('Failed to claim free reward:', error);
       if (window.Telegram?.WebApp?.showPopup) {
         await window.Telegram.WebApp.showPopup({
-          title: t('ERROR'),
-          message: t('FAILED_TO_CLAIM_FREE_REWARD'),
-          buttons: [{ id: 'ok', type: 'ok', text: t('OKAY') }]
+          title: 'Error',
+          message: 'Failed to claim free reward. Please try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
         });
       }
     }
@@ -304,9 +299,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.log('Refreshed Buy Options Response:', data);
       if (data.code === 0 && Array.isArray(data.data)) {
         console.log('Refreshed Buy Options Data:', data.data);
-        // Filter to only show free options (type 0)
-        const freeOptions = data.data.filter(option => option.type === 0);
-        setBuyOptions(freeOptions);
+        setBuyOptions(data.data);
       } else if (data.code === 102002 || data.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
@@ -316,9 +309,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
           const retryData = await retryResponse.json();
           if (retryData.code === 0 && Array.isArray(retryData.data)) {
-            // Filter to only show free options (type 0)
-            const freeOptions = retryData.data.filter(option => option.type === 0);
-            setBuyOptions(freeOptions);
+            setBuyOptions(retryData.data);
           }
         }
       }
@@ -479,7 +470,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           />
         </button>
         <div className="stat-item-main-text" onClick={() => setShowProfileView(true)}>
-          {t('GM_GREETING')} {shared.telegramUserData?.firstName || t('USER')}!
+          GM {shared.telegramUserData?.firstName || 'User'}!
         </div>
         <div className="stats-main">
           <button 
@@ -501,51 +492,180 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
       <div className="mk-market-container">
         <div className="mk-market-content">
-          <div className="mk-market-title">{t('MARKET')}</div>
+          <div className="mk-market-title">MARKET</div>
 
           {!shared.userProfile?.fslId && (
             <div className="mk-fsl-connect-section" onClick={handleConnectFSLID}>
               <div className="mk-fsl-connect-content">
                 <div className="mk-lock-icon">🔒</div>
                 <div className="mk-fsl-text">
-                  <div className="mk-connect-title">{t('CONNECT_FSL_ID')}</div>
-                  <div className="mk-connect-subtitle">{t('MARKET_CONNECT_FSL')}</div>
+                  <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
+                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
                 </div>
               </div>
             </div>
           )}
           
-          <div className="mk-scrollable-market-content">
-            <div className="mk-starlet-grid">
-              <button 
-                className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                onClick={() => 
-                {
-                  !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')
-                  trackLineConversion('Free_Starlets_Click');
-                }}
-                disabled={isFreeItemClaimed}
-              >
-                <div className="mk-market-ticket-button-image-container">
-                  <div className="mk-market-ticket-content">
-                    <div className="mk-market-ticket-icon">
-                      <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
+          <div className="mk-market-inner-content">
+            <div className="mk-market-tab-container">
+              <div className="mk-tabs">
+                <button
+                  className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('telegram')}
+                >
+                  <div>TELEGRAM</div>
+                  <div>PACKAGES</div>
+                </button>
+                <button
+                  className={`mk-tab ${activeTab === 'starlet' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('starlet')}
+                >
+                  <div>STARLET</div>
+                  <div>PACKAGES</div>
+                </button>
+              </div>
+              
+              <div className="mk-scrollable-market-content">
+                {/* Show content based on active tab */}
+                {activeTab === 'telegram' && (
+                  <>
+                    {/* Render each category in order */}
+                    {categoryOrder.map((type) => {
+                      const categoryInfo = getCategoryInfo(type);
+                      const isExpanded = getExpansionState(type);
+                      const options = groupedOptions[type] || [];
+                      
+                      // Skip empty sections except Standard Pack (type 0) which should always show for free item
+                      if (options.length === 0 && type !== 0) {
+                        return null;
+                      }
+                      
+                      return (
+                        <div key={type} className="mk-market-section">
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setExpansionState(type, !isExpanded)}
+                      >
+                        {/* Corner borders */}
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+                        
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: categoryInfo.color }}
+                        >
+                          <span className="mk-section-title">
+                            {categoryInfo.title}
+                          </span>
+                          <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
+                        {/* Corner borders for content */}
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+                        
+                        <div className="mk-starlet-grid">
+                          {/* Show free item only in Standard Pack (type 0) */}
+                          {type === 0 && (
+                            <button 
+                              className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                              onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
+                              disabled={isFreeItemClaimed}
+                            >
+                              <div className="mk-market-ticket-button-image-container">
+                                <div className="mk-market-ticket-content">
+                                  <div className="mk-market-ticket-icon">
+                                    <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
+                                  </div>
+                                  <div className="mk-market-ticket-info">
+                                    <div className="mk-market-ticket-text">
+                                      <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
+                                      <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                                    </div>
+                                    <div className="mk-market-ticket-bonus">
+                                      <span>X1</span>&nbsp;<span>TICKETS</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mk-market-ticket-price">
+                                  {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                                </div>
+                              </div>
+                            </button>
+                          )}
+                          
+                          {/* Show regular options */}
+                          {options.map((option) => {
+                            // Check if option is available (state 0 = available, 1 = unavailable)
+                            const isAvailable = option.state === 0 && option.canBuy;
+                            
+                            // Calculate bonus for special offers
+                            let bonusText = null;
+                            if (type === 30) { // Exclusive One-Time Offer
+                              if (option.stars === 0) bonusText = "BONUS: 50";
+                              else if (option.stars === 5) bonusText = "BONUS: 325";
+                              else if (option.stars === 10) bonusText = "BONUS: 325";
+                            } else if (type === 10) { // Limited Weekly Offer
+                              if (option.stars === 0) bonusText = "BONUS: 25";
+                              else if (option.stars === 5) {
+                                if (option.starlet === 100) bonusText = "BONUS: 195";
+                                else bonusText = "BONUS: 675";
+                              }
+                            } else if (type === 20) { // Limited Monthly Offer
+                              if (option.stars === 0) bonusText = "50% VALUE";
+                              else if (option.stars === 5) bonusText = "100% VALUE";
+                            }
+                            
+                            return (
+                              <button 
+                                key={option.id}
+                                className={`mk-market-ticket-button ${!isAvailable ? 'sold-out' : ''}`}
+                                onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                disabled={!isAvailable}
+                              >
+                                <div className="mk-market-ticket-button-image-container">
+                                  <div className="mk-market-ticket-content">
+                                    <div className="mk-market-ticket-icon">
+                                      <img src={starlet} alt="Starlet" style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                    </div>
+                                    <div className="mk-market-ticket-info">
+                                      {bonusText && (
+                                        <div className="mk-market-ticket-bonus-text" style={{ opacity: isAvailable ? 1 : 0.5 }}>{bonusText}</div>
+                                      )}
+                                      <div className="mk-market-ticket-text">
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
+                                      </div>
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                        <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    {!isAvailable ? 'SOLD OUT' : `${option.stars} TELEGRAM STARS`}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                    <div className="mk-market-ticket-info">
-                      <div className="mk-market-ticket-text">
-                        <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
-                        <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>{t('STARLETS_TEXT')}</div>
-                      </div>
-                      <div className="mk-market-ticket-bonus">
-                        <span>X1</span>&nbsp;<span>{t('TICKETS_TEXT')}</span>
-                      </div>
+                  );
+                })}
+                  </>
+                )}
+                
+                {activeTab === 'starlet' && (
+                  <div className="mk-starlet-packages-placeholder">
+                    <div className="mk-placeholder-content">
+                      <div className="mk-placeholder-text">STARLET PACKAGES</div>
+                      <div className="mk-placeholder-subtext">Coming Soon</div>
                     </div>
                   </div>
-                  <div className="mk-market-ticket-price">
-                    {isFreeItemClaimed ? t('SOLD_OUT') : t('FREE')}
-                  </div>
-                </div>
-              </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
