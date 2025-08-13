@@ -88,11 +88,31 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         const data = await response.json();
         console.log('API response:', data);
         if (data.code === 0) {
+          // Extract package type and value from productName
+          let packageType = 'unknown';
+          let packageValue = '';
+          
+          if (productName && typeof productName === 'string') {
+            if (productName.toLowerCase().includes('merch')) {
+              packageType = 'merch';
+              // Extract value from productName (e.g., "$79 MERCH COUPON" -> "79")
+              const valueMatch = productName.match(/\$(\d+)/);
+              packageValue = valueMatch ? valueMatch[1] : '';
+            } else if (productName.toLowerCase().includes('gmt') || productName.toLowerCase().includes('pay')) {
+              packageType = 'gmt';
+              // Extract value from productName (e.g., "$50 GMT PAY CARD" -> "50")
+              const valueMatch = productName.match(/\$(\d+)/);
+              packageValue = valueMatch ? valueMatch[1] : '';
+            }
+          }
+          
           result = {
             status: "paid",
             productName: productName,
             amount: amount,
-            isStarletProduct: true
+            isStarletProduct: true,
+            packageType: packageType,
+            packageValue: packageValue
           };
         } else if (data.code === 102002 || data.code === 102001) {
           console.log('Token expired, attempting to refresh...');
@@ -177,7 +197,9 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           tickets: result.tickets,
           productName: result.productName,
           amount: result.amount,
-          isStarletProduct: result.isStarletProduct
+          isStarletProduct: result.isStarletProduct,
+          packageType: result.packageType,
+          packageValue: result.packageValue
         });
         setShowSuccessPopup(true);
         
@@ -256,6 +278,8 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
               tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
               productName={purchaseData?.productName}
               isStarletProduct={purchaseData?.isStarletProduct}
+              packageType={purchaseData?.packageType}
+              packageValue={purchaseData?.packageValue}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
