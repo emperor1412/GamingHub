@@ -444,7 +444,7 @@ const translations = {
 
 // Get current language from localStorage or default to English
 const getCurrentLanguage = () => {
-  return localStorage.getItem('language') || 'ja';
+  return 'ja';
 };
 
 // Set language

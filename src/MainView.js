@@ -546,7 +546,7 @@ Response:
 
     const toggleLanguage = () => {
         const newLang = currentLanguage === 'en' ? 'ja' : 'en';
-        setLanguage(newLang);
+        setLanguage('ja');
     };
 
     const copyIdToken = async () => {
@@ -900,13 +900,13 @@ Response:
                         </button>
                     </div>
                 </div>
-                <button 
+                {/* <button 
                     className="language-toggle"
                     onClick={toggleLanguage}
                     title={t('LANGUAGE')}
                 >
                     {currentLanguage === 'en' ? '🇯🇵' : '🇺🇸'}
-                </button>
+                </button> */}
                 {/* <button 
                     className="id-token-toggle"
                     onClick={openIdTokenPopup}
