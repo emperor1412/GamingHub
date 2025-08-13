@@ -603,18 +603,18 @@ data object
         console.log('  Solana Address:', userData.userProfile.solAddr);
         console.log('  Full userData:', userData);
         
+        // Prepare purchase data
+        // Calculate GGUSD amount based on stars to GGUSD conversion rate
+        // Assuming 1 Star = 1 GGUSD (adjust this rate as needed)
+        const starsToGGUSDRate = 1; // 1 Star = 1 GGUSD
+        const ggusdAmount = purchaseData.stars * starsToGGUSDRate;
+        
         // Debug: Log purchase calculation
         console.log('💰 Purchase Calculation:');
         console.log('  Starlets to buy:', purchaseData.amount);
         console.log('  Stars required:', purchaseData.stars);
         console.log('  GGUSD to pay:', ggusdAmount);
         console.log('  Conversion rate: 1 Star =', starsToGGUSDRate, 'GGUSD');
-
-        // Prepare purchase data
-        // Calculate GGUSD amount based on stars to GGUSD conversion rate
-        // Assuming 1 Star = 1 GGUSD (adjust this rate as needed)
-        const starsToGGUSDRate = 1; // 1 Star = 1 GGUSD
-        const ggusdAmount = purchaseData.stars * starsToGGUSDRate;
         
         const purchaseInfo = {
             amount: purchaseData.amount, // Number of Starlets to purchase
