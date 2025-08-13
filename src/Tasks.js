@@ -14,6 +14,7 @@ import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
 import { trackTaskFunnel, trackTaskAttempt, trackTaskContent, trackLineConversion, trackUserAction } from './analytics';
 import { t } from './utils/localization';
+import TreasureHuntPopup from './TreasureHuntPopup';
 /*
 url: /app/taskList
 Request:
@@ -270,6 +271,8 @@ const Tasks = ({
     const [dailyTasksExpanded, setDailyTasksExpanded] = useState(true);
     const [partnerTasksExpanded, setPartnerTasksExpanded] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
+    const [showTreasureHuntPopup, setShowTreasureHuntPopup] = useState(false);
+    const [treasureRedirectUrl, setTreasureRedirectUrl] = useState('');
 
     // Helper function to extract error message from server response
     const getErrorMessage = (data, defaultMessage) => {
@@ -466,6 +469,18 @@ const Tasks = ({
         return retVal;
     }, []);
 
+    const attemptTreasureHuntPopup = useCallback(async () => {
+        try {
+            const url = await shared.completeTreasureHuntTaskSilent(1);
+            if (url) {
+                setTreasureRedirectUrl(url);
+                setShowTreasureHuntPopup(true);
+            }
+        } catch (e) {
+            console.log('Treasure hunt resolution error:', e);
+        }
+    }, []);
+
     const fetchTaskDataAndShow = useCallback(async (task, depth = 0) => {
         if (depth > 3) {
             console.error('Fetch task data failed after 3 attempts');
@@ -574,17 +589,35 @@ const Tasks = ({
             // Track LINE conversion for task completion
             trackLineConversion('Task_Completion');
 
-            completeTask(task.id, 0);
+            const reward = await completeTask(task.id, 0);
+            if (reward && task.type !== 4 && task.type !== 7) {
+                attemptTreasureHuntPopup();
+            }
 
         } else if (task.type === 4) {
             // Play Tadokami - In-app browser
             try {
+                // Tìm treasure hunt task type 7 với treasureHuntType = 2
+                let enhancedUrl = task.url;
+                try {
+                    // Lấy cả redirectUrl và taskId của treasure hunt task
+                    const treasureHuntData = await shared.getTreasureHuntRedirectUrl(2);
+                    if (treasureHuntData && treasureHuntData.redirectUrl) {
+                        // Chỉ cần += string vào startParam hiện có
+                        enhancedUrl += `__redirectUrl_${encodeURIComponent(treasureHuntData.redirectUrl)}__treasureHuntTaskId_${treasureHuntData.taskId}`;
+                        
+                        console.log('Enhanced URL with treasure hunt data:', enhancedUrl);
+                    }
+                } catch (e) {
+                    console.log('Error getting treasure hunt data:', e);
+                }
+                
                 trackUserAction('minigame_clicked', {
                     game_name: task.name,
-                    game_url: task.url,
+                    game_url: enhancedUrl,
                 }, shared.loginData?.link);
                 
-                shared.openInAppLink(task.url);
+                shared.openInAppLink(enhancedUrl);
             } catch (e) {
                 console.log('Error opening mini app task:', e);
                 // Fallback in case of error
@@ -775,10 +808,16 @@ const Tasks = ({
                         if (task.type === 6) {
                             // Task type 6: send word parameter
                             const reward = await completeTask(task.id, 0, word);
+                            if (reward && task.type !== 4 && task.type !== 7) {
+                                attemptTreasureHuntPopup();
+                            }
                             return reward;
                         } else {
                             // Task type 2, 3, 5: send answerIndex parameter
                             const reward = await completeTask(task.id, answerIndex);
+                            if (reward && task.type !== 4 && task.type !== 7) {
+                                attemptTreasureHuntPopup();
+                            }
                             return reward;
                         }
                     }}
@@ -849,6 +888,11 @@ const Tasks = ({
                 </div>
                 </>
             )}
+            <TreasureHuntPopup
+                isOpen={showTreasureHuntPopup}
+                redirectUrl={treasureRedirectUrl}
+                onClose={() => setShowTreasureHuntPopup(false)}
+            />
         </>
     );
 };

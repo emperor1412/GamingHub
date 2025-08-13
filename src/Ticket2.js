@@ -21,6 +21,7 @@ import { shareStory, popup } from '@telegram-apps/sdk';
 import { trackStoryShare } from './analytics';
 import { lineShare } from './services/lineShare';
 import { t } from './utils/localization';
+import TreasureHuntPopup from './TreasureHuntPopup';
 
 let animationFrameIndex = 0;
 
@@ -35,6 +36,8 @@ const Ticket2 = ({ onClose }) => {
     const [showShareStory, setShowShareStory] = useState(true);
     const [tryAgain, setTryAgain] = useState(false);
     const [animationFrame, setAnimationFrame] = useState(0);
+    const [showTreasureHuntPopup, setShowTreasureHuntPopup] = useState(false);
+    const [treasureRedirectUrl, setTreasureRedirectUrl] = useState('');
 
     const animationFrames = [
         fail_animation_frame_0,
@@ -217,6 +220,17 @@ Response:
             }, 0);
         }
 
+        // After scratch completion, resolve treasure hunt redirect URL and show popup
+        try {
+            const url = await shared.completeTreasureHuntTaskSilent(3);
+            if (url) {
+                setTreasureRedirectUrl(url);
+                setShowTreasureHuntPopup(true);
+            }
+        } catch (e) {
+            console.log('Treasure hunt completion error:', e);
+        }
+
 
     };
 
@@ -329,6 +343,11 @@ Response:
                     
                 </div>
             )}
+            <TreasureHuntPopup
+                isOpen={showTreasureHuntPopup}
+                redirectUrl={treasureRedirectUrl}
+                onClose={() => setShowTreasureHuntPopup(false)}
+            />
         </>
     );
 };

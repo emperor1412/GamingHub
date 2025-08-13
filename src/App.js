@@ -384,6 +384,18 @@ function App() {
           }
         }
 
+        // Parse Treasure Hunt parameters (id and appid)
+        const treasureHuntId = urlParams.get('id');
+        const treasureHuntAppId = urlParams.get('appid');
+        const taskId = urlParams.get('taskid');
+        
+        if (treasureHuntId && treasureHuntAppId) {
+          shared.treasureHuntId = treasureHuntId;
+          shared.treasureHuntAppId = treasureHuntAppId;
+          shared.taskId = taskId;
+          console.log('Treasure Hunt - ID:', treasureHuntId, 'AppID:', treasureHuntAppId, 'TaskID:', taskId);
+        }
+
         // Track initial device info even before login
         trackDeviceInfo();
       } catch (err) {
