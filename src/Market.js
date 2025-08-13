@@ -421,11 +421,112 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
-  // Add useEffect to watch for starlet purchase completion and reload market content
+  // Add new function to refresh only a specific starlet product
+  const refreshStarletProduct = async (productId) => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+      const data = await response.json();
+      console.log('Refreshed Starlet Product Response:', data);
+      if (data.code === 0 && data.data) {
+        console.log('Refreshed Starlet Product Data:', data.data);
+        // Update the specific product in starletProducts array
+        setStarletProducts(prevProducts => 
+          prevProducts.map(product => 
+            product.id === productId ? data.data : product
+          )
+        );
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && retryData.data) {
+            setStarletProducts(prevProducts => 
+              prevProducts.map(product => 
+                product.id === productId ? retryData.data : product
+              )
+            );
+          } else {
+            // Show error popup for retry failure
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Error',
+                message: 'Failed to refresh product data. Please try again.',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
+          }
+        } else {
+          // Show error popup for login failure
+          if (window.Telegram?.WebApp?.showPopup) {
+            await window.Telegram.WebApp.showPopup({
+              title: 'Error',
+              message: 'Session expired. Please try again.',
+              buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+            });
+          }
+        }
+      } else {
+        // Show error popup for API error
+        if (window.Telegram?.WebApp?.showPopup) {
+          await window.Telegram.WebApp.showPopup({
+            title: 'Error',
+            message: data.msg || 'Failed to refresh product data. Please try again.',
+            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh starlet product:', error);
+      // Show error popup for network/other errors
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Network error. Please check your connection and try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
+    }
+  };
+
+  // Add new function to refresh user profile only (without reloading market content)
+  const refreshUserProfileOnly = async () => {
+    try {
+      await shared.getProfileWithRetry();
+      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+      if (userStarlets) {
+        setStarlets(userStarlets.num);
+      }
+
+      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+      if (userTicket) {
+        setTickets(userTicket.num);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+      // Show error popup for profile refresh failure
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Failed to refresh user data. Please try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
+    }
+  };
+
+  // Add useEffect to watch for starlet purchase completion and reload only the specific product
   useEffect(() => {
     if (isStarletPurchaseComplete) {
-      console.log('Market: Starlet purchase completed, reloading market content');
-      refreshUserProfile();
+      console.log('Market: Starlet purchase completed, refreshing specific product and user profile');
+      // Refresh user profile to update starlets count
+      refreshUserProfileOnly();
+      // Refresh only the specific product that was purchased
+      if (selectedPurchase?.productId) {
+        refreshStarletProduct(selectedPurchase.productId);
+      }
       setActiveTab('starlet');
       setIsStarletPurchaseComplete(false); // Reset the flag
     }
