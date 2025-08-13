@@ -218,15 +218,8 @@ body::-webkit-scrollbar-track,
   padding-bottom: 165px; /* Increased space for fixed bottom navigation and flip button */
   box-sizing: border-box;
   background-color: #000;
-  overflow-x: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden; /* Disable all scrolling */
   min-height: 100vh; /* Ensure minimum height to fill viewport */
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  overflow: -moz-scrollbars-none;
 }
 
 
