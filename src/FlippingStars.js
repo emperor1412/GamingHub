@@ -1000,6 +1000,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           className="fc_logo-image" 
           style={{ display: !show3D ? 'block' : 'none' }}
         />
+        {/* WIN/LOSE text - displays above the logo when showing results */}
+        {!show3D && (logoImage === winFlippinStar || logoImage === loseFlippinStar) && (
+          <div className="fc_win-lose-text">
+            {logoImage === winFlippinStar ? 'WIN' : 'LOSE'}
+          </div>
+        )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
         {winReward !== null && (
           <div className="fc_win-reward-progress">
