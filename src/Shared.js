@@ -760,7 +760,7 @@ data object
                 return false;
             }
 
-            // Find first available type=7 task with matching treasureHuntType, appid, and id
+            // Find first available type=7 task with matching treasureHuntType and appid
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
                 if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
@@ -774,8 +774,8 @@ data object
                     // Check if treasureHuntType matches
                     if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
                     
-                    // Check if appid and id match the stored values
-                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    // Check if appid matches the stored value (id is user-specific, so we don't compare it)
+                    if (payload?.appid !== shared.treasureHuntAppId) return false;
                     
                     return true;
                 } catch (e) {
@@ -784,7 +784,7 @@ data object
             });
 
             if (!candidate) {
-                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId);
                 return false;
             }
 
@@ -919,7 +919,7 @@ data object
                 return '';
             }
 
-            // Find first available type=7 task with matching treasureHuntType, appid, and id
+            // Find first available type=7 task with matching treasureHuntType and appid
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
                 if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
@@ -933,8 +933,8 @@ data object
                     // Check if treasureHuntType matches
                     if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
                     
-                    // Check if appid and id match the stored values
-                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    // Check if appid matches the stored value (id is user-specific, so we don't compare it)
+                    if (payload?.appid !== shared.treasureHuntAppId) return false;
                     
                     return true;
                 } catch (e) {
@@ -943,7 +943,7 @@ data object
             });
 
             if (!candidate) {
-                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId);
                 return '';
             }
 
@@ -957,9 +957,9 @@ data object
                 huntPayload = null;
             }
 
-            // Validate appid and id (should already be validated above, but double-check)
-            if (!huntPayload?.appid || !huntPayload?.id) {
-                console.error('Missing app ID or ID in treasure hunt task data');
+            // Validate appid (should already be validated above, but double-check)
+            if (!huntPayload?.appid) {
+                console.error('Missing app ID in treasure hunt task data');
                 return '';
             }
 
@@ -1063,8 +1063,8 @@ data object
                     // Check if treasureHuntType matches
                     if (Number(payload?.treasureHuntType) !== Number(treasureHuntType)) return false;
                     
-                    // Check if appid and id match the stored values
-                    if (payload?.appid !== shared.treasureHuntAppId || payload?.id !== shared.treasureHuntId) return false;
+                    // Check if appid matches the stored value (id is user-specific, so we don't compare it)
+                    if (payload?.appid !== shared.treasureHuntAppId) return false;
                     
                     return true;
                 } catch (e) {
@@ -1073,7 +1073,7 @@ data object
             });
 
             if (!candidate) {
-                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId, 'and id:', shared.treasureHuntId);
+                console.log('No matching treasure hunt task found for type:', treasureHuntType, 'with appid:', shared.treasureHuntAppId);
                 return null;
             }
 
@@ -1097,6 +1097,7 @@ data object
                             urlObj.searchParams.set(key, value);
                         }
                     };
+                    // Use id from huntPayload if available, otherwise use shared.treasureHuntId
                     ensureParam('id', huntPayload?.id || shared.treasureHuntId);
                     ensureParam('appid', huntPayload?.appid || shared.treasureHuntAppId);
                     
