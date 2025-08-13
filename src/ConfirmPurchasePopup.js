@@ -275,7 +275,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                     <div className="purchase-text">
                       {isStarletProduct ? (
                         <>
-                          DO YOU WANT TO BUY <span className="highlight-value">{productName}</span>
+                          DO YOU WANT TO BUY A <span className="highlight-value">{productName}</span>
                           <br />
                           IN FSL GAME HUB
                           <br />

@@ -480,7 +480,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     switch (propId) {
       case 60010:
         return { 
-          name: '$50', 
+          name: '$50 GMT PAY CARD', 
+          displayAmount: '$50',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -489,7 +490,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60020:
         return { 
-          name: '$100', 
+          name: '$100 GMT PAY CARD', 
+          displayAmount: '$100',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -498,7 +500,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60030:
         return { 
-          name: '$200', 
+          name: '$200 GMT PAY CARD', 
+          displayAmount: '$200',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -507,7 +510,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70010:
         return { 
-          name: '$79 Merch Coupon', 
+          name: '$79 MERCH COUPON', 
+          displayAmount: '$79 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -515,7 +519,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70020:
         return { 
-          name: '$199 Merch Coupon', 
+          name: '$199 MERCH COUPON', 
+          displayAmount: '$199 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -852,7 +857,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                                 )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.name}</div>
+                                    <div className="mk-market-ticket-amount" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
                                     {/* <div className="mk-market-ticket-label" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>{productInfo.description}</div> */}
                                   </div>
                                   <div className="mk-market-ticket-bonus" style={{ opacity: (isAvailable && hasFSLID) ? 1 : 0.5 }}>
