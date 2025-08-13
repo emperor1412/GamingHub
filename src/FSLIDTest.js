@@ -56,7 +56,7 @@ Response:
                     state: state,
                     usePopup: true, // Popup a window instead of jump to
                     isApp: true,
-                    domain: 'https://gm3.joysteps.io/'
+                    domain: 'https://9ijsflpfgm3.joysteps.io/'
                 });
     
                 fslAuthorization.signInV2();
@@ -120,7 +120,7 @@ Response:
         console.log('Method 3');
 
         const REDIRECT_URL = window.location.href;
-        const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+        const FSL_ID_URL = 'https://9ijsflpfgm3.joysteps.io/login';
 
         const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
             client_id: 'LineMiniGame',
@@ -136,7 +136,7 @@ Response:
         console.log('Method 4');
 
         const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
-        const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+        const FSL_ID_URL = 'https://9ijsflpfgm3.joysteps.io/login';
 
         const loginUrl = `${FSL_ID_URL}?` + new URLSearchParams({
             client_id: 'LineMiniGame',
@@ -229,7 +229,7 @@ https://emperor1412.github.io/GamingHub/#tgWebAppData=user%3D%257B%2522id%2522%2
             <span>
                 <pre>
                     {`const REDIRECT_URL = window.location.href;
-const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+const FSL_ID_URL = 'https://9ijsflpfgm3.joysteps.io/login';
 
 const loginUrl = {FSL_ID_URL} + new URLSearchParams({
   client_id: 'LineMiniGame',
@@ -248,7 +248,7 @@ window.location.href = loginUrl;`}
             <span>
                 <pre>
                     {`const REDIRECT_URL = 'https://t.me/TestFSL_bot/fslhub?startapp=';
-const FSL_ID_URL = 'https://gm3.joysteps.io/login';
+const FSL_ID_URL = 'https://9ijsflpfgm3.joysteps.io/login';
 
 const loginUrl = {FSL_ID_URL} + new URLSearchParams({
   client_id: 'LineMiniGame',

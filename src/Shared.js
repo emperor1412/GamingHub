@@ -434,7 +434,7 @@ data object
                 state: state,
                 usePopup: true, // Popup a window instead of jump to
                 isApp: false, // Set to false to force external browser
-                domain: 'https://gm3.joysteps.io/'
+                domain: 'https://9ijsflpfgm3.joysteps.io/'
             });
 
             await fslAuthorization.signInV2();

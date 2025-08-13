@@ -145,7 +145,7 @@ const FSLID = () => {
 
     // Helper function to build FSL login URL manually
     const buildFSLLoginUrl = (state, redirectUrl) => {
-        const fslLoginUrl = new URL('https://gm3.joysteps.io/login/fslUsers');
+        const fslLoginUrl = new URL('https://9ijsflpfgm3.joysteps.io/login/fslUsers');
         fslLoginUrl.searchParams.append('response_type', 'code');
         fslLoginUrl.searchParams.append('appkey', 'LineMiniGame');
         fslLoginUrl.searchParams.append('scope', 'basic,wallet,stepn');
@@ -198,7 +198,7 @@ const FSLID = () => {
                     state: state,
                     usePopup: true,
                     isApp: true,
-                    domain: 'https://gm3.joysteps.io/'
+                    domain: 'https://9ijsflpfgm3.joysteps.io/'
                 });
 
                 // Use signInV2() method
