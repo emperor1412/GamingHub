@@ -270,21 +270,45 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipClick = () => {
     if (isAutoFlipping) {
-      // Clear timeout và dừng ngay lập tức
+      // Dừng ngay lập tức, không cần chờ kết quả
+      console.log('Stopping auto flip immediately...');
+      
+      // Clear tất cả timeouts
       if (autoFlipTimeoutRef.current) {
         clearTimeout(autoFlipTimeoutRef.current);
         autoFlipTimeoutRef.current = null;
       }
+      if (manualFlipTimerRef.current) {
+        clearTimeout(manualFlipTimerRef.current);
+        manualFlipTimerRef.current = null;
+      }
+      if (logoTimeoutRef.current) {
+        clearTimeout(logoTimeoutRef.current);
+        logoTimeoutRef.current = null;
+      }
+      
+      // Reset states ngay lập tức
       setIsAutoFlipping(false);
       setAutoFlip(false);
       setAutoFlipTarget(0);
       setAutoFlipCount(0);
+      setShow3D(false);
+      setIsFlipping(false);
+      
+      // Reset logo về mặc định
+      setLogoImage(flippingStarsLogo);
+      setWinReward(null);
+      
+      // Auto-select bet phù hợp
+      const currentStarlets = shared.getStarlets();
+      selectLargestAffordableBet(currentStarlets);
+      
     } else if (autoFlip) {
-      // If auto flip is ON but not currently flipping, turn it OFF
+      // Nếu auto flip ON nhưng không đang flipping, tắt OFF
       setAutoFlip(false);
       setSelectedAutoFlipCount(null);
     } else {
-      // If auto flip is OFF, show overlay to select options
+      // Nếu auto flip OFF, hiển thị overlay chọn số lần
       setShowAutoFlipOverlay(true);
     }
   };
@@ -531,10 +555,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
           } else {
             // Stop auto flip on error
+            let errorMessage = result.error;
+            let errorTitle = 'Auto Flip Error';
+            
+            if (result.error.includes('timeout')) {
+              errorTitle = 'Connection Timeout';
+              errorMessage = 'Server timeout during auto flip. Auto flip stopped.';
+            }
+            
             await shared.showPopup({
               type: 0,
-              title: 'Auto Flip Error',
-              message: result.error || 'Auto flip stopped due to an error'
+              title: errorTitle,
+              message: errorMessage
             });
             setIsAutoFlipping(false);
             setAutoFlip(false);
@@ -694,10 +726,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
       } else {
+        let errorMessage = result.error;
+        let errorTitle = 'Flip Failed';
+        
+        if (result.error.includes('timeout')) {
+          errorTitle = 'Connection Timeout';
+          errorMessage = 'Server is taking too long to respond. Please try again.';
+        }
+        
         await shared.showPopup({
           type: 0,
-          title: 'Flip Failed',
-          message: result.error || 'Failed to flip coin'
+          title: errorTitle,
+          message: errorMessage
         });
       }
     } catch (error) {
