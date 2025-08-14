@@ -1,4 +1,8 @@
 import React from 'react';
+import Lottie from 'lottie-react';
+
+// Import animation data từ file JSON thực tế từ artist
+import coinAnimationData from './animations/CoinAnim.json';
 
 function CoinAnimation({ loop = true, visible = true, onFinished, scale = 1 }) {
   if (!visible) return null;
@@ -10,20 +14,19 @@ function CoinAnimation({ loop = true, visible = true, onFinished, scale = 1 }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      transform: `scale(${scale})`
+      transform: `scale(${scale * 0.8})` // Giảm kích thước xuống 80% của scale được truyền vào
     }}>
-      <iframe
-        src="/flippin_coin_animation/CoinAnim.html"
+      <Lottie
+        animationData={coinAnimationData}
+        loop={loop}
+        autoplay={visible}
+        onComplete={onFinished}
         style={{ 
           width: '100%', 
           height: '100%',
           maxWidth: '300px',
-          maxHeight: '300px',
-          border: 'none',
-          background: 'transparent'
+          maxHeight: '300px'
         }}
-        title="Coin Flip Animation"
-        allow="autoplay"
       />
     </div>
   );
