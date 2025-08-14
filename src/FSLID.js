@@ -136,30 +136,41 @@ const FSLID = () => {
         getGMTBalance();
     }, []);
 
-    const connectFSLID = () => {
-        console.log('Connect FSL ID clicked');
-        
-        if (!state) {
-            console.log('State not ready, fetching key...');
-            fetchKey();
-            return;
+    const connectFSLID = async () => {
+        try {
+            console.log('Connect FSL ID clicked');
+            
+            if (!state) {
+                console.log('State not ready, fetching key...');
+                await fetchKey();
+                return;
+            }
+
+            const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
+            console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
+
+            const fslAuthorization = await FSLAuthorization.init({
+                responseType: 'code', // 'code' or 'token'
+                appKey: 'MiniGame',
+                redirectUri: REDIRECT_URL, // https://xxx.xxx.com
+                scope: 'basic,wallet,stepn', // Grant Scope
+                state: state,
+                usePopup: true, // Popup a window instead of jump to
+                isApp: true,
+                domain: 'https://9ijsflpfgm3.joysteps.io/'
+            });
+
+            await fslAuthorization.signInV2();
+            
+        } catch (error) {
+            console.error('FSL Authorization error:', error);
+            
+            // Show error popup
+            await shared.showPopup({
+                type: 0,
+                message: 'Failed to connect FSL ID. Please try again later.'
+            });
         }
-
-        const REDIRECT_URL = shared.server_url + '/api/app/fslCallback';
-        console.log('State:', state, '\nRedirect URL:', REDIRECT_URL);
-
-        const fslAuthorization = FSLAuthorization.init({
-            responseType: 'code', // 'code' or 'token'
-            appKey: 'MiniGame',
-            redirectUri: REDIRECT_URL, // https://xxx.xxx.com
-            scope: 'basic,wallet,stepn', // Grant Scope
-            state: state,
-            usePopup: true, // Popup a window instead of jump to
-            isApp: true,
-            domain: 'https://gm3.joysteps.io/'
-        });
-
-        fslAuthorization.signInV2();
     };
 
     return (
