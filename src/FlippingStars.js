@@ -9,7 +9,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
-import FlipCoin3D, { CoinModelPreloader } from './FlipCoin3D';
+import CoinAnimation from './CoinAnimation';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
@@ -984,14 +984,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </div>
       </header>
 
-      {/* Preload 3D model early */}
-      <CoinModelPreloader />
+      {/* Preload Lottie animation early */}
+      <CoinAnimation visible={false} />
 
       {/* Logo */}
       <div className={`fc_logo-container ${show3D ? 'fc_logo-elevated' : ''} ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
-        {/* Always render FlipCoin3D but control visibility */}
+        {/* Always render CoinAnimation but control visibility */}
         <div className="fc_logo-3d" style={{ display: show3D ? 'block' : 'none' }}>
-          <FlipCoin3D loop={true} scale={1.5} visible={show3D} />
+          <CoinAnimation loop={true} scale={1.5} visible={show3D} />
         </div>
         {/* Show image when 3D is not visible */}
         <img 
