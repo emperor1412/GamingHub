@@ -210,6 +210,76 @@ body::-webkit-scrollbar-track,
   text-transform: uppercase;
 }
 
+/* Sound Control Button */
+.fc_sound-control {
+  position: absolute;
+  right: 80px; /* Move left to avoid overlapping with stats */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* Ensure it's above other elements */
+}
+
+.fc_sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Test Sound Button (can be removed in production) */
+.fc_test-sound-control {
+  position: absolute;
+  right: 130px; /* Position to the left of sound control */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.fc_test-sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_test-sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_test-sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
 .fc_app {
   width: 390px;
   margin: 0 auto;
@@ -1899,7 +1969,7 @@ body::-webkit-scrollbar-track,
   box-shadow: 0 6px 20px rgba(255, 0, 246, 0.7);
 }
 
-.fc_flip-btn.fc_flip-btn-buy-starlets:hover .fc_corner {
+.fc_flip-btn.fc_flip-btn-buy-starlets .fc_corner {
   border-color: #FF00F6;
 }
 

@@ -19,6 +19,11 @@ import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
 
+// Sound imports
+import winSound from './sounds/Win.mp3';
+import loseSound from './sounds/Lose.mp3';
+import coinSpinningSound from './sounds/coin-spinning.mp3';
+
 // Navigation icons
 import HomeIcon_normal from './images/Home_normal.svg';
 import HomeIcon_selected from './images/Home_selected.svg';
@@ -86,6 +91,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
 
+  // Sound system states
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [soundVolume, setSoundVolume] = useState(0.7);
+  
+  // Audio refs for sound management
+  const audioRefs = useRef({
+    win: null,
+    lose: null,
+    coinSpinning: null
+  });
+
   // Function to format win reward into 4 digits for display
   const formatWinReward = (amount) => {
     if (!amount) return ['0', '0', '0', '0'];
@@ -103,6 +119,103 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return str.padStart(4, '0').split('');
   };
 
+  // Sound management functions
+  const initializeAudio = () => {
+    // Create audio elements for each sound
+    const audioElements = {
+      win: new Audio(winSound),
+      lose: new Audio(loseSound),
+      coinSpinning: new Audio(coinSpinningSound)
+    };
+
+    // Configure audio properties
+    Object.keys(audioElements).forEach(key => {
+      const audio = audioElements[key];
+      audio.volume = soundVolume;
+      audio.preload = 'auto';
+      
+      // Special handling for coin spinning sound (loop during animation)
+      if (key === 'coinSpinning') {
+        audio.loop = true;
+      }
+    });
+
+    audioRefs.current = audioElements;
+  };
+
+  const playSound = (soundType) => {
+    if (!isSoundEnabled) return;
+    
+    const audio = audioRefs.current[soundType];
+    if (audio) {
+      try {
+        // Reset audio to beginning
+        audio.currentTime = 0;
+        audio.volume = soundVolume;
+        audio.play().catch(error => {
+          console.log('Audio play failed:', error);
+        });
+      } catch (error) {
+        console.log('Sound play error:', error);
+      }
+    }
+  };
+
+  const stopSound = (soundType) => {
+    const audio = audioRefs.current[soundType];
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
+
+  const stopAllSounds = () => {
+    Object.keys(audioRefs.current).forEach(soundType => {
+      stopSound(soundType);
+    });
+  };
+
+  const toggleSound = () => {
+    setIsSoundEnabled(!isSoundEnabled);
+    if (!isSoundEnabled) {
+      stopAllSounds();
+    }
+  };
+
+  const adjustVolume = (newVolume) => {
+    const clampedVolume = Math.max(0, Math.min(1, newVolume));
+    setSoundVolume(clampedVolume);
+    
+    // Update all audio elements with new volume
+    Object.values(audioRefs.current).forEach(audio => {
+      if (audio) {
+        audio.volume = clampedVolume;
+      }
+    });
+  };
+
+  // Debug function to test sounds (can be removed in production)
+  const testSounds = () => {
+    if (!isSoundEnabled) {
+      console.log('Sound is disabled');
+      return;
+    }
+    
+    console.log('Testing sounds...');
+    console.log('Audio refs:', audioRefs.current);
+    console.log('Sound volume:', soundVolume);
+    
+    // Test each sound
+    Object.keys(audioRefs.current).forEach(soundType => {
+      const audio = audioRefs.current[soundType];
+      if (audio) {
+        console.log(`${soundType} audio:`, audio);
+        console.log(`${soundType} readyState:`, audio.readyState);
+        console.log(`${soundType} paused:`, audio.paused);
+      }
+    });
+  };
+
   // Function to show result on logo for 4 seconds
   const showResultOnLogo = (isWin, rewardAmount, duration = 10000) => {
     if (logoTimeoutRef.current) {
@@ -112,9 +225,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     if (isWin) {
       setLogoImage(winFlippinStar);
       setWinReward(rewardAmount || 0);
+      
+      // Play win sound for all wins
+      playSound('win');
     } else {
       setLogoImage(loseFlippinStar);
       setWinReward(null);
+      
+      // Play lose sound
+      playSound('lose');
     }
     
     // Only set logo timeout if auto flip is not being stopped
@@ -201,6 +320,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     };
   }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay]);
 
+  // Initialize audio system
+  useEffect(() => {
+    initializeAudio();
+    
+    // Cleanup audio when component unmounts
+    return () => {
+      stopAllSounds();
+    };
+  }, []); // Empty dependency array - only run once on mount
+
   const handleWelcomeClose = () => {
     setShowWelcome(false);
   };
@@ -270,21 +399,48 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipClick = () => {
     if (isAutoFlipping) {
-      // Clear timeout và dừng ngay lập tức
+      // Dừng ngay lập tức, không cần chờ kết quả
+      console.log('Stopping auto flip immediately...');
+      
+      // Stop all sounds immediately
+      stopAllSounds();
+      
+      // Clear tất cả timeouts
       if (autoFlipTimeoutRef.current) {
         clearTimeout(autoFlipTimeoutRef.current);
         autoFlipTimeoutRef.current = null;
       }
+      if (manualFlipTimerRef.current) {
+        clearTimeout(manualFlipTimerRef.current);
+        manualFlipTimerRef.current = null;
+      }
+      if (logoTimeoutRef.current) {
+        clearTimeout(logoTimeoutRef.current);
+        logoTimeoutRef.current = null;
+      }
+      
+      // Reset states ngay lập tức
       setIsAutoFlipping(false);
       setAutoFlip(false);
       setAutoFlipTarget(0);
       setAutoFlipCount(0);
+      setShow3D(false);
+      setIsFlipping(false);
+      
+      // Reset logo về mặc định
+      setLogoImage(flippingStarsLogo);
+      setWinReward(null);
+      
+      // Auto-select bet phù hợp
+      const currentStarlets = shared.getStarlets();
+      selectLargestAffordableBet(currentStarlets);
+      
     } else if (autoFlip) {
-      // If auto flip is ON but not currently flipping, turn it OFF
+      // Nếu auto flip ON nhưng không đang flipping, tắt OFF
       setAutoFlip(false);
       setSelectedAutoFlipCount(null);
     } else {
-      // If auto flip is OFF, show overlay to select options
+      // Nếu auto flip OFF, hiển thị overlay chọn số lần
       setShowAutoFlipOverlay(true);
     }
   };
@@ -329,6 +485,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleStopAutoFlip = () => {
     console.log('Stopping auto flip...');
     shouldStopAutoFlipRef.current = true;
+    
+    // Stop all sounds when stopping auto flip
+    stopAllSounds();
     
     // Clear any pending timeouts
     if (autoFlipTimeoutRef.current) {
@@ -409,6 +568,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
       // Check if user has enough starlets
       if (currentStarlets < betAmount) {
+        // Stop any playing sounds
+        stopAllSounds();
+        
         await shared.showPopup({
           type: 0,
           title: 'Insufficient Starlets',
@@ -427,6 +589,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setShow3D(true);
       setIsFlipping(true);
       
+      // Start playing coin spinning sound
+      playSound('coinSpinning');
+      
       // Store pending info for auto flip
       pendingBetRef.current = betAmount;
       pendingSideRef.current = selectedSide;
@@ -439,6 +604,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Check if user wants to stop before proceeding
         if (shouldStopAutoFlipRef.current) {
           console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+          // Stop all sounds when stopping
+          stopAllSounds();
           setIsAutoFlipping(false);
           setAutoFlip(false);
           setAutoFlipTarget(0);
@@ -488,9 +655,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
             showResultOnLogo(result.isWin, result.reward, 2000);
             
+            // Stop coin spinning sound after showing result
+            stopSound('coinSpinning');
+            
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
               console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+              // Stop all sounds when stopping
+              stopAllSounds();
               setIsAutoFlipping(false);
               setAutoFlip(false);
               setAutoFlipTarget(0);
@@ -519,6 +691,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               // Check again if user wants to stop before continuing
               if (shouldStopAutoFlipRef.current) {
                 console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+                // Stop all sounds when stopping
+                stopAllSounds();
                 setIsAutoFlipping(false);
                 setAutoFlip(false);
                 setAutoFlipTarget(0);
@@ -531,10 +705,21 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
           } else {
             // Stop auto flip on error
+            // Stop all sounds on error
+            stopAllSounds();
+            
+            let errorMessage = result.error;
+            let errorTitle = 'Auto Flip Error';
+            
+            if (result.error.includes('timeout')) {
+              errorTitle = 'Connection Timeout';
+              errorMessage = 'Server timeout during auto flip. Auto flip stopped.';
+            }
+            
             await shared.showPopup({
               type: 0,
-              title: 'Auto Flip Error',
-              message: result.error || 'Auto flip stopped due to an error'
+              title: errorTitle,
+              message: errorMessage
             });
             setIsAutoFlipping(false);
             setAutoFlip(false);
@@ -551,6 +736,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }
           }
         } catch (error) {
+          // Stop all sounds on error
+          stopAllSounds();
+          
           console.error('Auto flip error:', error);
           await shared.showPopup({
             type: 0,
@@ -640,6 +828,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setShow3D(true);
     setIsFlipping(true);
 
+    // Start playing coin spinning sound
+    playSound('coinSpinning');
+
     // Schedule server call after 1.5s; keep the 3D animation running until result arrives
     if (manualFlipTimerRef.current) {
       clearTimeout(manualFlipTimerRef.current);
@@ -678,6 +869,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           setTailsCount(prev => prev + 1);
         }
 
+        // Stop coin spinning sound before showing result
+        stopSound('coinSpinning');
+
         // Show win/lose on logo and reward overlay first
         showResultOnLogo(result.isWin, result.reward);
 
@@ -694,13 +888,27 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
       } else {
+        // Stop coin spinning sound on error
+        stopSound('coinSpinning');
+        
+        let errorMessage = result.error;
+        let errorTitle = 'Flip Failed';
+        
+        if (result.error.includes('timeout')) {
+          errorTitle = 'Connection Timeout';
+          errorMessage = 'Server is taking too long to respond. Please try again.';
+        }
+        
         await shared.showPopup({
           type: 0,
-          title: 'Flip Failed',
-          message: result.error || 'Failed to flip coin'
+          title: errorTitle,
+          message: errorMessage
         });
       }
     } catch (error) {
+      // Stop coin spinning sound on error
+      stopSound('coinSpinning');
+      
       console.error('Flip error:', error);
       await shared.showPopup({
         type: 0,
@@ -721,6 +929,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   useEffect(() => {
     if (shouldStopAutoFlipRef.current && isAutoFlipping) {
       console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+      // Stop all sounds when stopping
+      stopAllSounds();
       setIsAutoFlipping(false);
       setAutoFlip(false);
       setAutoFlipTarget(0);
@@ -741,6 +951,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       if (manualFlipTimerRef.current) {
         clearTimeout(manualFlipTimerRef.current);
       }
+      // Stop all sounds when component unmounts
+      stopAllSounds();
     };
   }, []);
 
@@ -982,6 +1194,26 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <span className="fc_stat-item-main-text">{starlets}</span>
           </button>
         </div>
+        
+        {/* Sound control button */}
+        {/* <button 
+          className="fc_sound-control"
+          onClick={toggleSound}
+          title={isSoundEnabled ? 'Disable Sound' : 'Enable Sound'}
+        >
+          <span className="fc_sound-icon">
+            {isSoundEnabled ? '🔊' : '🔇'}
+          </span>
+        </button> */}
+        
+        {/* Test sound button (can be removed in production) */}
+        {/* <button 
+          className="fc_test-sound-control"
+          onClick={testSounds}
+          title="Test Sounds (Debug)"
+        >
+          <span className="fc_test-sound-icon">🎵</span>
+        </button> */}
       </header>
 
       {/* Preload Lottie animation early */}

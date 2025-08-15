@@ -632,12 +632,19 @@ data object
         try {
             console.log('Flip coin params:', { head: isHeads, amount: betAmount, allin: allin });
 
+            // Thêm timeout 10 giây
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 giây
+
             const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                signal: controller.signal // Thêm signal để có thể abort
             });
+
+            clearTimeout(timeoutId); // Clear timeout nếu thành công
 
             console.log('Flip coin Response:', response);
             
@@ -646,7 +653,6 @@ data object
                 console.log('Flip coin data:', data);
 
                 if (data.code === 0) {
-                    // Refresh user profile to get updated starlets
                     await shared.getProfileWithRetry();
                     
                     return {
@@ -682,6 +688,15 @@ data object
                 };
             }
         } catch (error) {
+            // Xử lý timeout error
+            if (error.name === 'AbortError') {
+                return {
+                    success: false,
+                    error: 'Request timeout - server took too long to respond (10s)',
+                    data: null
+                };
+            }
+            
             console.error('Flip coin error:', error);
             return {
                 success: false,
