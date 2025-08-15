@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.88365633.css",
-    "main.js": "./static/js/main.f8a576e1.js",
+    "main.css": "./static/css/main.616b001f.css",
+    "main.js": "./static/js/main.49702839.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -95,6 +95,7 @@
     "static/media/Meet Marty 1.png": "./static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
     "static/media/lv9.png": "./static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "./static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
+    "static/media/coin-spinning.mp3": "./static/media/coin-spinning.c67fad2931739e1d7e7d.mp3",
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
     "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.dcaeba6bf83e16339318.png",
     "static/media/lv8.png": "./static/media/lv8.1291ef23720866f9eb8a.png",
@@ -106,8 +107,10 @@
     "static/media/lv1.png": "./static/media/lv1.1898e65a326e46523194.png",
     "static/media/lv6.png": "./static/media/lv6.7671e0ff975d85613c8a.png",
     "static/media/lv5.png": "./static/media/lv5.cb246d6f61887f43d540.png",
+    "static/media/Win.mp3": "./static/media/Win.fd2c2fea27379cbc44da.mp3",
     "static/media/FSLID_Login_Logo.png": "./static/media/FSLID_Login_Logo.07ed1adca04347f27a3e.png",
     "static/media/Egglets_Logo.png": "./static/media/Egglets_Logo.68f848b01467bbe7cdfb.png",
+    "static/media/Lose.mp3": "./static/media/Lose.94c07980232ec9d3104e.mp3",
     "static/media/lv4.png": "./static/media/lv4.8270aa7f7a5887fcf5e0.png",
     "static/media/MooAR_Login_Logo.png": "./static/media/MooAR_Login_Logo.b5c247a4297785ae1cc2.png",
     "static/media/one_shot.png": "./static/media/one_shot.2827c4f3c969098979d4.png",
@@ -180,12 +183,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.88365633.css.map": "./static/css/main.88365633.css.map",
-    "main.f8a576e1.js.map": "./static/js/main.f8a576e1.js.map",
+    "main.616b001f.css.map": "./static/css/main.616b001f.css.map",
+    "main.49702839.js.map": "./static/js/main.49702839.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.88365633.css",
-    "static/js/main.f8a576e1.js"
+    "static/css/main.616b001f.css",
+    "static/js/main.49702839.js"
   ]
 }
