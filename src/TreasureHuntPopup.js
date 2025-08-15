@@ -2,6 +2,7 @@ import React from 'react';
 import './TreasureHuntPopup.css';
 import starletIcon from './images/starlet.png';
 import shared from './Shared';
+import { t } from './utils/localization';
 
 const TreasureHuntPopup = ({ isOpen, onClose, redirectUrl, onGetReward }) => {
   if (!isOpen) return null;
@@ -28,18 +29,18 @@ const TreasureHuntPopup = ({ isOpen, onClose, redirectUrl, onGetReward }) => {
             <img src={starletIcon} alt="Starlet" />
           </div>
 
-          <h2 className="th-popup-title">TREASURE HUNT</h2>
-          <div className="th-popup-subtitle">TASK COMPLETED</div>
+          <h2 className="th-popup-title">{t('TREASURE_HUNT')}</h2>
+          <div className="th-popup-subtitle">{t('TH_COMPLETED')}</div>
 
           <div className="th-received-section">
-            <div className="th-received-text">You found a reward link</div>
+            <div className="th-received-text">{t('REWARD_LINK')}</div>
           </div>
 
           <button
             className="th-get-reward-button"
             onClick={handleGetReward}
           >
-            Get Reward
+            {t('TH_GET_REWARD')}
           </button>
         </div>
       </div>
