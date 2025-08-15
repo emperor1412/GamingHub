@@ -18,6 +18,7 @@ import loseFlippinStar from './images/LoseFlippinStar.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
+import settingsIcon from './images/Settings.png';
 
 // Sound imports
 import winSound from './sounds/Win.mp3';
@@ -57,8 +58,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
   const [showCustomConfirm, setShowCustomConfirm] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
+  const [customAmountError, setCustomAmountError] = useState('');
   const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
   const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   
   // New states for flip functionality
   const [isFlipping, setIsFlipping] = useState(false);
@@ -308,7 +311,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
-    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay) {
+    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay || showSettings) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -318,7 +321,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay]);
+  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay, showSettings]);
 
   // Initialize audio system
   useEffect(() => {
@@ -363,14 +366,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
+    const amountNum = parseInt(customAmount) || 0;
+    
+    // Check if amount is divisible by 10
+    if (amountNum % 10 !== 0) {
+      setCustomAmountError('DIVISIBLE BY 10 ONLY');
+      return;
+    }
+    
+    // Clear error if validation passes
+    setCustomAmountError('');
+    
     // Clamp to available starlets
-    const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
-    const finalAmount = amountNum.toString();
+    const finalAmount = Math.min(amountNum, starlets).toString();
     setShowCustomConfirm(false);
     
-          // If custom amount is 0, select the first bet option (10 starlets)
+    // If custom amount is 0, select the first bet option (10 starlets)
     if (amountNum === 0) {
-              setSelectedBet(10);
+      setSelectedBet(10);
     } else {
       setSelectedBet('custom');
     }
@@ -383,9 +396,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleKeypadInput = (value) => {
     if (value === 'delete') {
       setCustomAmount(prev => prev.slice(0, -1));
+      setCustomAmountError(''); // Clear error when deleting
     } else if (value === 'confirm') {
       handleCustomConfirm();
     } else {
+      // Clear error when typing new input
+      setCustomAmountError('');
+      
       // Limit to 6 digits and clamp to available starlets
       setCustomAmount(prev => {
         if ((prev || '').length >= 6) return prev;
@@ -480,6 +497,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleAutoFlipCancel = () => {
     setShowAutoFlipOverlay(false);
     setSelectedAutoFlipCount(null);
+  };
+
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+  };
+
+  const handleSettingsBack = () => {
+    setShowSettings(false);
   };
 
   const handleStopAutoFlip = () => {
@@ -1054,6 +1079,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {showAllInConfirm && (
         <div className="fc_allin-overlay">
           <div className="fc_allin-content">
+            {/* All-in Value Container */}
+            <div className="fc_allin-value-container">
+              <div className="fc_allin-value-display">
+                <span className="fc_allin-value-number">{starlets.toString()}</span>
+                <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
+              </div>
+            </div>
+            
             {/* ALL IN Text */}
             <div className="fc_allin-title">ALL IN!</div>
             
@@ -1104,6 +1137,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 </div>
               </div>
             </div>
+            
+            {/* Error message */}
+            {customAmountError && (
+              <div className="fc_custom-error" style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                {customAmountError}
+              </div>
+            )}
             
             {/* SET Button */}
             <div className="fc_custom-buttons">
@@ -1215,6 +1255,73 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <span className="fc_test-sound-icon">🎵</span>
         </button> */}
       </header>
+
+      {/* Settings Button - positioned below and to the right of fc_stats-header */}
+      <div className="fc_settings-button-container">
+        <button 
+          className="fc_settings-button"
+          onClick={handleSettingsClick}
+        >
+          <img src={settingsIcon} alt="Settings" className="fc_settings-icon" />
+        </button>
+      </div>
+
+      {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
+      <div className="fc_jackpot-container">
+        <div className="fc_jackpot">
+          <span className="fc_jackpot-label">JACKPOT</span>
+          <span className="fc_jackpot-count">00000000</span>
+        </div>
+      </div>
+
+      {/* Settings Overlay */}
+      {showSettings && (
+        <div className="fc_settings-overlay">
+          <div className="fc_settings-content">
+            {/* Sound Control Section */}
+            <div className="fc_settings-sound-section">
+              {/* <div className="fc_settings-sound-title">SOUND CONTROL</div> */}
+              
+              {/* Sound Toggle Buttons */}
+              <div className="fc_settings-sound-toggle">
+                <button 
+                  className={`fc_settings-sound-btn ${isSoundEnabled ? 'fc_sound-on' : 'fc_sound-off'}`}
+                  onClick={toggleSound}
+                >
+                  <span className="fc_sound-text">SOUND //</span>
+                </button>
+                
+                <button 
+                  className={`fc_settings-sound-status ${isSoundEnabled ? 'fc_status-on' : 'fc_status-off'}`}
+                  onClick={toggleSound}
+                >
+                  {isSoundEnabled ? 'ON' : 'OFF'}
+                </button>
+              </div>
+              
+              {/* Volume Control */}
+              <div className="fc_settings-volume-section">
+                <div className="fc_settings-volume-label">VOLUME</div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={soundVolume}
+                  onChange={(e) => adjustVolume(parseFloat(e.target.value))}
+                  className="fc_settings-volume-slider"
+                />
+                <div className="fc_settings-volume-value">{Math.round(soundVolume * 100)}%</div>
+              </div>
+            </div>
+            
+            {/* Back Button at the bottom */}
+            <button className="fc_settings-back-btn" onClick={handleSettingsBack}>
+              BACK
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Preload Lottie animation early */}
       <CoinAnimation visible={false} />
@@ -1386,7 +1493,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
-        <button 
+        {/* <button 
           className={`fc_bet-button fc_double-button ${selectedBet === 'double' ? 'fc_selected' : ''} ${(canDouble && lastWinAmount > 0 && lastWinAmount <= starlets) ? '' : 'fc_insufficient-funds'}`}
           onClick={() => {
             if (isAutoFlipping) return;
@@ -1404,7 +1511,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_double-line1"><span className="fc_double-word">DOUBLE</span> <span className="fc_double-or">OR</span></div>
             <div className="fc_double-line2">NOTHING</div>
           </div>
-        </button>
+        </button> */}
       </div>
 
       {/* Flip button */}

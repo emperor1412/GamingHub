@@ -292,6 +292,7 @@ body::-webkit-scrollbar-track,
   overflow-x: hidden; /* Prevent horizontal scrolling */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   min-height: 100vh; /* Ensure minimum height to fill viewport */
+  position: relative; /* Enable absolute positioning for child elements */
 }
 
 
@@ -482,10 +483,6 @@ body::-webkit-scrollbar-track,
 .fc_progress-starlet:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
-}
-
-.fc_progress-starlet:hover .fc_progress-starlet-icon {
-  transform: rotate(15deg);
 }
 
 
@@ -1365,6 +1362,36 @@ body::-webkit-scrollbar-track,
   gap: 30px;
 }
 
+/* All-in Value Container Styles */
+.fc_allin-value-container {
+  width: 241px;
+  height: 36px;
+  background: #000FEF;
+  border-radius: 25px;
+  padding: 4px 8px;
+}
+
+.fc_allin-value-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fc_allin-value-number {
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 0.1em;
+}
+
+.fc_allin-value-starlet-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .fc_allin-title {
   font-family: var(--font-primary);
   font-size: 120px;
@@ -2027,4 +2054,300 @@ body::-webkit-scrollbar-track,
 .fc_buy-more-btn:hover {
   background: linear-gradient(135deg, #FF0080, #FF00F6);
   transform: translateX(-50%) translateY(-2px);
+}
+
+/* Settings Button Container - positioned below and to the right of fc_stats-header */
+.fc_settings-button-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  right: 20px;
+  z-index: 999;
+  pointer-events: auto;
+}
+
+/* Jackpot Container - positioned below and in the center of fc_stats-header */
+.fc_jackpot-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+.fc_jackpot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 2px 12px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.fc_jackpot-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_jackpot-count {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_settings-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.fc_settings-button:hover {
+  opacity: 0.8;
+}
+
+.fc_settings-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Settings Overlay */
+.fc_settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_settings-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  min-height: 300px;
+  justify-content: space-between;
+}
+
+.fc_settings-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sound Control Section */
+.fc_settings-sound-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.fc_settings-sound-title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.fc_settings-sound-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.fc_settings-sound-btn {
+  position: relative;
+  width: 180px;
+  height: 40px;
+  background: #FF00F6;
+  border: none;
+  /* border-radius: 25px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-sound-btn:hover {
+  background: #FF00F6;
+  transform: translateY(-2px);
+}
+
+.fc_settings-sound-btn:active {
+  transform: translateY(0);
+}
+
+.fc_sound-text {
+  position: relative;
+}
+
+.fc_settings-sound-status {
+  width: 80px;
+  height: 40px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_status-on {
+  background: #FF00F6;
+}
+
+.fc_status-off {
+  background: #666666;
+}
+
+.fc_settings-sound-status:hover {
+  transform: translateY(-2px);
+}
+
+.fc_status-on:hover {
+  background: #FF00F6;
+}
+
+.fc_status-off:hover {
+  background: #777777;
+}
+
+.fc_settings-sound-status:active {
+  transform: translateY(0);
+}
+
+/* Volume Control Section */
+.fc_settings-volume-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.fc_settings-volume-label {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-volume-slider {
+  width: 250px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.fc_settings-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-value {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-back-btn {
+  position: relative;
+  width: 200px;
+  height: 49px;
+  background: #000FEF;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 18px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.fc_settings-back-btn:active {
+  transform: translateY(0);
 }
