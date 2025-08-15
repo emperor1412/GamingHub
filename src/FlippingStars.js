@@ -1266,6 +1266,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
       </div>
 
+      {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
+      <div className="fc_jackpot-container">
+        <div className="fc_jackpot">
+          <span className="fc_jackpot-label">JACKPOT</span>
+          <span className="fc_jackpot-count">00000000</span>
+        </div>
+      </div>
+
       {/* Settings Overlay */}
       {showSettings && (
         <div className="fc_settings-overlay">

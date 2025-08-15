@@ -2065,6 +2065,46 @@ body::-webkit-scrollbar-track,
   pointer-events: auto;
 }
 
+/* Jackpot Container - positioned below and in the center of fc_stats-header */
+.fc_jackpot-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+.fc_jackpot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 2px 12px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.fc_jackpot-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_jackpot-count {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
 .fc_settings-button {
   background: none;
   border: none;
