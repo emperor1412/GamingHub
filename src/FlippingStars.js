@@ -18,6 +18,7 @@ import loseFlippinStar from './images/LoseFlippinStar.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
+import settingsIcon from './images/Settings.png';
 
 // Sound imports
 import winSound from './sounds/Win.mp3';
@@ -60,6 +61,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [customAmountError, setCustomAmountError] = useState('');
   const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
   const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   
   // New states for flip functionality
   const [isFlipping, setIsFlipping] = useState(false);
@@ -309,7 +311,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
-    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay) {
+    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay || showSettings) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -319,7 +321,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay]);
+  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay, showSettings]);
 
   // Initialize audio system
   useEffect(() => {
@@ -495,6 +497,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleAutoFlipCancel = () => {
     setShowAutoFlipOverlay(false);
     setSelectedAutoFlipCount(null);
+  };
+
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+  };
+
+  const handleSettingsBack = () => {
+    setShowSettings(false);
   };
 
   const handleStopAutoFlip = () => {
@@ -1237,6 +1247,65 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           <span className="fc_test-sound-icon">🎵</span>
         </button> */}
       </header>
+
+      {/* Settings Button - positioned below and to the right of fc_stats-header */}
+      <div className="fc_settings-button-container">
+        <button 
+          className="fc_settings-button"
+          onClick={handleSettingsClick}
+        >
+          <img src={settingsIcon} alt="Settings" className="fc_settings-icon" />
+        </button>
+      </div>
+
+      {/* Settings Overlay */}
+      {showSettings && (
+        <div className="fc_settings-overlay">
+          <div className="fc_settings-content">
+            {/* Sound Control Section */}
+            <div className="fc_settings-sound-section">
+              {/* <div className="fc_settings-sound-title">SOUND CONTROL</div> */}
+              
+              {/* Sound Toggle Buttons */}
+              <div className="fc_settings-sound-toggle">
+                <button 
+                  className={`fc_settings-sound-btn ${isSoundEnabled ? 'fc_sound-on' : 'fc_sound-off'}`}
+                  onClick={toggleSound}
+                >
+                  <span className="fc_sound-text">SOUND //</span>
+                </button>
+                
+                <button 
+                  className={`fc_settings-sound-status ${isSoundEnabled ? 'fc_status-on' : 'fc_status-off'}`}
+                  onClick={toggleSound}
+                >
+                  {isSoundEnabled ? 'ON' : 'OFF'}
+                </button>
+              </div>
+              
+              {/* Volume Control */}
+              <div className="fc_settings-volume-section">
+                <div className="fc_settings-volume-label">VOLUME</div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={soundVolume}
+                  onChange={(e) => adjustVolume(parseFloat(e.target.value))}
+                  className="fc_settings-volume-slider"
+                />
+                <div className="fc_settings-volume-value">{Math.round(soundVolume * 100)}%</div>
+              </div>
+            </div>
+            
+            {/* Back Button at the bottom */}
+            <button className="fc_settings-back-btn" onClick={handleSettingsBack}>
+              BACK
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Preload Lottie animation early */}
       <CoinAnimation visible={false} />
