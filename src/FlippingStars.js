@@ -36,12 +36,12 @@ import Market_selected from './images/Market_selected.svg';
 import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
-const betOptions = [1, 10, 20, 50, 100, 500];
+const betOptions = [10, 20, 50, 70, 100, 500];
 const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
-  const [selectedBet, setSelectedBet] = useState(1);
+  const [selectedBet, setSelectedBet] = useState(10);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
@@ -368,9 +368,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const finalAmount = amountNum.toString();
     setShowCustomConfirm(false);
     
-    // If custom amount is 0, select the first bet option (1 starlet)
+          // If custom amount is 0, select the first bet option (10 starlets)
     if (amountNum === 0) {
-      setSelectedBet(1);
+              setSelectedBet(10);
     } else {
       setSelectedBet('custom');
     }
