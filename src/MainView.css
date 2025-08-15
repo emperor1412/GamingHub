@@ -359,9 +359,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #000FEF;
+    background-color: #FF00F6;
     padding: 2px 12px;
-    border: 1px solid rgba(0, 15, 239, 0.4);
     z-index: 10;
     pointer-events: none;
     white-space: nowrap;
@@ -372,12 +371,49 @@
     font-family: "PP Neue Machina";
     font-size: 13px;
     font-weight: 700;
-    color: #FF00F6;
+    color: #000FEF;
     text-transform: uppercase;
     opacity: 0.9;
 }
 
 .ticket-total-flips-count {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFF;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Total Jackpot Counter for Ticket Button */
+.ticket-total-jackpot {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #000FEF;
+    padding: 2px 12px;
+    border: 1px solid rgba(0, 15, 239, 0.4);
+    z-index: 10;
+    pointer-events: none;
+    white-space: nowrap;
+    min-width: max-content;
+}
+
+.ticket-total-jackpot-label {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FF00F6;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.ticket-total-jackpot-count {
     font-family: "PP Neue Machina";
     font-size: 13px;
     font-weight: 700;
