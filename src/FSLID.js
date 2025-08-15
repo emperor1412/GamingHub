@@ -151,7 +151,7 @@ const FSLID = () => {
 
             const fslAuthorization = await FSLAuthorization.init({
                 responseType: 'code', // 'code' or 'token'
-                appKey: 'MiniGame',
+                appKey: 'minifhYHG23fQ2',
                 redirectUri: REDIRECT_URL, // https://xxx.xxx.com
                 scope: 'basic,wallet,stepn', // Grant Scope
                 state: state,
