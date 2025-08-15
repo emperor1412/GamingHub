@@ -285,11 +285,39 @@ Response:
             trackLineConversion('Tadokami_Game_Click');
             
             // Main view banner - External browser
-            shared.openInAppLink(shared.game_link);
+            // Also include treasure hunt parameters like in Tasks.js
+            let enhancedUrl = shared.game_link;
+            try {
+                // Get treasure hunt redirect URL and task ID for type 2
+                const treasureHuntData = await shared.getTreasureHuntRedirectUrl(2);
+                if (treasureHuntData && treasureHuntData.redirectUrl) {
+                    // Add treasure hunt parameters to the URL with startParam format for consistency
+                    const hasQueryParam = enhancedUrl.includes('?');
+                    const separator = hasQueryParam ? '&' : '?';
+                    enhancedUrl += `${separator}startParam=redirectUrl_${encodeURIComponent(treasureHuntData.redirectUrl)}__treasureHuntTaskId_${treasureHuntData.taskId}`;
+                    
+                    console.log('Enhanced MainView URL with treasure hunt data:', enhancedUrl);
+                }
+            } catch (e) {
+                console.log('Error getting treasure hunt data in MainView:', e);
+            }
+            
+            shared.openInAppLink(enhancedUrl);
         } catch (e) {
             console.log('Error opening LIFF:', e);
-            // Fallback to browser
-            shared.openExternalLink(shared.game_link);
+            // Fallback to browser - use enhanced URL if available
+            try {
+                const treasureHuntData = await shared.getTreasureHuntRedirectUrl(2);
+                if (treasureHuntData && treasureHuntData.redirectUrl) {
+                    const fallbackUrl = shared.game_link + `?startParam=redirectUrl_${encodeURIComponent(treasureHuntData.redirectUrl)}__treasureHuntTaskId_${treasureHuntData.taskId}`;
+                    shared.openExternalLink(fallbackUrl);
+                } else {
+                    shared.openExternalLink(shared.game_link);
+                }
+            } catch (fallbackError) {
+                console.log('Error getting treasure hunt data for fallback:', fallbackError);
+                shared.openExternalLink(shared.game_link);
+            }
         }
     }
 
