@@ -1362,6 +1362,36 @@ body::-webkit-scrollbar-track,
   gap: 30px;
 }
 
+/* All-in Value Container Styles */
+.fc_allin-value-container {
+  width: 241px;
+  height: 36px;
+  background: #000FEF;
+  border-radius: 25px;
+  padding: 4px 8px;
+}
+
+.fc_allin-value-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fc_allin-value-number {
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 0.1em;
+}
+
+.fc_allin-value-starlet-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .fc_allin-title {
   font-family: var(--font-primary);
   font-size: 120px;

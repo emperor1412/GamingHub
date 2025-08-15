@@ -1079,6 +1079,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {showAllInConfirm && (
         <div className="fc_allin-overlay">
           <div className="fc_allin-content">
+            {/* All-in Value Container */}
+            <div className="fc_allin-value-container">
+              <div className="fc_allin-value-display">
+                <span className="fc_allin-value-number">{starlets.toString()}</span>
+                <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
+              </div>
+            </div>
+            
             {/* ALL IN Text */}
             <div className="fc_allin-title">ALL IN!</div>
             
@@ -1477,7 +1485,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
-        <button 
+        {/* <button 
           className={`fc_bet-button fc_double-button ${selectedBet === 'double' ? 'fc_selected' : ''} ${(canDouble && lastWinAmount > 0 && lastWinAmount <= starlets) ? '' : 'fc_insufficient-funds'}`}
           onClick={() => {
             if (isAutoFlipping) return;
@@ -1495,7 +1503,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_double-line1"><span className="fc_double-word">DOUBLE</span> <span className="fc_double-or">OR</span></div>
             <div className="fc_double-line2">NOTHING</div>
           </div>
-        </button>
+        </button> */}
       </div>
 
       {/* Flip button */}
