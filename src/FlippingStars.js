@@ -57,6 +57,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
   const [showCustomConfirm, setShowCustomConfirm] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
+  const [customAmountError, setCustomAmountError] = useState('');
   const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
   const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
   
@@ -363,14 +364,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
+    const amountNum = parseInt(customAmount) || 0;
+    
+    // Check if amount is divisible by 10
+    if (amountNum % 10 !== 0) {
+      setCustomAmountError('DIVISIBLE BY 10 ONLY');
+      return;
+    }
+    
+    // Clear error if validation passes
+    setCustomAmountError('');
+    
     // Clamp to available starlets
-    const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
-    const finalAmount = amountNum.toString();
+    const finalAmount = Math.min(amountNum, starlets).toString();
     setShowCustomConfirm(false);
     
-          // If custom amount is 0, select the first bet option (10 starlets)
+    // If custom amount is 0, select the first bet option (10 starlets)
     if (amountNum === 0) {
-              setSelectedBet(10);
+      setSelectedBet(10);
     } else {
       setSelectedBet('custom');
     }
@@ -383,9 +394,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleKeypadInput = (value) => {
     if (value === 'delete') {
       setCustomAmount(prev => prev.slice(0, -1));
+      setCustomAmountError(''); // Clear error when deleting
     } else if (value === 'confirm') {
       handleCustomConfirm();
     } else {
+      // Clear error when typing new input
+      setCustomAmountError('');
+      
       // Limit to 6 digits and clamp to available starlets
       setCustomAmount(prev => {
         if ((prev || '').length >= 6) return prev;
@@ -1104,6 +1119,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 </div>
               </div>
             </div>
+            
+            {/* Error message */}
+            {customAmountError && (
+              <div className="fc_custom-error" style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                {customAmountError}
+              </div>
+            )}
             
             {/* SET Button */}
             <div className="fc_custom-buttons">
