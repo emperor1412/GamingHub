@@ -1300,7 +1300,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               </div>
               
               {/* Volume Control */}
-              <div className="fc_settings-volume-section">
+              {/* <div className="fc_settings-volume-section">
                 <div className="fc_settings-volume-label">VOLUME</div>
                 <input
                   type="range"
@@ -1312,7 +1312,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                   className="fc_settings-volume-slider"
                 />
                 <div className="fc_settings-volume-value">{Math.round(soundVolume * 100)}%</div>
-              </div>
+              </div> */}
             </div>
             
             {/* Back Button at the bottom */}
