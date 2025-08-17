@@ -254,7 +254,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Function to check if a bet amount is affordable
   const isBetAffordable = (betAmount) => {
     if (betAmount === 'all-in') {
-      return starlets > 0; // All-in is always affordable if user has any starlets
+      return starlets >= 10; // All-in is affordable if user has at least 10 starlets
     } else if (betAmount === 'double') {
       return canDouble && lastWinAmount > 0 && lastWinAmount <= starlets;
     } else if (betAmount === 'custom') {
@@ -349,8 +349,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setUseDoubleNext(false);
     // Ensure no bet button is selected even after confirming
     setSelectedBet(null);
-    // Select ALL IN for UI highlight and flip immediately with all current starlets
-    handleFlip({ betAmount: starlets, allin: true });
+    // Select ALL IN for UI highlight and flip immediately with rounded bet amount
+    const allInAmount = Math.floor(starlets / 10) * 10;
+    // Pass allin: false because we're not betting the full amount, just the rounded amount
+    handleFlip({ betAmount: allInAmount, allin: false });
   };
 
   const handleAllInCancel = () => {
@@ -381,8 +383,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const finalAmount = Math.min(amountNum, starlets).toString();
     setShowCustomConfirm(false);
     
-    // If custom amount is 0, select the first bet option (10 starlets)
-    if (amountNum === 0) {
+    // If custom amount is 0 or less than minimum, select the first bet option (10 starlets)
+    if (amountNum === 0 || amountNum < 10) {
       setSelectedBet(10);
     } else {
       setSelectedBet('custom');
@@ -582,14 +584,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
-      // Calculate bet amount for auto flip using latest starlets from profile
-      const currentStarlets = shared.getStarlets();
-      let betAmount = selectedBet;
-      if (selectedBet === 'all-in') {
-        betAmount = currentStarlets;
-      } else if (selectedBet === 'custom') {
-        betAmount = parseInt(customAmount) || 0;
-      }
+             // Calculate bet amount for auto flip using latest starlets from profile
+       const currentStarlets = shared.getStarlets();
+       let betAmount = selectedBet;
+       if (selectedBet === 'all-in') {
+         betAmount = Math.floor(currentStarlets / 10) * 10; // Rounded to nearest 10
+         // For auto flip all-in, we use the rounded amount, not the full starlets
+       } else if (selectedBet === 'custom') {
+         betAmount = parseInt(customAmount) || 0;
+       }
 
       // Check if user has enough starlets
       if (currentStarlets < betAmount) {
@@ -809,7 +812,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
 
       if (selectedBet === 'all-in') {
-        betAmount = starlets; // Use all available starlets
+        betAmount = Math.floor(starlets / 10) * 10; // Use rounded amount to nearest 10
+        // For all-in, we need to pass the actual bet amount, not the full starlets
+        // The server will handle deducting only the bet amount
       } else if (selectedBet === 'custom') {
         betAmount = parseInt(customAmount) || 0;
       } else if (selectedBet === 'double') {
@@ -983,7 +988,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   // Helper to compute numeric bet amount for current selection
   const getNumericBetAmount = () => {
-    if (selectedBet === 'all-in') return starlets;
+    if (selectedBet === 'all-in') {
+      // All-in: cược số gần nhất chia hết cho 10, bé thua hoặc bằng số starlets hiện tại
+      return Math.floor(starlets / 10) * 10;
+    }
     if (selectedBet === 'custom') return parseInt(customAmount) || 0;
     if (selectedBet === 'double') return lastWinAmount || 0;
     if (typeof selectedBet === 'number') return selectedBet;
@@ -1004,7 +1012,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const currentBetAmount = getNumericBetAmount();
   const isValidPositiveBet = currentBetAmount > 0;
   const hasEnoughStarlets = isValidPositiveBet && starlets >= currentBetAmount;
-  const shouldShowInsufficient = isValidPositiveBet && !hasEnoughStarlets;
+  // Show insufficient when: valid bet but not enough starlets, OR when starlets <= minimum bet option (10)
+  const shouldShowInsufficient = (isValidPositiveBet && !hasEnoughStarlets) || starlets < 10;
+  
+  // Reset selectedBet to null when starlets <= minimum bet (prevents showing selected state on unaffordable bets)
+  useEffect(() => {
+    if (starlets < 10 && selectedBet !== null) {
+      setSelectedBet(null);
+    }
+  }, [starlets, selectedBet]);
 
   return (
     <div className={`fc_app ${isAutoFlipping ? 'is-auto-flipping' : ''}`}>
@@ -1082,7 +1098,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             {/* All-in Value Container */}
             <div className="fc_allin-value-container">
               <div className="fc_allin-value-display">
-                <span className="fc_allin-value-number">{starlets.toString()}</span>
+                <span className="fc_allin-value-number">{Math.floor(starlets / 10) * 10}</span>
                 <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
               </div>
             </div>
@@ -1480,9 +1496,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets === 0 ? 'fc_insufficient-funds' : ''}`}
-          onClick={starlets > 0 && !isAutoFlipping ? handleCustomClick : undefined}
-          disabled={isAutoFlipping || starlets === 0}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets < 10 ? 'fc_insufficient-funds' : ''}`}
+          onClick={starlets > 10 && !isAutoFlipping ? handleCustomClick : undefined}
+          disabled={isAutoFlipping || starlets < 10}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
