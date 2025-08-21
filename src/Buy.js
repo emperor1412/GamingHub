@@ -79,7 +79,7 @@ const Buy = ({
       }, shared.loginData?.link);
 
       // Redirect to GameHubPayment
-      shared.redirectToGameHubPayment(selectedPurchase);
+      shared.redirectToGameHubPayment();
       return;
     }
 

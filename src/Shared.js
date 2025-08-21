@@ -576,8 +576,8 @@ data object
         }
     },
 
-    // Redirect to GameHubPayment with user data and purchase info
-    redirectToGameHubPayment: (purchaseData) => {
+    // Redirect to GameHubPayment with user data only
+    redirectToGameHubPayment: () => {
         const paymentBaseUrl = 'https://hoangdevgames.github.io/GameHubPayment';
         
         // Prepare user data for transfer
@@ -602,35 +602,13 @@ data object
         console.log('  EVM Address:', userData.userProfile.evmAddr);
         console.log('  Solana Address:', userData.userProfile.solAddr);
         console.log('  Full userData:', userData);
-        
-        // Prepare purchase data
-        // Calculate GGUSD amount based on stars to GGUSD conversion rate
-        // Assuming 1 Star = 1 GGUSD (adjust this rate as needed)
-        const starsToGGUSDRate = 1; // 1 Star = 1 GGUSD
-        const ggusdAmount = purchaseData.stars * starsToGGUSDRate;
-        
-        // Debug: Log purchase calculation
-        console.log('💰 Purchase Calculation:');
-        console.log('  Starlets to buy:', purchaseData.amount);
-        console.log('  Stars required:', purchaseData.stars);
-        console.log('  GGUSD to pay:', ggusdAmount);
-        console.log('  Conversion rate: 1 Star =', starsToGGUSDRate, 'GGUSD');
-        
-        const purchaseInfo = {
-            amount: purchaseData.amount, // Number of Starlets to purchase
-            stars: purchaseData.stars,   // Number of Stars required
-            ggusdAmount: ggusdAmount,    // Number of GGUSD to pay
-            optionId: purchaseData.optionId,
-            productType: 'starlets',
-            currency: 'ggusd'
-        };
 
         // Encode data as URL parameters
         const params = new URLSearchParams({
             userData: btoa(JSON.stringify(userData)), // Base64 encode
-            purchaseData: btoa(JSON.stringify(purchaseInfo)),
             timestamp: Date.now().toString(),
-            source: 'gaminghub'
+            source: 'gaminghub',
+            token: shared.loginData?.token || '' // Add token for API authentication
         });
 
         // Construct final URL
