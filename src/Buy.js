@@ -64,24 +64,25 @@ const Buy = ({
       return;
     }
 
-    if (method === 'gmt') {
-      // Redirect to GameHubPayment for GMT payment
-      if (shared.userProfile.fslId === 0) {
-        showFSLIDScreen();
-        return;
-      }
-      
-      trackUserAction('buy_payment_method_click', {
-        method: 'gmt',
-        amount: selectedPurchase?.amount,
-        stars: selectedPurchase?.stars,
-        optionId: selectedPurchase?.optionId
-      }, shared.loginData?.link);
+    // Temporarily commented out - GMT payment now handled via Market MORE button
+    // if (method === 'gmt') {
+    //   // Redirect to GameHubPayment for GMT payment
+    //   if (shared.userProfile.fslId === 0) {
+    //     showFSLIDScreen();
+    //     return;
+    //   }
+    //   
+    //   trackUserAction('buy_payment_method_click', {
+    //     method: 'gmt',
+    //     amount: selectedPurchase?.amount,
+    //     stars: selectedPurchase?.stars,
+    //     optionId: selectedPurchase?.optionId
+    //   }, shared.loginData?.link);
 
-      // Redirect to GameHubPayment
-      shared.redirectToGameHubPayment();
-      return;
-    }
+    //   // Redirect to GameHubPayment
+    //   shared.redirectToGameHubPayment();
+    //   return;
+    // }
 
     trackUserAction('buy_payment_method_click', {
       method,
@@ -201,12 +202,13 @@ const Buy = ({
               {t('CLAIM_FREE')}
             </button>
           )}
-          <button 
+          {/* Temporarily commented out - redirecting via Market MORE button instead */}
+          {/* <button 
             className="bmk-payment-button bmk-gmt-button"
             onClick={() => handlePaymentMethod('gmt')}
           >
             PAY WITH SOLANA-GMT
-          </button>
+          </button> */}
         </div>
 
         <ConfirmPurchasePopup

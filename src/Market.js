@@ -595,6 +595,40 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                             </button>
                           )}
                           
+                          {/* Show MORE button for GameHubPayment redirect */}
+                          {type === 0 && (
+                            <button 
+                              className="mk-market-ticket-button"
+                              onClick={() => {
+                                if (!shared.userProfile?.fslId) {
+                                  showFSLIDScreen();
+                                  return;
+                                }
+                                shared.redirectToGameHubPayment();
+                              }}
+                            >
+                              <div className="mk-market-ticket-button-image-container">
+                                <div className="mk-market-ticket-content">
+                                  <div className="mk-market-ticket-icon">
+                                    <img src={starlet} alt="More Options" />
+                                  </div>
+                                  <div className="mk-market-ticket-info">
+                                    <div className="mk-market-ticket-text">
+                                      <div className="mk-market-ticket-amount">MORE</div>
+                                      <div className="mk-market-ticket-label">OPTIONS</div>
+                                    </div>
+                                    <div className="mk-market-ticket-bonus">
+                                      <span>GGUSD</span>&nbsp;<span>PAYMENT</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mk-market-ticket-price">
+                                  PAY WITH GGUSD
+                                </div>
+                              </div>
+                            </button>
+                          )}
+                          
                           {/* Show regular options */}
                           {options.map((option) => {
                             // Check if option is available (state 0 = available, 1 = unavailable)
