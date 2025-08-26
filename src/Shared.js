@@ -577,65 +577,29 @@ data object
     },
 
     // Redirect to GameHubPayment with user data only
-    redirectToGameHubPayment: () => {
-        const paymentBaseUrl = 'https://hoangdevgames.github.io/GameHubPayment';
-        
-        // Prepare user data for transfer
-        const userData = {
-            fslId: shared.userProfile?.fslId,
-            telegramUID: shared.telegramUserData?.id,
-            telegramUsername: shared.telegramUserData?.username,
-            telegramFirstName: shared.telegramUserData?.firstName,
-            telegramLastName: shared.telegramUserData?.lastName,
-            platform: 'telegram',
-            userProfile: {
-                level: shared.userProfile?.level,
-                pictureIndex: shared.userProfile?.pictureIndex,
-                email: shared.userProfile?.email,
-                evmAddr: shared.userProfile?.evmAddr,  // Add EVM wallet address
-                solAddr: shared.userProfile?.solAddr   // Add Solana wallet address
+    redirectToGameHubPayment: async () => {
+        try {
+            console.log('🚀 Redirecting to GameHubPayment...');
+            
+            // Use the new method that refreshes token first
+            const result = await shared.openGameHubPayment(shared.userProfile);
+            
+            if (result.success) {
+                console.log('✅ GameHubPayment opened successfully');
+                return result;
+            } else {
+                console.error('❌ Failed to open GameHubPayment:', result.error);
+                alert('Failed to open GameHubPayment: ' + result.error);
+                return result;
             }
-        };
-
-        // Debug: Log wallet addresses being passed
-        console.log('🔗 Redirecting to GameHubPayment with wallet addresses:');
-        console.log('  EVM Address:', userData.userProfile.evmAddr);
-        console.log('  Solana Address:', userData.userProfile.solAddr);
-        console.log('  Full userData:', userData);
-
-        // Encode data as URL parameters
-        const params = new URLSearchParams({
-            userData: btoa(JSON.stringify(userData)), // Base64 encode
-            timestamp: Date.now().toString(),
-            source: 'gaminghub',
-            token: shared.loginData?.token || '' // Add token for API authentication
-        });
-
-        // Construct final URL
-        const redirectUrl = `${paymentBaseUrl}/?${params.toString()}`;
-        
-        console.log('Redirecting to GameHubPayment:', redirectUrl);
-        
-        // Check if running in LINE Mini App
-        if (window.liff && liff.isInClient()) {
-            try {
-                // Use LIFF to open in external browser
-                liff.openWindow({
-                    url: redirectUrl,
-                    external: true
-                });
-                console.log('Opened GameHubPayment in external browser via LIFF');
-            } catch (error) {
-                console.error('Error opening with LIFF, falling back to window.open:', error);
-                // Fallback to window.open
-                shared.openExternalLinkWithFallback(redirectUrl);
-            }
-        } else {
-            // For non-LINE environments, use regular window.open
-            shared.openExternalLinkWithFallback(redirectUrl);
+        } catch (error) {
+            console.error('❌ Error redirecting to GameHubPayment:', error);
+            alert('Error opening GameHubPayment: ' + error.message);
+            return {
+                success: false,
+                error: error.message
+            };
         }
-        
-        return redirectUrl;
     },
 
     // NOTE: verifyFSLID method has been removed in fsl-authorization v1.1.1-beta.55+
@@ -1184,6 +1148,101 @@ data object
             console.error('Error opening in-app link:', error);
             // Fallback to window.open
             window.open(url, '_blank');
+        }
+    },
+
+    // Add method to refresh token by calling login again
+    refreshToken: async () => {
+        try {
+            console.log('🔄 Refreshing token...');
+            console.log('🔍 Using shared.initData:', shared.initData);
+            
+            if (!shared.initData) {
+                throw new Error('No initData available for token refresh. Please ensure you are logged in.');
+            }
+            
+            const loginResult = await shared.login(shared.initData);
+            if (loginResult.success) {
+                console.log('✅ Token refreshed successfully');
+                return {
+                    success: true,
+                    loginData: loginResult.loginData
+                };
+            } else {
+                console.error('❌ Failed to refresh token:', loginResult.error);
+                return {
+                    success: false,
+                    error: loginResult.error
+                };
+            }
+        } catch (error) {
+            console.error('❌ Token refresh error:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    },
+
+    // Add method to open GameHubPayment with fresh token
+    openGameHubPayment: async (userData) => {
+        try {
+            console.log('🚀 Opening GameHubPayment...');
+            console.log('🔍 Using shared.initData:', shared.initData);
+            
+            if (!shared.initData) {
+                throw new Error('No initData available for GameHubPayment. Please ensure you are logged in.');
+            }
+            
+            // First refresh token to ensure it's valid for 10 minutes
+            const refreshResult = await shared.refreshToken(shared.initData);
+            if (!refreshResult.success) {
+                throw new Error('Failed to refresh token: ' + refreshResult.error);
+            }
+            
+            // Prepare data to pass to GameHubPayment
+            const gameHubData = {
+                fslId: userData.fslId || userData.id,
+                telegramFirstName: userData.telegramFirstName || userData.name,
+                platform: userData.platform || 'telegram',
+                telegramUID: userData.telegramUID,
+                telegramUsername: userData.telegramUsername,
+                userProfile: userData.userProfile || {}
+            };
+            
+            // Encode user data and token
+            const encodedUserData = btoa(JSON.stringify(gameHubData));
+            const token = refreshResult.loginData.token;
+            
+            // Open GameHubPayment in new window/tab
+            const gameHubUrl = `https://hoangdevgames.github.io/GameHubPayment/?source=gaminghub&userData=${encodedUserData}&token=${token}`;
+            
+            console.log('🔗 Opening GameHubPayment URL:', gameHubUrl);
+            
+            // Open in new window
+            const gameHubWindow = window.open(
+                gameHubUrl,
+                'GameHubPayment',
+                'width=1200,height=800,scrollbars=yes,resizable=yes'
+            );
+            
+            if (gameHubWindow) {
+                console.log('✅ GameHubPayment opened successfully');
+                return {
+                    success: true,
+                    window: gameHubWindow
+                };
+            } else {
+                throw new Error('Failed to open GameHubPayment window');
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to open GameHubPayment:', error);
+            alert('Failed to open GameHubPayment: ' + error.message);
+            return {
+                success: false,
+                error: error.message
+            };
         }
     }
 

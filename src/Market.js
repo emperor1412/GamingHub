@@ -599,12 +599,16 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                           {type === 0 && (
                             <button 
                               className="mk-market-ticket-button"
-                              onClick={() => {
+                              onClick={async () => {
                                 if (!shared.userProfile?.fslId) {
                                   showFSLIDScreen();
                                   return;
                                 }
-                                shared.redirectToGameHubPayment();
+                                try {
+                                  await shared.redirectToGameHubPayment();
+                                } catch (error) {
+                                  console.error('Failed to open GameHubPayment:', error);
+                                }
                               }}
                             >
                               <div className="mk-market-ticket-button-image-container">

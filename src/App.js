@@ -414,6 +414,17 @@ function App() {
       .catch(error => console.error('Error loading version:', error));
   }, []);
 
+  // Update shared.initData when initDataRaw changes
+  useEffect(() => {
+    if (initDataRaw) {
+      shared.initData = initDataRaw;
+      console.log('✅ Updated shared.initData with:', initDataRaw);
+      console.log('🔍 shared.initData is now:', shared.initData);
+    } else {
+      console.log('⚠️ initDataRaw is null, shared.initData remains:', shared.initData);
+    }
+  }, [initDataRaw]);
+
   // Track tab changes
   useEffect(() => {
     if (previousTab) {
