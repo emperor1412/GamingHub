@@ -443,7 +443,7 @@ const translations = {
     UNABLE_TO_PROCESS_PAYMENT: "無効な値",
     CONFIRM_PURCHASE_MESSAGE: "FSLゲームハブで{starlets}スターレット{andTickets}を{price}で購入しますか？",
     CONFIRM_FREE_PURCHASE_MESSAGE: "FSLゲームハブで{starlets}スターレットと1チケットを無料で購入しますか？",
-    TREASURE_HUNT: "宝探し",
+    TREASURE_HUNT: "トレジャー・ハント",
     TH_COMPLETED: "タスク完了",
     REWARD_LINK: "報酬リンクを発見しました",
     TH_GET_REWARD: "報酬を受け取る"
