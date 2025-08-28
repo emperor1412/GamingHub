@@ -103,16 +103,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     };
   }, []);
 
+  // Main useEffect to fetch all data on component mount
   useEffect(() => {
-    const fetchBuyOptions = async () => {
+    const fetchAllData = async () => {
       try {
-        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-        const data = await response.json();
-        console.log('Buy Options Response:', data);
-        if (data.code === 0 && Array.isArray(data.data)) {
-          console.log('Buy Options Data:', data.data);
-          setBuyOptions(data.data);
-        } else if (data.code === 102002 || data.code === 102001) {
+        // Fetch buy options
+        const buyOptionsResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+        const buyOptionsData = await buyOptionsResponse.json();
+        console.log('Buy Options Response:', buyOptionsData);
+        if (buyOptionsData.code === 0 && Array.isArray(buyOptionsData.data)) {
+          console.log('Buy Options Data:', buyOptionsData.data);
+          setBuyOptions(buyOptionsData.data);
+        } else if (buyOptionsData.code === 102002 || buyOptionsData.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
           const result = await shared.login(shared.initData);
@@ -125,20 +127,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
             }
           }
         }
-      } catch (error) {
-        console.error('Failed to fetch buy options:', error);
-      }
-    };
 
-    const fetchStarletProducts = async () => {
-      try {
-        const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
-        const data = await response.json();
-        console.log('Starlet Products Response:', data);
-        if (data.code === 0 && Array.isArray(data.data)) {
-          console.log('Starlet Products Data:', data.data);
-          setStarletProducts(data.data);
-        } else if (data.code === 102002 || data.code === 102001) {
+        // Fetch starlet products
+        const starletResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+        const starletData = await starletResponse.json();
+        console.log('Starlet Products Response:', starletData);
+        if (starletData.code === 0 && Array.isArray(starletData.data)) {
+          console.log('Starlet Products Data:', starletData.data);
+          setStarletProducts(starletData.data);
+        } else if (starletData.code === 102002 || starletData.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
           const result = await shared.login(shared.initData);
@@ -151,36 +148,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
             }
           }
         }
-      } catch (error) {
-        console.error('Failed to fetch starlet products:', error);
-      }
-    };
 
-    fetchBuyOptions();
-    fetchStarletProducts();
-  }, []);
+        // Check free reward time
+        await checkFreeRewardTime();
 
-  useEffect(() => {
-    const setupProfileData = async () => {
-      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
-      if (userStarlets) {
-        setStarlets(userStarlets.num);
-      }
-
-      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
-      if (userTicket) {
-        setTickets(userTicket.num);
-      }
-    };
-
-    setupProfileData();
-  }, []);
-
-  // Add effect to watch showBuyView changes
-  useEffect(() => {
-    if (!showBuyView) { // When returning from Buy view
-      const updateData = async () => {
-        await shared.getProfileWithRetry();
+        // Setup profile data
         const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
         if (userStarlets) {
           setStarlets(userStarlets.num);
@@ -190,10 +162,44 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         if (userTicket) {
           setTickets(userTicket.num);
         }
-      };
-      updateData();
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // Add effect to watch showBuyView changes
+  useEffect(() => {
+    if (!showBuyView) { // When returning from Buy view
+      // Refresh both user profile and market content when returning from Buy view
+      // This ensures all data is up-to-date after any purchases or actions
+      refreshUserProfile();
+      refreshMarketContent();
     }
   }, [showBuyView]);
+
+  // Add useEffect to listen for data refresh trigger from App component
+  useEffect(() => {
+    // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+    // Only update if we have a userProfile and it's different from current state
+    if (shared.userProfile) {
+      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+      
+      // Only update if values actually changed to prevent unnecessary re-renders
+      if (userStarlets && userStarlets.num !== starlets) {
+        console.log('Market: Updating starlets display after data refresh');
+        setStarlets(userStarlets.num);
+      }
+      
+      if (userTicket && userTicket.num !== tickets) {
+        console.log('Market: Updating tickets display after data refresh');
+        setTickets(userTicket.num);
+      }
+    }
+  }, [shared.userProfile, starlets, tickets]); // This will trigger when shared.userProfile changes
 
   // Add new function to check free reward time
   const checkFreeRewardTime = async () => {
@@ -248,6 +254,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           setTickets(userTicket.num);
         }
 
+        // Refresh market content to update free reward status
+        await refreshMarketContent();
+
         // Show success popup
         if (window.Telegram?.WebApp?.showPopup) {
           await window.Telegram.WebApp.showPopup({
@@ -277,6 +286,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
               setTickets(userTicket.num);
             }
 
+            // Refresh market content to update free reward status
+            await refreshMarketContent();
+
             if (window.Telegram?.WebApp?.showPopup) {
               await window.Telegram.WebApp.showPopup({
                 title: 'Success',
@@ -299,10 +311,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
-  // Add useEffect to check free reward time on component mount
-  useEffect(() => {
-    checkFreeRewardTime();
-  }, []);
+
 
   const handleConnectFSLID = () => {
     showFSLIDScreen();
@@ -328,6 +337,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   const refreshUserProfile = async () => {
+    // Only refresh user profile data, not market content
     await shared.getProfileWithRetry();
     const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
     if (userStarlets) {
@@ -339,15 +349,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       setTickets(userTicket.num);
     }
 
-    // Reload buy options to update limited offer status
+    // Note: Market content (buyOptions, starletProducts) is only loaded once on mount
+    // to avoid duplicate API calls. If you need to refresh market content,
+    // use refreshMarketContent() function instead.
+  };
+
+  // Add new function to refresh market content (buyOptions and starletProducts)
+  const refreshMarketContent = async () => {
     try {
-      const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-      const data = await response.json();
-      console.log('Refreshed Buy Options Response:', data);
-      if (data.code === 0 && Array.isArray(data.data)) {
-        console.log('Refreshed Buy Options Data:', data.data);
-        setBuyOptions(data.data);
-      } else if (data.code === 102002 || data.code === 102001) {
+      // Reload buy options to update limited offer status
+      const buyOptionsResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+      const buyOptionsData = await buyOptionsResponse.json();
+      console.log('Refreshed Buy Options Response:', buyOptionsData);
+      if (buyOptionsData.code === 0 && Array.isArray(buyOptionsData.data)) {
+        console.log('Refreshed Buy Options Data:', buyOptionsData.data);
+        setBuyOptions(buyOptionsData.data);
+      } else if (buyOptionsData.code === 102002 || buyOptionsData.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
@@ -364,15 +381,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       console.error('Failed to refresh buy options:', error);
     }
 
-    // Reload starlet products to update stock and purchased quantities
     try {
-      const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
-      const data = await response.json();
-      console.log('Refreshed Starlet Products Response:', data);
-      if (data.code === 0 && Array.isArray(data.data)) {
-        console.log('Refreshed Starlet Products Data:', data.data);
-        setStarletProducts(data.data);
-      } else if (data.code === 102002 || data.code === 102001) {
+      // Reload starlet products to update stock and purchased quantities
+      const starletResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+      const starletData = await starletResponse.json();
+      console.log('Refreshed Starlet Products Response:', starletData);
+      if (starletData.code === 0 && Array.isArray(starletData.data)) {
+        console.log('Refreshed Starlet Products Data:', starletData.data);
+        setStarletProducts(starletData.data);
+      } else if (starletData.code === 102002 || starletData.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
@@ -388,38 +405,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     } catch (error) {
       console.error('Failed to refresh starlet products:', error);
     }
-
-    // Check free reward time after profile refresh
-    await checkFreeRewardTime();
   };
-
-  // Add effect to watch showBuyView changes
-  useEffect(() => {
-    if (!showBuyView) { // When returning from Buy view
-      refreshUserProfile();
-    }
-  }, [showBuyView]);
-
-  useEffect(() => {
-    refreshUserProfile();
-  }, []);
-
-  // Add useEffect to listen for data refresh trigger from App component
-  useEffect(() => {
-    // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
-    if (shared.userProfile) {
-      console.log('Market: Updating currency display after data refresh');
-      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
-      if (userStarlets) {
-        setStarlets(userStarlets.num);
-      }
-
-      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
-      if (userTicket) {
-        setTickets(userTicket.num);
-      }
-    }
-  }, [shared.userProfile]); // This will trigger when shared.userProfile changes
 
   // Add new function to refresh only a specific starlet product
   const refreshStarletProduct = async (productId) => {
@@ -523,10 +509,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       console.log('Market: Starlet purchase completed, refreshing specific product and user profile');
       // Refresh user profile to update starlets count
       refreshUserProfileOnly();
-      // Refresh only the specific product that was purchased
-      if (selectedPurchase?.productId) {
-        refreshStarletProduct(selectedPurchase.productId);
-      }
+      // Refresh market content to update all product statuses
+      refreshMarketContent();
       setActiveTab('starlet');
       setIsStarletPurchaseComplete(false); // Reset the flag
     }
@@ -557,6 +541,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     // After purchasing a Starlet product (e.g., GMT packages), trigger reload
     if (wasStarletProduct) {
       setIsStarletPurchaseComplete(true);
+    } else {
+      // For regular purchases, refresh market content to update availability
+      await refreshMarketContent();
     }
   };
 
