@@ -552,6 +552,7 @@ const bind_fslid = async () => {
           key={`market-${dataRefreshTrigger}`}
           showFSLIDScreen={() => setActiveTab('fslid')} 
           setShowProfileView={setShowProfileView}
+          initialTab={shared.initialMarketTab}
         />;
       default:
         return <MainView 
@@ -614,7 +615,10 @@ const bind_fslid = async () => {
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <button onClick={() => {
+                shared.setInitialMarketTab('telegram');
+                setActiveTab('market');
+              }} className={activeTab === 'market' ? 'active' : ''}>
                 <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
@@ -702,7 +706,10 @@ const bind_fslid = async () => {
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+            <button onClick={() => {
+              shared.setInitialMarketTab('telegram');
+              setActiveTab('market');
+            }} className={activeTab === 'market' ? 'active' : ''}>
               <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
             <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>

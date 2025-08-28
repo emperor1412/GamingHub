@@ -26,6 +26,7 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyV
       
       // Navigate directly to Market
       if (typeof shared.setActiveTab === 'function') {
+        shared.setInitialMarketTab('telegram');
         shared.setActiveTab('market');
       } else {
         setShowBuyView(false);

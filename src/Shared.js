@@ -60,6 +60,7 @@ const shared = {
     app_link: 'https://t.me/TestFSL_bot/fslhub',
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
+    initialMarketTab: 'telegram', // Default tab for Market component
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -97,6 +98,11 @@ const shared = {
         30020: 'MOOAR+ Membership',
         40010: 'StepN GO Shoe',
         50010: 'Alpha Chest'
+    },
+    
+    // Function to set initial market tab
+    setInitialMarketTab: function(tab) {
+        this.initialMarketTab = tab;
     },
     
     profileItems : [],

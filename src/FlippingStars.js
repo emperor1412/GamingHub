@@ -1540,7 +1540,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               className="fc_buy-more-btn"
               onClick={() => {
                 if (onClose) onClose();
-                if (setActiveTab) setActiveTab('market');
+                if (setActiveTab) {
+                  shared.setInitialMarketTab('telegram');
+                  setActiveTab('market');
+                }
               }}
             >
               <div className="fc_flip-content">BUY MORE</div>
@@ -1585,7 +1588,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
         <button onClick={() => {
           if (onClose) onClose();
-          if (setActiveTab) setActiveTab('market');
+          if (setActiveTab) {
+            shared.setInitialMarketTab('telegram');
+            setActiveTab('market');
+          }
         }}>
           <img src={Market_normal} alt="Market" />
         </button>
