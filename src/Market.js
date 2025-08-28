@@ -323,7 +323,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   const handleStarletProductPurchase = (product) => {
-    const productInfo = getStarletProductInfo(product.prop);
+    const productInfo = getStarletProductInfo(product);
     const purchaseData = { 
       amount: product.starlet,
       stars: 0, // Starlet products are bought with starlets, not telegram stars
@@ -564,8 +564,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   // Helper function to get starlet product info based on prop ID
-  const getStarletProductInfo = (propId) => {
-    switch (propId) {
+  const getStarletProductInfo = (product) => {
+    // If API provides name, use it directly
+    if (product.name) {
+      return {
+        name: product.name,
+        displayAmount: product.name, // Use name for display amount too
+        icon: gmtCard,
+        description: 'Product',
+        category: 'Products',
+        useBackground: false,
+        productId: `product-${product.id}`
+      };
+    }
+
+    // Fallback to hardcoded values if no name from API
+    switch (product.prop) {
       case 60010:
         return { 
           name: '$50 GMT PAY CARD', 
@@ -909,7 +923,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                   <div className="mk-starlet-products-container">
                     <div className="mk-starlet-grid">
                       {starletProducts.map((product) => {
-                        const productInfo = getStarletProductInfo(product.prop);
+                        const productInfo = getStarletProductInfo(product);
                         const hasFSLID = !!shared.userProfile?.fslId;
                         const userLevel = shared.userProfile?.level || 0;
                         const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
