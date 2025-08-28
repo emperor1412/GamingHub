@@ -228,6 +228,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     
     // Navigate directly to Market using shared.setActiveTab
     if (typeof shared.setActiveTab === 'function') {
+      shared.setInitialMarketTab('telegram');
       shared.setActiveTab('market');
     } else {
       // Fallback: use the old method if setActiveTab is not available

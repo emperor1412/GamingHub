@@ -22,7 +22,8 @@ import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
-import tadokami from './images/Tadokami_Logo.png'
+import tadokami from './images/Tadokami_Logo.png';
+import marketplace from './images/MARKETPLACE.png';
 import dailyTasks from './images/one_shot.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
@@ -62,6 +63,14 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
+
+    // Function to navigate to marketplace with starlet tab
+    const onClickMarketplace = () => {
+        // Set the initial market tab to 'starlet'
+        shared.setInitialMarketTab('starlet');
+        // Navigate to market tab
+        shared.setActiveTab('market');
+    };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -860,11 +869,11 @@ Response:
             </header>
 
             <div className="scrollable-content">
-            <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
+                <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => onClickMarketplace()}>
                         <div className='ticket-button-image-container'>
                             <img
-                                src={tadokami}
+                                src={marketplace}
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
@@ -873,6 +882,19 @@ Response:
                                 {/* <h3 className="event-card-title">TADOKAMI</h3>
                                 <p className="event-card-subtitle">Is now live</p> */}
                             {/* </div> */}
+                        </div>
+                    </button>
+                </section>
+                
+                <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={tadokami}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
                         </div>
                     </button>
                 </section>
@@ -949,15 +971,8 @@ Response:
                     </button> */}
                 </section>
 
-                <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
-                        <img
-                            // src={Frame4556}
-                            src = {my_ticket}
-                            alt="My Tickets"
-                            className="ticket-card-image-main"
-                        />
-                    </button> */}
+                {/* <section className="tickets-section">
+
 
                     <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='ticket-button-image-container'>
@@ -966,16 +981,7 @@ Response:
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
-                            {/* <div className='ticket-button-container-border'></div>
-                            <div className="ticket-button-content">
-                                <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
-                                <div className="check-out-button ticket">
-                                    Scratch Tickets
-                                </div>
-                            </div> */}
                         </div>
-                        {/* Total Flips Counter */}
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
                             <span className="ticket-total-flips-count">00000000</span>
@@ -985,7 +991,7 @@ Response:
                             <span className="ticket-total-jackpot-count">00000000</span>
                         </div>
                     </button>
-                </section>
+                </section> */}
 
                 <section className="tickets-section">
                     {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>

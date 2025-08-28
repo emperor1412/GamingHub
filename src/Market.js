@@ -71,7 +71,7 @@ import arrow_2 from './images/arrow_2.svg';
 //     }
 // }
 
-const Market = ({ showFSLIDScreen, setShowProfileView }) => {
+const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -80,7 +80,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
+  const [activeTab, setActiveTab] = useState(initialTab); // 'starlet' or 'telegram'
   const [starletProducts, setStarletProducts] = useState([]);
   
   // Add state to track GMT/starlet product purchase completion
