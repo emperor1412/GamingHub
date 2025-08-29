@@ -104,9 +104,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   }, []);
 
   // Main useEffect to fetch all data on component mount
+  // NOTE: buyOptions and starletProducts are loaded via refreshMarketContent() to prevent duplicate API calls
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        // COMMENTED OUT: Fetch buy options and starlet products on init to prevent duplicate API calls
+        // These will be fetched by refreshMarketContent() when needed
+        /*
         // Fetch buy options
         const buyOptionsResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
         const buyOptionsData = await buyOptionsResponse.json();
@@ -148,6 +152,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
             }
           }
         }
+        */
 
         // Check free reward time
         await checkFreeRewardTime();
@@ -162,6 +167,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         if (userTicket) {
           setTickets(userTicket.num);
         }
+
+        // Load initial market data (buyOptions and starletProducts) to prevent duplicate API calls
+        // await refreshMarketContent();
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -349,7 +357,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       setTickets(userTicket.num);
     }
 
-    // Note: Market content (buyOptions, starletProducts) is only loaded once on mount
+    // Note: Market content (buyOptions, starletProducts) is loaded by refreshMarketContent()
     // to avoid duplicate API calls. If you need to refresh market content,
     // use refreshMarketContent() function instead.
   };
@@ -404,6 +412,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       }
     } catch (error) {
       console.error('Failed to refresh starlet products:', error);
+    }
+
+    // Also refresh free reward status to ensure free option availability is up-to-date
+    try {
+      await checkFreeRewardTime();
+    } catch (error) {
+      console.error('Failed to refresh free reward status:', error);
     }
   };
 
