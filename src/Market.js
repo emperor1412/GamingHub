@@ -585,11 +585,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       return {
         name: product.name,
         displayAmount: product.name, // Use name for display amount too
-        icon: product.prop === 0 ? null : gmtCard,
-        description: product.prop === 0 ? 'Merchandise Coupon' : 'GMT Payment Card',
-        category: product.prop === 0 ? 'Merchandise' : 'Payment Cards',
-        useBackground: product.prop === 0 ? true : false,
-        backgroundImage: product.prop === 0 ? merchCouponBg : null,
+        icon: product.prop >= 70000 ? null : gmtCard,
+        description: product.prop >= 70000 ? 'Merchandise Coupon' : 'GMT Payment Card',
+        category: product.prop >= 70000 ? 'Merchandise' : 'Payment Cards',
+        useBackground: product.prop >= 70000 ? true : false,
+        backgroundImage: product.prop >= 70000 ? merchCouponBg : null,
         productId: `product-${product.id}`
       };
     }
