@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.add31505.css",
-    "main.js": "./static/js/main.07c7cc91.js",
+    "main.js": "./static/js/main.3613dc0a.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -17,13 +17,13 @@
     "static/media/leaderboard.svg": "./static/media/leaderboard.e1e827432beeb5463d194471f5aba747.svg",
     "static/media/my_ticket.png": "./static/media/my_ticket.4bb963de71f7668ade8b.png",
     "static/media/FSL Games UI 2-08.png": "./static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
-    "static/media/MARKETPLACE.png": "./static/media/MARKETPLACE.0bc48cb4a50434658cfa.png",
     "static/media/scratch_ticket.svg": "./static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
     "static/media/bank_ticket.svg": "./static/media/bank_ticket.59a113c097caac3a3d525cd39bb62511.svg",
     "static/media/burn_ticket.svg": "./static/media/burn_ticket.56e0ccb83c698133e4bf15727d9c254e.svg",
     "static/media/Egglets_Background.png": "./static/media/Egglets_Background.454ab62a418a7286483d.png",
     "static/media/FSLGames_mysterytrophy_PFP_1.png": "./static/media/FSLGames_mysterytrophy_PFP_1.aec10f2d8d2f2897d9b0.png",
     "static/media/background.png": "./static/media/background.6167c630830d31ce4fe3.png",
+    "static/media/MARKETPLACE.png": "./static/media/MARKETPLACE.07e1a1facfd5ebb14ff3.png",
     "static/media/Trophy-ALPHA_TESTER_Unlocked.png": "./static/media/Trophy-ALPHA_TESTER_Unlocked.4a5ca1d8dd16d4e7b680.png",
     "static/media/bank_step_background.png": "./static/media/bank_step_background.cfe263233c5148b147d7.png",
     "static/media/Tadokami_Logo.png": "./static/media/Tadokami_Logo.b377a1a50450299c5d4b.png",
@@ -185,11 +185,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.add31505.css.map": "./static/css/main.add31505.css.map",
-    "main.07c7cc91.js.map": "./static/js/main.07c7cc91.js.map",
+    "main.3613dc0a.js.map": "./static/js/main.3613dc0a.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.add31505.css",
-    "static/js/main.07c7cc91.js"
+    "static/js/main.3613dc0a.js"
   ]
 }
