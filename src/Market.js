@@ -405,6 +405,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     } catch (error) {
       console.error('Failed to refresh starlet products:', error);
     }
+
+    // Also refresh free reward status to ensure free option availability is up-to-date
+    try {
+      await checkFreeRewardTime();
+    } catch (error) {
+      console.error('Failed to refresh free reward status:', error);
+    }
   };
 
   // Add new function to refresh only a specific starlet product
