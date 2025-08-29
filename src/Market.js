@@ -570,10 +570,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       return {
         name: product.name,
         displayAmount: product.name, // Use name for display amount too
-        icon: gmtCard,
-        description: 'Product',
-        category: 'Products',
-        useBackground: false,
+        icon: product.prop === 0 ? null : gmtCard,
+        description: product.prop === 0 ? 'Merchandise Coupon' : 'GMT Payment Card',
+        category: product.prop === 0 ? 'Merchandise' : 'Payment Cards',
+        useBackground: product.prop === 0 ? true : false,
+        backgroundImage: product.prop === 0 ? merchCouponBg : null,
         productId: `product-${product.id}`
       };
     }
