@@ -108,7 +108,7 @@ export const handleStarletsPurchase = async (product) => {
             console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
             console.log('Checking payment - Current Tickets:', currentTickets, 'Initial:', initialTickets);
 
-            if (currentStarlets > initialStarlets && currentTickets > initialTickets) {
+            if (currentStarlets > initialStarlets && currentTickets >= initialTickets) {
               cleanup();
               localStorage.setItem('payment_success', JSON.stringify({
                 amount: product.amount,

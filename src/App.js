@@ -53,6 +53,7 @@ import loading_background from "./images/GamesHubLoading.png";
 import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
+import FlippingStars from './FlippingStars';
 
 
 function App() {
@@ -82,7 +83,9 @@ function App() {
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
+  const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
+  const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -106,15 +109,6 @@ function App() {
         }
         return 0;
     } else {
-        if (checkInResult.needRelogin) {
-            const loginResult = await shared.login(initDataRaw);
-            if (loginResult.success) {
-                setLoginData(loginResult.loginData);
-                setIsLoggedIn(true);
-                return await checkIn(loginResult.loginData);
-            }
-        }
-        
         if (popup.open.isAvailable()) {
             const promise = popup.open({
                 title: 'Error Checking-in',
@@ -238,26 +232,71 @@ const bind_fslid = async () => {
   // Function to reload app data
   const reloadAppData = async () => {
     console.log('Reloading app data after long unfocus...');
+    console.log('Current shared.loginData:', shared.loginData);
+    
     try {
-      if (loginData) {
-        await getProfileData(loginData);
-        // You can add more data reload functions here
-        console.log('App data reloaded successfully');
+      if (shared.loginData) {
+        console.log('Starting getProfileWithRetry...');
+        // Use getProfileWithRetry which already has retry logic built-in
+        const profileResult = await shared.getProfileWithRetry();
+        console.log('getProfileWithRetry result:', profileResult);
+        
+        if (profileResult.success) {
+          // Force a re-render by updating state with the same values
+          setUserProfile({...profileResult.userProfile}); // Create new object to trigger re-render
+          console.log('UserProfile force updated:', profileResult.userProfile);
+          
+          // Update shared.userProfile to ensure all components get the new data
+          shared.userProfile = profileResult.userProfile;
+          console.log('Shared userProfile updated');
+          
+          if (profileResult.profileItems) {
+            setProfileItems([...profileResult.profileItems]); // Create new array to trigger re-render
+            console.log('ProfileItems force updated:', profileResult.profileItems);
+          }
+          
+          // Trigger re-render of child components
+          setDataRefreshTrigger(prev => prev + 1);
+          
+          console.log('App data reloaded successfully');
+        } else {
+          console.error('Failed to reload app data:', profileResult.error);
+          // If retry login failed, we might need to show an error or redirect to login
+          if (popup.open.isAvailable()) {
+            const promise = popup.open({
+              title: 'Error Reloading Data',
+              message: `Failed to reload data: ${profileResult.error}. Please refresh the app.`,
+              buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+            });
+            await promise;
+          }
+        }
+      } else {
+        console.log('No shared.loginData available for reload');
       }
     } catch (error) {
       console.error('Error reloading app data:', error);
+      // Show error popup for unexpected errors
+      if (popup.open.isAvailable()) {
+        const promise = popup.open({
+          title: 'Error',
+          message: 'An unexpected error occurred while reloading data. Please refresh the app.',
+          buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
+        });
+        await promise;
+      }
     }
   };
 
   // Focus/Unfocus detection
   useEffect(() => {
     const handleFocus = () => {
-      console.log('App focused');
+      // console.log('App focused');
       
       // Check if app was unfocused for more than 60 seconds
       if (unfocusTimeRef.current) {
         const unfocusDuration = Date.now() - unfocusTimeRef.current;
-        console.log(`App was unfocused for ${unfocusDuration}ms`);
+        // console.log(`App was unfocused for ${unfocusDuration}ms`);
         
         if (unfocusDuration > FOCUS_TIMEOUT) {
           console.log('App was unfocused for more than 60s, reloading data...');
@@ -269,11 +308,18 @@ const bind_fslid = async () => {
     };
 
     const handleUnfocus = () => {
-      console.log('App unfocused');
+      // console.log('App unfocused');
+      // console.log('loginData at unfocus:', loginData);
+      // console.log('shared.loginData at unfocus:', shared.loginData);
       unfocusTimeRef.current = Date.now();
     };
 
-    // Primary method: Document Visibility API (most reliable for mobile)
+    // Kiểm tra Telegram WebView environment
+    if (window.TelegramWebviewProxy) {
+      console.log('TelegramWebviewProxy available, but no focus events - using visibility API');
+    }
+
+    // Sử dụng Document Visibility API (hoạt động tốt nhất cho WebView)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         handleUnfocus();
@@ -282,7 +328,7 @@ const bind_fslid = async () => {
       }
     });
 
-    // Backup method: Window Focus Events
+    // Backup: Window Focus Events
     window.addEventListener('focus', handleFocus);
     window.addEventListener('blur', handleUnfocus);
 
@@ -466,10 +512,17 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  const handleFlippingStarsClose = () => {
+    handleOverlayClose('flippingstars');
+    setShowFlippingStarsView(false);
+    setActiveTab('home');
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
         return <MainView 
+          key={`mainview-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
@@ -477,10 +530,12 @@ const bind_fslid = async () => {
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
+          setShowFlippingStarsView={setShowFlippingStarsView}
           getProfileData={getProfileData}
         />;      
       case 'tasks':
         return <Tasks 
+            key={`tasks-${dataRefreshTrigger}`}
             checkInData={checkInData}
             setShowCheckInAnimation={setShowCheckInAnimation}
             checkIn={checkIn}
@@ -489,16 +544,19 @@ const bind_fslid = async () => {
             getProfileData={getProfileData}
         />;
       case 'fslid':
-        return <FSLID />;
+        return <FSLID key={`fslid-${dataRefreshTrigger}`} />;
       case 'frens':
-        return <Frens />;
+        return <Frens key={`frens-${dataRefreshTrigger}`} />;
       case 'market':
         return <Market 
+          key={`market-${dataRefreshTrigger}`}
           showFSLIDScreen={() => setActiveTab('fslid')} 
           setShowProfileView={setShowProfileView}
+          initialTab={shared.initialMarketTab}
         />;
       default:
         return <MainView 
+          key={`mainview-default-${dataRefreshTrigger}`}
           checkInData={checkInData}
           setShowCheckInAnimation={setShowCheckInAnimation}
           checkIn={checkIn}
@@ -506,6 +564,7 @@ const bind_fslid = async () => {
           setShowProfileView={setShowProfileView}
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
+          setShowFlippingStarsView={setShowFlippingStarsView}
           getProfileData={getProfileData}
         />;
     }
@@ -551,12 +610,14 @@ const bind_fslid = async () => {
               <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
                 <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
               </button>
-
               <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
 
-              <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+              <button onClick={() => {
+                shared.setInitialMarketTab('telegram');
+                setActiveTab('market');
+              }} className={activeTab === 'market' ? 'active' : ''}>
                 <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
               </button>
               <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>
@@ -618,6 +679,15 @@ const bind_fslid = async () => {
           onClose={handleBankStepsClose}
         />
       )
+      : showFlippingStarsView ?
+      (
+        <FlippingStars 
+          onClose={handleFlippingStarsClose}
+          setShowProfileView={setShowProfileView}
+          setActiveTab={setActiveTab}
+          userProfile={userProfile}
+        />
+      )
       :
       (
         <div className="app-container">
@@ -630,12 +700,14 @@ const bind_fslid = async () => {
             <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
               <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
             </button>
-
             <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>
 
-            <button onClick={() => setActiveTab('market')} className={activeTab === 'market' ? 'active' : ''}>
+            <button onClick={() => {
+              shared.setInitialMarketTab('telegram');
+              setActiveTab('market');
+            }} className={activeTab === 'market' ? 'active' : ''}>
               <img src={activeTab === 'market' ? Market_selected : Market_normal} alt="Market" />
             </button>
             <button onClick={() => setActiveTab('fslid')} className={activeTab === 'fslid' ? 'active' : ''}>

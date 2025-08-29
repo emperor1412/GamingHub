@@ -336,47 +336,13 @@ const Frens = () => {
     setIsLoading(false);
   };
 
-  // url: /app/sharingTrophy
-
-  const shareStoryAPI = async (trophyId, depth = 0) => {
-    if (depth > 3) {
-      console.error('Share story API failed after 3 attempts');
-      return;
-    }
-    const response = await fetch(`${shared.server_url}/api/app/sharingTrophy?token=${shared.loginData.token}&trophyId=${trophyId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Share story API data:', data);
-      if (data.code === 0) {
-        console.log('Story shared API called success');
-      }
-      else if (data.code === 102002 || data.code === 102001) {
-        console.error('Share story data error:', data.msg);
-        const result = await shared.login(shared.initData);
-        if (result.success) {
-          shareStoryAPI(trophyId, depth + 1);
-        }
-        else {
-          console.error('Login failed:', result.error);
-        }
-      }
-    } else {
-      console.error('Share story API data error:', response);
-    }
-  };
+  /* Removed shareStoryAPI function as it's no longer needed */
 
   const onClickShareStory = () => {
     console.log('Share story');
     closeOverlay();
 
     if (shareStory.isSupported()) {
-      // const url = 'https://pub-8bab4a9dfe21470ebad9203e437e2292.r2.dev/miniGameHub/Dg+LT/1rbDTBnSBE673KpzH+jOrxj9FWbKzk1AHpGtw=.png';
       const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2542.png";
       shareStory(url, {
         text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
@@ -388,7 +354,14 @@ const Frens = () => {
         trophy_status: selectedTrophy.status
       }, shared.loginData?.userId);
 
-      shareStoryAPI(selectedTrophy.id);
+      // Complete share story task instead of calling sharingStory API
+      shared.completeShareStoryTask('trophy').then(taskCompleted => {
+        if (taskCompleted) {
+          console.log('Share story task completed successfully');
+        } else {
+          console.log('No share story task available or task completion failed');
+        }
+      });
     }
   };
 

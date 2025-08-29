@@ -16,12 +16,15 @@ import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
 import my_ticket from './images/my_ticket.png';
+import flipping_stars from './images/FlippingStarBanner.png';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
 // import morchigame from './images/morchigame.png';
 import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
-import tadokami from './images/Tadokami_Logo.png'
+import tadokami from './images/Tadokami_Logo.png';
+import marketplace from './images/MARKETPLACE.png';
+import dailyTasks from './images/one_shot.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
@@ -39,7 +42,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
@@ -53,13 +56,34 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
+    // Daily task states
+    const [dailyTaskId, setDailyTaskId] = useState(null);
+    const [dailyTaskStatus, setDailyTaskStatus] = useState(1); // Default: completed (disabled)
+    const [dailyTaskData, setDailyTaskData] = useState(null);
+    
     // Set to true to disable daily checking and always show popup when event is active
     const isMockup = false;
+
+    // Function to navigate to marketplace with starlet tab
+    const onClickMarketplace = () => {
+        // Set the initial market tab to 'starlet'
+        shared.setInitialMarketTab('starlet');
+        // Navigate to market tab
+        shared.setActiveTab('market');
+    };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
     // const [startDragX, setStartDragX] = useState(0);
     // const [startDragTime, setStartDragTime] = useState(0);
+
+    // url: /app/getDailyTask
+    // Request:
+    // Response:
+    // {
+    //     "code": 0,
+    //     "data": 1048109
+    // }
 
     /*
 userProfile : {
@@ -282,6 +306,34 @@ Response:
         }
     }
 
+    const onClickDailyTasks = async () => {
+        try {
+            if (dailyTaskId) {
+                // Check if task has expired
+                if (dailyTaskData && dailyTaskData.endTime) {
+                    const currentTime = Date.now();
+                    if (currentTime > dailyTaskData.endTime) {
+                        // Task has expired, show popup
+                        await shared.showPopup({
+                            type: 0,
+                            message: 'Task has expired'
+                        });
+                        return;
+                    }
+                }
+                
+                // Store the daily task ID in shared object so Tasks component can access it
+                shared.autoStartTaskId = dailyTaskId;
+                // Navigate to Tasks view
+                shared.setActiveTab('tasks');
+            } else {
+                console.log('No daily task available');
+            }
+        } catch (e) {
+            console.error('Error opening daily tasks:', e);
+        }
+    }
+
     const setupProfileData = async () => {
         await getProfileData();
         const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
@@ -292,6 +344,97 @@ Response:
         const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
         if (userTicket) {
             setTicket(userTicket.num);
+        }
+    };
+
+    const getDailyTask = async (depth = 0) => {
+        if (depth > 3) {
+            console.log('getDailyTask: too many retries');
+            return;
+        }
+        
+        console.log('getDailyTask...');
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/getDailyTask?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getDailyTask Response:', response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getDailyTask Data:', data);                
+                
+                if (data.code === 0) {
+                    console.log('getDailyTask: success, task ID:', data.data);
+                    setDailyTaskId(data.data);
+                    // Fetch task details to get status
+                    await fetchDailyTaskDetails(data.data);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getDailyTask: login again');                    
+                    const result = await shared.login();
+                    if (result) {
+                        getDailyTask(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getDailyTask error:', data);
+                }
+            }
+            else {
+                console.log('getDailyTask Response not ok:', response);
+            }
+        }
+        catch (e) {
+            console.error('getDailyTask error:', e);
+        }        
+    };
+
+    const fetchDailyTaskDetails = async (taskId, depth = 0) => {
+        if (depth > 3) {
+            console.log('fetchDailyTaskDetails: too many retries');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${shared.server_url}/api/app/taskData?token=${shared.loginData.token}&id=${taskId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Daily task details:', data);
+                
+                if (data.code === 0) {
+                    setDailyTaskData(data.data);
+                    // Only enable button if task is not completed (state 0)
+                    // Otherwise keep it disabled (state 1)
+                    setDailyTaskStatus(data.data.state);
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('fetchDailyTaskDetails: login again');
+                    const result = await shared.login();
+                    if (result) {
+                        fetchDailyTaskDetails(taskId, depth + 1);
+                    }
+                }
+                else {
+                    console.log('fetchDailyTaskDetails error:', data);
+                }
+            }
+            else {
+                console.log('fetchDailyTaskDetails Response not ok:', response);
+            }
+        }
+        catch (e) {
+            console.error('fetchDailyTaskDetails error:', e);
         }
     };
 
@@ -417,6 +560,7 @@ Response:
     useEffect(() => {
         setupProfileData();
         setupEvents();
+        getDailyTask();
         
         // Check if we should show Egglet popup (once daily logic)
         // Small timeout to let the page load first
@@ -425,6 +569,31 @@ Response:
         }, 500);
     }, []);
     
+    // Add useEffect to listen for data refresh trigger from App component
+    useEffect(() => {
+        // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+        if (shared.userProfile) {
+            console.log('MainView: Updating currency display after data refresh');
+            const userStarlets = shared.userProfile.UserToken.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+                setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile.UserToken.find(token => token.prop_id === 10010);
+            if (userTicket) {
+                setTicket(userTicket.num);
+            }
+        }
+    }, [getProfileData]); // This will trigger when getProfileData function reference changes (which happens when dataRefreshTrigger changes)
+    
+    // Add useEffect to refresh daily task data when user profile changes
+    useEffect(() => {
+        if (shared.userProfile && dailyTaskId) {
+            console.log('MainView: Refreshing daily task status after data refresh');
+            fetchDailyTaskDetails(dailyTaskId);
+        }
+    }, [shared.userProfile, dailyTaskId]);
+
     // Reset egglet popup flag at midnight
     useEffect(() => {
         // Skip this useEffect if in mockup mode
@@ -701,6 +870,130 @@ Response:
 
             <div className="scrollable-content">
                 <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => onClickMarketplace()}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={marketplace}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className="ticket-button-content"> */}
+                                {/* <h3 className="event-card-title">TADOKAMI</h3>
+                                <p className="event-card-subtitle">Is now live</p> */}
+                            {/* </div> */}
+                        </div>
+                    </button>
+                </section>
+                
+                <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={tadokami}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                        </div>
+                    </button>
+                </section>
+
+
+                {/* Egglet Event Section - only shown if event is active */}
+                {eventActive && (
+                    <section className="egglet-section">
+                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                            <div className="egglet-event-content">
+                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                                <div className="egglet-date">17 – 27 APRIL</div>
+                            </div>
+                            <div className="egglet-event-tag">EGGLET EVENT</div>
+                        </button>
+                    </section>
+                )}
+
+                <section className="locked-sections">
+                    <button 
+                        className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
+                        onClick={() => dailyTaskStatus !== 1 && onClickDailyTasks()}
+                        disabled={dailyTaskStatus === 1}
+                    >
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={dailyTasks}
+                                alt="Daily Tasks"
+                                className="locked-card-image minigames"
+                                style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
+                            /> 
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
+                            <div className='locked-card-text'></div>
+                        </div>
+                        {dailyTaskStatus === 1 && (
+                            <div className="sold-out-overlay">COMPLETED</div>
+                        )}
+                        {/* <img
+                            src={locker}
+                            alt="Locker"
+                            className="locker-icon"
+                        /> */}
+                    </button>
+
+                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
+                                src={stepn_background}
+                                alt="Leaderboard Coming Soon"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            <div className='check-out-button'>BANK STEPS</div>
+                            {/* <div className='locked-card-text'>STEPN</div> */}
+                        </div>
+                        {/* <img
+                            src={locker}
+                            alt="Locker"
+                            className="locker-icon"
+                        /> */}
+                    </button>
+
+                    {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <div className="flipping-stars-card-bg">
+                                <div className="flipping-stars-title">FLIPPING STARS</div>
+                                <div className="flipping-stars-subtitle">Flip coins & win rewards!</div>
+                            </div>
+                            <div className='ticket-button-container-border'></div>
+                            <div className='check-out-button'>PLAY NOW</div>
+                        </div>
+                    </button> */}
+                </section>
+
+                {/* <section className="tickets-section">
+
+
+                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={flipping_stars}
+                                alt="My Tickets"
+                                className="ticket-button-image"
+                            />
+                        </div>
+                        <div className="ticket-total-flips">
+                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
+                            <span className="ticket-total-flips-count">00000000</span>
+                        </div>
+                        <div className="ticket-total-jackpot">
+                            <span className="ticket-total-jackpot-label">JACKPOT</span>
+                            <span className="ticket-total-jackpot-count">00000000</span>
+                        </div>
+                    </button>
+                </section> */}
+
+                <section className="tickets-section">
                     {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
                         <img
                             // src={Frame4556}
@@ -720,66 +1013,12 @@ Response:
                             <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
                                 <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch Tickets and Unlock <br></br>Rewards!</p>
-                                <div className="check-out-button">
+                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                                <div className="check-out-button ticket">
                                     Scratch Tickets
                                 </div>
                             {/* </div> */}
                         </div>
-                    </button>
-                </section>
-
-                {/* Egglet Event Section - only shown if event is active */}
-                {eventActive && (
-                    <section className="egglet-section">
-                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
-                            <div className="egglet-event-content">
-                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
-                                <div className="egglet-date">17 – 27 APRIL</div>
-                            </div>
-                            <div className="egglet-event-tag">EGGLET EVENT</div>
-                        </button>
-                    </section>
-                )}
-
-                <section className="locked-sections">
-                    <button className="locked-card" onClick={() => onClickOpenGame()}>
-                        <div className='locked-card-image-container'>
-                            <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                                // src={Frame4561}
-                                src={tadokami}
-                                alt="Tadokami "
-                                className="locked-card-image minigames"
-                            /> 
-                            <div className='ticket-button-container-border'></div>
-                            {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
-                            <div className='locked-card-text'></div>
-                        </div>
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
-                    </button>
-
-                    <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
-                        <div className='locked-card-image-container'>
-                            <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
-                                src={stepn_background}
-                                alt="Leaderboard Coming Soon"
-                                className="locked-card-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>Bank Steps</div>
-                            <div className='locked-card-text'>STEPN</div>
-                        </div>
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
                 </section>
 

@@ -1,0 +1,2353 @@
+/*
+ * FlippingStars.css - PP Neue Machina Inktrap Font Configuration
+ * 
+ * This file uses PP Neue Machina Inktrap variant for all text elements.
+ * Font weights available: 100 (Thin), 200 (Ultralight), 300 (Light), 
+ * 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold), 900 (Black)
+ * 
+ * CSS Custom Properties:
+ * --font-primary: PP Neue Machina Inktrap (main font)
+ * --font-secondary: PP Neue Machina Plain (alternative font)
+ */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'PP Neue Machina Inktrap', 'Arial Black', sans-serif;
+  background-color: #000;
+  color: white;
+  overflow-x: hidden;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Prevent overscroll behavior */
+  overscroll-behavior: none;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+}
+
+/* PP Neue Machina Inktrap Font Family */
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CSS Custom Properties for Font Variants */
+:root {
+  --font-primary: 'PP Neue Machina Inktrap', 'Arial Black', sans-serif;
+  --font-secondary: 'PP Neue Machina Plain', 'Arial Black', sans-serif;
+}
+
+/* Font Weight Utility Classes */
+.fc_font-thin { font-weight: 100; }
+.fc_font-ultralight { font-weight: 200; }
+.fc_font-light { font-weight: 300; }
+.fc_font-regular { font-weight: 400; }
+.fc_font-medium { font-weight: 500; }
+.fc_font-semibold { font-weight: 600; }
+.fc_font-bold { font-weight: 700; }
+.fc_font-black { font-weight: 900; }
+
+/* Hide WebKit scrollbars globally */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+  display: none;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  display: none;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+  display: none;
+}
+
+/* Stats Header Styles - matching MainView.css */
+.fc_stats-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 1);
+  height: 60px;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.fc_profile-pic-main img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: #FF00F6 2px solid;
+}
+
+.fc_profile-pic-main {
+  margin-left: 10px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.fc_stats-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  flex: 1;
+}
+
+.fc_stat-item-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.fc_stat-item-main:hover {
+  opacity: 0.8;
+}
+
+.fc_stat-item-main img {
+  width: 24px;
+  height: 24px;
+}
+
+.fc_stat-item-main-text {
+  color: #FFF;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+/* Sound Control Button */
+.fc_sound-control {
+  position: absolute;
+  right: 80px; /* Move left to avoid overlapping with stats */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* Ensure it's above other elements */
+}
+
+.fc_sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Test Sound Button (can be removed in production) */
+.fc_test-sound-control {
+  position: absolute;
+  right: 130px; /* Position to the left of sound control */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.fc_test-sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_test-sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_test-sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+.fc_app {
+  width: 390px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 40px; /* Add space for fixed header */
+  padding-bottom: 165px; /* Increased space for fixed bottom navigation and flip button */
+  box-sizing: border-box;
+  background-color: #000;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  min-height: 100vh; /* Ensure minimum height to fill viewport */
+  position: relative; /* Enable absolute positioning for child elements */
+}
+
+
+
+/* Logo Container */
+.fc_logo-container {
+  text-align: center;
+  padding: 20px 20px 0 20px;
+  position: relative;
+  overflow: visible; /* allow 3D canvas to extend beyond container */
+  /* Use aspect-ratio to maintain proportions while preventing layout shift */
+  max-width: 350px;
+  aspect-ratio: 350 / 260;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Ensure horizontal centering */
+}
+
+/* Elevate only when 3D is showing; keep below global overlays (z 2000) */
+.fc_logo-container.fc_logo-elevated { 
+  z-index: 1500;
+}
+
+/* 3D overlay on top of the logo */
+.fc_logo-3d {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180%;
+  height: 180%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1501; /* above logo image and any siblings inside container */
+}
+
+.fc_logo-3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important; /* ensure underlying buttons remain clickable */
+}
+
+.fc_logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.fc_logo-image:hover {
+  transform: scale(1.025);
+  filter: drop-shadow(0 0 15px rgba(255, 0, 246, 0.8)) 
+          drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+}
+
+/* Keep consistent padding for all logo states */
+.fc_logo-container.fc_logo-result {
+  padding: 20px 20px 0 20px;
+}
+
+/* Win reward progress bar - new design */
+.fc_win-reward-progress {
+  position: absolute;
+  top: 75%; /* Position below the logo, not above */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px; /* Reduced width - shorter progress bar */
+  height: 40px; /* Keep height the same */
+  z-index: 1400; /* Below logo image to ensure proper layering */
+  animation: progressBarSlideIn 0.5s ease-out;
+}
+
+/* WIN/LOSE text styling */
+.fc_win-lose-text {
+  position: absolute;
+  top: 70%; /* Position below fc_win-reward-progress (which is at 75%) */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1399; /* Below fc_win-reward-progress (which is at 1400) */
+  text-align: center;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 107.37px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: transparent; /* Make text transparent so only stroke is visible */
+  animation: winLoseTextSlideIn 0.5s ease-out;
+  pointer-events: none; /* Prevent text from blocking interactions */
+}
+
+@keyframes winLoseTextSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes progressBarSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.fc_progress-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #FF00F6 0%, #8A2BE2 100%);
+  border-radius: 20px; /* Smaller border radius for smaller bar */
+  position: relative;
+  overflow: visible; /* Allow starlet to overflow */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Smaller shadow for smaller bar */
+}
+
+.fc_progress-numbers {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the single number */
+  flex: 1;
+  padding: 0 8px; /* Even smaller padding for shorter bar */
+}
+
+.fc_progress-number {
+  font-family: var(--font-primary);
+  font-size: 20px; /* Slightly larger font to fill the shorter bar */
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  animation: numberPopIn 0.6s ease-out;
+  /* Center the single number */
+  text-align: center;
+}
+
+@keyframes numberPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fc_progress-starlet {
+  width: 60px; /* Much larger than progress bar height (40px) */
+  height: 60px; /* Much larger than progress bar height (40px) */
+  background: transparent; /* Remove background, keep transparent */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  /* Position to overflow the progress bar */
+  margin-top: -10px; /* Move up to overlap with progress bar */
+  /* Ensure perfect centering within progress bar */
+  position: absolute;
+  right: -10px; /* Position to center of progress bar */
+  top: 0px; /* Fine-tuned position to center within progress bar */
+  transform: none; /* Remove transform to use fixed positioning */
+}
+
+.fc_progress-starlet-icon {
+  width: 48px; /* Much larger icon - almost fills the container */
+  height: 48px; /* Much larger icon - almost fills the container */
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.fc_progress-starlet:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
+}
+
+
+
+.fc_progress-starlet:hover .fc_progress-starlet-icon {
+  transform: rotate(15deg);
+}
+
+/* Responsive design for progress bar */
+@media (max-width: 768px) {
+  .fc_win-reward-progress {
+    width: 140px;
+    height: 35px;
+  }
+  
+  .fc_progress-number {
+    font-size: 22px;
+  }
+  
+  .fc_progress-starlet {
+    width: 50px;
+    height: 50px;
+    margin-top: -8px;
+    right: -25px; /* Adjust for smaller progress bar */
+    top: -2px; /* Center icon's center on progress bar center: (35-50)/2 = -7.5, but with margin-top: -8px, so top: -2px */
+  }
+  
+  .fc_progress-starlet-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fc_win-reward-progress {
+    width: 120px;
+    height: 30px;
+  }
+  
+  .fc_progress-number {
+    font-size: 22px;
+  }
+  
+  .fc_progress-starlet {
+    width: 45px;
+    height: 45px;
+    margin-top: -7px;
+    right: -22px; /* Adjust for smaller progress bar */
+    top: -2px; /* Center icon's center on progress bar center: (30-45)/2 = -7.5, but with margin-top: -7px, so top: -2px */
+  }
+  
+  .fc_progress-starlet-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Mobile scroll optimization */
+@media (max-width: 768px) {
+  .fc_app {
+    overscroll-behavior: auto; /* Allow overscroll on mobile for better UX */
+    scroll-behavior: smooth; /* Smooth scrolling on mobile */
+  }
+  
+  /* Ensure touch scrolling works properly on mobile */
+  .fc_app * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Flip Controls */
+.fc_flip-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  gap: 12px;
+}
+
+.fc_total-flips {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 4px 8px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+}
+
+.fc_total-flips-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_total-flips-count {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_auto-flip-toggle {
+  position: relative;
+  padding: 4px 8px;
+  background-color: #848484;
+  border: 0px solid #848484;
+  /* color: white; */
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  /* transition: all 0.2s ease; */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 8px; */
+  min-width: 97px;
+  height: 20px;
+}
+
+.fc_auto-flip-text {
+  font-size: 10px;
+  opacity: 0.9;
+  color: white;
+}
+
+.fc_auto-flip-separator {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 2px; 
+  margin-right: 2px;
+  color: white;
+
+}
+
+.fc_auto-flip-status {
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on {
+  background: #FF00F6;
+}
+
+/* .fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-status {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-text {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.fc_auto-flip-toggle.fc_auto-flip-on .fc_auto-flip-separator {
+  color: #00ff00;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+} */
+
+.fc_auto-flip-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.fc_auto-flip-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fc_auto-flip-toggle:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.fc_coin-select {
+  display: flex;
+  justify-content: space-around;
+  gap: 40px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  align-items: center;
+}
+
+.fc_coin-button {
+  position: relative;
+  padding: 16px 24px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Dim and disable interactions while auto flipping */
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected),
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected) {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+  cursor: not-allowed;
+}
+
+.fc_app.is-auto-flipping .fc_coin-button:not(.fc_selected):hover,
+.fc_app.is-auto-flipping .fc_bet-button:not(.fc_selected):hover {
+  transform: none;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.fc_coin-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc_coin-counter-wrapper {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.fc_coin-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.fc_coin-counter {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fc_coin-title {
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.fc_coin-streak-wrapper {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fc_coin-streak {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+  background: #FF00F6;
+  padding: 0px 8px;
+  border-radius: 15px;
+}
+
+.fc_coin-streak-multiplier {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+
+
+.fc_coin-button.fc_selected .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_coin-button.fc_selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 16px);
+  height: calc(100% - 30px);
+  background: #000FEF;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  z-index: 0;
+}
+
+.fc_coin-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.fc_coin-button:hover .fc_corner {
+  border-color: #ffffff;
+}
+
+/* Removed global streak - now handled per button */
+
+.fc_bet-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 20px;
+  margin-top: 20px;
+  padding: 0 10px;
+}
+
+/* Corner border elements - matching Market.css */
+.fc_corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #000FEF;
+  z-index: 2;
+}
+
+.fc_corner-top-left {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid #000FEF;
+  border-left: 1.5px solid #000FEF;
+}
+
+.fc_corner-top-right {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid #000FEF;
+  border-right: 1.5px solid #000FEF;
+}
+
+.fc_corner-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid #000FEF;
+  border-left: 1.5px solid #000FEF;
+}
+
+.fc_corner-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid #000FEF;
+  border-right: 1.5px solid #000FEF;
+}
+
+.fc_bet-button {
+  position: relative;
+  padding: 12px 8px;
+  font-size: 14px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 55px;
+}
+
+.fc_bet-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.fc_bet-amount {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.fc_bet-starlet-icon {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.fc_bet-button.fc_selected .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_bet-button.fc_selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 12px);
+  height: calc(100% - 20px);
+  background: #000FEF;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 3% 100%);
+  z-index: 0;
+}
+
+/* All In Button Styles */
+.fc_bet-button.fc_all-in {
+  min-height: 50px;
+  padding: 12px 8px;
+}
+
+.fc_all-in-content {
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc_all-in-title {
+  font-family: var(--font-primary);
+  font-size: 18.5px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+}
+
+.fc_all-in-details {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.fc_all-in-percent {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+}
+
+.fc_all-in-amount {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+}
+
+.fc_all-in-starlet {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+/* Double or Nothing Button Styles */
+.fc_bet-button.fc_disabled .fc_bet-content {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.fc_bet-button.fc_disabled {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.fc_bet-button.fc_disabled .fc_corner {
+  border-color: #555;
+}
+
+/* Double or Nothing separate button styling */
+.fc_bet-button.fc_double-button.fc_selected .fc_corner {
+  border-color: #ffffff;
+}
+
+.fc_bet-button.fc_double-button.fc_selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 12px);
+  height: calc(100% - 20px);
+  background: #000FEF;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 3% 100%);
+  z-index: 0;
+}
+
+/* Double or Nothing content two-line layout */
+.fc_double-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  gap: 2px;
+}
+
+.fc_double-line1,
+.fc_double-line2 {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Slightly smaller so it fits 2 lines nicely */
+.fc_double-line1 { font-size: 12px; }
+.fc_double-line2 { font-size: 13px; }
+
+/* Purple word for DOUBLE, white for OR */
+.fc_double-word { color: #FF00F6; }
+.fc_double-or { color: #FFFFFF; }
+
+/* Insufficient funds styling - dimmed buttons when user doesn't have enough starlets */
+.fc_bet-button.fc_insufficient-funds {
+  opacity: 0.4;
+  filter: grayscale(0.8);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.fc_bet-button.fc_insufficient-funds .fc_corner {
+  border-color: #555;
+  opacity: 0.2;
+}
+
+.fc_bet-button.fc_insufficient-funds .fc_bet-content {
+  opacity: 0.6;
+}
+
+.fc_bet-button.fc_insufficient-funds:hover {
+  transform: none;
+  filter: grayscale(0.8);
+  background-color: transparent;
+}
+
+.fc_bet-button.fc_insufficient-funds:hover .fc_corner {
+  border-color: #555;
+  opacity: 0.2;
+}
+
+.fc_bet-button:hover:not(.fc_disabled):not(.fc_insufficient-funds) {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.fc_bet-button:hover:not(.fc_disabled):not(.fc_insufficient-funds) .fc_corner {
+  border-color: #ffffff;
+}
+
+/* Custom Amount Button Styles */
+.fc_bet-button.fc_custom-amount {
+  min-height: 50px;
+  padding: 12px 8px;
+}
+
+.fc_custom-content {
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc_custom-amount-display {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_custom-text {
+  font-family: var(--font-primary);
+  font-size: 8px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  /* letter-spacing: 0.05em; */
+}
+
+.fc_flip-btn {
+  position: fixed;
+  bottom: 100px; /* Position above bottom navigation */
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(390px - 40px); /* Match app width minus margins */
+  max-width: calc(100vw - 40px); /* Responsive width */
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  z-index: 999; /* Ensure it's above other content but below overlays */
+}
+
+.fc_flip-content {
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1em;
+}
+
+.fc_flip-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_flip-btn:hover .fc_corner {
+  border-color: #00ffff;
+}
+
+.fc_flip-btn:active {
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Bottom Navigation - matching main app style */
+.fc_bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 0;
+  backdrop-filter: blur(10px);
+  touch-action: auto;
+  z-index: 1001;
+  height: 80px;
+  pointer-events: auto;
+}
+
+.fc_bottom-nav button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  touch-action: auto;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+
+.fc_bottom-nav button:hover {
+  opacity: 0.8;
+}
+
+.fc_bottom-nav button img {
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+}
+
+.fc_bottom-nav button.fc_active {
+  color: #8B5CF6;
+}
+
+/* Welcome Overlay Styles */
+.fc_welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hide scrollbars while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  overflow: -moz-scrollbars-none;
+}
+
+.fc_welcome-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  min-height: fit-content;
+  margin: auto 0;
+}
+
+.fc_welcome-title {
+  font-family: var(--font-primary);
+  font-size: 32px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_welcome-logo-container {
+  margin: 0px 10px;
+}
+
+.fc_welcome-logo-image {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+}
+
+.fc_welcome-pick-text {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.fc_welcome-bet-demo {
+  display: flex;
+  justify-content: center;
+}
+
+.fc_welcome-bet-button {
+  pointer-events: none !important;
+  cursor: default !important;
+  width: 80px;
+  min-height: 30px;
+}
+
+.fc_welcome-select-text {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 10px 0 0px 0;
+}
+
+.fc_welcome-coin-demo {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+}
+
+.fc_welcome-coin-button {
+  pointer-events: none !important;
+  cursor: default !important;
+  flex: none;
+  width: 80px;
+  min-height: 30px;
+}
+
+.fc_welcome-flip-text {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.fc_welcome-win-text {
+  background-color: blue;
+  padding: 0px 6px;
+}
+
+.fc_welcome-lfg-btn {
+  position: relative;
+  width: calc(100% - 40px);
+  max-width: 350px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  margin-top: 30px;
+}
+
+.fc_welcome-lfg-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_welcome-lfg-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* ALL IN Confirmation Overlay Styles */
+.fc_allin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_allin-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+}
+
+/* All-in Value Container Styles */
+.fc_allin-value-container {
+  width: 241px;
+  height: 36px;
+  background: #000FEF;
+  border-radius: 25px;
+  padding: 4px 8px;
+}
+
+.fc_allin-value-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fc_allin-value-number {
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 0.1em;
+}
+
+.fc_allin-value-starlet-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.fc_allin-title {
+  font-family: var(--font-primary);
+  font-size: 120px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 0.8;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.fc_allin-question {
+  font-family: var(--font-primary);
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  background: #FF00F6;
+  padding: 0px 6px;
+  border-radius: 0;
+  letter-spacing: 0.05em;
+}
+
+.fc_allin-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.fc_allin-btn {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.fc_allin-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_allin-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Comprehensive scrollbar hiding rules */
+.fc_app::-webkit-scrollbar,
+.fc_welcome-overlay::-webkit-scrollbar,
+.fc_welcome-content::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+  display: none;
+}
+
+.fc_app::-webkit-scrollbar-thumb,
+.fc_welcome-overlay::-webkit-scrollbar-thumb,
+.fc_welcome-content::-webkit-scrollbar-thumb {
+  background: transparent;
+  display: none;
+}
+
+.fc_app::-webkit-scrollbar-track,
+.fc_welcome-overlay::-webkit-scrollbar-track,
+.fc_welcome-content::-webkit-scrollbar-track {
+  background: transparent;
+  display: none;
+}
+
+/* Ensure child elements also hide scrollbars */
+.fc_app * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.fc_app *::-webkit-scrollbar {
+  display: none;
+}
+
+/* ALL IN Confirmation Overlay Styles */
+.fc_custom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_custom-overlay-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px 70px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fc_custom-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.fc_custom-btn {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.fc_custom-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_custom-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Number Keyboard Styles */
+.fc_keyboard {
+  text-align: center;
+  width: 85%;
+  transform: scale(0.8);
+}
+
+.fc_keyboard-shadow {
+  position: relative;
+  display: inline-block;
+}
+
+/* Pink "shadow" background */
+.fc_keyboard-shadow::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 100%;
+  height: 100%;
+  background: #FF00F6;
+  z-index: 0;
+}
+
+.fc_keyboard-container {
+  position: relative;
+  background: #FFFFFF;
+  z-index: 1;
+}
+
+.fc_custom-display {
+  width: 100%;
+  font-size: 2rem;
+  text-align: right;
+  padding: 8px;
+  border: none;
+  outline: none;
+  border-bottom: 4px solid #000FEF;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  color: #000000;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.fc_keyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: #000FEF;
+}
+
+.fc_keyboard-key {
+  font-size: 1.5rem;
+  border: none;
+  background: #FFFFFF;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  padding: 16px;
+}
+
+.fc_keyboard-key:hover {
+  background: #F0F0F0;
+}
+
+.fc_keyboard-key:active {
+  background: #E0E0E0;
+}
+
+/* Auto Flip Overlay Styles */
+.fc_autoflip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_autoflip-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  position: relative;
+}
+
+.fc_autoflip-header {
+  width: 85%;
+  max-width: 350px;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+
+.fc_autoflip-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 83px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.fc_autoflip-close:hover {
+  transform: scale(1.05);
+}
+
+.fc_autoflip-close-icon {
+  width: 79px;
+  height: 59px;
+  transform: scale(1.05);
+  object-fit: contain;
+}
+
+.fc_autoflip-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 85%;
+  max-width: 350px;
+}
+
+.fc_autoflip-option {
+  position: relative;
+  padding: 0;
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  /* width: 80px;
+  height: 50px; */
+  aspect-ratio: 79 / 59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc_autoflip-option-content {
+  position: relative;
+  z-index: 1;
+}
+
+.fc_autoflip-option.fc_selected {
+  background-color: #000FEF;
+  color: #FFFFFF;
+}
+
+.fc_autoflip-option:hover:not(.fc_selected) {
+  background-color: #F0F0F0;
+}
+
+.fc_autoflip-infinite .fc_autoflip-option-content {
+  font-size: 24px;
+}
+
+.fc_autoflip-infinite.fc_selected .fc_autoflip-option-content {
+  color: #FFFFFF;
+}
+
+.fc_autoflip-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.fc_autoflip-btn {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.fc_autoflip-btn:hover:not(.fc_disabled) {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_autoflip-btn:active:not(.fc_disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+.fc_autoflip-btn.fc_disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Flip Result Overlay Styles */
+.fc_flip-result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_flip-result-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #000FEF;
+  border-radius: 20px;
+}
+
+.fc_flip-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.fc_flip-result-header h3 {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.fc_flip-result-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.fc_flip-result-close:hover {
+  transform: scale(1.1);
+}
+
+.fc_flip-result-close img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.fc_flip-result-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.fc_flip-result-details p {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fc_flip-result-bet-amount,
+.fc_flip-result-reward {
+  color: #FF00F6;
+  text-shadow: 0 0 10px rgba(255, 0, 246, 0.5);
+}
+
+.fc_flip-result-actual-result {
+  color: #00FFFF;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_flip-result-win-loss {
+  font-size: 24px;
+  font-weight: 800;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.fc_flip-result-win-loss.win {
+  color: #00FF00;
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.fc_flip-result-win-loss.loss {
+  color: #FF0000;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+}
+
+.fc_flip-result-ok-btn {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0055ff, #0033cc);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.fc_flip-result-ok-btn:hover {
+  background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.fc_flip-result-ok-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Loading state for flip button */
+.fc_flip-btn-loading {
+  background: linear-gradient(135deg, #555, #333) !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  transform: translateX(-50%) !important; /* Always keep centered */
+}
+
+.fc_flip-btn-loading:hover {
+  transform: translateX(-50%) !important; /* Always keep centered */
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Force all flip button states to stay centered */
+.fc_flip-btn,
+.fc_flip-btn:hover,
+.fc_flip-btn:active,
+.fc_flip-btn:focus,
+.fc_flip-btn:disabled,
+.fc_flip-btn.fc_flip-btn-loading,
+.fc_flip-btn.fc_flip-btn-buy-starlets {
+  transform: translateX(-50%) !important;
+}
+
+/* Special cases for hover effects that need both centering and movement */
+.fc_flip-btn:hover:not(.fc_flip-btn-loading):not(:disabled) {
+  transform: translateX(-50%) translateY(-2px) !important;
+}
+
+.fc_flip-btn:active:not(.fc_flip-btn-loading):not(:disabled) {
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets:hover {
+  transform: translateX(-50%) translateY(-2px) !important;
+}
+
+.fc_flip-btn:disabled {
+  cursor: not-allowed;
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: translateX(-50%) !important; /* Always keep centered */
+}
+
+/* remove hover highlight when disabled */
+.fc_flip-btn:disabled:hover {
+  background: #6a6a6a !important;
+  box-shadow: none !important;
+  transform: translateX(-50%) !important; /* Always keep centered */
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets {
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  opacity: 1;
+  cursor: pointer;
+  transform: translateX(-50%) !important; /* Always keep centered */
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets:hover {
+  background: linear-gradient(135deg, #FF0080, #FF00F6);
+  transform: translateX(-50%) translateY(-2px) !important; /* Keep centered and add hover effect */
+  box-shadow: 0 6px 20px rgba(255, 0, 246, 0.7);
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets .fc_corner {
+  border-color: #FF00F6;
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets .fc_flip-content {
+  font-size: 20px;
+}
+
+/* Insufficient state container */
+.fc_flip-btn-container {
+  position: fixed;
+  bottom: 100px; /* Position above bottom navigation */
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(390px - 40px); /* Match app width minus margins */
+  max-width: calc(100vw - 40px); /* Responsive width */
+  margin: 0;
+  z-index: 999; /* Ensure it's above other content but below overlays */
+}
+
+.fc_flip-btn-insufficient {
+  background: #5c5c5c !important;
+  cursor: not-allowed !important;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+  position: relative; /* Keep relative positioning within container */
+  bottom: -28px;
+}
+
+.fc_flip-btn-insufficient .fc_flip-content {
+  font-size: 20px;
+  letter-spacing: normal;
+}
+
+.fc_buy-more-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -12px;
+  padding: 4px 18px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
+  z-index: 5;
+  position: relative; /* Keep relative positioning within container */
+}
+
+.fc_buy-more-btn:hover {
+  background: linear-gradient(135deg, #FF0080, #FF00F6);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* Settings Button Container - positioned below and to the right of fc_stats-header */
+.fc_settings-button-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  right: 20px;
+  z-index: 999;
+  pointer-events: auto;
+}
+
+/* Jackpot Container - positioned below and in the center of fc_stats-header */
+.fc_jackpot-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+.fc_jackpot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 2px 12px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.fc_jackpot-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_jackpot-count {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_settings-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.fc_settings-button:hover {
+  opacity: 0.8;
+}
+
+.fc_settings-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Settings Overlay */
+.fc_settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_settings-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  min-height: 300px;
+  justify-content: space-between;
+}
+
+.fc_settings-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sound Control Section */
+.fc_settings-sound-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.fc_settings-sound-title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.fc_settings-sound-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.fc_settings-sound-btn {
+  position: relative;
+  width: 180px;
+  height: 40px;
+  background: #FF00F6;
+  border: none;
+  /* border-radius: 25px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-sound-btn:hover {
+  background: #FF00F6;
+  transform: translateY(-2px);
+}
+
+.fc_settings-sound-btn:active {
+  transform: translateY(0);
+}
+
+.fc_sound-text {
+  position: relative;
+}
+
+.fc_settings-sound-status {
+  width: 80px;
+  height: 40px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_status-on {
+  background: #FF00F6;
+}
+
+.fc_status-off {
+  background: #666666;
+}
+
+.fc_settings-sound-status:hover {
+  transform: translateY(-2px);
+}
+
+.fc_status-on:hover {
+  background: #FF00F6;
+}
+
+.fc_status-off:hover {
+  background: #777777;
+}
+
+.fc_settings-sound-status:active {
+  transform: translateY(0);
+}
+
+/* Volume Control Section */
+.fc_settings-volume-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.fc_settings-volume-label {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-volume-slider {
+  width: 250px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.fc_settings-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-value {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-back-btn {
+  position: relative;
+  width: 200px;
+  height: 49px;
+  background: #000FEF;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 18px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.fc_settings-back-btn:active {
+  transform: translateY(0);
+}

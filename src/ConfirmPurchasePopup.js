@@ -9,7 +9,7 @@ import shared from './Shared';
 
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConfirm, setShowProfileView, setShowBuyView }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -72,10 +72,84 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
   }, [onClose]);
 
   const handleConfirmAndPay = useCallback(async () => {
+    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName });
     setIsProcessing(true);
     try {
       let result;
-      if (optionId === 'free') {
+      if (isStarletProduct && productId) {
+        console.log('Making starlet product purchase API call...');
+        // Handle starlet product purchase
+        const response = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        console.log('API response:', data);
+        if (data.code === 0) {
+          // Extract package type and value from productName
+          let packageType = 'unknown';
+          let packageValue = '';
+          
+          if (productName && typeof productName === 'string') {
+            if (productName.toLowerCase().includes('merch')) {
+              packageType = 'merch';
+              // Extract value from productName (e.g., "$79 MERCH COUPON" -> "79")
+              const valueMatch = productName.match(/\$(\d+)/);
+              packageValue = valueMatch ? valueMatch[1] : '';
+            } else if (productName.toLowerCase().includes('gmt') || productName.toLowerCase().includes('pay')) {
+              packageType = 'gmt';
+              // Extract value from productName (e.g., "$50 GMT PAY CARD" -> "50")
+              const valueMatch = productName.match(/\$(\d+)/);
+              packageValue = valueMatch ? valueMatch[1] : '';
+            }
+          }
+          
+          result = {
+            status: "paid",
+            productName: productName,
+            amount: amount,
+            isStarletProduct: true,
+            packageType: packageType,
+            packageValue: packageValue
+          };
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                productId: productId
+              })
+            });
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0) {
+              result = {
+                status: "paid",
+                productName: productName,
+                amount: amount,
+                isStarletProduct: true
+              };
+            } else {
+              console.log('Retry failed:', retryData);
+              await showError(retryData.msg || 'Payment failed. Please try again.');
+              return;
+            }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
+          }
+        } else {
+          console.log('API call failed:', data);
+          await showError(data.msg || 'Payment failed. Please try again.');
+          return;
+        }
+      } else if (optionId === 'free') {
         const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
         const data = await response.json();
         if (data.code === 0 && data.data.success) {
@@ -96,8 +170,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                 initialStarlets: 50,
                 tickets: 1
               };
+            } else {
+              await showError(retryData.msg || 'Claim failed. Please try again.');
+              return;
             }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
           }
+        } else {
+          await showError(data.msg || 'Claim failed. Please try again.');
+          return;
         }
       } else {
         result = await handleStarletsPurchase({ 
@@ -107,22 +190,33 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
         });
       }
 
+      console.log('Final result:', result);
       if (result?.status === "paid") {
         setPurchaseData({ 
           initialStarlets: result.initialStarlets,
-          tickets: result.tickets
+          tickets: result.tickets,
+          productName: result.productName,
+          amount: result.amount,
+          isStarletProduct: result.isStarletProduct,
+          packageType: result.packageType,
+          packageValue: result.packageValue
         });
         setShowSuccessPopup(true);
+        
+        // Call onPurchaseComplete for starlet products to trigger market reload
+        if (result.isStarletProduct && onPurchaseComplete) {
+          onPurchaseComplete();
+        }
       } else if (result?.status === "cancelled") {
         onClose();
       }
     } catch (error) {
       console.error('Purchase failed:', error);
-      await showError('Unable to process payment. Please try again.');
+      await showError(error?.message || 'Unable to process payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, optionId, showError, onClose]);
+  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose, onPurchaseComplete]);
 
   const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);
@@ -132,9 +226,15 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
     // Refresh user profile
     await shared.getProfileWithRetry();
     
-    onConfirm();
-    setShowBuyView(false);
-  }, [onConfirm, setShowBuyView]);
+    // Navigate directly to Market using shared.setActiveTab
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setInitialMarketTab('telegram');
+      shared.setActiveTab('market');
+    } else {
+      // Fallback: use the old method if setActiveTab is not available
+      setShowBuyView(false);
+    }
+  }, [setShowBuyView]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -174,8 +274,13 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
             <SuccessfulPurchasePopup 
               isOpen={true}
               onClaim={handleClaim}
-              amount={amount}
+              onClose={onClose}
+              amount={purchaseData?.isStarletProduct ? null : amount}
               tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
+              productName={purchaseData?.productName}
+              isStarletProduct={purchaseData?.isStarletProduct}
+              packageType={purchaseData?.packageType}
+              packageValue={purchaseData?.packageValue}
               setShowBuyView={setShowBuyView}
             />
           ) : isOpen && (
@@ -193,26 +298,44 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, onConf
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
-                      {stars > 0 ? (
+                      {isStarletProduct ? (
                         <>
+                          DO YOU WANT TO BUY A <span className="highlight-value">{productName}</span>
                           <br />
-                          AND <span className="highlight-value">{currentOption?.ticket || 10} TICKETS</span> IN FSL GAME HUB
+                          IN FSL GAME HUB
                           <br />
-                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                          FOR <span className="highlight-value">{amount} STARLETS</span>?
                         </>
                       ) : (
                         <>
-                          <br />
-                          AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
-                          <br />
-                          FOR <span className="highlight-value">FREE</span>?
+                          DO YOU WANT TO BUY <span className="highlight-value">{amount} STARLETS</span>
+                          {stars > 0 ? (
+                            <>
+                              {currentOption?.ticket > 0 && (
+                                <>
+                                  <br />
+                                  AND <span className="highlight-value">{currentOption.ticket} TICKETS</span>
+                                </>
+                              )}
+                              <br />
+                              IN FSL GAME HUB
+                              <br />
+                              FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                            </>
+                          ) : (
+                            <>
+                              <br />
+                              AND <span className="highlight-value">1 TICKET</span> IN FSL GAME HUB
+                              <br />
+                              FOR <span className="highlight-value">FREE</span>?
+                            </>
+                          )}
                         </>
                       )}
                     </div>
                   </div>
 
-                  <button className="confirm-button" onClick={handleConfirmAndPay}>
+                  <button className="cfp_confirm-button" onClick={handleConfirmAndPay}>
                     CONFIRM & PAY
                   </button>
                 </div>

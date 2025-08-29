@@ -117,57 +117,32 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
     const onClickShareStory = () => {
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
-            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2545.png";
 
             shareStory(url, {
-                text: 'I just scratched all my tickets and claimed rewards!',
+                text: 'I just won big with multiple tickets! 🎉',
             });
 
             trackStoryShare('ticket_all', {
-                reward_claimed: true,
-                invite_link: inviteLink,
-                rewards_count: rewards.length
+                total_rewards: calculateTotalRewards(),
+                invite_link: inviteLink
             }, shared.loginData?.userId);
 
             setShowShareStory(false);
-            claimRewardFromSharingStory();
-        }
-    };
-
-    const claimRewardFromSharingStory = async (depth = 0) => {
-        if (depth > 3) {
-            console.error('claimRewardFromSharingStory failed after 3 attempts');
-            return;
-        }
-
-        console.log('Claiming reward from sharing story...');
-        try {
-            const response = await fetch(`${shared.server_url}/api/app/sharingStory?token=${shared.loginData.token}&type=2`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
+            
+            // Complete share story task instead of calling sharingStory API
+            shared.completeShareStoryTask(2).then(taskCompleted => {
+                if (taskCompleted) {
+                    console.log('Share story task completed successfully');
+                    setShowRewardScreen(true);
+                } else {
+                    console.log('No share story task available or task completion failed');
                 }
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.code === 0) {
-                    console.log('Reward claimed successfully');
-                    setShowRewardScreen(true);
-                }
-                else if (data.code === 102002 || data.code === 102001) {
-                    console.log('Token expired, attempting to re-login');
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        claimRewardFromSharingStory(depth + 1);
-                    }
-                }
-            }
-        }
-        catch (error) {
-            console.error('claimRewardFromSharingStory error:', error);
         }
     };
+
+    /* Removed claimRewardFromSharingStory function as it's no longer needed */
 
     const handleClaimReward = () => {
         setShowRewardScreen(false);
@@ -272,10 +247,6 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     {showShareStory && (
                                         <button className="sa_share-story-button" onClick={onClickShareStory}>
                                             SHARE TO STORY
-                                            <div className="sa_share-story-reward">
-                                                <span>×40</span>
-                                                <img src={shared.mappingIcon[10020]} alt="Starlet" />
-                                            </div>
                                         </button>
                                     )}
                                     

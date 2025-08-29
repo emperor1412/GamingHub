@@ -60,6 +60,7 @@ const shared = {
     app_link: 'https://t.me/FSLGameHub_Bot/fslgamehub',
     game_link: 'https://t.me/FSLGameHub_Bot/Tadokami',
     host_environment: 'production',
+    initialMarketTab: 'telegram', // Default tab for Market component
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -97,6 +98,11 @@ const shared = {
         30020: 'MOOAR+ Membership',
         40010: 'StepN GO Shoe',
         50010: 'Alpha Chest'
+    },
+    
+    // Function to set initial market tab
+    setInitialMarketTab: function(tab) {
+        this.initialMarketTab = tab;
     },
     
     profileItems : [],
@@ -242,8 +248,12 @@ data object
     },
 
     getProfileData: async (loginData) => {
+        console.log('getProfileData called with loginData:', loginData);
         try {
-            const response = await fetch(`${shared.server_url}/api/app/userData?token=${loginData.token}`, {
+            const url = `${shared.server_url}/api/app/userData?token=${loginData.token}`;
+            console.log('Fetching from URL:', url);
+            
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -337,6 +347,9 @@ data object
     },
 
     getProfileWithRetry: async (depth = 0) => {
+        console.log(`getProfileWithRetry called with depth: ${depth}`);
+        console.log('shared.loginData in getProfileWithRetry:', shared.loginData);
+        
         if (depth > 3) {
             console.error('Get profile data failed after 3 attempts');
             return {
@@ -345,7 +358,10 @@ data object
             };
         }
 
+        console.log('Calling getProfileData...');
         const profileResult = await shared.getProfileData(shared.loginData);
+        console.log('getProfileData result:', profileResult);
+        
         if (!profileResult.success) {
             if (profileResult.needRelogin) {
                 console.log('Token expired while getting profile, attempting to re-login');
@@ -364,6 +380,7 @@ data object
                 return profileResult;
             }
         }
+        console.log('getProfileWithRetry returning success result');
         return profileResult;
     },
 
@@ -416,7 +433,7 @@ data object
                 state: state,
                 usePopup: true, // Popup a window instead of jump to
                 isApp: true,
-                domain: 'https://gm3.joysteps.io/'
+                domain: 'https://9ijsflpfgm3.joysteps.io/'
             });
 
             fslAuthorization.signInV2();
@@ -528,6 +545,170 @@ data object
                 buttons: [{ id: 'my-id', type: 'default', text: 'OK' }],
             });
             await promise;
+        }
+    },
+
+    // New function to handle share story task completion (type = 5)
+    completeShareStoryTask: async (shareType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Complete share story task failed after 3 attempts');
+            return false;
+        }
+
+        try {
+            // First, get the task list to find available type = 5 tasks
+            const response = await fetch(`${shared.server_url}/api/app/taskList?token=${shared.loginData.token}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                if (data.code === 0) {
+                    // Find available type = 5 tasks that are not completed
+                    const availableShareTasks = data.data.filter(task => 
+                        task.type === 5 && 
+                        task.state === 0 && 
+                        task.endTime > Date.now()
+                    );
+
+                    if (availableShareTasks.length > 0) {
+                        // Complete the first available share task
+                        const taskToComplete = availableShareTasks[0];
+                        console.log('Completing share story task:', taskToComplete.id);
+                        
+                        const completeResponse = await fetch(
+                            `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${taskToComplete.id}&answerIndex=0`, 
+                            {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+
+                        if (completeResponse.ok) {
+                            const completeData = await completeResponse.json();
+                            
+                            if (completeData.code === 0) {
+                                console.log('Share story task completed successfully');
+                                // Refresh user profile to get updated rewards
+                                await shared.getProfileWithRetry();
+                                return true;
+                            } else if (completeData.code === 102001 || completeData.code === 102002) {
+                                console.log('Token expired, attempting to re-login');
+                                const result = await shared.login(shared.initData);
+                                if (result.success) {
+                                    return shared.completeShareStoryTask(shareType, depth + 1);
+                                }
+                            } else {
+                                console.error('Complete share story task failed:', completeData);
+                            }
+                        }
+                    } else {
+                        console.log('No available share story tasks found');
+                    }
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return shared.completeShareStoryTask(shareType, depth + 1);
+                    }
+                } else {
+                    console.error('Get task list failed:', data);
+                }
+            } else {
+                console.error('Get task list request failed:', response);
+            }
+        } catch (error) {
+            console.error('Error completing share story task:', error);
+        }
+        
+        return false;
+    },
+
+    // New function to handle coin flip game
+    flipCoin: async (isHeads, betAmount, allin = false, depth = 0) => {
+        if (depth > 3) {
+            console.error('Flip coin failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Flip coin params:', { head: isHeads, amount: betAmount, allin: allin });
+
+            // Thêm timeout 10 giây
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 giây
+
+            const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                signal: controller.signal // Thêm signal để có thể abort
+            });
+
+            clearTimeout(timeoutId); // Clear timeout nếu thành công
+
+            console.log('Flip coin Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Flip coin data:', data);
+
+                if (data.code === 0) {
+                    await shared.getProfileWithRetry();
+                    
+                    return {
+                        success: true,
+                        data: data.data,
+                        isWin: data.data.success,
+                        reward: data.data.reward
+                    };
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return shared.flipCoin(isHeads, betAmount, allin, depth + 1);
+                    } else {
+                        return {
+                            success: false,
+                            error: 'Token expired and re-login failed',
+                            data: data
+                        };
+                    }
+                } else {
+                    return {
+                        success: false,
+                        error: data.msg || 'Flip coin failed',
+                        data: data
+                    };
+                }
+            } else {
+                return {
+                    success: false,
+                    error: 'Flip coin request failed',
+                    data: null
+                };
+            }
+        } catch (error) {
+            // Xử lý timeout error
+            if (error.name === 'AbortError') {
+                return {
+                    success: false,
+                    error: 'Request timeout - server took too long to respond (10s)',
+                    data: null
+                };
+            }
+            
+            console.error('Flip coin error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
         }
     }
 

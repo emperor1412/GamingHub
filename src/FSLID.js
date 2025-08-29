@@ -155,7 +155,7 @@ const FSLID = () => {
             scope: 'basic,wallet,stepn', // Grant Scope
             state: state,
             usePopup: true, // Popup a window instead of jump to
-            isApp: true
+            isApp: true,
             // domain: 'https://gm3.joysteps.io/'
         });
 
