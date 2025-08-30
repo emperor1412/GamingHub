@@ -1215,7 +1215,7 @@ data object
             const token = refreshResult.loginData.token;
             
             // Open GameHubPayment in new tab
-            const gameHubUrl = `https://hoangdevgames.github.io/GameHubPayment/?source=gaminghub&userData=${encodedUserData}&token=${token}`;
+            const gameHubUrl = `https://gamehubpayment.netlify.app/?source=gaminghub&userData=${encodedUserData}&token=${token}`;
             
             console.log('🔗 Opening GameHubPayment URL:', gameHubUrl);
             
