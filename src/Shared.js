@@ -1214,27 +1214,18 @@ data object
             const encodedUserData = btoa(JSON.stringify(gameHubData));
             const token = refreshResult.loginData.token;
             
-            // Open GameHubPayment in new window/tab
+            // Open GameHubPayment in new tab
             const gameHubUrl = `https://hoangdevgames.github.io/GameHubPayment/?source=gaminghub&userData=${encodedUserData}&token=${token}`;
             
             console.log('🔗 Opening GameHubPayment URL:', gameHubUrl);
             
-            // Open in new window
-            const gameHubWindow = window.open(
-                gameHubUrl,
-                'GameHubPayment',
-                'width=1200,height=800,scrollbars=yes,resizable=yes'
-            );
+            // Open in new tab
+            window.open(gameHubUrl, '_blank');
             
-            if (gameHubWindow) {
-                console.log('✅ GameHubPayment opened successfully');
-                return {
-                    success: true,
-                    window: gameHubWindow
-                };
-            } else {
-                throw new Error('Failed to open GameHubPayment window');
-            }
+            console.log('✅ GameHubPayment opened in new tab');
+            return {
+                success: true
+            };
             
         } catch (error) {
             console.error('❌ Failed to open GameHubPayment:', error);
