@@ -11,6 +11,12 @@ import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
 import arrow_2 from './images/arrow_2.svg';
+import iconStreak1 from './images/Icon_streak_1_day.png';
+import iconStreak2 from './images/Icon_streak_2_day.png';
+import iconStreak5 from './images/Icon_streak_5_day.png';
+import bgStreak1 from './images/Bg_streak_1.png';
+import bgStreak2 from './images/Bg_streak_2.png';
+import bgStreak5 from './images/Bg_streak_5.png';
 
 // url: /app/buyOptions
 // Request:
@@ -91,6 +97,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
   const [monthlyOfferExpanded, setMonthlyOfferExpanded] = useState(true);
   const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
+  // Freeze Streak expansion state
+  const [freezeStreakExpanded, setFreezeStreakExpanded] = useState(true);
 
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
@@ -705,6 +713,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     );
   }
 
+  // Freeze streak assets mapping
+  const freezeAssets = {
+    1: { icon: iconStreak1, bg: bgStreak1 },
+    2: { icon: iconStreak2, bg: bgStreak2 },
+    5: { icon: iconStreak5, bg: bgStreak5 },
+  };
+
   return (
     <>
       <div className="background-container">
@@ -920,6 +935,69 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 
                 {activeTab === 'starlet' && (
                   <div className="mk-starlet-products-container">
+                    {/* Freeze Streak Section */}
+                    <div className="mk-market-section">
+                      <div
+                        className="mk-section-header"
+                        onClick={() => setFreezeStreakExpanded(!freezeStreakExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#00FFFF' }}
+                        >
+                          <span className="mk-section-title">FREEZE STREAK</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${freezeStreakExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${freezeStreakExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                          {[{days: 1, price: 5000}, {days: 2, price: 7500}, {days: 5, price: 10000}].map(item => {
+                            const assets = freezeAssets[item.days] || {};
+                            return (
+                              <button
+                                key={item.days}
+                                className={`mk-market-ticket-button mk-freeze-card`}
+                                onClick={() => {}}
+                                disabled
+                                aria-label={`Freeze Streak ${item.days} ${item.days === 1 ? 'Day' : 'Days'} - ${item.price.toLocaleString()} Starlets`}
+                              >
+                                <div
+                                  className="mk-market-ticket-button-image-container"
+                                  style={{
+                                    backgroundImage: assets.bg ? `url(${assets.bg})` : undefined,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                  }}
+                                >
+                                  <div className="mk-market-ticket-content">
+                                    <div className="mk-market-ticket-icon">
+                                      <img src={assets.icon || starlet} alt={`Freeze ${item.days} day icon`} />
+                                    </div>
+                                    <div className="mk-market-ticket-info">
+                                      <div className="mk-market-ticket-text">
+                                        <div className="mk-market-ticket-amount">FREEZE STREAK</div>
+                                        <div className="mk-market-ticket-label">{item.days} {item.days === 1 ? 'DAY' : 'DAYS'}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mk-market-ticket-price">
+                                    <span>{item.price.toLocaleString()}</span>
+                                    <img src={starlet} alt="Starlet" className="mk-freeze-price-icon" />
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="mk-starlet-grid">
                       {starletProducts.map((product) => {
                         const productInfo = getStarletProductInfo(product.prop);
