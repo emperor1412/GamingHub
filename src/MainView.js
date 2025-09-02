@@ -27,6 +27,8 @@ import dailyTasks from './images/one_shot.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
+import freezeBG from './images/FreezeStreaksBG.png';
+import freezeText from './images/FreezeStreaksText.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -860,6 +862,32 @@ Response:
             </header>
 
             <div className="scrollable-content">
+            {/* FREEZE STREAKS hero section */}
+            <section className="freeze-hero-section">
+                    <button
+                        className="freeze-hero"
+                        onClick={() =>
+                            trackUserAction(
+                                'freeze_streaks_clicked',
+                                {},
+                                shared.loginData?.link
+                            )
+                        }
+                    >
+                        <div className='freeze-hero-image-container'>
+                            <div
+                                className='freeze-hero-bg'
+                                style={{ backgroundImage: `url(${freezeBG})` }}
+                            />
+                            <img
+                                src={freezeText}
+                                alt="FREEZE STREAKS"
+                                className="freeze-hero-text"
+                            />
+                            <div className='freeze-hero-border'></div>
+                        </div>
+                    </button>
+                </section>
             <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
                         <div className='ticket-button-image-container'>

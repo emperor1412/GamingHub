@@ -45,6 +45,8 @@ import checkInAnimation from './images/check_in_animation_540.gif';
 
 import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
+import freezeBG from './images/FreezeStreaksBG.png';
+import freezeText from './images/FreezeStreaksText.png';
 
 import loading_background from "./images/GamesHubLoading.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
@@ -369,6 +371,8 @@ const bind_fslid = async () => {
       background,
       checkInAnimation,
       lock_icon,
+      freezeBG,
+      freezeText,
       // Add any other images you need to preload
     ];
 
