@@ -1,0 +1,310 @@
+.freeze-streak-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(5px);
+  transition: background-color 0.3s ease;
+}
+
+.freeze-streak-popup-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.freeze-streak-popup {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #00ffff;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  max-width: 90%;
+  width: 350px;
+  box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.freeze-streak-popup::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ffff, #00bfff, #0080ff, #00ffff);
+  border-radius: 22px;
+  z-index: -1;
+  animation: borderGlow 3s linear infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes hexagonPulse {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(0, 191, 255, 0.8);
+  }
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@keyframes purchasedGlow {
+  0%, 100% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+  }
+}
+
+@keyframes priceGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  }
+}
+
+.freeze-streak-icon-container {
+  position: relative;
+  margin-bottom: 30px;
+  text-align: center;
+  z-index: 1;
+}
+
+.freeze-streak-hexagon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  animation: hexagonPulse 2s ease-in-out infinite;
+}
+
+.freeze-streak-hexagon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0, 191, 255, 0.7);
+}
+
+.freeze-streak-hexagon::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(135deg, #00ffff 0%, #00bfff 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.freeze-streak-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  z-index: 1;
+  transition: all 0.3s ease;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.freeze-streak-icon:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1));
+}
+
+.freeze-streak-days {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  margin-top: 20px;
+  text-align: center;
+  z-index: 2;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  animation: textGlow 2s ease-in-out infinite;
+}
+
+.freeze-streak-days:hover {
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+.freeze-streak-purchased {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  text-align: center;
+  z-index: 2;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  animation: purchasedGlow 1.5s ease-in-out infinite;
+}
+
+.freeze-streak-price {
+  font-size: 18px;
+  color: #00ffff;
+  margin-bottom: 30px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  text-align: center;
+  z-index: 2;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  animation: priceGlow 2.5s ease-in-out infinite;
+}
+
+.freeze-streak-price:hover {
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+}
+
+.freeze-streak-back-button {
+  background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+  min-width: 200px;
+  display: block;
+  margin: 0 auto;
+  z-index: 2;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.freeze-streak-back-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.freeze-streak-back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+}
+
+.freeze-streak-back-button:hover::before {
+  left: 100%;
+}
+
+.freeze-streak-back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .freeze-streak-popup {
+    padding: 30px 20px;
+    width: 300px;
+  }
+  
+  .freeze-streak-hexagon {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .freeze-streak-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .freeze-streak-days {
+    font-size: 28px;
+  }
+  
+  .freeze-streak-purchased {
+    font-size: 20px;
+  }
+  
+  .freeze-streak-price {
+    font-size: 16px;
+  }
+  
+  .freeze-streak-back-button {
+    font-size: 16px;
+    padding: 12px 25px;
+    min-width: 180px;
+  }
+}

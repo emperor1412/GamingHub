@@ -17,6 +17,7 @@ import iconStreak5 from './images/Icon_streak_5_day.png';
 import bgStreak1 from './images/Bg_streak_1.png';
 import bgStreak2 from './images/Bg_streak_2.png';
 import bgStreak5 from './images/Bg_streak_5.png';
+import FreezeStreakPopup from './FreezeStreakPopup';
 
 // url: /app/buyOptions
 // Request:
@@ -99,6 +100,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
   // Freeze Streak expansion state
   const [freezeStreakExpanded, setFreezeStreakExpanded] = useState(true);
+  
+  // Freeze Streak popup states
+  const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
+  const [selectedFreezeStreakPackage, setSelectedFreezeStreakPackage] = useState(null);
 
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
@@ -720,6 +725,19 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     5: { icon: iconStreak5, bg: bgStreak5 },
   };
 
+  // Handle Freeze Streak package selection
+  const handleFreezeStreakClick = (streakPackage) => {
+    setSelectedFreezeStreakPackage(streakPackage);
+    setShowFreezeStreakPopup(true);
+  };
+
+  // Handle Freeze Streak purchase
+  const handleFreezeStreakPurchase = (streakPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Freeze Streak package:', streakPackage);
+    // You might want to call an API here to process the purchase
+  };
+
   return (
     <>
       <div className="background-container">
@@ -963,8 +981,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                               <button
                                 key={item.days}
                                 className={`mk-market-ticket-button mk-freeze-card`}
-                                onClick={() => {}}
-                                disabled
+                                onClick={() => handleFreezeStreakClick(item)}
                                 aria-label={`Freeze Streak ${item.days} ${item.days === 1 ? 'Day' : 'Days'} - ${item.price.toLocaleString()} Starlets`}
                               >
                                 <div
@@ -1125,6 +1142,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         setShowProfileView={setShowProfileView}
         setShowBuyView={setShowBuyView}
         onPurchaseComplete={() => setIsStarletPurchaseComplete(true)}
+      />
+      
+      {/* Freeze Streak Popup */}
+      <FreezeStreakPopup
+        isOpen={showFreezeStreakPopup}
+        onClose={() => setShowFreezeStreakPopup(false)}
+        selectedPackage={selectedFreezeStreakPackage}
+        onPurchase={handleFreezeStreakPurchase}
       />
     </>
   );
