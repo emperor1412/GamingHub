@@ -102,7 +102,7 @@
     right: -10px;
     width: 43px;
     height: 47px;
-    z-index: 1;
+    z-index: 0; /* below text */
 }
 
 /* Locked Sections */
@@ -304,8 +304,9 @@
     position: relative;
     width: 100%;
     border-radius: 16px;
-    overflow: hidden;
+    overflow: visible; /* do not clip text; clipping handled by bg layer */
     height: 190px; /* match previous card height for consistency */
+    isolation: isolate; /* create local stacking context for negative z */
 }
 
 /* Background layer for Freeze Streaks */
@@ -315,9 +316,12 @@
     left: 0;
     right: 0;
     bottom: 0;
+    border-radius: 16px; /* clip background to rounded corners */
+    overflow: hidden;
     /* Zoom-in, a bit more on vertical axis */
     background-size: 110% 130%;
     background-position: center;
+    z-index: -1; /* behind everything */
 }
 
 /* Text layer (PNG without background), centered and tight */
@@ -325,13 +329,14 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -49%) scale(1.30); /* larger and a hair higher */
+    transform: translate(-50%, -49%) scale(1.5); /* larger and a hair higher */
     height: 82%; /* closer to edges like the design */
     width: auto;
     margin: 0;
     object-fit: contain;
     padding: 0; /* remove vertical padding to eliminate gaps */
     pointer-events: none;
+    z-index: 10; /* ensure on top of border */
 }
 
 .freeze-hero-border {
@@ -341,8 +346,10 @@
     right: 0;
     bottom: 0;
     border-radius: 16px;
-    border: 2px solid #0000FF;
+    border: 0; /* avoid overlaying content */
+    box-shadow: inset 0 0 0 2px #0000FF; /* visual border inside without covering text */
     pointer-events: none;
+    z-index: 0; /* below text */
 }
 
 /* Hide WebKit scrollbars */
