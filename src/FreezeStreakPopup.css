@@ -1,3 +1,11 @@
+.freeze-streak-pay-button:hover .pay-text {
+  box-shadow: rgba(255, 0, 246, 0.7);
+}
+
+.freeze-streak-pay-button:active .pay-text {
+  box-shadow: rgba(255, 0, 246, 0.6);
+}
+
 .freeze-streak-popup-overlay {
   position: fixed;
   top: 70px;
@@ -13,18 +21,19 @@
 }
 
 .freeze-streak-popup {
-  background: #1a1a1a;
+  background: rgba(35, 31, 32, 0.8);
   border: none;
-  border-radius: 20px;
+  border-radius: 0;
   padding: 25px;
   text-align: center;
-  max-width: 90%;
-  width: 360px;
+  font-family: "PP Neue Machina", sans-serif;
+  max-width: 100%;
+  width: 100%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: slideIn 0.3s ease-out;
   position: relative;
   z-index: 1001;
-  margin-top: -20px;
+  margin-top: -15px;
 }
 
 /* Header section with tilted 1 DAY */
@@ -69,7 +78,7 @@
   color: white;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
   line-height: 0.8;
-  font-family: 'Arial Black', sans-serif;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
 .freeze-streak-day-text {
@@ -78,18 +87,10 @@
   color: white;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
   margin-top: -3px;
-  font-family: 'Arial Black', sans-serif;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
-/* Content area */
-.freeze-streak-content {
-  background: rgba(40, 40, 40, 0.9);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+
 
 .freeze-streak-title {
   font-size: 14px;
@@ -101,11 +102,32 @@
 
 .freeze-streak-message {
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 700;
   color: white;
   margin-bottom: 18px;
   line-height: 1.2;
-  font-family: 'Arial Black', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-top: -10px;
+}
+
+/* Three-line message parts */
+.freeze-line {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.freeze-line-top,
+.freeze-line-bottom {
+  font-size: 18px;
+  letter-spacing: 0.02em;
+}
+
+.freeze-line-mid {
+  font-size: 36px;
+  line-height: 1;
 }
 
 /* Freeze options */
@@ -134,46 +156,64 @@
 
 /* Pay button */
 .freeze-streak-pay-button {
-  background: linear-gradient(135deg, #ff6b9d 0%, #ff4d8d 100%);
+  background: transparent;
   border: none;
-  border-radius: 10px;
+  outline: none;
   color: white;
   font-size: 16px;
   font-weight: 900;
   padding: 12px 20px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.5);
+  box-shadow: none;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'Arial Black', sans-serif;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
 .freeze-streak-pay-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(255, 107, 157, 0.7);
 }
 
 .freeze-streak-pay-button:active {
   transform: translateY(0);
 }
 
+.freeze-streak-pay-button:focus,
+.freeze-streak-pay-button:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 .pay-text {
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 700;
+  background: #FF00F6;
+  color: #fff;
+  padding: 3px 6px;
+  line-height: 1;
+  display: inline-block;
+  box-shadow: 0 4px 12px rgba(255, 0, 246, 0.5);
+  gap: 10px;
 }
 
 .pay-amount {
-  font-size: 16px;
+  font-size: 35px;
   font-weight: 700;
+  letter-spacing: 0.01em;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-right: 10px;
 }
 
 .pay-icon {
-  font-size: 14px;
-  color: #ffd700;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
 }
 
 /* Action buttons */
@@ -183,26 +223,36 @@
   gap: 10px;
 }
 
-.freeze-streak-no-thanks,
-.freeze-streak-yes {
-  background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
+.freeze-streak-no-thanks {
+  background: #000FEF;
   border: none;
-  border-radius: 10px;
+  border-radius: 30px;
   color: white;
-  font-size: 15px;
-  font-weight: 900;
-  padding: 10px 18px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0, 191, 255, 0.4);
-  min-width: 110px;
-  font-family: 'Arial Black', sans-serif;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 16px; /* spacing between the two buttons */
+  margin-top: -10px;
+  padding: 4px 14px; /* smaller padding */
+  line-height: 1;    /* tighter content height */
+}
+
+.freeze-streak-yes {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 8px 18px; /* reduced vertical height */
+  line-height: 1;    /* tighter content height */
 }
 
 .freeze-streak-no-thanks:hover,
 .freeze-streak-yes:hover {
   transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(0, 191, 255, 0.6);
+  box-shadow: 0 5px 15px rgba(0, 15, 239, 0.6);
 }
 
 .freeze-streak-no-thanks:active,
@@ -234,8 +284,8 @@
 /* Responsive design */
 @media (max-width: 480px) {
   .freeze-streak-popup {
-    padding: 20px;
-    width: 320px;
+    padding: 16px;
+    width: 100%;
   }
   
   .freeze-streak-hexagon {
@@ -257,22 +307,83 @@
   }
   
   .freeze-streak-content {
-    padding: 18px;
+    padding: 12px;
   }
   
   .freeze-streak-message {
     font-size: 16px;
+    margin-bottom: 0px;
+  }
+
+  .freeze-line-top,
+  .freeze-line-bottom {
+    font-size: 14px;
+  }
+
+  .freeze-line-mid {
+    font-size: 28px;
   }
   
   .freeze-streak-pay-button {
     padding: 10px 18px;
+    gap: 12px;
   }
   
   .pay-text {
-    font-size: 16px;
+    font-size: 20px;
   }
   
   .pay-amount {
-    font-size: 14px;
+    font-size: 20px;
+  }
+
+  .pay-icon {
+    margin-left: -15px;
+  }
+
+  /* Three-icon header (mobile) */
+  .freeze-streak-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .freeze-pop-icon {
+    height: 210px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+    margin-top: -15px;
+  }
+
+  /* Reduce header bottom spacing */
+  .freeze-streak-header {
+    margin-bottom: 0;
+  }
+
+  /* Options list compaction */
+  .freeze-streak-options {
+    margin-bottom: 0;
+  }
+  .freeze-option {
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 4px 0;
+  }
+
+  /* Action buttons compaction */
+  .freeze-streak-actions {
+    gap: 8px;
+  }
+  .freeze-streak-no-thanks{
+    font-size: 20px;
+    padding: 7px 14px;
+  }
+
+  .freeze-streak-yes {
+    font-size: 26px;
+    padding: 8px 16px;
   }
 }
