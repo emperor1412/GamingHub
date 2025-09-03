@@ -24,38 +24,69 @@ const FreezeStreakPopup = ({
     onClose();
   };
 
-  const handleBackToMarket = () => {
+  const handleNoThanks = () => {
+    onClose();
+  };
+
+  const handleYes = () => {
+    onPurchase(selectedPackage);
     onClose();
   };
 
   return (
     <div className="freeze-streak-popup-overlay" onClick={onClose}>
       <div className="freeze-streak-popup" onClick={(e) => e.stopPropagation()}>
-        <div className="freeze-streak-icon-container">
+        {/* Header with tilted 1 DAY */}
+        <div className="freeze-streak-header">
           <div className="freeze-streak-hexagon">
             <img 
               src={freezeAssets[selectedPackage.days]?.icon || iconStreak1} 
               alt={`Freeze ${selectedPackage.days} day icon`}
-              className="freeze-streak-icon"
+              className="freeze-streak-snowflake"
             />
           </div>
-          <div className="freeze-streak-days">{selectedPackage.days} {selectedPackage.days === 1 ? 'DAY' : 'DAYS'}</div>
+          <div className="freeze-streak-day-display">
+            <div className="freeze-streak-number">{selectedPackage.days}</div>
+            <div className="freeze-streak-day-text">DAY</div>
+          </div>
         </div>
         
-        <div className="freeze-streak-purchased">
-          PURCHASED +1
+        {/* Content area */}
+        <div className="freeze-streak-content">
+          <div className="freeze-streak-title">FREEZE STR</div>
+          <div className="freeze-streak-message">
+            PROTECT YOUR {selectedPackage.days} DAY STREAK
+          </div>
+          
+          {/* Freeze options */}
+          <div className="freeze-streak-options">
+            <div className="freeze-option">
+              <div className="freeze-option-icon">❄️</div>
+              <div className="freeze-option-text">FREEZE {selectedPackage.days} DAY</div>
+            </div>
+            <div className="freeze-option">
+              <div className="freeze-option-icon">❄️</div>
+              <div className="freeze-option-text">FREEZE {selectedPackage.days * 2} DAYS</div>
+            </div>
+          </div>
+          
+          {/* Pay button */}
+          <button className="freeze-streak-pay-button" onClick={handlePurchase}>
+            <span className="pay-text">PAY</span>
+            <span className="pay-amount">{selectedPackage.price.toLocaleString()}</span>
+            <span className="pay-icon">⭐</span>
+          </button>
         </div>
         
-        <div className="freeze-streak-price">
-          {selectedPackage.price.toLocaleString()} Starlets
+        {/* Action buttons */}
+        <div className="freeze-streak-actions">
+          <button className="freeze-streak-no-thanks" onClick={handleNoThanks}>
+            NO THANKS
+          </button>
+          <button className="freeze-streak-yes" onClick={handleYes}>
+            YES
+          </button>
         </div>
-        
-        <button 
-          className="freeze-streak-back-button"
-          onClick={handleBackToMarket}
-        >
-          BACK TO MARKET
-        </button>
       </div>
     </div>
   );

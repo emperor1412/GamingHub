@@ -467,6 +467,11 @@ body.mk-market-open {
   overflow: visible;
 }
 
+
+.mk-freeze-card .mk-market-ticket-content {
+  background: transparent !important;
+}
+
 .mk-freeze-card:disabled {
   /* Do not dim disabled freeze cards */
   opacity: 1;
@@ -487,13 +492,13 @@ body.mk-market-open {
   transform: translateY(0);
 }
 
-.mk-freeze-card .mk-market-ticket-content {
+/* .mk-freeze-card .mk-market-ticket-content {
   background: linear-gradient(
     225deg,
     rgba(0, 255, 255, 0.35) 0%,
     rgba(0, 15, 239, 0.0) 66%
   );
-}
+} */
 
 .mk-freeze-card .mk-market-ticket-amount {
   font-size: 16px; /* small title FREEZE STREAK */
@@ -571,7 +576,7 @@ body.mk-market-open {
 .mk-market-ticket-bonus-corner {
   position: absolute;
   z-index: 10;
-  background: blue;
+  background: rgb(28, 28, 219);
   /* border: 1px solid #0000FF; */
   padding: 2px 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -609,12 +614,6 @@ body.mk-market-open {
   min-height: 55px;
   backdrop-filter: blur(5px);
   position: relative;
-  background: linear-gradient(
-    225deg, /* hướng để màu nằm ở góc phải trên */
-    rgba(0, 15, 239, 1) 0%, 
-    rgba(0, 15, 239, 0) 66%
-  );
-
 }
 
 .mk-market-ticket-icon {
