@@ -284,8 +284,7 @@
 /* Responsive design */
 @media (max-width: 480px) {
   .freeze-streak-popup {
-    padding: 16px;
-    width: 100%;
+    width: 120%;
   }
   
   .freeze-streak-hexagon {
@@ -355,7 +354,7 @@
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
-    margin-top: -15px;
+    margin-top: -28px;
   }
 
   /* Reduce header bottom spacing */
