@@ -847,17 +847,19 @@ body.mk-market-open {
 
 /* Ensure tab container allows scrolling for starlet tab */
 .mk-market-tab-container[data-active-tab="starlet"] {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  /* Let parent .mk-scrollable-market-content handle scrolling like Telegram tab */
+  overflow: visible;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: auto;
   height: auto;
   min-height: 400px;
 }
 
 /* When starlet tab is active, ensure proper scrolling */
 .mk-market-tab-container[data-active-tab="starlet"] .mk-scrollable-market-content {
-  overflow: visible;
-  height: auto;
+  /* keep default behavior from .mk-scrollable-market-content */
+  overflow-y: auto;
+  height: fit-content;
   min-height: 0;
 }
 
@@ -867,22 +869,20 @@ body.mk-market-open {
   flex-direction: column;
   height: auto;
   min-height: 400px;
-  overflow: hidden;
+  overflow: visible; /* allow content to flow like Telegram tab */
 }
 
 /* Ensure starlet tab content can scroll properly */
 .mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  flex: 1;
+  /* Remove inner scrolling; delegate to parent scroll */
+  overflow: visible;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: auto;
+  flex: initial;
   height: auto;
-  min-height: 400px;
-  max-height: 70vh;
+  min-height: auto;
+  max-height: none;
   padding-bottom: 20px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 .mk-market-tab-container[data-active-tab="starlet"] .mk-starlet-products-container::-webkit-scrollbar {
@@ -892,12 +892,10 @@ body.mk-market-open {
 /* Ensure proper touch scrolling for starlet tab */
 .mk-market-tab-container[data-active-tab="starlet"] {
   touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: auto;
   position: relative;
   z-index: 1;
-  will-change: scroll-position;
-  transform: translateZ(0);
 }
 
 .mk-scrollable-market-content {
@@ -1028,9 +1026,10 @@ body.mk-market-open::-webkit-scrollbar {
 /* Starlet Products Container */
 .mk-starlet-products-container {
   width: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  /* No inner scroll; parent handles it */
+  overflow: visible;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: auto;
   min-height: 400px;
 }
 
