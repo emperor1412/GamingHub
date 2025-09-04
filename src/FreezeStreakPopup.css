@@ -435,10 +435,10 @@
   --mk-corner-border: 0.3px;           /* border thickness */
 
   /* Per-side offsets so you can tweak position easily */
-  --mk-corner-offset-top: 10px;
+  --mk-corner-offset-top: 25px;
   --mk-corner-offset-right: 20px;
   /* Ensure vertical span between top and bottom corners is exactly 330px */
-  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 180px);
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 240px);
   --mk-corner-offset-left: 20px;
 }
 
