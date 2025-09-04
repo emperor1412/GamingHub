@@ -966,7 +966,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                         // 4. Not enough starlets
                         else if (userStarlets < product.starlet) {
                           isDisabled = true;
-                          disabledReason = 'NOT ENOUGH STARLETS';
+                          disabledReason = product.starlet.toString();
                         }
                         // 5. Limit reached
                         else if (product.purchasedQuantity >= product.limitNum) {
