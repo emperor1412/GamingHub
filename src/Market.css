@@ -91,12 +91,12 @@ body.mk-market-open {
 
 .mk-market-title {
   text-align: center;
-  font-size: clamp(72px, 15vw, 90px);
+  font-size: clamp(62px, 13vw, 80px);
   font-weight: 700;
   font-family: "PP Neue Machina";
   color: white;
   text-transform: uppercase;
-  margin-top: 65px;
+  margin-top: 55px;
   padding: 0 28px;
   width: 100%;
   max-width: 100%;
@@ -157,11 +157,11 @@ body.mk-market-open {
 }
 
 .mk-fsl-connect-section {
-  background: rgba(0, 255, 255, 0.1);
   border-radius: 12px;
   padding: 12px;
-  margin: 16px 26px 0px;
+  margin: -25px 26px 0px;
   width: auto;
+  position: relative;
 }
 
 .mk-fsl-connect-content {
@@ -173,7 +173,7 @@ body.mk-market-open {
 .mk-lock-icon {
   font-size: 24px;
   color: #00ffff;
-  background: rgba(0, 255, 255, 0.2);
+  background: transparent;
   width: 40px;
   height: 40px;
   display: flex;
@@ -182,19 +182,48 @@ body.mk-market-open {
   border-radius: 50%;
 }
 
+/* Size the FSL ID icon image within the circular container */
+.mk-lock-icon img {
+  width: 160%;
+  height: 160%;
+  object-fit: contain;
+  display: block;
+  margin-right: -30px;
+}
+
 .mk-fsl-text {
   flex: 1;
 }
 
 .mk-connect-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15.5px;
+  font-weight: 700;
   margin-bottom: 4px;
+  text-align: center;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
 }
 
 .mk-connect-subtitle {
-  font-size: 12px;
+  margin-top: -5px;
+  font-size: 10px;
   opacity: 0.8;
+  text-align: center;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
+}
+
+/* Secondary line styling for FSL connect subtitle */
+.mk-connect-subtitle-secondary {
+
+  opacity: 1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-top: -3px;
+  text-align: center;
+  color: #00FF00;
+  font-family: "PP Neue Machina";
+  text-transform: uppercase;
 }
 
 /* REMOVED OLD CSS - Using new Frens.js layout instead */
@@ -220,10 +249,8 @@ body.mk-market-open {
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-  /* Remove margin since container handles padding */
   margin-left: 0;
   margin-right: 0;
-  /* Ensure proper border styling */
   box-sizing: border-box;
 }
 
@@ -1001,7 +1028,6 @@ body.mk-market-open::-webkit-scrollbar {
 /* Starlet Products Container */
 .mk-starlet-products-container {
   width: 100%;
-  padding: 16px 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -1010,7 +1036,7 @@ body.mk-market-open::-webkit-scrollbar {
 
 /* Starlet tab specific grid gap */
 .mk-starlet-products-container .mk-starlet-grid {
-  gap: 24px 16px; /* 24px row gap, 16px column gap for starlet tab */
+  gap: 15px 13px; /* 24px row gap, 16px column gap for starlet tab */
 }
 
 /* Ensure starlet tab content can scroll properly */

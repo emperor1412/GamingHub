@@ -18,6 +18,7 @@ import bgStreak1 from './images/Bg_streak_1.png';
 import bgStreak2 from './images/Bg_streak_2.png';
 import bgStreak5 from './images/Bg_streak_5.png';
 import FreezeStreakPopup from './FreezeStreakPopup';
+import fslidIcon from './images/FSLID-ICON.png';
 
 // url: /app/buyOptions
 // Request:
@@ -788,11 +789,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
           {!shared.userProfile?.fslId && (
             <div className="mk-fsl-connect-section" onClick={handleConnectFSLID}>
+              {/* Corner border element */}
+              <div className="mk-corner mk-top-left"></div>
+              <div className="mk-corner mk-top-right"></div>
+              <div className="mk-corner mk-bottom-left"></div>
+              <div className="mk-corner mk-bottom-right"></div>
               <div className="mk-fsl-connect-content">
-                <div className="mk-lock-icon">🔒</div>
+                <div className="mk-lock-icon"><img src={fslidIcon} alt="FSL ID" /></div>
                 <div className="mk-fsl-text">
                   <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
+                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN</div>
+                  <div className="mk-connect-subtitle mk-connect-subtitle-secondary">CLAIM 10 FREE STARLETS DAILY!</div>
                 </div>
               </div>
             </div>
