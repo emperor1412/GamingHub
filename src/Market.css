@@ -1035,7 +1035,8 @@ body.mk-market-open::-webkit-scrollbar {
 
 /* Starlet tab specific grid gap */
 .mk-starlet-products-container .mk-starlet-grid {
-  gap: 15px 13px; /* 24px row gap, 16px column gap for starlet tab */
+  /* Match Telegram tab grid gap */
+  gap: 12px;
 }
 
 /* Ensure starlet tab content can scroll properly */
@@ -1054,10 +1055,10 @@ body.mk-market-open::-webkit-scrollbar {
 }
 
 .mk-starlet-product {
-  /* Allow overflow for oversized icons */
-  overflow: visible !important;
+  /* Align with standard ticket card sizing (no forced aspect ratio) */
+  overflow: visible;
   position: relative;
-  aspect-ratio: 160/94;
+  aspect-ratio: auto;
   width: 100%;
 }
 
@@ -1114,20 +1115,18 @@ body.mk-market-open::-webkit-scrollbar {
 }
 
 .mk-starlet-product .mk-market-ticket-content {
-  overflow: visible !important;
+  /* Use standard overflow behavior from .mk-market-ticket-content */
+  overflow: hidden;
 }
 
-/* Oversized icon for starlet products */
+/* Align starlet product icon sizing with standard ticket card */
 .mk-starlet-product .mk-market-ticket-icon {
-  width: 60%;
-  height: 60%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2.4);
-  z-index: 2;
+  width: 35%;
+  height: 100%;
+  position: relative;
+  transform: none;
+  z-index: 1;
   overflow: visible;
-  pointer-events: none;
 }
 
 .mk-starlet-product .mk-market-ticket-icon img {
@@ -1135,8 +1134,8 @@ body.mk-market-open::-webkit-scrollbar {
   height: 100%;
   object-fit: contain;
   position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  z-index: 1;
+  filter: none;
 }
 
 /* Ensure text content has higher z-index than icon */
