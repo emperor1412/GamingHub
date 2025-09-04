@@ -115,11 +115,11 @@ const FreezeStreakPopup = ({
 
             {/* Pay button */}
             {!confirmed && (
-              <button className="freeze-streak-pay-button" onClick={handlePurchase}>
+              <div className="freeze-streak-pay-button">
                 <span className="pay-text">PAY</span>
                 <span className="pay-amount">{selectedPackage.price.toLocaleString()}</span>
                 <img className="pay-icon" src={starletIcon} alt="Starlets" />
-              </button>
+              </div>
             )}
           </div>
         </div>

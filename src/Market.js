@@ -105,6 +105,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
   const [selectedFreezeStreakPackage, setSelectedFreezeStreakPackage] = useState(null);
 
+  // If navigated from Home with a target tab instruction, switch tabs (no popup)
+  useEffect(() => {
+    if (shared.marketTargetTab) {
+      setActiveTab(shared.marketTargetTab);
+      delete shared.marketTargetTab;
+    }
+  }, []);
+
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
     // Add class when component mounts

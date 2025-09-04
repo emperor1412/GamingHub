@@ -866,13 +866,22 @@ Response:
             <section className="freeze-hero-section">
                     <button
                         className="freeze-hero"
-                        onClick={() =>
+                        onClick={() => {
+                            // Track click
                             trackUserAction(
                                 'freeze_streaks_clicked',
                                 {},
                                 shared.loginData?.link
-                            )
-                        }
+                            );
+
+                            // Instruct Market to switch to Starlet tab (no popup)
+                            shared.marketTargetTab = 'starlet';
+
+                            // Navigate to Market tab
+                            if (typeof shared.setActiveTab === 'function') {
+                                shared.setActiveTab('market');
+                            }
+                        }}
                     >
                         <div className='freeze-hero-image-container'>
                             <div
