@@ -126,12 +126,12 @@
 
 .freeze-line-top,
 .freeze-line-bottom {
-  font-size: 22px;
+  font-size: 32px;
   letter-spacing: 0.02em;
 }
 
 .freeze-line-mid {
-  font-size: 48px;
+  font-size: 64px;
   line-height: 1;
 }
 
@@ -214,7 +214,7 @@
 }
 
 .pay-amount {
-  font-size: 35px;
+  font-size: 50px;
   font-weight: 700;
   letter-spacing: 0.01em;
   font-family: "PP Neue Machina", sans-serif;
@@ -222,8 +222,8 @@
 }
 
 .pay-icon {
-  width: 18px;
-  height: 18px;
+  width: 36px;
+  height: 36px;
   display: inline-block;
   object-fit: contain;
   vertical-align: middle;
@@ -350,11 +350,11 @@
 
   .freeze-line-top,
   .freeze-line-bottom {
-    font-size: 18px;
+    font-size: 26px;
   }
 
   .freeze-line-mid {
-    font-size: 36px;
+    font-size: 30px;
   }
 
   /* Purchased message on mobile */
@@ -365,16 +365,17 @@
   .freeze-streak-pay-button {
     padding: 10px 18px;
     gap: 12px;
+    margin-bottom: 20px;
   }
   
   .pay-text {
     margin-left: -60px;
-    font-size: 20px;
+    font-size: 36px;
   }
   
   .pay-amount {
     margin-left: -5px;
-    font-size: 20px;
+    font-size: 32px;
   }
 
   .pay-icon {
@@ -382,7 +383,7 @@
   }
 
   .freeze-pop-icon {
-    height: 210px;
+    height: 260px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
@@ -409,15 +410,15 @@
     gap: 8px;
   }
   .freeze-streak-no-thanks{
-    margin-bottom: 10px; /* spacing between the two buttons */
-    font-size: 20px;
-    padding: 7px 14px;
+    margin-bottom: 20px; /* spacing between the two buttons */
+    font-size: 24px;
+    padding: 10px 16px;
   }
 
   .freeze-streak-yes {
-    margin-bottom: 50px; /* spacing between the two buttons */
+    margin-bottom: 40px; /* spacing between the two buttons */
     font-size: 26px;
-    padding: 8px 16px;
+    padding: 10px 16px;
   }
 
   /* Back button font on mobile */
@@ -438,7 +439,7 @@
   --mk-corner-offset-top: 25px;
   --mk-corner-offset-right: 20px;
   /* Ensure vertical span between top and bottom corners is exactly 330px */
-  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 240px);
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 220px);
   --mk-corner-offset-left: 20px;
 }
 
