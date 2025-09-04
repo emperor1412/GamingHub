@@ -24,6 +24,9 @@
   background: rgba(35, 31, 32, 0.8);
   border: none;
   border-radius: 0;
+  /* Make popup a vertical flex container so actions can sit at the bottom */
+  display: flex;
+  flex-direction: column;
   padding: 25px;
   text-align: center;
   font-family: "PP Neue Machina", sans-serif;
@@ -39,12 +42,11 @@
 /* Header section with tilted 1 DAY */
 .freeze-streak-header {
   position: relative;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
 }
+
 
 .freeze-streak-hexagon {
   width: 70px;
@@ -121,13 +123,21 @@
 
 .freeze-line-top,
 .freeze-line-bottom {
-  font-size: 18px;
+  font-size: 22px;
   letter-spacing: 0.02em;
 }
 
 .freeze-line-mid {
-  font-size: 36px;
+  font-size: 48px;
   line-height: 1;
+}
+
+/* Purchased state message */
+.freeze-purchased-text {
+  /* Adjust these as needed */
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 /* Freeze options */
@@ -221,6 +231,21 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Push actions to the bottom of the popup */
+  margin-top: auto;
+}
+
+/* In confirmed state, push header+content down instead, keep actions at very bottom */
+.freeze-streak-body { 
+  display: flex;
+  flex-direction: column;
+}
+.freeze-streak-popup.confirmed .freeze-streak-body {
+  margin-top: auto;       /* push body (icon + text) down */
+  margin-bottom: 50px;    /* small gap above actions */
+}
+.freeze-streak-popup.confirmed .freeze-streak-actions {
+  margin-top: 50px; /* small gap below content */
 }
 
 .freeze-streak-no-thanks {
@@ -247,6 +272,12 @@
   font-family: "PP Neue Machina", sans-serif;
   padding: 8px 18px; /* reduced vertical height */
   line-height: 1;    /* tighter content height */
+}
+
+/* Back to Market button modifier */
+.freeze-back-button {
+  /* Adjust these as needed */
+  font-size: 26px;
 }
 
 .freeze-streak-no-thanks:hover,
@@ -284,7 +315,7 @@
 /* Responsive design */
 @media (max-width: 480px) {
   .freeze-streak-popup {
-    width: 120%;
+    width: 100%;  
   }
   
   .freeze-streak-hexagon {
@@ -316,10 +347,15 @@
 
   .freeze-line-top,
   .freeze-line-bottom {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .freeze-line-mid {
+    font-size: 36px;
+  }
+
+  /* Purchased message on mobile */
+  .freeze-purchased-text {
     font-size: 28px;
   }
   
@@ -338,15 +374,6 @@
 
   .pay-icon {
     margin-left: -15px;
-  }
-
-  /* Three-icon header (mobile) */
-  .freeze-streak-icons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 6px;
   }
 
   .freeze-pop-icon {
@@ -385,4 +412,58 @@
     font-size: 26px;
     padding: 8px 16px;
   }
+
+  /* Back button font on mobile */
+  .freeze-back-button {
+    font-size: 24px;
+  }
+}
+
+/* Corner borders for FreezeStreakPopup */
+.freeze-streak-popup {
+  /* Customizable variables for corner decoration */
+  --mk-corner-size: 7px;              /* corner box size */
+  --mk-corner-color: #ffffff;          /* border color */
+  --mk-corner-border: 0.3px;           /* border thickness */
+
+  /* Per-side offsets so you can tweak position easily */
+  --mk-corner-offset-top: 10px;
+  --mk-corner-offset-right: 20px;
+  --mk-corner-offset-bottom: 240px;
+  --mk-corner-offset-left: 20px;
+}
+
+.freeze-streak-popup .mk-corner {
+  position: absolute;
+  width: var(--mk-corner-size);
+  height: var(--mk-corner-size);
+  z-index: 5; /* above content background */
+}
+
+.freeze-streak-popup .mk-top-left {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-top-right {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-bottom-left {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-bottom-right {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
 }
