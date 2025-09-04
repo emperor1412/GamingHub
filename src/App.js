@@ -614,7 +614,6 @@ const bind_fslid = async () => {
               <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
                 <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
               </button>
-
               <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
                 <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
               </button>
@@ -705,7 +704,6 @@ const bind_fslid = async () => {
             <button onClick={() => setActiveTab('tasks')} className={activeTab === 'tasks' ? 'active' : ''}>
               <img src={activeTab === 'tasks' ? Task_selected : Task_normal} alt="Tasks" />
             </button>
-
             <button onClick={() => setActiveTab('frens')} className={activeTab === 'frens' ? 'active' : ''}>
               <img src={activeTab === 'frens' ? Friends_selected : Friends_normal} alt="Friends" />
             </button>

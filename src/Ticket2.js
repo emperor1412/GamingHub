@@ -68,9 +68,9 @@ Response:
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
 
-            shareStory(url, {
-                text: 'I just scratched a ticket and claimed a reward!',
-            });
+            // shareStory(url, {
+            //     text: 'I just scratched a ticket and claimed a reward!',
+            //   });
 
             trackStoryShare('ticket', {
                 reward_claimed: true,
