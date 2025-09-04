@@ -1214,15 +1214,15 @@ data object
             const encodedUserData = btoa(JSON.stringify(gameHubData));
             const token = refreshResult.loginData.token;
             
-            // Open GameHubPayment in new tab
+            // Open GameHubPayment in external browser
             const gameHubUrl = `https://gamehubpayment.netlify.app/?source=gaminghub&userData=${encodedUserData}&token=${token}`;
             
             console.log('🔗 Opening GameHubPayment URL:', gameHubUrl);
             
-            // Open in new tab
-            window.open(gameHubUrl, '_blank');
+            // Use external browser (same as FSL ID)
+            shared.openExternalLinkWithFallback(gameHubUrl);
             
-            console.log('✅ GameHubPayment opened in new tab');
+            console.log('✅ GameHubPayment opened in external browser');
             return {
                 success: true
             };
