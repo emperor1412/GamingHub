@@ -101,6 +101,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
   // Freeze Streak expansion state
   const [freezeStreakExpanded, setFreezeStreakExpanded] = useState(true);
+  // Merch Coupon expansion state
+  const [merchCouponExpanded, setMerchCouponExpanded] = useState(true);
   
   // Freeze Streak popup states
   const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
@@ -1047,7 +1049,28 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                       </div>
                     </div>
 
-                    <div className="mk-starlet-grid">
+                    {/* Merch Coupon Section */}
+                    <div className="mk-market-section">
+                      <div
+                        className="mk-section-header"
+                        onClick={() => setMerchCouponExpanded(!merchCouponExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#FF00F6' }}
+                        >
+                          <span className="mk-section-title">MERCH COUPON</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${merchCouponExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${merchCouponExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
                       {starletProducts.map((product) => {
                         const productInfo = getStarletProductInfo(product);
                         const hasFSLID = !!shared.userProfile?.fslId;
@@ -1076,7 +1099,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                         // 4. Not enough starlets
                         else if (userStarlets < product.starlet) {
                           isDisabled = true;
-                          disabledReason = 'NOT ENOUGH STARLETS';
+                          disabledReason = product.starlet.toLocaleString() + ' STARLETS';
                         }
                         // 5. Limit reached
                         else if (product.purchasedQuantity >= product.limitNum) {
@@ -1147,11 +1170,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                       {starletProducts.length === 0 && (
                         <div className="mk-starlet-packages-placeholder">
                           <div className="mk-placeholder-content">
-                            <div className="mk-placeholder-text">STARLET PACKAGES</div>
+                            <div className="mk-placeholder-text">MERCH COUPON</div>
                             <div className="mk-placeholder-subtext">No products available</div>
                           </div>
                         </div>
                       )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
