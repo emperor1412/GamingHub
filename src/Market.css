@@ -488,17 +488,7 @@ body.mk-market-open {
   margin-bottom: 0px;
 }
 
-/* Freeze Streak specific card styles */
-.mk-freeze-card {
-  /* Keep same structure but treat as purchasable look even if disabled */
-  overflow: visible;
-}
-
-
-.mk-freeze-card .mk-market-ticket-content {
-  background: transparent !important;
-}
-
+/* Freeze Streak specific card styles - inherit sizing from mk-starlet-product */
 .mk-freeze-card:disabled {
   /* Do not dim disabled freeze cards */
   opacity: 1;
@@ -507,36 +497,20 @@ body.mk-market-open {
 
 .mk-freeze-card:not(:disabled) {
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.mk-freeze-card:not(:disabled):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3);
-}
-
-.mk-freeze-card:not(:disabled):active {
-  transform: translateY(0);
-}
-
-/* .mk-freeze-card .mk-market-ticket-content {
-  background: linear-gradient(
-    225deg,
-    rgba(0, 255, 255, 0.35) 0%,
-    rgba(0, 15, 239, 0.0) 66%
-  );
-} */
-
+/* Freeze card specific styling - only override layout, inherit sizing from mk-starlet-product */
 .mk-freeze-card .mk-market-ticket-amount {
-  font-size: 16px; /* small title FREEZE STREAK */
+  font-size: 16px;
   letter-spacing: 0.02em;
   font-weight: 600;
 }
 
 .mk-freeze-card .mk-market-ticket-label {
-  font-size: 20px; /* big 1 DAY / 2 DAYS */
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.04;
+  margin-top: 2px;
 }
 
 .mk-freeze-card .mk-market-ticket-price {
@@ -544,60 +518,24 @@ body.mk-market-open {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  background: #0000FF; /* ensure bright blue strip */
+  background: #0000FF;
   font-family: "PP Neue Machina";
-  font-size: 16px; /* thinner */
+  font-size: 16px;
   font-weight: 600;
-  line-height: 0;        /* tighten vertical metrics */
-  padding-block: 0px;    /* slight vertical padding to reduce height */
-  min-height: 20px;         /* override global min-height */
-  height: auto;          /* prevent extra vertical space */
+  line-height: 0;
+  padding-block: 0px;
+  min-height: 20px;
+  height: auto;
 }
 
 .mk-freeze-price-icon {
-  width: 12px;  /* thinner */
+  width: 12px;
   height: 12px;
   object-fit: contain;
 }
 
-/* Icon/text layout tweaks for Freeze cards */
-.mk-freeze-card .mk-market-ticket-icon {
-  width: 36%; /* enlarge icon area */
-}
-
-/* Special styling for streak icons - larger size and top layer */
 .mk-freeze-card .mk-market-ticket-icon img {
-  transform: scale(1.7); /* Additional scale factor */
-}
-
-.mk-freeze-card .mk-market-ticket-info {
-  width: 64%; /* adjust to accommodate larger icon */
-  padding-left: 6px;
-  min-width: 0; /* allow flex to shrink without wrapping early */
-}
-
-.mk-freeze-card .mk-market-ticket-text {
-  display: flex;
-  flex-direction: column;
-  /* gap: 2px; precise space between title and day(s) */
-}
-
-/* Reduce overall content block height just for Freeze cards */
-.mk-freeze-card .mk-market-ticket-content {
-  padding: 6px;  /* tighter than default 8px */
-  gap: 6px;      /* tighter than default 8px */
-  min-height: 48px; /* lower than default 55px */
-}
-
-/* Remove inherited margins and set explicit spacing */
-.mk-freeze-card .mk-market-ticket-amount {
-  margin: 0;           /* reset */
-  /* margin-bottom: 2px;  fine spacing above N DAYS */
-}
-
-.mk-freeze-card .mk-market-ticket-label {
-  margin: 0; /* reset any inherited margins */
-  white-space: nowrap; /* keep '2 DAYS' and '5 DAYS' on one line */
+  transform: scale(1.8);
 }
 
 .mk-market-ticket-bonus-corner {
