@@ -1047,12 +1047,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               let disabledReason = '';
                               
                               // 1. FSL ID not connected
-                              if (!hasFSLID) {
-                                isDisabled = true;
-                                disabledReason = 'FSL ID NOT CONNECTED';
-                              }
-                              // 2. Level requirement (Level 10)
-                              else if (userLevel < 10) {
+                               if (userLevel < 10) {
                                 isDisabled = true;
                                 disabledReason = 'LEVEL 10 REQUIRED';
                               }
@@ -1078,7 +1073,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 <button 
                                   key={product.id}
                                   className={`mk-market-ticket-button mk-freeze-card ${!isAvailable ? 'sold-out' : ''}`}
-                                  onClick={() => isAvailable && handleStarletProductPurchase(product)}
+                                  onClick={() => isAvailable && handleFreezeStreakClick({days: parseInt(product.name), price: product.starlet})}
                                   disabled={!isAvailable}
                                 >
                                   <div 

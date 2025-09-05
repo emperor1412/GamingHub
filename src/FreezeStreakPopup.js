@@ -105,7 +105,7 @@ const FreezeStreakPopup = ({
               {!confirmed ? (
                 <>
                   <div className="freeze-line freeze-line-top">PROTECT YOUR</div>
-                  <div className="freeze-line freeze-line-mid">{'<'}{selectedPackage.days}{'>'}</div>
+                  <div className="freeze-line freeze-line-mid">{selectedPackage.days}</div>
                   <div className="freeze-line freeze-line-bottom">DAY STREAK</div>
                 </>
               ) : (
