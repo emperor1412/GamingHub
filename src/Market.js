@@ -1042,7 +1042,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               const userLevel = shared.userProfile?.level || 0;
                               const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                               
-                              // Check conditions in order of priority (simplified for freeze streak)
+                              // Check conditions in order of priority (same as merch coupon)
                               let isDisabled = false;
                               let disabledReason = '';
                               
@@ -1056,13 +1056,21 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 isDisabled = true;
                                 disabledReason = 'LEVEL 10 REQUIRED';
                               }
-                              // 3. Not enough starlets
+                              // 3. Out of stock
+                              else if (product.stock <= 0) {
+                                isDisabled = true;
+                                disabledReason = 'OUT OF STOCK';
+                              }
+                              // 4. Purchase limit reached
+                              else if (product.purchasedQuantity >= product.limitNum) {
+                                isDisabled = true;
+                                disabledReason = 'LIMIT REACHED';
+                              }
+                              // 5. Not enough starlets
                               else if (userStarlets < product.starlet) {
                                 isDisabled = true;
                                 disabledReason = product.starlet.toLocaleString() + ' STARLETS';
                               }
-                              // For freeze streak products, skip stock/limit/purchased checks
-                              // as they are special products that don't follow normal inventory rules
                               
                               const isAvailable = !isDisabled;
                               
@@ -1100,14 +1108,25 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                       </div>
                                     </div>
                                     <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                      {productInfo.isFreezeCard ? (
-                                        <>
-                                          <span>{product.starlet.toLocaleString()}</span>
-                                          <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
-                                        </>
+                                      {isAvailable ? (
+                                        productInfo.isFreezeCard ? (
+                                          <>
+                                            <span>{product.starlet.toLocaleString()}</span>
+                                            <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
+                                          </>
+                                        ) : (
+                                          `${product.starlet} STARLETS`
+                                        )
                                       ) : (
-                                        isAvailable ? `${product.starlet} STARLETS` : disabledReason
+                                        disabledReason
                                       )}
+                                    </div>
+                                    
+                                    {/* Limit corner for freeze streak products */}
+                                    <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                      <div className="mk-starlet-limit-corner-text">
+                                        {product.purchasedQuantity}/{product.limitNum}
+                                      </div>
                                     </div>
                                   </div>
                                 </button>

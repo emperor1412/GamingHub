@@ -514,18 +514,8 @@ body.mk-market-open {
 }
 
 .mk-freeze-card .mk-market-ticket-price {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  background: #0000FF;
-  font-family: "PP Neue Machina";
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 0;
-  padding-block: 0px;
-  min-height: 20px;
-  height: auto;
+  position: relative;
+  z-index: 5;
 }
 
 .mk-freeze-price-icon {
