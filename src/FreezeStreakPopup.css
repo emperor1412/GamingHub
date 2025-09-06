@@ -1,6 +1,4 @@
-.freeze-streak-pay-button:hover .pay-text {
-  box-shadow: rgba(255, 0, 246, 0.7);
-}
+
 
 .freeze-streak-pay-button:active .pay-text {
   box-shadow: rgba(255, 0, 246, 0.6);
@@ -27,7 +25,7 @@
   /* Make popup a vertical flex container so actions can sit at the bottom */
   display: flex;
   flex-direction: column;
-  padding: 18px;
+  padding: 0 18px 0 18px;
   text-align: center;
   font-family: "PP Neue Machina", sans-serif;
   max-width: 100%;
@@ -236,7 +234,6 @@
   padding: 3px 6px;
   line-height: 1;
   display: inline-block;
-  box-shadow: 0 4px 12px rgba(255, 0, 246, 0.5);
   gap: 10px;
 }
 
@@ -287,7 +284,6 @@
   font-weight: 700;
   cursor: pointer;
   font-family: "PP Neue Machina", sans-serif;
-  margin-top: -10px;
   padding: 4px 14px; /* smaller padding */
   line-height: 1;    /* tighter content height */
   width: 100%;
@@ -363,8 +359,7 @@
   }
   
   .freeze-streak-content {
-    padding: 12px;
-    margin-top: 20px;
+    padding: 4px;
   }
   
   .freeze-line-top,
@@ -382,9 +377,8 @@
   }
   
   .freeze-streak-pay-button {
-    padding: 10px 18px;
+    padding: 4px 18px;
     gap: 12px;
-    margin-bottom: 8px;
   }
   
   .pay-text {
@@ -420,7 +414,6 @@
     gap: 8px;
   }
   .freeze-streak-no-thanks{
-    margin-bottom: 8px; /* spacing between the two buttons */
     font-size: 24px;
     padding: 10px 16px;
   }
@@ -446,11 +439,16 @@
   --mk-corner-border: 0.3px;           /* border thickness */
 
   /* Per-side offsets so you can tweak position easily */
-  --mk-corner-offset-top: 25px;
+  --mk-corner-offset-top: 10px;
   --mk-corner-offset-right: 20px;
   /* Ensure vertical span between top and bottom corners is exactly 330px */
-  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 220px);
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 190px);
   --mk-corner-offset-left: 20px;
+}
+
+.freeze-line.freeze-line-mid.freeze-purchased-text {
+  /* style áp dụng riêng cho đúng div có đủ cả 3 class */
+  margin-top: 50px;
 }
 
 .freeze-streak-popup .mk-corner {

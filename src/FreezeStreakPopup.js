@@ -13,7 +13,8 @@ const FreezeStreakPopup = ({
   isOpen, 
   onClose, 
   selectedPackage, 
-  onPurchase 
+  onPurchase,
+  refreshStarletProduct
 }) => {
   // Freeze streak assets mapping based on num value
   const getFreezeAssets = (num) => {
@@ -54,6 +55,15 @@ const FreezeStreakPopup = ({
   };
 
   const handleNoThanks = () => {
+    onClose();
+  };
+
+  const handleClose = async () => {
+    // If purchase was successful (confirmed = true), refresh the product data
+    if (confirmed && selectedPackage?.productId && refreshStarletProduct) {
+      console.log('FreezeStreakPopup: Refreshing product data after successful purchase');
+      await refreshStarletProduct(selectedPackage.productId);
+    }
     onClose();
   };
 
@@ -169,7 +179,7 @@ const FreezeStreakPopup = ({
   if (!isOpen || !selectedPackage) return null;
 
   return (
-    <div className="freeze-streak-popup-overlay" onClick={onClose}>
+    <div className="freeze-streak-popup-overlay" onClick={handleClose}>
       <div
         className={`freeze-streak-popup ${confirmed ? 'confirmed' : ''}`}
         ref={popupRef}
@@ -250,7 +260,7 @@ const FreezeStreakPopup = ({
               </button>
             </>
           ) : (
-            <button className="freeze-streak-yes freeze-back-button" onClick={onClose}>
+            <button className="freeze-streak-yes freeze-back-button" onClick={handleClose}>
               BACK TO MARKET
             </button>
           )}

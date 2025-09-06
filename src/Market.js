@@ -1327,6 +1327,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         onClose={() => setShowFreezeStreakPopup(false)}
         selectedPackage={selectedFreezeStreakPackage}
         onPurchase={handleFreezeStreakPurchase}
+        refreshStarletProduct={refreshStarletProduct}
       />
     </>
   );
