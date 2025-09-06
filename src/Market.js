@@ -602,11 +602,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
-  // Freeze streak assets mapping
-  const freezeAssets = {
-    1: { icon: iconStreak1, bg: bgStreak1 },
-    2: { icon: iconStreak2, bg: bgStreak2 },
-    5: { icon: iconStreak5, bg: bgStreak5 },
+  // Freeze streak assets mapping based on num value
+  const getFreezeAssets = (num) => {
+    if (num === 1) {
+      return { icon: iconStreak1, bg: bgStreak1 };
+    } else if (num > 4) {
+      return { icon: iconStreak5, bg: bgStreak5 };
+    } else if (num > 1) {
+      return { icon: iconStreak2, bg: bgStreak2 };
+    } else {
+      // Fallback to 1 day assets for any other values
+      return { icon: iconStreak1, bg: bgStreak1 };
+    }
   };
 
   // Helper function to get starlet product info based on prop ID
@@ -615,9 +622,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     if (product.name) {
       // Special case for freeze streak (prop 10110)
       if (product.prop === 10110) {
-        // Parse days from product name (e.g., "1", "2", "5")
-        const days = parseInt(product.name) || 1;
-        const assets = freezeAssets[days] || freezeAssets[1]; // Fallback to 1 day assets
+        // Use product.num to determine the appropriate assets
+        const num = product.num || 1;
+        const assets = getFreezeAssets(num);
         
         return {
           name: product.name,
@@ -631,7 +638,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           designClass: 'mk-freeze-card',
           // Additional properties for freeze card design
           isFreezeCard: true,
-          freezeDays: product.num, // Use product name as days (e.g., "1", "2", "5")
+          freezeDays: num, // Use product.num as days
           priceIcon: starlet, // Icon for price section
           priceIconClass: 'mk-freeze-price-icon'
         };
@@ -1072,7 +1079,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               return (
                                 <button 
                                   key={product.id}
-                                  className={`mk-market-ticket-button mk-freeze-card ${!isAvailable ? 'sold-out' : ''}`}
+                                  className={`mk-market-ticket-button ${productInfo.freezeDays === 1 ? 'mk-freeze-card mk-freeze-1-day' : 'mk-freeze-card'} ${!isAvailable ? 'sold-out' : ''}`}
                                   onClick={() => isAvailable && handleFreezeStreakClick({days: parseInt(product.name), price: product.starlet, productId: product.id})}
                                   disabled={!isAvailable}
                                 >

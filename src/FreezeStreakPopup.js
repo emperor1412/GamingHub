@@ -4,7 +4,7 @@ import iconStreak1 from './images/Icon_streak_1_day.png';
 import iconStreak2 from './images/Icon_streak_2_day.png';
 import iconStreak5 from './images/Icon_streak_5_day.png';
 import starletIcon from './images/starlet.png';
-import popFreeze1 from './images/icon_pop_freeze1.png';
+import popFreeze1 from './images/Icon_streak_1_day.png';
 import popFreeze2 from './images/icon_pop_freeze2.png';
 import popFreeze5 from './images/icon_pop_freeze5.png';
 import shared from './Shared';
@@ -15,11 +15,18 @@ const FreezeStreakPopup = ({
   selectedPackage, 
   onPurchase 
 }) => {
-  // Freeze streak assets mapping
-  const freezeAssets = {
-    1: { icon: iconStreak1 },
-    2: { icon: iconStreak2 },
-    5: { icon: iconStreak5 },
+  // Freeze streak assets mapping based on num value
+  const getFreezeAssets = (num) => {
+    if (num === 1) {
+      return { icon: popFreeze1 };
+    } else if (num > 4) {
+      return { icon: popFreeze5 };
+    } else if (num > 1) {
+      return { icon: popFreeze2 };
+    } else {
+      // Fallback to 1 day assets for any other values
+      return { icon: popFreeze1 };
+    }
   };
 
   // Track confirmation after clicking YES
@@ -193,7 +200,7 @@ const FreezeStreakPopup = ({
           <div className="freeze-streak-header">
             <div className="freeze-streak-icons">
               <img
-                src={{ 1: popFreeze1, 2: popFreeze2, 5: popFreeze5 }[selectedPackage.days] || popFreeze1}
+                src={getFreezeAssets(selectedPackage.days).icon}
                 alt={`Freeze ${selectedPackage.days} day icon`}
                 className="freeze-pop-icon"
               />

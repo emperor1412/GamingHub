@@ -528,6 +528,11 @@ body.mk-market-open {
   transform: scale(1.8);
 }
 
+/* Special scaling for 1-day freeze streak */
+.mk-freeze-card.mk-freeze-1-day .mk-market-ticket-icon img {
+  transform: scale(1.5) !important;
+}
+
 .mk-market-ticket-bonus-corner {
   position: absolute;
   z-index: 10;
