@@ -595,6 +595,9 @@ const bind_fslid = async () => {
     console.log('Purchase another freeze streak clicked, navigating to market');
     setShowFreezeStreakStatus(false);
     // TH2: User ấn PURCHASE ANOTHER -> gọi onClickMarketplace
+    // Set the initial market tab to 'starlet'
+    shared.setInitialMarketTab('starlet');
+    // Navigate to market tab
     setActiveTab('market');
   };
 
