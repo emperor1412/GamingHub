@@ -196,15 +196,17 @@ const FreezeStreakPopup = ({
         <div className="mk-corner mk-bottom-right"></div>
         {/* Body: header + content grouped */}
         <div className="freeze-streak-body">
-          {/* Header: show only one icon for the selected day */}
+          {/* Header: show icon and day text */}
           <div className="freeze-streak-header">
-            <div className="freeze-streak-icons">
+            <div className={`freeze-streak-icons ${selectedPackage.days > 4 ? 'freeze-streak-5' : ''}`}>
               <img
                 src={getFreezeAssets(selectedPackage.days).icon}
                 alt={`Freeze ${selectedPackage.days} day icon`}
                 className="freeze-pop-icon"
               />
             </div>
+            <div className={`freeze-streak-number ${selectedPackage.days > 4 ? 'freeze-streak-5' : ''}`}>{selectedPackage.days}</div>
+            <div className={`freeze-streak-day-text ${selectedPackage.days > 4 ? 'freeze-streak-5' : ''}`}>DAY</div>
           </div>
           
           {/* Content area */}
