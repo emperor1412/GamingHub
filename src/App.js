@@ -118,6 +118,11 @@ function App() {
         // Check if freeze streak was used - but still show animation first
         if (checkInResult.data.useStreakFreeze && checkInResult.data.missDay > 0) {
             console.log('Freeze streak was used, will show status popup after animation');
+            // Ensure profile is loaded before getting freeze streaks
+            if (!shared.userProfile) {
+                console.log('Profile not loaded, getting profile data first');
+                await getProfileData();
+            }
             // Store freeze streak data for later use
             const remainingFreezeStreaks = await getRemainingFreezeStreaks();
             setFreezeStreakData({
@@ -149,17 +154,27 @@ function App() {
   // Function to get remaining freeze streaks from user profile
   const getRemainingFreezeStreaks = async () => {
     try {
-      // Assuming the user profile has freeze streak information
-      // You might need to adjust this based on your actual profile structure
-      if (shared.userProfile && shared.userProfile.freezeStreaks !== undefined) {
-        return shared.userProfile.freezeStreaks;
+      console.log('getRemainingFreezeStreaks - shared.userProfile:', shared.userProfile);
+      
+      // Check if streakFreeze is directly in userProfile
+      if (shared.userProfile && shared.userProfile.streakFreeze !== undefined) {
+        console.log('Found streakFreeze:', shared.userProfile.streakFreeze);
+        return shared.userProfile.streakFreeze;
       }
       
-      // If not in profile, you might need to make an API call
-      // const response = await fetch(`${shared.server_url}/api/app/getFreezeStreaks?token=${shared.loginData.token}`);
-      // const data = await response.json();
-      // return data.freezeStreaks || 0;
+      // Check if it's in UserToken array (like other tokens)
+      if (shared.userProfile && shared.userProfile.UserToken) {
+        console.log('Checking UserToken array:', shared.userProfile.UserToken);
+        const freezeStreakToken = shared.userProfile.UserToken.find(token => 
+          token.prop_id === 10110 || token.prop_id === '10110'
+        );
+        if (freezeStreakToken) {
+          console.log('Found freeze streak in UserToken:', freezeStreakToken);
+          return freezeStreakToken.num || freezeStreakToken.ableNum || 0;
+        }
+      }
       
+      console.log('streakFreeze not found, returning 0');
       return 0; // Default fallback
     } catch (error) {
       console.error('Error getting remaining freeze streaks:', error);

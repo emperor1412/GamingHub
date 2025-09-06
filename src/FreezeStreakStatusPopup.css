@@ -7,9 +7,10 @@
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
+  padding-top: 20px;
 }
 
 .freeze-status-popup {
@@ -22,8 +23,6 @@
   font-family: "PP Neue Machina", sans-serif;
   max-width: 400px;
   width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: slideIn 0.3s ease-out;
   position: relative;
@@ -71,11 +70,11 @@
 .freeze-status-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  line-height: 0.9;
 }
 
 .freeze-status-text div {
-  font-size: 24px;
+  font-size: 39px;
   font-weight: 700;
   color: white;
   text-transform: uppercase;
@@ -88,6 +87,7 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-top: 15px;
 }
 
 .freeze-status-small-icon {
@@ -104,7 +104,7 @@
 }
 
 .freeze-status-current-text {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: white;
   text-transform: uppercase;
@@ -230,15 +230,12 @@
   }
   
   .freeze-status-number {
-    font-size: 56px;
+    font-size: 90px;
   }
-  
-  .freeze-status-text div {
-    font-size: 18px;
-  }
+
   
   .freeze-status-current-text {
-    font-size: 14px;
+    font-size: 17px;
   }
   
   .freeze-status-close,
