@@ -1080,7 +1080,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 <button 
                                   key={product.id}
                                   className={`mk-market-ticket-button ${productInfo.freezeDays === 1 ? 'mk-freeze-card mk-freeze-1-day' : 'mk-freeze-card'} ${!isAvailable ? 'sold-out' : ''}`}
-                                  onClick={() => isAvailable && handleFreezeStreakClick({days: parseInt(product.name), price: product.starlet, productId: product.id})}
+                                  onClick={() => isAvailable && handleFreezeStreakClick({days: product.num, price: product.starlet, productId: product.id})}
                                   disabled={!isAvailable}
                                 >
                                   <div 
