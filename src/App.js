@@ -12,6 +12,7 @@ import Frens from './Frens';
 import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
 import BankSteps from './BankSteps';
+import FreezeStreakStatusPopup from './FreezeStreakStatusPopup';
 import { 
   trackSectionView, 
   trackNavigation, 
@@ -88,6 +89,13 @@ function App() {
   const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
+  
+  // Freeze streak status popup states
+  const [showFreezeStreakStatus, setShowFreezeStreakStatus] = useState(false);
+  const [freezeStreakData, setFreezeStreakData] = useState({
+    missDay: 0,
+    remainingFreezeStreaks: 0
+  });
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -101,9 +109,24 @@ function App() {
     console.log(`Checking in ........: ${now.toLocaleString()}`);
     
     const checkInResult = await shared.checkIn(loginData);
+    console.log('CheckIn result:', checkInResult);
     
     if (checkInResult.success) {
         setCheckInData(checkInResult.data);
+        console.log('CheckIn data set:', checkInResult.data);
+        
+        // Check if freeze streak was used - but still show animation first
+        if (checkInResult.data.useStreakFreeze && checkInResult.data.missDay > 0) {
+            console.log('Freeze streak was used, will show status popup after animation');
+            // Store freeze streak data for later use
+            const remainingFreezeStreaks = await getRemainingFreezeStreaks();
+            setFreezeStreakData({
+                missDay: checkInResult.data.missDay,
+                remainingFreezeStreaks: remainingFreezeStreaks
+            });
+            // Still return 1 to show animation, popup will be shown after animation
+            return 1;
+        }
         
         if (checkInResult.isCheckIn) {
             console.log('Redirect to checkIn screen');
@@ -122,6 +145,27 @@ function App() {
         return 2;
     }
 };
+
+  // Function to get remaining freeze streaks from user profile
+  const getRemainingFreezeStreaks = async () => {
+    try {
+      // Assuming the user profile has freeze streak information
+      // You might need to adjust this based on your actual profile structure
+      if (shared.userProfile && shared.userProfile.freezeStreaks !== undefined) {
+        return shared.userProfile.freezeStreaks;
+      }
+      
+      // If not in profile, you might need to make an API call
+      // const response = await fetch(`${shared.server_url}/api/app/getFreezeStreaks?token=${shared.loginData.token}`);
+      // const data = await response.json();
+      // return data.freezeStreaks || 0;
+      
+      return 0; // Default fallback
+    } catch (error) {
+      console.error('Error getting remaining freeze streaks:', error);
+      return 0;
+    }
+  };
 
   const getProfileData = async (loginDataParam) => {
     const dataToUse = loginDataParam || loginData;
@@ -522,6 +566,21 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  // Freeze streak status popup handlers
+  const handleFreezeStreakStatusClose = () => {
+    console.log('Freeze streak popup closed, showing CheckIn view');
+    setShowFreezeStreakStatus(false);
+    // TH1: User ấn CLOSE -> show CheckIn.js
+    setShowCheckInView(true);
+  };
+
+  const handlePurchaseAnotherFreezeStreak = () => {
+    console.log('Purchase another freeze streak clicked, navigating to market');
+    setShowFreezeStreakStatus(false);
+    // TH2: User ấn PURCHASE ANOTHER -> gọi onClickMarketplace
+    setActiveTab('market');
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
@@ -631,8 +690,17 @@ const bind_fslid = async () => {
           </div>
 
           <button className="checkin-animation-button" onClick={() => {
+            console.log('Animation button clicked, checkInData:', checkInData);
             setShowCheckInAnimation(false);
-            setShowCheckInView(true);
+            // Check if freeze streak was used
+            if (checkInData && checkInData.useStreakFreeze && checkInData.missDay > 0) {
+              console.log('Freeze streak was used, showing status popup');
+              // Show freeze streak status popup
+              setShowFreezeStreakStatus(true);
+            } else {
+              console.log('No freeze streak used, showing check-in view');
+              setShowCheckInView(true);
+            }
           }}>
             <div className="checkin-content">
               <img src={checkInAnimation} alt="Check In Animation" className="checkin-animation-img"/>
@@ -645,6 +713,16 @@ const bind_fslid = async () => {
             </div>
           </button>
         </div>
+      )
+      : showFreezeStreakStatus ?
+      (
+        <FreezeStreakStatusPopup
+          isOpen={showFreezeStreakStatus}
+          onClose={handleFreezeStreakStatusClose}
+          onPurchaseAnother={handlePurchaseAnotherFreezeStreak}
+          missDay={freezeStreakData.missDay}
+          remainingFreezeStreaks={freezeStreakData.remainingFreezeStreaks}
+        />
       )
       : showCheckInView ?
       (
