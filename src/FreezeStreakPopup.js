@@ -7,6 +7,7 @@ import starletIcon from './images/starlet.png';
 import popFreeze1 from './images/icon_pop_freeze1.png';
 import popFreeze2 from './images/icon_pop_freeze2.png';
 import popFreeze5 from './images/icon_pop_freeze5.png';
+import shared from './Shared';
 
 const FreezeStreakPopup = ({ 
   isOpen, 
@@ -27,6 +28,8 @@ const FreezeStreakPopup = ({
   const popupRef = useRef(null);
   const [fixedHeight, setFixedHeight] = useState(null);
   const [fixedWidth, setFixedWidth] = useState(null);
+  // Track processing state for API calls
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Reset confirmation only when popup opens/closes
   useEffect(() => {
@@ -34,6 +37,7 @@ const FreezeStreakPopup = ({
       setConfirmed(false);
       setFixedHeight(null);
       setFixedWidth(null);
+      setIsProcessing(false);
     }
   }, [isOpen]);
 
@@ -55,6 +59,103 @@ const FreezeStreakPopup = ({
     }
     onPurchase(selectedPackage);
     setConfirmed(true);
+  };
+
+  const handleConfirmAndPay = async () => {
+    if (isProcessing) return; // Prevent multiple calls
+    
+    console.log('handleConfirmAndPay called with selectedPackage:', selectedPackage);
+    setIsProcessing(true);
+    
+    try {
+      // Check if selectedPackage has productId
+      if (!selectedPackage.productId) {
+        console.error('No productId found in selectedPackage');
+        await shared.showPopup({
+          type: 0,
+          title: 'Error',
+          message: 'Product ID not found. Please try again.'
+        });
+        return;
+      }
+
+      console.log('Making buyStarletProduct API call with productId:', selectedPackage.productId);
+      
+      // Make API call to buyStarletProduct
+      const response = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${selectedPackage.productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const data = await response.json();
+      console.log('buyStarletProduct API response:', data);
+      
+      if (data.code === 0) {
+        // Success - show confirmation
+        console.log('Purchase successful');
+        onPurchase(selectedPackage);
+        setConfirmed(true);
+        
+        // Refresh user profile to get updated data
+        await shared.getProfileWithRetry();
+        
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired - try to refresh
+        console.log('Token expired, attempting to refresh...');
+        const loginResult = await shared.login(shared.initData);
+        
+        if (loginResult.success) {
+          // Retry the purchase with new token
+          const retryResponse = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${selectedPackage.productId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0) {
+            console.log('Retry purchase successful');
+            onPurchase(selectedPackage);
+            setConfirmed(true);
+            await shared.getProfileWithRetry();
+          } else {
+            console.error('Retry failed:', retryData);
+            await shared.showPopup({
+              type: 0,
+              title: 'Purchase Failed',
+              message: retryData.msg || 'Payment failed. Please try again.'
+            });
+          }
+        } else {
+          await shared.showPopup({
+            type: 0,
+            title: 'Session Expired',
+            message: 'Please try again.'
+          });
+        }
+      } else {
+        // Other errors
+        console.error('Purchase failed:', data);
+        await shared.showPopup({
+          type: 0,
+          title: 'Purchase Failed',
+          message: data.msg || 'Payment failed. Please try again.'
+        });
+      }
+      
+    } catch (error) {
+      console.error('Purchase error:', error);
+      await shared.showPopup({
+        type: 0,
+        title: 'Error',
+        message: error?.message || 'Unable to process payment. Please try again.'
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // Only render when open and a package is selected (after hooks have been initialized)
@@ -131,8 +232,12 @@ const FreezeStreakPopup = ({
               <button className="freeze-streak-no-thanks" onClick={handleNoThanks}>
                 NO THANKS
               </button>
-              <button className="freeze-streak-yes" onClick={handleYes}>
-                YES
+              <button 
+                className="freeze-streak-yes" 
+                onClick={handleConfirmAndPay}
+                disabled={isProcessing}
+              >
+                {isProcessing ? 'PROCESSING...' : 'YES'}
               </button>
             </>
           ) : (
