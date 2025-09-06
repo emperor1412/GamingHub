@@ -22,7 +22,7 @@
   text-align: center;
   font-family: "PP Neue Machina", sans-serif;
   max-width: 400px;
-  width: 90%;
+  width: 100%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: slideIn 0.3s ease-out;
   position: relative;
@@ -57,6 +57,44 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+/* You missed X days section */
+.freeze-status-missed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.freeze-status-missed-text {
+  font-size: 39px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-top: 50px;
+}
+
+/* Streak is broken section */
+.freeze-status-broken {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.freeze-status-broken-text {
+  font-size: 39px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 0.9;
 }
 
 .freeze-status-number {
@@ -200,6 +238,15 @@
   border-right: var(--mk-corner-border) solid var(--mk-corner-color);
 }
 
+/* Adjust bottom corners for missed popup */
+.freeze-status-popup .mk-bottom-left {
+  bottom: calc(var(--mk-corner-offset-bottom) + 25px);
+}
+
+.freeze-status-popup .mk-bottom-right {
+  bottom: calc(var(--mk-corner-offset-bottom) + 25px);
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -233,9 +280,17 @@
     font-size: 90px;
   }
 
+  .freeze-status-number.freeze-status-missed {
+    font-size: 39px;
+  }
+
   
   .freeze-status-current-text {
     font-size: 17px;
+  }
+
+  .freeze-status-current.freeze-status-missed-popup {
+    margin-top: 60px;
   }
   
   .freeze-status-close,

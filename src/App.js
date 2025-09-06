@@ -94,7 +94,8 @@ function App() {
   const [showFreezeStreakStatus, setShowFreezeStreakStatus] = useState(false);
   const [freezeStreakData, setFreezeStreakData] = useState({
     missDay: 0,
-    remainingFreezeStreaks: 0
+    remainingFreezeStreaks: 0,
+    useStreakFreeze: false
   });
 
   // Add a ref to track initialization
@@ -115,9 +116,9 @@ function App() {
         setCheckInData(checkInResult.data);
         console.log('CheckIn data set:', checkInResult.data);
         
-        // Check if freeze streak was used - but still show animation first
-        if (checkInResult.data.useStreakFreeze && checkInResult.data.missDay > 0) {
-            console.log('Freeze streak was used, will show status popup after animation');
+        // Check if freeze streak was used OR streak is broken - but still show animation first
+        if (checkInResult.data.missDay > 0) {
+            console.log('Missed days detected, will show status popup after animation');
             // Ensure profile is loaded before getting freeze streaks
             if (!shared.userProfile) {
                 console.log('Profile not loaded, getting profile data first');
@@ -127,7 +128,8 @@ function App() {
             const remainingFreezeStreaks = await getRemainingFreezeStreaks();
             setFreezeStreakData({
                 missDay: checkInResult.data.missDay,
-                remainingFreezeStreaks: remainingFreezeStreaks
+                remainingFreezeStreaks: remainingFreezeStreaks,
+                useStreakFreeze: checkInResult.data.useStreakFreeze
             });
             // Still return 1 to show animation, popup will be shown after animation
             return 1;
@@ -707,13 +709,13 @@ const bind_fslid = async () => {
           <button className="checkin-animation-button" onClick={() => {
             console.log('Animation button clicked, checkInData:', checkInData);
             setShowCheckInAnimation(false);
-            // Check if freeze streak was used
-            if (checkInData && checkInData.useStreakFreeze && checkInData.missDay > 0) {
-              console.log('Freeze streak was used, showing status popup');
+            // Check if there are missed days (either freeze streak used or streak broken)
+            if (checkInData && checkInData.missDay > 0) {
+              console.log('Missed days detected, showing status popup');
               // Show freeze streak status popup
               setShowFreezeStreakStatus(true);
             } else {
-              console.log('No freeze streak used, showing check-in view');
+              console.log('No missed days, showing check-in view');
               setShowCheckInView(true);
             }
           }}>
@@ -737,6 +739,7 @@ const bind_fslid = async () => {
           onPurchaseAnother={handlePurchaseAnotherFreezeStreak}
           missDay={freezeStreakData.missDay}
           remainingFreezeStreaks={freezeStreakData.remainingFreezeStreaks}
+          useStreakFreeze={freezeStreakData.useStreakFreeze}
         />
       )
       : showCheckInView ?
