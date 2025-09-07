@@ -232,15 +232,6 @@ const FreezeStreakPopup = ({
                 <div className="freeze-line freeze-line-mid freeze-purchased-text">PURCHASED +{selectedPackage.days}</div>
               )}
             </div>
-
-            {/* Pay button */}
-            {!confirmed && (
-              <div className="freeze-streak-pay-button">
-                <span className="pay-text">PAY</span>
-                <span className="pay-amount">{selectedPackage.price.toLocaleString()}</span>
-                <img className="pay-icon" src={starletIcon} alt="Starlets" />
-              </div>
-            )}
           </div>
         </div>
         
@@ -248,6 +239,11 @@ const FreezeStreakPopup = ({
         <div className="freeze-streak-actions">
           {!confirmed ? (
             <>
+              <div className="freeze-streak-pay-button">
+                <span className="pay-text">PAY</span>
+                <span className="pay-amount">{selectedPackage.price.toLocaleString()}</span>
+                <img className="pay-icon" src={starletIcon} alt="Starlets" />
+              </div>
               <button className="freeze-streak-no-thanks" onClick={handleNoThanks}>
                 NO THANKS
               </button>

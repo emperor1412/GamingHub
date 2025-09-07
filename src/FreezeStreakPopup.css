@@ -200,7 +200,6 @@
   color: white;
   font-size: 16px;
   font-weight: 900;
-  padding: 12px 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: none;
@@ -242,7 +241,6 @@
   font-weight: 700;
   letter-spacing: 0.01em;
   font-family: "PP Neue Machina", sans-serif;
-  margin-right: 10px;
 }
 
 .pay-icon {
@@ -269,11 +267,10 @@
   flex-direction: column;
 }
 .freeze-streak-popup.confirmed .freeze-streak-body {
-  margin-top: auto;       /* push body (icon + text) down */
   margin-bottom: 50px;    /* small gap above actions */
 }
 .freeze-streak-popup.confirmed .freeze-streak-actions {
-  margin-top: 50px; /* small gap below content */
+  margin-top: auto; /* push actions to bottom */
 }
 
 .freeze-streak-no-thanks {
@@ -377,22 +374,19 @@
   }
   
   .freeze-streak-pay-button {
-    padding: 4px 18px;
     gap: 12px;
   }
   
   .pay-text {
-    margin-left: -60px;
     font-size: 36px;
   }
   
   .pay-amount {
-    margin-left: -5px;
     font-size: 32px;
   }
 
   .pay-icon {
-    margin-left: -18px;
+    /* Remove negative margin to center properly */
   }
   /* Reduce header bottom spacing */
   .freeze-streak-header {
