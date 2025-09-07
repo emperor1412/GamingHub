@@ -59,7 +59,7 @@ const FreezeStreakStatusPopup = ({
                   />
                 </div>
                 <div className="freeze-status-current-text">
-                  FREEZE STREAKS: {remainingFreezeStreaks}
+                  FREEZE STREAKS: {remainingFreezeStreaks - missDay}
                 </div>
               </div>
             </>
