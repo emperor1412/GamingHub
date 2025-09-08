@@ -705,7 +705,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       case 1:
         return { 
           name: 'X1.5 STEP BOOST', 
-          displayAmount: 'X1.5',
+          displayAmount: '1.5X',
           icon: iconStepBoostx1_5, // Will be replaced with step boost icon
           description: 'BOOST YOUR STEPS',
           category: 'Step Boosts',
@@ -717,7 +717,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       case 2:
         return { 
           name: 'X2 STEP BOOST', 
-          displayAmount: 'X2',
+          displayAmount: '2X',
           icon: iconStepBoostx2, // Will be replaced with step boost icon
           description: 'BOOST YOUR STEPS',
           category: 'Step Boosts',

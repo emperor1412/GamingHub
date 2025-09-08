@@ -6,6 +6,7 @@ import iconPopStepBoostx1_5 from './images/Icon_Pop_Stepboosts_1_5X.png';
 import iconPopStepBoostx2 from './images/Icon_Pop_Stepboosts_2X.png';
 import starletIcon from './images/starlet.png';
 import shared from './Shared';
+import stepBoostsPurchasedBg from './images/Icon_Status_Stepboosts.png';
 
 const StepBoostsPopup = ({ 
   isOpen, 
@@ -38,9 +39,39 @@ const StepBoostsPopup = ({
     }
   }, [isOpen]);
 
+  // Adjust background image when button margin changes
+  useEffect(() => {
+    if (confirmed && popupRef.current) {
+      const actionsElement = popupRef.current.querySelector('.step-boosts-actions');
+      if (actionsElement) {
+        const updateBackgroundPosition = () => {
+          const computedStyle = window.getComputedStyle(actionsElement);
+          const marginBottom = parseInt(computedStyle.marginBottom) || 0;
+          const marginTop = parseInt(computedStyle.marginTop) || 0;
+          const totalMargin = marginBottom + marginTop;
+          
+          // Update CSS custom property for dynamic calculation
+          popupRef.current.style.setProperty('--button-margin', `${totalMargin}px`);
+        };
+        
+        // Initial update
+        updateBackgroundPosition();
+        
+        // Watch for style changes
+        const observer = new MutationObserver(updateBackgroundPosition);
+        observer.observe(actionsElement, { 
+          attributes: true, 
+          attributeFilter: ['style'] 
+        });
+        
+        return () => observer.disconnect();
+      }
+    }
+  }, [confirmed]);
+
   const handlePurchase = () => {
-    onPurchase(selectedPackage);
-    onClose();
+    setConfirmed(true);
+    setIsProcessing(true);
   };
 
   const handleNoThanks = () => {
@@ -159,7 +190,7 @@ const StepBoostsPopup = ({
   if (!isOpen || !selectedPackage) return null;
 
   // Get display amount and icon based on selected package
-  const displayAmount = selectedPackage?.name?.includes('X1.5') ? 'X1.5' : 'X2';
+  const displayAmount = selectedPackage?.name?.includes('X1.5') ? '1.5X' : '2X';
   const stepBoostId = selectedPackage?.name?.includes('X1.5') ? 1 : 2;
   const stepBoostIcon = stepBoostAssets[stepBoostId]?.icon || iconStepBoostx1_5;
 
@@ -184,6 +215,9 @@ const StepBoostsPopup = ({
         }
         onClick={(e) => e.stopPropagation()}
       >
+
+    {!confirmed ? (
+    <>
         {/* Corner borders */}
         <div className="mk-corner mk-top-left"></div>
         <div className="mk-corner mk-top-right"></div>
@@ -192,6 +226,7 @@ const StepBoostsPopup = ({
         {/* Body: header + content grouped */}
         <div className="step-boosts-body">
           {/* Header: show only one icon for the selected step boost */}
+
           <div className="step-boosts-header">
             <div className="step-boosts-icons">
               <img
@@ -201,32 +236,52 @@ const StepBoostsPopup = ({
               />
             </div>
           </div>
+
           
           {/* Content area */}
           <div className="step-boosts-content">
             <div className="step-boosts-message">
-              {!confirmed ? (
-                <>
-                  <div className="step-boosts-line step-boosts-line-top">ACTIVATE BOOST</div>
-                  <div className="step-boosts-line step-boosts-line-top">AND MULTIPLY</div>
-                  <div className="step-boosts-line step-boosts-line-top">YOUR STARLET</div>
-                  <div className="step-boosts-line step-boosts-line-top">CLAIM TODAY</div>
-                </>
-              ) : (
-                <div className="step-boosts-line step-boosts-line-mid step-boosts-purchased-text">PURCHASED {displayAmount}</div>
-              )}
+                <div className="step-boosts-line step-boosts-line-top">ACTIVATE BOOST</div>
+                <div className="step-boosts-line step-boosts-line-top">AND MULTIPLY</div>
+                <div className="step-boosts-line step-boosts-line-top">YOUR STARLET</div>
+                <div className="step-boosts-line step-boosts-line-top">CLAIM TODAY</div>
             </div>
 
             {/* Pay button */}
-            {!confirmed && (
-              <div className="step-boosts-pay-button">
-                <span className="pay-text">PAY</span>
-                <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
-                <img className="pay-icon" src={starletIcon} alt="Starlets" />
-              </div>
-            )}
+            <div className="step-boosts-pay-button">
+            <span className="pay-text">PAY</span>
+            <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
+            <img className="pay-icon" src={starletIcon} alt="Starlets" />
+            </div>
           </div>
         </div>
+    </>
+     ) : 
+     <>
+         {/* Background image with floating coins */}
+         <div className="step-boosts-purchased-bg">
+             <img 
+                 src={stepBoostsPurchasedBg} 
+                 alt="Floating coins background" 
+                 className="step-boosts-bg-image"
+             />
+         </div>
+         
+        <div className="mk-corner mk-top-left-purchased"></div>
+        <div className="mk-corner mk-top-right-purchased"></div>
+        <div className="mk-corner mk-bottom-left-purchased"></div>
+        <div className="mk-corner mk-bottom-right-purchased"></div>
+         <div className="step-boosts-body">
+             <div className="step-boosts-content">
+                 <div className="step-boosts-purchased-message">
+                     <div className="step-boosts-purchased-main">{displayAmount}</div>
+                     <div className="step-boosts-purchased-sub">MULTIPLIER</div>
+                     <div className="step-boosts-purchased-sub">PURCHASED!</div>
+                 </div>
+             </div>
+         </div>
+     </>
+    }
         
         {/* Action buttons */}
         <div className="step-boosts-actions">
@@ -237,7 +292,7 @@ const StepBoostsPopup = ({
               </button>
               <button 
                 className="step-boosts-yes" 
-                onClick={handleYes}
+                onClick={handlePurchase}
                 disabled={isProcessing}
               >
                 {isProcessing ? 'PROCESSING...' : 'BUY'}
