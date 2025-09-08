@@ -1,0 +1,213 @@
+.abp_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #231F20E6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.abp_popup-container {
+    position: relative;
+    width: 410px;
+    height: 0;
+    padding-bottom: 76.92%; /* 300/390 * 100% */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20px;
+}
+
+.abp_content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.abp_boost-options {
+    width: 83%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+    margin-left: 8px;
+}
+
+.abp_boost-option {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    width: 100%;
+    padding: 8px 0;
+}
+
+.abp_boost-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    margin-bottom: 2px;
+}
+
+.abp_boost-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.abp_boost-label {
+    color: white;
+    font-size: 12.35px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    font-family: "PP Neue Machina", sans-serif;
+}
+
+.abp_activate-button-small {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #ff00ff;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    overflow: visible;
+    font-family: "PP Neue Machina";
+    font-size: 12.35px;
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    padding: 0px 8px 0px 14px;
+    min-width: 80px;
+    font-weight: 800;
+}
+
+.abp_activate-button-small:hover {
+    transform: scale(1.05);
+}
+
+.abp_activate-button-small:active {
+    transform: scale(0.95);
+}
+
+.abp_activate-icon {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 11;
+}
+
+.abp_activate-icon img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.abp_activate-button-small:hover .abp_activate-icon {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.abp_activate-button-small:hover .abp_activate-icon img {
+    transform: rotate(15deg);
+}
+
+.abp_currency-amount {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+    flex-shrink: 0;
+    font-family: "PP Neue Machina", sans-serif;
+}
+
+.abp_buttons {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+.abp_cancel-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-family: "PP Neue Machina", sans-serif;
+}
+
+.abp_cancel-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .abp_boost-options {
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .abp_activate-icon {
+        left: -18px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .abp_activate-icon img {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .abp_currency-amount {
+        font-size: 12px;
+        min-width: 35px;
+    }
+    
+    .abp_buttons {
+        gap: 15px;
+    }
+    
+    .abp_cancel-button {
+        padding: 10px 20px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+}

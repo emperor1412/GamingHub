@@ -19,6 +19,7 @@ import bs_receive_starlet_text_claim from './images/bs_receive_starlet_text_clai
 import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_icon.png';
 import bank_step_group_icon from './images/bank_step_group_icon.png';
 import boost_icon from './images/Icon_Step_Boost.png';
+import ActivateBoostPopup from './ActivateBoostPopup';
 
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
@@ -58,6 +59,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [steps, setSteps] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
+    const [showActivateBoostPopup, setShowActivateBoostPopup] = React.useState(false);
 
     const handleBack = () => {
         onClose();
@@ -119,8 +121,17 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     };
 
     const handleActivateBoost = () => {
-        // Handle activate boost action
-        console.log('Activate boost clicked');
+        setShowActivateBoostPopup(true);
+    };
+
+    const handleCloseActivateBoostPopup = () => {
+        setShowActivateBoostPopup(false);
+    };
+
+    const handleConfirmActivateBoost = (boostType) => {
+        // Handle actual boost activation logic here
+        console.log(`Boost ${boostType} activated successfully`);
+        // You can add API call or other logic here
     };
 
     const updateProgressBar = (received) => {
@@ -412,6 +423,11 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     <div className="bs_loading-spinner"></div>
                 </div>
             )}
+            <ActivateBoostPopup 
+                isOpen={showActivateBoostPopup}
+                onClose={handleCloseActivateBoostPopup}
+                onActivate={handleConfirmActivateBoost}
+            />
         </>
     );
 };
