@@ -1053,18 +1053,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               let isDisabled = false;
                               let disabledReason = '';
                               
-                              // 1. FSL ID not connected
-                               if (userLevel < 10) {
+                              if (userLevel < 10) {
                                 isDisabled = true;
                                 disabledReason = 'LEVEL 10 REQUIRED';
                               }
                               // 3. Out of stock
-                              else if (product.stock <= 0) {
+                              else if (product.stock != -1 && product.stock <= 0) {
                                 isDisabled = true;
                                 disabledReason = 'OUT OF STOCK';
                               }
                               // 4. Purchase limit reached
-                              else if (product.purchasedQuantity >= product.limitNum) {
+                              else if (product.limitNum != -1 && product.purchasedQuantity >= product.limitNum) {
                                 isDisabled = true;
                                 disabledReason = 'LIMIT REACHED';
                               }
@@ -1125,11 +1124,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                     </div>
                                     
                                     {/* Limit corner for freeze streak products */}
+                                    {product.limitNum != -1 && (
                                     <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
                                       <div className="mk-starlet-limit-corner-text">
                                         {product.purchasedQuantity}/{product.limitNum}
                                       </div>
                                     </div>
+                                    )}
                                   </div>
                                 </button>
                               );
