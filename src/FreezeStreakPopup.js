@@ -14,7 +14,8 @@ const FreezeStreakPopup = ({
   onClose, 
   selectedPackage, 
   onPurchase,
-  refreshStarletProduct
+  refreshStarletProduct,
+  refreshUserProfile
 }) => {
   // Freeze streak assets mapping based on num value
   const getFreezeAssets = (num) => {
@@ -112,11 +113,10 @@ const FreezeStreakPopup = ({
       if (data.code === 0) {
         // Success - show confirmation
         console.log('Purchase successful');
-        onPurchase(selectedPackage);
-        setConfirmed(true);
         
-        // Refresh user profile to get updated data
-        await shared.getProfileWithRetry();
+        // Call onPurchase which will refresh user profile and update UI
+        await onPurchase(selectedPackage);
+        setConfirmed(true);
         
       } else if (data.code === 102002 || data.code === 102001) {
         // Token expired - try to refresh
@@ -135,9 +135,10 @@ const FreezeStreakPopup = ({
           const retryData = await retryResponse.json();
           if (retryData.code === 0) {
             console.log('Retry purchase successful');
-            onPurchase(selectedPackage);
+            
+            // Call onPurchase which will refresh user profile and update UI
+            await onPurchase(selectedPackage);
             setConfirmed(true);
-            await shared.getProfileWithRetry();
           } else {
             console.error('Retry failed:', retryData);
             await shared.showPopup({

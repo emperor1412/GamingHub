@@ -944,10 +944,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   // Handle Freeze Streak purchase
-  const handleFreezeStreakPurchase = (streakPackage) => {
+  const handleFreezeStreakPurchase = async (streakPackage) => {
     // Here you can implement the actual purchase logic
     console.log('Purchasing Freeze Streak package:', streakPackage);
-    // You might want to call an API here to process the purchase
+    // Refresh user profile to update UI immediately
+    await refreshUserProfile();
   };
 
 
@@ -1622,6 +1623,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         selectedPackage={selectedFreezeStreakPackage}
         onPurchase={handleFreezeStreakPurchase}
         refreshStarletProduct={refreshStarletProduct}
+        refreshUserProfile={refreshUserProfile}
       />
 
       {/* Step Boosts Popup */}
