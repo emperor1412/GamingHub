@@ -21,6 +21,7 @@ import FreezeStreakPopup from './FreezeStreakPopup';
 import fslidIcon from './images/FSLID-ICON.png';
 import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
 import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
+import StepBoostsPopup from './StepBoostsPopup';
 
 // url: /app/buyOptions
 // Request:
@@ -111,6 +112,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   // Freeze Streak popup states
   const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
   const [selectedFreezeStreakPackage, setSelectedFreezeStreakPackage] = useState(null);
+
+  // Step Boosts popup states
+  const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
+  const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
   // If navigated from Home with a target tab instruction, switch tabs (no popup)
   useEffect(() => {
@@ -924,6 +929,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowFreezeStreakPopup(true);
   };
 
+  // Handle Step Boosts click
+  const handleStepBoostsClick = (stepBoostPackage) => {
+    setSelectedStepBoost(stepBoostPackage);
+    setShowStepBoostsPopup(true);
+  };
+
+  // Handle Step Boosts purchase
+  const handleStepBoostsPurchase = (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // Close popup after purchase
+    setShowStepBoostsPopup(false);
+  };
+
   // Handle Freeze Streak purchase
   const handleFreezeStreakPurchase = (streakPackage) => {
     // Here you can implement the actual purchase logic
@@ -932,9 +951,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
 
+  const handleStepBoostPurchase = (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // You might want to call an API here to process the purchase
+  };
+
   const handleStepBoostClick = (stepBoostPackage) => {
-    console.log('Purchasing Freeze Streak package:', stepBoostPackage);
+    handleFreezeStreakPurchase(stepBoostPackage);
+    setShowFreezeStreakPopup(true);
   }
+
+
   return (
     <>
       <div className="background-container">
@@ -1502,7 +1530,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 <button 
                                   key={product.id}
                                   className={`mk-market-ticket-button mk-step-boost-product ${!isAvailable ? 'sold-out' : ''}`}
-                                  onClick={() => isAvailable && handleStepBoostClick(product)}
+                                  onClick={() => isAvailable && handleStepBoostsClick({name: productInfo.name, starlet: product.starlet, productId: product.id})}
                                   disabled={!isAvailable}
                                 >
                                   <div 
@@ -1594,6 +1622,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         selectedPackage={selectedFreezeStreakPackage}
         onPurchase={handleFreezeStreakPurchase}
         refreshStarletProduct={refreshStarletProduct}
+      />
+
+      {/* Step Boosts Popup */}
+      <StepBoostsPopup
+        isOpen={showStepBoostsPopup}
+        onClose={() => setShowStepBoostsPopup(false)}
+        selectedPackage={selectedStepBoost}
+        onPurchase={handleStepBoostsPurchase}
+        refreshStarletProduct={refreshMarketContent}
       />
     </>
   );
