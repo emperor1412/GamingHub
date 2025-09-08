@@ -132,7 +132,7 @@
   }
   
   .step-boosts-message {
-    font-size: 12px;
+    font-size: 24px;
     font-weight: 700;
     color: white;
     line-height: 1.2;
@@ -142,7 +142,7 @@
     justify-content: center;
     text-align: center;
     font-family: "PP Neue Machina", sans-serif;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     gap: 1px;
   }
   
@@ -155,7 +155,7 @@
   }
   
   .step-boosts-line-top {
-    font-size: 12px;
+    font-size: 22px;
     letter-spacing: 0px;
     margin-bottom: -7px;
   }
@@ -209,7 +209,6 @@
     justify-content: center;
     gap: 8px;
     font-family: "PP Neue Machina", sans-serif;
-    margin: 5vh 0 5vh 0;
   }
   
   .step-boosts-pay-button:hover {
@@ -362,15 +361,6 @@
     .step-boosts-content {
       padding: 4px;
     }
-    
-    .step-boosts-line-top,
-    .step-boosts-line-bottom {
-      font-size: 24px;
-    }
-  
-    .step-boosts-line-mid {
-      font-size: 30px;
-    }
   
     /* Purchased message on mobile */
     .step-boosts-purchased-text {
@@ -425,7 +415,6 @@
     /* Back button font on mobile */
     .step-boosts-back-button {   
       margin-bottom: 50px; /* spacing between the two buttons */
-      font-size: 24px;
     }
   }
   

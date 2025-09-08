@@ -1,0 +1,359 @@
+.activate-boost-popup-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.activate-boost-popup {
+  background: rgba(35, 31, 32, 0.8);
+  border: none;
+  border-radius: 0;
+  /* Make popup a vertical flex container so actions can sit at the bottom */
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 0 18px;
+  text-align: center;
+  font-family: "PP Neue Machina", sans-serif;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1001;
+  margin-top: 0;
+}
+
+/* Header section with icon and day text */
+.activate-boost-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  height: 200px;
+}
+
+.activate-boost-icon {
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  position: relative;
+  z-index: 5;
+}
+
+.activate-boost-message {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 15px;
+  gap: 1px;
+}
+
+/* Three-line message parts */
+.activate-boost-line {
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
+.activate-boost-line-top {
+  font-size: 12px;
+  letter-spacing: 0px;
+  margin-bottom: -7px;
+}
+
+/* Action buttons */
+.activate-boost-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  /* Push actions to the bottom of the popup */
+  margin-top: auto;
+}
+
+/* In confirmed state, push header+content down instead, keep actions at very bottom */
+.activate-boost-body { 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 5px 0;
+}
+.activate-boost-popup.confirmed .activate-boost-body {
+  margin-bottom: 5px;    /* smaller gap above actions */
+}
+.activate-boost-popup.confirmed .activate-boost-actions {
+  margin-top: auto; /* push actions to bottom */
+}
+
+.activate-boost-no-thanks {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 4px 14px; /* smaller padding */
+  line-height: 1;    /* tighter content height */
+  width: 100%;
+  max-width: 330px;
+}
+
+.activate-boost-yes {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 8px 18px; /* reduced vertical height */
+  line-height: 1;    /* tighter content height */
+  width: 100%;
+  max-width: 330px;
+}
+
+/* Back to Bank Steps button modifier */
+.activate-boost-back-button {
+  /* Adjust these as needed */
+  font-size: 26px;
+}
+
+.activate-boost-no-thanks:hover,
+.activate-boost-yes:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 15, 239, 0.6);
+}
+
+.activate-boost-no-thanks:active,
+.activate-boost-yes:active {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .activate-boost-popup {
+    width: 100%;  
+  }
+  
+  .activate-boost-content {
+    padding: 4px;
+  }
+  
+  .activate-boost-line-top,
+  .activate-boost-line-bottom {
+    font-size: 24px;
+  }
+
+  .activate-boost-line-mid {
+    font-size: 30px;
+  }
+
+  /* Purchased message on mobile */
+  .activate-boost-purchased-text {
+    font-size: 28px;
+  }
+  
+  /* Reduce header bottom spacing */
+  .activate-boost-header {
+    margin-bottom: 0;
+  }
+
+  /* Action buttons compaction */
+  .activate-boost-actions {
+    gap: 8px;
+  }
+  .activate-boost-no-thanks{
+    font-size: 24px;
+    padding: 10px 16px;
+  }
+
+  .activate-boost-yes {
+    margin-bottom: 40px; /* spacing between the two buttons */
+    font-size: 26px;
+    padding: 10px 16px;
+  }
+
+  /* Back button font on mobile */
+  .activate-boost-back-button {   
+    margin-bottom: 50px; /* spacing between the two buttons */
+    font-size: 24px;
+  }
+}
+
+/* Corner borders for ActivateBoostConfirmPopup */
+.activate-boost-popup {
+  /* Customizable variables for corner decoration */
+  --mk-corner-size: 7px;              /* corner box size */
+  --mk-corner-color: #ffffff;          /* border color */
+  --mk-corner-border: 0.3px;           /* border thickness */
+
+  /* Per-side offsets so you can tweak position easily */
+  --mk-corner-offset-top: 10px;
+  --mk-corner-offset-right: 20px;
+  /* Ensure vertical span between top and bottom corners is exactly 330px */
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 190px);
+  --mk-corner-offset-left: 20px;
+}
+
+/* Purchased state styling */
+.activate-boost-purchased-bg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.activate-boost-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+.activate-boost-purchased-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.activate-boost-purchased-main {
+  font-size: 100px;
+  font-weight: 900;
+  color: #00FF00;
+  line-height: 0.8;
+  font-family: "PP Neue Machina", sans-serif;
+  text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+  margin-bottom: 15px;
+}
+
+.activate-boost-purchased-sub {
+  font-size: 35px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "PP Neue Machina", sans-serif;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.activate-boost-popup .mk-corner {
+  position: absolute;
+  width: var(--mk-corner-size);
+  height: var(--mk-corner-size);
+  z-index: 5; /* above content background */
+}
+
+.activate-boost-popup .mk-top-left {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-top-right {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-bottom-left {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-bottom-right {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-top-left-purchased {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-top-right-purchased {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-bottom-left-purchased {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.activate-boost-popup .mk-bottom-right-purchased {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
