@@ -29,8 +29,8 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate }) => {
 
     return (
         <>
-            <div className="abp_overlay">
-                <div className="abp_popup-container" style={{ backgroundImage: `url(${popupBackground})` }}>
+            <div className="abp_overlay" onClick={onClose}>
+                <div className="abp_popup-container" style={{ backgroundImage: `url(${popupBackground})` }} onClick={(e) => e.stopPropagation()}>
                     <div className="abp_content">
                         <div className="abp_boost-options">
                             <div className="abp_boost-option">
