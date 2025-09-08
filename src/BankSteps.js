@@ -18,6 +18,7 @@ import claim_starlet_button from './images/claim_starlet_button.png';
 import bs_receive_starlet_text_claim from './images/bs_receive_starlet_text_claim.png';
 import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_icon.png';
 import bank_step_group_icon from './images/bank_step_group_icon.png';
+import boost_icon from './images/Icon_Step_Boost.png';
 
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
@@ -115,6 +116,11 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         // Handle find out more action
         // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
         window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+    };
+
+    const handleActivateBoost = () => {
+        // Handle activate boost action
+        console.log('Activate boost clicked');
     };
 
     const updateProgressBar = (received) => {
@@ -331,11 +337,17 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         </div>
                     </div>
 
-                    <img 
-                        src={sneaker_icon_group}
-                        alt="STEPN NFT Group" 
-                        className="bs_stepn-nft-group"
-                    />
+                    <div className="bs_nft-group-container">
+                        <img 
+                            src={sneaker_icon_group}
+                            alt="STEPN NFT Group" 
+                            className="bs_stepn-nft-group"
+                        />
+                        <button className="bs_activate-boost-button" onClick={handleActivateBoost}>
+                            <img src={boost_icon} alt="Boost Icon" className="bs_boost-icon" />
+                            <span>ACTIVATE</span>
+                        </button>
+                    </div>
                     <div className='bs_stat'>
                         <div className="bs_stat-labels">
                             <div className="bs_stat-label">Km</div>
