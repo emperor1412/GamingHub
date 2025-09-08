@@ -1,13 +1,13 @@
 .activate-boost-popup-overlay {
   position: fixed;
-  top: 60px;
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 80px;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
 }

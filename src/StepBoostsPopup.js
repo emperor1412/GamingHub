@@ -246,13 +246,6 @@ const StepBoostsPopup = ({
                 <div className="step-boosts-line step-boosts-line-top">YOUR STARLET</div>
                 <div className="step-boosts-line step-boosts-line-top">CLAIM TODAY</div>
             </div>
-
-            {/* Pay button */}
-            <div className="step-boosts-pay-button">
-            <span className="pay-text">PAY</span>
-            <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
-            <img className="pay-icon" src={starletIcon} alt="Starlets" />
-            </div>
           </div>
         </div>
     </>
@@ -287,6 +280,13 @@ const StepBoostsPopup = ({
         <div className="step-boosts-actions">
           {!confirmed ? (
             <>
+              {/* Pay button */}
+              <div className="step-boosts-pay-button">
+                <span className="pay-text">PAY</span>
+                <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
+                <img className="pay-icon" src={starletIcon} alt="Starlets" />
+              </div>
+              
               <button className="step-boosts-no-thanks" onClick={handleNoThanks}>
                 NO THANKS
               </button>
