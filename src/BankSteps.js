@@ -160,10 +160,12 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         setShowActivateBoostPopup(false);
     };
 
-    const handleConfirmActivateBoost = (boostType) => {
+    const handleConfirmActivateBoost = async (boostType) => {
         // Handle actual boost activation logic here
         console.log(`Boost ${boostType} activated successfully`);
-        // You can add API call or other logic here
+        
+        // Refresh bank steps data to update boost state
+        await getBankSteps();
     };
 
     const updateProgressBar = (received) => {

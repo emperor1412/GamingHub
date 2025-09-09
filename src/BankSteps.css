@@ -1222,8 +1222,13 @@
 }
 
 .bs_boost-buy {
-    background: #556b2f !important; /* Dark olive green - BUY BOOST */
+    background: #3A3831 !important; /* Dark olive green - BUY BOOST */
 }
+
+.bs_boost-buy span {
+    color: #00FF00 !important;
+}
+
 
 .bs_boost-disabled {
     background: #808080 !important; /* Dark gray - DISABLED */

@@ -222,7 +222,11 @@
 }
 
 .abp_boost-buy {
-    background: #556b2f !important; /* Dark olive green - BUY BOOST */
+    background: #3A3831 !important; /* Dark olive green - BUY BOOST */
+}
+
+.abp_boost-buy span {
+    color: #00FF00 !important;
 }
 
 .abp_boost-disabled {
