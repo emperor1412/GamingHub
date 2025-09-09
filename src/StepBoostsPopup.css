@@ -421,12 +421,13 @@
     --mk-corner-border: 0.3px;           /* border thickness */
   
     /* Per-side offsets so you can tweak position easily */
-    --mk-corner-offset-top: 10px;
+    --mk-corner-offset-top: 20px;
     --mk-corner-offset-right: 20px;
     /* Ensure vertical span between top and bottom corners is exactly 330px */
-    --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 190px);
+    --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 150px);
     --mk-corner-offset-left: 20px;
   }
+
   
   .step-boosts-line.step-boosts-line-mid.step-boosts-purchased-text {
     /* style áp dụng riêng cho đúng div có đủ cả 3 class */
@@ -612,31 +613,76 @@
     border-right: var(--mk-corner-border) solid var(--mk-corner-color);
   }
 
-  .step-boosts-popup .mk-top-left-purchased {
+
+    /* Corner borders for purchased state */
+    .step-boosts-popup-purchased {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      height: auto;
+      min-width: 400px;
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      
+      /* Customizable variables for corner decoration */
+      --mk-corner-size: 7px;              /* corner box size */
+      --mk-corner-color: #ffffff;          /* border color */
+      --mk-corner-border: 0.3px;           /* border thickness */
+      /* Per-side offsets so you can tweak position easily */
+      --mk-corner-offset-top: 0px;
+      --mk-corner-offset-right: 15px;
+      --mk-corner-offset-bottom: 0px;
+      --mk-corner-offset-left: 15px;
+    }
+
+  .step-boosts-popup-purchased .mk-corner {
+    position: absolute;
+    width: var(--mk-corner-size);
+    height: var(--mk-corner-size);
+    z-index: 5; /* above content background */
+  }
+
+  .step-boosts-popup-purchased .mk-top-left-purchased {
     top: var(--mk-corner-offset-top);
     left: var(--mk-corner-offset-left);
     border-top: var(--mk-corner-border) solid var(--mk-corner-color);
     border-left: var(--mk-corner-border) solid var(--mk-corner-color);
   }
   
-  .step-boosts-popup .mk-top-right-purchased {
+  .step-boosts-popup-purchased .mk-top-right-purchased {
     top: var(--mk-corner-offset-top);
     right: var(--mk-corner-offset-right);
     border-top: var(--mk-corner-border) solid var(--mk-corner-color);
     border-right: var(--mk-corner-border) solid var(--mk-corner-color);
   }
   
-  .step-boosts-popup .mk-bottom-left-purchased {
+  .step-boosts-popup-purchased .mk-bottom-left-purchased {
     bottom: var(--mk-corner-offset-bottom);
     left: var(--mk-corner-offset-left);
     border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
     border-left: var(--mk-corner-border) solid var(--mk-corner-color);
   }
   
-  .step-boosts-popup .mk-bottom-right-purchased {
+  .step-boosts-popup-purchased .mk-bottom-right-purchased {
     bottom: var(--mk-corner-offset-bottom);
     right: var(--mk-corner-offset-right);
     border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
     border-right: var(--mk-corner-border) solid var(--mk-corner-color);
   }
   
+  @media (max-width: 480px) {
+
+  }
+
+  @media (max-width: 768px) {
+    
+  } 
+
+  @media (min-width: 1200px) {
+
+  }

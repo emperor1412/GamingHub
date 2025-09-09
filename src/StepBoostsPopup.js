@@ -226,7 +226,6 @@ const StepBoostsPopup = ({
         {/* Body: header + content grouped */}
         <div className="step-boosts-body">
           {/* Header: show only one icon for the selected step boost */}
-
           <div className="step-boosts-header">
             <div className="step-boosts-icons">
               <img
@@ -259,23 +258,25 @@ const StepBoostsPopup = ({
                  className="step-boosts-bg-image"
              />
          </div>
-         
-        <div className="mk-corner mk-top-left-purchased"></div>
-        <div className="mk-corner mk-top-right-purchased"></div>
-        <div className="mk-corner mk-bottom-left-purchased"></div>
-        <div className="mk-corner mk-bottom-right-purchased"></div>
-         <div className="step-boosts-body">
-             <div className="step-boosts-content">
-                 <div className="step-boosts-purchased-message">
-                     <div className="step-boosts-purchased-main">{displayAmount}</div>
-                     <div className="step-boosts-purchased-sub">MULTIPLIER</div>
-                     <div className="step-boosts-purchased-sub">PURCHASED!</div>
-                 </div>
-             </div>
-         </div>
+
+        <div className="step-boosts-popup-purchased">
+          <div className="mk-corner mk-top-left-purchased"></div>
+          <div className="mk-corner mk-top-right-purchased"></div>
+          <div className="mk-corner mk-bottom-left-purchased"></div>
+          <div className="mk-corner mk-bottom-right-purchased"></div>
+
+          <div className="step-boosts-body">
+              <div className="step-boosts-content">
+                  <div className="step-boosts-purchased-message">
+                      <div className="step-boosts-purchased-main">{displayAmount}</div>
+                      <div className="step-boosts-purchased-sub">MULTIPLIER</div>
+                      <div className="step-boosts-purchased-sub">PURCHASED!</div>
+                  </div>
+              </div>
+          </div>
+        </div>
      </>
     }
-        
         {/* Action buttons */}
         <div className="step-boosts-actions">
           {!confirmed ? (
