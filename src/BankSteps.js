@@ -60,6 +60,12 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [loading, setLoading] = React.useState(false);
     const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
     const [showActivateBoostPopup, setShowActivateBoostPopup] = React.useState(false);
+    const [boostData, setBoostData] = React.useState(null);
+
+    console.log('Profile items:', shared.profileItems);
+
+    const boostsStepsx1_5 = shared.profileItems?.find(item => item.type === 10120);
+    const boostsStepsx2 = shared.profileItems?.find(item => item.type === 10121);
 
     const handleBack = () => {
         onClose();
@@ -121,6 +127,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     };
 
     const handleActivateBoost = () => {
+        setBoostData({
+            x1_5: boostsStepsx1_5,
+            x2: boostsStepsx2
+        });
         setShowActivateBoostPopup(true);
     };
 
@@ -427,6 +437,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 isOpen={showActivateBoostPopup}
                 onClose={handleCloseActivateBoostPopup}
                 onActivate={handleConfirmActivateBoost}
+                boostData={boostData}
             />
         </>
     );

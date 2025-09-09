@@ -5,7 +5,7 @@ import boostIcon from './images/Boost_Icon.png';
 import boostIcon2 from './images/Icon_Step_Boost.png';
 import ActivateBoostConfirmPopup from './ActivateBoostConfirmPopup';
 
-const ActivateBoostPopup = ({ isOpen, onClose, onActivate }) => {
+const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData }) => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [selectedBoostType, setSelectedBoostType] = useState(null);
 
@@ -36,21 +36,37 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate }) => {
                             <div className="abp_boost-option">
                                 <img src={boostIcon} alt="Boost Icon" className="abp_boost-icon" />
                             <div className="abp_boost-label">1.5X BOOST STEPS</div>
-                                <button className="abp_activate-button-small" onClick={() => handleActivate('1.5x')}>
+                                <button 
+                                    className="abp_activate-button-small" 
+                                    onClick={() => handleActivate('1.5x')}
+                                    disabled={!boostData?.x1_5?.value || boostData.x1_5.value <= 0}
+                                    style={{
+                                        opacity: (!boostData?.x1_5?.value || boostData.x1_5.value <= 0) ? 0.5 : 1,
+                                        cursor: (!boostData?.x1_5?.value || boostData.x1_5.value <= 0) ? 'not-allowed' : 'pointer'
+                                    }}
+                                >
                                     <img src={boostIcon2} alt="Activate" className="abp_activate-icon" />
                                     <span>ACTIVATE</span>
                                 </button>
-                                <div className="abp_currency-amount">150</div>
+                                <div className="abp_currency-amount">{boostData?.x1_5?.value || 0}</div>
                             </div>
 
                             <div className="abp_boost-option">
                                 <img src={boostIcon} alt="Boost Icon" className="abp_boost-icon" />
                                 <div className="abp_boost-label">2X BOOST STEPS</div>
-                                <button className="abp_activate-button-small" onClick={() => handleActivate('2x')}>
+                                <button 
+                                    className="abp_activate-button-small" 
+                                    onClick={() => handleActivate('2x')}
+                                    disabled={!boostData?.x2?.value || boostData.x2.value <= 0}
+                                    style={{
+                                        opacity: (!boostData?.x2?.value || boostData.x2.value <= 0) ? 0.5 : 1,
+                                        cursor: (!boostData?.x2?.value || boostData.x2.value <= 0) ? 'not-allowed' : 'pointer'
+                                    }}
+                                >
                                     <img src={boostIcon2} alt="Activate" className="abp_activate-icon" />
                                     <span>ACTIVATE</span>
                                 </button>
-                                <div className="abp_currency-amount">300</div>
+                                <div className="abp_currency-amount">{boostData?.x2?.value || 0}</div>
                             </div>
                         </div>
                     </div>
