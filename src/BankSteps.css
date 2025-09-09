@@ -1147,6 +1147,7 @@
     left: -18px;
     display: flex;
     align-items: center;
+    justify-content: center;
     background: #ff00ff;
     border-radius: 25px;
     border: none;
@@ -1160,7 +1161,8 @@
     color: black;
     text-transform: uppercase;
     padding: 0px 16px 0px 20px;
-    min-width: 80px;
+    width: 120px;
+    min-width: 120px;
     font-weight: 800;
 }
 

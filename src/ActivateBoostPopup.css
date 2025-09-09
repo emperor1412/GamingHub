@@ -84,6 +84,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     background: #ff00ff;
     border-radius: 25px;
     border: none;
@@ -97,7 +98,8 @@
     color: black;
     text-transform: uppercase;
     padding: 0px 8px 0px 14px;
-    min-width: 80px;
+    width: 100px;
+    min-width: 100px;
     font-weight: 800;
 }
 
