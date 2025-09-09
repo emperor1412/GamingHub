@@ -713,6 +713,114 @@ data object
                 data: null
             };
         }
+    },
+
+    // New function to handle step boost activation
+    useStepBoost: async (boostType, depth = 0) => {
+        if (depth > 3) {
+            console.error('Use step boost failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            // Map boost type to propType
+            const propTypeMapping = {
+                '1.5x': 10120,
+                '2x': 10121
+            };
+
+            const propType = propTypeMapping[boostType];
+            if (!propType) {
+                return {
+                    success: false,
+                    error: 'Invalid boost type'
+                };
+            }
+
+            console.log('Use step boost params:', { boostType, propType });
+
+            // Add timeout to prevent hanging requests
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+            const response = await fetch(`${shared.server_url}/api/app/useStepBoost?token=${shared.loginData.token}&propType=${propType}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId); // Clear timeout if successful
+
+            console.log('Use step boost Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Use step boost data:', data);
+
+                if (data.code === 0) {
+                    // Refresh user profile to get updated data - use a separate call to avoid recursion
+                    try {
+                        await shared.getProfileWithRetry();
+                    } catch (profileError) {
+                        console.warn('Failed to refresh profile after step boost activation:', profileError);
+                        // Don't fail the entire operation if profile refresh fails
+                    }
+                    
+                    return {
+                        success: true,
+                        data: data.data,
+                        boostType: boostType,
+                        propType: propType
+                    };
+                } else if (data.code === 102001 || data.code === 102002) {
+                    console.log('Token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return shared.useStepBoost(boostType, depth + 1);
+                    } else {
+                        return {
+                            success: false,
+                            error: 'Token expired and re-login failed',
+                            data: data
+                        };
+                    }
+                } else {
+                    return {
+                        success: false,
+                        error: data.msg || 'Use step boost failed',
+                        data: data
+                    };
+                }
+            } else {
+                return {
+                    success: false,
+                    error: 'Use step boost request failed',
+                    data: null
+                };
+            }
+        } catch (error) {
+            // Handle timeout error specifically
+            if (error.name === 'AbortError') {
+                console.error('Use step boost timeout');
+                return {
+                    success: false,
+                    error: 'Request timeout - server took too long to respond',
+                    data: null
+                };
+            }
+            
+            console.error('Use step boost error:', error);
+            return {
+                success: false,
+                error: error.message,
+                data: null
+            };
+        }
     }
 
 };

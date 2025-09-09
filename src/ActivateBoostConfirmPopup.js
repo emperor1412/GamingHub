@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './ActivateBoostConfirmPopup.css';
 import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
 import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
 import iconPopStepBoostx1_5 from './images/Icon_Pop_Stepboosts_1_5X.png';
 import iconPopStepBoostx2 from './images/Icon_Pop_Stepboosts_2X.png';
 import stepBoostsPurchasedBg from './images/Icon_Status_Stepboosts.png';
+import shared from './Shared';
 
 const ActivateBoostConfirmPopup = ({ 
   isOpen, 
@@ -24,6 +25,8 @@ const ActivateBoostConfirmPopup = ({
   const popupRef = useRef(null);
   const [fixedHeight, setFixedHeight] = useState(null);
   const [fixedWidth, setFixedWidth] = useState(null);
+  // Track processing state for API calls
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Reset confirmation only when popup opens/closes
   useEffect(() => {
@@ -31,6 +34,7 @@ const ActivateBoostConfirmPopup = ({
       setConfirmed(false);
       setFixedHeight(null);
       setFixedWidth(null);
+      setIsProcessing(false);
     }
   }, [isOpen]);
 
@@ -68,16 +72,68 @@ const ActivateBoostConfirmPopup = ({
     onClose();
   };
 
-  const handleActivate = () => {
-    // Capture current popup size before content changes
-    if (popupRef.current) {
-      const rect = popupRef.current.getBoundingClientRect();
-      setFixedHeight(rect.height);
-      setFixedWidth(rect.width);
+  // Debounced handleActivate function to prevent multiple rapid calls
+  const handleActivate = useCallback(async () => {
+    if (isProcessing) return; // Prevent multiple calls
+    
+    setIsProcessing(true);
+    
+    try {
+      console.log('Activating step boost:', selectedBoostType);
+      
+      // Add timeout wrapper to prevent infinite loops
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 15000); // 15 second timeout
+      });
+      
+      // Call the useStepBoost API with timeout protection
+      const result = await Promise.race([
+        shared.useStepBoost(selectedBoostType),
+        timeoutPromise
+      ]);
+      
+      if (result && result.success) {
+        console.log('Step boost activated successfully');
+        
+        // Capture current popup size before content changes
+        if (popupRef.current) {
+          const rect = popupRef.current.getBoundingClientRect();
+          setFixedHeight(rect.height);
+          setFixedWidth(rect.width);
+        }
+        
+        // Call the parent onActivate callback
+        onActivate(selectedBoostType);
+        setConfirmed(true);
+      } else {
+        console.error('Failed to activate step boost:', result?.error);
+        await shared.showPopup({
+          type: 0,
+          title: 'Activation Failed',
+          message: result?.error || 'Failed to activate step boost. Please try again.'
+        });
+      }
+    } catch (error) {
+      console.error('Error activating step boost:', error);
+      
+      // Handle specific error types
+      let errorMessage = 'An error occurred while activating the step boost. Please try again.';
+      
+      if (error.message === 'Request timeout') {
+        errorMessage = 'Request timed out. Please check your connection and try again.';
+      } else if (error.message.includes('Maximum call stack size exceeded')) {
+        errorMessage = 'System error occurred. Please refresh the page and try again.';
+      }
+      
+      await shared.showPopup({
+        type: 0,
+        title: 'Error',
+        message: errorMessage
+      });
+    } finally {
+      setIsProcessing(false);
     }
-    onActivate(selectedBoostType);
-    setConfirmed(true);
-  };
+  }, [isProcessing, selectedBoostType, onActivate]);
 
   const handleBackToBankSteps = () => {
     onClose();
@@ -183,8 +239,9 @@ const ActivateBoostConfirmPopup = ({
               <button 
                 className="activate-boost-yes" 
                 onClick={handleActivate}
+                disabled={isProcessing}
               >
-                ACTIVATE
+                {isProcessing ? 'ACTIVATING...' : 'ACTIVATE'}
               </button>
             </>
           ) : (
