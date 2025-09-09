@@ -211,3 +211,22 @@
         min-width: 80px;
     }
 }
+
+/* Boost button states for ActivateBoostPopup */
+.abp_boost-activate {
+    background: #ff00ff !important; /* Magenta - ACTIVATE */
+}
+
+.abp_boost-active {
+    background: #00ff00 !important; /* Lime green - ACTIVE */
+}
+
+.abp_boost-buy {
+    background: #556b2f !important; /* Dark olive green - BUY BOOST */
+}
+
+.abp_boost-disabled {
+    background: #808080 !important; /* Dark gray - DISABLED */
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}

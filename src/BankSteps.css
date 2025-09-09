@@ -1211,3 +1211,22 @@
         box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(255, 0, 255, 0.6);
     }
 }
+
+/* Boost button states */
+.bs_boost-activate {
+    background: #ff00ff !important; /* Magenta - ACTIVATE */
+}
+
+.bs_boost-active {
+    background: #00ff00 !important; /* Lime green - ACTIVE */
+}
+
+.bs_boost-buy {
+    background: #556b2f !important; /* Dark olive green - BUY BOOST */
+}
+
+.bs_boost-disabled {
+    background: #808080 !important; /* Dark gray - DISABLED */
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}

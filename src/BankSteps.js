@@ -61,11 +61,33 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
     const [showActivateBoostPopup, setShowActivateBoostPopup] = React.useState(false);
     const [boostData, setBoostData] = React.useState(null);
+    const [stepBoostState, setStepBoostState] = React.useState(null);
 
     console.log('Profile items:', shared.profileItems);
 
     const boostsStepsx1_5 = shared.profileItems?.find(item => item.type === 10120);
     const boostsStepsx2 = shared.profileItems?.find(item => item.type === 10121);
+
+    // Determine boost button state based on stepBoostState and available boosts
+    const getBoostButtonState = () => {
+        // If no boost is active (stepBoostState is null or 0)
+        if (!stepBoostState || stepBoostState === 0) {
+            // Check if user has any boosts available
+            const hasX1_5Boost = boostsStepsx1_5?.value > 0;
+            const hasX2Boost = boostsStepsx2?.value > 0;
+            
+            if (hasX1_5Boost || hasX2Boost) {
+                return 'activate'; // User has boosts, can activate
+            } else {
+                return 'buy'; // No boosts available, need to buy
+            }
+        } else {
+            // A boost is currently active
+            return 'active';
+        }
+    };
+
+    const boostButtonState = getBoostButtonState();
 
     const handleBack = () => {
         onClose();
@@ -182,6 +204,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 setTime(Math.round(data.data.time * 0.1));
                 setSteps(data.data.steps);
                 setCanClaim(data.data.canReceive > data.data.received);
+                setStepBoostState(data.data.stepBoostState);
 
                 /* testing  */
                 // setStarletsReceived(335);
@@ -190,6 +213,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 // setTime(9876);
                 // setDistance(22.34);
                 // setCanClaim(true);
+                // setStepBoostState(10120); // Test 1.5x boost active
                 /* ------- */
 
                 
@@ -364,9 +388,17 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             alt="STEPN NFT Group" 
                             className="bs_stepn-nft-group"
                         />
-                        <button className="bs_activate-boost-button" onClick={handleActivateBoost}>
+                        <button 
+                            className={`bs_activate-boost-button bs_boost-${boostButtonState}`} 
+                            onClick={boostButtonState === 'buy' ? () => window.open('/market', '_blank') : handleActivateBoost}
+                        >
                             <img src={boost_icon} alt="Boost Icon" className="bs_boost-icon" />
-                            <span>ACTIVATE</span>
+                            <span>
+                                {boostButtonState === 'activate' && 'ACTIVATE'}
+                                {boostButtonState === 'active' && 'ACTIVE'}
+                                {boostButtonState === 'buy' && 'BUY BOOST'}
+                                {boostButtonState === 'disabled' && 'DISABLED'}
+                            </span>
                         </button>
                     </div>
                     <div className='bs_stat'>
@@ -438,6 +470,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 onClose={handleCloseActivateBoostPopup}
                 onActivate={handleConfirmActivateBoost}
                 boostData={boostData}
+                stepBoostState={stepBoostState}
             />
         </>
     );
