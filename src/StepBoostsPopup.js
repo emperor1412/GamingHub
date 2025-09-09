@@ -195,118 +195,123 @@ const StepBoostsPopup = ({
   const stepBoostIcon = stepBoostAssets[stepBoostId]?.icon || iconStepBoostx1_5;
 
   return (
-    <div className="step-boosts-popup-overlay" onClick={onClose}>
-      <div
-        className={`step-boosts-popup ${confirmed ? 'confirmed' : ''}`}
-        ref={popupRef}
-        style={
-          fixedHeight || fixedWidth
-            ? {
-                height: fixedHeight,
-                minHeight: fixedHeight,
-                maxHeight: fixedHeight,
-                width: fixedWidth,
-                minWidth: fixedWidth,
-                maxWidth: fixedWidth,
-                boxSizing: 'border-box',
-                overflow: 'hidden',
-              }
-            : undefined
-        }
-        onClick={(e) => e.stopPropagation()}
-      >
-
-    {!confirmed ? (
     <>
-        {/* Corner borders */}
-        <div className="mk-corner mk-top-left"></div>
-        <div className="mk-corner mk-top-right"></div>
-        <div className="mk-corner mk-bottom-left"></div>
-        <div className="mk-corner mk-bottom-right"></div>
-        {/* Body: header + content grouped */}
-        <div className="step-boosts-body">
-          {/* Header: show only one icon for the selected step boost */}
-          <div className="step-boosts-header">
-            <div className="step-boosts-icons">
-              <img
-                src={stepBoostIcon}
-                alt={`${displayAmount} Step Boost icon`}
-                className="step-boosts-icon"
-              />
-            </div>
-          </div>
+      <div className="step-boosts-popup-overlay" onClick={onClose}>
+        <div
+          className={`step-boosts-popup ${confirmed ? 'confirmed' : ''}`}
+          ref={popupRef}
+          style={
+            fixedHeight || fixedWidth
+              ? {
+                  height: fixedHeight,
+                  minHeight: fixedHeight,
+                  maxHeight: fixedHeight,
+                  width: fixedWidth,
+                  minWidth: fixedWidth,
+                  maxWidth: fixedWidth,
+                  boxSizing: 'border-box',
+                  overflow: 'visible',
+                }
+              : undefined
+          }
+          onClick={(e) => e.stopPropagation()}
+        >
 
-          
-          {/* Content area */}
-          <div className="step-boosts-content">
-            <div className="step-boosts-message">
-                <div className="step-boosts-line step-boosts-line-top">ACTIVATE BOOST</div>
-                <div className="step-boosts-line step-boosts-line-top">AND MULTIPLY</div>
-                <div className="step-boosts-line step-boosts-line-top">YOUR STARLET</div>
-                <div className="step-boosts-line step-boosts-line-top">CLAIM TODAY</div>
-            </div>
-          </div>
-        </div>
-    </>
-     ) : 
-     <>
-         {/* Background image with floating coins */}
-         <div className="step-boosts-purchased-bg">
-             <img 
-                 src={stepBoostsPurchasedBg} 
-                 alt="Floating coins background" 
-                 className="step-boosts-bg-image"
-             />
-         </div>
-
-        <div className="step-boosts-popup-purchased">
-          <div className="mk-corner mk-top-left-purchased"></div>
-          <div className="mk-corner mk-top-right-purchased"></div>
-          <div className="mk-corner mk-bottom-left-purchased"></div>
-          <div className="mk-corner mk-bottom-right-purchased"></div>
-
+      {!confirmed ? (
+      <>
+          {/* Corner borders */}
+          <div className="mk-corner mk-top-left"></div>
+          <div className="mk-corner mk-top-right"></div>
+          <div className="mk-corner mk-bottom-left"></div>
+          <div className="mk-corner mk-bottom-right"></div>
+          {/* Body: header + content grouped */}
           <div className="step-boosts-body">
-              <div className="step-boosts-content">
-                  <div className="step-boosts-purchased-message">
-                      <div className="step-boosts-purchased-main">{displayAmount}</div>
-                      <div className="step-boosts-purchased-sub">MULTIPLIER</div>
-                      <div className="step-boosts-purchased-sub">PURCHASED!</div>
-                  </div>
+            {/* Header: show only one icon for the selected step boost */}
+            <div className="step-boosts-header">
+              <div className="step-boosts-icons">
+                <img
+                  src={stepBoostIcon}
+                  alt={`${displayAmount} Step Boost icon`}
+                  className="step-boosts-icon"
+                />
               </div>
+            </div>
+
+            
+            {/* Content area */}
+            <div className="step-boosts-content">
+              <div className="step-boosts-message">
+                  <div className="step-boosts-line step-boosts-line-top">ACTIVATE BOOST</div>
+                  <div className="step-boosts-line step-boosts-line-top">AND MULTIPLY</div>
+                  <div className="step-boosts-line step-boosts-line-top">YOUR STARLET</div>
+                  <div className="step-boosts-line step-boosts-line-top">CLAIM TODAY</div>
+              </div>
+            </div>
           </div>
-        </div>
-     </>
-    }
-        {/* Action buttons */}
-        <div className="step-boosts-actions">
-          {!confirmed ? (
-            <>
-              {/* Pay button */}
-              <div className="step-boosts-pay-button">
-                <span className="pay-text">PAY</span>
-                <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
-                <img className="pay-icon" src={starletIcon} alt="Starlets" />
-              </div>
-              
-              <button className="step-boosts-no-thanks" onClick={handleNoThanks}>
-                NO THANKS
-              </button>
-              <button 
-                className="step-boosts-yes" 
-                onClick={handlePurchase}
-                disabled={isProcessing}
-              >
-                {isProcessing ? 'PROCESSING...' : 'BUY'}
-              </button>
-            </>
-          ) : (
-            <button className="step-boosts-yes step-boosts-back-button" onClick={onClose}>
-              BACK TO MARKET
-            </button>
-          )}
+      </>
+       ) : 
+       <>
+           {/* Background image with floating coins */}
+           <div className="step-boosts-purchased-bg">
+               <img 
+                   src={stepBoostsPurchasedBg} 
+                   alt="Floating coins background" 
+                   className="step-boosts-bg-image"
+               />
+           </div>
+
+          <div className="step-boosts-popup-purchased">
+            <div className="mk-corner mk-top-left-purchased"></div>
+            <div className="mk-corner mk-top-right-purchased"></div>
+            <div className="mk-corner mk-bottom-left-purchased"></div>
+            <div className="mk-corner mk-bottom-right-purchased"></div>
+
+            <div className="step-boosts-body">
+                <div className="step-boosts-content">
+                    <div className="step-boosts-purchased-message">
+                        <div className="step-boosts-purchased-main">{displayAmount}</div>
+                        <div className="step-boosts-purchased-sub">MULTIPLIER</div>
+                        <div className="step-boosts-purchased-sub">PURCHASED!</div>
+                    </div>
+                </div>
+            </div>
+          </div>
+       </>
+      }
+          {/* Action buttons */}
+          <div className="step-boosts-actions">
+            {!confirmed ? (
+              <>
+                {/* Pay button */}
+                <div className="step-boosts-pay-button">
+                  <span className="pay-text">PAY</span>
+                  <span className="pay-amount">{selectedPackage.starlet?.toLocaleString()}</span>
+                  <img className="pay-icon" src={starletIcon} alt="Starlets" />
+                </div>
+                
+                <button className="step-boosts-no-thanks" onClick={handleNoThanks}>
+                  NO THANKS
+                </button>
+                <button 
+                  className="step-boosts-yes" 
+                  onClick={handlePurchase}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? 'PROCESSING...' : 'BUY'}
+                </button>
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+      
+      {/* Back button rendered outside popup */}
+      {confirmed && (
+        <button className="step-boosts-back-button" onClick={onClose}>
+          BACK TO MARKET
+        </button>
+      )}
+    </>
   );
 };
 
