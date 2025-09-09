@@ -190,8 +190,8 @@ const StepBoostsPopup = ({
   if (!isOpen || !selectedPackage) return null;
 
   // Get display amount and icon based on selected package
-  const displayAmount = selectedPackage?.name?.includes('X1.5') ? '1.5X' : '2X';
-  const stepBoostId = selectedPackage?.name?.includes('X1.5') ? 1 : 2;
+  const displayAmount = selectedPackage?.name?.includes('1.5') ? '1.5X' : '2X';
+  const stepBoostId = selectedPackage?.name?.includes('1.5') ? 1 : 2;
   const stepBoostIcon = stepBoostAssets[stepBoostId]?.icon || iconStepBoostx1_5;
 
   return (

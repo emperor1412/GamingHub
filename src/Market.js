@@ -771,8 +771,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       if (product.prop === 10120 || product.prop === 10121) {
         return {
           name: product.name,
-          displayAmount: product.name.includes('x1.5') ? 'X1.5' : 'X2',
-          icon: product.name.includes('x1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
+          displayAmount: product.name.includes('1.5') ? 'X1.5' : 'X2',
+          icon: product.name.includes('1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
           description: 'BOOST YOUR STEPS',
           category: 'Step Boosts',
           useBackground: false,
@@ -1509,11 +1509,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               const productInfo = getStarletProductInfo(product);
                               // const hasFSLID = !!shared.userProfile?.fslId;
                               // const userLevel = shared.userProfile?.level || 0;
-                              // const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                               
                               // // Check conditions for Step Boosts
-                              // let isDisabled = false;
-                              // let disabledReason = '';
+                              let isDisabled = false;
+                              let disabledReason = '';
                               
                               // // 1. FSL ID not connected
                               // if (!hasFSLID) {
@@ -1538,9 +1538,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               // // 5. Check if user already has an active boost (only one can be active at a time)
                               // // This would need to be implemented based on your backend logic
                               // // For now, we'll allow purchase but the activation logic should be handled elsewhere
+
+                              // 1. Not enough starlets
+                              if (userStarlets < product.starlet) {
+                                isDisabled = true;
+                                disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                              }
                               
-                              // const isAvailable = !isDisabled;
-                              const isAvailable = true;
+                              const isAvailable = !isDisabled;
                               
                               return (
                                 <button 
@@ -1588,8 +1593,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                           <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
                                         </>
                                       ) : (
-                                        // disabledReason
-                                        'TEST'
+                                        disabledReason
                                       )}
                                     </div>
                                   </div>
