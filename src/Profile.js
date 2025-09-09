@@ -275,6 +275,11 @@ Response:
                                             i
                                         </button>
                                     )}
+                                    {item.type === 10110 && (
+                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FREEZE-STREAK-FAQ-26895c775fea807393e0c4917cf9a0c3', '_blank')}>
+                                            i
+                                        </button>
+                                    )}
                                     </div>
                                     <div className="profile-item-right">
                                         {item.showClaim && (
