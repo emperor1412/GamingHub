@@ -444,6 +444,7 @@
     pointer-events: none;
     width: 100%;
     height: 100%;
+    top: -30px;
   }
 
   .step-boosts-bg-image {
@@ -467,15 +468,15 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+    font-family: "PP Neue Machina", sans-serif;
   }
 
   .step-boosts-purchased-main {
     font-size: 100px;
-    font-weight: 900;
+    font-weight: 700;
     color: #00FF00;
     line-height: 0.8;
-    font-family: "PP Neue Machina", sans-serif;
-    text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    font-family: "PP Neue Machina inktrap", sans-serif;
     margin-bottom: 15px;
   }
   
