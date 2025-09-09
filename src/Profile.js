@@ -275,6 +275,11 @@ Response:
                                             i
                                         </button>
                                     )}
+                                    {item.type === 10110 && (
+                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank')}>
+                                            i
+                                        </button>
+                                    )}
                                     </div>
                                     <div className="profile-item-right">
                                         {item.showClaim && (
