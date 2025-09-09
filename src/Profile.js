@@ -276,7 +276,7 @@ Response:
                                         </button>
                                     )}
                                     {item.type === 10110 && (
-                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank')}>
+                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FREEZE-STREAK-FAQ-26895c775fea807393e0c4917cf9a0c3', '_blank')}>
                                             i
                                         </button>
                                     )}
