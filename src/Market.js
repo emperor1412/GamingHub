@@ -1507,40 +1507,32 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             .filter(product => product.prop === 10120 || product.prop === 10121) // Filter for step boost products (prop 20010 = step boosts)
                             .map((product) => {
                               const productInfo = getStarletProductInfo(product);
-                              // const hasFSLID = !!shared.userProfile?.fslId;
-                              // const userLevel = shared.userProfile?.level || 0;
+                              const hasFSLID = !!shared.userProfile?.fslId;
+                              const userLevel = shared.userProfile?.level || 0;
                               const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
                               
                               // // Check conditions for Step Boosts
                               let isDisabled = false;
                               let disabledReason = '';
                               
-                              // // 1. FSL ID not connected
-                              // if (!hasFSLID) {
-                              //   isDisabled = true;
-                              //   disabledReason = 'FSL ID NOT CONNECTED';
-                              // }
-                              // // 2. Level requirement (Level 5 for Step Boosts)
-                              // else if (userLevel < 5) {
-                              //   isDisabled = true;
-                              //   disabledReason = 'LEVEL 5 REQUIRED';
-                              // }
-                              // // 3. Not enough starlets
-                              // else if (userStarlets < product.starlet) {
-                              //   isDisabled = true;
-                              //   disabledReason = product.starlet.toLocaleString() + ' STARLETS';
-                              // }
-                              // // 4. Product state unavailable
-                              // else if (product.state !== 0) {
-                              //   isDisabled = true;
-                              //   disabledReason = 'UNAVAILABLE';
-                              // }
-                              // // 5. Check if user already has an active boost (only one can be active at a time)
-                              // // This would need to be implemented based on your backend logic
-                              // // For now, we'll allow purchase but the activation logic should be handled elsewhere
-
-                              // 1. Not enough starlets
-                              if (userStarlets < product.starlet) {
+                              // *. FSL ID not connected
+                              if (!hasFSLID) {
+                                isDisabled = true;
+                                disabledReason = 'FSL ID NOT CONNECTED';
+                              }
+                              // 1. Level requirement (Level 10 for Step Boosts)
+                              else if (userLevel < 10) {
+                                isDisabled = true;
+                                disabledReason = 'LEVEL 10 REQUIRED';
+                              }
+                              // 2. Bank Steps Not Connected
+                              else if (!isConnectedBankSteps) {
+                                isDisabled = true;
+                                disabledReason = 'BANK STEPS NOT CONNECTED';
+                              }
+                              // 3. Not enough starlets
+                              else if (userStarlets < product.starlet) {
                                 isDisabled = true;
                                 disabledReason = product.starlet.toLocaleString() + ' STARLETS';
                               }

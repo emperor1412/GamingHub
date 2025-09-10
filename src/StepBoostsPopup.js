@@ -123,7 +123,6 @@ const StepBoostsPopup = ({
       if (data.code === 0) {
         // Success - show confirmation
         console.log('Purchase successful');
-        onPurchase(selectedPackage);
         setConfirmed(true);
         
         // Refresh user profile to get updated data
@@ -146,7 +145,6 @@ const StepBoostsPopup = ({
           const retryData = await retryResponse.json();
           if (retryData.code === 0) {
             console.log('Retry purchase successful');
-            onPurchase(selectedPackage);
             setConfirmed(true);
             await shared.getProfileWithRetry();
           } else {
@@ -294,7 +292,7 @@ const StepBoostsPopup = ({
                 </button>
                 <button 
                   className="step-boosts-yes" 
-                  onClick={handlePurchase}
+                  onClick={handleConfirmAndPay}
                   disabled={isProcessing}
                 >
                   {isProcessing ? 'PROCESSING...' : 'BUY'}
