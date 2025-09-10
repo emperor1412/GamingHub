@@ -1,0 +1,301 @@
+.freeze-status-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+  padding-top: 20px;
+}
+
+.freeze-status-popup {
+  background: #000000;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-family: "PP Neue Machina", sans-serif;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1001;
+}
+
+/* Main content area */
+.freeze-status-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Large freeze streak icon */
+.freeze-status-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.freeze-status-icon-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.6));
+}
+
+/* Freeze streaks used section */
+.freeze-status-used {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* You missed X days section */
+.freeze-status-missed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.freeze-status-missed-text {
+  font-size: 39px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-top: 50px;
+}
+
+/* Streak is broken section */
+.freeze-status-broken {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.freeze-status-broken-text {
+  font-size: 39px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 0.9;
+}
+
+.freeze-status-number {
+  font-size: 72px;
+  font-weight: 700;
+  color: white;
+  line-height: 0.8;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.freeze-status-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+}
+
+.freeze-status-text div {
+  font-size: 39px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Current freeze streaks section */
+.freeze-status-current {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.freeze-status-small-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.freeze-status-small-icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(0, 191, 255, 0.6));
+}
+
+.freeze-status-current-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Action buttons */
+.freeze-status-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.freeze-status-close,
+.freeze-status-purchase {
+  background: #000FEF;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 12px 24px;
+  line-height: 1;
+  width: 100%;
+  max-width: 300px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.freeze-status-close:hover,
+.freeze-status-purchase:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 15, 239, 0.6);
+}
+
+.freeze-status-close:active,
+.freeze-status-purchase:active {
+  transform: translateY(0);
+}
+
+/* Corner borders for FreezeStreakStatusPopup */
+.freeze-status-popup {
+  /* Customizable variables for corner decoration */
+  --mk-corner-size: 7px;              /* corner box size */
+  --mk-corner-color: #ffffff;          /* border color */
+  --mk-corner-border: 0.3px;           /* border thickness */
+
+  /* Per-side offsets so you can tweak position easily */
+  --mk-corner-offset-top: 10px;
+  --mk-corner-offset-right: 20px;
+  /* Ensure vertical span between top and bottom corners is exactly 330px */
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 190px);
+  --mk-corner-offset-left: 20px;
+}
+
+.freeze-status-popup .mk-corner {
+  position: absolute;
+  width: var(--mk-corner-size);
+  height: var(--mk-corner-size);
+  z-index: 5; /* above content background */
+}
+
+.freeze-status-popup .mk-top-left {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-status-popup .mk-top-right {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-status-popup .mk-bottom-left {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-status-popup .mk-bottom-right {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+/* Adjust bottom corners for missed popup */
+.freeze-status-popup .mk-bottom-left {
+  bottom: calc(var(--mk-corner-offset-bottom) + 25px);
+}
+
+.freeze-status-popup .mk-bottom-right {
+  bottom: calc(var(--mk-corner-offset-bottom) + 25px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 48000px) {
+  
+  .freeze-status-icon-img {
+    height: 180px;
+    width: auto;
+  }
+  
+  .freeze-status-number {
+    font-size: 90px;
+  }
+
+  .freeze-status-number.freeze-status-missed {
+    font-size: 39px;
+  }
+
+  
+  .freeze-status-current-text {
+    font-size: 17px;
+  }
+
+  .freeze-status-current.freeze-status-missed-popup {
+    margin-top: 60px;
+  }
+  
+  .freeze-status-close,
+  .freeze-status-purchase {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}

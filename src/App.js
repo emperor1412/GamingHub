@@ -12,6 +12,7 @@ import Frens from './Frens';
 import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
 import BankSteps from './BankSteps';
+import FreezeStreakStatusPopup from './FreezeStreakStatusPopup';
 import { 
   trackSectionView, 
   trackNavigation, 
@@ -45,6 +46,8 @@ import checkInAnimation from './images/check_in_animation_540.gif';
 
 import shared from './Shared';
 import lock_icon from "./images/lock_trophy.png";
+import freezeBG from './images/FreezeStreaksBG.png';
+import freezeText from './images/FreezeStreaksText.png';
 
 import loading_background from "./images/GamesHubLoading.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
@@ -86,6 +89,14 @@ function App() {
   const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
+  
+  // Freeze streak status popup states
+  const [showFreezeStreakStatus, setShowFreezeStreakStatus] = useState(false);
+  const [freezeStreakData, setFreezeStreakData] = useState({
+    missDay: 0,
+    remainingFreezeStreaks: 0,
+    useStreakFreeze: false
+  });
 
   // Add a ref to track initialization
   const initRef = useRef(false);
@@ -99,9 +110,30 @@ function App() {
     console.log(`Checking in ........: ${now.toLocaleString()}`);
     
     const checkInResult = await shared.checkIn(loginData);
+    console.log('CheckIn result:', checkInResult);
     
     if (checkInResult.success) {
         setCheckInData(checkInResult.data);
+        console.log('CheckIn data set:', checkInResult.data);
+        
+        // Check if freeze streak was used OR streak is broken - but still show animation first
+        if (checkInResult.data.missDay > 0) {
+            console.log('Missed days detected, will show status popup after animation');
+            // Ensure profile is loaded before getting freeze streaks
+            if (!shared.userProfile) {
+                console.log('Profile not loaded, getting profile data first');
+                await getProfileData();
+            }
+            // Store freeze streak data for later use
+            const remainingFreezeStreaks = await getRemainingFreezeStreaks();
+            setFreezeStreakData({
+                missDay: checkInResult.data.missDay,
+                remainingFreezeStreaks: remainingFreezeStreaks,
+                useStreakFreeze: checkInResult.data.useStreakFreeze
+            });
+            // Still return 1 to show animation, popup will be shown after animation
+            return 1;
+        }
         
         if (checkInResult.isCheckIn) {
             console.log('Redirect to checkIn screen');
@@ -120,6 +152,37 @@ function App() {
         return 2;
     }
 };
+
+  // Function to get remaining freeze streaks from user profile
+  const getRemainingFreezeStreaks = async () => {
+    try {
+      console.log('getRemainingFreezeStreaks - shared.userProfile:', shared.userProfile);
+      
+      // Check if streakFreeze is directly in userProfile
+      if (shared.userProfile && shared.userProfile.streakFreeze !== undefined) {
+        console.log('Found streakFreeze:', shared.userProfile.streakFreeze);
+        return shared.userProfile.streakFreeze;
+      }
+      
+      // Check if it's in UserToken array (like other tokens)
+      if (shared.userProfile && shared.userProfile.UserToken) {
+        console.log('Checking UserToken array:', shared.userProfile.UserToken);
+        const freezeStreakToken = shared.userProfile.UserToken.find(token => 
+          token.prop_id === 10110 || token.prop_id === '10110'
+        );
+        if (freezeStreakToken) {
+          console.log('Found freeze streak in UserToken:', freezeStreakToken);
+          return freezeStreakToken.num || freezeStreakToken.ableNum || 0;
+        }
+      }
+      
+      console.log('streakFreeze not found, returning 0');
+      return 0; // Default fallback
+    } catch (error) {
+      console.error('Error getting remaining freeze streaks:', error);
+      return 0;
+    }
+  };
 
   const getProfileData = async (loginDataParam) => {
     const dataToUse = loginDataParam || loginData;
@@ -369,6 +432,8 @@ const bind_fslid = async () => {
       background,
       checkInAnimation,
       lock_icon,
+      freezeBG,
+      freezeText,
       // Add any other images you need to preload
     ];
 
@@ -518,6 +583,24 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  // Freeze streak status popup handlers
+  const handleFreezeStreakStatusClose = () => {
+    console.log('Freeze streak popup closed, showing CheckIn view');
+    setShowFreezeStreakStatus(false);
+    // TH1: User ấn CLOSE -> show CheckIn.js
+    setShowCheckInView(true);
+  };
+
+  const handlePurchaseAnotherFreezeStreak = () => {
+    console.log('Purchase another freeze streak clicked, navigating to market');
+    setShowFreezeStreakStatus(false);
+    // TH2: User ấn PURCHASE ANOTHER -> gọi onClickMarketplace
+    // Set the initial market tab to 'starlet'
+    shared.setInitialMarketTab('starlet');
+    // Navigate to market tab
+    setActiveTab('market');
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'home':
@@ -627,8 +710,17 @@ const bind_fslid = async () => {
           </div>
 
           <button className="checkin-animation-button" onClick={() => {
+            console.log('Animation button clicked, checkInData:', checkInData);
             setShowCheckInAnimation(false);
-            setShowCheckInView(true);
+            // Check if there are missed days (either freeze streak used or streak broken)
+            if (checkInData && checkInData.missDay > 0) {
+              console.log('Missed days detected, showing status popup');
+              // Show freeze streak status popup
+              setShowFreezeStreakStatus(true);
+            } else {
+              console.log('No missed days, showing check-in view');
+              setShowCheckInView(true);
+            }
           }}>
             <div className="checkin-content">
               <img src={checkInAnimation} alt="Check In Animation" className="checkin-animation-img"/>
@@ -641,6 +733,17 @@ const bind_fslid = async () => {
             </div>
           </button>
         </div>
+      )
+      : showFreezeStreakStatus ?
+      (
+        <FreezeStreakStatusPopup
+          isOpen={showFreezeStreakStatus}
+          onClose={handleFreezeStreakStatusClose}
+          onPurchaseAnother={handlePurchaseAnotherFreezeStreak}
+          missDay={freezeStreakData.missDay}
+          remainingFreezeStreaks={freezeStreakData.remainingFreezeStreaks}
+          useStreakFreeze={freezeStreakData.useStreakFreeze}
+        />
       )
       : showCheckInView ?
       (

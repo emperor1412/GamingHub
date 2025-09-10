@@ -6,6 +6,7 @@ import gmtIcon from './images/GMT_1.png';
 import SUT from './images/SUT.png';
 import energy from './images/energy.svg';
 import mooar from './images/Mooar.svg';
+import streakFreeze from './images/streakFreezeIcon.png';
 import stepn_go_sneaker from './images/STEPNGO_SNEAKER_BUSHWALKING_Common.png';
 import stepn_go_code from './images/stepngo_code.png';
 import alpha_chest from './images/Chest_Icon.png';
@@ -81,6 +82,7 @@ const shared = {
         10010: ticketIcon,
         10020: starletIcon,
         10030: energy,
+        10110: streakFreeze,
         20010: SUT,
         20020: gmtIcon,
         30010: stepn_go_code,
@@ -92,6 +94,7 @@ const shared = {
         10010: 'Tickets',
         10020: 'Starlets',
         10030: 'Energy',
+        10110: 'Streak Freeze',
         20010: 'SUT',
         20020: 'GMT',
         30010: 'StepN GO code',

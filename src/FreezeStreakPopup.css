@@ -1,0 +1,481 @@
+
+
+.freeze-streak-pay-button:active .pay-text {
+  box-shadow: rgba(255, 0, 246, 0.6);
+}
+
+.freeze-streak-popup-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.freeze-streak-popup {
+  background: rgba(35, 31, 32, 0.8);
+  border: none;
+  border-radius: 0;
+  /* Make popup a vertical flex container so actions can sit at the bottom */
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 0 18px;
+  text-align: center;
+  font-family: "PP Neue Machina", sans-serif;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1001;
+  margin-top: 0;
+}
+
+/* Header section with icon and day text */
+.freeze-streak-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  height: 200px;
+}
+
+
+.freeze-streak-hexagon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+  overflow: hidden;
+}
+
+.freeze-streak-snowflake {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  filter: brightness(1.2) drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+
+.freeze-streak-number {
+  font-size: 128px;
+  font-weight: 700;
+  color: white;
+  line-height: 0.8;
+  font-family: "PP Neue Machina", sans-serif;
+  position: absolute;
+  left: calc(50% + 75px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.freeze-streak-day-text {
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+  margin-top: -5px;
+  font-family: "PP Neue Machina", sans-serif;
+  position: absolute;
+  left: calc(50% + 10px);
+  top: calc(50% + 75px);
+  transform: translate(-50%, -50%) translate(5px, 5px);
+  z-index: 10;
+}
+
+.freeze-pop-icon {
+  height: 180px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  position: absolute;
+  left: calc(50% - 25px);
+  top: 50%;
+  transform: translate(-50%, -50%) translateX(-10px);
+  z-index: 5;
+}
+
+.freeze-streak-icons.freeze-streak-5 .freeze-pop-icon {
+  left: 50%;
+}
+
+.freeze-streak-number.freeze-streak-5  {
+  left: calc(50% + 50px);
+}
+
+.freeze-streak-day-text.freeze-streak-5  {
+  left: 50%;
+  top: calc(50% + 75px);
+}
+
+.freeze-streak-title {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.freeze-streak-message {
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Three-line message parts */
+.freeze-line {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.freeze-line-top,
+.freeze-line-bottom {
+  font-size: 32px;
+  letter-spacing: 0.02em;
+}
+
+.freeze-line-mid {
+  font-size: 64px;
+  line-height: 1;
+}
+
+/* Purchased state message */
+.freeze-purchased-text {
+  /* Adjust these as needed */
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Freeze options */
+.freeze-streak-options {
+  margin-bottom: 20px;
+}
+
+.freeze-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 6px 0;
+}
+
+.freeze-option-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(0, 191, 255, 0.8));
+}
+
+.freeze-option-text {
+  font-size: 15px;
+  color: #bbb;
+  font-weight: 500;
+}
+
+/* Pay button */
+.freeze-streak-pay-button {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.freeze-streak-pay-button:hover {
+  transform: translateY(-1px);
+}
+
+.freeze-streak-pay-button:active {
+  transform: translateY(0);
+}
+
+.freeze-streak-pay-button:focus,
+.freeze-streak-pay-button:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.pay-text {
+  font-size: 18px;
+  font-weight: 700;
+  background: #FF00F6;
+  color: #fff;
+  padding: 3px 6px;
+  line-height: 1;
+  display: inline-block;
+  gap: 10px;
+}
+
+.pay-amount {
+  font-size: 50px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.pay-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* Action buttons */
+.freeze-streak-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  /* Push actions to the bottom of the popup */
+  margin-top: auto;
+}
+
+/* In confirmed state, push header+content down instead, keep actions at very bottom */
+.freeze-streak-body { 
+  display: flex;
+  flex-direction: column;
+}
+.freeze-streak-popup.confirmed .freeze-streak-body {
+  margin-bottom: 50px;    /* small gap above actions */
+}
+.freeze-streak-popup.confirmed .freeze-streak-actions {
+  margin-top: auto; /* push actions to bottom */
+}
+
+.freeze-streak-no-thanks {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 4px 14px; /* smaller padding */
+  line-height: 1;    /* tighter content height */
+  width: 100%;
+  max-width: 330px;
+}
+
+.freeze-streak-yes {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 8px 18px; /* reduced vertical height */
+  line-height: 1;    /* tighter content height */
+  width: 100%;
+  max-width: 330px;
+}
+
+/* Back to Market button modifier */
+.freeze-back-button {
+  /* Adjust these as needed */
+  font-size: 26px;
+}
+
+.freeze-streak-no-thanks:hover,
+.freeze-streak-yes:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 15, 239, 0.6);
+}
+
+.freeze-streak-no-thanks:active,
+.freeze-streak-yes:active {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 4800px) {
+  .freeze-streak-popup {
+    width: 100%;  
+  }
+  
+  .freeze-streak-hexagon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .freeze-streak-snowflake {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .freeze-streak-content {
+    padding: 4px;
+  }
+  
+  .freeze-line-top,
+  .freeze-line-bottom {
+    font-size: 24px;
+  }
+
+  .freeze-line-mid {
+    font-size: 30px;
+  }
+
+  /* Purchased message on mobile */
+  .freeze-purchased-text {
+    font-size: 28px;
+  }
+  
+  .freeze-streak-pay-button {
+    gap: 12px;
+  }
+  
+  .pay-text {
+    font-size: 36px;
+  }
+  
+  .pay-amount {
+    font-size: 32px;
+  }
+
+  .pay-icon {
+    /* Remove negative margin to center properly */
+  }
+  /* Reduce header bottom spacing */
+  .freeze-streak-header {
+    margin-bottom: 0;
+  }
+
+  /* Options list compaction */
+  .freeze-streak-options {
+    margin-bottom: 0;
+  }
+  .freeze-option {
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 4px 0;
+  }
+
+  /* Action buttons compaction */
+  .freeze-streak-actions {
+    gap: 8px;
+  }
+  .freeze-streak-no-thanks{
+    font-size: 24px;
+    padding: 10px 16px;
+  }
+
+  .freeze-streak-yes {
+    margin-bottom: 40px; /* spacing between the two buttons */
+    font-size: 26px;
+    padding: 10px 16px;
+  }
+
+  /* Back button font on mobile */
+  .freeze-back-button {   
+    margin-bottom: 50px; /* spacing between the two buttons */
+    font-size: 24px;
+  }
+}
+
+/* Corner borders for FreezeStreakPopup */
+.freeze-streak-popup {
+  /* Customizable variables for corner decoration */
+  --mk-corner-size: 7px;              /* corner box size */
+  --mk-corner-color: #ffffff;          /* border color */
+  --mk-corner-border: 0.3px;           /* border thickness */
+
+  /* Per-side offsets so you can tweak position easily */
+  --mk-corner-offset-top: 10px;
+  --mk-corner-offset-right: 20px;
+  /* Ensure vertical span between top and bottom corners is exactly 330px */
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 190px);
+  --mk-corner-offset-left: 20px;
+}
+
+.freeze-line.freeze-line-mid.freeze-purchased-text {
+  /* style áp dụng riêng cho đúng div có đủ cả 3 class */
+  margin-top: 50px;
+}
+
+.freeze-streak-popup .mk-corner {
+  position: absolute;
+  width: var(--mk-corner-size);
+  height: var(--mk-corner-size);
+  z-index: 5; /* above content background */
+}
+
+.freeze-streak-popup .mk-top-left {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-top-right {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-bottom-left {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.freeze-streak-popup .mk-bottom-right {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
