@@ -394,32 +394,21 @@
 }
 
 .info-button {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #83807F;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    background: none;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /* margin-left: 8px; */
     transition: all 0.2s ease;
     position: relative;
     z-index: 10;
-    
-    color: #83807F;
-    font-family: "PP Neue Machina";
-    font-size: 12px;
-    font-style: italic;
-    font-weight: 600;
-    line-height: 1;
+    padding: 0;
 }
 
 .info-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #FFF;
-    color: #FFF;
+    transform: scale(1.1);
+    opacity: 0.8;
 }
 
 .info-button:active {
