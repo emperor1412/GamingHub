@@ -24,6 +24,14 @@ import trophy_10020 from './images/Runner-Trophy_Colour.png';
 import trophy_10020_locked from './images/Runner-Trophy_Bw.png';
 import trophy_10030 from './images/FSLGAMES-newtrophyicons_1360.png';
 import trophy_10030_locked from './images/FSLGAMES-newtrophyicons_1360_1.png';
+import trophy_10040 from './images/TheFirstHunded_Unlocked.png';
+import trophy_10040_locked from './images/TheFirstHunded_Locked.png';
+import trophy_10041 from './images/TwoHundredStrong_Unlocked.png';
+import trophy_10041_locked from './images/TwoHundredStrong_Locked.png';
+import trophy_10042 from './images/Spartan_Unlocked.png';
+import trophy_10042_locked from './images/Spartan_Locked.png';
+import trophy_10043 from './images/UnbrokenYear_Unlocked.png';
+import trophy_10043_locked from './images/UnbrokenYear_Locked.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -111,14 +119,22 @@ const Frens = () => {
     10000: trophy_10000,
     10010: trophy_10010,
     10020: trophy_10020,
-    10030: trophy_10030
+    10030: trophy_10030,
+    10040: trophy_10040,
+    10041: trophy_10041,
+    10042: trophy_10042,
+    10043: trophy_10043,
   }
   
   const trophyIconLocked = {
     10000: trophy_10000_locked,
     10010: trophy_10010_locked,
     10020: trophy_10020_locked,
-    10030: trophy_10030_locked
+    10030: trophy_10030_locked,
+    10040: trophy_10040_locked,
+    10041: trophy_10041_locked,
+    10042: trophy_10042_locked,
+    10043: trophy_10043_locked,
   }
   
   const getTrophyData = async (depth = 0) => {
@@ -150,6 +166,10 @@ const Frens = () => {
                 trophy.id === 10010 && trophy.state === 0 ? trophy_10010_locked :
                 trophy.id === 10020 && trophy.state === 0 ? trophy_10020_locked :
                 trophy.id === 10030 && trophy.state === 0 ? trophy_10030_locked :
+                trophy.id === 10040 && trophy.state === 0 ? trophy_10040_locked :
+                trophy.id === 10041 && trophy.state === 0 ? trophy_10041_locked :
+                trophy.id === 10042 && trophy.state === 0 ? trophy_10042_locked :
+                trophy.id === 10043 && trophy.state === 0 ? trophy_10043_locked :
                 trophyIcon[trophy.id]
         }));
 
