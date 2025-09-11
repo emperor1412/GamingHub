@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.a154a1d7.css",
-    "main.js": "./static/js/main.0a92e7b9.js",
+    "main.css": "./static/css/main.3a8f23e3.css",
+    "main.js": "./static/js/main.a4d0bf51.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -146,6 +146,7 @@
     "static/media/Egglets_Description_4.png": "./static/media/Egglets_Description_4.6d50e70fbb04a52d6109.png",
     "static/media/Coming soon-05.png": "./static/media/Coming soon-05.2a90ee886501e9436007.png",
     "static/media/LFGO.png": "./static/media/LFGO.364707930addb09f1e2a.png",
+    "static/media/Icon_Status_Stepboosts.png": "./static/media/Icon_Status_Stepboosts.8b459286fe785736c091.png",
     "static/media/Egglets_Description_1.png": "./static/media/Egglets_Description_1.a37b3eaf28e4e9a771c3.png",
     "static/media/Icon_streak_1_day.png": "./static/media/Icon_streak_1_day.42db52211de85e224445.png",
     "static/media/sneaker_icon_group.png": "./static/media/sneaker_icon_group.99d5d639102b5d61d969.png",
@@ -156,7 +157,9 @@
     "static/media/shadow.png": "./static/media/shadow.27395acaf6c283eab075.png",
     "static/media/stepngo_code.png": "./static/media/stepngo_code.feddfc2b2086c5e84ff7.png",
     "static/media/trophy_3_200px.png": "./static/media/trophy_3_200px.d5ea6ef4daff09c97db3.png",
+    "static/media/Icon_Pop_Stepboosts_1_5X.png": "./static/media/Icon_Pop_Stepboosts_1_5X.060a5d7ea21ee665975a.png",
     "static/media/trophy_1_200px.png": "./static/media/trophy_1_200px.e4c9f6d5767024684519.png",
+    "static/media/Icon_Pop_Stepboosts_2X.png": "./static/media/Icon_Pop_Stepboosts_2X.0b40744ac209b3d10ce1.png",
     "static/media/Icon_streak_2_day.png": "./static/media/Icon_streak_2_day.4f2eff7387e1a3f8af03.png",
     "static/media/bank_step_coin.png": "./static/media/bank_step_coin.03673377f82706998b96.png",
     "static/media/Bg_streak_1.png": "./static/media/Bg_streak_1.8f614a0f9c213ee0a0a9.png",
@@ -203,12 +206,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.a154a1d7.css.map": "./static/css/main.a154a1d7.css.map",
-    "main.0a92e7b9.js.map": "./static/js/main.0a92e7b9.js.map",
+    "main.3a8f23e3.css.map": "./static/css/main.3a8f23e3.css.map",
+    "main.a4d0bf51.js.map": "./static/js/main.a4d0bf51.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a154a1d7.css",
-    "static/js/main.0a92e7b9.js"
+    "static/css/main.3a8f23e3.css",
+    "static/js/main.a4d0bf51.js"
   ]
 }
