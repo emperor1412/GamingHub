@@ -59,6 +59,16 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [steps, setSteps] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
+    const [hasBoost, setHasBoost] = React.useState(false);
+    const [boostMultiplier, setBoostMultiplier] = React.useState("X1.5");
+    
+    // Function to set boost state and multiplier together
+    const setBoostState = (stepBoostState) => {
+        const hasBoostValue = stepBoostState > 0;
+        const multiplierValue = stepBoostState === 10120 ? "1.5X" : "2X";
+        setHasBoost(hasBoostValue);
+        setBoostMultiplier(multiplierValue);
+    };
     const [showActivateBoostPopup, setShowActivateBoostPopup] = React.useState(false);
     const [boostData, setBoostData] = React.useState(null);
     const [stepBoostState, setStepBoostState] = React.useState(null);
@@ -112,8 +122,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             console.log('Claim response:', data);
             
             if (data.code === 0) {
-                console.log(`Claim successful: ${data.data} starlets, refreshing data...`);
-                setJustClaimedStarlets(data.data);
+                console.log(`Claim successful: ${data.data.num} starlets, refreshing data...`);
+                setJustClaimedStarlets(data.data.num);
+                // Set boost state and multiplier together
+                setBoostState(data.data.stepBoostState);
                 await getBankSteps();
                 setShowOverlayClaimSuccess(true);
             } else if (data.code === 102002 || data.code === 102001) {
@@ -290,6 +302,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const handleCloseSuccessOverlay = () => {
         trackOverlayExit('bank_steps_success', shared.loginData?.link, 'bank_steps');
         setShowOverlayClaimSuccess(false);
+        setBoostState(0); // Reset boost state and multiplier
     };
 
     if (shared.userProfile.fslId === 0) {
@@ -440,8 +453,13 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             {showOverlayClaimSuccess && (
                 <div className="bs_overlay">
                     <div className="bs_overlay-content">
-                        <div className="bs_overlay-starlets">
-                            {justClaimedStarlets}
+                        <div className="bs_overlay-starlets-container">
+                            <div className="bs_overlay-starlets">
+                                {justClaimedStarlets}
+                            </div>
+                            {hasBoost && (
+                                <div className="bs_overlay-boost">{boostMultiplier}</div>
+                            )}
                         </div>
                         <img 
                             src={bs_receive_starlet_text_claim} 
