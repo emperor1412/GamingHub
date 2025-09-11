@@ -950,11 +950,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   // Handle Step Boosts purchase
-  const handleStepBoostsPurchase = (stepBoostPackage) => {
+  const handleStepBoostsPurchase = async (stepBoostPackage) => {
     // Here you can implement the actual purchase logic
     console.log('Purchasing Step Boost package:', stepBoostPackage);
-    // Close popup after purchase
-    setShowStepBoostsPopup(false);
+    // Refresh user profile to update UI immediately
+    await refreshUserProfile();
   };
 
   // Handle Freeze Streak purchase
