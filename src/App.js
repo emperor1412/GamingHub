@@ -13,6 +13,7 @@ import ScratchTest from './ScratchTest';
 import Ticket from './Ticket';
 import BankSteps from './BankSteps';
 import FreezeStreakStatusPopup from './FreezeStreakStatusPopup';
+import ErrorBoundary from './ErrorBoundary';
 import { 
   trackSectionView, 
   trackNavigation, 
@@ -663,7 +664,8 @@ const bind_fslid = async () => {
   };
 
   return (
-    <div className="App">
+    <ErrorBoundary>
+      <div className="App">
       <div className="background-container">
         <img src={background} alt="background" />
       </div>
@@ -821,7 +823,8 @@ const bind_fslid = async () => {
       )}
 
       <div style={versionStyle}>{buildVersion}</div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 

@@ -19,6 +19,9 @@ import bgStreak2 from './images/Bg_streak_2.png';
 import bgStreak5 from './images/Bg_streak_5.png';
 import FreezeStreakPopup from './FreezeStreakPopup';
 import fslidIcon from './images/FSLID-ICON.png';
+import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
+import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
+import StepBoostsPopup from './StepBoostsPopup';
 
 // url: /app/buyOptions
 // Request:
@@ -103,10 +106,16 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [freezeStreakExpanded, setFreezeStreakExpanded] = useState(true);
   // Merch Coupon expansion state
   const [merchCouponExpanded, setMerchCouponExpanded] = useState(true);
+  // Step Boosts expansion state
+  const [stepBoostsExpanded, setStepBoostsExpanded] = useState(true);
   
   // Freeze Streak popup states
   const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
   const [selectedFreezeStreakPackage, setSelectedFreezeStreakPackage] = useState(null);
+
+  // Step Boosts popup states
+  const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
+  const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
   // If navigated from Home with a target tab instruction, switch tabs (no popup)
   useEffect(() => {
@@ -420,7 +429,36 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       console.log('Refreshed Starlet Products Response:', starletData);
       if (starletData.code === 0 && Array.isArray(starletData.data)) {
         console.log('Refreshed Starlet Products Data:', starletData.data);
-        setStarletProducts(starletData.data);
+        
+        // // Add fake Step Boost products for testing
+        // const fakeStepBoosts = [
+        //   {
+        //     id: 1,            // ID để xác định step boost x1.5
+        //     prop: 20010,      // Prop để xác định loại step boosts
+        //     name: "X1.5 STEP BOOST",
+        //     starlet: 100,
+        //     stock: 10,
+        //     limitNum: 5,
+        //     purchasedQuantity: 0,
+        //     state: 0,
+        //     canBuy: true
+        //   },
+        //   {
+        //     id: 2,            // ID để xác định step boost x2
+        //     prop: 20010,      // Prop để xác định loại step boosts (cùng loại)
+        //     name: "X2 STEP BOOST", 
+        //     starlet: 200,
+        //     stock: 10,
+        //     limitNum: 3,
+        //     purchasedQuantity: 0,
+        //     state: 0,
+        //     canBuy: true
+        //   }
+        // ];
+        
+        // // Combine API data with fake Step Boosts
+        const combinedData = [...starletData.data];
+        setStarletProducts(combinedData);
       } else if (starletData.code === 102002 || starletData.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
@@ -430,7 +468,35 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           const retryResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
           const retryData = await retryResponse.json();
           if (retryData.code === 0 && Array.isArray(retryData.data)) {
-            setStarletProducts(retryData.data);
+            // // Add fake Step Boost products for testing
+            // const fakeStepBoosts = [
+            //   {
+            //     id: 1,        // ID để xác định step boost x1.5
+            //     prop: 20010,      // Prop để xác định loại step boosts
+            //     name: "X1.5 STEP BOOST",
+            //     starlet: 100,
+            //     stock: 10,
+            //     limitNum: 5,
+            //     purchasedQuantity: 0,
+            //     state: 0,
+            //     canBuy: true
+            //   },
+            //   {
+            //     id: 2,        // ID để xác định step boost x2
+            //     prop: 20010,      // Prop để xác định loại step boosts (cùng loại)
+            //     name: "X2 STEP BOOST", 
+            //     starlet: 200,
+            //     stock: 10,
+            //     limitNum: 3,
+            //     purchasedQuantity: 0,
+            //     state: 0,
+            //     canBuy: true
+            //   }
+            // ];
+            
+            // // Combine API data with fake Step Boosts
+            const combinedData = [...retryData.data];
+            setStarletProducts(combinedData);
           }
         }
       }
@@ -616,6 +682,64 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
+  // // Helper function to get step boost product info
+  // const getStepBoostProductInfo = (product) => {
+  //   // If API provides name, use it directly
+  //   if (product.name) {
+  //     return {
+  //       name: product.name,
+  //       displayAmount: product.name.includes('X1.5') ? 'X1.5' : 'X2',
+  //       icon: product.name.includes('X1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
+  //       description: 'BOOST YOUR STEPS',
+  //       category: 'Step Boosts',
+  //       useBackground: false,
+  //       productId: product.id,
+  //       priceIcon: starlet,
+  //       priceIconClass: 'mk-freeze-price-icon'
+  //     };
+  //   }
+
+  //   // Fallback to hardcoded values if no name from API
+  //   // Use product.id to determine specific step boost type
+  //   switch (product.id) {
+  //     case 1:
+  //       return { 
+  //         name: 'X1.5 STEP BOOST', 
+  //         displayAmount: '1.5X',
+  //         icon: iconStepBoostx1_5, // Will be replaced with step boost icon
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 1,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //     case 2:
+  //       return { 
+  //         name: 'X2 STEP BOOST', 
+  //         displayAmount: '2X',
+  //         icon: iconStepBoostx2, // Will be replaced with step boost icon
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 2,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //     default:
+  //       return { 
+  //         name: 'Unknown Step Boost', 
+  //         icon: starlet,
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 0,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //   }
+  // };
+
   // Helper function to get starlet product info based on prop ID
   const getStarletProductInfo = (product) => {
     // If API provides name, use it directly
@@ -644,6 +768,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         };
       }
       
+      if (product.prop === 10120 || product.prop === 10121) {
+        return {
+          name: product.name,
+          displayAmount: product.name.includes('1.5') ? 'X1.5' : 'X2',
+          icon: product.name.includes('1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
+          description: 'BOOST YOUR STEPS',
+          category: 'Step Boosts',
+          useBackground: false,
+          productId: product.id,
+          priceIcon: starlet,
+          priceIconClass: 'mk-freeze-price-icon'
+        };
+      }
+
       // Default design for other props
       return {
         name: product.name,
@@ -718,6 +856,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
+  // const getStepBoostProductInfo = () => {
+  //   // Default design for other props
+  //   return {
+  //     name: "Step Boost",
+  //     displayAmount: "x1.5", // Use name for display amount too
+  //     icon: iconStepBoostx1_5,
+  //     description: 'Step Boost x1.5',
+  //     category: 'Step Boosts',
+  //     useBackground: true,
+  //     backgroundImage: null,
+  //     productId: `1`
+  //   };
+  // };
+
   // Helper function to get expansion state based on type
   const getExpansionState = (type) => {
     switch (type) {
@@ -791,6 +943,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowFreezeStreakPopup(true);
   };
 
+  // Handle Step Boosts click
+  const handleStepBoostsClick = (stepBoostPackage) => {
+    setSelectedStepBoost(stepBoostPackage);
+    setShowStepBoostsPopup(true);
+  };
+
+  // Handle Step Boosts purchase
+  const handleStepBoostsPurchase = (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // Close popup after purchase
+    setShowStepBoostsPopup(false);
+  };
+
   // Handle Freeze Streak purchase
   const handleFreezeStreakPurchase = async (streakPackage) => {
     // Here you can implement the actual purchase logic
@@ -798,6 +964,19 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     // Refresh user profile to update UI immediately
     await refreshUserProfile();
   };
+
+
+  const handleStepBoostPurchase = (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // You might want to call an API here to process the purchase
+  };
+
+  const handleStepBoostClick = (stepBoostPackage) => {
+    handleFreezeStreakPurchase(stepBoostPackage);
+    setShowFreezeStreakPopup(true);
+  }
+
 
   return (
     <>
@@ -1020,6 +1199,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 
                 {activeTab === 'starlet' && (
                   <div className="mk-starlet-products-container">
+
                     {/* Freeze Streak Section */}
                     <div className="mk-market-section">
                       <div
@@ -1173,7 +1353,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
 
                         <div className="mk-starlet-grid">
                       {starletProducts
-                        .filter(product => product.prop !== 10110) // Exclude freeze streak products
+                        .filter(product => product.prop === 70010) // Exclude freeze streak products
                         .map((product) => {
                         const productInfo = getStarletProductInfo(product);
                         const hasFSLID = !!shared.userProfile?.fslId;
@@ -1300,6 +1480,131 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                         </div>
                       </div>
                     </div>
+
+                    {/* Step Boosts Section */}
+                    <div className="mk-market-section">
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setStepBoostsExpanded(!stepBoostsExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#00FF00' }}
+                        >
+                          <span className="mk-section-title">STEP BOOSTS</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${stepBoostsExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${stepBoostsExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                          {starletProducts
+                            .filter(product => product.prop === 10120 || product.prop === 10121) // Filter for step boost products (prop 20010 = step boosts)
+                            .map((product) => {
+                              const productInfo = getStarletProductInfo(product);
+                              const hasFSLID = !!shared.userProfile?.fslId;
+                              const userLevel = shared.userProfile?.level || 0;
+                              const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
+                              
+                              // // Check conditions for Step Boosts
+                              let isDisabled = false;
+                              let disabledReason = '';
+                              
+                              // *. FSL ID not connected
+                              if (!hasFSLID) {
+                                isDisabled = true;
+                                disabledReason = 'FSL ID NOT CONNECTED';
+                              }
+                              // 1. Level requirement (Level 10 for Step Boosts)
+                              else if (userLevel < 10) {
+                                isDisabled = true;
+                                disabledReason = 'LEVEL 10 REQUIRED';
+                              }
+                              // 2. Bank Steps Not Connected
+                              else if (!isConnectedBankSteps) {
+                                isDisabled = true;
+                                disabledReason = 'BANK STEPS NOT CONNECTED';
+                              }
+                              // 3. Not enough starlets
+                              else if (userStarlets < product.starlet) {
+                                isDisabled = true;
+                                disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                              }
+                              
+                              const isAvailable = !isDisabled;
+                              
+                              return (
+                                <button 
+                                  key={product.id}
+                                  className={`mk-market-ticket-button mk-step-boost-product ${!isAvailable ? 'sold-out' : ''}`}
+                                  onClick={() => isAvailable && handleStepBoostsClick({name: productInfo.name, starlet: product.starlet, productId: product.id})}
+                                  disabled={!isAvailable}
+                                >
+                                  <div 
+                                    className="mk-market-ticket-button-image-container"
+                                    style={productInfo.useBackground ? {
+                                      backgroundImage: `url(${productInfo.backgroundImage})`,
+                                      backgroundSize: 'cover',
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat'
+                                    } : {}}
+                                  >
+                                    <div className="mk-market-ticket-content">
+                                      {(!productInfo.useBackground) && (
+                                        <div className="mk-market-ticket-icon">
+                                          <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                        </div>
+                                      )}
+                                      <div className="mk-market-ticket-info">
+                                        <div className="mk-market-ticket-text">
+                                          <div 
+                                            className="mk-market-ticket-amount" 
+                                            style={{ 
+                                              opacity: isAvailable ? 1 : 0.5,
+                                              color: productInfo.displayAmount === 'X1.5' ? '#00FF00' : '#FF0080'
+                                            }}
+                                          >
+                                            {productInfo.displayAmount}
+                                          </div>
+                                          <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                            {productInfo.description}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                      {isAvailable ? (
+                                        <>
+                                          <span>{product.starlet.toLocaleString()}</span>
+                                          <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
+                                        </>
+                                      ) : (
+                                        disabledReason
+                                      )}
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          
+                          {/* Show message if no step boost products available */}
+                          {starletProducts.filter(product => product.prop === 10120 || product.prop === 10121).length === 0 && (
+                            <div className="mk-starlet-packages-placeholder">
+                              <div className="mk-placeholder-content">
+                                <div className="mk-placeholder-text">STEP BOOSTS</div>
+                                <div className="mk-placeholder-subtext">No products available</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1331,6 +1636,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         onPurchase={handleFreezeStreakPurchase}
         refreshStarletProduct={refreshStarletProduct}
         refreshUserProfile={refreshUserProfile}
+      />
+
+      {/* Step Boosts Popup */}
+      <StepBoostsPopup
+        isOpen={showStepBoostsPopup}
+        onClose={() => setShowStepBoostsPopup(false)}
+        selectedPackage={selectedStepBoost}
+        onPurchase={handleStepBoostsPurchase}
+        refreshStarletProduct={refreshMarketContent}
       />
     </>
   );
