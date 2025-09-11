@@ -123,10 +123,10 @@ const StepBoostsPopup = ({
       if (data.code === 0) {
         // Success - show confirmation
         console.log('Purchase successful');
-        setConfirmed(true);
         
-        // Refresh user profile to get updated data
-        await shared.getProfileWithRetry();
+        // Call onPurchase which will refresh user profile and update UI
+        await onPurchase(selectedPackage);
+        setConfirmed(true);
         
       } else if (data.code === 102002 || data.code === 102001) {
         // Token expired - try to refresh
@@ -145,8 +145,10 @@ const StepBoostsPopup = ({
           const retryData = await retryResponse.json();
           if (retryData.code === 0) {
             console.log('Retry purchase successful');
+            
+            // Call onPurchase which will refresh user profile and update UI
+            await onPurchase(selectedPackage);
             setConfirmed(true);
-            await shared.getProfileWithRetry();
           } else {
             console.error('Retry failed:', retryData);
             await shared.showPopup({
