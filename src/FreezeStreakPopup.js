@@ -43,7 +43,7 @@ const FreezeStreakPopup = ({
   // Reset confirmation only when popup opens/closes
   useEffect(() => {
     if (isOpen) {
-      setConfirmed(false);
+      setConfirmed(false); 
       setFixedHeight(null);
       setFixedWidth(null);
       setIsProcessing(false);

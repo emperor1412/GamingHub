@@ -18,6 +18,8 @@ import claim_starlet_button from './images/claim_starlet_button.png';
 import bs_receive_starlet_text_claim from './images/bs_receive_starlet_text_claim.png';
 import bs_receive_starlet_group_icon from './images/bs_receive_starlet_group_icon.png';
 import bank_step_group_icon from './images/bank_step_group_icon.png';
+import boost_icon from './images/Icon_Step_Boost.png';
+import ActivateBoostPopup from './ActivateBoostPopup';
 
 import { shareStory } from '@telegram-apps/sdk';
 import { trackStoryShare, trackOverlayView, trackOverlayExit } from './analytics';
@@ -57,6 +59,45 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const [steps, setSteps] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [justClaimedStarlets, setJustClaimedStarlets] = React.useState(0);
+    const [hasBoost, setHasBoost] = React.useState(false);
+    const [boostMultiplier, setBoostMultiplier] = React.useState("X1.5");
+    
+    // Function to set boost state and multiplier together
+    const setBoostState = (stepBoostState) => {
+        const hasBoostValue = stepBoostState > 0;
+        const multiplierValue = stepBoostState === 10120 ? "1.5X" : "2X";
+        setHasBoost(hasBoostValue);
+        setBoostMultiplier(multiplierValue);
+    };
+    const [showActivateBoostPopup, setShowActivateBoostPopup] = React.useState(false);
+    const [boostData, setBoostData] = React.useState(null);
+    const [stepBoostState, setStepBoostState] = React.useState(null);
+
+    console.log('Profile items:', shared.profileItems);
+
+    const boostsStepsx1_5 = shared.profileItems?.find(item => item.type === 10120);
+    const boostsStepsx2 = shared.profileItems?.find(item => item.type === 10121);
+
+    // Determine boost button state based on stepBoostState and available boosts
+    const getBoostButtonState = () => {
+        // If no boost is active (stepBoostState is null or 0)
+        if (!stepBoostState || stepBoostState === 0) {
+            // Check if user has any boosts available
+            const hasX1_5Boost = boostsStepsx1_5?.value > 0;
+            const hasX2Boost = boostsStepsx2?.value > 0;
+            
+            if (hasX1_5Boost || hasX2Boost) {
+                return 'activate'; // User has boosts, can activate
+            } else {
+                return 'buy'; // No boosts available, need to buy
+            }
+        } else {
+            // A boost is currently active
+            return 'active';
+        }
+    };
+
+    const boostButtonState = getBoostButtonState();
 
     const handleBack = () => {
         onClose();
@@ -81,8 +122,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             console.log('Claim response:', data);
             
             if (data.code === 0) {
-                console.log(`Claim successful: ${data.data} starlets, refreshing data...`);
-                setJustClaimedStarlets(data.data);
+                console.log(`Claim successful: ${data.data.num} starlets, refreshing data...`);
+                setJustClaimedStarlets(data.data.num);
+                // Set boost state and multiplier together
+                setBoostState(data.data.stepBoostState);
                 await getBankSteps();
                 setShowOverlayClaimSuccess(true);
             } else if (data.code === 102002 || data.code === 102001) {
@@ -115,6 +158,26 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         // Handle find out more action
         // window.open("https://youtu.be/ZmEq4LLxRnw?si=1z635ok5An4u_HeV", "_blank");
         window.open("https://www.notion.so/fsl-web3/STEPN-User-Guide-18995c775fea800f90c1cafa81459d9c?pvs=4", "_blank");
+    };
+
+    const handleActivateBoost = () => {
+        setBoostData({
+            x1_5: boostsStepsx1_5,
+            x2: boostsStepsx2
+        });
+        setShowActivateBoostPopup(true);
+    };
+
+    const handleCloseActivateBoostPopup = () => {
+        setShowActivateBoostPopup(false);
+    };
+
+    const handleConfirmActivateBoost = async (boostType) => {
+        // Handle actual boost activation logic here
+        console.log(`Boost ${boostType} activated successfully`);
+        
+        // Refresh bank steps data to update boost state
+        await getBankSteps();
     };
 
     const updateProgressBar = (received) => {
@@ -155,6 +218,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 setTime(Math.round(data.data.time * 0.1));
                 setSteps(data.data.steps);
                 setCanClaim(data.data.canReceive > data.data.received);
+                setStepBoostState(data.data.stepBoostState);
 
                 /* testing  */
                 // setStarletsReceived(335);
@@ -163,6 +227,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 // setTime(9876);
                 // setDistance(22.34);
                 // setCanClaim(true);
+                // setStepBoostState(10120); // Test 1.5x boost active
                 /* ------- */
 
                 
@@ -237,6 +302,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const handleCloseSuccessOverlay = () => {
         trackOverlayExit('bank_steps_success', shared.loginData?.link, 'bank_steps');
         setShowOverlayClaimSuccess(false);
+        setBoostState(0); // Reset boost state and multiplier
     };
 
     if (shared.userProfile.fslId === 0) {
@@ -331,11 +397,25 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         </div>
                     </div>
 
-                    <img 
-                        src={sneaker_icon_group}
-                        alt="STEPN NFT Group" 
-                        className="bs_stepn-nft-group"
-                    />
+                    <div className="bs_nft-group-container">
+                        <img 
+                            src={sneaker_icon_group}
+                            alt="STEPN NFT Group" 
+                            className="bs_stepn-nft-group"
+                        />
+                        <button 
+                            className={`bs_activate-boost-button bs_boost-${boostButtonState}`} 
+                            onClick={boostButtonState === 'buy' ? () => window.open('/market', '_blank') : handleActivateBoost}
+                        >
+                            <img src={boost_icon} alt="Boost Icon" className="bs_boost-icon" />
+                            <span>
+                                {boostButtonState === 'activate' && 'ACTIVATE'}
+                                {boostButtonState === 'active' && 'ACTIVE'}
+                                {boostButtonState === 'buy' && 'BUY BOOST'}
+                                {boostButtonState === 'disabled' && 'DISABLED'}
+                            </span>
+                        </button>
+                    </div>
                     <div className='bs_stat'>
                         <div className="bs_stat-labels">
                             <div className="bs_stat-label">Km</div>
@@ -373,8 +453,13 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
             {showOverlayClaimSuccess && (
                 <div className="bs_overlay">
                     <div className="bs_overlay-content">
-                        <div className="bs_overlay-starlets">
-                            {justClaimedStarlets}
+                        <div className="bs_overlay-starlets-container">
+                            <div className="bs_overlay-starlets">
+                                {justClaimedStarlets}
+                            </div>
+                            {hasBoost && (
+                                <div className="bs_overlay-boost">{boostMultiplier}</div>
+                            )}
                         </div>
                         <img 
                             src={bs_receive_starlet_text_claim} 
@@ -400,6 +485,13 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                     <div className="bs_loading-spinner"></div>
                 </div>
             )}
+            <ActivateBoostPopup 
+                isOpen={showActivateBoostPopup}
+                onClose={handleCloseActivateBoostPopup}
+                onActivate={handleConfirmActivateBoost}
+                boostData={boostData}
+                stepBoostState={stepBoostState}
+            />
         </>
     );
 };
