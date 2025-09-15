@@ -1,7 +1,15 @@
+/*
+ * FlippingStars.js - Coin Flipping Game Component
+ * 
+ * This component uses PP Neue Machina Inktrap font variant for all text elements.
+ * Font configuration is handled in FlippingStars.css with @font-face declarations
+ * and CSS custom properties for consistent typography.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import './FlippingStars.css';
 import shared from './Shared';
-import FlipCoin3D from './FlipCoin3D';
+import CoinAnimation from './CoinAnimation';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
@@ -10,6 +18,12 @@ import loseFlippinStar from './images/LoseFlippinStar.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
+import settingsIcon from './images/Settings.png';
+
+// Sound imports
+import winSound from './sounds/Win.mp3';
+import loseSound from './sounds/Lose.mp3';
+import coinSpinningSound from './sounds/coin-spinning.mp3';
 
 // Navigation icons
 import HomeIcon_normal from './images/Home_normal.svg';
@@ -23,12 +37,12 @@ import Market_selected from './images/Market_selected.svg';
 import ID_normal from './images/ID_normal.svg';
 import ID_selected from './images/ID_selected.svg';
 
-const betOptions = [1, 10, 20, 50, 100, 500];
+const betOptions = [10, 20, 50, 70, 100, 500];
 const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
-  const [selectedBet, setSelectedBet] = useState(1);
+  const [selectedBet, setSelectedBet] = useState(10);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
@@ -44,8 +58,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
   const [showCustomConfirm, setShowCustomConfirm] = useState(false);
   const [customAmount, setCustomAmount] = useState('');
+  const [customAmountError, setCustomAmountError] = useState('');
   const [showAutoFlipOverlay, setShowAutoFlipOverlay] = useState(false);
   const [selectedAutoFlipCount, setSelectedAutoFlipCount] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   
   // New states for flip functionality
   const [isFlipping, setIsFlipping] = useState(false);
@@ -70,12 +86,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const animationDoneRef = useRef(false);
   const pendingBetRef = useRef(0);
   const pendingSideRef = useRef('HEADS');
+  const pendingAllInRef = useRef(false);
   const manualFlipTimerRef = useRef(null);
 
   // Double or Nothing states
   const [lastWinAmount, setLastWinAmount] = useState(0);
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
+
+  // Sound system states
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [soundVolume, setSoundVolume] = useState(0.7);
+  
+  // Audio refs for sound management
+  const audioRefs = useRef({
+    win: null,
+    lose: null,
+    coinSpinning: null
+  });
 
   // Function to format win reward into 4 digits for display
   const formatWinReward = (amount) => {
@@ -94,6 +122,103 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return str.padStart(4, '0').split('');
   };
 
+  // Sound management functions
+  const initializeAudio = () => {
+    // Create audio elements for each sound
+    const audioElements = {
+      win: new Audio(winSound),
+      lose: new Audio(loseSound),
+      coinSpinning: new Audio(coinSpinningSound)
+    };
+
+    // Configure audio properties
+    Object.keys(audioElements).forEach(key => {
+      const audio = audioElements[key];
+      audio.volume = soundVolume;
+      audio.preload = 'auto';
+      
+      // Special handling for coin spinning sound (loop during animation)
+      if (key === 'coinSpinning') {
+        audio.loop = true;
+      }
+    });
+
+    audioRefs.current = audioElements;
+  };
+
+  const playSound = (soundType) => {
+    if (!isSoundEnabled) return;
+    
+    const audio = audioRefs.current[soundType];
+    if (audio) {
+      try {
+        // Reset audio to beginning
+        audio.currentTime = 0;
+        audio.volume = soundVolume;
+        audio.play().catch(error => {
+          console.log('Audio play failed:', error);
+        });
+      } catch (error) {
+        console.log('Sound play error:', error);
+      }
+    }
+  };
+
+  const stopSound = (soundType) => {
+    const audio = audioRefs.current[soundType];
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
+
+  const stopAllSounds = () => {
+    Object.keys(audioRefs.current).forEach(soundType => {
+      stopSound(soundType);
+    });
+  };
+
+  const toggleSound = () => {
+    setIsSoundEnabled(!isSoundEnabled);
+    if (!isSoundEnabled) {
+      stopAllSounds();
+    }
+  };
+
+  const adjustVolume = (newVolume) => {
+    const clampedVolume = Math.max(0, Math.min(1, newVolume));
+    setSoundVolume(clampedVolume);
+    
+    // Update all audio elements with new volume
+    Object.values(audioRefs.current).forEach(audio => {
+      if (audio) {
+        audio.volume = clampedVolume;
+      }
+    });
+  };
+
+  // Debug function to test sounds (can be removed in production)
+  const testSounds = () => {
+    if (!isSoundEnabled) {
+      console.log('Sound is disabled');
+      return;
+    }
+    
+    console.log('Testing sounds...');
+    console.log('Audio refs:', audioRefs.current);
+    console.log('Sound volume:', soundVolume);
+    
+    // Test each sound
+    Object.keys(audioRefs.current).forEach(soundType => {
+      const audio = audioRefs.current[soundType];
+      if (audio) {
+        console.log(`${soundType} audio:`, audio);
+        console.log(`${soundType} readyState:`, audio.readyState);
+        console.log(`${soundType} paused:`, audio.paused);
+      }
+    });
+  };
+
   // Function to show result on logo for 4 seconds
   const showResultOnLogo = (isWin, rewardAmount, duration = 10000) => {
     if (logoTimeoutRef.current) {
@@ -103,9 +228,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     if (isWin) {
       setLogoImage(winFlippinStar);
       setWinReward(rewardAmount || 0);
+      
+      // Play win sound for all wins
+      playSound('win');
     } else {
       setLogoImage(loseFlippinStar);
       setWinReward(null);
+      
+      // Play lose sound
+      playSound('lose');
     }
     
     // Only set logo timeout if auto flip is not being stopped
@@ -123,7 +254,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Function to check if a bet amount is affordable
   const isBetAffordable = (betAmount) => {
     if (betAmount === 'all-in') {
-      return starlets > 0; // All-in is always affordable if user has any starlets
+      return starlets >= 10; // All-in is affordable if user has at least 10 starlets
     } else if (betAmount === 'double') {
       return canDouble && lastWinAmount > 0 && lastWinAmount <= starlets;
     } else if (betAmount === 'custom') {
@@ -180,7 +311,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   useEffect(() => {
     // Prevent body scroll when welcome overlay or ALL IN confirmation is shown
-    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay) {
+    if (showWelcome || showAllInConfirm || showCustomConfirm || showAutoFlipOverlay || showSettings) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -190,7 +321,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay]);
+  }, [showWelcome, showAllInConfirm, showCustomConfirm, showAutoFlipOverlay, showSettings]);
+
+  // Initialize audio system
+  useEffect(() => {
+    initializeAudio();
+    
+    // Cleanup audio when component unmounts
+    return () => {
+      stopAllSounds();
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
@@ -208,8 +349,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setUseDoubleNext(false);
     // Ensure no bet button is selected even after confirming
     setSelectedBet(null);
-    // Select ALL IN for UI highlight and flip immediately with all current starlets
-    handleFlip({ betAmount: starlets });
+    // Select ALL IN for UI highlight and flip immediately with rounded bet amount
+    const allInAmount = Math.floor(starlets / 10) * 10;
+    // Pass allin: false because we're not betting the full amount, just the rounded amount
+    handleFlip({ betAmount: allInAmount, allin: false });
   };
 
   const handleAllInCancel = () => {
@@ -225,11 +368,28 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomConfirm = () => {
+    const amountNum = parseInt(customAmount) || 0;
+    
+    // Check if amount is divisible by 10
+    if (amountNum % 10 !== 0) {
+      setCustomAmountError('DIVISIBLE BY 10 ONLY');
+      return;
+    }
+    
+    // Clear error if validation passes
+    setCustomAmountError('');
+    
     // Clamp to available starlets
-    const amountNum = Math.min(parseInt(customAmount) || 0, starlets);
-    const finalAmount = amountNum.toString();
+    const finalAmount = Math.min(amountNum, starlets).toString();
     setShowCustomConfirm(false);
-    setSelectedBet('custom');
+    
+    // If custom amount is 0 or less than minimum, select the first bet option (10 starlets)
+    if (amountNum === 0 || amountNum < 10) {
+      setSelectedBet(10);
+    } else {
+      setSelectedBet('custom');
+    }
+    
     setCustomAmount(finalAmount);
     setUseDoubleNext(false);
     console.log('Custom amount set:', finalAmount); // Debug log
@@ -238,9 +398,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const handleKeypadInput = (value) => {
     if (value === 'delete') {
       setCustomAmount(prev => prev.slice(0, -1));
+      setCustomAmountError(''); // Clear error when deleting
     } else if (value === 'confirm') {
       handleCustomConfirm();
     } else {
+      // Clear error when typing new input
+      setCustomAmountError('');
+      
       // Limit to 6 digits and clamp to available starlets
       setCustomAmount(prev => {
         if ((prev || '').length >= 6) return prev;
@@ -254,21 +418,48 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const handleAutoFlipClick = () => {
     if (isAutoFlipping) {
-      // Clear timeout và dừng ngay lập tức
+      // Dừng ngay lập tức, không cần chờ kết quả
+      console.log('Stopping auto flip immediately...');
+      
+      // Stop all sounds immediately
+      stopAllSounds();
+      
+      // Clear tất cả timeouts
       if (autoFlipTimeoutRef.current) {
         clearTimeout(autoFlipTimeoutRef.current);
         autoFlipTimeoutRef.current = null;
       }
+      if (manualFlipTimerRef.current) {
+        clearTimeout(manualFlipTimerRef.current);
+        manualFlipTimerRef.current = null;
+      }
+      if (logoTimeoutRef.current) {
+        clearTimeout(logoTimeoutRef.current);
+        logoTimeoutRef.current = null;
+      }
+      
+      // Reset states ngay lập tức
       setIsAutoFlipping(false);
       setAutoFlip(false);
       setAutoFlipTarget(0);
       setAutoFlipCount(0);
+      setShow3D(false);
+      setIsFlipping(false);
+      
+      // Reset logo về mặc định
+      setLogoImage(flippingStarsLogo);
+      setWinReward(null);
+      
+      // Auto-select bet phù hợp
+      const currentStarlets = shared.getStarlets();
+      selectLargestAffordableBet(currentStarlets);
+      
     } else if (autoFlip) {
-      // If auto flip is ON but not currently flipping, turn it OFF
+      // Nếu auto flip ON nhưng không đang flipping, tắt OFF
       setAutoFlip(false);
       setSelectedAutoFlipCount(null);
     } else {
-      // If auto flip is OFF, show overlay to select options
+      // Nếu auto flip OFF, hiển thị overlay chọn số lần
       setShowAutoFlipOverlay(true);
     }
   };
@@ -310,9 +501,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     setSelectedAutoFlipCount(null);
   };
 
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+  };
+
+  const handleSettingsBack = () => {
+    setShowSettings(false);
+  };
+
   const handleStopAutoFlip = () => {
     console.log('Stopping auto flip...');
     shouldStopAutoFlipRef.current = true;
+    
+    // Stop all sounds when stopping auto flip
+    stopAllSounds();
     
     // Clear any pending timeouts
     if (autoFlipTimeoutRef.current) {
@@ -382,17 +584,21 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
-      // Calculate bet amount for auto flip using latest starlets from profile
-      const currentStarlets = shared.getStarlets();
-      let betAmount = selectedBet;
-      if (selectedBet === 'all-in') {
-        betAmount = currentStarlets;
-      } else if (selectedBet === 'custom') {
-        betAmount = parseInt(customAmount) || 0;
-      }
+             // Calculate bet amount for auto flip using latest starlets from profile
+       const currentStarlets = shared.getStarlets();
+       let betAmount = selectedBet;
+       if (selectedBet === 'all-in') {
+         betAmount = Math.floor(currentStarlets / 10) * 10; // Rounded to nearest 10
+         // For auto flip all-in, we use the rounded amount, not the full starlets
+       } else if (selectedBet === 'custom') {
+         betAmount = parseInt(customAmount) || 0;
+       }
 
       // Check if user has enough starlets
       if (currentStarlets < betAmount) {
+        // Stop any playing sounds
+        stopAllSounds();
+        
         await shared.showPopup({
           type: 0,
           title: 'Insufficient Starlets',
@@ -411,6 +617,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setShow3D(true);
       setIsFlipping(true);
       
+      // Start playing coin spinning sound
+      playSound('coinSpinning');
+      
       // Store pending info for auto flip
       pendingBetRef.current = betAmount;
       pendingSideRef.current = selectedSide;
@@ -423,6 +632,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Check if user wants to stop before proceeding
         if (shouldStopAutoFlipRef.current) {
           console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+          // Stop all sounds when stopping
+          stopAllSounds();
           setIsAutoFlipping(false);
           setAutoFlip(false);
           setAutoFlipTarget(0);
@@ -436,7 +647,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           // Perform single flip
           const isHeads = pendingSideRef.current === 'HEADS';
           const betAmount = pendingBetRef.current || 0;
-          const result = await shared.flipCoin(isHeads, betAmount);
+          const result = await shared.flipCoin(isHeads, betAmount, false); // Auto flip is never all-in
           
           if (result.success) {
             currentCount++;
@@ -472,9 +683,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
             showResultOnLogo(result.isWin, result.reward, 2000);
             
+            // Stop coin spinning sound after showing result
+            stopSound('coinSpinning');
+            
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
               console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+              // Stop all sounds when stopping
+              stopAllSounds();
               setIsAutoFlipping(false);
               setAutoFlip(false);
               setAutoFlipTarget(0);
@@ -503,6 +719,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               // Check again if user wants to stop before continuing
               if (shouldStopAutoFlipRef.current) {
                 console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+                // Stop all sounds when stopping
+                stopAllSounds();
                 setIsAutoFlipping(false);
                 setAutoFlip(false);
                 setAutoFlipTarget(0);
@@ -515,10 +733,21 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
           } else {
             // Stop auto flip on error
+            // Stop all sounds on error
+            stopAllSounds();
+            
+            let errorMessage = result.error;
+            let errorTitle = 'Auto Flip Error';
+            
+            if (result.error.includes('timeout')) {
+              errorTitle = 'Connection Timeout';
+              errorMessage = 'Server timeout during auto flip. Auto flip stopped.';
+            }
+            
             await shared.showPopup({
               type: 0,
-              title: 'Auto Flip Error',
-              message: result.error || 'Auto flip stopped due to an error'
+              title: errorTitle,
+              message: errorMessage
             });
             setIsAutoFlipping(false);
             setAutoFlip(false);
@@ -535,6 +764,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }
           }
         } catch (error) {
+          // Stop all sounds on error
+          stopAllSounds();
+          
           console.error('Auto flip error:', error);
           await shared.showPopup({
             type: 0,
@@ -580,7 +812,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
 
       if (selectedBet === 'all-in') {
-        betAmount = starlets; // Use all available starlets
+        betAmount = Math.floor(starlets / 10) * 10; // Use rounded amount to nearest 10
+        // For all-in, we need to pass the actual bet amount, not the full starlets
+        // The server will handle deducting only the bet amount
       } else if (selectedBet === 'custom') {
         betAmount = parseInt(customAmount) || 0;
       } else if (selectedBet === 'double') {
@@ -616,11 +850,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Store pending info and start animation; API will be called after 1.5s while animation keeps looping
     pendingBetRef.current = betAmount;
     pendingSideRef.current = selectedSide;
+    // Store allin flag if it's an all-in bet
+    pendingAllInRef.current = options.allin || false;
 
     // Show 3D overlay for manual flip only and reset animation state
     animationDoneRef.current = false;
     setShow3D(true);
     setIsFlipping(true);
+
+    // Start playing coin spinning sound
+    playSound('coinSpinning');
 
     // Schedule server call after 1.5s; keep the 3D animation running until result arrives
     if (manualFlipTimerRef.current) {
@@ -636,7 +875,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     try {
       const isHeads = pendingSideRef.current === 'HEADS';
       const betAmount = pendingBetRef.current || 0;
-      const result = await shared.flipCoin(isHeads, betAmount);
+      const allin = pendingAllInRef.current || false;
+      const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
         setTotalFlips(prev => prev + 1);
@@ -659,6 +899,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           setTailsCount(prev => prev + 1);
         }
 
+        // Stop coin spinning sound before showing result
+        stopSound('coinSpinning');
+
         // Show win/lose on logo and reward overlay first
         showResultOnLogo(result.isWin, result.reward);
 
@@ -675,13 +918,27 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         const updatedStarlets = shared.getStarlets();
         setStarlets(updatedStarlets);
       } else {
+        // Stop coin spinning sound on error
+        stopSound('coinSpinning');
+        
+        let errorMessage = result.error;
+        let errorTitle = 'Flip Failed';
+        
+        if (result.error.includes('timeout')) {
+          errorTitle = 'Connection Timeout';
+          errorMessage = 'Server is taking too long to respond. Please try again.';
+        }
+        
         await shared.showPopup({
           type: 0,
-          title: 'Flip Failed',
-          message: result.error || 'Failed to flip coin'
+          title: errorTitle,
+          message: errorMessage
         });
       }
     } catch (error) {
+      // Stop coin spinning sound on error
+      stopSound('coinSpinning');
+      
       console.error('Flip error:', error);
       await shared.showPopup({
         type: 0,
@@ -694,6 +951,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       animationDoneRef.current = true;
       setIsFlipping(false);
       pendingBetRef.current = 0;
+      pendingAllInRef.current = false;
     }
   };
 
@@ -701,6 +959,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   useEffect(() => {
     if (shouldStopAutoFlipRef.current && isAutoFlipping) {
       console.log('Stopping auto flip due to shouldStopAutoFlip flag');
+      // Stop all sounds when stopping
+      stopAllSounds();
       setIsAutoFlipping(false);
       setAutoFlip(false);
       setAutoFlipTarget(0);
@@ -721,12 +981,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       if (manualFlipTimerRef.current) {
         clearTimeout(manualFlipTimerRef.current);
       }
+      // Stop all sounds when component unmounts
+      stopAllSounds();
     };
   }, []);
 
   // Helper to compute numeric bet amount for current selection
   const getNumericBetAmount = () => {
-    if (selectedBet === 'all-in') return starlets;
+    if (selectedBet === 'all-in') {
+      // All-in: cược số gần nhất chia hết cho 10, bé thua hoặc bằng số starlets hiện tại
+      return Math.floor(starlets / 10) * 10;
+    }
     if (selectedBet === 'custom') return parseInt(customAmount) || 0;
     if (selectedBet === 'double') return lastWinAmount || 0;
     if (typeof selectedBet === 'number') return selectedBet;
@@ -747,7 +1012,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const currentBetAmount = getNumericBetAmount();
   const isValidPositiveBet = currentBetAmount > 0;
   const hasEnoughStarlets = isValidPositiveBet && starlets >= currentBetAmount;
-  const shouldShowInsufficient = isValidPositiveBet && !hasEnoughStarlets;
+  // Show insufficient when: valid bet but not enough starlets, OR when starlets <= minimum bet option (10)
+  const shouldShowInsufficient = (isValidPositiveBet && !hasEnoughStarlets) || starlets < 10;
+  
+  // Reset selectedBet to null when starlets <= minimum bet (prevents showing selected state on unaffordable bets)
+  useEffect(() => {
+    if (starlets < 10 && selectedBet !== null) {
+      setSelectedBet(null);
+    }
+  }, [starlets, selectedBet]);
 
   return (
     <div className={`fc_app ${isAutoFlipping ? 'is-auto-flipping' : ''}`}>
@@ -822,6 +1095,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {showAllInConfirm && (
         <div className="fc_allin-overlay">
           <div className="fc_allin-content">
+            {/* All-in Value Container */}
+            <div className="fc_allin-value-container">
+              <div className="fc_allin-value-display">
+                <span className="fc_allin-value-number">{Math.floor(starlets / 10) * 10}</span>
+                <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
+              </div>
+            </div>
+            
             {/* ALL IN Text */}
             <div className="fc_allin-title">ALL IN!</div>
             
@@ -872,6 +1153,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 </div>
               </div>
             </div>
+            
+            {/* Error message */}
+            {customAmountError && (
+              <div className="fc_custom-error" style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                {customAmountError}
+              </div>
+            )}
             
             {/* SET Button */}
             <div className="fc_custom-buttons">
@@ -962,17 +1250,116 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <span className="fc_stat-item-main-text">{starlets}</span>
           </button>
         </div>
+        
+        {/* Sound control button */}
+        {/* <button 
+          className="fc_sound-control"
+          onClick={toggleSound}
+          title={isSoundEnabled ? 'Disable Sound' : 'Enable Sound'}
+        >
+          <span className="fc_sound-icon">
+            {isSoundEnabled ? '🔊' : '🔇'}
+          </span>
+        </button> */}
+        
+        {/* Test sound button (can be removed in production) */}
+        {/* <button 
+          className="fc_test-sound-control"
+          onClick={testSounds}
+          title="Test Sounds (Debug)"
+        >
+          <span className="fc_test-sound-icon">🎵</span>
+        </button> */}
       </header>
+
+      {/* Settings Button - positioned below and to the right of fc_stats-header */}
+      <div className="fc_settings-button-container">
+        <button 
+          className="fc_settings-button"
+          onClick={handleSettingsClick}
+        >
+          <img src={settingsIcon} alt="Settings" className="fc_settings-icon" />
+        </button>
+      </div>
+
+      {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
+      <div className="fc_jackpot-container">
+        <div className="fc_jackpot">
+          <span className="fc_jackpot-label">JACKPOT</span>
+          <span className="fc_jackpot-count">00000000</span>
+        </div>
+      </div>
+
+      {/* Settings Overlay */}
+      {showSettings && (
+        <div className="fc_settings-overlay">
+          <div className="fc_settings-content">
+            {/* Sound Control Section */}
+            <div className="fc_settings-sound-section">
+              {/* <div className="fc_settings-sound-title">SOUND CONTROL</div> */}
+              
+              {/* Sound Toggle Buttons */}
+              <div className="fc_settings-sound-toggle">
+                <button 
+                  className={`fc_settings-sound-btn ${isSoundEnabled ? 'fc_sound-on' : 'fc_sound-off'}`}
+                  onClick={toggleSound}
+                >
+                  <span className="fc_sound-text">SOUND //</span>
+                </button>
+                
+                <button 
+                  className={`fc_settings-sound-status ${isSoundEnabled ? 'fc_status-on' : 'fc_status-off'}`}
+                  onClick={toggleSound}
+                >
+                  {isSoundEnabled ? 'ON' : 'OFF'}
+                </button>
+              </div>
+              
+              {/* Volume Control */}
+              {/* <div className="fc_settings-volume-section">
+                <div className="fc_settings-volume-label">VOLUME</div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={soundVolume}
+                  onChange={(e) => adjustVolume(parseFloat(e.target.value))}
+                  className="fc_settings-volume-slider"
+                />
+                <div className="fc_settings-volume-value">{Math.round(soundVolume * 100)}%</div>
+              </div> */}
+            </div>
+            
+            {/* Back Button at the bottom */}
+            <button className="fc_settings-back-btn" onClick={handleSettingsBack}>
+              BACK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Preload Lottie animation early */}
+      <CoinAnimation visible={false} />
 
       {/* Logo */}
       <div className={`fc_logo-container ${show3D ? 'fc_logo-elevated' : ''} ${logoImage !== flippingStarsLogo ? 'fc_logo-result' : ''}`}>
-        {show3D && (
-          <div className="fc_logo-3d">
-            <FlipCoin3D loop={true} scale={1.5} />
+        {/* Always render CoinAnimation but control visibility */}
+        <div className="fc_logo-3d" style={{ display: show3D ? 'block' : 'none' }}>
+          <CoinAnimation loop={true} scale={1.5} visible={show3D} />
+        </div>
+        {/* Show image when 3D is not visible */}
+        <img 
+          src={logoImage} 
+          alt="Flipping Stars" 
+          className="fc_logo-image" 
+          style={{ display: !show3D ? 'block' : 'none' }}
+        />
+        {/* WIN/LOSE text - displays above the logo when showing results */}
+        {!show3D && (logoImage === winFlippinStar || logoImage === loseFlippinStar) && (
+          <div className="fc_win-lose-text">
+            {logoImage === winFlippinStar ? 'WIN' : 'LOSE'}
           </div>
-        )}
-        {!show3D && (
-          <img src={logoImage} alt="Flipping Stars" className="fc_logo-image" />
         )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
         {winReward !== null && (
@@ -1109,9 +1496,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets === 0 ? 'fc_insufficient-funds' : ''}`}
-          onClick={starlets > 0 && !isAutoFlipping ? handleCustomClick : undefined}
-          disabled={isAutoFlipping || starlets === 0}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets < 10 ? 'fc_insufficient-funds' : ''}`}
+          onClick={starlets > 10 && !isAutoFlipping ? handleCustomClick : undefined}
+          disabled={isAutoFlipping || starlets < 10}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -1122,7 +1509,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_custom-text">CUSTOM AMOUNT</div>
           </div>
         </button>
-        <button 
+        {/* <button 
           className={`fc_bet-button fc_double-button ${selectedBet === 'double' ? 'fc_selected' : ''} ${(canDouble && lastWinAmount > 0 && lastWinAmount <= starlets) ? '' : 'fc_insufficient-funds'}`}
           onClick={() => {
             if (isAutoFlipping) return;
@@ -1140,7 +1527,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_double-line1"><span className="fc_double-word">DOUBLE</span> <span className="fc_double-or">OR</span></div>
             <div className="fc_double-line2">NOTHING</div>
           </div>
-        </button>
+        </button> */}
       </div>
 
       {/* Flip button */}
@@ -1153,7 +1540,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               className="fc_buy-more-btn"
               onClick={() => {
                 if (onClose) onClose();
-                if (setActiveTab) setActiveTab('market');
+                if (setActiveTab) {
+                  shared.setInitialMarketTab('telegram');
+                  setActiveTab('market');
+                }
               }}
             >
               <div className="fc_flip-content">BUY MORE</div>
@@ -1198,7 +1588,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
         <button onClick={() => {
           if (onClose) onClose();
-          if (setActiveTab) setActiveTab('market');
+          if (setActiveTab) {
+            shared.setInitialMarketTab('telegram');
+            setActiveTab('market');
+          }
         }}>
           <img src={Market_normal} alt="Market" />
         </button>

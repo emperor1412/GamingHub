@@ -102,7 +102,7 @@
     right: -10px;
     width: 43px;
     height: 47px;
-    z-index: 1;
+    z-index: 0; /* below text */
 }
 
 /* Locked Sections */
@@ -286,7 +286,71 @@
     cursor: grabbing;
 }
 
+/* FREEZE STREAKS hero */
+.freeze-hero-section {
+    margin-bottom: 20px;
+}
 
+.freeze-hero {
+    position: relative;
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.freeze-hero-image-container {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: visible; /* do not clip text; clipping handled by bg layer */
+    height: 190px; /* match previous card height for consistency */
+    isolation: isolate; /* create local stacking context for negative z */
+}
+
+/* Background layer for Freeze Streaks */
+.freeze-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px; /* clip background to rounded corners */
+    overflow: hidden;
+    /* Zoom-in, a bit more on vertical axis */
+    background-size: 110% 130%;
+    background-position: center;
+    z-index: -1; /* behind everything */
+}
+
+/* Text layer (PNG without background), centered and tight */
+.freeze-hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -49%) scale(1.5); /* larger and a hair higher */
+    height: 82%; /* closer to edges like the design */
+    width: auto;
+    margin: 0;
+    object-fit: contain;
+    padding: 0; /* remove vertical padding to eliminate gaps */
+    pointer-events: none;
+    z-index: 10; /* ensure on top of border */
+}
+
+.freeze-hero-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    border: 0; /* avoid overlaying content */
+    box-shadow: inset 0 0 0 2px #0000FF; /* visual border inside without covering text */
+    pointer-events: none;
+    z-index: 0; /* below text */
+}
 
 /* Hide WebKit scrollbars */
 .events-carousel::-webkit-scrollbar,
@@ -359,9 +423,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #000FEF;
+    background-color: #FF00F6;
     padding: 2px 12px;
-    border: 1px solid rgba(0, 15, 239, 0.4);
     z-index: 10;
     pointer-events: none;
     white-space: nowrap;
@@ -372,12 +435,49 @@
     font-family: "PP Neue Machina";
     font-size: 13px;
     font-weight: 700;
-    color: #FF00F6;
+    color: #000FEF;
     text-transform: uppercase;
     opacity: 0.9;
 }
 
 .ticket-total-flips-count {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFF;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Total Jackpot Counter for Ticket Button */
+.ticket-total-jackpot {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #000FEF;
+    padding: 2px 12px;
+    border: 1px solid rgba(0, 15, 239, 0.4);
+    z-index: 10;
+    pointer-events: none;
+    white-space: nowrap;
+    min-width: max-content;
+}
+
+.ticket-total-jackpot-label {
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    color: #FF00F6;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.ticket-total-jackpot-count {
     font-family: "PP Neue Machina";
     font-size: 13px;
     font-weight: 700;

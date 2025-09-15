@@ -321,7 +321,16 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             if (shared.checkIn) {
                 const result = await shared.checkIn(shared.loginData);
                 console.log('CheckIn Response:', result);
-                setShowCheckInView(true);
+                if(result == 1) {
+                    // Animation will be handled by App.js
+                    console.log('Check-in animation will be shown');
+                }
+                else if(result == 0) {
+                    setShowCheckInView(true);
+                }
+                else {
+                    console.log('Check-in failed');
+                }
             } else {
                 console.log('Check-in function not available');
                 onClose();

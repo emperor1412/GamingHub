@@ -1,7 +1,19 @@
+/*
+ * FlippingStars.css - PP Neue Machina Inktrap Font Configuration
+ * 
+ * This file uses PP Neue Machina Inktrap variant for all text elements.
+ * Font weights available: 100 (Thin), 200 (Ultralight), 300 (Light), 
+ * 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold), 900 (Black)
+ * 
+ * CSS Custom Properties:
+ * --font-primary: PP Neue Machina Inktrap (main font)
+ * --font-secondary: PP Neue Machina Plain (alternative font)
+ */
+
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'PP Neue Machina Inktrap', 'Arial Black', sans-serif;
   background-color: #000;
   color: white;
   overflow-x: hidden;
@@ -16,6 +28,87 @@ html, body {
   -ms-overflow-style: none;  /* IE and Edge */
   overflow: -moz-scrollbars-none;
 }
+
+/* PP Neue Machina Inktrap Font Family */
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapUltralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapSemibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina Inktrap';
+  src: url('./fonts/minigame font/PPNeueMachina-InktrapBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CSS Custom Properties for Font Variants */
+:root {
+  --font-primary: 'PP Neue Machina Inktrap', 'Arial Black', sans-serif;
+  --font-secondary: 'PP Neue Machina Plain', 'Arial Black', sans-serif;
+}
+
+/* Font Weight Utility Classes */
+.fc_font-thin { font-weight: 100; }
+.fc_font-ultralight { font-weight: 200; }
+.fc_font-light { font-weight: 300; }
+.fc_font-regular { font-weight: 400; }
+.fc_font-medium { font-weight: 500; }
+.fc_font-semibold { font-weight: 600; }
+.fc_font-bold { font-weight: 700; }
+.fc_font-black { font-weight: 900; }
 
 /* Hide WebKit scrollbars globally */
 html::-webkit-scrollbar,
@@ -109,7 +202,7 @@ body::-webkit-scrollbar-track,
 
 .fc_stat-item-main-text {
   color: #FFF;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 16px;
   font-style: italic;
   font-weight: 800;
@@ -117,22 +210,89 @@ body::-webkit-scrollbar-track,
   text-transform: uppercase;
 }
 
+/* Sound Control Button */
+.fc_sound-control {
+  position: absolute;
+  right: 80px; /* Move left to avoid overlapping with stats */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* Ensure it's above other elements */
+}
+
+.fc_sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Test Sound Button (can be removed in production) */
+.fc_test-sound-control {
+  position: absolute;
+  right: 130px; /* Position to the left of sound control */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.fc_test-sound-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fc_test-sound-control:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.fc_test-sound-icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
 .fc_app {
   width: 390px;
   margin: 0 auto;
   padding: 20px;
   padding-top: 40px; /* Add space for fixed header */
-  padding-bottom: 100px; /* Add space for fixed bottom navigation */
+  padding-bottom: 165px; /* Increased space for fixed bottom navigation and flip button */
   box-sizing: border-box;
   background-color: #000;
-  overflow-x: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
-  
-  /* Hide scrollbars while maintaining functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  overflow: -moz-scrollbars-none;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  min-height: 100vh; /* Ensure minimum height to fill viewport */
+  position: relative; /* Enable absolute positioning for child elements */
 }
 
 
@@ -236,6 +396,37 @@ body::-webkit-scrollbar-track,
   animation: progressBarSlideIn 0.5s ease-out;
 }
 
+/* WIN/LOSE text styling */
+.fc_win-lose-text {
+  position: absolute;
+  top: 70%; /* Position below fc_win-reward-progress (which is at 75%) */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1399; /* Below fc_win-reward-progress (which is at 1400) */
+  text-align: center;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 107.37px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: transparent; /* Make text transparent so only stroke is visible */
+  animation: winLoseTextSlideIn 0.5s ease-out;
+  pointer-events: none; /* Prevent text from blocking interactions */
+}
+
+@keyframes winLoseTextSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 @keyframes progressBarSlideIn {
   from {
     opacity: 0;
@@ -268,7 +459,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_progress-number {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 20px; /* Slightly larger font to fill the shorter bar */
   font-weight: 800;
   color: #FFFFFF;
@@ -320,10 +511,6 @@ body::-webkit-scrollbar-track,
 .fc_progress-starlet:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
-}
-
-.fc_progress-starlet:hover .fc_progress-starlet-icon {
-  transform: rotate(15deg);
 }
 
 
@@ -381,6 +568,19 @@ body::-webkit-scrollbar-track,
   }
 }
 
+/* Mobile scroll optimization */
+@media (max-width: 768px) {
+  .fc_app {
+    overscroll-behavior: auto; /* Allow overscroll on mobile for better UX */
+    scroll-behavior: smooth; /* Smooth scrolling on mobile */
+  }
+  
+  /* Ensure touch scrolling works properly on mobile */
+  .fc_app * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Flip Controls */
 .fc_flip-controls {
   display: flex;
@@ -400,7 +600,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_total-flips-label {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 700;
   color: #FF00F6;
@@ -409,7 +609,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_total-flips-count {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 700;
   color: #FFF;
@@ -425,7 +625,7 @@ body::-webkit-scrollbar-track,
   border: 0px solid #848484;
   /* color: white; */
   cursor: pointer;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
@@ -513,7 +713,7 @@ body::-webkit-scrollbar-track,
   border: none;
   color: white;
   cursor: pointer;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 25px;
   font-weight: 700;
   text-transform: uppercase;
@@ -566,14 +766,14 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_coin-counter {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
 }
 
 .fc_coin-title {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 25px;
   font-weight: 700;
   text-transform: uppercase;
@@ -592,7 +792,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_coin-streak {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 12px;
   font-weight: 700;
   color: #000;
@@ -603,7 +803,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_coin-streak-multiplier {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 700;
   color: #ffffff;
@@ -693,7 +893,7 @@ body::-webkit-scrollbar-track,
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
   cursor: pointer;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-weight: 600;
   text-transform: uppercase;
   transition: all 0.2s ease;
@@ -755,7 +955,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_all-in-title {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18.5px;
   font-weight: 700;
   color: white;
@@ -770,7 +970,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_all-in-percent {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 10px;
   font-weight: 700;
   color: #FF00F6;
@@ -778,7 +978,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_all-in-amount {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 10px;
   font-weight: 700;
   color: #FF00F6;
@@ -837,7 +1037,7 @@ body::-webkit-scrollbar-track,
 
 .fc_double-line1,
 .fc_double-line2 {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -901,7 +1101,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_custom-amount-display {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   color: #FFF;
@@ -911,7 +1111,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_custom-text {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 8px;
   font-weight: 700;
   color: #FF00F6;
@@ -920,17 +1120,19 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_flip-btn {
-  position: relative;
-  margin-top: 20px;
-  width: calc(100% - 40px);
-  margin-left: 20px;
-  margin-right: 20px;
+  position: fixed;
+  bottom: 100px; /* Position above bottom navigation */
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(390px - 40px); /* Match app width minus margins */
+  max-width: calc(100vw - 40px); /* Responsive width */
+  margin: 0;
   padding: 20px;
   background: linear-gradient(135deg, #0055ff, #0033cc);
   color: white;
   font-size: 24px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -941,6 +1143,7 @@ body::-webkit-scrollbar-track,
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  z-index: 999; /* Ensure it's above other content but below overlays */
 }
 
 .fc_flip-content {
@@ -951,7 +1154,6 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-btn:hover {
   background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
 }
 
@@ -960,7 +1162,6 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_flip-btn:active {
-  transform: translateY(0);
   box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
 }
 
@@ -1051,7 +1252,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_welcome-title {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 32px;
   font-weight: 700;
   color: #FFF;
@@ -1069,7 +1270,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_welcome-pick-text {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   color: #FFF;
@@ -1090,7 +1291,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_welcome-select-text {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 24px;
   font-weight: 700;
   color: #FF00F6;
@@ -1115,7 +1316,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_welcome-flip-text {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 24px;
   font-weight: 700;
   color: #FFF;
@@ -1137,7 +1338,7 @@ body::-webkit-scrollbar-track,
   color: white;
   font-size: 24px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -1189,8 +1390,38 @@ body::-webkit-scrollbar-track,
   gap: 30px;
 }
 
+/* All-in Value Container Styles */
+.fc_allin-value-container {
+  width: 241px;
+  height: 36px;
+  background: #000FEF;
+  border-radius: 25px;
+  padding: 4px 8px;
+}
+
+.fc_allin-value-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fc_allin-value-number {
+  font-family: var(--font-primary);
+  font-size: 25px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 0.1em;
+}
+
+.fc_allin-value-starlet-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .fc_allin-title {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 120px;
   font-weight: 700;
   color: #FFF;
@@ -1201,7 +1432,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_allin-question {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 32px;
   font-weight: 700;
   color: white;
@@ -1228,7 +1459,7 @@ body::-webkit-scrollbar-track,
   color: white;
   font-size: 24px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -1328,7 +1559,7 @@ body::-webkit-scrollbar-track,
   color: white;
   font-size: 24px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -1390,7 +1621,7 @@ body::-webkit-scrollbar-track,
   border: none;
   outline: none;
   border-bottom: 4px solid #000FEF;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-weight: 700;
   color: #000000;
   background: transparent;
@@ -1409,7 +1640,7 @@ body::-webkit-scrollbar-track,
   border: none;
   background: #FFFFFF;
   cursor: pointer;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-weight: 700;
   color: #000000;
   transition: all 0.2s ease;
@@ -1499,7 +1730,7 @@ body::-webkit-scrollbar-track,
   border: none;
   color: #000000;
   cursor: pointer;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1550,7 +1781,7 @@ body::-webkit-scrollbar-track,
   color: white;
   font-size: 24px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -1565,7 +1796,6 @@ body::-webkit-scrollbar-track,
 
 .fc_autoflip-btn:hover:not(.fc_disabled) {
   background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
 }
 
@@ -1620,7 +1850,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_flip-result-header h3 {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 24px;
   font-weight: 700;
   color: #FFF;
@@ -1659,7 +1889,7 @@ body::-webkit-scrollbar-track,
 }
 
 .fc_flip-result-details p {
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   color: #FFF;
@@ -1706,7 +1936,7 @@ body::-webkit-scrollbar-track,
   color: white;
   font-size: 20px;
   font-weight: 700;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   text-transform: uppercase;
   border: none;
   border-radius: 25px;
@@ -1721,7 +1951,6 @@ body::-webkit-scrollbar-track,
 
 .fc_flip-result-ok-btn:hover {
   background: linear-gradient(135deg, #9F7AEA, #8B5CF6);
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
 }
 
@@ -1735,42 +1964,67 @@ body::-webkit-scrollbar-track,
   background: linear-gradient(135deg, #555, #333) !important;
   cursor: not-allowed !important;
   opacity: 0.7;
+  transform: translateX(-50%) !important; /* Always keep centered */
 }
 
 .fc_flip-btn-loading:hover {
-  transform: none !important;
+  transform: translateX(-50%) !important; /* Always keep centered */
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Force all flip button states to stay centered */
+.fc_flip-btn,
+.fc_flip-btn:hover,
+.fc_flip-btn:active,
+.fc_flip-btn:focus,
+.fc_flip-btn:disabled,
+.fc_flip-btn.fc_flip-btn-loading,
+.fc_flip-btn.fc_flip-btn-buy-starlets {
+  transform: translateX(-50%) !important;
+}
+
+/* Special cases for hover effects that need both centering and movement */
+.fc_flip-btn:hover:not(.fc_flip-btn-loading):not(:disabled) {
+  transform: translateX(-50%) translateY(-2px) !important;
+}
+
+.fc_flip-btn:active:not(.fc_flip-btn-loading):not(:disabled) {
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.fc_flip-btn.fc_flip-btn-buy-starlets:hover {
+  transform: translateX(-50%) translateY(-2px) !important;
 }
 
 .fc_flip-btn:disabled {
   cursor: not-allowed;
   background: #6a6a6a !important;
   box-shadow: none !important;
-  transform: none !important;
+  transform: translateX(-50%) !important; /* Always keep centered */
 }
 
 /* remove hover highlight when disabled */
 .fc_flip-btn:disabled:hover {
   background: #6a6a6a !important;
   box-shadow: none !important;
-  transform: none !important;
+  transform: translateX(-50%) !important; /* Always keep centered */
 }
 
 .fc_flip-btn.fc_flip-btn-buy-starlets {
   background: linear-gradient(135deg, #FF00F6, #FF0080);
   opacity: 1;
   cursor: pointer;
-  transform: none;
+  transform: translateX(-50%) !important; /* Always keep centered */
   box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
 }
 
 .fc_flip-btn.fc_flip-btn-buy-starlets:hover {
   background: linear-gradient(135deg, #FF0080, #FF00F6);
-  transform: translateY(-2px);
+  transform: translateX(-50%) translateY(-2px) !important; /* Keep centered and add hover effect */
   box-shadow: 0 6px 20px rgba(255, 0, 246, 0.7);
 }
 
-.fc_flip-btn.fc_flip-btn-buy-starlets:hover .fc_corner {
+.fc_flip-btn.fc_flip-btn-buy-starlets .fc_corner {
   border-color: #FF00F6;
 }
 
@@ -1780,11 +2034,14 @@ body::-webkit-scrollbar-track,
 
 /* Insufficient state container */
 .fc_flip-btn-container {
-  position: relative;
-  width: calc(100% - 40px);
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 30px;
+  position: fixed;
+  bottom: 100px; /* Position above bottom navigation */
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(390px - 40px); /* Match app width minus margins */
+  max-width: calc(100vw - 40px); /* Responsive width */
+  margin: 0;
+  z-index: 999; /* Ensure it's above other content but below overlays */
 }
 
 .fc_flip-btn-insufficient {
@@ -1793,6 +2050,8 @@ body::-webkit-scrollbar-track,
   width: 100%;
   margin: 0;
   z-index: 1;
+  position: relative; /* Keep relative positioning within container */
+  bottom: -28px;
 }
 
 .fc_flip-btn-insufficient .fc_flip-content {
@@ -1810,16 +2069,313 @@ body::-webkit-scrollbar-track,
   color: #fff;
   border: none;
   border-radius: 20px;
-  font-family: "PP Neue Machina";
+  font-family: var(--font-primary);
   font-weight: 800;
   font-size: 16px;
   letter-spacing: 0.05em;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(255, 0, 246, 0.5);
   z-index: 5;
+  position: relative; /* Keep relative positioning within container */
 }
 
 .fc_buy-more-btn:hover {
   background: linear-gradient(135deg, #FF0080, #FF00F6);
   transform: translateX(-50%) translateY(-2px);
+}
+
+/* Settings Button Container - positioned below and to the right of fc_stats-header */
+.fc_settings-button-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  right: 20px;
+  z-index: 999;
+  pointer-events: auto;
+}
+
+/* Jackpot Container - positioned below and in the center of fc_stats-header */
+.fc_jackpot-container {
+  position: absolute;
+  top: 60px; /* Position below fc_stats-header (60px height + 10px padding + 10px gap) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+.fc_jackpot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000FEF;
+  padding: 2px 12px;
+  border: 1px solid rgba(0, 15, 239, 0.4);
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.fc_jackpot-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF00F6;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.fc_jackpot-count {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.fc_settings-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.fc_settings-button:hover {
+  opacity: 0.8;
+}
+
+.fc_settings-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Settings Overlay */
+.fc_settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fc_settings-content {
+  width: 390px;
+  max-width: calc(100% - 40px);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  min-height: 300px;
+  justify-content: space-between;
+}
+
+.fc_settings-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sound Control Section */
+.fc_settings-sound-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.fc_settings-sound-title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.fc_settings-sound-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.fc_settings-sound-btn {
+  position: relative;
+  width: 180px;
+  height: 40px;
+  background: #FF00F6;
+  border: none;
+  /* border-radius: 25px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-sound-btn:hover {
+  background: #FF00F6;
+  transform: translateY(-2px);
+}
+
+.fc_settings-sound-btn:active {
+  transform: translateY(0);
+}
+
+.fc_sound-text {
+  position: relative;
+}
+
+.fc_settings-sound-status {
+  width: 80px;
+  height: 40px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_status-on {
+  background: #FF00F6;
+}
+
+.fc_status-off {
+  background: #666666;
+}
+
+.fc_settings-sound-status:hover {
+  transform: translateY(-2px);
+}
+
+.fc_status-on:hover {
+  background: #FF00F6;
+}
+
+.fc_status-off:hover {
+  background: #777777;
+}
+
+.fc_settings-sound-status:active {
+  transform: translateY(0);
+}
+
+/* Volume Control Section */
+.fc_settings-volume-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.fc_settings-volume-label {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-volume-slider {
+  width: 250px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.fc_settings-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF00F6, #FF0080);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(255, 0, 246, 0.5);
+}
+
+.fc_settings-volume-value {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.fc_settings-back-btn {
+  position: relative;
+  width: 200px;
+  height: 49px;
+  background: #000FEF;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 18px;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.fc_settings-back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.fc_settings-back-btn:active {
+  transform: translateY(0);
 }

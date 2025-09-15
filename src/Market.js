@@ -11,6 +11,17 @@ import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
 import arrow_2 from './images/arrow_2.svg';
+import iconStreak1 from './images/Icon_streak_1_day.png';
+import iconStreak2 from './images/Icon_streak_2_day.png';
+import iconStreak5 from './images/Icon_streak_5_day.png';
+import bgStreak1 from './images/Bg_streak_1.png';
+import bgStreak2 from './images/Bg_streak_2.png';
+import bgStreak5 from './images/Bg_streak_5.png';
+import FreezeStreakPopup from './FreezeStreakPopup';
+import fslidIcon from './images/FSLID-ICON.png';
+import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
+import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
+import StepBoostsPopup from './StepBoostsPopup';
 
 // url: /app/buyOptions
 // Request:
@@ -71,7 +82,7 @@ import arrow_2 from './images/arrow_2.svg';
 //     }
 // }
 
-const Market = ({ showFSLIDScreen, setShowProfileView }) => {
+const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }) => {
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -80,14 +91,39 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
   const [isFreeItemClaimed, setIsFreeItemClaimed] = useState(false);
   const [nextClaimTime, setNextClaimTime] = useState(null);
   const [buyOptions, setBuyOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState('telegram'); // 'starlet' or 'telegram'
+  const [activeTab, setActiveTab] = useState(initialTab); // 'starlet' or 'telegram'
   const [starletProducts, setStarletProducts] = useState([]);
+  
+  // Add state to track GMT/starlet product purchase completion
+  const [isStarletPurchaseComplete, setIsStarletPurchaseComplete] = useState(false);
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
   const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
   const [monthlyOfferExpanded, setMonthlyOfferExpanded] = useState(true);
   const [weeklyOfferExpanded, setWeeklyOfferExpanded] = useState(true);
+  // Freeze Streak expansion state
+  const [freezeStreakExpanded, setFreezeStreakExpanded] = useState(true);
+  // Merch Coupon expansion state
+  const [merchCouponExpanded, setMerchCouponExpanded] = useState(true);
+  // Step Boosts expansion state
+  const [stepBoostsExpanded, setStepBoostsExpanded] = useState(true);
+  
+  // Freeze Streak popup states
+  const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
+  const [selectedFreezeStreakPackage, setSelectedFreezeStreakPackage] = useState(null);
+
+  // Step Boosts popup states
+  const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
+  const [selectedStepBoost, setSelectedStepBoost] = useState(null);
+
+  // If navigated from Home with a target tab instruction, switch tabs (no popup)
+  useEffect(() => {
+    if (shared.marketTargetTab) {
+      setActiveTab(shared.marketTargetTab);
+      delete shared.marketTargetTab;
+    }
+  }, []);
 
   // Add body class to prevent iOS overscrolling
   useEffect(() => {
@@ -100,16 +136,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     };
   }, []);
 
+  // Main useEffect to fetch all data on component mount
+  // NOTE: buyOptions and starletProducts are loaded via refreshMarketContent() to prevent duplicate API calls
   useEffect(() => {
-    const fetchBuyOptions = async () => {
+    const fetchAllData = async () => {
       try {
-        const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-        const data = await response.json();
-        console.log('Buy Options Response:', data);
-        if (data.code === 0 && Array.isArray(data.data)) {
-          console.log('Buy Options Data:', data.data);
-          setBuyOptions(data.data);
-        } else if (data.code === 102002 || data.code === 102001) {
+        // COMMENTED OUT: Fetch buy options and starlet products on init to prevent duplicate API calls
+        // These will be fetched by refreshMarketContent() when needed
+        /*
+        // Fetch buy options
+        const buyOptionsResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+        const buyOptionsData = await buyOptionsResponse.json();
+        console.log('Buy Options Response:', buyOptionsData);
+        if (buyOptionsData.code === 0 && Array.isArray(buyOptionsData.data)) {
+          console.log('Buy Options Data:', buyOptionsData.data);
+          setBuyOptions(buyOptionsData.data);
+        } else if (buyOptionsData.code === 102002 || buyOptionsData.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
           const result = await shared.login(shared.initData);
@@ -122,20 +164,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             }
           }
         }
-      } catch (error) {
-        console.error('Failed to fetch buy options:', error);
-      }
-    };
 
-    const fetchStarletProducts = async () => {
-      try {
-        const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
-        const data = await response.json();
-        console.log('Starlet Products Response:', data);
-        if (data.code === 0 && Array.isArray(data.data)) {
-          console.log('Starlet Products Data:', data.data);
-          setStarletProducts(data.data);
-        } else if (data.code === 102002 || data.code === 102001) {
+        // Fetch starlet products
+        const starletResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+        const starletData = await starletResponse.json();
+        console.log('Starlet Products Response:', starletData);
+        if (starletData.code === 0 && Array.isArray(starletData.data)) {
+          console.log('Starlet Products Data:', starletData.data);
+          setStarletProducts(starletData.data);
+        } else if (starletData.code === 102002 || starletData.code === 102001) {
           // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
           const result = await shared.login(shared.initData);
@@ -148,36 +185,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
             }
           }
         }
-      } catch (error) {
-        console.error('Failed to fetch starlet products:', error);
-      }
-    };
+        */
 
-    fetchBuyOptions();
-    fetchStarletProducts();
-  }, []);
+        // Check free reward time
+        await checkFreeRewardTime();
 
-  useEffect(() => {
-    const setupProfileData = async () => {
-      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
-      if (userStarlets) {
-        setStarlets(userStarlets.num);
-      }
-
-      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
-      if (userTicket) {
-        setTickets(userTicket.num);
-      }
-    };
-
-    setupProfileData();
-  }, []);
-
-  // Add effect to watch showBuyView changes
-  useEffect(() => {
-    if (!showBuyView) { // When returning from Buy view
-      const updateData = async () => {
-        await shared.getProfileWithRetry();
+        // Setup profile data
         const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
         if (userStarlets) {
           setStarlets(userStarlets.num);
@@ -187,10 +200,47 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         if (userTicket) {
           setTickets(userTicket.num);
         }
-      };
-      updateData();
+
+        // Load initial market data (buyOptions and starletProducts) to prevent duplicate API calls
+        // await refreshMarketContent();
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // Add effect to watch showBuyView changes
+  useEffect(() => {
+    if (!showBuyView) { // When returning from Buy view
+      // Refresh both user profile and market content when returning from Buy view
+      // This ensures all data is up-to-date after any purchases or actions
+      refreshUserProfile();
+      refreshMarketContent();
     }
   }, [showBuyView]);
+
+  // Add useEffect to listen for data refresh trigger from App component
+  useEffect(() => {
+    // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
+    // Only update if we have a userProfile and it's different from current state
+    if (shared.userProfile) {
+      const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+      const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+      
+      // Only update if values actually changed to prevent unnecessary re-renders
+      if (userStarlets && userStarlets.num !== starlets) {
+        console.log('Market: Updating starlets display after data refresh');
+        setStarlets(userStarlets.num);
+      }
+      
+      if (userTicket && userTicket.num !== tickets) {
+        console.log('Market: Updating tickets display after data refresh');
+        setTickets(userTicket.num);
+      }
+    }
+  }, [shared.userProfile, starlets, tickets]); // This will trigger when shared.userProfile changes
 
   // Add new function to check free reward time
   const checkFreeRewardTime = async () => {
@@ -245,6 +295,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           setTickets(userTicket.num);
         }
 
+        // Refresh market content to update free reward status
+        await refreshMarketContent();
+
         // Show success popup
         if (window.Telegram?.WebApp?.showPopup) {
           await window.Telegram.WebApp.showPopup({
@@ -274,6 +327,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
               setTickets(userTicket.num);
             }
 
+            // Refresh market content to update free reward status
+            await refreshMarketContent();
+
             if (window.Telegram?.WebApp?.showPopup) {
               await window.Telegram.WebApp.showPopup({
                 title: 'Success',
@@ -296,10 +352,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   };
 
-  // Add useEffect to check free reward time on component mount
-  useEffect(() => {
-    checkFreeRewardTime();
-  }, []);
+
 
   const handleConnectFSLID = () => {
     showFSLIDScreen();
@@ -310,7 +363,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setShowBuyView(true);
   };
 
+  const handleStarletProductPurchase = (product) => {
+    const productInfo = getStarletProductInfo(product);
+    const purchaseData = { 
+      amount: product.starlet,
+      stars: 0, // Starlet products are bought with starlets, not telegram stars
+      productId: product.id,
+      productName: productInfo.name,
+      isStarletProduct: true
+    };
+    console.log('Market handleStarletProductPurchase:', { product, productInfo, purchaseData });
+    setSelectedPurchase(purchaseData);
+    setIsPopupOpen(true);
+  };
+
   const refreshUserProfile = async () => {
+    // Only refresh user profile data, not market content
     await shared.getProfileWithRetry();
     const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
     if (userStarlets) {
@@ -322,15 +390,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       setTickets(userTicket.num);
     }
 
-    // Reload buy options to update limited offer status
+    // Note: Market content (buyOptions, starletProducts) is loaded by refreshMarketContent()
+    // to avoid duplicate API calls. If you need to refresh market content,
+    // use refreshMarketContent() function instead.
+  };
+
+  // Add new function to refresh market content (buyOptions and starletProducts)
+  const refreshMarketContent = async () => {
     try {
-      const response = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
-      const data = await response.json();
-      console.log('Refreshed Buy Options Response:', data);
-      if (data.code === 0 && Array.isArray(data.data)) {
-        console.log('Refreshed Buy Options Data:', data.data);
-        setBuyOptions(data.data);
-      } else if (data.code === 102002 || data.code === 102001) {
+      // Reload buy options to update limited offer status
+      const buyOptionsResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+      const buyOptionsData = await buyOptionsResponse.json();
+      console.log('Refreshed Buy Options Response:', buyOptionsData);
+      if (buyOptionsData.code === 0 && Array.isArray(buyOptionsData.data)) {
+        console.log('Refreshed Buy Options Data:', buyOptionsData.data);
+        setBuyOptions(buyOptionsData.data);
+      } else if (buyOptionsData.code === 102002 || buyOptionsData.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
@@ -347,15 +422,44 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.error('Failed to refresh buy options:', error);
     }
 
-    // Reload starlet products to update stock and purchased quantities
     try {
-      const response = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
-      const data = await response.json();
-      console.log('Refreshed Starlet Products Response:', data);
-      if (data.code === 0 && Array.isArray(data.data)) {
-        console.log('Refreshed Starlet Products Data:', data.data);
-        setStarletProducts(data.data);
-      } else if (data.code === 102002 || data.code === 102001) {
+      // Reload starlet products to update stock and purchased quantities
+      const starletResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
+      const starletData = await starletResponse.json();
+      console.log('Refreshed Starlet Products Response:', starletData);
+      if (starletData.code === 0 && Array.isArray(starletData.data)) {
+        console.log('Refreshed Starlet Products Data:', starletData.data);
+        
+        // // Add fake Step Boost products for testing
+        // const fakeStepBoosts = [
+        //   {
+        //     id: 1,            // ID để xác định step boost x1.5
+        //     prop: 20010,      // Prop để xác định loại step boosts
+        //     name: "X1.5 STEP BOOST",
+        //     starlet: 100,
+        //     stock: 10,
+        //     limitNum: 5,
+        //     purchasedQuantity: 0,
+        //     state: 0,
+        //     canBuy: true
+        //   },
+        //   {
+        //     id: 2,            // ID để xác định step boost x2
+        //     prop: 20010,      // Prop để xác định loại step boosts (cùng loại)
+        //     name: "X2 STEP BOOST", 
+        //     starlet: 200,
+        //     stock: 10,
+        //     limitNum: 3,
+        //     purchasedQuantity: 0,
+        //     state: 0,
+        //     canBuy: true
+        //   }
+        // ];
+        
+        // // Combine API data with fake Step Boosts
+        const combinedData = [...starletData.data];
+        setStarletProducts(combinedData);
+      } else if (starletData.code === 102002 || starletData.code === 102001) {
         // Token expired, attempt to refresh
         console.log('Token expired, attempting to refresh...');
         const result = await shared.login(shared.initData);
@@ -364,7 +468,35 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           const retryResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
           const retryData = await retryResponse.json();
           if (retryData.code === 0 && Array.isArray(retryData.data)) {
-            setStarletProducts(retryData.data);
+            // // Add fake Step Boost products for testing
+            // const fakeStepBoosts = [
+            //   {
+            //     id: 1,        // ID để xác định step boost x1.5
+            //     prop: 20010,      // Prop để xác định loại step boosts
+            //     name: "X1.5 STEP BOOST",
+            //     starlet: 100,
+            //     stock: 10,
+            //     limitNum: 5,
+            //     purchasedQuantity: 0,
+            //     state: 0,
+            //     canBuy: true
+            //   },
+            //   {
+            //     id: 2,        // ID để xác định step boost x2
+            //     prop: 20010,      // Prop để xác định loại step boosts (cùng loại)
+            //     name: "X2 STEP BOOST", 
+            //     starlet: 200,
+            //     stock: 10,
+            //     limitNum: 3,
+            //     purchasedQuantity: 0,
+            //     state: 0,
+            //     canBuy: true
+            //   }
+            // ];
+            
+            // // Combine API data with fake Step Boosts
+            const combinedData = [...retryData.data];
+            setStarletProducts(combinedData);
           }
         }
       }
@@ -372,26 +504,88 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       console.error('Failed to refresh starlet products:', error);
     }
 
-    // Check free reward time after profile refresh
-    await checkFreeRewardTime();
+    // Also refresh free reward status to ensure free option availability is up-to-date
+    try {
+      await checkFreeRewardTime();
+    } catch (error) {
+      console.error('Failed to refresh free reward status:', error);
+    }
   };
 
-  // Add effect to watch showBuyView changes
-  useEffect(() => {
-    if (!showBuyView) { // When returning from Buy view
-      refreshUserProfile();
+  // Add new function to refresh only a specific starlet product
+  const refreshStarletProduct = async (productId) => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+      const data = await response.json();
+      console.log('Refreshed Starlet Product Response:', data);
+      if (data.code === 0 && data.data) {
+        console.log('Refreshed Starlet Product Data:', data.data);
+        // Update the specific product in starletProducts array
+        setStarletProducts(prevProducts => 
+          prevProducts.map(product => 
+            product.id === productId ? data.data : product
+          )
+        );
+      } else if (data.code === 102002 || data.code === 102001) {
+        // Token expired, attempt to refresh
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/starletProductData?token=${shared.loginData.token}&productId=${productId}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && retryData.data) {
+            setStarletProducts(prevProducts => 
+              prevProducts.map(product => 
+                product.id === productId ? retryData.data : product
+              )
+            );
+          } else {
+            // Show error popup for retry failure
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Error',
+                message: 'Failed to refresh product data. Please try again.',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
+          }
+        } else {
+          // Show error popup for login failure
+          if (window.Telegram?.WebApp?.showPopup) {
+            await window.Telegram.WebApp.showPopup({
+              title: 'Error',
+              message: 'Session expired. Please try again.',
+              buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+            });
+          }
+        }
+      } else {
+        // Show error popup for API error
+        if (window.Telegram?.WebApp?.showPopup) {
+          await window.Telegram.WebApp.showPopup({
+            title: 'Error',
+            message: data.msg || 'Failed to refresh product data. Please try again.',
+            buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh starlet product:', error);
+      // Show error popup for network/other errors
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Network error. Please check your connection and try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
     }
-  }, [showBuyView]);
+  };
 
-  useEffect(() => {
-    refreshUserProfile();
-  }, []);
-
-  // Add useEffect to listen for data refresh trigger from App component
-  useEffect(() => {
-    // This will run when dataRefreshTrigger changes (after focus/unfocus reload)
-    if (shared.userProfile) {
-      console.log('Market: Updating currency display after data refresh');
+  // Add new function to refresh user profile only (without reloading market content)
+  const refreshUserProfileOnly = async () => {
+    try {
+      await shared.getProfileWithRetry();
       const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
       if (userStarlets) {
         setStarlets(userStarlets.num);
@@ -401,10 +595,34 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
       if (userTicket) {
         setTickets(userTicket.num);
       }
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+      // Show error popup for profile refresh failure
+      if (window.Telegram?.WebApp?.showPopup) {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: 'Failed to refresh user data. Please try again.',
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      }
     }
-  }, [shared.userProfile]); // This will trigger when shared.userProfile changes
+  };
 
-  const handleConfirmPurchase = () => {
+  // Add useEffect to watch for starlet purchase completion and reload only the specific product
+  useEffect(() => {
+    if (isStarletPurchaseComplete) {
+      console.log('Market: Starlet purchase completed, refreshing specific product and user profile');
+      // Refresh user profile to update starlets count
+      refreshUserProfileOnly();
+      // Refresh market content to update all product statuses
+      refreshMarketContent();
+      setActiveTab('starlet');
+      setIsStarletPurchaseComplete(false); // Reset the flag
+    }
+  }, [isStarletPurchaseComplete]);
+
+  const handleConfirmPurchase = async () => {
+    const wasStarletProduct = !!selectedPurchase?.isStarletProduct;
     if (!shared.loginData?.fslId) {
       setIsPopupOpen(false);
       setSelectedPurchase(null);
@@ -424,6 +642,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);
+
+    // After purchasing a Starlet product (e.g., GMT packages), trigger reload
+    if (wasStarletProduct) {
+      setIsStarletPurchaseComplete(true);
+    } else {
+      // For regular purchases, refresh market content to update availability
+      await refreshMarketContent();
+    }
   };
 
   // Helper function to get category title and color based on type
@@ -442,12 +668,139 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     }
   };
 
+  // Freeze streak assets mapping based on num value
+  const getFreezeAssets = (num) => {
+    if (num === 1) {
+      return { icon: iconStreak1, bg: bgStreak1 };
+    } else if (num > 4) {
+      return { icon: iconStreak5, bg: bgStreak5 };
+    } else if (num > 1) {
+      return { icon: iconStreak2, bg: bgStreak2 };
+    } else {
+      // Fallback to 1 day assets for any other values
+      return { icon: iconStreak1, bg: bgStreak1 };
+    }
+  };
+
+  // // Helper function to get step boost product info
+  // const getStepBoostProductInfo = (product) => {
+  //   // If API provides name, use it directly
+  //   if (product.name) {
+  //     return {
+  //       name: product.name,
+  //       displayAmount: product.name.includes('X1.5') ? 'X1.5' : 'X2',
+  //       icon: product.name.includes('X1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
+  //       description: 'BOOST YOUR STEPS',
+  //       category: 'Step Boosts',
+  //       useBackground: false,
+  //       productId: product.id,
+  //       priceIcon: starlet,
+  //       priceIconClass: 'mk-freeze-price-icon'
+  //     };
+  //   }
+
+  //   // Fallback to hardcoded values if no name from API
+  //   // Use product.id to determine specific step boost type
+  //   switch (product.id) {
+  //     case 1:
+  //       return { 
+  //         name: 'X1.5 STEP BOOST', 
+  //         displayAmount: '1.5X',
+  //         icon: iconStepBoostx1_5, // Will be replaced with step boost icon
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 1,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //     case 2:
+  //       return { 
+  //         name: 'X2 STEP BOOST', 
+  //         displayAmount: '2X',
+  //         icon: iconStepBoostx2, // Will be replaced with step boost icon
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 2,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //     default:
+  //       return { 
+  //         name: 'Unknown Step Boost', 
+  //         icon: starlet,
+  //         description: 'BOOST YOUR STEPS',
+  //         category: 'Step Boosts',
+  //         useBackground: false,
+  //         productId: 0,
+  //         priceIcon: starlet,
+  //         priceIconClass: 'mk-freeze-price-icon'
+  //       };
+  //   }
+  // };
+
   // Helper function to get starlet product info based on prop ID
-  const getStarletProductInfo = (propId) => {
-    switch (propId) {
+  const getStarletProductInfo = (product) => {
+    // If API provides name, use it directly
+    if (product.name) {
+      // Special case for freeze streak (prop 10110)
+      if (product.prop === 10110) {
+        // Use product.num to determine the appropriate assets
+        const num = product.num || 1;
+        const assets = getFreezeAssets(num);
+        
+        return {
+          name: product.name,
+          displayAmount: 'FREEZE STREAK', // Fixed text like hard-coded version
+          icon: assets.icon || starlet, // Use appropriate streak icon
+          description: 'Freeze Streak',
+          category: 'Freeze Streak',
+          useBackground: true,
+          backgroundImage: assets.bg || bgStreak1, // Use appropriate background
+          productId: `product-${product.id}`,
+          designClass: 'mk-freeze-card',
+          // Additional properties for freeze card design
+          isFreezeCard: true,
+          freezeDays: num, // Use product.num as days
+          priceIcon: starlet, // Icon for price section
+          priceIconClass: 'mk-freeze-price-icon'
+        };
+      }
+      
+      if (product.prop === 10120 || product.prop === 10121) {
+        return {
+          name: product.name,
+          displayAmount: product.name.includes('1.5') ? 'X1.5' : 'X2',
+          icon: product.name.includes('1.5') ? iconStepBoostx1_5 : iconStepBoostx2,
+          description: 'BOOST YOUR STEPS',
+          category: 'Step Boosts',
+          useBackground: false,
+          productId: product.id,
+          priceIcon: starlet,
+          priceIconClass: 'mk-freeze-price-icon'
+        };
+      }
+
+      // Default design for other props
+      return {
+        name: product.name,
+        displayAmount: product.name, // Use name for display amount too
+        icon: product.prop >= 70000 ? null : gmtCard,
+        description: product.prop >= 70000 ? 'Merchandise Coupon' : 'GMT Payment Card',
+        category: product.prop >= 70000 ? 'Merchandise' : 'Payment Cards',
+        useBackground: product.prop >= 70000 ? true : false,
+        backgroundImage: product.prop >= 70000 ? merchCouponBg : null,
+        productId: `product-${product.id}`
+      };
+    }
+
+    // Fallback to hardcoded values if no name from API
+    switch (product.prop) {
       case 60010:
         return { 
-          name: '$50', 
+          name: '$50 GMT PAY CARD', 
+          displayAmount: '$50',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -456,7 +809,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60020:
         return { 
-          name: '$100', 
+          name: '$100 GMT PAY CARD', 
+          displayAmount: '$100',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -465,7 +819,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 60030:
         return { 
-          name: '$200', 
+          name: '$200 GMT PAY CARD', 
+          displayAmount: '$200',
           icon: gmtCard,
           description: 'GMT Payment Card',
           category: 'Payment Cards',
@@ -474,7 +829,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70010:
         return { 
-          name: '$79 Merch Coupon', 
+          name: '$79 MERCH COUPON', 
+          displayAmount: '$79 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -482,7 +838,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
       case 70020:
         return { 
-          name: '$199 Merch Coupon', 
+          name: '$199 MERCH COUPON', 
+          displayAmount: '$199 MERCH COUPON', 
           backgroundImage: merchCouponBg,
           description: 'Merchandise Coupon',
           category: 'Merchandise',
@@ -498,6 +855,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
         };
     }
   };
+
+  // const getStepBoostProductInfo = () => {
+  //   // Default design for other props
+  //   return {
+  //     name: "Step Boost",
+  //     displayAmount: "x1.5", // Use name for display amount too
+  //     icon: iconStepBoostx1_5,
+  //     description: 'Step Boost x1.5',
+  //     category: 'Step Boosts',
+  //     useBackground: true,
+  //     backgroundImage: null,
+  //     productId: `1`
+  //   };
+  // };
 
   // Helper function to get expansion state based on type
   const getExpansionState = (type) => {
@@ -566,6 +937,47 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
     );
   }
 
+  // Handle Freeze Streak package selection
+  const handleFreezeStreakClick = (streakPackage) => {
+    setSelectedFreezeStreakPackage(streakPackage);
+    setShowFreezeStreakPopup(true);
+  };
+
+  // Handle Step Boosts click
+  const handleStepBoostsClick = (stepBoostPackage) => {
+    setSelectedStepBoost(stepBoostPackage);
+    setShowStepBoostsPopup(true);
+  };
+
+  // Handle Step Boosts purchase
+  const handleStepBoostsPurchase = async (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // Refresh user profile to update UI immediately
+    await refreshUserProfile();
+  };
+
+  // Handle Freeze Streak purchase
+  const handleFreezeStreakPurchase = async (streakPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Freeze Streak package:', streakPackage);
+    // Refresh user profile to update UI immediately
+    await refreshUserProfile();
+  };
+
+
+  const handleStepBoostPurchase = (stepBoostPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Step Boost package:', stepBoostPackage);
+    // You might want to call an API here to process the purchase
+  };
+
+  const handleStepBoostClick = (stepBoostPackage) => {
+    handleFreezeStreakPurchase(stepBoostPackage);
+    setShowFreezeStreakPopup(true);
+  }
+
+
   return (
     <>
       <div className="background-container">
@@ -608,18 +1020,24 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
 
           {!shared.userProfile?.fslId && (
             <div className="mk-fsl-connect-section" onClick={handleConnectFSLID}>
+              {/* Corner border element */}
+              <div className="mk-corner mk-top-left"></div>
+              <div className="mk-corner mk-top-right"></div>
+              <div className="mk-corner mk-bottom-left"></div>
+              <div className="mk-corner mk-bottom-right"></div>
               <div className="mk-fsl-connect-content">
-                <div className="mk-lock-icon">🔒</div>
+                <div className="mk-lock-icon"><img src={fslidIcon} alt="FSL ID" /></div>
                 <div className="mk-fsl-text">
                   <div className="mk-connect-title">CONNECT YOUR FSL ID</div>
-                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN CLAIM 10 FREE STARLETS DAILY!</div>
+                  <div className="mk-connect-subtitle">STEPN OG SNEAKER HOLDERS CAN</div>
+                  <div className="mk-connect-subtitle mk-connect-subtitle-secondary">CLAIM 10 FREE STARLETS DAILY!</div>
                 </div>
               </div>
             </div>
           )}
           
           <div className="mk-market-inner-content">
-            <div className="mk-market-tab-container">
+            <div className="mk-market-tab-container" data-active-tab={activeTab}>
               <div className="mk-tabs">
                 <button
                   className={`mk-tab ${activeTab === 'telegram' ? 'active' : ''}`}
@@ -781,62 +1199,269 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                 
                 {activeTab === 'starlet' && (
                   <div className="mk-starlet-products-container">
-                    <div className="mk-starlet-grid">
-                      {starletProducts.map((product) => {
-                        const productInfo = getStarletProductInfo(product.prop);
-                        const isAvailable = product.state === 0 && product.stock > 0 && product.purchasedQuantity < product.limitNum;
-                        const isLimitReached = product.purchasedQuantity >= product.limitNum;
-                        const isOutOfStock = product.stock <= 0;
+
+                    {/* Freeze Streak Section */}
+                    <div className="mk-market-section">
+                      <div
+                        className="mk-section-header"
+                        onClick={() => setFreezeStreakExpanded(!freezeStreakExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#00FFFF' }}
+                        >
+                          <span className="mk-section-title">FREEZE STREAK</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${freezeStreakExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${freezeStreakExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                          {starletProducts
+                            .filter(product => product.prop === 10110)
+                            .map((product) => {
+                              const productInfo = getStarletProductInfo(product);
+                              const hasFSLID = !!shared.userProfile?.fslId;
+                              const userLevel = shared.userProfile?.level || 0;
+                              const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              
+                              // Check conditions in order of priority (same as merch coupon)
+                              let isDisabled = false;
+                              let disabledReason = '';
+                              
+                              if (userLevel < 10) {
+                                isDisabled = true;
+                                disabledReason = 'LEVEL 10 REQUIRED';
+                              }
+                              // 3. Out of stock
+                              else if (product.stock != -1 && product.stock <= 0) {
+                                isDisabled = true;
+                                disabledReason = 'OUT OF STOCK';
+                              }
+                              // 4. Purchase limit reached
+                              else if (product.limitNum != -1 && product.purchasedQuantity >= product.limitNum) {
+                                isDisabled = true;
+                                disabledReason = 'LIMIT REACHED';
+                              }
+                              // 5. Not enough starlets
+                              else if (userStarlets < product.starlet) {
+                                isDisabled = true;
+                                disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                              }
+                              
+                              const isAvailable = !isDisabled;
+                              
+                              return (
+                                <button 
+                                  key={product.id}
+                                  className={`mk-market-ticket-button ${productInfo.freezeDays === 1 ? 'mk-freeze-card mk-freeze-1-day' : 'mk-freeze-card'} ${!isAvailable ? 'sold-out' : ''}`}
+                                  onClick={() => isAvailable && handleFreezeStreakClick({days: product.num, price: product.starlet, productId: product.id})}
+                                  disabled={!isAvailable}
+                                >
+                                  <div 
+                                    className="mk-market-ticket-button-image-container"
+                                    style={productInfo.useBackground ? {
+                                      backgroundImage: `url(${productInfo.backgroundImage})`,
+                                      backgroundSize: 'cover',
+                                      backgroundPosition: productInfo.isFreezeCard ? 'center' : 'calc(50% + 50px) center',
+                                      backgroundRepeat: 'no-repeat'
+                                    } : {}}
+                                  >
+                                    <div className="mk-market-ticket-content">
+                                      {(!productInfo.useBackground || productInfo.isFreezeCard) && (
+                                        <div className="mk-market-ticket-icon">
+                                          <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                        </div>
+                                      )}
+                                      <div className="mk-market-ticket-info">
+                                        <div className="mk-market-ticket-text">
+                                          <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
+                                          {productInfo.isFreezeCard && (
+                                            <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                              {productInfo.freezeDays} {productInfo.freezeDays === '1' ? 'DAY' : 'DAYS'}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                      {isAvailable ? (
+                                        productInfo.isFreezeCard ? (
+                                          <>
+                                            <span>{product.starlet.toLocaleString()}</span>
+                                            <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
+                                          </>
+                                        ) : (
+                                          `${product.starlet} STARLETS`
+                                        )
+                                      ) : (
+                                        disabledReason
+                                      )}
+                                    </div>
+                                    
+                                    {/* Limit corner for freeze streak products */}
+                                    {product.limitNum != -1 && (
+                                    <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                      <div className="mk-starlet-limit-corner-text">
+                                        {product.purchasedQuantity}/{product.limitNum}
+                                      </div>
+                                    </div>
+                                    )}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          
+                          {/* Show message if no freeze streak products available */}
+                          {starletProducts.filter(product => product.prop === 10110).length === 0 && (
+                            <div className="mk-starlet-packages-placeholder">
+                              <div className="mk-placeholder-content">
+                                <div className="mk-placeholder-text">FREEZE STREAK</div>
+                                <div className="mk-placeholder-subtext">No products available</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Merch Coupon Section */}
+                    <div className="mk-market-section">
+                      <div
+                        className="mk-section-header"
+                        onClick={() => setMerchCouponExpanded(!merchCouponExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#FF00F6' }}
+                        >
+                          <span className="mk-section-title">MERCH COUPON</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${merchCouponExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${merchCouponExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                      {starletProducts
+                        .filter(product => product.prop === 70010) // Exclude freeze streak products
+                        .map((product) => {
+                        const productInfo = getStarletProductInfo(product);
+                        const hasFSLID = !!shared.userProfile?.fslId;
+                        const userLevel = shared.userProfile?.level || 0;
+                        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                        
+                        // Check conditions in order of priority
+                        let isDisabled = false;
+                        let disabledReason = '';
+                        
+                        // 1. FSL ID not connected
+                        if (!hasFSLID) {
+                          isDisabled = true;
+                          disabledReason = 'FSL ID NOT CONNECTED';
+                        }
+                        // 2. Level requirement (Level 10)
+                        else if (userLevel < 10) {
+                          isDisabled = true;
+                          disabledReason = 'LEVEL 10 REQUIRED';
+                        }
+                        // 3. Out of stock
+                        else if (product.stock <= 0) {
+                          isDisabled = true;
+                          disabledReason = 'OUT OF STOCK';
+                        }
+                        // 4. Not enough starlets
+                        else if (userStarlets < product.starlet) {
+                          isDisabled = true;
+                          disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                        }
+                        // 5. Limit reached
+                        else if (product.purchasedQuantity >= product.limitNum) {
+                          isDisabled = true;
+                          disabledReason = 'LIMIT REACHED';
+                        }
+                        // 6. Product state unavailable
+                        else if (product.state !== 0) {
+                          isDisabled = true;
+                          disabledReason = 'UNAVAILABLE';
+                        }
+                        
+                        const isAvailable = !isDisabled;
                         
                         return (
                           <button 
                             key={product.id}
-                            className={`mk-market-ticket-button mk-starlet-product ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''}`}
-                            onClick={() => isAvailable && console.log('Purchase starlet product:', product.id)}
+                            className={`mk-market-ticket-button ${productInfo.isFreezeCard ? 'mk-freeze-card' : 'mk-starlet-product'} ${!isAvailable ? 'sold-out' : ''} ${productInfo.productId ? `product-${productInfo.productId}` : ''} ${productInfo.designClass || ''}`}
+                            onClick={() => isAvailable && handleStarletProductPurchase(product)}
                             disabled={!isAvailable}
                           >
-                            {/* Limit corner in top-right for starlet products */}
-                            <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                              <div className="mk-starlet-limit-corner-text">
-                                {product.purchasedQuantity}/{product.limitNum}
+                            {/* Limit corner in top-right for starlet products (not freeze cards) */}
+                            {!productInfo.isFreezeCard && (
+                              <div className="mk-starlet-limit-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                <div className="mk-starlet-limit-corner-text">
+                                  {product.purchasedQuantity}/{product.limitNum}
+                                </div>
                               </div>
-                            </div>
+                            )}
                             <div 
                               className="mk-market-ticket-button-image-container"
                               style={productInfo.useBackground ? {
                                 backgroundImage: `url(${productInfo.backgroundImage})`,
                                 backgroundSize: 'cover',
-                                backgroundPosition: 'calc(50% + 50px) center',
+                                backgroundPosition: productInfo.isFreezeCard ? 'center' : 'calc(50% + 50px) center',
                                 backgroundRepeat: 'no-repeat'
                               } : {}}
                             >
                               <div className="mk-market-ticket-content">
-                                {!productInfo.useBackground && (
+                                {(!productInfo.useBackground || productInfo.isFreezeCard) && (
                                   <div className="mk-market-ticket-icon">
                                     <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
                                   </div>
                                 )}
                                 <div className="mk-market-ticket-info">
                                   <div className="mk-market-ticket-text">
-                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.name}</div>
-                                    {/* <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.description}</div> */}
-                                  </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                    <span>Stock:</span>&nbsp;<span>{product.stock}</span>
-                                  </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                    <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
-                                  </div>
-                                  <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                    <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
+                                    <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{productInfo.displayAmount}</div>
+                                    {productInfo.isFreezeCard && (
+                                      <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                        {productInfo.freezeDays} {productInfo.freezeDays === '1' ? 'DAY' : 'DAYS'}
+                                      </div>
+                                    )}
+                                    {!productInfo.isFreezeCard && (
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                        <span>Stock:</span>&nbsp;<span>{product.stock}</span>
+                                      </div>
+                                    )}
+                                    {!productInfo.isFreezeCard && (
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                        <span>Limit:</span>&nbsp;<span>{product.limitNum}</span>
+                                      </div>
+                                    )}
+                                    {!productInfo.isFreezeCard && (
+                                      <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                        <span>Purchased:</span>&nbsp;<span>{product.purchasedQuantity}</span>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
                               <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                {isOutOfStock ? 'OUT OF STOCK' : 
-                                 isLimitReached ? 'LIMIT REACHED' : 
-                                 !isAvailable ? 'UNAVAILABLE' : 
-                                 `${product.starlet} STARLETS`}
+                                {productInfo.isFreezeCard ? (
+                                  <>
+                                    <span>{product.starlet.toLocaleString()}</span>
+                                    <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
+                                  </>
+                                ) : (
+                                  isAvailable ? `${product.starlet} STARLETS` : disabledReason
+                                )}
                               </div>
                             </div>
                           </button>
@@ -844,14 +1469,141 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
                       })}
                       
                       {/* Show message if no products available */}
-                      {starletProducts.length === 0 && (
+                      {starletProducts.filter(product => product.prop !== 10110).length === 0 && (
                         <div className="mk-starlet-packages-placeholder">
                           <div className="mk-placeholder-content">
-                            <div className="mk-placeholder-text">STARLET PACKAGES</div>
+                            <div className="mk-placeholder-text">MERCH COUPON</div>
                             <div className="mk-placeholder-subtext">No products available</div>
                           </div>
                         </div>
                       )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Step Boosts Section */}
+                    <div className="mk-market-section">
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setStepBoostsExpanded(!stepBoostsExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#00FF00' }}
+                        >
+                          <span className="mk-section-title">STEP BOOSTS</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${stepBoostsExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${stepBoostsExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                          {starletProducts
+                            .filter(product => product.prop === 10120 || product.prop === 10121) // Filter for step boost products (prop 20010 = step boosts)
+                            .map((product) => {
+                              const productInfo = getStarletProductInfo(product);
+                              const hasFSLID = !!shared.userProfile?.fslId;
+                              const userLevel = shared.userProfile?.level || 0;
+                              const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
+                              
+                              // // Check conditions for Step Boosts
+                              let isDisabled = false;
+                              let disabledReason = '';
+                              
+                              // *. FSL ID not connected
+                              if (!hasFSLID) {
+                                isDisabled = true;
+                                disabledReason = 'FSL ID NOT CONNECTED';
+                              }
+                              // 1. Level requirement (Level 10 for Step Boosts)
+                              else if (userLevel < 10) {
+                                isDisabled = true;
+                                disabledReason = 'LEVEL 10 REQUIRED';
+                              }
+                              // 2. Bank Steps Not Connected
+                              else if (!isConnectedBankSteps) {
+                                isDisabled = true;
+                                disabledReason = 'BANK STEPS NOT CONNECTED';
+                              }
+                              // 3. Not enough starlets
+                              else if (userStarlets < product.starlet) {
+                                isDisabled = true;
+                                disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                              }
+                              
+                              const isAvailable = !isDisabled;
+                              
+                              return (
+                                <button 
+                                  key={product.id}
+                                  className={`mk-market-ticket-button mk-step-boost-product ${!isAvailable ? 'sold-out' : ''}`}
+                                  onClick={() => isAvailable && handleStepBoostsClick({name: productInfo.name, starlet: product.starlet, productId: product.id})}
+                                  disabled={!isAvailable}
+                                >
+                                  <div 
+                                    className="mk-market-ticket-button-image-container"
+                                    style={productInfo.useBackground ? {
+                                      backgroundImage: `url(${productInfo.backgroundImage})`,
+                                      backgroundSize: 'cover',
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat'
+                                    } : {}}
+                                  >
+                                    <div className="mk-market-ticket-content">
+                                      {(!productInfo.useBackground) && (
+                                        <div className="mk-market-ticket-icon">
+                                          <img src={productInfo.icon} alt={productInfo.name} style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                        </div>
+                                      )}
+                                      <div className="mk-market-ticket-info">
+                                        <div className="mk-market-ticket-text">
+                                          <div 
+                                            className="mk-market-ticket-amount" 
+                                            style={{ 
+                                              opacity: isAvailable ? 1 : 0.5,
+                                              color: productInfo.displayAmount === 'X1.5' ? '#00FF00' : '#FF0080'
+                                            }}
+                                          >
+                                            {productInfo.displayAmount}
+                                          </div>
+                                          <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                            {productInfo.description}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                      {isAvailable ? (
+                                        <>
+                                          <span>{product.starlet.toLocaleString()}</span>
+                                          <img src={productInfo.priceIcon} alt="Starlet" className={productInfo.priceIconClass} />
+                                        </>
+                                      ) : (
+                                        disabledReason
+                                      )}
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          
+                          {/* Show message if no step boost products available */}
+                          {starletProducts.filter(product => product.prop === 10120 || product.prop === 10121).length === 0 && (
+                            <div className="mk-starlet-packages-placeholder">
+                              <div className="mk-placeholder-content">
+                                <div className="mk-placeholder-text">STEP BOOSTS</div>
+                                <div className="mk-placeholder-subtext">No products available</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -860,6 +1612,40 @@ const Market = ({ showFSLIDScreen, setShowProfileView }) => {
           </div>
         </div>
       </div>
+
+      <ConfirmPurchasePopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        amount={selectedPurchase?.amount}
+        stars={selectedPurchase?.stars}
+        optionId={selectedPurchase?.optionId}
+        productId={selectedPurchase?.productId}
+        productName={selectedPurchase?.productName}
+        isStarletProduct={selectedPurchase?.isStarletProduct}
+        onConfirm={handleConfirmPurchase}
+        setShowProfileView={setShowProfileView}
+        setShowBuyView={setShowBuyView}
+        onPurchaseComplete={() => setIsStarletPurchaseComplete(true)}
+      />
+      
+      {/* Freeze Streak Popup */}
+      <FreezeStreakPopup
+        isOpen={showFreezeStreakPopup}
+        onClose={() => setShowFreezeStreakPopup(false)}
+        selectedPackage={selectedFreezeStreakPackage}
+        onPurchase={handleFreezeStreakPurchase}
+        refreshStarletProduct={refreshStarletProduct}
+        refreshUserProfile={refreshUserProfile}
+      />
+
+      {/* Step Boosts Popup */}
+      <StepBoostsPopup
+        isOpen={showStepBoostsPopup}
+        onClose={() => setShowStepBoostsPopup(false)}
+        selectedPackage={selectedStepBoost}
+        onPurchase={handleStepBoostsPurchase}
+        refreshStarletProduct={refreshMarketContent}
+      />
     </>
   );
 };

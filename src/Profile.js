@@ -6,6 +6,7 @@ import backIcon from './images/back.svg';
 import arrowIcon from './images/arrow.svg';
 import ID_selected from './images/ID_selected.svg';
 import ticketDiscountIcon from './images/ticket-discount.png';
+import infoIcon from './images/Info_Icon.png';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 
@@ -272,7 +273,12 @@ Response:
                                         <span className="profile-item-text">{item.text}</span>
                                     {item.type === 30020 && (
                                         <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank')}>
-                                            i
+                                            <img src={infoIcon} alt="Info" />
+                                        </button>
+                                    )}
+                                    {item.type === 10110 && (
+                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FREEZE-STREAK-FAQ-26895c775fea807393e0c4917cf9a0c3', '_blank')}>
+                                            <img src={infoIcon} alt="Info" />
                                         </button>
                                     )}
                                     </div>
