@@ -12,6 +12,7 @@ import shared from './Shared';
 import CoinAnimation from './CoinAnimation';
 import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png';
+import bCoin from './images/bCoin_icon.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
 import winFlippinStar from './images/WinFlippinStar.png';
 import loseFlippinStar from './images/LoseFlippinStar.png';
@@ -1047,7 +1048,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 <div className="fc_corner fc_corner-bottom-right"></div>
                 <div className="fc_bet-content">
                   <span className="fc_bet-amount">10</span>
-                  <img src={starlet} alt="starlet" className="fc_bet-starlet-icon" />
+                  <img src={bCoin} alt="starlet" className="fc_bet-starlet-icon" />
                 </div>
               </div>
             </div>
@@ -1099,7 +1100,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_allin-value-container">
               <div className="fc_allin-value-display">
                 <span className="fc_allin-value-number">{Math.floor(starlets / 10) * 10}</span>
-                <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
+                <img src={bCoin} alt="starlet" className="fc_allin-value-starlet-icon" />
               </div>
             </div>
             
@@ -1249,6 +1250,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <img src={starlet} alt="Starlets" />
             <span className="fc_stat-item-main-text">{starlets}</span>
           </button>
+          
         </div>
         
         {/* Sound control button */}
@@ -1369,7 +1371,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 <span className="fc_progress-number">{winReward}</span>
               </div>
               <div className="fc_progress-starlet">
-                <img src={starlet} alt="starlet" className="fc_progress-starlet-icon" />
+                <img src={bCoin} alt="starlet" className="fc_progress-starlet-icon" />
               </div>
             </div>
           </div>
@@ -1473,7 +1475,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
             <div className="fc_bet-content">
               <span className="fc_bet-amount">{bet}</span>
-              <img src={starlet} alt="starlet" className="fc_bet-starlet-icon" />
+              <img src={bCoin} alt="starlet" className="fc_bet-starlet-icon" />
             </div>
           </button>
         ))}
@@ -1491,7 +1493,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_all-in-details">
               <span className="fc_all-in-percent">.01%</span>
               <span className="fc_all-in-amount">X10</span>
-              <img src={starlet} alt="starlet" className="fc_all-in-starlet" />
+              <img src={bCoin} alt="starlet" className="fc_all-in-starlet" />
             </div>
           </div>
         </button>

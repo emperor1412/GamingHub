@@ -971,16 +971,15 @@ Response:
                     </button> */}
                 </section>
 
-                {/* <section className="tickets-section">
-
-
+                <section className="tickets-section">
                     <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='ticket-button-image-container'>
                             <img
                                 src={flipping_stars}
-                                alt="My Tickets"
+                                alt="Flipping Stars"
                                 className="ticket-button-image"
                             />
+                            <div className='ticket-button-container-border'></div>
                         </div>
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
@@ -991,7 +990,7 @@ Response:
                             <span className="ticket-total-jackpot-count">00000000</span>
                         </div>
                     </button>
-                </section> */}
+                </section>
 
                 <section className="tickets-section">
                     {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
