@@ -103,6 +103,12 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
         onClose();
     };
 
+    const handleOpenMarket = () => {
+        onClose();
+        shared.setInitialMarketTab('starlet');
+        shared.setActiveTab('market');
+    }
+
     const handleConnectFSL = () => {
         showFSLIDScreen();
     };
@@ -406,8 +412,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         <button 
                             className={`bs_activate-boost-button bs_boost-${boostButtonState}`} 
                             onClick={boostButtonState === 'buy' ? () => {
-                                shared.setInitialMarketTab('starlet');
-                                shared.setActiveTab('market');
+                                handleOpenMarket();
                             } : handleActivateBoost}
                         >
                             <img src={boost_icon} alt="Boost Icon" className="bs_boost-icon" />
@@ -494,6 +499,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                 onActivate={handleConfirmActivateBoost}
                 boostData={boostData}
                 stepBoostState={stepBoostState}
+                handleOpenMarket={handleOpenMarket}
             />
         </>
     );
