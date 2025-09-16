@@ -405,7 +405,10 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                         />
                         <button 
                             className={`bs_activate-boost-button bs_boost-${boostButtonState}`} 
-                            onClick={boostButtonState === 'buy' ? () => window.open('/market', '_blank') : handleActivateBoost}
+                            onClick={boostButtonState === 'buy' ? () => {
+                                shared.setInitialMarketTab('starlet');
+                                shared.setActiveTab('market');
+                            } : handleActivateBoost}
                         >
                             <img src={boost_icon} alt="Boost Icon" className="bs_boost-icon" />
                             <span>
