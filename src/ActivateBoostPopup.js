@@ -4,8 +4,9 @@ import popupBackground from './images/Popup_Activate_boost.png';
 import boostIcon from './images/Boost_Icon.png';
 import boostIcon2 from './images/Icon_Step_Boost.png';
 import ActivateBoostConfirmPopup from './ActivateBoostConfirmPopup';
+import shared from './Shared';
 
-const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostState }) => {
+const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostState, handleOpenMarket }) => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [selectedBoostType, setSelectedBoostType] = useState(null);
 
@@ -17,12 +18,13 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostS
         const hasBoost = boostItem?.value > 0;
         const boostTypeCode = boostType === '1.5x' ? 10120 : 10121;
         
-        if (!hasBoost) {
-            return 'buy'; // No boost available, need to buy
-        } else if (stepBoostState === boostTypeCode) {
+        // First check if this boost is currently active
+        if (stepBoostState === boostTypeCode) {
             return 'active'; // This boost is currently active
         } else if (stepBoostState && stepBoostState !== 0) {
             return 'disabled'; // Another boost is active
+        } else if (!hasBoost) {
+            return 'buy'; // No boost available, need to buy
         } else {
             return 'activate'; // Can activate this boost
         }
@@ -31,8 +33,8 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostS
     const handleActivate = (boostType) => {
         const buttonState = getBoostButtonState(boostType);
         if (buttonState === 'buy') {
-            // Redirect to market
-            window.open('/market', '_blank');
+            // Navigate to marketplace with starlet tab
+            handleOpenMarket();
             return;
         } else if (buttonState === 'disabled' || buttonState === 'active') {
             // Do nothing for disabled or active state
