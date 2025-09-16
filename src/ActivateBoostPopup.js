@@ -4,8 +4,9 @@ import popupBackground from './images/Popup_Activate_boost.png';
 import boostIcon from './images/Boost_Icon.png';
 import boostIcon2 from './images/Icon_Step_Boost.png';
 import ActivateBoostConfirmPopup from './ActivateBoostConfirmPopup';
+import shared from './Shared';
 
-const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostState }) => {
+const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostState, handleOpenMarket }) => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [selectedBoostType, setSelectedBoostType] = useState(null);
 
@@ -31,8 +32,8 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostS
     const handleActivate = (boostType) => {
         const buttonState = getBoostButtonState(boostType);
         if (buttonState === 'buy') {
-            // Redirect to market
-            window.open('/market', '_blank');
+            // Navigate to marketplace with starlet tab
+            handleOpenMarket();
             return;
         } else if (buttonState === 'disabled' || buttonState === 'active') {
             // Do nothing for disabled or active state
