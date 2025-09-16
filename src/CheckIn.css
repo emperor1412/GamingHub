@@ -53,11 +53,12 @@
 
 .days-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
   max-width: 100%;
   margin-bottom: 5px;
   overscroll-behavior: none;
+  padding: 0 0px;
 }
 
 /* .days-grid > div:last-child {
@@ -132,7 +133,7 @@
 
 .day-card {  
   border-radius: 16px;
-  padding: 12px 8px;
+  padding: 5px 8px;
   text-align: center;
   width: 100%;
   box-sizing: border-box;
@@ -144,6 +145,7 @@
   flex-direction: column;
   justify-content: space-between;
   background: #212121;
+  height: 105px;
 }
 
 .day-card.active {
@@ -158,8 +160,9 @@
   margin-bottom: 12px;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 4px;
+  gap: 4px;
 }
 
 .number-group {
@@ -171,7 +174,7 @@
 .number {
   color: #FFF;
   font-family: "PP Neue Machina";
-  font-size: 24px;
+  font-size: 26px;
   font-style: italic;
   font-weight: 800;
   line-height: normal;
@@ -190,7 +193,6 @@
 }
 
 .label {
-  margin-left: auto;
   color: #FFF;
   font-family: "PP Neue Machina";
   font-size: 11px;
@@ -203,7 +205,7 @@
 .rewards {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 7px;
 }
 
 .reward {
@@ -216,6 +218,13 @@
 .reward img {
   width: 20px;
   height: 20px;
+}
+
+.reward-divider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin: 0 1px;
 }
 
 .reward-text-checkin {
@@ -256,8 +265,8 @@
 
 .checkmark-icon {
   position: absolute;
-  bottom: -20px;
-  left: 60%;
+  bottom: 10px;
+  left: 80%;
   transform: translateX(-50%);
   width: 100px;
   height: 100px;
