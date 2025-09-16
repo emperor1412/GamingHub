@@ -1082,7 +1082,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             </div>
             
             {/* Press Flip Text */}
-            <div className="fc_welcome-flip-text">PRESS FLIP AND<br/><span className="fc_welcome-win-text">WIN STARLETS</span></div>
+            <div className="fc_welcome-flip-text">PRESS FLIP AND<br/><span className="fc_welcome-win-text">WIN B$</span></div>
             
             {/* LFG Button */}
             <button className="fc_welcome-lfg-btn" onClick={handleWelcomeClose}>
