@@ -18,12 +18,13 @@ const ActivateBoostPopup = ({ isOpen, onClose, onActivate, boostData, stepBoostS
         const hasBoost = boostItem?.value > 0;
         const boostTypeCode = boostType === '1.5x' ? 10120 : 10121;
         
-        if (!hasBoost) {
-            return 'buy'; // No boost available, need to buy
-        } else if (stepBoostState === boostTypeCode) {
+        // First check if this boost is currently active
+        if (stepBoostState === boostTypeCode) {
             return 'active'; // This boost is currently active
         } else if (stepBoostState && stepBoostState !== 0) {
             return 'disabled'; // Another boost is active
+        } else if (!hasBoost) {
+            return 'buy'; // No boost available, need to buy
         } else {
             return 'activate'; // Can activate this boost
         }
