@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.3a8f23e3.css",
-    "main.js": "./static/js/main.25c98f62.js",
+    "main.js": "./static/js/main.ddbefd89.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -110,6 +110,7 @@
     "static/media/TheFirstHunded_Unlocked.png": "./static/media/TheFirstHunded_Unlocked.df948b380a31b1895c41.png",
     "static/media/Runner-Trophy_Bw.png": "./static/media/Runner-Trophy_Bw.5658ef750c2712c9e763.png",
     "static/media/lv1.png": "./static/media/lv1.1898e65a326e46523194.png",
+    "static/media/stepBoost_trophy_unlocked.png": "./static/media/stepBoost_trophy_unlocked.547627452eecff254dab.png",
     "static/media/lv6.png": "./static/media/lv6.7671e0ff975d85613c8a.png",
     "static/media/lv5.png": "./static/media/lv5.cb246d6f61887f43d540.png",
     "static/media/FSLID_Login_Logo.png": "./static/media/FSLID_Login_Logo.07ed1adca04347f27a3e.png",
@@ -127,6 +128,7 @@
     "static/media/gmtCard.png": "./static/media/gmtCard.04c30cce34d0cc2676da.png",
     "static/media/icon_pop_freeze2.png": "./static/media/icon_pop_freeze2.7a05c864c78fb5422491.png",
     "static/media/FSLGames_mysterytrophy_PFP_1.png": "./static/media/FSLGames_mysterytrophy_PFP_1.b74e34d33e4d203b1ce1.png",
+    "static/media/stepBoost_trophy_locked.png": "./static/media/stepBoost_trophy_locked.03f12dd38abc4786dd2d.png",
     "static/media/GMT_1.png": "./static/media/GMT_1.da83f947f90d67f7c656.png",
     "static/media/WinFlippinStar.png": "./static/media/WinFlippinStar.95a2dd8ab8d8ed3c4c02.png",
     "static/media/trophy_4_200px.png": "./static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
@@ -207,11 +209,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.3a8f23e3.css.map": "./static/css/main.3a8f23e3.css.map",
-    "main.25c98f62.js.map": "./static/js/main.25c98f62.js.map",
+    "main.ddbefd89.js.map": "./static/js/main.ddbefd89.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3a8f23e3.css",
-    "static/js/main.25c98f62.js"
+    "static/js/main.ddbefd89.js"
   ]
 }
