@@ -1285,12 +1285,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </div>
 
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
-      <div className="fc_jackpot-container">
+      {/* <div className="fc_jackpot-container">
         <div className="fc_jackpot">
           <span className="fc_jackpot-label">JACKPOT</span>
           <span className="fc_jackpot-count">00000000</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Settings Overlay */}
       {showSettings && (
@@ -1379,21 +1379,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       </div>
 
       {/* Total Flips and Auto Flip Controls */}
-      <div className="fc_flip-controls">
+      <div className={`fc_flip-controls ${shouldShowInsufficient ? 'fc_center-total-flips' : ''}`}>
         <div className="fc_total-flips">
           <span className="fc_total-flips-label">TOTAL FLIPS</span>
           <span className="fc_total-flips-count">{totalFlips.toLocaleString().padStart(8, '0')}</span>
         </div>
-        <button 
-          className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
-          onClick={handleAutoFlipClick}
-        >
-          <span className="fc_auto-flip-text">AUTO FLIP</span>
-          <span className="fc_auto-flip-separator">|</span>
-          <span className="fc_auto-flip-status">
-            {autoFlip ? 'ON' : 'OFF'}
-          </span>
-        </button>
+        {/* Only show auto flip button when user has enough starlets */}
+        {!shouldShowInsufficient && (
+          <button 
+            className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
+            onClick={handleAutoFlipClick}
+          >
+            <span className="fc_auto-flip-text">AUTO FLIP</span>
+            <span className="fc_auto-flip-separator">|</span>
+            <span className="fc_auto-flip-status">
+              {autoFlip ? 'ON' : 'OFF'}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Coin face selection - cập nhật hiển thị streak */}
@@ -1536,9 +1539,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       { shouldShowInsufficient ? (
           <div className="fc_flip-btn-container">
             <button className={`fc_flip-btn fc_flip-btn-insufficient`} disabled>
-              <div className="fc_flip-content">NOT ENOUGH STARLETS</div>
+              <div className="fc_flip-content">NOT ENOUGH B$</div>
             </button>
-            <button
+            {/* <button
               className="fc_buy-more-btn"
               onClick={() => {
                 if (onClose) onClose();
@@ -1549,7 +1552,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               }}
             >
               <div className="fc_flip-content">BUY MORE</div>
-            </button>
+            </button> */}
           </div>
         ) : (
           <button 

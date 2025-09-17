@@ -590,6 +590,16 @@ body::-webkit-scrollbar-track,
   gap: 12px;
 }
 
+/* Center total flips when auto flip button is hidden */
+.fc_flip-controls:has(.fc_auto-flip-toggle:not(:last-child)) {
+  justify-content: center;
+}
+
+/* Alternative approach for browsers that don't support :has() */
+.fc_flip-controls.fc_center-total-flips {
+  justify-content: center;
+}
+
 .fc_total-flips {
   display: flex;
   align-items: center;
@@ -2035,7 +2045,7 @@ body::-webkit-scrollbar-track,
 /* Insufficient state container */
 .fc_flip-btn-container {
   position: fixed;
-  bottom: 100px; /* Position above bottom navigation */
+  bottom: 120px; /* Position above bottom navigation */
   left: 50%;
   transform: translateX(-50%);
   width: calc(390px - 40px); /* Match app width minus margins */
