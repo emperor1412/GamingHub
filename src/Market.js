@@ -22,6 +22,8 @@ import fslidIcon from './images/FSLID-ICON.png';
 import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
 import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
 import StepBoostsPopup from './StepBoostsPopup';
+import PremiumPopup from './PremiumPopup';
+import premiumIcon from './images/Premium_icon.png';
 
 // url: /app/buyOptions
 // Request:
@@ -108,6 +110,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [merchCouponExpanded, setMerchCouponExpanded] = useState(true);
   // Step Boosts expansion state
   const [stepBoostsExpanded, setStepBoostsExpanded] = useState(true);
+  const [premiumExpanded, setPremiumExpanded] = useState(true);
   
   // Freeze Streak popup states
   const [showFreezeStreakPopup, setShowFreezeStreakPopup] = useState(false);
@@ -116,6 +119,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   // Step Boosts popup states
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
+  const [showPremiumPopup, setShowPremiumPopup] = useState(false);
+  const [selectedPremiumPackage, setSelectedPremiumPackage] = useState(null);
 
   // If navigated from Home with a target tab instruction, switch tabs (no popup)
   useEffect(() => {
@@ -856,6 +861,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
+  const getPremiumMembershipProductInfo = (product) => {
+    return {
+      name: "PREMIUM MEMBERSHIP",
+      displayAmount: "Monthly",
+      icon: premiumIcon,
+      description: "Premium Membership Monthly",
+      useBackground: true,
+      backgroundImage: null,
+      productId: `1`
+    };
+  };
+
   // const getStepBoostProductInfo = () => {
   //   // Default design for other props
   //   return {
@@ -949,6 +966,22 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowStepBoostsPopup(true);
   };
 
+  // Handle Premium click
+  const handlePremiumClick = (premiumPackage) => {
+    setSelectedPremiumPackage(premiumPackage);
+    setShowPremiumPopup(true);
+  };
+
+  // Handle Premium purchase
+  const handlePremiumPurchase = async (premiumPackage) => {
+    // Here you can implement the actual purchase logic
+    console.log('Purchasing Premium package:', premiumPackage);
+    // You might want to call an API here to process the purchase
+    setShowPremiumPopup(false);
+    // Refresh user profile to update UI immediately
+    await refreshUserProfile();
+  };
+
   // Handle Step Boosts purchase
   const handleStepBoostsPurchase = async (stepBoostPackage) => {
     // Here you can implement the actual purchase logic
@@ -964,18 +997,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     // Refresh user profile to update UI immediately
     await refreshUserProfile();
   };
-
-
-  const handleStepBoostPurchase = (stepBoostPackage) => {
-    // Here you can implement the actual purchase logic
-    console.log('Purchasing Step Boost package:', stepBoostPackage);
-    // You might want to call an API here to process the purchase
-  };
-
-  const handleStepBoostClick = (stepBoostPackage) => {
-    handleFreezeStreakPurchase(stepBoostPackage);
-    setShowFreezeStreakPopup(true);
-  }
 
 
   return (
@@ -1605,6 +1626,136 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                         </div>
                       </div>
                     </div>
+
+                    {/* Premium Membership Section */}
+                    <div className="mk-market-section">
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setPremiumExpanded(!premiumExpanded)}
+                      >
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: '#FFD700' }}
+                        >
+                          <span className="mk-section-title">PREMIUM MEMBERSHIP</span>
+                          <img src={arrow_2} className={`mk-section-arrow ${premiumExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${premiumExpanded ? 'expanded' : ''}`}>
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+
+                        <div className="mk-starlet-grid">
+                          {starletProducts
+                            .filter(product => product.prop === 10120 || product.prop === 10121) // Filter for premium membership products
+                            .map((product) => {
+                              const productInfo = getPremiumMembershipProductInfo(product);
+                              const hasFSLID = !!shared.userProfile?.fslId;
+                              const userLevel = shared.userProfile?.level || 0;
+                              const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                              const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
+                              
+                              // Check conditions for Premium Membership
+                              let isDisabled = false;
+                              let disabledReason = '';
+                              
+                              // *. FSL ID not connected
+                              if (!hasFSLID) {
+                                isDisabled = true;
+                                disabledReason = 'FSL ID NOT CONNECTED';
+                              }
+                              // 1. Level requirement (Level 10 for Premium Membership)
+                              else if (userLevel < 1) {
+                                isDisabled = true;
+                                disabledReason = 'LEVEL 1 REQUIRED';
+                              }
+                              // 2. Bank Steps Not Connected
+                              else if (!isConnectedBankSteps) {
+                                isDisabled = true;
+                                disabledReason = 'BANK STEPS NOT CONNECTED';
+                              }
+                              // 3. Not enough starlets
+                              else if (userStarlets < product.starlet) {
+                                isDisabled = true;
+                                disabledReason = product.starlet.toLocaleString() + ' STARLETS';
+                              }
+                              
+                              const isAvailable = !isDisabled;
+                              
+                              return (
+                                <button 
+                                  key={product.id}
+                                  className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
+                                  onClick={() => isAvailable && handlePremiumClick({name: productInfo.name, starlet: product.starlet, productId: product.id})}
+                                  disabled={!isAvailable}
+                                >
+                                  <div 
+                                    className="mk-market-ticket-button-image-container"
+                                    style={productInfo.useBackground ? {
+                                      backgroundImage: `url(${productInfo.backgroundImage})`,
+                                      backgroundSize: 'cover',
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat'
+                                    } : {}}
+                                  >
+                                    <div className="mk-market-ticket-content">
+                                      {/* Text Section */}
+                                      <div className="mk-market-ticket-info">
+                                        <div className="mk-market-ticket-text">
+                                          <div className="mk-market-ticket-amount">{productInfo.displayAmount}</div>
+                                          <div className="mk-market-ticket-label">{productInfo.name.split(' ')[0]}</div>
+                                          <div className="mk-market-ticket-label">{productInfo.name.split(' ')[1]}</div>
+                                        </div>
+                                      </div>
+                                      
+                                      {/* Diamond Section */}
+                                      <div className="mk-market-ticket-icon">
+                                        <div className="mk-premium-diamond-bg">
+                                          {/* Diamond Image */}
+                                          <img 
+                                            src={premiumIcon} 
+                                            alt="Premium Diamond" 
+                                            className="mk-premium-diamond-img"
+                                          />
+                                          
+                                          {/* Sparkles */}
+                                          {/* <div className="mk-premium-sparkles">
+                                            <div className="mk-sparkle mk-sparkle-1"></div>
+                                            <div className="mk-sparkle mk-sparkle-2"></div>
+                                            <div className="mk-sparkle mk-sparkle-3"></div>
+                                            <div className="mk-sparkle mk-sparkle-4"></div>
+                                            <div className="mk-sparkle mk-sparkle-5"></div>
+                                          </div> */}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Price Section */}
+                                    <div className="mk-market-ticket-price">
+                                      <span>100 STARLETS</span>
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          
+                          {/* Show message if no premium membership products available */}
+                          {starletProducts.filter(product => product.prop === 10120 || product.prop === 10121).length === 0 && (
+                            <div className="mk-starlet-packages-placeholder">
+                              <div className="mk-placeholder-content">
+                                <div className="mk-placeholder-text">PREMIUM MEMBERSHIP</div>
+                                <div className="mk-placeholder-subtext">No products available</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
                 )}
               </div>
@@ -1645,6 +1796,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         selectedPackage={selectedStepBoost}
         onPurchase={handleStepBoostsPurchase}
         refreshStarletProduct={refreshMarketContent}
+      />
+
+      {/* Premium Popup */}
+      <PremiumPopup
+        isOpen={showPremiumPopup}
+        onClose={() => setShowPremiumPopup(false)}
+        selectedPackage={selectedPremiumPackage}
+        onPurchase={handlePremiumPurchase}
       />
     </>
   );
