@@ -7,9 +7,7 @@ import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
 import shared from './Shared';
 
 
-
-
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, refreshUserProfile }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);

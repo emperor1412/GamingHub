@@ -961,6 +961,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         showFSLIDScreen={showFSLIDScreen}
         setSelectedPurchase={setSelectedPurchase}
         setShowProfileView={setShowProfileView}
+        refreshUserProfile={refreshUserProfile}
       />
     );
   }
@@ -1683,7 +1684,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               
                               return (
                                 <button 
-                                  key={productInfo.productId}
+                                  key={product.id}
                                   className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
                                   onClick={() => {
                                     if (isAvailable) {

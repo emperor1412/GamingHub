@@ -16,7 +16,8 @@ const Buy = ({
   setShowBuyView, 
   showFSLIDScreen,
   setSelectedPurchase,
-  setShowProfileView 
+  setShowProfileView,
+  refreshUserProfile
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
@@ -75,7 +76,7 @@ const Buy = ({
     setIsPopupOpen(true);
   };
 
-  const handleConfirmPurchase = () => {
+  const handleConfirmPurchase = async () => {
     if (selectedPurchase) {
       trackUserAction('market_purchase_click', {
         amount: selectedPurchase.amount,
@@ -84,6 +85,12 @@ const Buy = ({
         price: selectedPurchase.stars === 0 ? 'FREE' : null
       }, shared.loginData?.link);
     }
+    
+    // Refresh user profile to update starlet data
+    if (refreshUserProfile) {
+      await refreshUserProfile();
+    }
+    
     setIsPopupOpen(false);
     setSelectedPurchase(null);
     setShowBuyView(false);
@@ -259,6 +266,12 @@ const Buy = ({
           isStarletProduct={selectedPurchase?.isStarletProduct}
           productId={selectedPurchase?.productId}
           productName={selectedPurchase?.productName}
+          refreshUserProfile={refreshUserProfile}
+          onPurchaseComplete={async () => {
+            if (refreshUserProfile) {
+              await refreshUserProfile();
+            }
+          }}
         />
       </div>
     </>
