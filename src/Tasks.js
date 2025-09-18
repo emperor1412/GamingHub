@@ -608,6 +608,16 @@ const Tasks = ({
                         
                         console.log('Enhanced URL with treasure hunt data:', enhancedUrl);
                     }
+                    else 
+                    {
+                        const treasureHuntData2 = await shared.getTreasureHuntRedirectUrl(1);
+                        if (treasureHuntData2 && treasureHuntData2.redirectUrl) {
+                            // Chỉ cần += string vào startParam hiện có
+                            enhancedUrl += `__redirectUrl_${encodeURIComponent(treasureHuntData2.redirectUrl)}__treasureHuntTaskType_${1}__treasureHuntTaskId_${treasureHuntData2.taskId}`;
+                            
+                            console.log('Enhanced URL with treasure hunt data:', enhancedUrl);
+                        }
+                    }
                 } catch (e) {
                     console.log('Error getting treasure hunt data:', e);
                 }

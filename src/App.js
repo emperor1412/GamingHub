@@ -200,7 +200,6 @@ function App() {
   // Function to reload app data
   const reloadAppData = async () => {
     console.log('Reloading app data after long unfocus...');
-    console.log('Current shared.loginData:', shared.loginData);
     
     try {
       if (shared.loginData) {
@@ -245,15 +244,12 @@ function App() {
   // Focus/Unfocus detection
   useEffect(() => {
     const handleFocus = () => {
-      console.log('App focused');
       
       // Check if app was unfocused for more than 60 seconds
       if (unfocusTimeRef.current) {
         const unfocusDuration = Date.now() - unfocusTimeRef.current;
-        console.log(`App was unfocused for ${unfocusDuration}ms`);
         
         if (unfocusDuration > FOCUS_TIMEOUT) {
-          console.log('App was unfocused for more than 60s, reloading data...');
           reloadAppData();
         }
         
@@ -262,9 +258,6 @@ function App() {
     };
 
     const handleUnfocus = () => {
-      console.log('App unfocused');
-      console.log('loginData at unfocus:', loginData);
-      console.log('shared.loginData at unfocus:', shared.loginData);
       unfocusTimeRef.current = Date.now();
     };
 
