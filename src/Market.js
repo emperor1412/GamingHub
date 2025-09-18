@@ -22,8 +22,8 @@ import fslidIcon from './images/FSLID-ICON.png';
 import iconStepBoostx1_5 from './images/Icon_StepBoosts_x1_5.png';
 import iconStepBoostx2 from './images/Icon_StepBoosts_x2.png';
 import StepBoostsPopup from './StepBoostsPopup';
-import PremiumPopup from './PremiumPopup';
 import premiumIcon from './images/Premium_icon.png';
+import premiumBg from './images/Premium_bg.png';
 
 // url: /app/buyOptions
 // Request:
@@ -119,8 +119,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   // Step Boosts popup states
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
-  const [showPremiumPopup, setShowPremiumPopup] = useState(false);
-  const [selectedPremiumPackage, setSelectedPremiumPackage] = useState(null);
 
   // If navigated from Home with a target tab instruction, switch tabs (no popup)
   useEffect(() => {
@@ -657,6 +655,19 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
+  const handlePurchasePremium = (product) => {
+    setSelectedPurchase({
+      amount: product.starlet,
+      stars: 0,
+      productId: product.id,
+      productName: "Premium Membership Monthly",
+      isStarletProduct: true,
+      isPremium: true,
+      optionId: null
+    });
+    setShowBuyView(true);
+  }
+
   // Helper function to get category title and color based on type
   const getCategoryInfo = (type) => {
     switch (type) {
@@ -868,7 +879,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       icon: premiumIcon,
       description: "Premium Membership Monthly",
       useBackground: true,
-      backgroundImage: null,
+      backgroundImage: premiumBg,
       productId: `1`
     };
   };
@@ -966,21 +977,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowStepBoostsPopup(true);
   };
 
-  // Handle Premium click
-  const handlePremiumClick = (premiumPackage) => {
-    setSelectedPremiumPackage(premiumPackage);
-    setShowPremiumPopup(true);
-  };
-
-  // Handle Premium purchase
-  const handlePremiumPurchase = async (premiumPackage) => {
-    // Here you can implement the actual purchase logic
-    console.log('Purchasing Premium package:', premiumPackage);
-    // You might want to call an API here to process the purchase
-    setShowPremiumPopup(false);
-    // Refresh user profile to update UI immediately
-    await refreshUserProfile();
-  };
 
   // Handle Step Boosts purchase
   const handleStepBoostsPurchase = async (stepBoostPackage) => {
@@ -1652,7 +1648,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                           {starletProducts
                             .filter(product => product.prop === 10120 || product.prop === 10121) // Filter for premium membership products
                             .map((product) => {
-                              const productInfo = getPremiumMembershipProductInfo(product);
+                              const productInfo = getPremiumMembershipProductInfo();
                               const hasFSLID = !!shared.userProfile?.fslId;
                               const userLevel = shared.userProfile?.level || 0;
                               const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
@@ -1687,9 +1683,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               
                               return (
                                 <button 
-                                  key={product.id}
+                                  key={productInfo.productId}
                                   className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
-                                  onClick={() => isAvailable && handlePremiumClick({name: productInfo.name, starlet: product.starlet, productId: product.id})}
+                                  onClick={() => {
+                                    if (isAvailable) {
+                                      handlePurchasePremium(product);
+                                    }
+                                  }}
                                   disabled={!isAvailable}
                                 >
                                   <div 
@@ -1798,13 +1798,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         refreshStarletProduct={refreshMarketContent}
       />
 
-      {/* Premium Popup */}
-      <PremiumPopup
-        isOpen={showPremiumPopup}
-        onClose={() => setShowPremiumPopup(false)}
-        selectedPackage={selectedPremiumPackage}
-        onPurchase={handlePremiumPurchase}
-      />
     </>
   );
 };

@@ -182,6 +182,16 @@
   top: -7.5%;
 }
 
+.bmk-item-premium-bg {
+  position: absolute;
+  width: 115%;
+  height: 115%;
+  object-fit: cover;
+  border-radius: 12px;
+  left: -7.5%;
+  top: -7.5%;
+}
+
 .bmk-item-icon {
   position: relative;
   width: 80px;
@@ -189,6 +199,15 @@
   z-index: 1;
   margin-right: 50px;
   bottom: -40px;
+}
+
+.bmk-item-premium-icon {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  bottom: 0px;
+  left: -50px;
 }
 
 .bmk-floating-starlets {
@@ -297,6 +316,7 @@
   max-width: 300px;
   line-height: 1.5;
   letter-spacing: 0.5px;
+  margin-top: 20px;
 }
 
 .bmk-payment-buttons {

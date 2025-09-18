@@ -8,6 +8,8 @@ import ConfirmPurchasePopup from './ConfirmPurchasePopup';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import background from './images/background_2.png';
 import back from './images/back.svg';
+import premiumBackground from './images/Premium_background_buy.png';
+import premiumIcon from './images/Premium_icon.png';
 
 const Buy = ({ 
   selectedPurchase, 
@@ -92,6 +94,10 @@ const Buy = ({
     setIsPopupOpen(false);
   };
 
+  const handlePaymentMethodPremium = () => {
+    setIsPopupOpen(true);
+  };
+
   return (
     <>
       <div className="background-container">
@@ -134,8 +140,17 @@ const Buy = ({
         <div className="bmk-buy-content">
           <div className="bmk-item-display-container">
             <div className="bmk-item-display">
-              <img src={scratch_ticket_button_bg} alt="Background" className="bmk-item-display-bg" />
-              <img src={starlet} alt="Item" className="bmk-item-icon" />
+              {selectedPurchase?.isPremium ? (
+                <>
+                  <img src={premiumBackground} alt="Background" className="bmk-item-premium-bg" />
+                  <img src={premiumIcon} alt="Item" className="bmk-item-premium-icon" />
+                </>
+              ) : (
+                <>
+                  <img src={scratch_ticket_button_bg} alt="Background" className="bmk-item-display-bg" />
+                  <img src={starlet} alt="Item" className="bmk-item-icon" />
+                </>
+              )}
               <div className="bmk-floating-starlets">
                 <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s1" />
                 <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s2" />
@@ -144,6 +159,21 @@ const Buy = ({
                 <img src={starlet} alt="Floating Starlet" className="bmk-floating-starlet s5" />
               </div>
               <div className="bmk-item-details">
+              {selectedPurchase?.isPremium ? (
+                <>
+                  <div className="bmk-item-detail-box">
+                    <div className="bmk-item-amount">
+                      <span className="x-mark"></span>30 DAYS
+                    </div>
+                  </div>
+                  <div className="bmk-item-detail-box">
+                    <div className="bmk-item-amount">
+                      <span className="x-mark"></span>X Premium
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
                 <div className="bmk-item-detail-box">
                   <div className="bmk-item-amount">
                     <span className="x-mark">x</span>{selectedPurchase?.amount} STARLETS
@@ -156,38 +186,66 @@ const Buy = ({
                     </div>
                   </div>
                 )}
+                </>
+              )}
               </div>
             </div>
           </div>
 
-          <div className="bmk-item-description">
-            USE STARLETS TO LEVEL UP YOUR ACCOUNT AND UNLOCK SPECIAL FEATURES WITHIN FSL GAME HUB
-          </div>
+          {selectedPurchase?.isPremium ? (
+            <>
+            <div className="bmk-item-description">
+              GET PREMIUM AND UNLOCK THE FULL FSL GAME HUB EXPERIENCE WITH POWERFUL PERKS THAT GO BEYOND THE BASICS.
+            </div>
+            </>
+          ) : (
+            <>
+            <div className="bmk-item-description">
+              USE STARLETS TO LEVEL UP YOUR ACCOUNT AND UNLOCK SPECIAL FEATURES WITHIN FSL GAME HUB.
+            </div>
+            </>
+          )}
         </div>
 
-        <div className="bmk-payment-buttons">
-          {selectedPurchase?.stars > 0 ? (
-            <button 
+        {selectedPurchase?.isPremium ? (
+          <>
+            <div className="bmk-payment-buttons">
+              <button 
               className="bmk-payment-button bmk-stars-button"
-              onClick={() => handlePaymentMethod('stars')}
-            >
-              PAY WITH {selectedPurchase?.stars} STARS
-            </button>
-          ) : (
-            <button 
-              className="bmk-payment-button bmk-stars-button"
-              onClick={() => handlePaymentMethod('free')}
-            >
-              CLAIM FREE
-            </button>
-          )}
-          <button 
-            className="bmk-payment-button bmk-gmt-button"
-            onClick={() => handlePaymentMethod('gmt')}
-          >
-            PAY WITH GMT
-          </button>
-        </div>
+              onClick={() => handlePaymentMethodPremium()}
+              >
+              PAY WITH STARS
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bmk-payment-buttons">
+              {selectedPurchase?.stars > 0 ? (
+              <button 
+                className="bmk-payment-button bmk-stars-button"
+                onClick={() => handlePaymentMethod('stars')}
+              >
+                PAY WITH {selectedPurchase?.stars} STARS
+              </button>
+              ) : (
+              <button 
+                className="bmk-payment-button bmk-stars-button"
+                onClick={() => handlePaymentMethod('free')}
+              >
+                CLAIM FREE
+              </button>
+              )}
+              <button 
+                className="bmk-payment-button bmk-gmt-button"
+                onClick={() => handlePaymentMethod('gmt')}
+              >
+                PAY WITH GMT
+              </button>
+            </div>
+          </>
+        )}
+        
 
         <ConfirmPurchasePopup
           isOpen={isPopupOpen}
@@ -198,6 +256,9 @@ const Buy = ({
           onConfirm={handleConfirmPurchase}
           setShowProfileView={setShowProfileView}
           setShowBuyView={setShowBuyView}
+          isStarletProduct={selectedPurchase?.isStarletProduct}
+          productId={selectedPurchase?.productId}
+          productName={selectedPurchase?.productName}
         />
       </div>
     </>

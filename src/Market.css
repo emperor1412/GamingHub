@@ -1334,37 +1334,9 @@ body.mk-market-open::-webkit-scrollbar {
   justify-content: center;
   align-items: center;
   position: relative;
+  transform: scale(1.2);
   z-index: 2;
 }
-
-.mk-premium-membership-product {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-.mk-premium-membership-product .mk-market-ticket-content {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* Override any inline styles for Step Boost */
-.mk-premium-membership-product .mk-market-ticket-button-image-container[style] {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-}
-/* 
-.mk-premium-membership-product .mk-premium-diamond-bg {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(135deg, #4A0080 0%, #8B00FF 50%, #FF0080 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
-} */
 
 .mk-premium-membership-product .mk-premium-diamond-img {
   width: 100%;
@@ -1374,78 +1346,3 @@ body.mk-market-open::-webkit-scrollbar {
   z-index: 1;
   filter: none;
 }
-
-/* .mk-premium-membership-product .mk-premium-sparkles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.mk-premium-membership-product .mk-sparkle {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #FFFFFF;
-  transform: rotate(45deg);
-  animation: sparkle 2s infinite ease-in-out;
-}
-
-.mk-premium-membership-product .mk-sparkle-1 {
-  top: 20%;
-  right: 10%;
-  animation-delay: 0s;
-}
-
-.mk-premium-membership-product .mk-sparkle-2 {
-  top: 60%;
-  right: 5%;
-  animation-delay: 0.4s;
-}
-
-.mk-premium-membership-product .mk-sparkle-3 {
-  bottom: 30%;
-  right: 15%;
-  animation-delay: 0.8s;
-}
-
-.mk-premium-membership-product .mk-sparkle-4 {
-  top: 40%;
-  left: 5%;
-  animation-delay: 1.2s;
-}
-
-.mk-premium-membership-product .mk-sparkle-5 {
-  bottom: 20%;
-  left: 10%;
-  animation-delay: 1.6s;
-} */
-
-/* .mk-premium-membership-product .mk-market-ticket-price {
-  background: #00BFFF;
-  padding: 15px 30px;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-  color: #FFFFFF;
-  font-family: "PP Neue Machina", sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-} */
-
-/* Sparkle animation for premium banner */
-/* @keyframes sparkle {
-  0%, 100% {
-    opacity: 0;
-    transform: rotate(45deg) scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: rotate(45deg) scale(1);
-  }
-}  */
