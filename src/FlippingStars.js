@@ -41,12 +41,73 @@ import ID_selected from './images/ID_selected.svg';
 const betOptions = [10, 20, 50, 70, 100, 500];
 const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
+// Custom hook for counting up animation
+const useCountUp = (start, end, duration = 2000) => {
+  const [count, setCount] = useState(end);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (duration > 0 && start !== end) {
+      setIsAnimating(true);
+      setCount(start);
+      
+      const startTime = Date.now();
+      const startValue = start;
+      
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentCount = Math.floor(startValue + (end - startValue) * easeOut);
+        
+        setCount(currentCount);
+        
+        if (progress >= 1) {
+          setCount(end);
+          setIsAnimating(false);
+          clearInterval(timer);
+        }
+      }, 16); // ~60fps
+      
+      return () => clearInterval(timer);
+    } else {
+      // No animation, just set the value directly
+      setCount(end);
+      setIsAnimating(false);
+    }
+  }, [start, end, duration]);
+
+  return { count, isAnimating };
+};
+
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
   const [selectedBet, setSelectedBet] = useState(10);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
+  
+  // Use count up animation for starlets display - only when starlets change
+  const [previousStarlets, setPreviousStarlets] = useState(starlets);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const { count: animatedStarlets, isAnimating } = useCountUp(previousStarlets, starlets, shouldAnimate ? 2000 : 0);
+
+  // Watch for starlets changes and trigger animation
+  useEffect(() => {
+    if (starlets !== previousStarlets) {
+      setShouldAnimate(true);
+      
+      // Reset animation flag after animation completes
+      const timer = setTimeout(() => {
+        setShouldAnimate(false);
+        setPreviousStarlets(starlets); // Update previous value after animation
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [starlets, previousStarlets]);
   const [tailsCount, setTailsCount] = useState(0);
   // Streak theo kết quả thực tế (HEADS/TAILS) và số lần liên tiếp
   const [streakSide, setStreakSide] = useState(null);
@@ -1035,9 +1096,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             {/* Logo */}
             <div className="fc_welcome-logo-container">
               <img src={flippingStarsLogo} alt="Flipping Stars" className="fc_welcome-logo-image" />
-            </div>
-            
-            
+            </div>                 
             
             {/* Bet Button Demo (non-interactive) */}
             <div className="fc_welcome-bet-demo">
@@ -1364,11 +1423,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
-        {winReward !== null && (
+        {!isFlipping && (
           <div className="fc_win-reward-progress">
             <div className="fc_progress-bar">
               <div className="fc_progress-numbers">
-                <span className="fc_progress-number">{winReward}</span>
+                {/* <span className="fc_progress-number">{winReward}</span> */}
+                 <span className={`fc_progress-number fc_animated-number ${isAnimating ? 'animating' : ''}`}>{animatedStarlets}</span>
               </div>
               <div className="fc_progress-starlet">
                 <img src={bCoin} alt="starlet" className="fc_progress-starlet-icon" />
@@ -1377,6 +1437,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         )}
       </div>
+      
 
       {/* Total Flips and Auto Flip Controls */}
       <div className={`fc_flip-controls ${shouldShowInsufficient ? 'fc_center-total-flips' : ''}`}>

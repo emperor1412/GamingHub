@@ -312,6 +312,7 @@ body::-webkit-scrollbar-track,
   align-items: center;
   justify-content: center;
   margin: 0 auto; /* Ensure horizontal centering */
+  margin-bottom: 20px;
   box-sizing: border-box; /* Ensure padding is included in dimensions */
 }
 
@@ -365,9 +366,9 @@ body::-webkit-scrollbar-track,
 .fc_logo-container.fc_logo-result {
   padding: 20px 20px 0 20px;
   width: 350px;
-  height: 260px;
+  height: 280px; /* Increased from 260px to 280px */
   max-width: 350px;
-  max-height: 260px;
+  max-height: 280px; /* Increased from 260px to 280px */
   margin: 0 auto;
 }
 
@@ -376,9 +377,9 @@ body::-webkit-scrollbar-track,
 .fc_logo-container.fc_logo-elevated,
 .fc_logo-container.fc_logo-result {
   width: 350px;
-  height: 260px;
+  height: 280px; /* Increased from 260px to 280px */
   max-width: 350px;
-  max-height: 260px;
+  max-height: 280px; /* Increased from 260px to 280px */
   padding: 20px 20px 0 20px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -387,7 +388,7 @@ body::-webkit-scrollbar-track,
 /* Win reward progress bar - new design */
 .fc_win-reward-progress {
   position: absolute;
-  top: 75%; /* Position below the logo, not above */
+  top: 90%; /* Position below the logo, not above */
   left: 50%;
   transform: translate(-50%, -50%);
   width: 160px; /* Reduced width - shorter progress bar */
@@ -469,6 +470,33 @@ body::-webkit-scrollbar-track,
   /* Center the single number */
   text-align: center;
 }
+
+/* Animated number for counting up effect */
+.fc_animated-number {
+  display: inline-block;
+  min-width: 60px; /* Ensure space for the number */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Animation when counting up */
+.fc_animated-number.animating {
+  animation: numberBounce 0.5s ease-out 0.5s;
+}
+
+/* Bounce effect for more visibility */
+@keyframes numberBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 
 @keyframes numberPopIn {
   from {
@@ -586,7 +614,7 @@ body::-webkit-scrollbar-track,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 20px 15px;
   gap: 12px;
 }
 
