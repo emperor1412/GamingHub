@@ -760,10 +760,11 @@ data object
                 return false;
             }
 
+            console.log('Get task list data:', data.data);
             // Find first available type=7 task with matching treasureHuntType and appid
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
-                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (task.type !== 7) return false;
                 if (!task.taskHuntData) return false;
 
                 try {
@@ -830,37 +831,8 @@ data object
                 }
             }
 
-            // Complete the task
-            const completeResponse = await fetch(
-                `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${candidate.id}&answerIndex=0`,
-                {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                }
-            );
-
-            if (!completeResponse.ok) {
-                console.error('Complete treasure hunt task request failed:', completeResponse);
-                return false;
-            }
-
-            const completeData = await completeResponse.json();
-            if (completeData.code === 102001 || completeData.code === 102002) {
-                console.log('Token expired on complete, attempting to re-login');
-                const result = await shared.login(shared.initData);
-                if (result.success) {
-                    return shared.completeTreasureHuntTask(treasureHuntType, depth + 1);
-                }
-                return false;
-            }
-
-            if (completeData.code !== 0) {
-                console.error('Complete treasure hunt task failed:', completeData);
-                return false;
-            }
-
-            // Optionally refresh profile
-            try { await shared.getProfileWithRetry(); } catch (e) {}
+            // Task exists, return true without calling complete API
+            console.log('Treasure hunt task found, returning true without completing');
 
             // Open redirect URL externally if present (ensure id/appid present)
             if (redirectUrl && typeof redirectUrl === 'string') {
@@ -926,7 +898,7 @@ data object
             // Find first available type=7 task with matching treasureHuntType and appid
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
-                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (task.type !== 7) return false;
                 if (!task.taskHuntData) return false;
 
                 try {
@@ -974,36 +946,8 @@ data object
                 redirectUrl = huntPayload.redirectUrl;
             }
 
-            // Complete the task
-            const completeResponse = await fetch(
-                `${shared.server_url}/api/app/taskComplete?token=${shared.loginData.token}&id=${candidate.id}&answerIndex=0`,
-                {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                }
-            );
-
-            if (!completeResponse.ok) {
-                console.error('Complete treasure hunt task request failed:', completeResponse);
-                return '';
-            }
-
-            const completeData = await completeResponse.json();
-            if (completeData.code === 102001 || completeData.code === 102002) {
-                console.log('Token expired on complete, attempting to re-login');
-                const result = await shared.login(shared.initData);
-                if (result.success) {
-                    return shared.completeTreasureHuntTaskSilent(treasureHuntType, depth + 1);
-                }
-                return '';
-            }
-
-            if (completeData.code !== 0) {
-                console.error('Complete treasure hunt task failed:', completeData);
-                return '';
-            }
-
-            try { await shared.getProfileWithRetry(); } catch (e) {}
+            // Task exists, return redirect URL without calling complete API
+            console.log('Treasure hunt task found, returning redirect URL without completing');
 
             if (redirectUrl) {
                 try {
@@ -1066,7 +1010,7 @@ data object
 
             const now = Date.now();
             const candidate = (data.data || []).find((task) => {
-                if (task.type !== 7 || task.state !== 0 || task.endTime <= now) return false;
+                if (task.type !== 7) return false;
                 if (!task.taskHuntData) return false;
                 try {
                     const payload = typeof task.taskHuntData === 'string' ? JSON.parse(task.taskHuntData) : task.taskHuntData;
