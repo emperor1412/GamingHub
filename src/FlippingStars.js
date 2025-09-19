@@ -92,18 +92,25 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Use count up animation for starlets display - only when starlets change
   const [previousStarlets, setPreviousStarlets] = useState(starlets);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [isPositiveChange, setIsPositiveChange] = useState(true);
+  const [lastBetAmount, setLastBetAmount] = useState(0);
   const { count: animatedStarlets, isAnimating } = useCountUp(previousStarlets, starlets, shouldAnimate ? 2000 : 0);
 
   // Watch for starlets changes and trigger animation
   useEffect(() => {
     if (starlets !== previousStarlets) {
       setShouldAnimate(true);
+      const isPositive = starlets > previousStarlets;
+      setIsPositiveChange(isPositive); // Set color based on increase/decrease
+      
+      // Different animation duration for win (2s) vs lose (1.5s)
+      const animationDuration = isPositive ? 2000 : 1500;
       
       // Reset animation flag after animation completes
       const timer = setTimeout(() => {
         setShouldAnimate(false);
         setPreviousStarlets(starlets); // Update previous value after animation
-      }, 2000);
+      }, animationDuration);
       
       return () => clearTimeout(timer);
     }
@@ -909,6 +916,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       return;
     }
 
+    // Store bet amount for floating animation
+    setLastBetAmount(betAmount);
+
     // Store pending info and start animation; API will be called after 1.5s while animation keeps looping
     pendingBetRef.current = betAmount;
     pendingSideRef.current = selectedSide;
@@ -1436,9 +1446,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             </div>
           </div>
         )}
+        
+        {/* Floating win reward text */}
+        {!isFlipping && isAnimating && ((isPositiveChange && winReward > 0) || (!isPositiveChange && lastBetAmount > 0)) && (
+          <div className={`fc_floating-win-reward ${isPositiveChange ? 'positive' : 'negative'}`}>
+            {isPositiveChange ? '+' : '-'}{isPositiveChange ? winReward : lastBetAmount}
+          </div>
+        )}
       </div>
       
-
       {/* Total Flips and Auto Flip Controls */}
       <div className={`fc_flip-controls ${shouldShowInsufficient ? 'fc_center-total-flips' : ''}`}>
         <div className="fc_total-flips">

@@ -497,6 +497,50 @@ body::-webkit-scrollbar-track,
   }
 }
 
+/* Floating win reward animation */
+.fc_floating-win-reward {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Win animation - 2 seconds with green colors */
+.fc_floating-win-reward.positive {
+  animation: floatUp 2s ease-out forwards;
+  color: #00FF88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+/* Lose animation - 1.5 seconds with red colors */
+.fc_floating-win-reward.negative {
+  animation: floatUp 1.5s ease-out forwards;
+  color: #FF4444;
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-20px);
+    scale: 1.1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-40px);
+    scale: 0.8;
+  }
+}
+
 
 @keyframes numberPopIn {
   from {
