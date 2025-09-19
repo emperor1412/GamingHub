@@ -47,12 +47,44 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
+    const [totalFlips, setTotalFlips] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+
+    // Fetch total flips from API
+    const fetchTotalFlips = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for totalFlips API');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+            console.log('Fetching total flips from:', url);
+            
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Total flips API response:', data);
+                
+                // Handle API response format: {"code": 0, "data": 159}
+                if (data.code === 0 && data.data !== undefined) {
+                    setTotalFlips(data.data);
+                    console.log('✅ Found totalFlips in data.data:', data.data);
+                } else {
+                    console.log('Unexpected totalFlips API response format:', data);
+                }
+            } else {
+                console.error('Total flips API response not ok:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching total flips:', error);
+        }
+    };
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
@@ -561,12 +593,22 @@ Response:
         setupProfileData();
         setupEvents();
         getDailyTask();
+        fetchTotalFlips();
         
         // Check if we should show Egglet popup (once daily logic)
         // Small timeout to let the page load first
         setTimeout(() => {
             checkEggletPopup();
         }, 500);
+    }, []);
+
+    // Auto-refresh total flips every 30 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchTotalFlips();
+        }, 30000); // 30 seconds
+
+        return () => clearInterval(interval);
     }, []);
     
     // Add useEffect to listen for data refresh trigger from App component
@@ -983,7 +1025,7 @@ Response:
                         </div>
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">00000000</span>
+                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
                         <div className="ticket-total-jackpot">
                             <span className="ticket-total-jackpot-label">JACKPOT</span>

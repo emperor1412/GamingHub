@@ -83,7 +83,7 @@ const shared = {
     mappingIcon : {
         10010: ticketIcon,
         10020: starletIcon,
-        10030: energy,
+        10030: bCoin,
         10110: streakFreeze,
         10120: step_boost,
         10121: step_boost,
@@ -93,12 +93,11 @@ const shared = {
         30020: mooar,
         40010: stepn_go_sneaker,
         50010: alpha_chest,
-        213: bCoin
     },
     mappingText : {
         10010: 'Tickets',
         10020: 'Starlets',
-        10030: 'Energy',
+        10030: 'B$',
         10110: 'Streak Freeze',
         10120: '1.5X BOOST STEPS',
         10121: '2X BOOST STEPS',
@@ -458,6 +457,11 @@ data object
 
     getTicket : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10010);
+        return retVal?.num || 0;
+    },
+
+    getBcoin : () => {
+        const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10030);
         return retVal?.num || 0;
     },
 
