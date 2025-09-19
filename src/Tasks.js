@@ -339,7 +339,7 @@ const Tasks = ({
                     //             rewardList: [
                     //                 ...task.rewardList,
                     //                 {
-                    //                     type: 213, // Starlets type
+                    //                     type: 10030, // Starlets type
                     //                     amount: Math.floor(Math.random() * 50) + 10 // Random amount 10-60
                     //                 }
                     //             ]
