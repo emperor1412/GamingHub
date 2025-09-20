@@ -1501,6 +1501,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
       </div>
 
+      {/* Auto Flip Counter - positioned below and to the left of fc_stats-header */}
+      {isAutoFlipping && (
+        <div className="fc_auto-flip-counter-container">
+          <div className="fc_auto-flip-counter">
+            <span className="fc_auto-flip-counter-label">FLIP</span>
+            <span className="fc_auto-flip-counter-count">
+              {autoFlipCount.toString().padStart(2, '0')}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
       {/* <div className="fc_jackpot-container">
         <div className="fc_jackpot">
