@@ -99,23 +99,30 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // const { count: animatedStarlets, isAnimating } = useCountUp(previousStarlets, starlets, shouldAnimate ? 2000 : 0); // Commented out - now using BCoin
   const { count: animatedBcoin, isAnimating } = useCountUp(previousBcoin, bcoin, shouldAnimate ? 2000 : 0);
 
-  // Watch for bcoin changes and trigger animation
+  // Watch for bcoin changes and trigger animation (only for game results, not initial load)
   useEffect(() => {
     if (bcoin !== previousBcoin) {
-      setShouldAnimate(true);
-      const isPositive = bcoin > previousBcoin;
-      setIsPositiveChange(isPositive); // Set color based on increase/decrease
-      
-      // Different animation duration for win (2s) vs lose (1.5s)
-      const animationDuration = isPositive ? 2000 : 1500;
-      
-      // Reset animation flag after animation completes
-      const timer = setTimeout(() => {
-        setShouldAnimate(false);
-        setPreviousBcoin(bcoin); // Update previous value after animation
-      }, animationDuration);
-      
-      return () => clearTimeout(timer);
+      // Only animate if this is not the initial load (previousBcoin was 0 initially)
+      // and we have a valid previous value (not the initial 0)
+      if (previousBcoin > 0) {
+        setShouldAnimate(true);
+        const isPositive = bcoin > previousBcoin;
+        setIsPositiveChange(isPositive); // Set color based on increase/decrease
+        
+        // Different animation duration for win (2s) vs lose (1.5s)
+        const animationDuration = isPositive ? 2000 : 1500;
+        
+        // Reset animation flag after animation completes
+        const timer = setTimeout(() => {
+          setShouldAnimate(false);
+          setPreviousBcoin(bcoin); // Update previous value after animation
+        }, animationDuration);
+        
+        return () => clearTimeout(timer);
+      } else {
+        // For initial load, just update the previous value without animation
+        setPreviousBcoin(bcoin);
+      }
     }
   }, [bcoin, previousBcoin]);
   

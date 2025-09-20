@@ -1027,10 +1027,10 @@ Response:
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
                             <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
-                        <div className="ticket-total-jackpot">
+                        {/* <div className="ticket-total-jackpot">
                             <span className="ticket-total-jackpot-label">JACKPOT</span>
                             <span className="ticket-total-jackpot-count">00000000</span>
-                        </div>
+                        </div> */}
                     </button>
                 </section>
 

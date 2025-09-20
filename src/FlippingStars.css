@@ -389,7 +389,7 @@ body::-webkit-scrollbar-track,
 .fc_win-reward-progress {
   position: absolute;
   top: 90%; /* Position below the logo, not above */
-  left: 50%;
+  left: 48%;
   transform: translate(-50%, -50%);
   width: 160px; /* Reduced width - shorter progress bar */
   height: 40px; /* Keep height the same */
@@ -658,7 +658,7 @@ body::-webkit-scrollbar-track,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 15px;
+  /* padding: 20px 15px; */
   gap: 12px;
 }
 
