@@ -197,6 +197,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Sound system states
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [soundVolume, setSoundVolume] = useState(0.7);
+  const [audioContextUnlocked, setAudioContextUnlocked] = useState(false);
   
   // Audio refs for sound management
   const audioRefs = useRef({
@@ -224,6 +225,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   // Sound management functions
   const initializeAudio = () => {
+    // Initialize Audio Context for iOS compatibility
+    if (!window.audioContext) {
+      try {
+        window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (error) {
+        console.log('AudioContext not supported:', error);
+      }
+    }
+
     // Create audio elements for each sound
     const audioElements = {
       win: new Audio(winSound),
@@ -241,9 +251,55 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       if (key === 'coinSpinning') {
         audio.loop = true;
       }
+      
+      // Add event listeners for better iOS compatibility
+      audio.addEventListener('canplaythrough', () => {
+        console.log(`${key} audio loaded successfully`);
+      });
+      
+      audio.addEventListener('error', (e) => {
+        console.log(`${key} audio load error:`, e);
+      });
+      
+      // Force load audio for better iOS compatibility
+      audio.load();
     });
 
     audioRefs.current = audioElements;
+    
+    // Setup user gesture listeners to unlock audio context
+    setupAudioUnlock();
+  };
+
+  // Function to unlock audio context on user interaction (iOS requirement)
+  const setupAudioUnlock = () => {
+    const unlockAudio = () => {
+      if (!audioContextUnlocked) {
+        // Try to resume AudioContext
+        if (window.audioContext && window.audioContext.state === 'suspended') {
+          window.audioContext.resume().then(() => {
+            console.log('AudioContext resumed successfully');
+            setAudioContextUnlocked(true);
+          }).catch(error => {
+            console.log('Failed to resume AudioContext:', error);
+          });
+        } else {
+          setAudioContextUnlocked(true);
+        }
+        
+        // Play a silent audio to initialize the audio system on iOS
+        const silentAudio = new Audio('data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+        silentAudio.volume = 0.01;
+        silentAudio.play().catch(error => {
+          console.log('Silent audio initialization failed:', error);
+        });
+      }
+    };
+    
+    // Add event listeners for user interactions (once only)
+    document.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+    document.addEventListener('click', unlockAudio, { once: true });
+    document.addEventListener('keydown', unlockAudio, { once: true });
   };
 
   const playSound = (soundType) => {
@@ -252,14 +308,39 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const audio = audioRefs.current[soundType];
     if (audio) {
       try {
+        // Ensure AudioContext is resumed (iOS requirement)
+        if (window.audioContext && window.audioContext.state === 'suspended') {
+          window.audioContext.resume().catch(error => {
+            console.log('Failed to resume AudioContext:', error);
+          });
+        }
+        
         // Reset audio to beginning
         audio.currentTime = 0;
         audio.volume = soundVolume;
-        audio.play().catch(error => {
-          console.log('Audio play failed:', error);
-        });
+        
+        // Use Promise-based play with better error handling
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log(`${soundType} sound played successfully`);
+            })
+            .catch(error => {
+              console.log(`Audio play failed for ${soundType}:`, error);
+              
+              // Fallback: try to play again after a short delay (iOS sometimes needs this)
+              if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
+                setTimeout(() => {
+                  audio.play().catch(retryError => {
+                    console.log(`Retry audio play failed for ${soundType}:`, retryError);
+                  });
+                }, 100);
+              }
+            });
+        }
       } catch (error) {
-        console.log('Sound play error:', error);
+        console.log(`Sound play error for ${soundType}:`, error);
       }
     }
   };
@@ -329,14 +410,32 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setLogoImage(winFlippinStar);
       setWinReward(rewardAmount || 0);
       
-      // Play win sound for all wins
-      playSound('win');
+      // Ensure audio context is active before playing win sound
+      if (window.audioContext && window.audioContext.state === 'suspended') {
+        window.audioContext.resume().then(() => {
+          playSound('win');
+        }).catch(error => {
+          console.log('Failed to resume AudioContext for win sound:', error);
+          playSound('win'); // Try anyway
+        });
+      } else {
+        playSound('win');
+      }
     } else {
       setLogoImage(loseFlippinStar);
       setWinReward(null);
       
-      // Play lose sound
-      playSound('lose');
+      // Ensure audio context is active before playing lose sound
+      if (window.audioContext && window.audioContext.state === 'suspended') {
+        window.audioContext.resume().then(() => {
+          playSound('lose');
+        }).catch(error => {
+          console.log('Failed to resume AudioContext for lose sound:', error);
+          playSound('lose'); // Try anyway
+        });
+      } else {
+        playSound('lose');
+      }
     }
     
     // Only set logo timeout if auto flip is not being stopped
@@ -446,6 +545,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Cleanup audio when component unmounts
     return () => {
       stopAllSounds();
+      // Clean up event listeners
+      document.removeEventListener('touchstart', setupAudioUnlock);
+      document.removeEventListener('click', setupAudioUnlock);
+      document.removeEventListener('keydown', setupAudioUnlock);
     };
   }, []); // Empty dependency array - only run once on mount
 
@@ -755,6 +858,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
+      // Ensure audio context is active before starting flip sounds
+      if (window.audioContext && window.audioContext.state === 'suspended') {
+        window.audioContext.resume().catch(error => {
+          console.log('Failed to resume AudioContext before auto flip:', error);
+        });
+      }
+      
       // Show 3D animation for auto flip (same as manual flip)
       setShow3D(true);
       setIsFlipping(true);
@@ -830,11 +940,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // const updatedStarlets = shared.getStarlets();
             // setStarlets(updatedStarlets);
             
+            // Stop coin spinning sound before showing result (to avoid audio overlap)
+            stopSound('coinSpinning');
+            
+            // Ensure audio context is active before playing win/lose sound
+            if (window.audioContext && window.audioContext.state === 'suspended') {
+              window.audioContext.resume().catch(error => {
+                console.log('Failed to resume AudioContext in auto flip:', error);
+              });
+            }
+            
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
             showResultOnLogo(result.isWin, result.reward, 2000);
-            
-            // Stop coin spinning sound after showing result
-            stopSound('coinSpinning');
             
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
@@ -864,7 +981,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setTimeout(() => setShow3D(false), 50);
             setIsFlipping(false);
             
-            // Wait 2 seconds before continuing auto flip (logo will show win/lose during this time)
+            // Wait 2.5 seconds before continuing auto flip (give more time for win/lose sound)
             autoFlipTimeoutRef.current = setTimeout(() => {
               // Check again if user wants to stop before continuing
               if (shouldStopAutoFlipRef.current) {
@@ -879,7 +996,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 return;
               }
               performAutoFlip();
-            }, 2000);
+            }, 2500);
             
           } else {
             // Stop auto flip on error
@@ -1622,7 +1739,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       <div className="fc_coin-select">
         <button
           className={`fc_coin-button ${selectedSide === 'HEADS' ? 'fc_selected' : ''}`}
-          onClick={() => setSelectedSide('HEADS')}
+          onClick={() => {
+            // Unlock audio context on user interaction
+            if (!audioContextUnlocked && window.audioContext && window.audioContext.state === 'suspended') {
+              window.audioContext.resume().then(() => {
+                setAudioContextUnlocked(true);
+              }).catch(error => {
+                console.log('Failed to resume AudioContext:', error);
+              });
+            }
+            setSelectedSide('HEADS');
+          }}
           disabled={isAutoFlipping}
         >
           {/* Counter positioned above button */}
@@ -1650,7 +1777,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         
         <button
           className={`fc_coin-button ${selectedSide === 'TAILS' ? 'fc_selected' : ''}`}
-          onClick={() => setSelectedSide('TAILS')}
+          onClick={() => {
+            // Unlock audio context on user interaction
+            if (!audioContextUnlocked && window.audioContext && window.audioContext.state === 'suspended') {
+              window.audioContext.resume().then(() => {
+                setAudioContextUnlocked(true);
+              }).catch(error => {
+                console.log('Failed to resume AudioContext:', error);
+              });
+            }
+            setSelectedSide('TAILS');
+          }}
           disabled={isAutoFlipping}
         >
           {/* Counter positioned above button */}
@@ -1776,7 +1913,23 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         ) : (
           <button 
             className={`fc_flip-btn ${isFlipping || isAutoFlipping ? 'fc_flip-btn-loading' : ''}`} 
-            onClick={isAutoFlipping ? handleStopAutoFlip : handleFlip}
+            onClick={() => {
+              // Ensure audio context is unlocked on user interaction (iOS requirement)
+              if (!audioContextUnlocked && window.audioContext && window.audioContext.state === 'suspended') {
+                window.audioContext.resume().then(() => {
+                  setAudioContextUnlocked(true);
+                }).catch(error => {
+                  console.log('Failed to resume AudioContext on flip:', error);
+                });
+              }
+              
+              // Execute the main flip logic
+              if (isAutoFlipping) {
+                handleStopAutoFlip();
+              } else {
+                handleFlip();
+              }
+            }}
             disabled={isFlipping || (!isAutoFlipping && !isValidPositiveBet)}
           >
             <div className="fc_flip-content">

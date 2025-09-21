@@ -509,16 +509,16 @@ body::-webkit-scrollbar-track,
   pointer-events: none;
 }
 
-/* Win animation - 2 seconds with green colors */
+/* Win animation - 2 seconds with green colors, floats up */
 .fc_floating-win-reward.positive {
   animation: floatUp 2s ease-out forwards;
   color: #00FF88;
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
 }
 
-/* Lose animation - 1.5 seconds with red colors */
+/* Lose animation - 1.5 seconds with red colors, floats down */
 .fc_floating-win-reward.negative {
-  animation: floatUp 1.5s ease-out forwards;
+  animation: floatDown 1.5s ease-out forwards;
   color: #FF4444;
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
 }
@@ -537,6 +537,24 @@ body::-webkit-scrollbar-track,
   100% {
     opacity: 0;
     transform: translateX(-50%) translateY(-40px);
+    scale: 0.8;
+  }
+}
+
+@keyframes floatDown {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(20px);
+    scale: 1.1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px);
     scale: 0.8;
   }
 }
@@ -2529,4 +2547,164 @@ body::-webkit-scrollbar-track,
 
 .fc_settings-back-btn:active {
   transform: translateY(0);
+}
+
+/* Media query cho màn hình 320px - 370px */
+@media (min-width: 320px) and (max-width: 370px) {
+  .fc_app {
+    width: 100%;
+    max-width: 370px;
+    padding: 15px; /* Giảm padding từ 20px */
+  }
+
+  .fc_logo-container {
+    width: 90%;
+    max-width: 320px;
+    height: 220px; /* Giảm từ 280px */
+    padding: 15px 15px 0 15px; /* Giảm padding */
+  }
+
+  .fc_logo-container.fc_logo-elevated,
+  .fc_logo-container.fc_logo-result {
+    width: 90%;
+    max-width: 320px;
+    height: 220px;
+    padding: 15px 15px 0 15px;
+  }
+
+  .fc_flip-btn {
+    width: calc(100% - 30px); /* Giảm margin */
+    max-width: calc(100vw - 30px);
+    padding: 15px; /* Giảm padding */
+    font-size: 20px; /* Giảm font size */
+  }
+
+  .fc_flip-btn-container {
+    width: calc(100% - 30px);
+    max-width: calc(100vw - 30px);
+  }
+
+  .fc_coin-select {
+    gap: 30px; /* Giảm gap từ 40px */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding: 0 15px; /* Giảm padding */
+  }
+
+  .fc_coin-button {
+    padding: 12px 20px; /* Giảm padding */
+    font-size: 22px; /* Giảm font size */
+    min-height: 55px; /* Giảm height */
+  }
+
+  .fc_bet-buttons {
+    gap: 8px 15px; /* Giảm gap */
+    margin-top: 15px;
+    padding: 0 8px; /* Giảm padding */
+  }
+
+  .fc_bet-button {
+    padding: 10px 6px; /* Giảm padding */
+    font-size: 12px; /* Giảm font size */
+    min-height: 45px; /* Giảm height */
+  }
+
+  .fc_bet-amount {
+    font-size: 18px; /* Giảm font size */
+  }
+
+  .fc_bet-starlet-icon {
+    width: 22px; /* Giảm kích thước icon */
+    height: 22px;
+  }
+
+  .fc_total-flips {
+    padding: 3px 6px; /* Giảm padding */
+  }
+
+  .fc_total-flips-label,
+  .fc_total-flips-count {
+    font-size: 12px; /* Giảm font size */
+  }
+
+  .fc_auto-flip-toggle {
+    padding: 3px 6px; /* Giảm padding */
+    min-width: 85px; /* Giảm width */
+    height: 18px; /* Giảm height */
+  }
+
+  .fc_auto-flip-text,
+  .fc_auto-flip-separator,
+  .fc_auto-flip-status {
+    font-size: 9px; /* Giảm font size */
+  }
+
+  .fc_win-reward-progress {
+    width: 140px; /* Giảm width */
+    height: 35px; /* Giảm height */
+  }
+
+  .fc_progress-starlet {
+    width: 50px; /* Giảm kích thước */
+    height: 50px;
+    margin-top: -8px;
+    right: -25px;
+  }
+
+  .fc_progress-starlet-icon {
+    width: 40px; /* Giảm kích thước icon */
+    height: 40px;
+  }
+
+  .fc_progress-number {
+    font-size: 18px; /* Giảm font size */
+  }
+
+  .fc_welcome-content,
+  .fc_allin-content,
+  .fc_custom-overlay-content,
+  .fc_autoflip-content,
+  .fc_flip-result-content,
+  .fc_settings-content {
+    width: 100%;
+    max-width: 350px;
+    padding: 15px; /* Giảm padding */
+  }
+
+  .fc_welcome-logo-image {
+    max-width: 300px; /* Giảm kích thước logo */
+  }
+
+  .fc_welcome-lfg-btn,
+  .fc_allin-btn,
+  .fc_custom-btn,
+  .fc_autoflip-btn,
+  .fc_flip-result-ok-btn,
+  .fc_settings-back-btn {
+    padding: 15px; /* Giảm padding */
+    font-size: 20px; /* Giảm font size */
+    height: 45px; /* Giảm height */
+  }
+
+  .fc_allin-title {
+    font-size: 100px; /* Giảm font size */
+  }
+
+  .fc_allin-question {
+    font-size: 28px; /* Giảm font size */
+  }
+
+  .fc_autoflip-options {
+    gap: 12px; /* Giảm gap */
+    width: 90%;
+    max-width: 320px;
+  }
+
+  .fc_autoflip-option {
+    font-size: 16px; /* Giảm font size */
+  }
+
+  .fc_autoflip-infinite .fc_autoflip-option-content {
+    font-size: 20px; /* Giảm font size */
+  }
 }
