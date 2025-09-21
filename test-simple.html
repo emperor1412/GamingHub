@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlippingStars Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+        .test-container {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            position: relative;
+        }
+        
+        /* Mock FlippingStars styles */
+        .fc_app {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fc_stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .fc_profile-pic-main {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #00ff88;
+            background: #333;
+            cursor: pointer;
+        }
+        
+        .fc_stat-item-main-text {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .fc_stats-main {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .fc_stat-item-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .fc_logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            margin: 40px 0;
+        }
+        
+        .fc_logo-image {
+            max-width: 200px;
+            height: auto;
+        }
+        
+        .fc_coin-select {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .fc_coin-button {
+            background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 20px 40px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 120px;
+        }
+        
+        .fc_coin-button:hover {
+            background: linear-gradient(145deg, #3a3a4e, #2a2a3e);
+            transform: translateY(-2px);
+        }
+        
+        .fc_coin-button.fc_selected {
+            background: linear-gradient(145deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .fc_bet-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        
+        .fc_bet-button {
+            background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px 25px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+        
+        .fc_bet-button:hover {
+            background: linear-gradient(145deg, #3a3a4e, #2a2a3e);
+            transform: translateY(-2px);
+        }
+        
+        .fc_bet-button.fc_selected {
+            background: linear-gradient(145deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .fc_flip-btn {
+            display: block;
+            margin: 40px auto;
+            background: linear-gradient(145deg, #00ff88, #00cc6a);
+            border: none;
+            border-radius: 25px;
+            padding: 20px 60px;
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .fc_flip-btn:hover {
+            background: linear-gradient(145deg, #00cc6a, #00ff88);
+            transform: translateY(-2px);
+        }
+        
+        .fc_bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+        }
+        
+        .fc_bottom-nav button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .fc_bottom-nav button:hover {
+            color: #00ff88;
+        }
+        
+        .test-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff88;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        FlippingStars Test Mode<br>
+        Mock data loaded
+    </div>
+    
+    <div id="root">
+        <div class="fc_app">
+            <!-- Header -->
+            <header class="fc_stats-header">
+                <button class="fc_profile-pic-main">
+                    <div style="width: 100%; height: 100%; background: #00ff88; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold;">T</div>
+                </button>
+                <div class="fc_stat-item-main-text">GM TestUser!</div>
+                <div class="fc_stats-main">
+                    <button class="fc_stat-item-main">
+                        <span>🎫</span>
+                        <span class="fc_stat-item-main-text">10</span>
+                    </button>
+                    <button class="fc_stat-item-main">
+                        <span>⭐</span>
+                        <span class="fc_stat-item-main-text">500</span>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Logo -->
+            <div class="fc_logo-container">
+                <div style="width: 200px; height: 200px; background: linear-gradient(145deg, #00ff88, #00cc6a); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #000;">
+                    FLIPPING<br>STARS
+                </div>
+            </div>
+            
+            <!-- Coin Selection -->
+            <div class="fc_coin-select">
+                <button class="fc_coin-button fc_selected">
+                    HEADS
+                </button>
+                <button class="fc_coin-button">
+                    TAILS
+                </button>
+            </div>
+            
+            <!-- Bet Buttons -->
+            <div class="fc_bet-buttons">
+                <button class="fc_bet-button fc_selected">10</button>
+                <button class="fc_bet-button">20</button>
+                <button class="fc_bet-button">50</button>
+                <button class="fc_bet-button">70</button>
+                <button class="fc_bet-button">100</button>
+                <button class="fc_bet-button">500</button>
+                <button class="fc_bet-button">ALL IN</button>
+                <button class="fc_bet-button">CUSTOM</button>
+            </div>
+            
+            <!-- Flip Button -->
+            <button class="fc_flip-btn">
+                FLIP
+            </button>
+            
+            <!-- Bottom Navigation -->
+            <nav class="fc_bottom-nav">
+                <button>🏠</button>
+                <button>📋</button>
+                <button>👥</button>
+                <button>🛒</button>
+                <button>🆔</button>
+            </nav>
+        </div>
+    </div>
+    
+    <script>
+        // Mock functionality
+        console.log('🎮 FlippingStars Test Mode Active');
+        console.log('📊 Mock Data:');
+        console.log('- BCoin: 1000');
+        console.log('- Starlets: 500');
+        console.log('- Tickets: 10');
+        
+        // Add some interactive behavior
+        document.querySelectorAll('.fc_coin-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.fc_coin-button').forEach(b => b.classList.remove('fc_selected'));
+                this.classList.add('fc_selected');
+            });
+        });
+        
+        document.querySelectorAll('.fc_bet-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.fc_bet-button').forEach(b => b.classList.remove('fc_selected'));
+                this.classList.add('fc_selected');
+            });
+        });
+        
+        document.querySelector('.fc_flip-btn').addEventListener('click', function() {
+            this.textContent = 'FLIPPING...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                const isWin = Math.random() > 0.5;
+                this.textContent = isWin ? 'WIN!' : 'LOSE';
+                this.style.background = isWin ? 'linear-gradient(145deg, #00ff88, #00cc6a)' : 'linear-gradient(145deg, #ff4444, #cc0000)';
+                
+                setTimeout(() => {
+                    this.textContent = 'FLIP';
+                    this.disabled = false;
+                    this.style.background = 'linear-gradient(145deg, #00ff88, #00cc6a)';
+                }, 2000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
