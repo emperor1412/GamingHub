@@ -509,16 +509,16 @@ body::-webkit-scrollbar-track,
   pointer-events: none;
 }
 
-/* Win animation - 2 seconds with green colors */
+/* Win animation - 2 seconds with green colors, floats up */
 .fc_floating-win-reward.positive {
   animation: floatUp 2s ease-out forwards;
   color: #00FF88;
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
 }
 
-/* Lose animation - 1.5 seconds with red colors */
+/* Lose animation - 1.5 seconds with red colors, floats down */
 .fc_floating-win-reward.negative {
-  animation: floatUp 1.5s ease-out forwards;
+  animation: floatDown 1.5s ease-out forwards;
   color: #FF4444;
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
 }
@@ -537,6 +537,24 @@ body::-webkit-scrollbar-track,
   100% {
     opacity: 0;
     transform: translateX(-50%) translateY(-40px);
+    scale: 0.8;
+  }
+}
+
+@keyframes floatDown {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(20px);
+    scale: 1.1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px);
     scale: 0.8;
   }
 }
