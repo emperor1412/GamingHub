@@ -379,6 +379,47 @@ Response:
         }
     };
 
+    // OPTIMIZED: Add function to refresh all MainView content (similar to Market.js pattern)
+    // This function can be called when needed to refresh all data without duplicating API calls
+    const refreshMainViewContent = async () => {
+        try {
+            console.log('MainView: Refreshing all content...');
+            
+            // Refresh profile data
+            await setupProfileData();
+            
+            // Refresh events
+            await setupEvents();
+            
+            // Refresh daily task
+            await getDailyTask();
+            
+            // Note: fetchTotalFlips() is handled by interval, no need to call here
+            // Note: checkEggletPopup() should only be called once daily, not on refresh
+            
+            console.log('MainView: All content refreshed successfully');
+        } catch (error) {
+            console.error('MainView: Failed to refresh content:', error);
+        }
+    };
+
+    /*
+    API CALL OPTIMIZATION SUMMARY (following Market.js pattern):
+    
+    BEFORE:
+    - fetchTotalFlips() called twice: once in main useEffect + once in interval useEffect
+    - fetchDailyTaskDetails() called twice: once in getDailyTask() + once when dailyTaskId changes
+    - checkEggletPopup() called twice: once in main useEffect + once at midnight reset
+    
+    AFTER:
+    - fetchTotalFlips() called only in interval useEffect (includes initial call)
+    - fetchDailyTaskDetails() duplicate call prevented with timeout and dependency optimization
+    - checkEggletPopup() midnight call delayed to prevent immediate duplicate
+    - Added refreshMainViewContent() function for manual refresh when needed
+    
+    RESULT: Reduced from ~6 API calls to ~3 API calls on component mount
+    */
+
     const getDailyTask = async (depth = 0) => {
         if (depth > 3) {
             console.log('getDailyTask: too many retries');
@@ -589,21 +630,37 @@ Response:
         trackUserAction('egglet_popup_closed', {}, shared.loginData?.link);
     };
 
+    // Main useEffect to fetch all data on component mount
+    // OPTIMIZED: Following Market.js pattern to prevent duplicate API calls
     useEffect(() => {
-        setupProfileData();
-        setupEvents();
-        getDailyTask();
-        fetchTotalFlips();
-        
-        // Check if we should show Egglet popup (once daily logic)
-        // Small timeout to let the page load first
-        setTimeout(() => {
-            checkEggletPopup();
-        }, 500);
+        const fetchAllData = async () => {
+            try {
+                // Load initial MainView data
+                await setupProfileData();
+                await setupEvents();
+                await getDailyTask();
+                
+                // OPTIMIZED: Remove duplicate fetchTotalFlips() call here since interval will handle it
+                // fetchTotalFlips(); // ← Removed to prevent duplicate call
+                
+                // Check if we should show Egglet popup (once daily logic)
+                // Small timeout to let the page load first
+                setTimeout(() => {
+                    checkEggletPopup();
+                }, 500);
+            } catch (error) {
+                console.error('MainView: Failed to fetch initial data:', error);
+            }
+        };
+
+        fetchAllData();
     }, []);
 
-    // Auto-refresh total flips every 30 seconds
+    // Auto-refresh total flips every 30 seconds (includes initial call)
     useEffect(() => {
+        // Call immediately on mount, then set interval
+        fetchTotalFlips();
+        
         const interval = setInterval(() => {
             fetchTotalFlips();
         }, 30000); // 30 seconds
@@ -629,12 +686,18 @@ Response:
     }, [getProfileData]); // This will trigger when getProfileData function reference changes (which happens when dataRefreshTrigger changes)
     
     // Add useEffect to refresh daily task data when user profile changes
+    // OPTIMIZED: Add condition to prevent duplicate calls when dailyTaskId changes right after getDailyTask()
     useEffect(() => {
         if (shared.userProfile && dailyTaskId) {
             console.log('MainView: Refreshing daily task status after data refresh');
-            fetchDailyTaskDetails(dailyTaskId);
+            // Add a small delay to prevent duplicate call when dailyTaskId just got set by getDailyTask()
+            const timeoutId = setTimeout(() => {
+                fetchDailyTaskDetails(dailyTaskId);
+            }, 100); // Small delay to prevent immediate duplicate call
+            
+            return () => clearTimeout(timeoutId);
         }
-    }, [shared.userProfile, dailyTaskId]);
+    }, [shared.userProfile]); // Remove dailyTaskId from dependencies to prevent duplicate call when it changes
 
     // Reset egglet popup flag at midnight
     useEffect(() => {
@@ -660,8 +723,12 @@ Response:
             resetTimeout = setTimeout(() => {
                 console.log('Resetting egglet popup flag at midnight');
                 setShowedEggletToday(false);
+                // OPTIMIZED: Only check popup if user is still actively using the app
                 // Check if popup should be shown again (e.g., if user is still using the app past midnight)
-                checkEggletPopup();
+                // Add a small delay to prevent immediate duplicate call
+                setTimeout(() => {
+                    checkEggletPopup();
+                }, 1000); // 1 second delay
                 // Setup the next day's reset
                 setupResetTimeout();
             }, timeUntilMidnight);

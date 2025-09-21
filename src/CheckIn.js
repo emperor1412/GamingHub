@@ -168,7 +168,7 @@ const CheckIn = ({ checkInData, onClose }) => {
                             <div className="rewards">
                                 <div className="reward">
                                     <img src={ticket} alt="Ticket" />
-                                    <span className='reward-text-checkin'>{day.ticket}1</span>
+                                    <span className='reward-text-checkin'>{day.ticket}</span>
                                 </div>
                                 <div className="reward-divider"></div>
                                 <div className="reward">
