@@ -20,6 +20,7 @@ import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
 import settingsIcon from './images/Settings.png';
+import back from './images/back.svg';
 
 // Sound imports
 import winSound from './sounds/Win.mp3';
@@ -515,12 +516,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomClick = () => {
+    console.log('Custom amount button clicked!', { bCoin, isAutoFlipping, selectedBet });
     // Enable Custom Amount functionality
     setShowCustomConfirm(true);
   };
 
   const handleCustomConfirm = () => {
     const amountNum = parseInt(customAmount) || 0;
+    
+    // Check if user has enough BCoin
+    if (bcoin < 10) {
+      setCustomAmountError('NOT ENOUGH B$');
+      return;
+    }
     
     // Check if amount is divisible by 10
     if (amountNum % 10 !== 0) {
@@ -1341,6 +1349,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {showCustomConfirm && (
         <div className="fc_custom-overlay">
           <div className="fc_custom-overlay-content">
+            {/* Back Button */}
+            <button 
+              className="fc_back-button fc_back-button-alignment"
+              onClick={() => setShowCustomConfirm(false)}
+            >
+              <img src={back} alt="Back" />
+            </button>
+            
             {/* Number Keyboard */}
             <div className="fc_keyboard">
               <div className="fc_keyboard-shadow">
@@ -1738,9 +1754,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${bCoin < 10 ? 'fc_insufficient-funds' : ''}`}
-          onClick={bCoin > 10 && !isAutoFlipping ? handleCustomClick : undefined}
-          disabled={isAutoFlipping || bCoin < 10}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${bcoin < 10 ? 'fc_insufficient-funds' : ''}`}
+          onClick={handleCustomClick}
+          disabled={bcoin < 10 || isAutoFlipping}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
