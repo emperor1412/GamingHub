@@ -153,44 +153,6 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
   const [totalFlips, setTotalFlips] = useState(0);
-
-  // Fetch total flips from API
-  const fetchTotalFlips = async () => {
-    try {
-      if (!shared.loginData?.token) {
-        console.log('No login token available for totalFlips API');
-        return;
-      }
-      
-      const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
-      console.log('Fetching total flips from:', url);
-      
-      const response = await fetch(url);
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Total flips API response:', data);
-        
-        // Handle different possible response formats
-        if (data.code === 0 && data.data !== undefined) {
-          // data.data is a number directly (e.g., 159)
-          setTotalFlips(data.data);
-          console.log('✅ Found totalFlips in data.data:', data.data);
-        } else if (data.totalFlips !== undefined) {
-          setTotalFlips(data.totalFlips);
-        } else if (data.total_flips !== undefined) {
-          setTotalFlips(data.total_flips);
-        } else if (data.count !== undefined) {
-          setTotalFlips(data.count);
-        } else {
-          console.log('Unexpected totalFlips API response format:', data);
-        }
-      } else {
-        console.error('Total flips API response not ok:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching total flips:', error);
-    }
-  };
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
@@ -427,13 +389,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         setBcoin(shared.getBcoin());
         setStarlets(shared.getStarlets());
         setTickets(shared.getTicket());
-        // Fetch total flips from API
-        fetchTotalFlips();
+        // Don't reset total flips here - let it persist during the session
       }
     };
 
     setupProfileData();
   }, [shared.userProfile]); // Add dependency to refresh when userProfile changes
+
+  // Reset total flips when component first mounts (new session)
+  useEffect(() => {
+    setTotalFlips(0);
+  }, []);
 
   // Show welcome overlay only once per app session
   useEffect(() => {
@@ -830,7 +796,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setAutoFlipCount(currentCount);
             
             // Update counters and UI (same as handleFlip)
-            setTotalFlips(prev => prev + 1);
+            setTotalFlips(prev => {
+              const newTotal = prev + 1;
+              console.log('Auto flip - Total flips updated:', newTotal);
+              return newTotal;
+            });
             
             // Tính kết quả thực tế của coin
             const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1077,7 +1047,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
-        setTotalFlips(prev => prev + 1);
+        setTotalFlips(prev => {
+          const newTotal = prev + 1;
+          console.log('Manual flip - Total flips updated:', newTotal);
+          return newTotal;
+        });
 
         const chosenSide = pendingSideRef.current;
         const actualResult = result.isWin ? chosenSide : (chosenSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1170,14 +1144,6 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
   }, [isAutoFlipping]);
 
-  // Auto-refresh total flips every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchTotalFlips();
-    }, 30000); // 30 seconds
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Cleanup khi component unmount
   useEffect(() => {
