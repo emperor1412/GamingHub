@@ -11,7 +11,8 @@ import './FlippingStars.css';
 import shared from './Shared';
 import CoinAnimation from './CoinAnimation';
 import ticketIcon from './images/ticket.svg';
-import starlet from './images/starlet.png';
+import starlet from './images/starlet.png'; // Commented out - now using BCoin
+import bCoin from './images/bCoin_icon.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
 import winFlippinStar from './images/WinFlippinStar.png';
 import loseFlippinStar from './images/LoseFlippinStar.png';
@@ -19,6 +20,7 @@ import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
 import settingsIcon from './images/Settings.png';
+import back from './images/back.svg';
 
 // Sound imports
 import winSound from './sounds/Win.mp3';
@@ -40,12 +42,110 @@ import ID_selected from './images/ID_selected.svg';
 const betOptions = [10, 20, 50, 70, 100, 500];
 const WELCOME_FLAG_KEY = 'flippingStarsWelcomeShown';
 
+// Custom hook for counting up animation
+const useCountUp = (start, end, duration = 2000) => {
+  const [count, setCount] = useState(end);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (duration > 0 && start !== end) {
+      setIsAnimating(true);
+      setCount(start);
+      
+      const startTime = Date.now();
+      const startValue = start;
+      
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentCount = Math.floor(startValue + (end - startValue) * easeOut);
+        
+        setCount(currentCount);
+        
+        if (progress >= 1) {
+          setCount(end);
+          setIsAnimating(false);
+          clearInterval(timer);
+        }
+      }, 16); // ~60fps
+      
+      return () => clearInterval(timer);
+    } else {
+      // No animation, just set the value directly
+      setCount(end);
+      setIsAnimating(false);
+    }
+  }, [start, end, duration]);
+
+  return { count, isAnimating };
+};
+
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
   const [selectedBet, setSelectedBet] = useState(10);
   const [tickets, setTickets] = useState(0);
-  const [starlets, setStarlets] = useState(0);
+  const [starlets, setStarlets] = useState(0); // Commented out - now using BCoin
+  const [bcoin, setBcoin] = useState(0);
   const [headsCount, setHeadsCount] = useState(0);
+  
+  // Use count up animation for bcoin display - only when bcoin change
+  // const [previousStarlets, setPreviousStarlets] = useState(starlets); // Commented out - now using BCoin
+  const [previousBcoin, setPreviousBcoin] = useState(bcoin);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [isPositiveChange, setIsPositiveChange] = useState(true);
+  const [lastBetAmount, setLastBetAmount] = useState(0);
+  // const { count: animatedStarlets, isAnimating } = useCountUp(previousStarlets, starlets, shouldAnimate ? 2000 : 0); // Commented out - now using BCoin
+  const { count: animatedBcoin, isAnimating } = useCountUp(previousBcoin, bcoin, shouldAnimate ? 2000 : 0);
+
+  // Watch for bcoin changes and trigger animation (only for game results, not initial load)
+  useEffect(() => {
+    if (bcoin !== previousBcoin) {
+      // Only animate if this is not the initial load (previousBcoin was 0 initially)
+      // and we have a valid previous value (not the initial 0)
+      if (previousBcoin > 0) {
+        setShouldAnimate(true);
+        const isPositive = bcoin > previousBcoin;
+        setIsPositiveChange(isPositive); // Set color based on increase/decrease
+        
+        // Different animation duration for win (2s) vs lose (1.5s)
+        const animationDuration = isPositive ? 2000 : 1500;
+        
+        // Reset animation flag after animation completes
+        const timer = setTimeout(() => {
+          setShouldAnimate(false);
+          setPreviousBcoin(bcoin); // Update previous value after animation
+        }, animationDuration);
+        
+        return () => clearTimeout(timer);
+      } else {
+        // For initial load, just update the previous value without animation
+        setPreviousBcoin(bcoin);
+      }
+    }
+  }, [bcoin, previousBcoin]);
+  
+  // Watch for starlets changes and trigger animation (COMMENTED OUT - now using BCoin)
+  // useEffect(() => {
+  //   if (starlets !== previousStarlets) {
+  //     setShouldAnimate(true);
+  //     const isPositive = starlets > previousStarlets;
+  //     setIsPositiveChange(isPositive); // Set color based on increase/decrease
+  //     
+  //     // Different animation duration for win (2s) vs lose (1.5s)
+  //     const animationDuration = isPositive ? 2000 : 1500;
+  //     
+  //     // Reset animation flag after animation completes
+  //     const timer = setTimeout(() => {
+  //       setShouldAnimate(false);
+  //       setPreviousStarlets(starlets); // Update previous value after animation
+  //     }, animationDuration);
+  //     
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [starlets, previousStarlets]);
   const [tailsCount, setTailsCount] = useState(0);
   // Streak theo kết quả thực tế (HEADS/TAILS) và số lần liên tiếp
   const [streakSide, setStreakSide] = useState(null);
@@ -53,6 +153,44 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
   const [totalFlips, setTotalFlips] = useState(0);
+
+  // Fetch total flips from API
+  const fetchTotalFlips = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for totalFlips API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+      console.log('Fetching total flips from:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Total flips API response:', data);
+        
+        // Handle different possible response formats
+        if (data.code === 0 && data.data !== undefined) {
+          // data.data is a number directly (e.g., 159)
+          setTotalFlips(data.data);
+          console.log('✅ Found totalFlips in data.data:', data.data);
+        } else if (data.totalFlips !== undefined) {
+          setTotalFlips(data.totalFlips);
+        } else if (data.total_flips !== undefined) {
+          setTotalFlips(data.total_flips);
+        } else if (data.count !== undefined) {
+          setTotalFlips(data.count);
+        } else {
+          console.log('Unexpected totalFlips API response format:', data);
+        }
+      } else {
+        console.error('Total flips API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching total flips:', error);
+    }
+  };
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
@@ -254,31 +392,43 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Function to check if a bet amount is affordable
   const isBetAffordable = (betAmount) => {
     if (betAmount === 'all-in') {
-      return starlets >= 10; // All-in is affordable if user has at least 10 starlets
+      return bcoin >= 10; // All-in is affordable if user has at least 10 bcoin
     } else if (betAmount === 'double') {
-      return canDouble && lastWinAmount > 0 && lastWinAmount <= starlets;
+      return canDouble && lastWinAmount > 0 && lastWinAmount <= bcoin;
     } else if (betAmount === 'custom') {
       const customBet = parseInt(customAmount) || 0;
-      return customBet > 0 && customBet <= starlets;
+      return customBet > 0 && customBet <= bcoin;
     } else if (typeof betAmount === 'number') {
-      return betAmount <= starlets;
+      return betAmount <= bcoin;
     } else {
       return false; // Invalid bet amount
     }
   };
+  
+  // const isBetAffordable = (betAmount) => { // COMMENTED OUT - now using BCoin
+  //   if (betAmount === 'all-in') {
+  //     return starlets >= 10; // All-in is affordable if user has at least 10 starlets
+  //   } else if (betAmount === 'double') {
+  //     return canDouble && lastWinAmount > 0 && lastWinAmount <= starlets;
+  //   } else if (betAmount === 'custom') {
+  //     const customBet = parseInt(customAmount) || 0;
+  //     return customBet > 0 && customBet <= starlets;
+  //   } else if (typeof betAmount === 'number') {
+  //     return betAmount <= starlets;
+  //   } else {
+  //     return false; // Invalid bet amount
+  //   }
+  // };
 
   useEffect(() => {
     const setupProfileData = async () => {
       if (shared.userProfile) {
-        const userStarlets = shared.userProfile.UserToken?.find(token => token.prop_id === 10020);
-        if (userStarlets) {
-          setStarlets(userStarlets.num);
-        }
-
-        const userTicket = shared.userProfile.UserToken?.find(token => token.prop_id === 10010);
-        if (userTicket) {
-          setTickets(userTicket.num);
-        }
+        // Use helper functions for consistency
+        setBcoin(shared.getBcoin());
+        setStarlets(shared.getStarlets());
+        setTickets(shared.getTicket());
+        // Fetch total flips from API
+        fetchTotalFlips();
       }
     };
 
@@ -350,9 +500,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Ensure no bet button is selected even after confirming
     setSelectedBet(null);
     // Select ALL IN for UI highlight and flip immediately with rounded bet amount
-    const allInAmount = Math.floor(starlets / 10) * 10;
+    const allInAmount = Math.floor(bcoin / 10) * 10;
     // Pass allin: false because we're not betting the full amount, just the rounded amount
     handleFlip({ betAmount: allInAmount, allin: false });
+    
+    // const allInAmount = Math.floor(starlets / 10) * 10; // COMMENTED OUT - now using BCoin
+    // handleFlip({ betAmount: allInAmount, allin: false });
   };
 
   const handleAllInCancel = () => {
@@ -363,12 +516,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const handleCustomClick = () => {
+    console.log('Custom amount button clicked!', { bCoin, isAutoFlipping, selectedBet });
     // Enable Custom Amount functionality
     setShowCustomConfirm(true);
   };
 
   const handleCustomConfirm = () => {
     const amountNum = parseInt(customAmount) || 0;
+    
+    // Check if user has enough BCoin
+    if (bcoin < 10) {
+      setCustomAmountError('NOT ENOUGH B$');
+      return;
+    }
     
     // Check if amount is divisible by 10
     if (amountNum % 10 !== 0) {
@@ -379,13 +539,17 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Clear error if validation passes
     setCustomAmountError('');
     
-    // Clamp to available starlets
-    const finalAmount = Math.min(amountNum, starlets).toString();
+    // Clamp to available bcoin
+    const finalAmount = Math.min(amountNum, bcoin).toString();
     setShowCustomConfirm(false);
     
-    // If custom amount is 0 or less than minimum, select the first bet option (10 starlets)
+    // If custom amount is 0 or less than minimum, select the first bet option (10 bcoin)
     if (amountNum === 0 || amountNum < 10) {
       setSelectedBet(10);
+      
+    // const finalAmount = Math.min(amountNum, starlets).toString(); // COMMENTED OUT - now using BCoin
+    // if (amountNum === 0 || amountNum < 10) {
+    //   setSelectedBet(10);
     } else {
       setSelectedBet('custom');
     }
@@ -405,14 +569,23 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       // Clear error when typing new input
       setCustomAmountError('');
       
-      // Limit to 6 digits and clamp to available starlets
+      // Limit to 6 digits and clamp to available bcoin
       setCustomAmount(prev => {
         if ((prev || '').length >= 6) return prev;
         const nextRaw = prev === '0' ? value : (prev || '') + value;
         let nextNum = parseInt(nextRaw) || 0;
-        if (nextNum > starlets) nextNum = starlets;
+        if (nextNum > bcoin) nextNum = bcoin;
         return nextNum.toString();
       });
+      
+      // Limit to 6 digits and clamp to available starlets (COMMENTED OUT - now using BCoin)
+      // setCustomAmount(prev => {
+      //   if ((prev || '').length >= 6) return prev;
+      //   const nextRaw = prev === '0' ? value : (prev || '') + value;
+      //   let nextNum = parseInt(nextRaw) || 0;
+      //   if (nextNum > starlets) nextNum = starlets;
+      //   return nextNum.toString();
+      // });
     }
   };
 
@@ -451,8 +624,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       setWinReward(null);
       
       // Auto-select bet phù hợp
-      const currentStarlets = shared.getStarlets();
-      selectLargestAffordableBet(currentStarlets);
+      const currentBcoin = shared.getBcoin();
+      selectLargestAffordableBet(currentBcoin);
+      
+      // const currentStarlets = shared.getStarlets(); // COMMENTED OUT - now using BCoin
+      // selectLargestAffordableBet(currentStarlets);
       
     } else if (autoFlip) {
       // Nếu auto flip ON nhưng không đang flipping, tắt OFF
@@ -584,32 +760,32 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         return;
       }
       
-             // Calculate bet amount for auto flip using latest starlets from profile
-       const currentStarlets = shared.getStarlets();
+             // Calculate bet amount for auto flip using latest bcoin from profile
+       const currentBcoin = shared.getBcoin();
        let betAmount = selectedBet;
        if (selectedBet === 'all-in') {
-         betAmount = Math.floor(currentStarlets / 10) * 10; // Rounded to nearest 10
-         // For auto flip all-in, we use the rounded amount, not the full starlets
+         betAmount = Math.floor(currentBcoin / 10) * 10; // Rounded to nearest 10
+         // For auto flip all-in, we use the rounded amount, not the full bcoin
        } else if (selectedBet === 'custom') {
          betAmount = parseInt(customAmount) || 0;
        }
 
-      // Check if user has enough starlets
-      if (currentStarlets < betAmount) {
+      // Check if user has enough bcoin
+      if (currentBcoin < betAmount) {
         // Stop any playing sounds
         stopAllSounds();
         
         await shared.showPopup({
           type: 0,
-          title: 'Insufficient Starlets',
-          message: 'Auto flip stopped due to insufficient Starlets'
+          title: 'Insufficient BCoin',
+          message: 'Auto flip stopped due to insufficient BCoin'
         });
         setIsAutoFlipping(false);
         setAutoFlip(false);
         setAutoFlipTarget(0);
         setAutoFlipCount(0);
         // Auto-select the largest affordable numeric bet (exclude 'custom' and 'all-in')
-        selectLargestAffordableBet(currentStarlets);
+        selectLargestAffordableBet(currentBcoin);
         return;
       }
       
@@ -676,9 +852,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               setTailsCount(prev => prev + 1);
             }
             
-            // Update starlets
-            const updatedStarlets = shared.getStarlets();
-            setStarlets(updatedStarlets);
+            // Update bcoin
+            const updatedBcoin = shared.getBcoin();
+            setBcoin(updatedBcoin);
+            
+            // Update starlets (COMMENTED OUT - now using BCoin)
+            // const updatedStarlets = shared.getStarlets();
+            // setStarlets(updatedStarlets);
             
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
             showResultOnLogo(result.isWin, result.reward, 2000);
@@ -755,13 +935,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setAutoFlipCount(0);
             setShow3D(false);
             setIsFlipping(false);
-            // If server error indicates insufficient starlets, choose best affordable bet
+            // If server error indicates insufficient bcoin, choose best affordable bet
             const errMsg = (result && result.error) || '';
             const errCode = result && result.data && result.data.code;
-            if (errCode === 210001 || /not have enough starlets/i.test(errMsg)) {
-              const refreshedStarlets = shared.getStarlets();
-              selectLargestAffordableBet(refreshedStarlets);
+            if (errCode === 210001 || /not have enough bcoin/i.test(errMsg)) {
+              const refreshedBcoin = shared.getBcoin();
+              selectLargestAffordableBet(refreshedBcoin);
             }
+            
+            // If server error indicates insufficient starlets, choose best affordable bet (COMMENTED OUT - now using BCoin)
+            // if (errCode === 210001 || /not have enough starlets/i.test(errMsg)) {
+            //   const refreshedStarlets = shared.getStarlets();
+            //   selectLargestAffordableBet(refreshedStarlets);
+            // }
           }
         } catch (error) {
           // Stop all sounds on error
@@ -812,8 +998,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
 
       if (selectedBet === 'all-in') {
-        betAmount = Math.floor(starlets / 10) * 10; // Use rounded amount to nearest 10
-        // For all-in, we need to pass the actual bet amount, not the full starlets
+        betAmount = Math.floor(bcoin / 10) * 10; // Use rounded amount to nearest 10
+        // For all-in, we need to pass the actual bet amount, not the full bcoin
         // The server will handle deducting only the bet amount
       } else if (selectedBet === 'custom') {
         betAmount = parseInt(customAmount) || 0;
@@ -838,14 +1024,26 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       return;
     }
 
-    if (betAmount > starlets) {
+    if (betAmount > bcoin) {
       await shared.showPopup({
         type: 0,
-        title: 'Insufficient Starlets',
-        message: 'You don\'t have enough Starlets for this bet'
+        title: 'Insufficient BCoin',
+        message: 'You don\'t have enough BCoin for this bet'
       });
       return;
     }
+    
+    // if (betAmount > starlets) { // COMMENTED OUT - now using BCoin
+    //   await shared.showPopup({
+    //     type: 0,
+    //     title: 'Insufficient Starlets',
+    //     message: 'You don\'t have enough Starlets for this bet'
+    //   });
+    //   return;
+    // }
+
+    // Store bet amount for floating animation
+    setLastBetAmount(betAmount);
 
     // Store pending info and start animation; API will be called after 1.5s while animation keeps looping
     pendingBetRef.current = betAmount;
@@ -915,8 +1113,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           }
         }
 
-        const updatedStarlets = shared.getStarlets();
-        setStarlets(updatedStarlets);
+        const updatedBcoin = shared.getBcoin();
+        setBcoin(updatedBcoin);
+        
+        // const updatedStarlets = shared.getStarlets(); // COMMENTED OUT - now using BCoin
+        // setStarlets(updatedStarlets);
       } else {
         // Stop coin spinning sound on error
         stopSound('coinSpinning');
@@ -969,6 +1170,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
   }, [isAutoFlipping]);
 
+  // Auto-refresh total flips every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchTotalFlips();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Cleanup khi component unmount
   useEffect(() => {
     return () => {
@@ -989,10 +1199,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Helper to compute numeric bet amount for current selection
   const getNumericBetAmount = () => {
     if (selectedBet === 'all-in') {
-      // All-in: cược số gần nhất chia hết cho 10, bé thua hoặc bằng số starlets hiện tại
-      return Math.floor(starlets / 10) * 10;
+      // All-in: cược số gần nhất chia hết cho 10, bé thua hoặc bằng số bcoin hiện tại
+      return Math.floor(bcoin / 10) * 10;
     }
     if (selectedBet === 'custom') return parseInt(customAmount) || 0;
+    
+    // if (selectedBet === 'all-in') { // COMMENTED OUT - now using BCoin
+    //   // All-in: cược số gần nhất chia hết cho 10, bé thua hoặc bằng số starlets hiện tại
+    //   return Math.floor(starlets / 10) * 10;
+    // }
     if (selectedBet === 'double') return lastWinAmount || 0;
     if (typeof selectedBet === 'number') return selectedBet;
     return 0;
@@ -1011,16 +1226,26 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
   const currentBetAmount = getNumericBetAmount();
   const isValidPositiveBet = currentBetAmount > 0;
-  const hasEnoughStarlets = isValidPositiveBet && starlets >= currentBetAmount;
-  // Show insufficient when: valid bet but not enough starlets, OR when starlets <= minimum bet option (10)
-  const shouldShowInsufficient = (isValidPositiveBet && !hasEnoughStarlets) || starlets < 10;
+  const hasEnoughBcoin = isValidPositiveBet && bcoin >= currentBetAmount;
+  // Show insufficient when: valid bet but not enough bcoin, OR when bcoin <= minimum bet option (10)
+  const shouldShowInsufficient = (isValidPositiveBet && !hasEnoughBcoin) || bcoin < 10;
   
-  // Reset selectedBet to null when starlets <= minimum bet (prevents showing selected state on unaffordable bets)
+  // const hasEnoughStarlets = isValidPositiveBet && starlets >= currentBetAmount; // COMMENTED OUT - now using BCoin
+  // const shouldShowInsufficient = (isValidPositiveBet && !hasEnoughStarlets) || starlets < 10;
+  
+  // Reset selectedBet to null when bcoin <= minimum bet (prevents showing selected state on unaffordable bets)
   useEffect(() => {
-    if (starlets < 10 && selectedBet !== null) {
+    if (bcoin < 10 && selectedBet !== null) {
       setSelectedBet(null);
     }
-  }, [starlets, selectedBet]);
+  }, [bcoin, selectedBet]);
+  
+  // Reset selectedBet to null when starlets <= minimum bet (COMMENTED OUT - now using BCoin)
+  // useEffect(() => {
+  //   if (starlets < 10 && selectedBet !== null) {
+  //     setSelectedBet(null);
+  //   }
+  // }, [starlets, selectedBet]);
 
   return (
     <div className={`fc_app ${isAutoFlipping ? 'is-auto-flipping' : ''}`}>
@@ -1034,9 +1259,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             {/* Logo */}
             <div className="fc_welcome-logo-container">
               <img src={flippingStarsLogo} alt="Flipping Stars" className="fc_welcome-logo-image" />
-            </div>
-            
-            
+            </div>                 
             
             {/* Bet Button Demo (non-interactive) */}
             <div className="fc_welcome-bet-demo">
@@ -1047,7 +1270,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                 <div className="fc_corner fc_corner-bottom-right"></div>
                 <div className="fc_bet-content">
                   <span className="fc_bet-amount">10</span>
-                  <img src={starlet} alt="starlet" className="fc_bet-starlet-icon" />
+                  <img src={bCoin} alt="starlet" className="fc_bet-starlet-icon" />
                 </div>
               </div>
             </div>
@@ -1081,7 +1304,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             </div>
             
             {/* Press Flip Text */}
-            <div className="fc_welcome-flip-text">PRESS FLIP AND<br/><span className="fc_welcome-win-text">WIN STARLETS</span></div>
+            <div className="fc_welcome-flip-text">PRESS FLIP AND<br/><span className="fc_welcome-win-text">WIN B$</span></div>
             
             {/* LFG Button */}
             <button className="fc_welcome-lfg-btn" onClick={handleWelcomeClose}>
@@ -1098,8 +1321,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             {/* All-in Value Container */}
             <div className="fc_allin-value-container">
               <div className="fc_allin-value-display">
-                <span className="fc_allin-value-number">{Math.floor(starlets / 10) * 10}</span>
-                <img src={starlet} alt="starlet" className="fc_allin-value-starlet-icon" />
+                <span className="fc_allin-value-number">{Math.floor(bcoin / 10) * 10}</span>
+                <img src={bCoin} alt="starlet" className="fc_allin-value-starlet-icon" />
               </div>
             </div>
             
@@ -1126,6 +1349,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {showCustomConfirm && (
         <div className="fc_custom-overlay">
           <div className="fc_custom-overlay-content">
+            {/* Back Button */}
+            <button 
+              className="fc_back-button fc_back-button-alignment"
+              onClick={() => setShowCustomConfirm(false)}
+            >
+              <img src={back} alt="Back" />
+            </button>
+            
             {/* Number Keyboard */}
             <div className="fc_keyboard">
               <div className="fc_keyboard-shadow">
@@ -1246,9 +1477,13 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             className="fc_stat-item-main"
             onClick={() => setShowProfileView && setShowProfileView(true)}
           >
-            <img src={starlet} alt="Starlets" />
+            {/* <img src={bCoin} alt="BCoin" />
+            <span className="fc_stat-item-main-text">{bcoin}</span> */}
+            
+            <img src={starlet} alt="Starlets" /> 
             <span className="fc_stat-item-main-text">{starlets}</span>
           </button>
+          
         </div>
         
         {/* Sound control button */}
@@ -1282,13 +1517,25 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         </button>
       </div>
 
+      {/* Auto Flip Counter - positioned below and to the left of fc_stats-header */}
+      {isAutoFlipping && (
+        <div className="fc_auto-flip-counter-container">
+          <div className="fc_auto-flip-counter">
+            <span className="fc_auto-flip-counter-label">FLIP</span>
+            <span className="fc_auto-flip-counter-count">
+              {autoFlipCount.toString().padStart(2, '0')}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
-      <div className="fc_jackpot-container">
+      {/* <div className="fc_jackpot-container">
         <div className="fc_jackpot">
           <span className="fc_jackpot-label">JACKPOT</span>
           <span className="fc_jackpot-count">00000000</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Settings Overlay */}
       {showSettings && (
@@ -1362,36 +1609,47 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           </div>
         )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
-        {winReward !== null && (
+        {!isFlipping && (
           <div className="fc_win-reward-progress">
             <div className="fc_progress-bar">
               <div className="fc_progress-numbers">
-                <span className="fc_progress-number">{winReward}</span>
+                {/* <span className="fc_progress-number">{winReward}</span> */}
+                 <span className={`fc_progress-number fc_animated-number ${isAnimating ? 'animating' : ''}`}>{animatedBcoin}</span>
               </div>
               <div className="fc_progress-starlet">
-                <img src={starlet} alt="starlet" className="fc_progress-starlet-icon" />
+                <img src={bCoin} alt="starlet" className="fc_progress-starlet-icon" />
               </div>
             </div>
           </div>
         )}
+        
+        {/* Floating win reward text */}
+        {!isFlipping && isAnimating && ((isPositiveChange && winReward > 0) || (!isPositiveChange && lastBetAmount > 0)) && (
+          <div className={`fc_floating-win-reward ${isPositiveChange ? 'positive' : 'negative'}`}>
+            {isPositiveChange ? '+' : '-'}{isPositiveChange ? winReward : lastBetAmount}
+          </div>
+        )}
       </div>
-
+      
       {/* Total Flips and Auto Flip Controls */}
-      <div className="fc_flip-controls">
+      <div className={`fc_flip-controls ${shouldShowInsufficient ? 'fc_center-total-flips' : ''}`}>
         <div className="fc_total-flips">
           <span className="fc_total-flips-label">TOTAL FLIPS</span>
           <span className="fc_total-flips-count">{totalFlips.toLocaleString().padStart(8, '0')}</span>
         </div>
-        <button 
-          className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
-          onClick={handleAutoFlipClick}
-        >
-          <span className="fc_auto-flip-text">AUTO FLIP</span>
-          <span className="fc_auto-flip-separator">|</span>
-          <span className="fc_auto-flip-status">
-            {autoFlip ? 'ON' : 'OFF'}
-          </span>
-        </button>
+        {/* Only show auto flip button when user has enough starlets */}
+        {!shouldShowInsufficient && (
+          <button 
+            className={`fc_auto-flip-toggle ${autoFlip ? 'fc_auto-flip-on' : 'fc_auto-flip-off'}`}
+            onClick={handleAutoFlipClick}
+          >
+            <span className="fc_auto-flip-text">AUTO FLIP</span>
+            <span className="fc_auto-flip-separator">|</span>
+            <span className="fc_auto-flip-status">
+              {autoFlip ? 'ON' : 'OFF'}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Coin face selection - cập nhật hiển thị streak */}
@@ -1473,7 +1731,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
             <div className="fc_bet-content">
               <span className="fc_bet-amount">{bet}</span>
-              <img src={starlet} alt="starlet" className="fc_bet-starlet-icon" />
+              <img src={bCoin} alt="starlet" className="fc_bet-starlet-icon" />
             </div>
           </button>
         ))}
@@ -1491,14 +1749,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             <div className="fc_all-in-details">
               <span className="fc_all-in-percent">.01%</span>
               <span className="fc_all-in-amount">X10</span>
-              <img src={starlet} alt="starlet" className="fc_all-in-starlet" />
+              <img src={bCoin} alt="starlet" className="fc_all-in-starlet" />
             </div>
           </div>
         </button>
         <button 
-          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${starlets < 10 ? 'fc_insufficient-funds' : ''}`}
-          onClick={starlets > 10 && !isAutoFlipping ? handleCustomClick : undefined}
-          disabled={isAutoFlipping || starlets < 10}
+          className={`fc_bet-button fc_custom-amount ${selectedBet === 'custom' ? 'fc_selected' : ''} ${bcoin < 10 ? 'fc_insufficient-funds' : ''}`}
+          onClick={handleCustomClick}
+          disabled={bcoin < 10 || isAutoFlipping}
         >
           <div className="fc_corner fc_corner-top-left"></div>
           <div className="fc_corner fc_corner-top-right"></div>
@@ -1534,9 +1792,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       { shouldShowInsufficient ? (
           <div className="fc_flip-btn-container">
             <button className={`fc_flip-btn fc_flip-btn-insufficient`} disabled>
-              <div className="fc_flip-content">NOT ENOUGH STARLETS</div>
+              <div className="fc_flip-content">NOT ENOUGH B$</div>
             </button>
-            <button
+            {/* <button
               className="fc_buy-more-btn"
               onClick={() => {
                 if (onClose) onClose();
@@ -1547,7 +1805,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               }}
             >
               <div className="fc_flip-content">BUY MORE</div>
-            </button>
+            </button> */}
           </div>
         ) : (
           <button 

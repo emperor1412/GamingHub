@@ -3,6 +3,8 @@ import './CheckIn.css';
 import ticket from './images/ticket.svg';
 // import km from './images/km.svg';
 import starlet from './images/starlet.png';
+import bCoin from './images/bCoin_icon.png';
+
 import checkmark from './images/checkmark.svg';
 
 import shared from './Shared';
@@ -168,9 +170,15 @@ const CheckIn = ({ checkInData, onClose }) => {
                                     <img src={ticket} alt="Ticket" />
                                     <span className='reward-text-checkin'>{day.ticket}</span>
                                 </div>
+                                <div className="reward-divider"></div>
                                 <div className="reward">
                                     <img src={starlet} alt="Starlets" />
                                     <span className='reward-text-checkin'>{day.starlets}</span>
+                                </div>
+                                <div className="reward-divider"></div>
+                                <div className="reward">
+                                    <img src={bCoin} alt="Starlets" />
+                                    <span className='reward-text-checkin'>20</span>
                                 </div>
                             </div>
                         </div>
