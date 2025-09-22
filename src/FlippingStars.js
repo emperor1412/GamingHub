@@ -199,11 +199,15 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [soundVolume, setSoundVolume] = useState(0.7);
   const [audioContextUnlocked, setAudioContextUnlocked] = useState(false);
   
-  // Audio refs for sound management
-  const audioRefs = useRef({
-    win: null,
-    lose: null,
-    coinSpinning: null
+  // Audio pool for iOS compatibility - Single Audio Element Pool
+  const audioPool = useRef({
+    current: null,
+    elements: [],
+    soundTypes: {
+      win: winSound,
+      lose: loseSound,
+      coinSpinning: coinSpinningSound
+    }
   });
 
   // Function to format win reward into 4 digits for display
@@ -234,38 +238,29 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
     }
 
-    // Create audio elements for each sound
-    const audioElements = {
-      win: new Audio(winSound),
-      lose: new Audio(loseSound),
-      coinSpinning: new Audio(coinSpinningSound)
-    };
-
-    // Configure audio properties
-    Object.keys(audioElements).forEach(key => {
-      const audio = audioElements[key];
+    // Create audio pool - 3 elements to avoid conflicts
+    const pool = audioPool.current;
+    pool.elements = [];
+    
+    for (let i = 0; i < 3; i++) {
+      const audio = new Audio();
       audio.volume = soundVolume;
       audio.preload = 'auto';
       
-      // Special handling for coin spinning sound (loop during animation)
-      if (key === 'coinSpinning') {
-        audio.loop = true;
-      }
-      
       // Add event listeners for better iOS compatibility
       audio.addEventListener('canplaythrough', () => {
-        console.log(`${key} audio loaded successfully`);
+        console.log(`Audio pool element ${i} loaded successfully`);
       });
       
       audio.addEventListener('error', (e) => {
-        console.log(`${key} audio load error:`, e);
+        console.log(`Audio pool element ${i} load error:`, e);
       });
       
       // Force load audio for better iOS compatibility
       audio.load();
-    });
-
-    audioRefs.current = audioElements;
+      
+      pool.elements.push(audio);
+    }
     
     // Setup user gesture listeners to unlock audio context
     setupAudioUnlock();
@@ -305,58 +300,107 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const playSound = (soundType) => {
     if (!isSoundEnabled) return;
     
-    const audio = audioRefs.current[soundType];
-    if (audio) {
-      try {
-        // Ensure AudioContext is resumed (iOS requirement)
-        if (window.audioContext && window.audioContext.state === 'suspended') {
-          window.audioContext.resume().catch(error => {
-            console.log('Failed to resume AudioContext:', error);
-          });
-        }
-        
-        // Reset audio to beginning
-        audio.currentTime = 0;
-        audio.volume = soundVolume;
-        
-        // Use Promise-based play with better error handling
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              console.log(`${soundType} sound played successfully`);
-            })
-            .catch(error => {
-              console.log(`Audio play failed for ${soundType}:`, error);
-              
-              // Fallback: try to play again after a short delay (iOS sometimes needs this)
-              if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
-                setTimeout(() => {
-                  audio.play().catch(retryError => {
-                    console.log(`Retry audio play failed for ${soundType}:`, retryError);
-                  });
-                }, 100);
-              }
-            });
-        }
-      } catch (error) {
-        console.log(`Sound play error for ${soundType}:`, error);
+    const pool = audioPool.current;
+    const soundSrc = pool.soundTypes[soundType];
+    
+    if (!soundSrc) {
+      console.log(`Unknown sound type: ${soundType}`);
+      return;
+    }
+    
+    try {
+      // Ensure AudioContext is resumed (iOS requirement)
+      if (window.audioContext && window.audioContext.state === 'suspended') {
+        window.audioContext.resume().catch(error => {
+          console.log('Failed to resume AudioContext:', error);
+        });
       }
+      
+      // CRITICAL: Stop any currently playing sounds first to prevent overlap
+      pool.elements.forEach(audio => {
+        if (!audio.paused) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
+      
+      // Find available audio element from pool
+      let availableAudio = null;
+      for (let i = 0; i < pool.elements.length; i++) {
+        const audio = pool.elements[i];
+        if (audio.paused || audio.ended) {
+          availableAudio = audio;
+          break;
+        }
+      }
+      
+      // If no available element, use the first one
+      if (!availableAudio) {
+        availableAudio = pool.elements[0];
+      }
+      
+      // Set up audio for the sound type
+      availableAudio.src = soundSrc;
+      availableAudio.volume = soundVolume;
+      availableAudio.currentTime = 0;
+      
+      // Special handling for coin spinning sound (loop during animation)
+      if (soundType === 'coinSpinning') {
+        availableAudio.loop = true;
+      } else {
+        availableAudio.loop = false;
+      }
+      
+      // Use Promise-based play with better error handling
+      const playPromise = availableAudio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log(`${soundType} sound played successfully`);
+            pool.current = availableAudio; // Track current playing audio
+          })
+          .catch(error => {
+            console.log(`Audio play failed for ${soundType}:`, error);
+            
+            // Fallback: try to play again after a short delay (iOS sometimes needs this)
+            if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
+              setTimeout(() => {
+                availableAudio.play().catch(retryError => {
+                  console.log(`Retry audio play failed for ${soundType}:`, retryError);
+                });
+              }, 100);
+            }
+          });
+      }
+    } catch (error) {
+      console.log(`Sound play error for ${soundType}:`, error);
     }
   };
 
   const stopSound = (soundType) => {
-    const audio = audioRefs.current[soundType];
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
+    const pool = audioPool.current;
+    
+    // Stop all audio elements that are playing the specified sound type
+    pool.elements.forEach(audio => {
+      if (audio.src === pool.soundTypes[soundType] && !audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.loop = false; // Ensure loop is disabled
+        console.log(`Stopped ${soundType} sound`);
+      }
+    });
   };
 
   const stopAllSounds = () => {
-    Object.keys(audioRefs.current).forEach(soundType => {
-      stopSound(soundType);
+    const pool = audioPool.current;
+    
+    // Stop all audio elements in the pool
+    pool.elements.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.loop = false; // Ensure loop is disabled
     });
+    console.log('Stopped all sounds');
   };
 
   const toggleSound = () => {
@@ -370,8 +414,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setSoundVolume(clampedVolume);
     
-    // Update all audio elements with new volume
-    Object.values(audioRefs.current).forEach(audio => {
+    // Update all audio elements in pool with new volume
+    const pool = audioPool.current;
+    pool.elements.forEach(audio => {
       if (audio) {
         audio.volume = clampedVolume;
       }
@@ -386,17 +431,19 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
     
     console.log('Testing sounds...');
-    console.log('Audio refs:', audioRefs.current);
+    console.log('Audio pool:', audioPool.current);
     console.log('Sound volume:', soundVolume);
     
-    // Test each sound
-    Object.keys(audioRefs.current).forEach(soundType => {
-      const audio = audioRefs.current[soundType];
-      if (audio) {
-        console.log(`${soundType} audio:`, audio);
-        console.log(`${soundType} readyState:`, audio.readyState);
-        console.log(`${soundType} paused:`, audio.paused);
-      }
+    // Test each sound type
+    Object.keys(audioPool.current.soundTypes).forEach(soundType => {
+      console.log(`${soundType} sound source:`, audioPool.current.soundTypes[soundType]);
+    });
+    
+    // Test audio pool elements
+    audioPool.current.elements.forEach((audio, index) => {
+      console.log(`Audio pool element ${index}:`, audio);
+      console.log(`Element ${index} readyState:`, audio.readyState);
+      console.log(`Element ${index} paused:`, audio.paused);
     });
   };
 
@@ -542,6 +589,24 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   useEffect(() => {
     initializeAudio();
     
+    // Handle app visibility changes to prevent background audio loop
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // App is minimized - stop all sounds to prevent background loop
+        stopAllSounds();
+        console.log('App minimized - stopped all sounds');
+      }
+    };
+    
+    // Handle page unload to stop sounds
+    const handleBeforeUnload = () => {
+      stopAllSounds();
+    };
+    
+    // Add event listeners
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
     // Cleanup audio when component unmounts
     return () => {
       stopAllSounds();
@@ -549,6 +614,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       document.removeEventListener('touchstart', setupAudioUnlock);
       document.removeEventListener('click', setupAudioUnlock);
       document.removeEventListener('keydown', setupAudioUnlock);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []); // Empty dependency array - only run once on mount
 
