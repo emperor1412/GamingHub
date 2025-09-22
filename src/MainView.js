@@ -977,7 +977,30 @@ Response:
                 </div>
             </header>
 
+
+
             <div className="scrollable-content">
+                <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={flipping_stars}
+                                alt="Flipping Stars"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                        </div>
+                        <div className="ticket-total-flips">
+                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
+                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                        </div>
+                        {/* <div className="ticket-total-jackpot">
+                            <span className="ticket-total-jackpot-label">JACKPOT</span>
+                            <span className="ticket-total-jackpot-count">00000000</span>
+                        </div> */}
+                    </button>
+                </section>
+
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickMarketplace()}>
                         <div className='ticket-button-image-container'>
@@ -1078,27 +1101,6 @@ Response:
                             <div className='check-out-button'>PLAY NOW</div>
                         </div>
                     </button> */}
-                </section>
-
-                <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={flipping_stars}
-                                alt="Flipping Stars"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                        </div>
-                        <div className="ticket-total-flips">
-                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
-                        </div>
-                        {/* <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">JACKPOT</span>
-                            <span className="ticket-total-jackpot-count">00000000</span>
-                        </div> */}
-                    </button>
                 </section>
 
                 <section className="tickets-section">
