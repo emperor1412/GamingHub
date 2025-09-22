@@ -21,6 +21,7 @@ import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
 import settingsIcon from './images/Settings.png';
 import back from './images/back.svg';
+import infoIcon from './images/Info_Icon.png';
 
 // Sound imports
 import winSound from './sounds/Win.mp3';
@@ -1712,6 +1713,16 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                   onClick={toggleSound}
                 >
                   {isSoundEnabled ? 'ON' : 'OFF'}
+                </button>
+              </div>
+              
+              {/* Info Button */}
+              <div className="fc_settings-info-section">
+                <button 
+                  className="info-button" 
+                  onClick={() => window.open('https://www.notion.so/fsl-web3/FLIPPING-STARS-Player-FAQ-24f95c775fea80eabed0f722a601ab48', '_blank')}
+                >
+                  <img src={infoIcon} alt="Info" />
                 </button>
               </div>
               

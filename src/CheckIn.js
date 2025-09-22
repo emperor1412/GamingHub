@@ -73,7 +73,8 @@ const CheckIn = ({ checkInData, onClose }) => {
                 label: daySuffixes[index],
                 status: isActive ? 'active' : 'inactive',
                 starlets: reward.kmPoint,
-                ticket: reward.ticket
+                ticket: reward.ticket,
+                bCoin: reward.bNum
             };
         });
     }
@@ -178,7 +179,7 @@ const CheckIn = ({ checkInData, onClose }) => {
                                 <div className="reward-divider"></div>
                                 <div className="reward">
                                     <img src={bCoin} alt="Starlets" />
-                                    <span className='reward-text-checkin'>20</span>
+                                    <span className='reward-text-checkin'>{day.bCoin}</span>
                                 </div>
                             </div>
                         </div>

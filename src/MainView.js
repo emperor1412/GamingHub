@@ -1001,7 +1001,7 @@ Response:
                     </button>
                 </section>
 
-                <section className="tickets-section">
+                {/* <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickMarketplace()}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -1010,13 +1010,9 @@ Response:
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
-                            {/* <div className="ticket-button-content"> */}
-                                {/* <h3 className="event-card-title">TADOKAMI</h3>
-                                <p className="event-card-subtitle">Is now live</p> */}
-                            {/* </div> */}
                         </div>
                     </button>
-                </section>
+                </section> */}
                 
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
