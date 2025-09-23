@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.dd650ca6.css",
-    "main.js": "./static/js/main.b9334971.js",
+    "main.js": "./static/js/main.d3b8fc41.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -43,7 +43,6 @@
     "static/media/avatar_10_Mochi_300px.png": "./static/media/avatar_10_Mochi_300px.b5b3c12feae20c8b6b98.png",
     "static/media/avatar_8_Mooarty_300px.png": "./static/media/avatar_8_Mooarty_300px.bdc08fba9cdf1d121264.png",
     "static/media/avatar_5_Frog_Knight_300px.png": "./static/media/avatar_5_Frog_Knight_300px.21dc73b7a8f99b7037c7.png",
-    "static/media/BToken.png": "./static/media/BToken.cc7c240a7699753fd4d0.png",
     "static/media/avatar_2_Chef_Cat_300px.png": "./static/media/avatar_2_Chef_Cat_300px.e80621e259adbfb7f52b.png",
     "static/media/PPNeueMachina-InktrapBoldItalic.ttf": "./static/media/PPNeueMachina-InktrapBoldItalic.428743c4048618a2d77e.ttf",
     "static/media/PPNeueMachina-InktrapRegularItalic.ttf": "./static/media/PPNeueMachina-InktrapRegularItalic.d8206042331fe141994d.ttf",
@@ -98,6 +97,7 @@
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
     "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.dcaeba6bf83e16339318.png",
     "static/media/lv8.png": "./static/media/lv8.1291ef23720866f9eb8a.png",
+    "static/media/BToken.png": "./static/media/BToken.f6bcdba7b07b7f8fee1c.png",
     "static/media/lv0.png": "./static/media/lv0.ccec12e0db250b47bcfe.png",
     "static/media/lv3.png": "./static/media/lv3.0d604c014b6f962bd014.png",
     "static/media/Spartan_Unlocked.png": "./static/media/Spartan_Unlocked.1aa57850ceac52e58f4f.png",
@@ -123,7 +123,7 @@
     "static/media/Trophy-ALPHA_TESTER_Unlocked.png": "./static/media/Trophy-ALPHA_TESTER_Unlocked.2c421d7956889bc8cc40.png",
     "static/media/Spartan_Locked.png": "./static/media/Spartan_Locked.0f27fd203cd61f8fe160.png",
     "static/media/Win.mp3": "./static/media/Win.fe20f4de37d6803b0a32.mp3",
-    "static/media/BToken_Locked.png": "./static/media/BToken_Locked.272fea7642b2dda118e3.png",
+    "static/media/BToken_Locked.png": "./static/media/BToken_Locked.45a00a6fbaef59d216f3.png",
     "static/media/UnbrokenYear_Locked.png": "./static/media/UnbrokenYear_Locked.298b57da5868ae615a8a.png",
     "static/media/TwoHundredStrong_Locked.png": "./static/media/TwoHundredStrong_Locked.54779237ef667ce63309.png",
     "static/media/TheFirstHunded_Locked.png": "./static/media/TheFirstHunded_Locked.e855105823836cf64366.png",
@@ -212,11 +212,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.dd650ca6.css.map": "./static/css/main.dd650ca6.css.map",
-    "main.b9334971.js.map": "./static/js/main.b9334971.js.map",
+    "main.d3b8fc41.js.map": "./static/js/main.d3b8fc41.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dd650ca6.css",
-    "static/js/main.b9334971.js"
+    "static/js/main.d3b8fc41.js"
   ]
 }
