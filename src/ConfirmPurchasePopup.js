@@ -4,10 +4,11 @@ import starlet from './images/starlet.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
+import SuccessfulPurchasePremium from './SuccessfulPurchasePremium';
 import shared from './Shared';
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, refreshUserProfile }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, refreshUserProfile }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -269,18 +270,27 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           )}
           
           {showSuccessPopup ? (
-            <SuccessfulPurchasePopup 
-              isOpen={true}
-              onClaim={handleClaim}
-              onClose={onClose}
-              amount={purchaseData?.isStarletProduct ? null : amount}
-              tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
-              productName={purchaseData?.productName}
-              isStarletProduct={purchaseData?.isStarletProduct}
-              packageType={purchaseData?.packageType}
-              packageValue={purchaseData?.packageValue}
-              setShowBuyView={setShowBuyView}
-            />
+            isPremium ? (
+              <SuccessfulPurchasePremium 
+                isOpen={true}
+                onClaim={handleClaim}
+                onClose={onClose}
+                setShowBuyView={setShowBuyView}
+              />
+            ) : (
+              <SuccessfulPurchasePopup 
+                isOpen={true}
+                onClaim={handleClaim}
+                onClose={onClose}
+                amount={purchaseData?.isStarletProduct ? null : amount}
+                tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
+                productName={purchaseData?.productName}
+                isStarletProduct={purchaseData?.isStarletProduct}
+                packageType={purchaseData?.packageType}
+                packageValue={purchaseData?.packageValue}
+                setShowBuyView={setShowBuyView}
+              />
+            )
           ) : isOpen && (
             <div className="popup-overlay">
               <div className="popup-container">

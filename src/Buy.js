@@ -266,6 +266,7 @@ const Buy = ({
           isStarletProduct={selectedPurchase?.isStarletProduct}
           productId={selectedPurchase?.productId}
           productName={selectedPurchase?.productName}
+          isPremium={selectedPurchase?.isPremium}
           refreshUserProfile={refreshUserProfile}
           onPurchaseComplete={async () => {
             if (refreshUserProfile) {

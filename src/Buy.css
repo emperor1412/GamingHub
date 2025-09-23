@@ -131,7 +131,7 @@
   font-family: "PP Neue Machina";
   color: white;
   text-transform: uppercase;
-  margin: 65px auto 20px;
+  margin: 70px auto 20px;
   padding: 0;
   width: 100%;
   line-height: 1;
@@ -316,7 +316,7 @@
   max-width: 300px;
   line-height: 1.5;
   letter-spacing: 0.5px;
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .bmk-payment-buttons {
