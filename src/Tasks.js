@@ -329,6 +329,28 @@ const Tasks = ({
 
                 if (data.code === 0) {
                     const sortedTasks = data.data.sort((a, b) => b.weight - a.weight);
+                    
+                    //#region  Add fake rewards for testing bCoin
+                    // const tasksWithFakeRewards = data.data.map(task => {
+                    //     // Add fake second reward for testing
+                    //     if (task.rewardList && task.rewardList.length === 1) {
+                    //         return {
+                    //             ...task,
+                    //             rewardList: [
+                    //                 ...task.rewardList,
+                    //                 {
+                    //                     type: 10030, // Starlets type
+                    //                     amount: Math.floor(Math.random() * 50) + 10 // Random amount 10-60
+                    //                 }
+                    //             ]
+                    //         };
+                    //     }
+                    //     return task;
+                    // });
+                    
+                    // const sortedTasks = tasksWithFakeRewards.sort((a, b) => b.weight - a.weight);
+                    //#endregion
+
                     setTasksTimelimited(sortedTasks.filter(task => task.category === 0));
                     setTasksStandard(sortedTasks.filter(task => task.category === 1));
                     setTasksDaily(sortedTasks.filter(task => task.category === 2));
@@ -638,8 +660,19 @@ const Tasks = ({
                     <h3 className={`task-title ${isDone ? 'done' : ''}`}>{task.name}</h3>
                     <div className="task-bottom-left">
                         <div className="task-reward">
-                            <img src={shared.mappingIcon[task.rewardList[0].type]} alt="Starlets" className={`reward-icon ${isDone ? 'done' : ''}`} />
-                            <span className="reward-amount-task">{task.rewardList[0]?.amount || 0}</span>
+                            {task.rewardList && task.rewardList.length > 0 ? (
+                                task.rewardList.map((reward, index) => (
+                                    <div key={index} className="reward-item">
+                                        <img src={shared.mappingIcon[reward.type]} alt="Reward" className={`reward-icon ${isDone ? 'done' : ''}`} />
+                                        <span className="reward-amount-task">{reward.amount || 0}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="reward-item">
+                                    <img src={shared.mappingIcon[10030]} alt="Default" className={`reward-icon ${isDone ? 'done' : ''}`} />
+                                    <span className="reward-amount-task">0</span>
+                                </div>
+                            )}
                         </div>
                         {isTimeLimited && (<div className={`task-deadline ${isDone ? 'done': ''}`}>ENDS {formattedDate}</div>)} 
                     </div>

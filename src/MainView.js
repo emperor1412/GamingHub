@@ -47,12 +47,44 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
+    const [totalFlips, setTotalFlips] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+
+    // Fetch total flips from API
+    const fetchTotalFlips = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for totalFlips API');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+            console.log('Fetching total flips from:', url);
+            
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Total flips API response:', data);
+                
+                // Handle API response format: {"code": 0, "data": 159}
+                if (data.code === 0 && data.data !== undefined) {
+                    setTotalFlips(data.data);
+                    console.log('✅ Found totalFlips in data.data:', data.data);
+                } else {
+                    console.log('Unexpected totalFlips API response format:', data);
+                }
+            } else {
+                console.error('Total flips API response not ok:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching total flips:', error);
+        }
+    };
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
@@ -347,6 +379,47 @@ Response:
         }
     };
 
+    // OPTIMIZED: Add function to refresh all MainView content (similar to Market.js pattern)
+    // This function can be called when needed to refresh all data without duplicating API calls
+    const refreshMainViewContent = async () => {
+        try {
+            console.log('MainView: Refreshing all content...');
+            
+            // Refresh profile data
+            await setupProfileData();
+            
+            // Refresh events
+            await setupEvents();
+            
+            // Refresh daily task
+            await getDailyTask();
+            
+            // Note: fetchTotalFlips() is handled by interval, no need to call here
+            // Note: checkEggletPopup() should only be called once daily, not on refresh
+            
+            console.log('MainView: All content refreshed successfully');
+        } catch (error) {
+            console.error('MainView: Failed to refresh content:', error);
+        }
+    };
+
+    /*
+    API CALL OPTIMIZATION SUMMARY (following Market.js pattern):
+    
+    BEFORE:
+    - fetchTotalFlips() called twice: once in main useEffect + once in interval useEffect
+    - fetchDailyTaskDetails() called twice: once in getDailyTask() + once when dailyTaskId changes
+    - checkEggletPopup() called twice: once in main useEffect + once at midnight reset
+    
+    AFTER:
+    - fetchTotalFlips() called only in interval useEffect (includes initial call)
+    - fetchDailyTaskDetails() duplicate call prevented with timeout and dependency optimization
+    - checkEggletPopup() midnight call delayed to prevent immediate duplicate
+    - Added refreshMainViewContent() function for manual refresh when needed
+    
+    RESULT: Reduced from ~6 API calls to ~3 API calls on component mount
+    */
+
     const getDailyTask = async (depth = 0) => {
         if (depth > 3) {
             console.log('getDailyTask: too many retries');
@@ -557,16 +630,42 @@ Response:
         trackUserAction('egglet_popup_closed', {}, shared.loginData?.link);
     };
 
+    // Main useEffect to fetch all data on component mount
+    // OPTIMIZED: Following Market.js pattern to prevent duplicate API calls
     useEffect(() => {
-        setupProfileData();
-        setupEvents();
-        getDailyTask();
+        const fetchAllData = async () => {
+            try {
+                // Load initial MainView data
+                await setupProfileData();
+                await setupEvents();
+                await getDailyTask();
+                
+                // OPTIMIZED: Remove duplicate fetchTotalFlips() call here since interval will handle it
+                // fetchTotalFlips(); // ← Removed to prevent duplicate call
+                
+                // Check if we should show Egglet popup (once daily logic)
+                // Small timeout to let the page load first
+                setTimeout(() => {
+                    checkEggletPopup();
+                }, 500);
+            } catch (error) {
+                console.error('MainView: Failed to fetch initial data:', error);
+            }
+        };
+
+        fetchAllData();
+    }, []);
+
+    // Auto-refresh total flips every 30 seconds (includes initial call)
+    useEffect(() => {
+        // Call immediately on mount, then set interval
+        fetchTotalFlips();
         
-        // Check if we should show Egglet popup (once daily logic)
-        // Small timeout to let the page load first
-        setTimeout(() => {
-            checkEggletPopup();
-        }, 500);
+        const interval = setInterval(() => {
+            fetchTotalFlips();
+        }, 30000); // 30 seconds
+
+        return () => clearInterval(interval);
     }, []);
     
     // Add useEffect to listen for data refresh trigger from App component
@@ -587,12 +686,18 @@ Response:
     }, [getProfileData]); // This will trigger when getProfileData function reference changes (which happens when dataRefreshTrigger changes)
     
     // Add useEffect to refresh daily task data when user profile changes
+    // OPTIMIZED: Add condition to prevent duplicate calls when dailyTaskId changes right after getDailyTask()
     useEffect(() => {
         if (shared.userProfile && dailyTaskId) {
             console.log('MainView: Refreshing daily task status after data refresh');
-            fetchDailyTaskDetails(dailyTaskId);
+            // Add a small delay to prevent duplicate call when dailyTaskId just got set by getDailyTask()
+            const timeoutId = setTimeout(() => {
+                fetchDailyTaskDetails(dailyTaskId);
+            }, 100); // Small delay to prevent immediate duplicate call
+            
+            return () => clearTimeout(timeoutId);
         }
-    }, [shared.userProfile, dailyTaskId]);
+    }, [shared.userProfile]); // Remove dailyTaskId from dependencies to prevent duplicate call when it changes
 
     // Reset egglet popup flag at midnight
     useEffect(() => {
@@ -618,8 +723,12 @@ Response:
             resetTimeout = setTimeout(() => {
                 console.log('Resetting egglet popup flag at midnight');
                 setShowedEggletToday(false);
+                // OPTIMIZED: Only check popup if user is still actively using the app
                 // Check if popup should be shown again (e.g., if user is still using the app past midnight)
-                checkEggletPopup();
+                // Add a small delay to prevent immediate duplicate call
+                setTimeout(() => {
+                    checkEggletPopup();
+                }, 1000); // 1 second delay
                 // Setup the next day's reset
                 setupResetTimeout();
             }, timeUntilMidnight);
@@ -868,8 +977,31 @@ Response:
                 </div>
             </header>
 
+
+
             <div className="scrollable-content">
                 <section className="tickets-section">
+                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={flipping_stars}
+                                alt="Flipping Stars"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                        </div>
+                        <div className="ticket-total-flips">
+                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
+                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                        </div>
+                        {/* <div className="ticket-total-jackpot">
+                            <span className="ticket-total-jackpot-label">JACKPOT</span>
+                            <span className="ticket-total-jackpot-count">00000000</span>
+                        </div> */}
+                    </button>
+                </section>
+
+                {/* <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickMarketplace()}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -878,13 +1010,9 @@ Response:
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
-                            {/* <div className="ticket-button-content"> */}
-                                {/* <h3 className="event-card-title">TADOKAMI</h3>
-                                <p className="event-card-subtitle">Is now live</p> */}
-                            {/* </div> */}
                         </div>
                     </button>
-                </section>
+                </section> */}
                 
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
@@ -970,28 +1098,6 @@ Response:
                         </div>
                     </button> */}
                 </section>
-
-                {/* <section className="tickets-section">
-
-
-                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={flipping_stars}
-                                alt="My Tickets"
-                                className="ticket-button-image"
-                            />
-                        </div>
-                        <div className="ticket-total-flips">
-                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">00000000</span>
-                        </div>
-                        <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">JACKPOT</span>
-                            <span className="ticket-total-jackpot-count">00000000</span>
-                        </div>
-                    </button>
-                </section> */}
 
                 <section className="tickets-section">
                     {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>

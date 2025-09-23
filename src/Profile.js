@@ -265,7 +265,7 @@ Response:
 
                     <div className="profile-content-wrapper">
                         <div className="profile-content">
-                            {shared.profileItems.filter(item => item.type !== 10030 && (!item.claimText || item.claimText !== "Claimed")) // Filter out items with type 10030 and Claimed status
+                            {shared.profileItems.filter(item => (!item.claimText || item.claimText !== "Claimed")) // Filter out items with type 10030 and Claimed status
                                         .map((item, index) => (
                                 <div key={index} className="profile-item">
                                     <div className="profile-item-left">
