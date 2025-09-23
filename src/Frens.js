@@ -34,6 +34,8 @@ import trophy_10043 from './images/UnbrokenYear_Unlocked.png';
 import trophy_10043_locked from './images/UnbrokenYear_Locked.png';
 import trophy_10050 from './images/stepBoost_trophy_unlocked.png';
 import trophy_10050_locked from './images/stepBoost_trophy_locked.png';
+import trophy_10060 from './images/BToken.png';
+import trophy_10060_locked from './images/BToken_Locked.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -127,6 +129,7 @@ const Frens = () => {
     10042: trophy_10042,
     10043: trophy_10043,
     10050: trophy_10050,
+    10060: trophy_10060,
   }
   
   const trophyIconLocked = {
@@ -139,6 +142,7 @@ const Frens = () => {
     10042: trophy_10042_locked,
     10043: trophy_10043_locked,
     10050: trophy_10050_locked,
+    10060: trophy_10060_locked,
   }
   
   const getTrophyData = async (depth = 0) => {
@@ -175,6 +179,7 @@ const Frens = () => {
                 trophy.id === 10042 && trophy.state === 0 ? trophy_10042_locked :
                 trophy.id === 10043 && trophy.state === 0 ? trophy_10043_locked :
                 trophy.id === 10050 && trophy.state === 0 ? trophy_10050_locked :
+                trophy.id === 10060 && trophy.state === 0 ? trophy_10060_locked :
                 trophyIcon[trophy.id]
         }));
 
