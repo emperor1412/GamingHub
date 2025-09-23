@@ -86,7 +86,8 @@ const useCountUp = (start, end, duration = 2000) => {
 
 const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [selectedSide, setSelectedSide] = useState('HEADS');
-  const [selectedBet, setSelectedBet] = useState(10);
+  const [selectedBet, setSelectedBet] = useState(null);
+  const [isInitialState, setIsInitialState] = useState(true);
   const [tickets, setTickets] = useState(0);
   const [starlets, setStarlets] = useState(0); // Commented out - now using BCoin
   const [bcoin, setBcoin] = useState(0);
@@ -542,6 +543,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
 
     setupProfileData();
   }, [shared.userProfile]); // Add dependency to refresh when userProfile changes
+
+  // Auto-select bet when bcoin is loaded and no bet is selected (only on initial load)
+  useEffect(() => {
+    if (isInitialState && bcoin > 0 && selectedBet === null) {
+      selectLargestAffordableBet(bcoin, false);
+      setIsInitialState(false); // Mark as no longer initial state
+    }
+  }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialState
 
   // Reset total flips when component first mounts (new session)
   useEffect(() => {
@@ -1368,10 +1377,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   // Select the largest affordable numeric bet (exclude 'custom' and 'all-in')
-  const selectLargestAffordableBet = (balance) => {
+  const selectLargestAffordableBet = (balance, isLargest = true) => {
     const affordableBets = betOptions.filter((b) => typeof b === 'number' && b <= balance);
     if (affordableBets.length > 0) {
-      const bestBet = Math.max(...affordableBets);
+      const bestBet = isLargest ? Math.max(...affordableBets) : Math.min(...affordableBets);
       setSelectedBet(bestBet);
     } else {
       setSelectedBet(null);
