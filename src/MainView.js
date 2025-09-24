@@ -980,7 +980,7 @@ Response:
 
 
             <div className="scrollable-content">
-                <section className="tickets-section">
+                {/* <section className="tickets-section">
                     <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -994,12 +994,8 @@ Response:
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
                             <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
-                        {/* <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">JACKPOT</span>
-                            <span className="ticket-total-jackpot-count">00000000</span>
-                        </div> */}
                     </button>
-                </section>
+                </section> */}
 
                 {/* <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickMarketplace()}>
