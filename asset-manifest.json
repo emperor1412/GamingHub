@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.dd650ca6.css",
-    "main.js": "./static/js/main.9f6a7b83.js",
+    "main.css": "./static/css/main.8e096342.css",
+    "main.js": "./static/js/main.dc5ac379.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -92,15 +92,18 @@
     "static/media/Sora-VariableFont_wght.ttf": "./static/media/Sora-VariableFont_wght.e56298aec2e944c699d8.ttf",
     "static/media/x-icon.svg": "./static/media/x-icon.699021517046322407f2ca01239e5315.svg",
     "static/media/Egglet_Image_1.png": "./static/media/Egglet_Image_1.c897b94fb142c796a62c.png",
+    "static/media/Head-Win.png": "./static/media/Head-Win.d096ea845c314ac3a52d.png",
     "static/media/Meet Marty 1.png": "./static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
     "static/media/lv9.png": "./static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "./static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
+    "static/media/Tail-Win.png": "./static/media/Tail-Win.337cd728db028f816575.png",
     "static/media/icon_pop_freeze5.png": "./static/media/icon_pop_freeze5.79cfb05757a53ea1cbb4.png",
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
-    "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.dcaeba6bf83e16339318.png",
+    "static/media/Tail-Lose.png": "./static/media/Tail-Lose.dcaeba6bf83e16339318.png",
     "static/media/lv8.png": "./static/media/lv8.1291ef23720866f9eb8a.png",
     "static/media/lv0.png": "./static/media/lv0.ccec12e0db250b47bcfe.png",
     "static/media/lv3.png": "./static/media/lv3.0d604c014b6f962bd014.png",
+    "static/media/Head-Lose.png": "./static/media/Head-Lose.42d5f33b7b43092097c1.png",
     "static/media/Spartan_Unlocked.png": "./static/media/Spartan_Unlocked.1aa57850ceac52e58f4f.png",
     "static/media/UnbrokenYear_Unlocked.png": "./static/media/UnbrokenYear_Unlocked.c5ac2e118f2c41cae704.png",
     "static/media/SUT.png": "./static/media/SUT.114ba6d0ccbda741216b.png",
@@ -132,7 +135,6 @@
     "static/media/FSLGames_mysterytrophy_PFP_1.png": "./static/media/FSLGames_mysterytrophy_PFP_1.b74e34d33e4d203b1ce1.png",
     "static/media/stepBoost_trophy_locked.png": "./static/media/stepBoost_trophy_locked.03f12dd38abc4786dd2d.png",
     "static/media/GMT_1.png": "./static/media/GMT_1.da83f947f90d67f7c656.png",
-    "static/media/WinFlippinStar.png": "./static/media/WinFlippinStar.95a2dd8ab8d8ed3c4c02.png",
     "static/media/trophy_4_200px.png": "./static/media/trophy_4_200px.ed32e3fcee5c6ff87887.png",
     "static/media/Flipping_stars.png": "./static/media/Flipping_stars.ccfc603820579a196631.png",
     "static/media/scratch_ticket_button_bg.png": "./static/media/scratch_ticket_button_bg.3705505d8149e8301700.png",
@@ -211,12 +213,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.dd650ca6.css.map": "./static/css/main.dd650ca6.css.map",
-    "main.9f6a7b83.js.map": "./static/js/main.9f6a7b83.js.map",
+    "main.8e096342.css.map": "./static/css/main.8e096342.css.map",
+    "main.dc5ac379.js.map": "./static/js/main.dc5ac379.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dd650ca6.css",
-    "static/js/main.9f6a7b83.js"
+    "static/css/main.8e096342.css",
+    "static/js/main.dc5ac379.js"
   ]
 }
