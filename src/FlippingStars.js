@@ -550,7 +550,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       selectLargestAffordableBet(bcoin, false);
       setIsInitialState(false); // Mark as no longer initial state
     }
-  }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialState
+  }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialStatec
 
   // Reset total flips when component first mounts (new session)
   useEffect(() => {
@@ -1731,6 +1731,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                   className="info-button" 
                   onClick={() => window.open('https://www.notion.so/fsl-web3/FLIPPING-STARS-Player-FAQ-24f95c775fea80eabed0f722a601ab48', '_blank')}
                 >
+                  <span className="fc_faq-text">FAQ</span>
                   <img src={infoIcon} alt="Info" />
                 </button>
               </div>

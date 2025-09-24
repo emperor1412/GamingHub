@@ -2708,3 +2708,40 @@ body::-webkit-scrollbar-track,
     font-size: 20px; /* Giảm font size */
   }
 }
+
+/* Info Button and FAQ Text */
+.fc_settings-info-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.info-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.info-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.fc_faq-text {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
