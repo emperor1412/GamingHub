@@ -36,6 +36,7 @@ import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 import IntroducePremium from './IntroducePremium';
+import Premium from './Premium';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
 
@@ -58,6 +59,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
+    const [showPremium, setShowPremium] = useState(false);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -108,8 +110,15 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setActiveTab('market');
     };
 
+    // Boolean để quyết định mở trang nào
+    const [isPremiumUser, setIsPremiumUser] = useState(true); // false = introducePremium, true = Premium
+    
     const onClickPremium = () => {
-        setShowIntroducePremium(true);
+        if (isPremiumUser) {
+            setShowPremium(true); // Mở trang Premium
+        } else {
+            setShowIntroducePremium(true); // Mở trang IntroducePremium
+        }
     };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
@@ -1240,6 +1249,12 @@ Response:
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
+            
+            {/* Premium Popup */}
+            <Premium 
+                isOpen={showPremium} 
+                onClose={() => setShowPremium(false)}
+            />
             
             {/* Introduce Premium Popup */}
             <IntroducePremium 

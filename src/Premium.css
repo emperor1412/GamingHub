@@ -1,0 +1,297 @@
+/* Premium Overlay */
+.premium-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* Premium Container */
+.premium-container {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #000FEF;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 350px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 20px;
+  
+  /* Corner borders variables */
+  --premium-corner-size: 15px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 0.5px;
+  --premium-corner-offset: 15px;
+}
+
+.premium-container .premium-corner {
+  position: absolute;
+  width: var(--premium-corner-size);
+  height: var(--premium-corner-size);
+  z-index: 5;
+}
+
+.premium-container .premium-top-left {
+  top: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-container .premium-top-right {
+  top: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-container .premium-bottom-left {
+  bottom: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-container .premium-bottom-right {
+  bottom: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+/* Back Button */
+.premium-back-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.premium-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.premium-back-btn img {
+  width: 20px;
+  height: 20px;
+  filter: invert(1); /* Make icon white */
+}
+
+/* Header */
+.premium-header {
+  display: flex;
+  align-items: center;
+  margin: 20px 20px;
+  gap: 20px;
+}
+
+.premium-diamond-img {
+  flex: 3;
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+}
+
+.premium-title {
+  flex: 7;
+  font-size: 32.82px;
+  font-weight: 700;
+  line-height: 30.08px;
+  letter-spacing: 2px;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+}
+
+.premium-title-line {
+  display: block;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-family: inherit;
+}
+
+/* Progress Bar */
+.premium-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.premium-level-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.premium-level {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.premium-progress-bar {
+  flex: 1;
+  height: 30px;
+  background: #0000FF; /* Dark blue background */
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.premium-progress-fill {
+  height: 100%;
+  background: #00F1FF; /* Cyan fill */
+  border-radius: 30px;
+  transition: width 0.3s ease;
+}
+
+.premium-segment-divider {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: #000;
+  z-index: 2;
+}
+
+
+
+/* Rewards List */
+.premium-rewards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.premium-reward-item {
+  background: rgba(50, 50, 50, 0.8);
+  border: 1px solid #00F1FF;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.premium-reward-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  min-width: 20px;
+}
+
+.premium-reward-text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.premium-reward-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.premium-reward-status:contains("CLAIMED") {
+  background: #00F1FF;
+  color: #000;
+}
+
+.premium-reward-status:contains("UNLOCKED") {
+  background: #00FF00;
+  color: #000;
+}
+
+.premium-reward-status:contains("LOCKED") {
+  background: #666;
+  color: #fff;
+}
+
+.premium-reward-quantity {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFD700;
+}
+
+/* Footer */
+.premium-footer {
+  text-align: center;
+}
+
+.premium-time-remaining {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 15px;
+  line-height: 100%;
+}
+
+.premium-renew-btn {
+  background: #000FEF;
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 24px;
+  width: 100%;
+  font-size: 25.62px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+}
+
+.premium-renew-btn:hover {
+  background: #000FEF;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+/* @media screen and (max-width: 480px) {
+  .premium-container {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  .premium-title {
+    font-size: 90px !important;
+  }
+  
+  .premium-reward-item {
+    padding: 10px;
+  }
+  
+  .premium-reward-text {
+    font-size: 12px;
+  }
+} */
