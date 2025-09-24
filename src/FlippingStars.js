@@ -1082,6 +1082,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // const updatedStarlets = shared.getStarlets();
             // setStarlets(updatedStarlets);
             
+            // Fetch updated jackpot value after flip
+            fetchJackpotValue();
+            
             // Stop coin spinning sound before showing result (to avoid audio overlap)
             stopSound('coinSpinning');
             
@@ -1351,6 +1354,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         
         // const updatedStarlets = shared.getStarlets(); // COMMENTED OUT - now using BCoin
         // setStarlets(updatedStarlets);
+        
+        // Fetch updated jackpot value after flip
+        fetchJackpotValue();
       } else {
         // Stop coin spinning sound on error
         stopSound('coinSpinning');
