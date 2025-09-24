@@ -14,8 +14,10 @@ import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png'; // Commented out - now using BCoin
 import bCoin from './images/bCoin_icon.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
-import winFlippinStar from './images/WinFlippinStar.png';
-import loseFlippinStar from './images/LoseFlippinStar.png';
+import headWinFlippinStar from './images/Head-Win.png';
+import headLoseFlippinStar from './images/Head-Lose.png';
+import tailWinFlippinStar from './images/Tail-Win.png';
+import tailLoseFlippinStar from './images/Tail-Lose.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
@@ -170,6 +172,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Logo swap and reward overlay
   const [logoImage, setLogoImage] = useState(flippingStarsLogo);
   const [winReward, setWinReward] = useState(null);
+  const [isWinResult, setIsWinResult] = useState(null); // Track win/lose result
   const logoTimeoutRef = useRef(null);
   
   // Auto flip states
@@ -450,14 +453,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   // Function to show result on logo for 4 seconds
-  const showResultOnLogo = (isWin, rewardAmount, duration = 10000) => {
+  const showResultOnLogo = (isWin, rewardAmount, selectedSide, duration = 10000) => {
     if (logoTimeoutRef.current) {
       clearTimeout(logoTimeoutRef.current);
       logoTimeoutRef.current = null;
     }
     if (isWin) {
-      setLogoImage(winFlippinStar);
+      // Show win logo based on what user selected
+      if (selectedSide === 'HEADS') {
+        setLogoImage(headWinFlippinStar); // Heads win
+      } else {
+        setLogoImage(tailWinFlippinStar); // Tails win
+      }
       setWinReward(rewardAmount || 0);
+      setIsWinResult(true);
       
       // Ensure audio context is active before playing win sound
       if (window.audioContext && window.audioContext.state === 'suspended') {
@@ -471,8 +480,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         playSound('win');
       }
     } else {
-      setLogoImage(loseFlippinStar);
+      // Show lose logo based on what user selected
+      if (selectedSide === 'HEADS') {
+        setLogoImage(headLoseFlippinStar); // Heads lose
+      } else {
+        setLogoImage(tailLoseFlippinStar); // Tails lose
+      }
       setWinReward(null);
+      setIsWinResult(false);
       
       // Ensure audio context is active before playing lose sound
       if (window.audioContext && window.audioContext.state === 'suspended') {
@@ -494,6 +509,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         if (!shouldStopAutoFlipRef.current) {
           setLogoImage(flippingStarsLogo);
           setWinReward(null);
+          setIsWinResult(null);
         }
       }, duration);
     }
@@ -768,6 +784,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       // Reset logo về mặc định
       setLogoImage(flippingStarsLogo);
       setWinReward(null);
+      setIsWinResult(null);
       
       // Auto-select bet phù hợp
       const currentBcoin = shared.getBcoin();
@@ -863,6 +880,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Reset logo to default
     setLogoImage(flippingStarsLogo);
     setWinReward(null);
+    setIsWinResult(null);
     
     // Auto-select the largest affordable numeric bet when stopping
     const currentStarlets = shared.getStarlets();
@@ -1031,7 +1049,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }
             
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
-            showResultOnLogo(result.isWin, result.reward, 2000);
+            showResultOnLogo(result.isWin, result.reward, pendingSideRef.current, 2000);
             
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
@@ -1272,7 +1290,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         stopSound('coinSpinning');
 
         // Show win/lose on logo and reward overlay first
-        showResultOnLogo(result.isWin, result.reward);
+        showResultOnLogo(result.isWin, result.reward, pendingSideRef.current);
 
         if (result.isWin && result.reward > 0) {
           setLastWinAmount(result.reward);
@@ -1777,9 +1795,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           style={{ display: !show3D ? 'block' : 'none' }}
         />
         {/* WIN/LOSE text - displays above the logo when showing results */}
-        {!show3D && (logoImage === winFlippinStar || logoImage === loseFlippinStar) && (
+        {!show3D && isWinResult !== null && (
           <div className="fc_win-lose-text">
-            {logoImage === winFlippinStar ? 'WIN' : 'LOSE'}
+            {isWinResult ? 'WIN' : 'LOSE'}
           </div>
         )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}
