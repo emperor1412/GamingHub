@@ -48,6 +48,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
     const [totalFlips, setTotalFlips] = useState(0);
+    const [jackpotValue, setJackpotValue] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -85,6 +86,38 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
             console.error('Error fetching total flips:', error);
         }
     };
+
+    // Fetch jackpot value from API
+    const fetchJackpotValue = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for jackpot API');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/getJackpotValue?token=${shared.loginData.token}`;
+            console.log('Fetching jackpot value from:', url);
+            
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Jackpot value API response:', data);
+                
+                // Handle API response format: {"code": 0, "data": 34947}
+                if (data.code === 0 && data.data !== undefined) {
+                    setJackpotValue(data.data);
+                    console.log('✅ Found jackpot value in data.data:', data.data);
+                } else {
+                    console.log('Unexpected jackpot API response format:', data);
+                }
+            } else {
+                console.error('Jackpot value API response not ok:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching jackpot value:', error);
+        }
+    };
+
     const [eventActive, setEventActive] = useState(false);
     const [showedEggletToday, setShowedEggletToday] = useState(false);
     
@@ -663,7 +696,19 @@ Response:
         
         const interval = setInterval(() => {
             fetchTotalFlips();
-        }, 30000); // 30 seconds
+        }, 60000); // 30 seconds
+
+        return () => clearInterval(interval);
+    }, []);
+
+    // Auto-refresh jackpot value every 30 seconds (includes initial call)
+    useEffect(() => {
+        // Call immediately on mount, then set interval
+        fetchJackpotValue();
+        
+        const interval = setInterval(() => {
+            fetchJackpotValue();
+        }, 60000); // 30 seconds
 
         return () => clearInterval(interval);
     }, []);
@@ -993,6 +1038,10 @@ Response:
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
                             <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                        </div>
+                        <div className="ticket-total-jackpot">
+                            <span className="ticket-total-jackpot-label">JACKPOT</span>
+                            <span className="ticket-total-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
                         </div>
                     </button>
                 </section>
