@@ -86,15 +86,6 @@ const SuccessfulPurchasePremium = ({ isOpen, onClaim, onClose, setShowBuyView })
           </div>
         </div>
 
-        {/* Bottom Navigation */}
-        <div className="spp-bottom-nav">
-          <div className="spp-nav-item spp-nav-store"></div>
-          <div className="spp-nav-item spp-nav-people"></div>
-          <div className="spp-nav-item spp-nav-cart"></div>
-          <div className="spp-nav-item spp-nav-profile">
-            <span className="spp-nav-count">0</span>
-          </div>
-        </div>
       </div>
     </div>
   );

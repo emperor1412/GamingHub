@@ -35,6 +35,9 @@ import shared from './Shared';
 import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
+import IntroducePremium from './IntroducePremium';
+import premiumBg from './images/Premium_background_buy.png';
+import premiumDiamond from './images/Premium_icon.png';
 
 let isMouseDown = false;
 let startX;
@@ -54,6 +57,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+    const [showIntroducePremium, setShowIntroducePremium] = useState(false);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -102,6 +106,10 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setInitialMarketTab('starlet');
         // Navigate to market tab
         shared.setActiveTab('market');
+    };
+
+    const onClickPremium = () => {
+        setShowIntroducePremium(true);
     };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
@@ -1010,6 +1018,8 @@ Response:
                     </button>
                 </section> */}
                 
+                
+
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
                         <div className='ticket-button-image-container'>
@@ -1112,7 +1122,7 @@ Response:
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
-                            <div className='ticket-button-container-border'></div>
+                        <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
                                 <h3 className="event-card-title">MY TICKETS</h3>
                                 <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
@@ -1120,6 +1130,31 @@ Response:
                                     Scratch Tickets
                                 </div>
                             {/* </div> */}
+                        </div>
+                    </button>
+                </section>
+
+                <section className="tickets-section">
+                    <button className="ticket-button premium-button" onClick={() => onClickPremium()}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={premiumBg}
+                                alt="Premium Background"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            
+                            {/* Premium Text */}
+                            <div className="premium-text">PREMIUM</div>
+                        </div>
+                        
+                        {/* Premium Diamond */}
+                        <div className="premium-diamond-container">
+                            <img
+                                src={premiumDiamond}
+                                alt="Premium Diamond"
+                                className="premium-diamond"
+                            />
                         </div>
                     </button>
                 </section>
@@ -1205,6 +1240,19 @@ Response:
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
+            
+            {/* Introduce Premium Popup */}
+            <IntroducePremium 
+                isOpen={showIntroducePremium} 
+                onClose={() => setShowIntroducePremium(false)}
+                onSelectPlan={(plan) => {
+                    console.log('Selected plan:', plan);
+                    setShowIntroducePremium(false);
+                    // Navigate to market with premium tab
+                    shared.setInitialMarketTab('premium');
+                    shared.setActiveTab('market');
+                }}
+            />
         </>
     );
 };
