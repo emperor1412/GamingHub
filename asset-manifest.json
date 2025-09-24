@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.dd650ca6.css",
-    "main.js": "./static/js/main.d3b8fc41.js",
+    "main.js": "./static/js/main.13b8baac.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -16,6 +16,7 @@
     "static/media/morchigame.svg": "./static/media/morchigame.614e79bfd8558440a0cd96f46b79bd97.svg",
     "static/media/leaderboard.svg": "./static/media/leaderboard.e1e827432beeb5463d194471f5aba747.svg",
     "static/media/my_ticket.png": "./static/media/my_ticket.4bb963de71f7668ade8b.png",
+    "static/media/BToken.png": "./static/media/BToken.7712e6a35d8aa15a80fa.png",
     "static/media/FSL Games UI 2-08.png": "./static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
     "static/media/FSLGAMES-newtrophyicons_1360_1.png": "./static/media/FSLGAMES-newtrophyicons_1360_1.a01a14689f9d833d2179.png",
     "static/media/scratch_ticket.svg": "./static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
@@ -28,6 +29,7 @@
     "static/media/Tadokami_Logo.png": "./static/media/Tadokami_Logo.b377a1a50450299c5d4b.png",
     "static/media/FlippingStarBanner.png": "./static/media/FlippingStarBanner.964c033f14299086d004.png",
     "static/media/stepn_background.png": "./static/media/stepn_background.3a589c6bf46691f2580f.png",
+    "static/media/BToken_Locked.png": "./static/media/BToken_Locked.3584d6b5007064c4442a.png",
     "static/media/Egglet_Image_4.png": "./static/media/Egglet_Image_4.637a3cf0706a989e77a9.png",
     "static/media/Egglet_Image_3.png": "./static/media/Egglet_Image_3.c22d8075cf24267f509b.png",
     "static/media/avatar_7_Druid_300px.png": "./static/media/avatar_7_Druid_300px.1bc7172a63a1c812ea9c.png",
@@ -97,7 +99,6 @@
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
     "static/media/LoseFlippinStar.png": "./static/media/LoseFlippinStar.dcaeba6bf83e16339318.png",
     "static/media/lv8.png": "./static/media/lv8.1291ef23720866f9eb8a.png",
-    "static/media/BToken.png": "./static/media/BToken.f6bcdba7b07b7f8fee1c.png",
     "static/media/lv0.png": "./static/media/lv0.ccec12e0db250b47bcfe.png",
     "static/media/lv3.png": "./static/media/lv3.0d604c014b6f962bd014.png",
     "static/media/Spartan_Unlocked.png": "./static/media/Spartan_Unlocked.1aa57850ceac52e58f4f.png",
@@ -123,7 +124,6 @@
     "static/media/Trophy-ALPHA_TESTER_Unlocked.png": "./static/media/Trophy-ALPHA_TESTER_Unlocked.2c421d7956889bc8cc40.png",
     "static/media/Spartan_Locked.png": "./static/media/Spartan_Locked.0f27fd203cd61f8fe160.png",
     "static/media/Win.mp3": "./static/media/Win.fe20f4de37d6803b0a32.mp3",
-    "static/media/BToken_Locked.png": "./static/media/BToken_Locked.45a00a6fbaef59d216f3.png",
     "static/media/UnbrokenYear_Locked.png": "./static/media/UnbrokenYear_Locked.298b57da5868ae615a8a.png",
     "static/media/TwoHundredStrong_Locked.png": "./static/media/TwoHundredStrong_Locked.54779237ef667ce63309.png",
     "static/media/TheFirstHunded_Locked.png": "./static/media/TheFirstHunded_Locked.e855105823836cf64366.png",
@@ -212,11 +212,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.dd650ca6.css.map": "./static/css/main.dd650ca6.css.map",
-    "main.d3b8fc41.js.map": "./static/js/main.d3b8fc41.js.map",
+    "main.13b8baac.js.map": "./static/js/main.13b8baac.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dd650ca6.css",
-    "static/js/main.d3b8fc41.js"
+    "static/js/main.13b8baac.js"
   ]
 }
