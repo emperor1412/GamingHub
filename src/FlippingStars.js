@@ -482,9 +482,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     } else {
       // Show lose logo based on what user selected
       if (selectedSide === 'HEADS') {
-        setLogoImage(headLoseFlippinStar); // Heads lose
+        setLogoImage(tailLoseFlippinStar); // Heads lose
       } else {
-        setLogoImage(tailLoseFlippinStar); // Tails lose
+        setLogoImage(headLoseFlippinStar); // Tails lose
       }
       setWinReward(null);
       setIsWinResult(false);
