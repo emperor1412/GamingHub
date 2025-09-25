@@ -201,9 +201,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
 
-  // Sound system states
-  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
-  const [soundVolume, setSoundVolume] = useState(0.7);
+  // Sound system states - use shared session storage
+  const [isSoundEnabled, setIsSoundEnabled] = useState(shared.getSoundEnabled());
+  const [soundVolume, setSoundVolume] = useState(shared.getSoundVolume());
   const [audioContextUnlocked, setAudioContextUnlocked] = useState(false);
   
   // Audio pool for iOS compatibility - Single Audio Element Pool
@@ -442,8 +442,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const toggleSound = () => {
-    setIsSoundEnabled(!isSoundEnabled);
-    if (!isSoundEnabled) {
+    const newSoundState = !isSoundEnabled;
+    setIsSoundEnabled(newSoundState);
+    shared.setSoundEnabled(newSoundState);
+    if (!newSoundState) {
       stopAllSounds();
     }
   };
@@ -451,6 +453,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const adjustVolume = (newVolume) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setSoundVolume(clampedVolume);
+    shared.setSoundVolume(clampedVolume);
     
     // Update all audio elements in pool with new volume
     const pool = audioPool.current;
