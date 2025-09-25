@@ -1096,8 +1096,32 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               });
             }
             
+            // Check for jackpot first in auto flip - if jackpot hit, use jackpot amount but keep original win/lose result
+            let autoFlipDisplayReward = result.reward;
+            let isAutoFlipJackpotHit = false;
+            
+            // Check local testing flags first, then server data
+            if (shared.getIsJackpot()) {
+              autoFlipDisplayReward = 10000; // Default jackpot amount for testing
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP LOCAL JACKPOT TEST! Using jackpotNum:', autoFlipDisplayReward);
+            } else if (shared.getIsAllinJackpot()) {
+              autoFlipDisplayReward = 50000; // Default all-in jackpot amount for testing
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP LOCAL ALL-IN JACKPOT TEST! Using allinJackpotNum:', autoFlipDisplayReward);
+            } else if (result.data && result.data.isJackpot && result.data.jackpotNum > 0) {
+              autoFlipDisplayReward = result.data.jackpotNum;
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP SERVER JACKPOT HIT! Using jackpotNum:', autoFlipDisplayReward);
+            } else if (result.data && result.data.isAllinJackpot && result.data.allinJackpotNum > 0) {
+              autoFlipDisplayReward = result.data.allinJackpotNum;
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP SERVER ALL-IN JACKPOT HIT! Using allinJackpotNum:', autoFlipDisplayReward);
+            }
+
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
-            showResultOnLogo(result.isWin, result.reward, pendingSideRef.current, 2000);
+            // Keep original win/lose result, only change the reward amount if jackpot hit
+            showResultOnLogo(result.isWin, autoFlipDisplayReward, pendingSideRef.current, 2000);
             
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
@@ -1114,9 +1138,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               return;
             }
 
-            // Update Double or Nothing availability
-            if (result.isWin && result.reward > 0) {
-              setLastWinAmount(result.reward);
+            // Update Double or Nothing availability - use jackpot amount if applicable
+            if ((isAutoFlipJackpotHit || result.isWin) && autoFlipDisplayReward > 0) {
+              setLastWinAmount(autoFlipDisplayReward);
               setCanDouble(true);
             } else {
               setCanDouble(false);
@@ -1334,11 +1358,36 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Stop coin spinning sound before showing result
         stopSound('coinSpinning');
 
-        // Show win/lose on logo and reward overlay first
-        showResultOnLogo(result.isWin, result.reward, pendingSideRef.current);
+        // Check for jackpot first - if jackpot hit, use jackpot amount but keep original win/lose result
+        let displayReward = result.reward;
+        let isJackpotHit = false;
+        
+        // Check local testing flags first, then server data
+        if (shared.getIsJackpot()) {
+          displayReward = 10000; // Default jackpot amount for testing
+          isJackpotHit = true;
+          console.log('🎰 LOCAL JACKPOT TEST! Using jackpotNum:', displayReward);
+        } else if (shared.getIsAllinJackpot()) {
+          displayReward = 50000; // Default all-in jackpot amount for testing
+          isJackpotHit = true;
+          console.log('🎰 LOCAL ALL-IN JACKPOT TEST! Using allinJackpotNum:', displayReward);
+        } else if (result.data && result.data.isJackpot && result.data.jackpotNum > 0) {
+          displayReward = result.data.jackpotNum;
+          isJackpotHit = true;
+          console.log('🎰 SERVER JACKPOT HIT! Using jackpotNum:', displayReward);
+        } else if (result.data && result.data.isAllinJackpot && result.data.allinJackpotNum > 0) {
+          displayReward = result.data.allinJackpotNum;
+          isJackpotHit = true;
+          console.log('🎰 SERVER ALL-IN JACKPOT HIT! Using allinJackpotNum:', displayReward);
+        }
 
-        if (result.isWin && result.reward > 0) {
-          setLastWinAmount(result.reward);
+        // Show win/lose on logo and reward overlay first
+        // Keep original win/lose result, only change the reward amount if jackpot hit
+        showResultOnLogo(result.isWin, displayReward, pendingSideRef.current);
+
+        // Update Double or Nothing availability - use jackpot amount if applicable
+        if ((isJackpotHit || result.isWin) && displayReward > 0) {
+          setLastWinAmount(displayReward);
           setCanDouble(true);
         } else {
           setCanDouble(false);

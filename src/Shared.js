@@ -132,6 +132,10 @@ const shared = {
     // Session-based sound settings
     isSoundEnabled: true,
     soundVolume: 0.7,
+    
+    // Local testing flags for jackpot simulation
+    isJackpot: false,
+    isAllinJackpot: false,
 
     // Add these to the shared object
     starImages: {
@@ -507,6 +511,25 @@ data object
         console.log('Sound volume set to:', shared.soundVolume);
     },
 
+    // Jackpot testing functions
+    getIsJackpot : () => {
+        return shared.isJackpot;
+    },
+
+    setIsJackpot : (value) => {
+        shared.isJackpot = Boolean(value);
+        console.log('Jackpot test flag set to:', shared.isJackpot);
+    },
+
+    getIsAllinJackpot : () => {
+        return shared.isAllinJackpot;
+    },
+
+    setIsAllinJackpot : (value) => {
+        shared.isAllinJackpot = Boolean(value);
+        console.log('All-in jackpot test flag set to:', shared.isAllinJackpot);
+    },
+
     getSolanaGMTBalance : async (walletAddress) => {
         console.log('Get Solana GMT balance for wallet:', walletAddress);
 
@@ -698,6 +721,7 @@ data object
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 giây
 
+            // PlayFlip api real
             const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}`, {
                 method: 'GET',
                 headers: {
@@ -706,6 +730,16 @@ data object
                 signal: controller.signal // Thêm signal để có thể abort
             });
 
+            // TestPlayFlip api fake
+            // const response = await fetch(`${shared.server_url}/api/app/testPlayFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}&isJackpot=true&isAllinJackpot=false`, {
+            //     method: 'GET',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     signal: controller.signal // Thêm signal để có thể abort
+            // });
+
+            
             clearTimeout(timeoutId); // Clear timeout nếu thành công
 
             console.log('Flip coin Response:', response);
