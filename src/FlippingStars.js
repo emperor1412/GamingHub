@@ -156,7 +156,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [streakCount, setStreakCount] = useState(0);
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
-  const [totalFlips, setTotalFlips] = useState(0);
+  // Use shared.totalFlips instead of local state to persist across component mounts
+  const [totalFlips, setTotalFlips] = useState(shared.getTotalFlips());
   const [jackpotValue, setJackpotValue] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -600,9 +601,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
   }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialStatec
 
-  // Reset total flips when component first mounts (new session)
+  // Initialize total flips from shared state when component mounts
   useEffect(() => {
-    setTotalFlips(0);
+    setTotalFlips(shared.getTotalFlips());
   }, []);
 
   // Show welcome overlay only once per app session
@@ -1045,11 +1046,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setAutoFlipCount(currentCount);
             
             // Update counters and UI (same as handleFlip)
-            setTotalFlips(prev => {
-              const newTotal = prev + 1;
-              console.log('Auto flip - Total flips updated:', newTotal);
-              return newTotal;
-            });
+            const newTotalFlips = shared.incrementTotalFlips();
+            setTotalFlips(newTotalFlips);
             
             // Tính kết quả thực tế của coin
             const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1309,11 +1307,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
-        setTotalFlips(prev => {
-          const newTotal = prev + 1;
-          console.log('Manual flip - Total flips updated:', newTotal);
-          return newTotal;
-        });
+        const newTotalFlips = shared.incrementTotalFlips();
+        setTotalFlips(newTotalFlips);
 
         const chosenSide = pendingSideRef.current;
         const actualResult = result.isWin ? chosenSide : (chosenSide === 'HEADS' ? 'TAILS' : 'HEADS');
