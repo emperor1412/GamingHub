@@ -156,7 +156,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [streakCount, setStreakCount] = useState(0);
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
-  const [totalFlips, setTotalFlips] = useState(0);
+  // Use shared.totalFlips instead of local state to persist across component mounts
+  const [totalFlips, setTotalFlips] = useState(shared.getTotalFlips());
+  const [jackpotValue, setJackpotValue] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
@@ -199,9 +201,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
 
-  // Sound system states
-  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
-  const [soundVolume, setSoundVolume] = useState(0.7);
+  // Sound system states - use shared session storage
+  const [isSoundEnabled, setIsSoundEnabled] = useState(shared.getSoundEnabled());
+  const [soundVolume, setSoundVolume] = useState(shared.getSoundVolume());
   const [audioContextUnlocked, setAudioContextUnlocked] = useState(false);
   
   // Audio pool for iOS compatibility - Single Audio Element Pool
@@ -230,6 +232,37 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     
     // Pad with leading zeros to make it 4 digits
     return str.padStart(4, '0').split('');
+  };
+
+  // Fetch jackpot value from API
+  const fetchJackpotValue = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for jackpot API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/getJackpotValue?token=${shared.loginData.token}`;
+      console.log('Fetching jackpot value from:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Jackpot value API response:', data);
+        
+        // Handle API response format: {"code": 0, "data": 34947}
+        if (data.code === 0 && data.data !== undefined) {
+          setJackpotValue(data.data);
+          console.log('✅ Found jackpot value in data.data:', data.data);
+        } else {
+          console.log('Unexpected jackpot API response format:', data);
+        }
+      } else {
+        console.error('Jackpot value API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching jackpot value:', error);
+    }
   };
 
   // Sound management functions
@@ -409,8 +442,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   const toggleSound = () => {
-    setIsSoundEnabled(!isSoundEnabled);
-    if (!isSoundEnabled) {
+    const newSoundState = !isSoundEnabled;
+    setIsSoundEnabled(newSoundState);
+    shared.setSoundEnabled(newSoundState);
+    if (!newSoundState) {
       stopAllSounds();
     }
   };
@@ -418,6 +453,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const adjustVolume = (newVolume) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setSoundVolume(clampedVolume);
+    shared.setSoundVolume(clampedVolume);
     
     // Update all audio elements in pool with new volume
     const pool = audioPool.current;
@@ -568,9 +604,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
   }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialStatec
 
-  // Reset total flips when component first mounts (new session)
+  // Initialize total flips from shared state when component mounts
   useEffect(() => {
-    setTotalFlips(0);
+    setTotalFlips(shared.getTotalFlips());
   }, []);
 
   // Show welcome overlay only once per app session
@@ -644,6 +680,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []); // Empty dependency array - only run once on mount
+
+  // Auto-refresh jackpot value every 30 seconds (includes initial call)
+  useEffect(() => {
+    // Call immediately on mount, then set interval
+    fetchJackpotValue();
+    
+    const interval = setInterval(() => {
+      fetchJackpotValue();
+    }, 60000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
@@ -1001,11 +1049,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setAutoFlipCount(currentCount);
             
             // Update counters and UI (same as handleFlip)
-            setTotalFlips(prev => {
-              const newTotal = prev + 1;
-              console.log('Auto flip - Total flips updated:', newTotal);
-              return newTotal;
-            });
+            const newTotalFlips = shared.incrementTotalFlips();
+            setTotalFlips(newTotalFlips);
             
             // Tính kết quả thực tế của coin
             const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1038,6 +1083,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // const updatedStarlets = shared.getStarlets();
             // setStarlets(updatedStarlets);
             
+            // Fetch updated jackpot value after flip
+            fetchJackpotValue();
+            
             // Stop coin spinning sound before showing result (to avoid audio overlap)
             stopSound('coinSpinning');
             
@@ -1048,8 +1096,32 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               });
             }
             
+            // Check for jackpot first in auto flip - if jackpot hit, use jackpot amount but keep original win/lose result
+            let autoFlipDisplayReward = result.reward;
+            let isAutoFlipJackpotHit = false;
+            
+            // Check local testing flags first, then server data
+            if (shared.getIsJackpot()) {
+              autoFlipDisplayReward = 10000; // Default jackpot amount for testing
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP LOCAL JACKPOT TEST! Using jackpotNum:', autoFlipDisplayReward);
+            } else if (shared.getIsAllinJackpot()) {
+              autoFlipDisplayReward = 50000; // Default all-in jackpot amount for testing
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP LOCAL ALL-IN JACKPOT TEST! Using allinJackpotNum:', autoFlipDisplayReward);
+            } else if (result.data && result.data.isJackpot && result.data.jackpotNum > 0) {
+              autoFlipDisplayReward = result.data.jackpotNum;
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP SERVER JACKPOT HIT! Using jackpotNum:', autoFlipDisplayReward);
+            } else if (result.data && result.data.isAllinJackpot && result.data.allinJackpotNum > 0) {
+              autoFlipDisplayReward = result.data.allinJackpotNum;
+              isAutoFlipJackpotHit = true;
+              console.log('🎰 AUTO FLIP SERVER ALL-IN JACKPOT HIT! Using allinJackpotNum:', autoFlipDisplayReward);
+            }
+
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
-            showResultOnLogo(result.isWin, result.reward, pendingSideRef.current, 2000);
+            // Keep original win/lose result, only change the reward amount if jackpot hit
+            showResultOnLogo(result.isWin, autoFlipDisplayReward, pendingSideRef.current, 2000);
             
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
@@ -1066,9 +1138,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
               return;
             }
 
-            // Update Double or Nothing availability
-            if (result.isWin && result.reward > 0) {
-              setLastWinAmount(result.reward);
+            // Update Double or Nothing availability - use jackpot amount if applicable
+            if ((isAutoFlipJackpotHit || result.isWin) && autoFlipDisplayReward > 0) {
+              setLastWinAmount(autoFlipDisplayReward);
               setCanDouble(true);
             } else {
               setCanDouble(false);
@@ -1262,11 +1334,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
-        setTotalFlips(prev => {
-          const newTotal = prev + 1;
-          console.log('Manual flip - Total flips updated:', newTotal);
-          return newTotal;
-        });
+        const newTotalFlips = shared.incrementTotalFlips();
+        setTotalFlips(newTotalFlips);
 
         const chosenSide = pendingSideRef.current;
         const actualResult = result.isWin ? chosenSide : (chosenSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1289,11 +1358,36 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         // Stop coin spinning sound before showing result
         stopSound('coinSpinning');
 
-        // Show win/lose on logo and reward overlay first
-        showResultOnLogo(result.isWin, result.reward, pendingSideRef.current);
+        // Check for jackpot first - if jackpot hit, use jackpot amount but keep original win/lose result
+        let displayReward = result.reward;
+        let isJackpotHit = false;
+        
+        // Check local testing flags first, then server data
+        if (shared.getIsJackpot()) {
+          displayReward = 10000; // Default jackpot amount for testing
+          isJackpotHit = true;
+          console.log('🎰 LOCAL JACKPOT TEST! Using jackpotNum:', displayReward);
+        } else if (shared.getIsAllinJackpot()) {
+          displayReward = 50000; // Default all-in jackpot amount for testing
+          isJackpotHit = true;
+          console.log('🎰 LOCAL ALL-IN JACKPOT TEST! Using allinJackpotNum:', displayReward);
+        } else if (result.data && result.data.isJackpot && result.data.jackpotNum > 0) {
+          displayReward = result.data.jackpotNum;
+          isJackpotHit = true;
+          console.log('🎰 SERVER JACKPOT HIT! Using jackpotNum:', displayReward);
+        } else if (result.data && result.data.isAllinJackpot && result.data.allinJackpotNum > 0) {
+          displayReward = result.data.allinJackpotNum;
+          isJackpotHit = true;
+          console.log('🎰 SERVER ALL-IN JACKPOT HIT! Using allinJackpotNum:', displayReward);
+        }
 
-        if (result.isWin && result.reward > 0) {
-          setLastWinAmount(result.reward);
+        // Show win/lose on logo and reward overlay first
+        // Keep original win/lose result, only change the reward amount if jackpot hit
+        showResultOnLogo(result.isWin, displayReward, pendingSideRef.current);
+
+        // Update Double or Nothing availability - use jackpot amount if applicable
+        if ((isJackpotHit || result.isWin) && displayReward > 0) {
+          setLastWinAmount(displayReward);
           setCanDouble(true);
         } else {
           setCanDouble(false);
@@ -1307,6 +1401,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         
         // const updatedStarlets = shared.getStarlets(); // COMMENTED OUT - now using BCoin
         // setStarlets(updatedStarlets);
+        
+        // Fetch updated jackpot value after flip
+        fetchJackpotValue();
       } else {
         // Stop coin spinning sound on error
         stopSound('coinSpinning');
@@ -1711,12 +1808,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       )}
 
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
-      {/* <div className="fc_jackpot-container">
+      <div className="fc_jackpot-container">
         <div className="fc_jackpot">
           <span className="fc_jackpot-label">JACKPOT</span>
-          <span className="fc_jackpot-count">00000000</span>
+          <span className="fc_jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
         </div>
-      </div> */}
+      </div>
 
       {/* Settings Overlay */}
       {showSettings && (
