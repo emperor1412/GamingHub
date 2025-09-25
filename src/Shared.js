@@ -125,6 +125,17 @@ const shared = {
     GMT_Solana: 0,
     GMT_Polygon: 0,
     getGMT: false,
+    
+    // Session-based total flips counter for FlippingStars game
+    totalFlips: 0,
+    
+    // Session-based sound settings
+    isSoundEnabled: true,
+    soundVolume: 0.7,
+    
+    // Local testing flags for jackpot simulation
+    isJackpot: false,
+    isAllinJackpot: false,
 
     // Add these to the shared object
     starImages: {
@@ -465,6 +476,60 @@ data object
         return retVal?.num || 0;
     },
 
+    // Functions to manage total flips counter
+    getTotalFlips : () => {
+        return shared.totalFlips;
+    },
+
+    incrementTotalFlips : () => {
+        shared.totalFlips += 1;
+        console.log('Total flips incremented to:', shared.totalFlips);
+        return shared.totalFlips;
+    },
+
+    resetTotalFlips : () => {
+        shared.totalFlips = 0;
+        console.log('Total flips reset to 0');
+    },
+
+    // Functions to manage sound settings
+    getSoundEnabled : () => {
+        return shared.isSoundEnabled;
+    },
+
+    setSoundEnabled : (enabled) => {
+        shared.isSoundEnabled = enabled;
+        console.log('Sound enabled set to:', enabled);
+    },
+
+    getSoundVolume : () => {
+        return shared.soundVolume;
+    },
+
+    setSoundVolume : (volume) => {
+        shared.soundVolume = Math.max(0, Math.min(1, volume)); // Clamp between 0 and 1
+        console.log('Sound volume set to:', shared.soundVolume);
+    },
+
+    // Jackpot testing functions
+    getIsJackpot : () => {
+        return shared.isJackpot;
+    },
+
+    setIsJackpot : (value) => {
+        shared.isJackpot = Boolean(value);
+        console.log('Jackpot test flag set to:', shared.isJackpot);
+    },
+
+    getIsAllinJackpot : () => {
+        return shared.isAllinJackpot;
+    },
+
+    setIsAllinJackpot : (value) => {
+        shared.isAllinJackpot = Boolean(value);
+        console.log('All-in jackpot test flag set to:', shared.isAllinJackpot);
+    },
+
     getSolanaGMTBalance : async (walletAddress) => {
         console.log('Get Solana GMT balance for wallet:', walletAddress);
 
@@ -656,6 +721,7 @@ data object
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 giây
 
+            // PlayFlip api real
             const response = await fetch(`${shared.server_url}/api/app/playFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}`, {
                 method: 'GET',
                 headers: {
@@ -664,6 +730,16 @@ data object
                 signal: controller.signal // Thêm signal để có thể abort
             });
 
+            // TestPlayFlip api fake
+            // const response = await fetch(`${shared.server_url}/api/app/testPlayFlip?token=${shared.loginData.token}&head=${isHeads}&amount=${betAmount}&allin=${allin}&isJackpot=true&isAllinJackpot=false`, {
+            //     method: 'GET',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     signal: controller.signal // Thêm signal để có thể abort
+            // });
+
+            
             clearTimeout(timeoutId); // Clear timeout nếu thành công
 
             console.log('Flip coin Response:', response);
@@ -678,8 +754,8 @@ data object
                     return {
                         success: true,
                         data: data.data,
-                        isWin: data.data.success,
-                        reward: data.data.reward
+                        isWin: data.data.success || data.data.isJackpot || data.data.isAllinJackpot,
+                        reward: data.data.isJackpot ? data.data.jackpotNum : data.data.reward
                     };
                 } else if (data.code === 102001 || data.code === 102002) {
                     console.log('Token expired, attempting to re-login');
