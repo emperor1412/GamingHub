@@ -2171,11 +2171,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }}
             disabled={isFlipping || (!isAutoFlipping && !isValidPositiveBet)}
           >
-            <div className="fc_flip-content">
-              { isAutoFlipping ? `AUTO FLIP (${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget})` : 
-               isFlipping ? 'FLIPPING...' :
-               'FLIP'}
-            </div>
+             <div className="fc_flip-content">
+               { isAutoFlipping ? `AUTO FLIP (${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget})` : 
+                isFlipping ? 'FLIPPING...' :
+                lastBetAmount > 0 ? 'FLIP AGAIN' : 'FLIP'}
+             </div>
           </button>
         )
       }
