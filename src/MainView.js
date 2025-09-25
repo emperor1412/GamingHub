@@ -24,7 +24,7 @@ import morchigame from './images/morchigame.svg';
 import comingsoon from './images/Coming soon-05.png';
 import tadokami from './images/Tadokami_Logo.png';
 import marketplace from './images/MARKETPLACE.png';
-import dailyTasks from './images/one_shot.png';
+import dailyTasks from './images/one_shot.2827c4f3c969098979d4.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
@@ -74,7 +74,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 
                 // Handle API response format: {"code": 0, "data": 159}
                 if (data.code === 0 && data.data !== undefined) {
-                    setTotalFlips(data.data);
+                    setTotalFlips(data.data.totalFlips);
                     console.log('✅ Found totalFlips in data.data:', data.data);
                 } else {
                     console.log('Unexpected totalFlips API response format:', data);
@@ -1036,11 +1036,11 @@ Response:
                             <div className='ticket-button-container-border'></div>
                         </div>
                         <div className="ticket-total-flips">
-                            <span className="ticket-total-flips-label">DAILY GLOBAL FLIPS</span>
+                            <span className="ticket-total-flips-label">GLOBAL FLIPS</span>
                             <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
                         <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">JACKPOT</span>
+                            <span className="ticket-total-jackpot-label">GRAND JACKPOT</span>
                             <span className="ticket-total-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
                         </div>
                     </button>

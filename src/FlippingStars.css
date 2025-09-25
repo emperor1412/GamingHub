@@ -2276,9 +2276,8 @@ body::-webkit-scrollbar-track,
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #000FEF;
+  background-color: #FF00F6;
   padding: 2px 12px;
-  border: 1px solid rgba(0, 15, 239, 0.4);
   white-space: nowrap;
   min-width: max-content;
 }
@@ -2287,7 +2286,7 @@ body::-webkit-scrollbar-track,
   font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 700;
-  color: #FF00F6;
+  color: #000FEF;
   text-transform: uppercase;
   opacity: 0.9;
 }
