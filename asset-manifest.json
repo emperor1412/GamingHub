@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.8e096342.css",
-    "main.js": "./static/js/main.56915588.js",
+    "main.css": "./static/css/main.12520f28.css",
+    "main.js": "./static/js/main.12db4b7f.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -123,7 +123,7 @@
     "static/media/lv4.png": "./static/media/lv4.8270aa7f7a5887fcf5e0.png",
     "static/media/Lose.mp3": "./static/media/Lose.4ba5c94cf3dc7d057cfa.mp3",
     "static/media/MooAR_Login_Logo.png": "./static/media/MooAR_Login_Logo.b5c247a4297785ae1cc2.png",
-    "static/media/one_shot.png": "./static/media/one_shot.2827c4f3c969098979d4.png",
+    "static/media/one_shot.png": "./static/media/one_shot.2827c4f3c969098979d4.2827c4f3c969098979d4.png",
     "static/media/Trophy-ALPHA_TESTER_Unlocked.png": "./static/media/Trophy-ALPHA_TESTER_Unlocked.2c421d7956889bc8cc40.png",
     "static/media/Spartan_Locked.png": "./static/media/Spartan_Locked.0f27fd203cd61f8fe160.png",
     "static/media/Win.mp3": "./static/media/Win.fe20f4de37d6803b0a32.mp3",
@@ -213,12 +213,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.8e096342.css.map": "./static/css/main.8e096342.css.map",
-    "main.56915588.js.map": "./static/js/main.56915588.js.map",
+    "main.12520f28.css.map": "./static/css/main.12520f28.css.map",
+    "main.12db4b7f.js.map": "./static/js/main.12db4b7f.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8e096342.css",
-    "static/js/main.56915588.js"
+    "static/css/main.12520f28.css",
+    "static/js/main.12db4b7f.js"
   ]
 }
