@@ -125,6 +125,9 @@ const shared = {
     GMT_Solana: 0,
     GMT_Polygon: 0,
     getGMT: false,
+    
+    // Session-based total flips counter for FlippingStars game
+    totalFlips: 0,
 
     // Add these to the shared object
     starImages: {
@@ -463,6 +466,22 @@ data object
     getBcoin : () => {
         const retVal = shared.userProfile.UserToken.find(item => item.prop_id === 10030);
         return retVal?.num || 0;
+    },
+
+    // Functions to manage total flips counter
+    getTotalFlips : () => {
+        return shared.totalFlips;
+    },
+
+    incrementTotalFlips : () => {
+        shared.totalFlips += 1;
+        console.log('Total flips incremented to:', shared.totalFlips);
+        return shared.totalFlips;
+    },
+
+    resetTotalFlips : () => {
+        shared.totalFlips = 0;
+        console.log('Total flips reset to 0');
     },
 
     getSolanaGMTBalance : async (walletAddress) => {
