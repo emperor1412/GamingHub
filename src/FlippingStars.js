@@ -14,8 +14,10 @@ import ticketIcon from './images/ticket.svg';
 import starlet from './images/starlet.png'; // Commented out - now using BCoin
 import bCoin from './images/bCoin_icon.png';
 import flippingStarsLogo from './images/Flipping_stars.png';
-import winFlippinStar from './images/WinFlippinStar.png';
-import loseFlippinStar from './images/LoseFlippinStar.png';
+import headWinFlippinStar from './images/Head-Win.png';
+import headLoseFlippinStar from './images/Head-Lose.png';
+import tailWinFlippinStar from './images/Tail-Win.png';
+import tailLoseFlippinStar from './images/Tail-Lose.png';
 import headsCounterLogo from './images/HeadsCounterLogo.png';
 import tailsCounterLogo from './images/TailsCounterLogo.png';
 import exitButton from './images/ExitButton.png';
@@ -155,6 +157,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
   const [totalFlips, setTotalFlips] = useState(0);
+  const [jackpotValue, setJackpotValue] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showAllInConfirm, setShowAllInConfirm] = useState(false);
@@ -170,6 +173,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   // Logo swap and reward overlay
   const [logoImage, setLogoImage] = useState(flippingStarsLogo);
   const [winReward, setWinReward] = useState(null);
+  const [isWinResult, setIsWinResult] = useState(null); // Track win/lose result
   const logoTimeoutRef = useRef(null);
   
   // Auto flip states
@@ -227,6 +231,37 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     
     // Pad with leading zeros to make it 4 digits
     return str.padStart(4, '0').split('');
+  };
+
+  // Fetch jackpot value from API
+  const fetchJackpotValue = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for jackpot API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/getJackpotValue?token=${shared.loginData.token}`;
+      console.log('Fetching jackpot value from:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Jackpot value API response:', data);
+        
+        // Handle API response format: {"code": 0, "data": 34947}
+        if (data.code === 0 && data.data !== undefined) {
+          setJackpotValue(data.data);
+          console.log('✅ Found jackpot value in data.data:', data.data);
+        } else {
+          console.log('Unexpected jackpot API response format:', data);
+        }
+      } else {
+        console.error('Jackpot value API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching jackpot value:', error);
+    }
   };
 
   // Sound management functions
@@ -450,14 +485,20 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   };
 
   // Function to show result on logo for 4 seconds
-  const showResultOnLogo = (isWin, rewardAmount, duration = 10000) => {
+  const showResultOnLogo = (isWin, rewardAmount, selectedSide, duration = 10000) => {
     if (logoTimeoutRef.current) {
       clearTimeout(logoTimeoutRef.current);
       logoTimeoutRef.current = null;
     }
     if (isWin) {
-      setLogoImage(winFlippinStar);
+      // Show win logo based on what user selected
+      if (selectedSide === 'HEADS') {
+        setLogoImage(headWinFlippinStar); // Heads win
+      } else {
+        setLogoImage(tailWinFlippinStar); // Tails win
+      }
       setWinReward(rewardAmount || 0);
+      setIsWinResult(true);
       
       // Ensure audio context is active before playing win sound
       if (window.audioContext && window.audioContext.state === 'suspended') {
@@ -471,8 +512,14 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         playSound('win');
       }
     } else {
-      setLogoImage(loseFlippinStar);
+      // Show lose logo based on what user selected
+      if (selectedSide === 'HEADS') {
+        setLogoImage(tailLoseFlippinStar); // Heads lose
+      } else {
+        setLogoImage(headLoseFlippinStar); // Tails lose
+      }
       setWinReward(null);
+      setIsWinResult(false);
       
       // Ensure audio context is active before playing lose sound
       if (window.audioContext && window.audioContext.state === 'suspended') {
@@ -494,6 +541,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         if (!shouldStopAutoFlipRef.current) {
           setLogoImage(flippingStarsLogo);
           setWinReward(null);
+          setIsWinResult(null);
         }
       }, duration);
     }
@@ -550,7 +598,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       selectLargestAffordableBet(bcoin, false);
       setIsInitialState(false); // Mark as no longer initial state
     }
-  }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialState
+  }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialStatec
 
   // Reset total flips when component first mounts (new session)
   useEffect(() => {
@@ -628,6 +676,18 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []); // Empty dependency array - only run once on mount
+
+  // Auto-refresh jackpot value every 30 seconds (includes initial call)
+  useEffect(() => {
+    // Call immediately on mount, then set interval
+    fetchJackpotValue();
+    
+    const interval = setInterval(() => {
+      fetchJackpotValue();
+    }, 60000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleWelcomeClose = () => {
     setShowWelcome(false);
@@ -768,6 +828,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       // Reset logo về mặc định
       setLogoImage(flippingStarsLogo);
       setWinReward(null);
+      setIsWinResult(null);
       
       // Auto-select bet phù hợp
       const currentBcoin = shared.getBcoin();
@@ -863,6 +924,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     // Reset logo to default
     setLogoImage(flippingStarsLogo);
     setWinReward(null);
+    setIsWinResult(null);
     
     // Auto-select the largest affordable numeric bet when stopping
     const currentStarlets = shared.getStarlets();
@@ -1020,6 +1082,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             // const updatedStarlets = shared.getStarlets();
             // setStarlets(updatedStarlets);
             
+            // Fetch updated jackpot value after flip
+            fetchJackpotValue();
+            
             // Stop coin spinning sound before showing result (to avoid audio overlap)
             stopSound('coinSpinning');
             
@@ -1031,7 +1096,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }
             
             // Update logo to reflect win/lose (show for 2 seconds in auto flip)
-            showResultOnLogo(result.isWin, result.reward, 2000);
+            showResultOnLogo(result.isWin, result.reward, pendingSideRef.current, 2000);
             
             // Check if user wants to stop while showing result
             if (shouldStopAutoFlipRef.current) {
@@ -1272,7 +1337,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         stopSound('coinSpinning');
 
         // Show win/lose on logo and reward overlay first
-        showResultOnLogo(result.isWin, result.reward);
+        showResultOnLogo(result.isWin, result.reward, pendingSideRef.current);
 
         if (result.isWin && result.reward > 0) {
           setLastWinAmount(result.reward);
@@ -1289,6 +1354,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
         
         // const updatedStarlets = shared.getStarlets(); // COMMENTED OUT - now using BCoin
         // setStarlets(updatedStarlets);
+        
+        // Fetch updated jackpot value after flip
+        fetchJackpotValue();
       } else {
         // Stop coin spinning sound on error
         stopSound('coinSpinning');
@@ -1693,12 +1761,12 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       )}
 
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
-      {/* <div className="fc_jackpot-container">
+      <div className="fc_jackpot-container">
         <div className="fc_jackpot">
           <span className="fc_jackpot-label">JACKPOT</span>
-          <span className="fc_jackpot-count">00000000</span>
+          <span className="fc_jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
         </div>
-      </div> */}
+      </div>
 
       {/* Settings Overlay */}
       {showSettings && (
@@ -1731,6 +1799,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
                   className="info-button" 
                   onClick={() => window.open('https://www.notion.so/fsl-web3/FLIPPING-STARS-Player-FAQ-24f95c775fea80eabed0f722a601ab48', '_blank')}
                 >
+                  <span className="fc_faq-text">FAQ</span>
                   <img src={infoIcon} alt="Info" />
                 </button>
               </div>
@@ -1776,9 +1845,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           style={{ display: !show3D ? 'block' : 'none' }}
         />
         {/* WIN/LOSE text - displays above the logo when showing results */}
-        {!show3D && (logoImage === winFlippinStar || logoImage === loseFlippinStar) && (
+        {!show3D && isWinResult !== null && (
           <div className="fc_win-lose-text">
-            {logoImage === winFlippinStar ? 'WIN' : 'LOSE'}
+            {isWinResult ? 'WIN' : 'LOSE'}
           </div>
         )}
         {/* Progress bar showing win reward - displays 4 digits and starlet icon */}

@@ -281,6 +281,11 @@ Response:
                                             <img src={infoIcon} alt="Info" />
                                         </button>
                                     )}
+                                    {item.type === 10030 && (
+                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FLIPPING-STARS-Player-FAQ-24f95c775fea80eabed0f722a601ab48', '_blank')}>
+                                            <img src={infoIcon} alt="Info" />
+                                        </button>
+                                    )}
                                     </div>
                                     <div className="profile-item-right">
                                         {item.showClaim && (
