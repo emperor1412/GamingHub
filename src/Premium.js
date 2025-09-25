@@ -3,6 +3,11 @@ import './Premium.css';
 import back from './images/back.svg';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
+import freezeStreak from './images/freeze_streak_icon.png';
+import stepBoost from './images/banking_step_icon.png';
+import bCoin from './images/bCoin_headlose.png';
+import unlockIcon from './images/unlock.png';
+import lockIcon from './images/lock_icon.png';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
@@ -12,6 +17,29 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   useEffect(() => {
     setCurrentXP(2233);
   }, []);
+
+  // Premium rewards data - 12 levels with 4 reward types (3 levels each)
+  const premiumRewards = [
+    // Group 1: BANK STEPS (Levels 1-3)
+    { level: 1, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'CLAIMED', icon: starlet },
+    { level: 2, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'UNLOCKED', icon: starlet },
+    { level: 3, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'LOCKED', icon: starlet },
+    
+    // Group 2: FREEZE STREAK (Levels 4-6)
+    { level: 4, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'CLAIMED', icon: freezeStreak },
+    { level: 5, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'UNLOCKED', icon: freezeStreak },
+    { level: 6, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'LOCKED', icon: freezeStreak },
+    
+    // Group 3: STEP BOOST (Levels 7-9)
+    { level: 7, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'CLAIMED', icon: stepBoost },
+    { level: 8, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'UNLOCKED', icon: stepBoost },
+    { level: 9, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'LOCKED', icon: stepBoost },
+    
+    // Group 4: SGC TOKENS (Levels 10-12)
+    { level: 10, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
+    { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'UNLOCKED', icon: bCoin },
+    { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
+  ];
 
   // Dữ liệu XP cho từng level
   const levelData = [
@@ -101,48 +129,27 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         
         {/* Rewards List */}
         <div className="premium-rewards">
-          <div className="premium-reward-item">
-            <div className="premium-reward-item-left">
-              <span className="premium-reward-number">1</span>
-              <span className="premium-reward-text">BANK 500 STEPS</span>
-            </div>
-            <div className="premium-reward-item-right">
-              <div className="premium-status-group">
-                <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
-                <span className="premium-reward-status">CLAIMED</span>
+          {premiumRewards.map((reward, index) => (
+            <div key={reward.level} className={`premium-reward-item premium-reward-${reward.type.toLowerCase().replace(' ', '-')}`}>
+              <div className="premium-reward-item-left">
+                <span className={`premium-reward-number premium-number-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.level}</span>
+                <span className={`premium-reward-text premium-text-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.description}</span>
               </div>
-              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
-              <span className="premium-reward-quantity">600</span>
-            </div>
-          </div>
-          <div className="premium-reward-item">
-            <div className="premium-reward-item-left">
-              <span className="premium-reward-number">2</span>
-              <span className="premium-reward-text">BANK 500 STEPS</span>
-            </div>
-            <div className="premium-reward-item-right">
-              <div className="premium-status-group">
-              <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
-                <span className="premium-reward-status">UNLOCKED</span>
+              <div className="premium-reward-item-right">
+                <div className="premium-status-group">
+                  <img 
+                    src={reward.status === 'CLAIMED' ? premiumDiamond : 
+                         reward.status === 'UNLOCKED' ? unlockIcon : lockIcon} 
+                    alt="Status Icon" 
+                    className="premium-status-icon" 
+                  />
+                  <span className={`premium-reward-status premium-status-${reward.status.toLowerCase()}`}>{reward.status}</span>
+                </div>
+                <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
+                <span className="premium-reward-quantity">{reward.quantity}</span>
               </div>
-              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
-              <span className="premium-reward-quantity">600</span>
             </div>
-          </div>
-          <div className="premium-reward-item">
-            <div className="premium-reward-item-left">
-              <span className="premium-reward-number">3</span>
-              <span className="premium-reward-text">BANK 500 STEPS</span>
-            </div>
-            <div className="premium-reward-item-right">
-              <div className="premium-status-group">
-              <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
-                <span className="premium-reward-status">LOCKED</span>
-              </div>
-              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
-              <span className="premium-reward-quantity">600</span>
-            </div>
-          </div>
+          ))}
         </div>
         
         {/* Footer */}

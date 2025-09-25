@@ -198,6 +198,38 @@
   padding: 0 5px;
 }
 
+/* Type-specific colors */
+.premium-reward-bank-steps {
+  border-color: #FF00F6; /* Pink - default */
+}
+
+.premium-reward-freeze-streak {
+  border-color: #00FFEE; /* Cyan */
+}
+
+.premium-reward-step-boost {
+  border-color: #FF5F57; /* Orange */
+}
+
+.premium-reward-sgc-tokens {
+  border-color: #F9DF26; /* Yellow */
+}
+
+/* Locked state - override with gray colors */
+.premium-reward-item:has(.premium-status-locked) {
+  border-color: #A9A7A7 !important; /* Dark gray border */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-number {
+  background: #A9A7A7 !important; /* Dark gray number */
+  color: #000000 !important; /* Light gray text */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-text {
+  background: #A9A7A7 !important; /* Dark gray text background */
+  color: #000000 !important; /* Light gray text */
+}
+
 .premium-reward-item-left {
   display: flex;
   align-items: center;
@@ -231,6 +263,23 @@
   justify-content: center;
 }
 
+/* Type-specific number colors */
+.premium-number-bank-steps {
+  background: #FF00F6; /* Pink */
+}
+
+.premium-number-freeze-streak {
+  background: #00FFEE; /* Cyan */
+}
+
+.premium-number-step-boost {
+  background: #FF5F57; /* Orange */
+}
+
+.premium-number-sgc-tokens {
+  background: #F9DF26; /* Yellow */
+}
+
 .premium-reward-text {
   font-size: 8px;
   font-weight: 700;
@@ -248,9 +297,26 @@
   flex-shrink: 0;
 }
 
+/* Type-specific text colors */
+.premium-text-bank-steps {
+  background: #FF00F6; /* Pink */
+}
+
+.premium-text-freeze-streak {
+  background: #00FFEE; /* Cyan */
+}
+
+.premium-text-step-boost {
+  background: #FF5F57; /* Orange */
+}
+
+.premium-text-sgc-tokens {
+  background: #F9DF26; /* Yellow */
+}
+
 .premium-reward-status {
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 4px 8px;
   border-radius: 4px;
   width: 63px;
@@ -264,6 +330,22 @@
   border-radius: 30px;
   padding: 5px;
   background: #000FEF;
+}
+
+/* Status-specific colors */
+.premium-status-claimed {
+  background: #000FEF; /* Blue */
+  color: #FFFFFF;
+}
+
+.premium-status-unlocked {
+  background: #00FF00; /* Green */
+  color: #000000;
+}
+
+.premium-status-locked {
+  background: #373737; /* Dark gray */
+  color: #FFFFFF; /* Light gray text */
 }
 
 .premium-reward-quantity {
