@@ -754,8 +754,8 @@ data object
                     return {
                         success: true,
                         data: data.data,
-                        isWin: data.data.success,
-                        reward: data.data.reward
+                        isWin: data.data.success || data.data.isJackpot,
+                        reward: data.data.isJackpot ? data.data.jackpotNum : data.data.reward
                     };
                 } else if (data.code === 102001 || data.code === 102002) {
                     console.log('Token expired, attempting to re-login');
