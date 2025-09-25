@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Premium.css';
 import back from './images/back.svg';
 import premiumDiamond from './images/Premium_icon.png';
+import starlet from './images/starlet.png';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
@@ -27,7 +28,6 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     { level: 11, xpNeeded: 570, cumulativeXP: 4650 },
     { level: 12, xpNeeded: 570, cumulativeXP: 5220 }
   ];
-  
 
   // Tính level hiện tại dựa trên XP
   const getCurrentLevel = () => {
@@ -102,22 +102,46 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         {/* Rewards List */}
         <div className="premium-rewards">
           <div className="premium-reward-item">
-            <span className="premium-reward-number">1</span>
-            <span className="premium-reward-text">BANK 500 STEPS</span>
-            <span className="premium-reward-status">CLAIMED</span>
-            <span className="premium-reward-quantity">600</span>
+            <div className="premium-reward-item-left">
+              <span className="premium-reward-number">1</span>
+              <span className="premium-reward-text">BANK 500 STEPS</span>
+            </div>
+            <div className="premium-reward-item-right">
+              <div className="premium-status-group">
+                <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
+                <span className="premium-reward-status">CLAIMED</span>
+              </div>
+              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
+              <span className="premium-reward-quantity">600</span>
+            </div>
           </div>
           <div className="premium-reward-item">
-            <span className="premium-reward-number">2</span>
-            <span className="premium-reward-text">BANK 500 STEPS</span>
-            <span className="premium-reward-status">UNLOCKED</span>
-            <span className="premium-reward-quantity">600</span>
+            <div className="premium-reward-item-left">
+              <span className="premium-reward-number">2</span>
+              <span className="premium-reward-text">BANK 500 STEPS</span>
+            </div>
+            <div className="premium-reward-item-right">
+              <div className="premium-status-group">
+              <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
+                <span className="premium-reward-status">UNLOCKED</span>
+              </div>
+              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
+              <span className="premium-reward-quantity">600</span>
+            </div>
           </div>
           <div className="premium-reward-item">
-            <span className="premium-reward-number">3</span>
-            <span className="premium-reward-text">BANK 500 STEPS</span>
-            <span className="premium-reward-status">LOCKED</span>
-            <span className="premium-reward-quantity">600</span>
+            <div className="premium-reward-item-left">
+              <span className="premium-reward-number">3</span>
+              <span className="premium-reward-text">BANK 500 STEPS</span>
+            </div>
+            <div className="premium-reward-item-right">
+              <div className="premium-status-group">
+              <img src={premiumDiamond} alt="Status Icon" className="premium-status-icon" />
+                <span className="premium-reward-status">LOCKED</span>
+              </div>
+              <img src={starlet} alt="Reward Icon" className="premium-reward-icon" />
+              <span className="premium-reward-quantity">600</span>
+            </div>
           </div>
         </div>
         
