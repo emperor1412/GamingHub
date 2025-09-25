@@ -128,6 +128,10 @@ const shared = {
     
     // Session-based total flips counter for FlippingStars game
     totalFlips: 0,
+    
+    // Session-based sound settings
+    isSoundEnabled: true,
+    soundVolume: 0.7,
 
     // Add these to the shared object
     starImages: {
@@ -482,6 +486,25 @@ data object
     resetTotalFlips : () => {
         shared.totalFlips = 0;
         console.log('Total flips reset to 0');
+    },
+
+    // Functions to manage sound settings
+    getSoundEnabled : () => {
+        return shared.isSoundEnabled;
+    },
+
+    setSoundEnabled : (enabled) => {
+        shared.isSoundEnabled = enabled;
+        console.log('Sound enabled set to:', enabled);
+    },
+
+    getSoundVolume : () => {
+        return shared.soundVolume;
+    },
+
+    setSoundVolume : (volume) => {
+        shared.soundVolume = Math.max(0, Math.min(1, volume)); // Clamp between 0 and 1
+        console.log('Sound volume set to:', shared.soundVolume);
     },
 
     getSolanaGMTBalance : async (walletAddress) => {
