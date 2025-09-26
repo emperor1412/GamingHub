@@ -78,10 +78,18 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 const data = await response.json();
                 console.log('Total flips API response:', data);
                 
-                // Handle API response format: {"code": 0, "data": 159}
+                // Handle API response format: {"code": 0, "data": {"totalFlips": 1859, "userFlips": 27}}
                 if (data.code === 0 && data.data !== undefined) {
-                    setTotalFlips(data.data.totalFlips);
-                    console.log('✅ Found totalFlips in data.data:', data.data);
+                    if (typeof data.data === 'object' && data.data.totalFlips !== undefined) {
+                        setTotalFlips(data.data.totalFlips);
+                        console.log('✅ Found totalFlips in data.data.totalFlips:', data.data.totalFlips);
+                    } else if (typeof data.data === 'number') {
+                        // Fallback for old format: {"code": 0, "data": 159}
+                        setTotalFlips(data.data);
+                        console.log('✅ Found totalFlips in data.data (number):', data.data);
+                    } else {
+                        console.log('Unexpected totalFlips API response format:', data);
+                    }
                 } else {
                     console.log('Unexpected totalFlips API response format:', data);
                 }
@@ -1098,7 +1106,7 @@ Response:
                         </div>
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">GLOBAL FLIPS</span>
-                            {/* <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span> */}
+                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
                         <div className="ticket-total-jackpot">
                             <span className="ticket-total-jackpot-label">GRAND JACKPOT</span>
