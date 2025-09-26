@@ -22,6 +22,11 @@ const Buy = ({
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
 
+  // Debug log to check selectedPurchase data
+  useEffect(() => {
+    console.log('Buy component - selectedPurchase data:', selectedPurchase);
+  }, [selectedPurchase]);
+
   useEffect(() => {
     const fetchOptionData = async () => {
       if (!selectedPurchase?.optionId) return;
@@ -170,7 +175,7 @@ const Buy = ({
                 <>
                   <div className="bmk-item-detail-box">
                     <div className="bmk-item-amount">
-                      <span className="x-mark"></span>30 DAYS
+                      <span className="x-mark"></span>{selectedPurchase?.productName?.includes('Yearly') ? '365 DAYS' : '30 DAYS'}
                     </div>
                   </div>
                   <div className="bmk-item-detail-box">
@@ -253,7 +258,6 @@ const Buy = ({
           </>
         )}
         
-
         <ConfirmPurchasePopup
           isOpen={isPopupOpen}
           onClose={handleClosePopup}

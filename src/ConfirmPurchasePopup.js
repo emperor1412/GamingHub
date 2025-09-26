@@ -14,6 +14,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
 
+  // Debug log to check premium data
+  useEffect(() => {
+    console.log('ConfirmPurchasePopup - Premium data:', {
+      isPremium,
+      amount,
+      productName,
+      productId,
+      isStarletProduct
+    });
+  }, [isPremium, amount, productName, productId, isStarletProduct]);
+
   useEffect(() => {
     const fetchOptionData = async () => {
       if (!optionId) return;
@@ -71,11 +82,65 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
   }, [onClose]);
 
   const handleConfirmAndPay = useCallback(async () => {
-    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName });
+    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName, isPremium });
     setIsProcessing(true);
     try {
       let result;
-      if (isStarletProduct && productId) {
+      if (isPremium) {
+        console.log('Making premium membership purchase API call...');
+        // Handle premium membership purchase
+        const response = await fetch(`${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        console.log('Premium membership API response:', data);
+        if (data.code === 0) {
+          result = {
+            status: "paid",
+            productName: productName,
+            amount: amount,
+            isPremium: true,
+            membershipType: productId,
+            membershipPrice: amount
+          };
+        } else if (data.code === 102002 || data.code === 102001) {
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0) {
+              result = {
+                status: "paid",
+                productName: productName,
+                amount: amount,
+                isPremium: true,
+                membershipType: productId,
+                membershipPrice: amount
+              };
+            } else {
+              console.log('Retry failed:', retryData);
+              await showError(retryData.msg || 'Premium purchase failed. Please try again.');
+              return;
+            }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
+          }
+        } else {
+          console.log('Premium API call failed:', data);
+          await showError(data.msg || 'Premium purchase failed. Please try again.');
+          return;
+        }
+      } else if (isStarletProduct && productId) {
         console.log('Making starlet product purchase API call...');
         // Handle starlet product purchase
         const response = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, {
@@ -197,13 +262,16 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           productName: result.productName,
           amount: result.amount,
           isStarletProduct: result.isStarletProduct,
+          isPremium: result.isPremium,
+          membershipType: result.membershipType,
+          membershipPrice: result.membershipPrice,
           packageType: result.packageType,
           packageValue: result.packageValue
         });
         setShowSuccessPopup(true);
         
-        // Call onPurchaseComplete for starlet products to trigger market reload
-        if (result.isStarletProduct && onPurchaseComplete) {
+        // Call onPurchaseComplete for starlet products and premium to trigger market reload
+        if ((result.isStarletProduct || result.isPremium) && onPurchaseComplete) {
           onPurchaseComplete();
         }
       } else if (result?.status === "cancelled") {
@@ -306,7 +374,15 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      {isStarletProduct ? (
+                      {isPremium ? (
+                        <>
+                          DO YOU WANT TO BUY <span className="highlight-value">{productName}</span>
+                          <br />
+                          IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">{amount} STARLETS</span>?
+                        </>
+                      ) : isStarletProduct ? (
                         <>
                           DO YOU WANT TO BUY A <span className="highlight-value">{productName}</span>
                           <br />

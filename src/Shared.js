@@ -64,6 +64,11 @@ const shared = {
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
     initialMarketTab: 'telegram', // Default tab for Market component
+    
+    // Premium membership status - shared across all components
+    isPremiumMember: false,
+    setIsPremiumMember: null, // Will be set by MainView component
+    
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },

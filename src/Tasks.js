@@ -13,6 +13,7 @@ import { openLink } from '@telegram-apps/sdk';
 import done_icon from './images/done_icon.svg';
 import arrow_2 from './images/arrow_2.svg';
 import { trackTaskFunnel, trackTaskAttempt, trackUserAction } from './analytics';
+import premiumDiamond from './images/Premium_icon.png';
 /*
 url: /app/taskList
 Request:
@@ -765,15 +766,23 @@ const Tasks = ({
                 </div>
             )}
             <header className="stats-header">
-                <button 
-                    className="profile-pic"
-                    onClick={() => setShowProfileView(true)}
-                >
-                    <img 
-                        src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                        alt="Profile" 
-                    />
-                </button>
+                <div className="profile-pic-container">
+                    <button 
+                        className="profile-pic"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img 
+                            src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                            alt="Profile" 
+                        />
+                    </button>
+                    {/* Premium icon overlay */}
+                    {shared.isPremiumMember && (
+                        <div className="premium-icon-overlay">
+                            <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+                        </div>
+                    )}
+                </div>
                 <div className="stats">
                     <button 
                         className="stat-item"

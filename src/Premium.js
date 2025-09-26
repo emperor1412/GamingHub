@@ -9,42 +9,184 @@ import bCoin from './images/bCoin_headlose.png';
 import unlockIcon from './images/unlock.png';
 import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
+import shared from './Shared';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
   const [currentXP, setCurrentXP] = useState(0);
+  const [currentLevel, setCurrentLevel] = useState(0);
+  const [isMembership, setIsMembership] = useState(false);
+  const [endTime, setEndTime] = useState(0);
   const [rewards, setRewards] = useState([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Premium rewards data - 12 levels with 4 reward types (3 levels each)
-  const initialRewards = [
-    // Group 1: BANK STEPS (Levels 1-3)
-    { level: 1, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'CLAIMED', icon: starlet },
-    { level: 2, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'UNLOCKED', icon: starlet },
-    { level: 3, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'LOCKED', icon: starlet },
-    
-    // Group 2: FREEZE STREAK (Levels 4-6)
-    { level: 4, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'UNLOCKED', icon: freezeStreak },
-    { level: 5, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'CLAIMED', icon: freezeStreak },
-    { level: 6, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'LOCKED', icon: freezeStreak },
-    
-    // Group 3: STEP BOOST (Levels 7-9)
-    { level: 7, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'LOCKED', icon: stepBoost },
-    { level: 8, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'CLAIMED', icon: stepBoost },
-    { level: 9, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'UNLOCKED', icon: stepBoost },
-    
-    // Group 4: SGC TOKENS (Levels 10-12)
-    { level: 10, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'UNLOCKED', icon: bCoin },
-    { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
-    { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
-  ];
+  // Mapping reward types from API to display format
+  const getRewardTypeInfo = (type) => {
+    switch(type) {
+      case 10020: // STARLETS/BANK STEPS
+        return {
+          type: 'BANK STEPS',
+          description: 'BANK STEPS',
+          icon: starlet
+        };
+      case 10021: // FREEZE STREAK
+        return {
+          type: 'FREEZE STREAK', 
+          description: 'FREEZE STREAK',
+          icon: freezeStreak
+        };
+      case 10022: // STEP BOOST
+        return {
+          type: 'STEP BOOST',
+          description: '1.5 STEP BOOST', 
+          icon: stepBoost
+        };
+      case 10023: // SGC TOKENS
+        return {
+          type: 'SGC TOKENS',
+          description: 'SGC TOKENS',
+          icon: bCoin
+        };
+      default:
+        return {
+          type: 'UNKNOWN',
+          description: 'UNKNOWN REWARD',
+          icon: starlet
+        };
+    }
+  };
 
-  // Set XP ban đầu và khởi tạo rewards khi component mount
+  // OLD PREMIUM REWARDS DATA (COMMENTED OUT - NOW USING API DATA)
+  // const initialRewards = [
+  //   // Group 1: BANK STEPS (Levels 1-3)
+  //   { level: 1, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'CLAIMED', icon: starlet },
+  //   { level: 2, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'UNLOCKED', icon: starlet },
+  //   { level: 3, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'LOCKED', icon: starlet },
+  //   
+  //   // Group 2: FREEZE STREAK (Levels 4-6)
+  //   { level: 4, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'UNLOCKED', icon: freezeStreak },
+  //   { level: 5, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'CLAIMED', icon: freezeStreak },
+  //   { level: 6, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'LOCKED', icon: freezeStreak },
+  //   
+  //   // Group 3: STEP BOOST (Levels 7-9)
+  //   { level: 7, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'LOCKED', icon: stepBoost },
+  //   { level: 8, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'CLAIMED', icon: stepBoost },
+  //   { level: 9, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'UNLOCKED', icon: stepBoost },
+  //   
+  //   // Group 4: SGC TOKENS (Levels 10-12)
+  //   { level: 10, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'UNLOCKED', icon: bCoin },
+  //   { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
+  //   { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
+  // ];
+
+  // Function to determine reward status based on level and current level
+  const getRewardStatus = (rewardLevel, claimStatus) => {
+    if (claimStatus) {
+      return 'CLAIMED';
+    } else if (rewardLevel <= currentLevel) {
+      return 'UNLOCKED';
+    } else {
+      return 'LOCKED';
+    }
+  };
+
+  // Fetch premium data from API
+  const fetchPremiumData = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for premium data API');
+        setLoading(false);
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+      console.log('Fetching premium data from:', url);
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Premium data API response:', data);
+        
+        if (data.code === 0 && data.data) {
+          const premiumData = data.data;
+          
+          // Set basic info
+          setCurrentXP(premiumData.exp || 0);
+          setCurrentLevel(premiumData.level || 0);
+          setIsMembership(premiumData.isMembership || false);
+          setEndTime(premiumData.endTime || 0);
+          
+          // Process rewards
+          if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
+            const processedRewards = premiumData.rewards.map(rewardLevel => {
+              if (rewardLevel.list && rewardLevel.list.length > 0) {
+                const rewardItem = rewardLevel.list[0]; // Take first item from list
+                const typeInfo = getRewardTypeInfo(rewardItem.type);
+                const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus);
+                
+                return {
+                  level: rewardLevel.level,
+                  type: typeInfo.type,
+                  description: typeInfo.description,
+                  quantity: rewardItem.amount,
+                  status: status,
+                  icon: typeInfo.icon,
+                  claimStatus: rewardLevel.claimStatus
+                };
+              }
+              return null;
+            }).filter(reward => reward !== null);
+            
+            setRewards(processedRewards);
+            console.log('✅ Processed rewards:', processedRewards);
+          }
+        } else {
+          console.log('Unexpected premium data API response format:', data);
+        }
+      } else {
+        console.error('Premium data API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching premium data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to calculate remaining time
+  const getRemainingTime = () => {
+    if (!endTime || endTime === 0) {
+      return "NO ACTIVE MEMBERSHIP";
+    }
+    
+    const now = Date.now() / 1000; // Current time in seconds
+    const remaining = endTime - now;
+    
+    if (remaining <= 0) {
+      return "MEMBERSHIP EXPIRED";
+    }
+    
+    const days = Math.floor(remaining / (24 * 60 * 60));
+    const hours = Math.floor((remaining % (24 * 60 * 60)) / (60 * 60));
+    
+    if (days > 0) {
+      return `${days} DAY${days > 1 ? 'S' : ''} REMAINING`;
+    } else if (hours > 0) {
+      return `${hours} HOUR${hours > 1 ? 'S' : ''} REMAINING`;
+    } else {
+      return "LESS THAN 1 HOUR REMAINING";
+    }
+  };
+
+  // Fetch premium data when component mounts
   useEffect(() => {
-    setCurrentXP(2233);
-    setRewards(initialRewards);
-  }, []);
+    if (isOpen) {
+      fetchPremiumData();
+    }
+  }, [isOpen]);
 
   // Function to show confirm popup
   const handleClaimReward = (rewardIndex) => {
@@ -90,7 +232,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   ];
 
   // Tính level hiện tại dựa trên XP
-  const getCurrentLevel = () => {
+  const calculateCurrentLevel = () => {
     for (let i = levelData.length - 1; i >= 0; i--) {
       if (currentXP >= levelData[i].cumulativeXP) {
         return i + 1;
@@ -99,13 +241,13 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     return 1;
   };
   
-  const currentLevel = getCurrentLevel();
+  const calculatedLevel = calculateCurrentLevel();
   
   // Tính progress percentage dựa trên XP hiện tại
   const getProgressPercentage = () => {
     if (currentXP >= 5220) return 100; // Max level
     
-    const currentLevelIndex = currentLevel - 1;
+    const currentLevelIndex = calculatedLevel - 1;
     const currentLevelStartXP = currentLevelIndex > 0 ? levelData[currentLevelIndex - 1].cumulativeXP : 0;
     const currentLevelEndXP = levelData[currentLevelIndex].cumulativeXP;
     const currentLevelProgress = (currentXP - currentLevelStartXP) / (currentLevelEndXP - currentLevelStartXP);
@@ -114,6 +256,26 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   };
   
   if (!isOpen) return null;
+
+  if (loading) {
+    return (
+      <div className="premium-overlay">
+        <div className="premium-container">
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: '100vh',
+            color: 'white',
+            fontSize: '18px',
+            fontFamily: '"PP Neue Machina", sans-serif'
+          }}>
+            Loading Premium Data...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="premium-overlay">
@@ -196,7 +358,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           <div className="premium-corner premium-bottom-left"></div>
           <div className="premium-corner premium-bottom-right"></div>
 
-          <div className="premium-time-remaining">20 DAYS REMAINING</div>
+          <div className="premium-time-remaining">{getRemainingTime()}</div>
           <button className="premium-renew-btn">RENEW</button>
         </div>
       </div>

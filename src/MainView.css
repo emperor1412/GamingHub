@@ -15,6 +15,30 @@
     transition: opacity 0.2s;
 }
 
+/* Profile pic container for premium icon positioning */
+.profile-pic-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Premium icon overlay - positioned outside button */
+.premium-icon-overlay {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 25px;
+    height: 25px;
+    z-index: 10;
+    pointer-events: none; /* Prevent interfering with button clicks */
+}
+
+.premium-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
 /* Header Styles */
 .stats-header {
     position: fixed;

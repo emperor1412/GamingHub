@@ -51,7 +51,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
-    // const [totalFlips, setTotalFlips] = useState(0);
+    const [totalFlips, setTotalFlips] = useState(0);
     const [jackpotValue, setJackpotValue] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
@@ -63,35 +63,35 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showPremium, setShowPremium] = useState(false);
 
     // Fetch total flips from API
-    // const fetchTotalFlips = async () => {
-    //     try {
-    //         if (!shared.loginData?.token) {
-    //             console.log('No login token available for totalFlips API');
-    //             return;
-    //         }
+    const fetchTotalFlips = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for totalFlips API');
+                return;
+            }
             
-    //         const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
-    //         console.log('Fetching total flips from:', url);
+            const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+            console.log('Fetching total flips from:', url);
             
-    //         const response = await fetch(url);
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             console.log('Total flips API response:', data);
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Total flips API response:', data);
                 
-    //             // Handle API response format: {"code": 0, "data": 159}
-    //             if (data.code === 0 && data.data !== undefined) {
-    //                 setTotalFlips(data.data.totalFlips);
-    //                 console.log('✅ Found totalFlips in data.data:', data.data);
-    //             } else {
-    //                 console.log('Unexpected totalFlips API response format:', data);
-    //             }
-    //         } else {
-    //             console.error('Total flips API response not ok:', response.status);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching total flips:', error);
-    //     }
-    // };
+                // Handle API response format: {"code": 0, "data": 159}
+                if (data.code === 0 && data.data !== undefined) {
+                    setTotalFlips(data.data.totalFlips);
+                    console.log('✅ Found totalFlips in data.data:', data.data);
+                } else {
+                    console.log('Unexpected totalFlips API response format:', data);
+                }
+            } else {
+                console.error('Total flips API response not ok:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching total flips:', error);
+        }
+    };
 
     // Fetch jackpot value from API
     const fetchJackpotValue = async () => {
@@ -145,6 +145,39 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
 
     // Boolean để quyết định mở trang nào
     const [isPremiumUser, setIsPremiumUser] = useState(true); // false = introducePremium, true = Premium
+    
+    // Premium membership status
+    const [isPremiumMember, setIsPremiumMember] = useState(false);
+    
+    // Set setIsPremiumMember function to shared so other components can use it
+    useEffect(() => {
+        shared.setIsPremiumMember = setIsPremiumMember;
+    }, []);
+    
+    // Function to check premium membership status
+    const checkPremiumStatus = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for premium status check');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.code === 0 && data.data) {
+                    const premiumData = data.data;
+                    setIsPremiumMember(premiumData.isMembership || false);
+                    shared.isPremiumMember = premiumData.isMembership || false; // Update shared state
+                    console.log('Premium status updated:', premiumData.isMembership);
+                }
+            }
+        } catch (error) {
+            console.error('Error checking premium status:', error);
+        }
+    };
     
     const onClickPremium = () => {
         if (isPremiumUser) {
@@ -690,6 +723,9 @@ Response:
                 await setupEvents();
                 await getDailyTask();
                 
+                // Check premium status
+                await checkPremiumStatus();
+                
                 // OPTIMIZED: Remove duplicate fetchTotalFlips() call here since interval will handle it
                 // fetchTotalFlips(); // ← Removed to prevent duplicate call
                 
@@ -707,16 +743,16 @@ Response:
     }, []);
 
     // Auto-refresh total flips every 30 seconds (includes initial call)
-    // useEffect(() => {
-    //     // Call immediately on mount, then set interval
-    //     fetchTotalFlips();
+    useEffect(() => {
+        // Call immediately on mount, then set interval
+        fetchTotalFlips();
         
-    //     const interval = setInterval(() => {
-    //         fetchTotalFlips();
-    //     }, 60000); // 30 seconds
+        const interval = setInterval(() => {
+            fetchTotalFlips();
+        }, 60000); // 30 seconds
 
-    //     return () => clearInterval(interval);
-    // }, []);
+        return () => clearInterval(interval);
+    }, []);
 
     // Auto-refresh jackpot value every 30 seconds (includes initial call)
     useEffect(() => {
@@ -995,14 +1031,22 @@ Response:
     return (
         <>
             <header className="stats-header">
-                <button 
-                    className="profile-pic-main"
-                    onClick={() => setShowProfileView(true)}
-                >
-                    <img 
-                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                    alt="Profile" />
-                </button>
+                <div className="profile-pic-container">
+                    <button 
+                        className="profile-pic-main"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img 
+                        src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                        alt="Profile" />
+                    </button>
+                    {/* Premium icon overlay */}
+                    {shared.isPremiumMember && (
+                        <div className="premium-icon-overlay">
+                            <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+                        </div>
+                    )}
+                </div>
                 <div className="level-badge" onClick={() => setShowProfileView(true)}>
                     LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
