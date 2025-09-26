@@ -32,35 +32,35 @@
   --premium-corner-offset: 15px;
 }
 
-.premium-container .premium-corner {
+.premium-header .premium-corner {
   position: absolute;
   width: var(--premium-corner-size);
   height: var(--premium-corner-size);
   z-index: 5;
 }
 
-.premium-container .premium-top-left {
+.premium-header .premium-top-left {
   top: var(--premium-corner-offset);
   left: var(--premium-corner-offset);
   border-top: var(--premium-corner-border) solid var(--premium-corner-color);
   border-left: var(--premium-corner-border) solid var(--premium-corner-color);
 }
 
-.premium-container .premium-top-right {
+.premium-header .premium-top-right {
   top: var(--premium-corner-offset);
   right: var(--premium-corner-offset);
   border-top: var(--premium-corner-border) solid var(--premium-corner-color);
   border-right: var(--premium-corner-border) solid var(--premium-corner-color);
 }
 
-.premium-container .premium-bottom-left {
+.premium-header .premium-bottom-left {
   bottom: var(--premium-corner-offset);
   left: var(--premium-corner-offset);
   border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
   border-left: var(--premium-corner-border) solid var(--premium-corner-color);
 }
 
-.premium-container .premium-bottom-right {
+.premium-header .premium-bottom-right {
   bottom: var(--premium-corner-offset);
   right: var(--premium-corner-offset);
   border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
@@ -98,14 +98,21 @@
   align-items: center;
   margin: 20px 20px;
   gap: 20px;
+  position: relative;
+  
+  /* Corner borders variables for header */
+  --premium-corner-size: 10px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 2px;
+  --premium-corner-offset: -20px;
 }
 
 .premium-diamond-img {
   flex: 3;
-  width: 92px;
-  height: 92px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+  transform: scale(1.2);
 }
 
 .premium-title {
@@ -136,6 +143,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-top: 30px;
   margin-bottom: 10px;
 }
 
@@ -146,9 +154,17 @@
 }
 
 .premium-level {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: "PP Neue Machina";
+  font-style: italic;
   color: #ffffff;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 100%;
+  letter-spacing: 1.2px;
 }
 
 .premium-progress-bar {
@@ -225,9 +241,18 @@
   color: #000000 !important; /* Light gray text */
 }
 
+.premium-reward-item:has(.premium-status-locked) .premium-reward-quantity {
+  color: #83807F !important; /* Gray color for locked quantity */
+}
+
 .premium-reward-item:has(.premium-status-locked) .premium-reward-text {
-  background: #A9A7A7 !important; /* Dark gray text background */
-  color: #000000 !important; /* Light gray text */
+  background: #8C8C8C !important; /* Dark gray text background */
+  box-shadow: 0 0 0 1px #B8B8B8 !important; /* Outer border with #B8B8B8 color */
+}
+
+.premium-reward-item:has(.premium-status-unlocked) .premium-reward-text {
+  background: transparent !important; /* No background for unlocked */
+  color: white !important; /* Light gray text */
 }
 
 .premium-reward-item-left {
@@ -251,11 +276,14 @@
 }
 
 .premium-reward-number {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
   color: #000000;
   width: 23px;
   height: 23px;
+  font-family: "PP Neue Machina", sans-serif;
   border-radius: 50%;
   background: #FF00F6;
   display: flex;
@@ -283,52 +311,59 @@
 .premium-reward-text {
   font-size: 8px;
   font-weight: 700;
+  line-height: 100%;
   color: #000000;
-  text-transform: uppercase;
-  font-family: "PP Neue Machina", sans-serif;
-  border-radius: 30px;
-  padding: 5px;
-  background: #FF00F6;
   width: 99px;
+  height: 8px;
+  padding: 4px 4px;
+  padding-top: 4.5px;
+  font-family: "PP Neue Machina", sans-serif;
   display: flex;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  flex-shrink: 0;
+  justify-content: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+  border-radius: 30px;
+  background: #FF00F6;
 }
 
 /* Type-specific text colors */
 .premium-text-bank-steps {
   background: #FF00F6; /* Pink */
+  box-shadow: 0 0 0 1px #FF00F6 !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-text-freeze-streak {
   background: #00FFEE; /* Cyan */
+  box-shadow: 0 0 0 1px #00FFEE !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-text-step-boost {
   background: #FF5F57; /* Orange */
+  box-shadow: 0 0 0 1px #FF5F57 !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-text-sgc-tokens {
   background: #F9DF26; /* Yellow */
+  box-shadow: 0 0 0 1px #F9DF26 !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-reward-status {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
   width: 63px;
-  text-align: center;
+  height: 8px;
+  padding: 4px 4px;
+  padding-top: 4.5px;
   font-family: "PP Neue Machina", sans-serif;
   display: flex;
   align-items: center;
+  text-align: center;
   justify-content: center;
   white-space: nowrap;
   text-transform: uppercase;
   border-radius: 30px;
-  padding: 5px;
   background: #000FEF;
 }
 
@@ -336,16 +371,35 @@
 .premium-status-claimed {
   background: #000FEF; /* Blue */
   color: #FFFFFF;
+  box-shadow: 0 0 0 1px #000FEF !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-status-unlocked {
-  background: #00FF00; /* Green */
-  color: #000000;
+  background: transparent !important; /* No background for unlocked */
+  color: white !important; /* Light gray text */
+}
+
+/* Unlocked status specific colors for each type */
+.premium-status-unlocked.premium-status-type-bank-steps {
+  box-shadow: 0 0 0 1px #FF00F6 !important; /* Pink border for unlocked bank steps */
+}
+
+.premium-status-unlocked.premium-status-type-freeze-streak {
+  box-shadow: 0 0 0 1px #00FFEE !important; /* Cyan border for unlocked freeze streak */
+}
+
+.premium-status-unlocked.premium-status-type-step-boost {
+  box-shadow: 0 0 0 1px #FF5F57 !important; /* Orange border for unlocked step boost */
+}
+
+.premium-status-unlocked.premium-status-type-sgc-tokens {
+  box-shadow: 0 0 0 1px #F9DF26 !important; /* Yellow border for unlocked sgc tokens */
 }
 
 .premium-status-locked {
   background: #373737; /* Dark gray */
   color: #FFFFFF; /* Light gray text */
+  box-shadow: 0 0 0 1px #373737 !important; /* Yellow border for unlocked sgc tokens */
 }
 
 .premium-reward-quantity {
@@ -354,7 +408,11 @@
   color: #FFFFFF;
   white-space: nowrap;
   font-family: "PP Neue Machina", sans-serif;
-  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 30px;
 }
 
 /* Status Icon - thể hiện trạng thái CLAIMED/UNLOCKED/LOCKED */
@@ -374,6 +432,48 @@
 /* Footer */
 .premium-footer {
   text-align: center;
+  position: relative;
+
+  /* Corner borders variables for footer */
+  --premium-corner-size: 10px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 2px;
+  --premium-corner-offset: -5px;
+}
+
+.premium-footer .premium-corner {
+  position: absolute;
+  width: var(--premium-corner-size);
+  height: var(--premium-corner-size);
+  z-index: 5;
+}
+
+.premium-footer .premium-top-left {
+  top: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-top-right {
+  top: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-bottom-left {
+  bottom: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-bottom-right {
+  bottom: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
 }
 
 .premium-time-remaining {

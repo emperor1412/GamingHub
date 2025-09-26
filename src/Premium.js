@@ -26,19 +26,19 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     { level: 3, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'LOCKED', icon: starlet },
     
     // Group 2: FREEZE STREAK (Levels 4-6)
-    { level: 4, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'CLAIMED', icon: freezeStreak },
-    { level: 5, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'UNLOCKED', icon: freezeStreak },
+    { level: 4, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'UNLOCKED', icon: freezeStreak },
+    { level: 5, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'CLAIMED', icon: freezeStreak },
     { level: 6, type: 'FREEZE STREAK', description: 'FREEZE STREAK', quantity: 1, status: 'LOCKED', icon: freezeStreak },
     
     // Group 3: STEP BOOST (Levels 7-9)
-    { level: 7, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'CLAIMED', icon: stepBoost },
-    { level: 8, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'UNLOCKED', icon: stepBoost },
-    { level: 9, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'LOCKED', icon: stepBoost },
+    { level: 7, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'LOCKED', icon: stepBoost },
+    { level: 8, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'CLAIMED', icon: stepBoost },
+    { level: 9, type: 'STEP BOOST', description: '1.5 STEP BOOST', quantity: 1, status: 'UNLOCKED', icon: stepBoost },
     
     // Group 4: SGC TOKENS (Levels 10-12)
-    { level: 10, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
-    { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'UNLOCKED', icon: bCoin },
-    { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
+    { level: 10, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'UNLOCKED', icon: bCoin },
+    { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
+    { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
   ];
 
   // Dữ liệu XP cho từng level
@@ -86,12 +86,6 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   return (
     <div className="premium-overlay">
       <div className="premium-container">
-        {/* Corner borders */}
-        <div className="premium-corner premium-top-left"></div>
-        <div className="premium-corner premium-top-right"></div>
-        <div className="premium-corner premium-bottom-left"></div>
-        <div className="premium-corner premium-bottom-right"></div>
-        
         {/* Back Button */}
         <button className="premium-back-btn" onClick={onClose}>
           <img src={back} alt="Back" />
@@ -99,7 +93,13 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         
         {/* Header */}
         <div className="premium-header">
-            <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
+          {/* Corner borders for header */}
+          <div className="premium-corner premium-top-left"></div>
+          <div className="premium-corner premium-top-right"></div>
+          <div className="premium-corner premium-bottom-left"></div>
+          <div className="premium-corner premium-bottom-right"></div>
+          
+          <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
           <div className="premium-title">
             <span className="premium-title-line">PREMIUM</span>
             <span className="premium-title-line">REWARDS</span>
@@ -143,7 +143,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
                     alt="Status Icon" 
                     className="premium-status-icon" 
                   />
-                  <span className={`premium-reward-status premium-status-${reward.status.toLowerCase()}`}>{reward.status}</span>
+                  <span className={`premium-reward-status premium-status-${reward.status.toLowerCase()} premium-status-type-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.status}</span>
                 </div>
                 <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
                 <span className="premium-reward-quantity">{reward.quantity}</span>
@@ -154,6 +154,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         
         {/* Footer */}
         <div className="premium-footer">
+          {/* Corner borders for header */}
+          <div className="premium-corner premium-top-left"></div>
+          <div className="premium-corner premium-top-right"></div>
+          <div className="premium-corner premium-bottom-left"></div>
+          <div className="premium-corner premium-bottom-right"></div>
+
           <div className="premium-time-remaining">20 DAYS REMAINING</div>
           <button className="premium-renew-btn">RENEW</button>
         </div>
