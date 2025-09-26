@@ -754,7 +754,7 @@ data object
                     return {
                         success: true,
                         data: data.data,
-                        isWin: data.data.success || data.data.isJackpot,
+                        isWin: data.data.success || data.data.isJackpot || data.data.isAllinJackpot,
                         reward: data.data.isJackpot ? data.data.jackpotNum : data.data.reward
                     };
                 } else if (data.code === 102001 || data.code === 102002) {

@@ -156,8 +156,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [streakCount, setStreakCount] = useState(0);
   const streakSideRef = useRef(null);
   const streakCountRef = useRef(0);
-  // Use shared.totalFlips instead of local state to persist across component mounts
-  const [totalFlips, setTotalFlips] = useState(shared.getTotalFlips());
+  // Use server data only - no local counter
+  const [totalFlips, setTotalFlips] = useState(0);
   const [jackpotValue, setJackpotValue] = useState(0);
   const [autoFlip, setAutoFlip] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -232,6 +232,38 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     
     // Pad with leading zeros to make it 4 digits
     return str.padStart(4, '0').split('');
+  };
+
+  // Fetch userFlips from totalFlips API
+  const fetchUserFlips = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for totalFlips API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+      console.log('Fetching userFlips from:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Total flips API response:', data);
+        
+        // Handle API response format: {"code": 0, "data": {"totalFlips": 1737, "userFlips": 1}}
+        if (data.code === 0 && data.data !== undefined) {
+          const userFlips = data.data.userFlips || 0;
+          setTotalFlips(userFlips);
+          console.log('✅ Updated userFlips:', userFlips);
+        } else {
+          console.log('Unexpected totalFlips API response format:', data);
+        }
+      } else {
+        console.error('Total flips API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching userFlips:', error);
+    }
   };
 
   // Fetch jackpot value from API
@@ -604,9 +636,10 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
     }
   }, [bcoin, isInitialState]); // Depend on both bcoin and isInitialStatec
 
-  // Initialize total flips from shared state when component mounts
+  // Initialize total flips from server data when component mounts
   useEffect(() => {
-    setTotalFlips(shared.getTotalFlips());
+    // Fetch userFlips from server immediately when component mounts
+    fetchUserFlips();
   }, []);
 
   // Show welcome overlay only once per app session
@@ -1049,8 +1082,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             setAutoFlipCount(currentCount);
             
             // Update counters and UI (same as handleFlip)
-            const newTotalFlips = shared.incrementTotalFlips();
-            setTotalFlips(newTotalFlips);
+            // Fetch userFlips from totalFlips API
+            await fetchUserFlips();
             
             // Tính kết quả thực tế của coin
             const actualResult = result.isWin ? selectedSide : (selectedSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1334,8 +1367,8 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
-        const newTotalFlips = shared.incrementTotalFlips();
-        setTotalFlips(newTotalFlips);
+        // Fetch userFlips from totalFlips API
+        await fetchUserFlips();
 
         const chosenSide = pendingSideRef.current;
         const actualResult = result.isWin ? chosenSide : (chosenSide === 'HEADS' ? 'TAILS' : 'HEADS');
@@ -1810,7 +1843,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       {/* Jackpot Counter - positioned below and in the center of fc_stats-header */}
       <div className="fc_jackpot-container">
         <div className="fc_jackpot">
-          <span className="fc_jackpot-label">JACKPOT</span>
+          <span className="fc_jackpot-label">GRAND JACKPOT</span>
           <span className="fc_jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
         </div>
       </div>
@@ -2138,11 +2171,11 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             }}
             disabled={isFlipping || (!isAutoFlipping && !isValidPositiveBet)}
           >
-            <div className="fc_flip-content">
-              { isAutoFlipping ? `AUTO FLIP (${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget})` : 
-               isFlipping ? 'FLIPPING...' :
-               'FLIP'}
-            </div>
+             <div className="fc_flip-content">
+               { isAutoFlipping ? `AUTO FLIP (${autoFlipCount}/${autoFlipTarget === 'infinite' ? '∞' : autoFlipTarget})` : 
+                isFlipping ? 'FLIPPING...' :
+                lastBetAmount > 0 ? 'FLIP AGAIN' : 'FLIP'}
+             </div>
           </button>
         )
       }
