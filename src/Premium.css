@@ -212,6 +212,16 @@
   gap: 10px;
   height: 31px;
   padding: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.premium-reward-clickable {
+  cursor: pointer;
+}
+
+.premium-reward-clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 241, 255, 0.3);
 }
 
 /* Type-specific colors */

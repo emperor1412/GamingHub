@@ -51,7 +51,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
-    const [totalFlips, setTotalFlips] = useState(0);
+    // const [totalFlips, setTotalFlips] = useState(0);
     const [jackpotValue, setJackpotValue] = useState(0);
     const [eventData, setEventData] = useState([]);
     const carouselRef = useRef(null);
@@ -63,35 +63,35 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showPremium, setShowPremium] = useState(false);
 
     // Fetch total flips from API
-    const fetchTotalFlips = async () => {
-        try {
-            if (!shared.loginData?.token) {
-                console.log('No login token available for totalFlips API');
-                return;
-            }
+    // const fetchTotalFlips = async () => {
+    //     try {
+    //         if (!shared.loginData?.token) {
+    //             console.log('No login token available for totalFlips API');
+    //             return;
+    //         }
             
-            const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
-            console.log('Fetching total flips from:', url);
+    //         const url = `${shared.server_url}/api/app/totalFlips?token=${shared.loginData.token}`;
+    //         console.log('Fetching total flips from:', url);
             
-            const response = await fetch(url);
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Total flips API response:', data);
+    //         const response = await fetch(url);
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             console.log('Total flips API response:', data);
                 
-                // Handle API response format: {"code": 0, "data": 159}
-                if (data.code === 0 && data.data !== undefined) {
-                    setTotalFlips(data.data.totalFlips);
-                    console.log('✅ Found totalFlips in data.data:', data.data);
-                } else {
-                    console.log('Unexpected totalFlips API response format:', data);
-                }
-            } else {
-                console.error('Total flips API response not ok:', response.status);
-            }
-        } catch (error) {
-            console.error('Error fetching total flips:', error);
-        }
-    };
+    //             // Handle API response format: {"code": 0, "data": 159}
+    //             if (data.code === 0 && data.data !== undefined) {
+    //                 setTotalFlips(data.data.totalFlips);
+    //                 console.log('✅ Found totalFlips in data.data:', data.data);
+    //             } else {
+    //                 console.log('Unexpected totalFlips API response format:', data);
+    //             }
+    //         } else {
+    //             console.error('Total flips API response not ok:', response.status);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching total flips:', error);
+    //     }
+    // };
 
     // Fetch jackpot value from API
     const fetchJackpotValue = async () => {
@@ -707,16 +707,16 @@ Response:
     }, []);
 
     // Auto-refresh total flips every 30 seconds (includes initial call)
-    useEffect(() => {
-        // Call immediately on mount, then set interval
-        fetchTotalFlips();
+    // useEffect(() => {
+    //     // Call immediately on mount, then set interval
+    //     fetchTotalFlips();
         
-        const interval = setInterval(() => {
-            fetchTotalFlips();
-        }, 60000); // 30 seconds
+    //     const interval = setInterval(() => {
+    //         fetchTotalFlips();
+    //     }, 60000); // 30 seconds
 
-        return () => clearInterval(interval);
-    }, []);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     // Auto-refresh jackpot value every 30 seconds (includes initial call)
     useEffect(() => {
@@ -1054,7 +1054,7 @@ Response:
                         </div>
                         <div className="ticket-total-flips">
                             <span className="ticket-total-flips-label">GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                            {/* <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span> */}
                         </div>
                         <div className="ticket-total-jackpot">
                             <span className="ticket-total-jackpot-label">GRAND JACKPOT</span>

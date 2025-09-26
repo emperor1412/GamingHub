@@ -8,18 +8,17 @@ import stepBoost from './images/banking_step_icon.png';
 import bCoin from './images/bCoin_headlose.png';
 import unlockIcon from './images/unlock.png';
 import lockIcon from './images/lock_icon.png';
+import ConfirmClaimReward from './ConfirmClaimReward';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
   const [currentXP, setCurrentXP] = useState(0);
-
-  // Set XP ban đầu khi component mount
-  useEffect(() => {
-    setCurrentXP(2233);
-  }, []);
+  const [rewards, setRewards] = useState([]);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [selectedReward, setSelectedReward] = useState(null);
 
   // Premium rewards data - 12 levels with 4 reward types (3 levels each)
-  const premiumRewards = [
+  const initialRewards = [
     // Group 1: BANK STEPS (Levels 1-3)
     { level: 1, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'CLAIMED', icon: starlet },
     { level: 2, type: 'BANK STEPS', description: 'BANK 500 STEPS', quantity: 600, status: 'UNLOCKED', icon: starlet },
@@ -40,6 +39,39 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     { level: 11, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'LOCKED', icon: bCoin },
     { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
   ];
+
+  // Set XP ban đầu và khởi tạo rewards khi component mount
+  useEffect(() => {
+    setCurrentXP(2233);
+    setRewards(initialRewards);
+  }, []);
+
+  // Function to show confirm popup
+  const handleClaimReward = (rewardIndex) => {
+    if (rewards[rewardIndex].status === 'UNLOCKED') {
+      setSelectedReward({ ...rewards[rewardIndex], index: rewardIndex });
+      setShowConfirmPopup(true);
+    }
+  };
+
+  // Function to confirm claim
+  const handleConfirmClaim = () => {
+    if (selectedReward) {
+      setRewards(prevRewards => {
+        const newRewards = [...prevRewards];
+        newRewards[selectedReward.index].status = 'CLAIMED';
+        return newRewards;
+      });
+      setShowConfirmPopup(false);
+      setSelectedReward(null);
+    }
+  };
+
+  // Function to close popup
+  const handleClosePopup = () => {
+    setShowConfirmPopup(false);
+    setSelectedReward(null);
+  };
 
   // Dữ liệu XP cho từng level
   const levelData = [
@@ -129,8 +161,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         
         {/* Rewards List */}
         <div className="premium-rewards">
-          {premiumRewards.map((reward, index) => (
-            <div key={reward.level} className={`premium-reward-item premium-reward-${reward.type.toLowerCase().replace(' ', '-')}`}>
+          {rewards.map((reward, index) => (
+            <div 
+              key={reward.level} 
+              className={`premium-reward-item premium-reward-${reward.type.toLowerCase().replace(' ', '-')} ${reward.status === 'UNLOCKED' ? 'premium-reward-clickable' : ''}`}
+              onClick={() => reward.status === 'UNLOCKED' && handleClaimReward(index)}
+            >
               <div className="premium-reward-item-left">
                 <span className={`premium-reward-number premium-number-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.level}</span>
                 <span className={`premium-reward-text premium-text-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.description}</span>
@@ -164,6 +200,14 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           <button className="premium-renew-btn">RENEW</button>
         </div>
       </div>
+      
+      {/* Confirm Claim Reward Popup */}
+      <ConfirmClaimReward 
+        isOpen={showConfirmPopup}
+        onClose={handleClosePopup}
+        onConfirm={handleConfirmClaim}
+        reward={selectedReward}
+      />
     </div>
   );
 };
