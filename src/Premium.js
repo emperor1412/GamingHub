@@ -162,15 +162,15 @@ const Premium = ({ isOpen, onClose = 0 }) => {
       return "NO ACTIVE MEMBERSHIP";
     }
     
-    const now = Date.now() / 1000; // Current time in seconds
-    const remaining = endTime - now;
+    const now = Date.now(); // Current time in milliseconds
+    const remaining = endTime - now; // endTime is already in milliseconds from API
     
     if (remaining <= 0) {
       return "MEMBERSHIP EXPIRED";
     }
     
-    const days = Math.floor(remaining / (24 * 60 * 60));
-    const hours = Math.floor((remaining % (24 * 60 * 60)) / (60 * 60));
+    const days = Math.floor(remaining / (24 * 60 * 60 * 1000)); // Convert to days
+    const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)); // Convert to hours
     
     if (days > 0) {
       return `${days} DAY${days > 1 ? 'S' : ''} REMAINING`;
@@ -213,6 +213,20 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   const handleClosePopup = () => {
     setShowConfirmPopup(false);
     setSelectedReward(null);
+  };
+
+  // Function to handle renew button click
+  const handleRenew = () => {
+    // Close premium popup first
+    onClose();
+    
+    // Navigate to market/shop
+    if (typeof shared.setActiveTab === 'function') {
+      shared.setInitialMarketTab('starlet');
+      shared.setActiveTab('market');
+    } else {
+      console.log('setActiveTab function not available');
+    }
   };
 
   // Dữ liệu XP cho từng level
@@ -359,7 +373,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           <div className="premium-corner premium-bottom-right"></div>
 
           <div className="premium-time-remaining">{getRemainingTime()}</div>
-          <button className="premium-renew-btn">RENEW</button>
+          <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
         </div>
       </div>
       
