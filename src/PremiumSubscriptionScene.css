@@ -1,0 +1,424 @@
+.psc-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  color: white;
+  background-color: #000000;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.psc-stats-header {
+  position: relative;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 1);
+  height: 60px;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.psc-stats-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  flex: 1;
+}
+
+.psc-stat-item-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: fit-content;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.psc-stat-item-main:hover {
+  opacity: 0.8;
+}
+
+.psc-stat-item-main img {
+  width: 24px;
+  height: 24px;
+}
+
+.psc-stat-item-main-text {
+  color: #FFF;
+  font-family: "PP Neue Machina";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.psc-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  overflow-y: auto;
+  flex: 1;
+  height: calc(100vh - 60px);
+  padding-bottom: 100px;
+}
+
+.psc-title {
+  text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+  font-family: "PP Neue Machina";
+  color: white;
+  text-transform: uppercase;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.psc-title span {
+  width: auto;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  font-size: inherit;
+}
+
+/* Premium Display Container */
+.psc-premium-display-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.psc-premium-display {
+  position: relative;
+  width: 200px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.psc-premium-bg {
+  position: absolute;
+  width: 115%;
+  height: 115%;
+  object-fit: cover;
+  border-radius: 12px;
+  left: -7.5%;
+  top: -7.5%;
+}
+
+.psc-premium-icon {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+  bottom: 0px;
+}
+
+.psc-floating-stars {
+  position: absolute;
+  width: 130%;
+  height: 130%;
+  pointer-events: none;
+  z-index: 2;
+  left: -15%;
+  top: -15%;
+  overflow: visible;
+}
+
+.psc-star {
+  position: absolute;
+  color: white;
+  font-size: 20px;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+.psc-star.s1 {
+  top: 10%;
+  right: 15%;
+  animation-delay: 0s;
+}
+
+.psc-star.s2 {
+  top: 25%;
+  left: 25%;
+  animation-delay: 1s;
+}
+
+.psc-star.s3 {
+  bottom: 20%;
+  right: 20%;
+  animation-delay: 0.5s;
+}
+
+.psc-star.s4 {
+  bottom: -10px;
+  right: 30px;
+  animation-delay: 0.8s;
+}
+
+.psc-star.s5 {
+  bottom: 8px;
+  right: 85%;
+  animation-delay: 1.2s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Premium Section with Corner Borders */
+.psc-premium-section {
+  width: 95%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 12px 0px;
+  
+  /* Corner borders variables */
+  --psc-corner-size: 15px;
+  --psc-corner-color: #00F1FF;
+  --psc-corner-border: 0.5px;
+  --psc-corner-offset: 15px;
+}
+
+.psc-premium-section .psc-corner {
+  position: absolute;
+  width: var(--psc-corner-size);
+  height: var(--psc-corner-size);
+  z-index: 5;
+}
+
+.psc-premium-section .psc-top-left {
+  top: var(--psc-corner-offset);
+  left: var(--psc-corner-offset);
+  border-top: var(--psc-corner-border) solid var(--psc-corner-color);
+  border-left: var(--psc-corner-border) solid var(--psc-corner-color);
+}
+
+.psc-premium-section .psc-top-right {
+  top: var(--psc-corner-offset);
+  right: var(--psc-corner-offset);
+  border-top: var(--psc-corner-border) solid var(--psc-corner-color);
+  border-right: var(--psc-corner-border) solid var(--psc-corner-color);
+}
+
+.psc-premium-section .psc-bottom-left {
+  bottom: var(--psc-corner-offset);
+  left: var(--psc-corner-offset);
+  border-bottom: var(--psc-corner-border) solid var(--psc-corner-color);
+  border-left: var(--psc-corner-border) solid var(--psc-corner-color);
+}
+
+.psc-premium-section .psc-bottom-right {
+  bottom: var(--psc-corner-offset);
+  right: var(--psc-corner-offset);
+  border-bottom: var(--psc-corner-border) solid var(--psc-corner-color);
+  border-right: var(--psc-corner-border) solid var(--psc-corner-color);
+}
+
+.psc-subscription-container {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  max-width: 300px;
+  justify-content: center;
+}
+
+.psc-subscription-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.psc-subscription-item:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.psc-plan-type {
+  background: #FF00F6;
+  color: black;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 100%;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 2px 6px;
+  margin-bottom: 8px;
+  font-family: "PP Neue Machina Inktrap";
+}
+
+.psc-plan-price-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.psc-plan-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: "PP Neue Machina";
+}
+
+.psc-plan-starlet-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Benefits Section */
+.psc-benefits-section {
+  width: 100%;
+  max-width: 350px;
+  padding: 0 20px;
+}
+
+.psc-benefits-title {
+  font-size: 28px;
+  line-height: 1em;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina";
+}
+
+.psc-benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.psc-benefit-item {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid #000FEF;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.psc-benefit-item:hover {
+  background: rgba(40, 40, 40, 0.9);
+  border-color: #000FEF;
+}
+
+.psc-benefit-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.psc-benefit-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.psc-benefit-text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0px;
+  text-align: left;
+  font-family: "PP Neue Machina";
+}
+
+.psc-benefit-text-small {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Back button styling */
+.back-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.back-button:hover {
+  opacity: 0.7;
+}
+
+.back-button img {
+  width: 24px;
+  height: 24px;
+}
+
+.back-button-alignment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 500px) {
+  .psc-container {
+    width: 100vw;
+  }
+
+  .psc-subscription-container {
+    max-width: 280px;
+  }
+
+  .psc-benefits-section {
+    padding: 0 15px;
+  }
+
+  .psc-benefit-text {
+    font-size: 14px;
+  }
+}

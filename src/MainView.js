@@ -37,6 +37,7 @@ import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
+import PremiumSubscriptionScene from './PremiumSubscriptionScene';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
 
@@ -61,6 +62,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showEggletPage, setShowEggletPage] = useState(false);
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
+    const [showPremiumSubscriptionScene, setShowPremiumSubscriptionScene] = useState(false);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -188,12 +190,19 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     };
     
     const onClickPremium = () => {
-        if (isPremiumUser) {
-            setShowPremium(true); // Mở trang Premium
+        if (isPremiumMember) {
+            setShowPremium(true); // Mở trang Premium cho user đã có premium
         } else {
-            setShowIntroducePremium(true); // Mở trang IntroducePremium
+            setShowPremiumSubscriptionScene(true); // Mở trang PremiumSubscriptionScene cho user chưa có premium
         }
     };
+
+    // Auto show premium subscription scene if user doesn't have premium
+    useEffect(() => {
+        if (!isPremiumMember && shared.loginData?.token && shared.userProfile) {
+            setShowPremiumSubscriptionScene(true);
+        }
+    }, [isPremiumMember, shared.loginData?.token, shared.userProfile]);
 
     // const [scrollLeft, setScrollLeft] = useState(0);
     // const [startX, setStartX] = useState(0);
@@ -1038,7 +1047,10 @@ Response:
 
     return (
         <>
-            <header className="stats-header">
+            {/* Main View Content - only show if not showing premium subscription scene */}
+            {!showPremiumSubscriptionScene && (
+                <>
+                    <header className="stats-header">
                 <div className="profile-pic-container">
                     <button 
                         className="profile-pic-main"
@@ -1339,6 +1351,8 @@ Response:
                     </div>
                 </section>
             </div>
+                </>
+            )}
 
             {/* EggletEventPage component */}
             {showEggletPage && <EggletEventPage 
@@ -1369,6 +1383,13 @@ Response:
                     shared.setActiveTab('market');
                 }}
             />
+            
+            {/* Premium Subscription Scene - always show if user doesn't have premium */}
+            {showPremiumSubscriptionScene && <PremiumSubscriptionScene 
+                setShowPremiumSubscriptionScene={setShowPremiumSubscriptionScene}
+                setShowProfileView={setShowProfileView}
+                refreshUserProfile={getProfileData}
+            />}
         </>
     );
 };
