@@ -82,10 +82,10 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   // ];
 
   // Function to determine reward status based on level and current level
-  const getRewardStatus = (rewardLevel, claimStatus) => {
+  const getRewardStatus = (rewardLevel, claimStatus, userLevel) => {
     if (claimStatus) {
       return 'CLAIMED';
-    } else if (rewardLevel <= currentLevel) {
+    } else if (rewardLevel <= userLevel) {
       return 'UNLOCKED';
     } else {
       return 'LOCKED';
@@ -125,7 +125,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
               if (rewardLevel.list && rewardLevel.list.length > 0) {
                 const rewardItem = rewardLevel.list[0]; // Take first item from list
                 const typeInfo = getRewardTypeInfo(rewardItem.type);
-                const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus);
+                const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
                 
                 return {
                   level: rewardLevel.level,
