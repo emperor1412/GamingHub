@@ -1351,7 +1351,11 @@ Response:
             {/* Premium Popup */}
             <Premium 
                 isOpen={showPremium} 
-                onClose={() => setShowPremium(false)}
+                onClose={() => {
+                    setShowPremium(false);
+                    // Refresh profile data when closing premium to update any claimed rewards
+                    getProfileData();
+                }}
             />
             
             {/* Introduce Premium Popup */}

@@ -188,25 +188,71 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     }
   }, [isOpen]);
 
-  // Function to show confirm popup
-  const handleClaimReward = (rewardIndex) => {
-    if (rewards[rewardIndex].status === 'UNLOCKED') {
-      setSelectedReward({ ...rewards[rewardIndex], index: rewardIndex });
-      setShowConfirmPopup(true);
+  // Function to claim reward and show popup
+  const handleClaimReward = async (rewardIndex) => {
+    if (rewards[rewardIndex].status !== 'UNLOCKED') return;
+    
+    const reward = rewards[rewardIndex];
+    
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for claim reward API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/claimPremiumRewards?level=${reward.level}&token=${shared.loginData.token}`;
+      console.log('Claiming reward from:', url);
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Claim reward API response:', data);
+        
+        if (data.code === 0 && data.data?.success) {
+          // Update UI state to show as claimed
+          setRewards(prevRewards => {
+            const newRewards = [...prevRewards];
+            newRewards[rewardIndex].status = 'CLAIMED';
+            newRewards[rewardIndex].claimStatus = true;
+            return newRewards;
+          });
+          
+          // Set reward data from API response for popup
+          if (data.data.reward && data.data.reward.length > 0) {
+            const apiReward = data.data.reward[0];
+            const typeInfo = getRewardTypeInfo(apiReward.type);
+            
+            setSelectedReward({
+              level: apiReward.level,
+              type: typeInfo.type,
+              description: typeInfo.description,
+              quantity: apiReward.amount,
+              status: 'CLAIMED',
+              icon: typeInfo.icon,
+              claimStatus: true,
+              index: rewardIndex
+            });
+            
+            // Show success popup
+            setShowConfirmPopup(true);
+            console.log('✅ Reward claimed successfully!');
+          }
+        } else {
+          console.error('Claim reward failed:', data.message || 'Unknown error');
+        }
+      } else {
+        console.error('Claim reward API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error claiming reward:', error);
     }
   };
 
-  // Function to confirm claim
+  // Function to close claim popup
   const handleConfirmClaim = () => {
-    if (selectedReward) {
-      setRewards(prevRewards => {
-        const newRewards = [...prevRewards];
-        newRewards[selectedReward.index].status = 'CLAIMED';
-        return newRewards;
-      });
-      setShowConfirmPopup(false);
-      setSelectedReward(null);
-    }
+    setShowConfirmPopup(false);
+    setSelectedReward(null);
   };
 
   // Function to close popup
