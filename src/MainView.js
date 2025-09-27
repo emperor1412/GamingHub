@@ -151,9 +151,6 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setActiveTab('market');
     };
 
-    // Boolean để quyết định mở trang nào
-    const [isPremiumUser, setIsPremiumUser] = useState(true); // false = introducePremium, true = Premium
-    
     // Premium membership status
     const [isPremiumMember, setIsPremiumMember] = useState(false);
     
@@ -188,7 +185,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     };
     
     const onClickPremium = () => {
-        if (isPremiumUser) {
+        if (isPremiumMember) {
             setShowPremium(true); // Mở trang Premium
         } else {
             setShowIntroducePremium(true); // Mở trang IntroducePremium
@@ -1364,8 +1361,8 @@ Response:
                 onSelectPlan={(plan) => {
                     console.log('Selected plan:', plan);
                     setShowIntroducePremium(false);
-                    // Navigate to market with premium tab
-                    shared.setInitialMarketTab('premium');
+                    // Navigate to market with starlet tab to show premium packages
+                    shared.setInitialMarketTab('starlet');
                     shared.setActiveTab('market');
                 }}
             />

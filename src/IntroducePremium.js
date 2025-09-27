@@ -47,14 +47,14 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan }) => {
             {/* Premium Title */}
             <div className="ip-premium-title">PREMIUM</div>
             <div className="ip-subscription-container">
-              <div className="ip-subscription-item ip-yearly-item">
+              <div className="ip-subscription-item ip-yearly-item" onClick={handleYearlySelect}>
                 <span className="ip-plan-type">YEARLY</span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">100</span>
                   <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
-              <div className="ip-subscription-item ip-monthly-item">
+              <div className="ip-subscription-item ip-monthly-item" onClick={handleMonthlySelect}>
                 <span className="ip-plan-type">MONTHLY</span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">1,000</span>

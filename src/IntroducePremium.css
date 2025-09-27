@@ -58,10 +58,9 @@ background-repeat: no-repeat; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 0px 20px;
   position: relative;
   z-index: 10;
-  margin-top: 20px;
 }
 
 /* Diamond Container */
@@ -168,6 +167,7 @@ background-repeat: no-repeat; */
   text-transform: uppercase;
   text-align: center;
   padding: 4px 8px;
+  font-family: "PP Neue Machina Inktrap";
 }
 
 .ip-plan-price-container {
@@ -178,9 +178,10 @@ background-repeat: no-repeat; */
 
 .ip-plan-price {
   font-size: 28px;
-  font-weight: 900;
+  font-weight: 700;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: "PP Neue Machina Inktrap";
 }
 
 .ip-plan-starlet-icon {
