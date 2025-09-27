@@ -22,7 +22,7 @@
     position: relative;
     min-height: 100vh;
     max-height: 100vh;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
   
@@ -36,7 +36,7 @@
     justify-content: center;
     width: 100%;
     max-width: 400px;
-    margin-top: 400px;
+    margin-top: 60px;
   }
   
   /* Welcome Section */
