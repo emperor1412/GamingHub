@@ -321,13 +321,13 @@
     white-space: nowrap;
   }
   
-  .spp-benefits-list {
+  /* .spp-benefits-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin-bottom: 30px;
     align-items: center;
-  }
+  } */
   
   .spp-benefit-item {
     font-size: 29.61px;

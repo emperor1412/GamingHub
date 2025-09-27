@@ -6,9 +6,9 @@
   height: 100vh;
   background-color: transparent;
   width: min(500px, 100%);
-  margin: 0 auto;
+  margin: 30px auto;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .bmk-buy-top-bar, .market-top-bar {
@@ -122,6 +122,9 @@
   position: relative;
   overflow-y: auto;
   gap: 36px;
+  flex: 1;
+  margin-bottom: 120px;
+  min-height: 0;
 }
 
 .bmk-buy-title {
@@ -131,7 +134,7 @@
   font-family: "PP Neue Machina";
   color: white;
   text-transform: uppercase;
-  margin: 70px auto 20px;
+  margin: 10px auto 15px;
   padding: 0;
   width: 100%;
   line-height: 1;
@@ -326,7 +329,6 @@
   transform: translateX(-50%);
   width: 100%;
   max-width: 420px;
-  padding: 20px 28px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -379,12 +381,7 @@
   }
 
   .bmk-buy-content {
-    padding: 15px 0;
-  }
-
-  .bmk-payment-buttons {
-    max-width: 100%;
-    padding: 20px;
+    padding: 20px 0;
   }
   
   .bmk-payment-button {
