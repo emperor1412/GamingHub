@@ -18,12 +18,13 @@
   background: rgba(30, 30, 30, 0.9);
   border: 1px solid #000FEF;
   border-radius: 12px;
-  width: 90%;
+  width: 83%;
   max-width: 350px;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
-  padding: 20px;
+  padding: 15px;
+  margin-top: 50px;
   
   /* Corner borders variables */
   --premium-corner-size: 15px;
@@ -109,20 +110,20 @@
 
 .premium-diamond-img {
   flex: 3;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   transform: scale(1.2);
 }
 
 .premium-title {
   flex: 7;
-  font-size: 32.82px;
+  font-size: 29.82px;
   font-weight: 700;
   line-height: 30.08px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: white;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   text-transform: uppercase;
   display: flex;
   flex-direction: column; 
@@ -209,10 +210,10 @@
   border-radius: 30px;
   display: flex;
   align-items: center;
-  gap: 10px;
   height: 31px;
   padding: 0 5px;
   transition: all 0.3s ease;
+  gap: 2px;
 }
 
 .premium-reward-clickable {
@@ -275,7 +276,7 @@
 .premium-reward-item-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-right: auto;
 }
 
@@ -420,7 +421,6 @@
   font-family: "PP Neue Machina", sans-serif;
   display: flex;
   align-items: center;
-  justify-content: center;
   text-align: center;
   min-width: 30px;
 }

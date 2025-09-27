@@ -281,7 +281,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     <div className="premium-overlay">
       <div className="premium-container">
         {/* Back Button */}
-        <button className="premium-back-btn" onClick={onClose}>
+        <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
         </button>
         
