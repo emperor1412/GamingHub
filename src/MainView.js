@@ -1351,10 +1351,12 @@ Response:
             {/* Premium Popup */}
             <Premium 
                 isOpen={showPremium} 
-                onClose={() => {
+                onClose={async () => {
                     setShowPremium(false);
-                    // Refresh profile data when closing premium to update any claimed rewards
-                    getProfileData();
+                    // Refresh all data when closing premium to match Market → MainView behavior
+                    await getProfileData();
+                    await checkPremiumStatus();
+                    await fetchTotalFlips();
                 }}
             />
             
