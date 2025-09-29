@@ -31,19 +31,19 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           description: 'BANK STEPS',
           icon: starlet
         };
-      case 10021: // FREEZE STREAK
+      case 10110: // FREEZE STREAK
         return {
           type: 'FREEZE STREAK', 
           description: 'FREEZE STREAK',
           icon: freezeStreak
         };
-      case 10022: // STEP BOOST
+      case 10120: // STEP BOOST
         return {
           type: 'STEP BOOST',
           description: '1.5 STEP BOOST', 
           icon: stepBoost
         };
-      case 10023: // SGC TOKENS
+      case 10030: // SGC TOKENS
         return {
           type: 'SGC TOKENS',
           description: 'SGC TOKENS',
