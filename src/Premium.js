@@ -340,10 +340,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   return (
     <div className="premium-overlay">
       <div className="premium-container">
-        {/* Back Button */}
-        <button className="back-button back-button-alignment" onClick={onClose}>
-          <img src={back} alt="Back" />
-        </button>
+        {/* Back Button - Hide when ConfirmClaimReward is open */}
+        {!showConfirmPopup && (
+          <button className="back-button back-button-alignment" onClick={onClose}>
+            <img src={back} alt="Back" />
+          </button>
+        )}
         
         {/* Header */}
         <div className="premium-header">
