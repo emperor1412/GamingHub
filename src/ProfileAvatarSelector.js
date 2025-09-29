@@ -60,6 +60,33 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       return;
     }
 
+    // Handle premium avatars (13-15)
+    if (index >= 13 && index <= 15) {
+      if (shared.isPremiumMember) {
+        setSelectedAvatar(index);
+        setHasChanged(index !== shared.userProfile.pictureIndex);
+        onSelect(shared.avatars[index % 3]);
+        
+        // Track avatar selection
+        trackUserAction('avatar_selected', {
+          avatar_index: index,
+          previous_avatar: shared.userProfile.pictureIndex,
+          is_unlocked: true,
+          is_premium: true
+        }, shared.loginData?.userId);
+      } else {
+        setShowLockOverlay(true);
+        
+        // Track attempt to select locked premium avatar
+        trackUserAction('avatar_selected', {
+          avatar_index: index,
+          is_unlocked: false,
+          requires_premium: true
+        }, shared.loginData?.userId);
+      }
+      return;
+    }
+
     // Handle regular avatars
     if (index < shared.userProfile.avatarNum) {
       setSelectedAvatar(index);
@@ -159,6 +186,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
     setShowLevelUp(true);
   };
 
+
   return (
     <div className="avatar-selector-overlay">
       {showLoading && (
@@ -211,6 +239,8 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                     className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${
                       index === 12 
                         ? (!shared.userProfile.buyStarlets ? 'locked' : '')
+                        : (index >= 13 && index <= 15)
+                        ? (!shared.isPremiumMember ? 'locked' : '')
                         : (index >= shared.userProfile.avatarNum ? 'locked' : '')
                     }`}
                     onClick={() => handleAvatarSelect(index)}
@@ -222,7 +252,9 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                       </div>
                     )}
                     <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
-                    {(index === 12 && !shared.userProfile.buyStarlets) || (index >= shared.userProfile.avatarNum) ? (
+                    {(index === 12 && !shared.userProfile.buyStarlets) || 
+                     (index >= 13 && index <= 15 && !shared.isPremiumMember) ||
+                     (index < 13 && index >= shared.userProfile.avatarNum) ? (
                       <div className="lock-overlay">
                         <img src={lock_icon} alt="Locked" className="lock-icon" />
                       </div>
@@ -270,9 +302,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 <div className="lock-overlay-description">
                   {selectedIndex === 12 ? 
                     'SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?' :
+                    (selectedIndex >= 13 && selectedIndex <= 15) ?
+                    'UNLOCK PREMIUM MEMBERSHIP\nTO ACCESS EXCLUSIVE PFPS!' :
                     'LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!'}
                 </div>
-                {selectedIndex !== 12 && (
+                {selectedIndex === 12 || (selectedIndex >= 13 && selectedIndex <= 15) ? null : (
                   <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
                     LEVEL UP
                   </button>
