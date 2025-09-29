@@ -1,14 +1,18 @@
 {
   "files": {
-    "main.css": "./static/css/main.4ad54c69.css",
-    "main.js": "./static/js/main.c6fff12e.js",
+    "main.css": "./static/css/main.1047ea8c.css",
+    "main.js": "./static/js/main.8be90059.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
+    "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
+    "static/media/PirateParrot.png": "./static/media/PirateParrot.8e497d96efbf7ae1361c.png",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
+    "static/media/Robot.png": "./static/media/Robot.840d966a97bba02c3f60.png",
     "static/media/check_in_animation_540.gif": "./static/media/check_in_animation_540.f79e00a6220ffb8d5a81.gif",
     "static/media/FSL Games UI 2-10.png": "./static/media/FSL Games UI 2-10.423b8be012eb806cfc40.png",
     "static/media/scratch_ticket_background_full.png": "./static/media/scratch_ticket_background_full.10686c8b948d08378f20.png",
     "static/media/snoop_dogg_raffle.svg": "./static/media/snoop_dogg_raffle.dd0d52c3515042f13f6ec5c80446b906.svg",
+    "static/media/FSLGamesHub_PremiumMembership_1441.png": "./static/media/FSLGamesHub_PremiumMembership_1441.cbf9c9a1815839cbb658.png",
     "static/media/FSLGAMES-newtrophyicons_1360.png": "./static/media/FSLGAMES-newtrophyicons_1360.29252a207f17a9087f03.png",
     "static/media/FSL Games UI 2-07.png": "./static/media/FSL Games UI 2-07.4542adfdae1b5731003d.png",
     "static/media/background_no_reward.png": "./static/media/background_no_reward.4542adfdae1b5731003d.png",
@@ -16,6 +20,7 @@
     "static/media/morchigame.svg": "./static/media/morchigame.614e79bfd8558440a0cd96f46b79bd97.svg",
     "static/media/leaderboard.svg": "./static/media/leaderboard.e1e827432beeb5463d194471f5aba747.svg",
     "static/media/my_ticket.png": "./static/media/my_ticket.4bb963de71f7668ade8b.png",
+    "static/media/FSLGamesHub_PremiumMembership_1441_1.png": "./static/media/FSLGamesHub_PremiumMembership_1441_1.241a6c6185574f32877c.png",
     "static/media/BToken.png": "./static/media/BToken.7712e6a35d8aa15a80fa.png",
     "static/media/FSL Games UI 2-08.png": "./static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
     "static/media/FSLGAMES-newtrophyicons_1360_1.png": "./static/media/FSLGAMES-newtrophyicons_1360_1.a01a14689f9d833d2179.png",
@@ -98,7 +103,6 @@
     "static/media/lv9.png": "./static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "./static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
     "static/media/Tail-Win.png": "./static/media/Tail-Win.337cd728db028f816575.png",
-    "static/media/bCoin_headlose.png": "./static/media/bCoin_headlose.c251d45bf7aa02c9fe65.png",
     "static/media/icon_pop_freeze5.png": "./static/media/icon_pop_freeze5.79cfb05757a53ea1cbb4.png",
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
     "static/media/Tail-Lose.png": "./static/media/Tail-Lose.dcaeba6bf83e16339318.png",
@@ -169,7 +173,6 @@
     "static/media/shadow.png": "./static/media/shadow.27395acaf6c283eab075.png",
     "static/media/stepngo_code.png": "./static/media/stepngo_code.feddfc2b2086c5e84ff7.png",
     "static/media/trophy_3_200px.png": "./static/media/trophy_3_200px.d5ea6ef4daff09c97db3.png",
-    "static/media/freeze_streak_icon.png": "./static/media/freeze_streak_icon.1686f6f250db25abd2e4.png",
     "static/media/Icon_Pop_Stepboosts_1_5X.png": "./static/media/Icon_Pop_Stepboosts_1_5X.060a5d7ea21ee665975a.png",
     "static/media/lock_icon.png": "./static/media/lock_icon.046ba4298cecfd0426ba.png",
     "static/media/trophy_1_200px.png": "./static/media/trophy_1_200px.e4c9f6d5767024684519.png",
@@ -221,12 +224,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.4ad54c69.css.map": "./static/css/main.4ad54c69.css.map",
-    "main.c6fff12e.js.map": "./static/js/main.c6fff12e.js.map",
+    "main.1047ea8c.css.map": "./static/css/main.1047ea8c.css.map",
+    "main.8be90059.js.map": "./static/js/main.8be90059.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ad54c69.css",
-    "static/js/main.c6fff12e.js"
+    "static/css/main.1047ea8c.css",
+    "static/js/main.8be90059.js"
   ]
 }
