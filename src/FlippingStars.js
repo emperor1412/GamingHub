@@ -201,6 +201,9 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
   const [canDouble, setCanDouble] = useState(false);
   const [useDoubleNext, setUseDoubleNext] = useState(false);
 
+  // Daily member task states
+  const [dailyTaskCompleted, setDailyTaskCompleted] = useState(false);
+
   // Sound system states - use shared session storage
   const [isSoundEnabled, setIsSoundEnabled] = useState(shared.getSoundEnabled());
   const [soundVolume, setSoundVolume] = useState(shared.getSoundVolume());
@@ -294,6 +297,76 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       }
     } catch (error) {
       console.error('Error fetching jackpot value:', error);
+    }
+  };
+
+  // Get daily member task API
+  const getDailyMemberTask = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for daily member task API');
+        return null;
+      }
+      
+      const url = `${shared.server_url}/api/app/getDailyMemberTask?type=1&token=${shared.loginData.token}`;
+      console.log('Fetching daily member task from:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Daily member task API response:', data);
+        
+        // Handle API response format: {"code": 0, "data": 387833}
+        if (data.code === 0 && data.data !== undefined) {
+          console.log('✅ Found daily member task ID:', data.data);
+          return data.data;
+        } else {
+          console.log('Unexpected daily member task API response format:', data);
+          return null;
+        }
+      } else {
+        console.error('Daily member task API response not ok:', response.status);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching daily member task:', error);
+      return null;
+    }
+  };
+
+  // Complete daily member task API
+  const completeDailyMemberTask = async (taskId) => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for complete daily member task API');
+        return false;
+      }
+      
+      const url = `${shared.server_url}/api/app/taskComplete?id=${taskId}&type=1&token=${shared.loginData.token}`;
+      console.log('Completing daily member task:', url);
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Complete daily member task API response:', data);
+        
+        if (data.code === 0) {
+          console.log('✅ Daily member task completed successfully');
+          return true;
+        } else if (data.code === 205002) {
+          console.log('✅ Daily member task already completed');
+          return true;
+        } else {
+          console.log('Daily member task completion failed:', data);
+          return false;
+        }
+      } else {
+        console.error('Complete daily member task API response not ok:', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error completing daily member task:', error);
+      return false;
     }
   };
 
@@ -1078,6 +1151,27 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
           const result = await shared.flipCoin(isHeads, betAmount, false); // Auto flip is never all-in
           
           if (result.success) {
+            // Handle daily member task completion on first valid flip of session (premium users only)
+            if (!dailyTaskCompleted && shared.isPremiumMember) {
+              console.log('First valid flip of session (auto flip, premium user) - attempting daily member task completion');
+              try {
+                const taskId = await getDailyMemberTask();
+                if (taskId) {
+                  const completed = await completeDailyMemberTask(taskId);
+                  if (completed) {
+                    setDailyTaskCompleted(true);
+                    console.log('✅ Daily member task completed successfully on first auto flip');
+                  } else {
+                    console.log('❌ Failed to complete daily member task');
+                  }
+                } else {
+                  console.log('❌ No daily member task ID received');
+                }
+              } catch (error) {
+                console.error('Error handling daily member task:', error);
+              }
+            }
+
             currentCount++;
             setAutoFlipCount(currentCount);
             
@@ -1367,6 +1461,27 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
       const result = await shared.flipCoin(isHeads, betAmount, allin);
 
       if (result.success) {
+        // Handle daily member task completion on first valid flip of session (premium users only)
+        if (!dailyTaskCompleted && shared.isPremiumMember) {
+          console.log('First valid flip of session (premium user) - attempting daily member task completion');
+          try {
+            const taskId = await getDailyMemberTask();
+            if (taskId) {
+              const completed = await completeDailyMemberTask(taskId);
+              if (completed) {
+                setDailyTaskCompleted(true);
+                console.log('✅ Daily member task completed successfully on first flip');
+              } else {
+                console.log('❌ Failed to complete daily member task');
+              }
+            } else {
+              console.log('❌ No daily member task ID received');
+            }
+          } catch (error) {
+            console.error('Error handling daily member task:', error);
+          }
+        }
+
         // Fetch userFlips from totalFlips API
         await fetchUserFlips();
 
