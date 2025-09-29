@@ -49,11 +49,7 @@ const ConfirmClaimReward = ({ isOpen, onClose, onConfirm, reward }) => {
             </div>
             
             <div className="ccr-reward-name">
-              {reward.type === 'BANK STEPS' ? 'STARLETS' :
-               reward.type === 'FREEZE STREAK' ? 'FREEZE STREAK' :
-               reward.type === 'STEP BOOST' ? '1.5 STEP BOOST' :
-               reward.type === 'SGC TOKENS' ? 'SGC TOKENS' :
-               reward.type}
+              {reward.description || reward.type}
             </div>
             
             <div className="ccr-encourage">

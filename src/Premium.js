@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Premium.css';
 import back from './images/back.svg';
 import premiumDiamond from './images/Premium_icon.png';
-import starlet from './images/starlet.png';
-import freezeStreak from './images/freeze_streak_icon.png';
-import stepBoost from './images/banking_step_icon.png';
-import bCoin from './images/bCoin_headlose.png';
 import unlockIcon from './images/unlock.png';
 import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
@@ -28,32 +24,38 @@ const Premium = ({ isOpen, onClose = 0 }) => {
       case 10020: // STARLETS/BANK STEPS
         return {
           type: 'BANK STEPS',
-          description: 'BANK STEPS',
-          icon: starlet
+          description: shared.mappingText[type] || 'BANK STEPS',
+          icon: shared.mappingIcon[type]
         };
       case 10110: // FREEZE STREAK
         return {
           type: 'FREEZE STREAK', 
-          description: 'FREEZE STREAK',
-          icon: freezeStreak
+          description: shared.mappingText[type] || 'FREEZE STREAK',
+          icon: shared.mappingIcon[type]
         };
       case 10120: // STEP BOOST
         return {
           type: 'STEP BOOST',
-          description: '1.5 STEP BOOST', 
-          icon: stepBoost
+          description: shared.mappingText[type] || '1.5X BOOST STEPS', 
+          icon: shared.mappingIcon[type]
+        };
+      case 10121: // STEP BOOST
+        return {
+          type: 'STEP BOOST',
+          description: shared.mappingText[type] || '2X BOOST STEPS', 
+          icon: shared.mappingIcon[type]
         };
       case 10030: // SGC TOKENS
         return {
           type: 'SGC TOKENS',
-          description: 'SGC TOKENS',
-          icon: bCoin
+          description: shared.mappingText[type] || 'SGC TOKENS',
+          icon: shared.mappingIcon[type]
         };
       default:
         return {
           type: 'UNKNOWN',
           description: 'UNKNOWN REWARD',
-          icon: starlet
+          icon: shared.mappingIcon[10020] // fallback to starlet icon
         };
     }
   };
