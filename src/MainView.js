@@ -175,9 +175,20 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 const data = await response.json();
                 if (data.code === 0 && data.data) {
                     const premiumData = data.data;
-                    setIsPremiumMember(premiumData.isMembership || false);
-                    shared.isPremiumMember = premiumData.isMembership || false; // Update shared state
-                    console.log('Premium status updated:', premiumData.isMembership);
+                    const newPremiumStatus = premiumData.isMembership || false;
+                    
+                    setIsPremiumMember(newPremiumStatus);
+                    shared.isPremiumMember = newPremiumStatus; // Update shared state
+                    console.log('Premium status updated:', newPremiumStatus);
+                    
+                    // Auto-adjust avatar if premium status changed and avatar doesn't match
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
+                        console.log('Premium status is false but user has premium avatar, auto-adjusting...');
+                        const adjustResult = await shared.autoAdjustAvatar(getProfileData);
+                        if (adjustResult.success) {
+                            console.log('Avatar auto-adjusted:', adjustResult.message);
+                        }
+                    }
                 }
             }
         } catch (error) {

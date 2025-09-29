@@ -254,7 +254,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                     <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
                     {(index === 12 && !shared.userProfile.buyStarlets) || 
                      (index >= 13 && index <= 15 && !shared.isPremiumMember) ||
-                     (index < 13 && index >= shared.userProfile.avatarNum) ? (
+                     (index < 12 && index >= shared.userProfile.avatarNum) ? (
                       <div className="lock-overlay">
                         <img src={lock_icon} alt="Locked" className="lock-icon" />
                       </div>
