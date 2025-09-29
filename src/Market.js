@@ -1856,7 +1856,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   
                                   {/* Price Section */}
                                   <div className="mk-market-ticket-price">
-                                    <span>{membershipData.membershipMonthlyPrice} STARLETS</span>
+                                    {isAvailable ? (
+                                      <span>{membershipData.membershipMonthlyPrice} STARLETS</span>
+                                    ) : (
+                                      <span>{disabledReason}</span>
+                                    )}
                                   </div>
                                 </div>
                               </button>
@@ -1942,7 +1946,11 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   
                                   {/* Price Section */}
                                   <div className="mk-market-ticket-price">
-                                    <span>{membershipData.membershipYearlyPrice} STARLETS</span>
+                                    {isAvailable ? (
+                                      <span>{membershipData.membershipYearlyPrice} STARLETS</span>
+                                    ) : (
+                                      <span>{disabledReason}</span>
+                                    )}
                                   </div>
                                 </div>
                               </button>
