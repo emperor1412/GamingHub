@@ -108,6 +108,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     membershipYearlyPrice: 1000
   });
   
+  // Premium membership status
+  const [premiumType, setPremiumType] = useState(null); // null, 1 (monthly), or 2 (yearly)
+  
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
   const [exclusiveOfferExpanded, setExclusiveOfferExpanded] = useState(true);
@@ -129,12 +132,41 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
+  // Function to fetch premium membership type
+  const fetchPremiumType = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for premium type check');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.code === 0 && data.data) {
+          const premiumData = data.data;
+          setPremiumType(premiumData.type || null);
+          console.log('Premium type updated:', premiumData.type);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching premium type:', error);
+    }
+  };
+
   // If navigated from Home with a target tab instruction, switch tabs (no popup)
   useEffect(() => {
     if (shared.marketTargetTab) {
       setActiveTab(shared.marketTargetTab);
       delete shared.marketTargetTab;
     }
+  }, []);
+
+  // Fetch premium type on component mount
+  useEffect(() => {
+    fetchPremiumType();
   }, []);
 
   // Add body class to prevent iOS overscrolling
@@ -673,6 +705,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       refreshUserProfileOnly();
       // Refresh market content to update all product statuses
       refreshMarketContent();
+      // Refresh premium type to update membership status
+      fetchPremiumType();
       setActiveTab('starlet');
       setIsStarletPurchaseComplete(false); // Reset the flag
     }
@@ -1764,7 +1798,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               isDisabled = true;
                               disabledReason = 'BANK STEPS NOT CONNECTED';
                             }
-                            // 3. Not enough starlets
+                            // 3. Already have yearly membership (disable monthly)
+                            else if (premiumType === 2) {
+                              isDisabled = true;
+                              disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
+                            }
+                            // 4. Not enough starlets
                             else if (userStarlets < membershipData.membershipMonthlyPrice) {
                               isDisabled = true;
                               disabledReason = membershipData.membershipMonthlyPrice.toLocaleString() + ' STARLETS';

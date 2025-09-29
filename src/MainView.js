@@ -157,6 +157,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     // Set setIsPremiumMember function to shared so other components can use it
     useEffect(() => {
         shared.setIsPremiumMember = setIsPremiumMember;
+        shared.setShowPremium = () => setShowPremium(true);
     }, []);
     
     // Function to check premium membership status
