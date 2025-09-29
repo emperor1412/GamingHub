@@ -844,7 +844,7 @@ const Tasks = ({
                             </h2>
                             <div className={`tasks-list ${timeLimitedExpanded ? 'expanded' : ''}`}>
                                 {tasksTimeLimited
-                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .filter(task => task.state === 0 && task.endTime > Date.now() && task.type !== 8)
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
@@ -858,7 +858,7 @@ const Tasks = ({
                             </h2>
                             <div className={`tasks-list ${standardTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksStandard
-                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .filter(task => task.state === 0 && task.endTime > Date.now() && task.type !== 8)
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
@@ -873,7 +873,7 @@ const Tasks = ({
                             </h2>
                             <div className={`tasks-list ${dailyTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksDaily
-                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .filter(task => task.state === 0 && task.endTime > Date.now() && task.type !== 8)
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
@@ -888,7 +888,7 @@ const Tasks = ({
                             </h2>
                             <div className={`tasks-list ${partnerTasksExpanded ? 'expanded' : ''}`}>
                                 {tasksPartner
-                                    .filter(task => task.state === 0 && task.endTime > Date.now())
+                                    .filter(task => task.state === 0 && task.endTime > Date.now() && task.type !== 8)
                                     .map(task => renderTaskCard(task))}
                             </div>
                         </section>
