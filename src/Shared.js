@@ -29,6 +29,9 @@ import avatar13 from './images/avatar_13_Squirrel_300px.png';
 import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
+import avatar17 from './images/PirateParrot.png';
+import avatar18 from './images/Robot.png';
+import avatar19 from './images/Squirrel.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
@@ -83,6 +86,9 @@ const shared = {
         { id: 10, src: avatar11 },
         { id: 11, src: avatar12 },
         { id: 12, src: avatar16 },
+        { id: 13, src: avatar17 },
+        { id: 14, src: avatar18 },
+        { id: 15, src: avatar19 },
     ],
 
     mappingIcon : {

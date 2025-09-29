@@ -34,7 +34,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
     console.log('Avatar selected:', index);
     setSelectedIndex(index);
 
-    // Special handling for buyStarlets avatar (index 12)
+    // Special handling for buyStarlets avatar (index 12 only)
     if (index === 12) {
       if (shared.userProfile.buyStarlets) {
         setSelectedAvatar(index);
@@ -205,7 +205,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 Select Avatar
                 </div>
               <div className="avatar-grid">
-                {[...Array(13)].map((_, index) => (
+                {[...Array(shared.avatars.length)].map((_, index) => (
                   <button 
                     key={index} 
                     className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${
@@ -222,7 +222,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                       </div>
                     )}
                     <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
-                    {(index === 12 && !shared.userProfile.buyStarlets) || (index < 12 && index >= shared.userProfile.avatarNum) ? (
+                    {(index === 12 && !shared.userProfile.buyStarlets) || (index >= shared.userProfile.avatarNum) ? (
                       <div className="lock-overlay">
                         <img src={lock_icon} alt="Locked" className="lock-icon" />
                       </div>
