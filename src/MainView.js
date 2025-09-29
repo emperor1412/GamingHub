@@ -35,6 +35,10 @@ import shared from './Shared';
 import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
+import IntroducePremium from './IntroducePremium';
+import Premium from './Premium';
+import premiumBg from './images/Premium_background_buy.png';
+import premiumDiamond from './images/Premium_icon.png';
 
 let isMouseDown = false;
 let startX;
@@ -55,6 +59,8 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+    const [showIntroducePremium, setShowIntroducePremium] = useState(false);
+    const [showPremium, setShowPremium] = useState(false);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -72,10 +78,18 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 const data = await response.json();
                 console.log('Total flips API response:', data);
                 
-                // Handle API response format: {"code": 0, "data": 159}
+                // Handle API response format: {"code": 0, "data": {"totalFlips": 1859, "userFlips": 27}}
                 if (data.code === 0 && data.data !== undefined) {
-                    setTotalFlips(data.data.totalFlips);
-                    console.log('✅ Found totalFlips in data.data:', data.data);
+                    if (typeof data.data === 'object' && data.data.totalFlips !== undefined) {
+                        setTotalFlips(data.data.totalFlips);
+                        console.log('✅ Found totalFlips in data.data.totalFlips:', data.data.totalFlips);
+                    } else if (typeof data.data === 'number') {
+                        // Fallback for old format: {"code": 0, "data": 159}
+                        setTotalFlips(data.data);
+                        console.log('✅ Found totalFlips in data.data (number):', data.data);
+                    } else {
+                        console.log('Unexpected totalFlips API response format:', data);
+                    }
                 } else {
                     console.log('Unexpected totalFlips API response format:', data);
                 }
@@ -135,6 +149,59 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setInitialMarketTab('starlet');
         // Navigate to market tab
         shared.setActiveTab('market');
+    };
+
+    // Premium membership status
+    const [isPremiumMember, setIsPremiumMember] = useState(false);
+    
+    // Set setIsPremiumMember function to shared so other components can use it
+    useEffect(() => {
+        shared.setIsPremiumMember = setIsPremiumMember;
+        shared.setShowPremium = () => setShowPremium(true);
+    }, []);
+    
+    // Function to check premium membership status
+    const checkPremiumStatus = async () => {
+        try {
+            if (!shared.loginData?.token) {
+                console.log('No login token available for premium status check');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.code === 0 && data.data) {
+                    const premiumData = data.data;
+                    const newPremiumStatus = premiumData.isMembership || false;
+                    
+                    setIsPremiumMember(newPremiumStatus);
+                    shared.isPremiumMember = newPremiumStatus; // Update shared state
+                    console.log('Premium status updated:', newPremiumStatus);
+                    
+                    // Auto-adjust avatar if premium status changed and avatar doesn't match
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
+                        console.log('Premium status is false but user has premium avatar, auto-adjusting...');
+                        const adjustResult = await shared.autoAdjustAvatar(getProfileData);
+                        if (adjustResult.success) {
+                            console.log('Avatar auto-adjusted:', adjustResult.message);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking premium status:', error);
+        }
+    };
+    
+    const onClickPremium = () => {
+        if (isPremiumMember) {
+            setShowPremium(true); // Mở trang Premium
+        } else {
+            setShowIntroducePremium(true); // Mở trang IntroducePremium
+        }
     };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
@@ -673,6 +740,9 @@ Response:
                 await setupEvents();
                 await getDailyTask();
                 
+                // Check premium status
+                await checkPremiumStatus();
+                
                 // OPTIMIZED: Remove duplicate fetchTotalFlips() call here since interval will handle it
                 // fetchTotalFlips(); // ← Removed to prevent duplicate call
                 
@@ -978,14 +1048,22 @@ Response:
     return (
         <>
             <header className="stats-header">
-                <button 
-                    className="profile-pic-main"
-                    onClick={() => setShowProfileView(true)}
-                >
-                    <img 
-                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                    alt="Profile" />
-                </button>
+                <div className="profile-pic-container">
+                    <button 
+                        className="profile-pic-main"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img 
+                        src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                        alt="Profile" />
+                    </button>
+                    {/* Premium icon overlay */}
+                    {shared.isPremiumMember && (
+                        <div className="premium-icon-overlay">
+                            <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+                        </div>
+                    )}
+                </div>
                 <div className="level-badge" onClick={() => setShowProfileView(true)}>
                     LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
@@ -1059,6 +1137,8 @@ Response:
                     </button>
                 </section> */}
                 
+                
+
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => onClickOpenGame()}>
                         <div className='ticket-button-image-container'>
@@ -1161,7 +1241,7 @@ Response:
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
-                            <div className='ticket-button-container-border'></div>
+                        <div className='ticket-button-container-border'></div>
                             {/* <div className="ticket-button-content"> */}
                                 <h3 className="event-card-title">MY TICKETS</h3>
                                 <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
@@ -1169,6 +1249,31 @@ Response:
                                     Scratch Tickets
                                 </div>
                             {/* </div> */}
+                        </div>
+                    </button>
+                </section>
+
+                <section className="tickets-section">
+                    <button className="ticket-button premium-button" onClick={() => onClickPremium()}>
+                        <div className='ticket-button-image-container'>
+                            <img
+                                src={premiumBg}
+                                alt="Premium Background"
+                                className="ticket-button-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            
+                            {/* Premium Text */}
+                            <div className="premium-text">PREMIUM</div>
+                        </div>
+                        
+                        {/* Premium Diamond */}
+                        <div className="premium-diamond-container">
+                            <img
+                                src={premiumDiamond}
+                                alt="Premium Diamond"
+                                className="premium-diamond"
+                            />
                         </div>
                     </button>
                 </section>
@@ -1254,6 +1359,31 @@ Response:
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
+            
+            {/* Premium Popup */}
+            <Premium 
+                isOpen={showPremium} 
+                onClose={async () => {
+                    setShowPremium(false);
+                    // Refresh all data when closing premium to match Market → MainView behavior
+                    await getProfileData();
+                    await checkPremiumStatus();
+                    await fetchTotalFlips();
+                }}
+            />
+            
+            {/* Introduce Premium Popup */}
+            <IntroducePremium 
+                isOpen={showIntroducePremium} 
+                onClose={() => setShowIntroducePremium(false)}
+                onSelectPlan={(plan) => {
+                    console.log('Selected plan:', plan);
+                    setShowIntroducePremium(false);
+                    // Navigate to market with starlet tab to show premium packages
+                    shared.setInitialMarketTab('starlet');
+                    shared.setActiveTab('market');
+                }}
+            />
         </>
     );
 };

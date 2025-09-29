@@ -8,6 +8,7 @@ import fsl_point from './images/fsl_point.png';
 import starletIcon from './images/starlet.png';
 import gmtIcon from './images/GMT_1.png';
 import ID_selected from './images/ID_selected.svg';
+import premiumDiamond from './images/Premium_icon.png';
 
 const FSLID = () => {
     const [loading, setLoading] = useState(false);

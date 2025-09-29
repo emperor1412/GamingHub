@@ -29,6 +29,9 @@ import avatar13 from './images/avatar_13_Squirrel_300px.png';
 import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
+import avatar17 from './images/PirateParrot.png';
+import avatar18 from './images/Robot.png';
+import avatar19 from './images/Squirrel.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
@@ -64,6 +67,11 @@ const shared = {
     game_link: 'https://t.me/TestFSL_bot/tadogami',
     host_environment: 'test',
     initialMarketTab: 'telegram', // Default tab for Market component
+    
+    // Premium membership status - shared across all components
+    isPremiumMember: false,
+    setIsPremiumMember: null, // Will be set by MainView component
+    
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -78,6 +86,9 @@ const shared = {
         { id: 10, src: avatar11 },
         { id: 11, src: avatar12 },
         { id: 12, src: avatar16 },
+        { id: 13, src: avatar17 },
+        { id: 14, src: avatar18 },
+        { id: 15, src: avatar19 },
     ],
 
     mappingIcon : {
@@ -908,6 +919,74 @@ data object
                 data: null
             };
         }
+    },
+
+    // Auto-adjust avatar if it's premium but user doesn't have premium membership
+    autoAdjustAvatar: async (getProfileData) => {
+        if (!shared.userProfile || !shared.loginData?.token) {
+            return { success: false, error: 'No user profile or login data' };
+        }
+
+        // Check if current avatar is premium (13-15) but user doesn't have premium membership
+        if (shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !shared.isPremiumMember) {
+            console.log(`Avatar ${shared.userProfile.pictureIndex} is premium but user doesn't have premium membership`);
+            
+            // Find the lowest available avatar index
+            let minAvailableIndex = 0;
+            
+            // Always use avatar 0 (the smallest/basic avatar)
+            minAvailableIndex = 0;
+            
+            // Set to the lowest available avatar and auto-save
+            if (minAvailableIndex >= 0) {
+                console.log(`Auto-adjusting avatar from ${shared.userProfile.pictureIndex} to ${minAvailableIndex}`);
+                
+                try {
+                    // Auto-save the avatar change
+                    const response = await fetch(`${shared.server_url}/api/app/changePicture?token=${shared.loginData.token}&index=${minAvailableIndex}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Auto-save avatar response:', data);
+                    
+                    if (data.code === 0) {
+                        // Refresh profile data to get updated pictureIndex
+                        if (getProfileData) {
+                            await getProfileData();
+                        } else {
+                            await shared.getProfileWithRetry();
+                        }
+                        console.log('Avatar auto-saved successfully');
+                        
+                        return {
+                            success: true,
+                            adjustedFrom: shared.userProfile.pictureIndex,
+                            adjustedTo: minAvailableIndex,
+                            message: `Avatar auto-adjusted from ${shared.userProfile.pictureIndex} to ${minAvailableIndex}`
+                        };
+                    } else {
+                        console.error('Failed to auto-save avatar:', data);
+                        return {
+                            success: false,
+                            error: data.msg || 'Failed to auto-save avatar',
+                            data: data
+                        };
+                    }
+                } catch (error) {
+                    console.error('Error auto-saving avatar:', error);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+        }
+        
+        return { success: false, message: 'No adjustment needed' };
     }
 
 };

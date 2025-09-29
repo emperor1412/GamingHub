@@ -36,6 +36,8 @@ import trophy_10050 from './images/stepBoost_trophy_unlocked.png';
 import trophy_10050_locked from './images/stepBoost_trophy_locked.png';
 import trophy_10060 from './images/BToken.png';
 import trophy_10060_locked from './images/BToken_Locked.png';
+import trophy_10070 from './images/FSLGamesHub_PremiumMembership_1441.png';
+import trophy_10070_locked from './images/FSLGamesHub_PremiumMembership_1441_1.png';
 import locker from './images/locker.png';
 import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
@@ -130,6 +132,7 @@ const Frens = () => {
     10043: trophy_10043,
     10050: trophy_10050,
     10060: trophy_10060,
+    10070: trophy_10070,
   }
   
   const trophyIconLocked = {
@@ -143,6 +146,7 @@ const Frens = () => {
     10043: trophy_10043_locked,
     10050: trophy_10050_locked,
     10060: trophy_10060_locked,
+    10070: trophy_10070_locked,
   }
   
   const getTrophyData = async (depth = 0) => {
@@ -180,6 +184,7 @@ const Frens = () => {
                 trophy.id === 10043 && trophy.state === 0 ? trophy_10043_locked :
                 trophy.id === 10050 && trophy.state === 0 ? trophy_10050_locked :
                 trophy.id === 10060 && trophy.state === 0 ? trophy_10060_locked :
+                trophy.id === 10070 && trophy.state === 0 ? trophy_10070_locked :
                 trophyIcon[trophy.id]
         }));
 

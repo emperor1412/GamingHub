@@ -1,0 +1,538 @@
+/* Premium Overlay */
+.premium-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* Premium Container */
+.premium-container {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #000FEF;
+  border-radius: 12px;
+  width: 83%;
+  max-width: 350px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 15px;
+  margin-top: 50px;
+  
+  /* Corner borders variables */
+  --premium-corner-size: 15px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 0.5px;
+  --premium-corner-offset: 15px;
+}
+
+.premium-header .premium-corner {
+  position: absolute;
+  width: var(--premium-corner-size);
+  height: var(--premium-corner-size);
+  z-index: 5;
+}
+
+.premium-header .premium-top-left {
+  top: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-header .premium-top-right {
+  top: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-header .premium-bottom-left {
+  bottom: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-header .premium-bottom-right {
+  bottom: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+/* Back Button */
+.premium-back-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.premium-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.premium-back-btn img {
+  width: 20px;
+  height: 20px;
+  filter: invert(1); /* Make icon white */
+}
+
+/* Header */
+.premium-header {
+  display: flex;
+  align-items: center;
+  margin: 20px 20px;
+  gap: 20px;
+  position: relative;
+  
+  /* Corner borders variables for header */
+  --premium-corner-size: 10px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 2px;
+  --premium-corner-offset: -20px;
+}
+
+.premium-diamond-img {
+  flex: 3;
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  transform: scale(1.2);
+}
+
+.premium-title {
+  flex: 7;
+  font-size: 29.82px;
+  font-weight: 700;
+  line-height: 30.08px;
+  letter-spacing: 1px;
+  color: white;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+}
+
+.premium-title-line {
+  display: block;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-family: inherit;
+}
+
+/* Progress Bar */
+.premium-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.premium-level-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.premium-level {
+  font-size: 10px;
+  font-weight: 800;
+  font-family: "PP Neue Machina";
+  font-style: italic;
+  color: #ffffff;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 100%;
+  letter-spacing: 1.2px;
+}
+
+.premium-progress-bar {
+  flex: 1;
+  height: 30px;
+  background: #0000FF; /* Dark blue background */
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.premium-progress-fill {
+  height: 100%;
+  background: #00F1FF; /* Cyan fill */
+  border-radius: 30px;
+  transition: width 0.3s ease;
+}
+
+.premium-segment-divider {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: #000;
+  z-index: 2;
+}
+
+
+
+/* Rewards List */
+.premium-rewards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.premium-reward-item {
+  background: #000000;
+  border: 1px solid #FF00F6;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  height: 31px;
+  padding: 0 5px;
+  transition: all 0.3s ease;
+  gap: 2px;
+}
+
+.premium-reward-clickable {
+  cursor: pointer;
+}
+
+.premium-reward-clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 241, 255, 0.3);
+}
+
+/* Type-specific colors */
+.premium-reward-bank-steps {
+  border-color: #FF00F6; /* Pink - default */
+}
+
+.premium-reward-freeze-streak {
+  border-color: #00FFEE; /* Cyan */
+}
+
+.premium-reward-step-boost {
+  border-color: #FF5F57; /* Orange */
+}
+
+.premium-reward-sgc-tokens {
+  border-color: #F9DF26; /* Yellow */
+}
+
+/* Locked state - override with gray colors */
+.premium-reward-item:has(.premium-status-locked) {
+  border-color: #A9A7A7 !important; /* Dark gray border */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-number {
+  background: #A9A7A7 !important; /* Dark gray number */
+  color: #000000 !important; /* Light gray text */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-quantity {
+  color: #83807F !important; /* Gray color for locked quantity */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-text {
+  background: #8C8C8C !important; /* Dark gray text background */
+  box-shadow: 0 0 0 1px #B8B8B8 !important; /* Outer border with #B8B8B8 color */
+}
+
+.premium-reward-item:has(.premium-status-unlocked) .premium-reward-text {
+  background: transparent !important; /* No background for unlocked */
+  color: white !important; /* Light gray text */
+}
+
+.premium-reward-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.premium-reward-item-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto;
+}
+
+.premium-status-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.premium-reward-number {
+  font-size: 11px;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #000000;
+  width: 23px;
+  height: 23px;
+  font-family: "PP Neue Machina", sans-serif;
+  border-radius: 50%;
+  background: #FF00F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Type-specific number colors */
+.premium-number-bank-steps {
+  background: #FF00F6; /* Pink */
+}
+
+.premium-number-freeze-streak {
+  background: #00FFEE; /* Cyan */
+}
+
+.premium-number-step-boost {
+  background: #FF5F57; /* Orange */
+}
+
+.premium-number-sgc-tokens {
+  background: #F9DF26; /* Yellow */
+}
+
+.premium-reward-text {
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 100%;
+  color: #000000;
+  width: 99px;
+  height: 8px;
+  padding: 4px 4px;
+  padding-top: 4.5px;
+  font-family: "PP Neue Machina", sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+  border-radius: 30px;
+  background: #FF00F6;
+}
+
+/* Type-specific text colors */
+.premium-text-bank-steps {
+  background: #FF00F6; /* Pink */
+  box-shadow: 0 0 0 1px #FF00F6 !important; /* Outer border with #FF00F6 color */
+}
+
+.premium-text-freeze-streak {
+  background: #00FFEE; /* Cyan */
+  box-shadow: 0 0 0 1px #00FFEE !important; /* Outer border with #FF00F6 color */
+}
+
+.premium-text-step-boost {
+  background: #FF5F57; /* Orange */
+  box-shadow: 0 0 0 1px #FF5F57 !important; /* Outer border with #FF00F6 color */
+}
+
+.premium-text-sgc-tokens {
+  background: #F9DF26; /* Yellow */
+  box-shadow: 0 0 0 1px #F9DF26 !important; /* Outer border with #FF00F6 color */
+}
+
+.premium-reward-status {
+  font-size: 8px;
+  font-weight: 700;
+  width: 63px;
+  height: 8px;
+  padding: 4px 4px;
+  padding-top: 4.5px;
+  font-family: "PP Neue Machina", sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+  border-radius: 30px;
+  background: #000FEF;
+}
+
+/* Status-specific colors */
+.premium-status-claimed {
+  background: #000FEF; /* Blue */
+  color: #FFFFFF;
+  box-shadow: 0 0 0 1px #000FEF !important; /* Outer border with #FF00F6 color */
+}
+
+.premium-status-unlocked {
+  background: transparent !important; /* No background for unlocked */
+  color: white !important; /* Light gray text */
+}
+
+/* Unlocked status specific colors for each type */
+.premium-status-unlocked.premium-status-type-bank-steps {
+  box-shadow: 0 0 0 1px #FF00F6 !important; /* Pink border for unlocked bank steps */
+}
+
+.premium-status-unlocked.premium-status-type-freeze-streak {
+  box-shadow: 0 0 0 1px #00FFEE !important; /* Cyan border for unlocked freeze streak */
+}
+
+.premium-status-unlocked.premium-status-type-step-boost {
+  box-shadow: 0 0 0 1px #FF5F57 !important; /* Orange border for unlocked step boost */
+}
+
+.premium-status-unlocked.premium-status-type-sgc-tokens {
+  box-shadow: 0 0 0 1px #F9DF26 !important; /* Yellow border for unlocked sgc tokens */
+}
+
+.premium-status-locked {
+  background: #373737; /* Dark gray */
+  color: #FFFFFF; /* Light gray text */
+  box-shadow: 0 0 0 1px #373737 !important; /* Yellow border for unlocked sgc tokens */
+}
+
+.premium-reward-quantity {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  font-family: "PP Neue Machina", sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  min-width: 30px;
+}
+
+/* Status Icon - thể hiện trạng thái CLAIMED/UNLOCKED/LOCKED */
+.premium-status-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Reward Icon - thể hiện loại reward, nằm chung với quantity */
+.premium-reward-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* Footer */
+.premium-footer {
+  text-align: center;
+  position: relative;
+
+  /* Corner borders variables for footer */
+  --premium-corner-size: 10px;
+  --premium-corner-color: #00F1FF;
+  --premium-corner-border: 2px;
+  --premium-corner-offset: -5px;
+}
+
+.premium-footer .premium-corner {
+  position: absolute;
+  width: var(--premium-corner-size);
+  height: var(--premium-corner-size);
+  z-index: 5;
+}
+
+.premium-footer .premium-top-left {
+  top: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-top-right {
+  top: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-top: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-bottom-left {
+  bottom: var(--premium-corner-offset);
+  left: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-left: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-footer .premium-bottom-right {
+  bottom: var(--premium-corner-offset);
+  right: var(--premium-corner-offset);
+  border-bottom: var(--premium-corner-border) solid var(--premium-corner-color);
+  border-right: var(--premium-corner-border) solid var(--premium-corner-color);
+}
+
+.premium-time-remaining {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 15px;
+  line-height: 100%;
+}
+
+.premium-renew-btn {
+  background: #000FEF;
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 24px;
+  width: 100%;
+  font-size: 25.62px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+}
+
+.premium-renew-btn:hover {
+  background: #000FEF;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+/* @media screen and (max-width: 480px) {
+  .premium-container {
+    width: 95%;
+    padding: 15px;
+  }
+  ư
+  .premium-title {
+    font-size: 90px !important;
+  }
+  
+  .premium-reward-item {
+    padding: 10px;
+  }
+  
+  .premium-reward-text {
+    font-size: 12px;
+  }
+} */
