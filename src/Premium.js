@@ -6,6 +6,7 @@ import unlockIcon from './images/unlock.png';
 import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
+import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
@@ -33,13 +34,13 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           description: shared.mappingText[type] || 'FREEZE STREAK',
           icon: shared.mappingIcon[type]
         };
-      case 10120: // STEP BOOST
+      case 10120: // STEP BOOST 1.5x
         return {
           type: 'STEP BOOST',
           description: shared.mappingText[type] || '1.5X BOOST STEPS', 
-          icon: shared.mappingIcon[type]
+          icon: iconStepBoostReward
         };
-      case 10121: // STEP BOOST
+      case 10121: // STEP BOOST 2x
         return {
           type: 'STEP BOOST',
           description: shared.mappingText[type] || '2X BOOST STEPS', 
@@ -121,29 +122,38 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           setIsMembership(premiumData.isMembership || false);
           setEndTime(premiumData.endTime || 0);
           
-          // Process rewards
+          // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
           if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
             const processedRewards = premiumData.rewards.map(rewardLevel => {
               if (rewardLevel.list && rewardLevel.list.length > 0) {
-                const rewardItem = rewardLevel.list[0]; // Take first item from list
-                const typeInfo = getRewardTypeInfo(rewardItem.type);
-                const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
+                // Process each reward in the list
+                const rewards = rewardLevel.list.map(rewardItem => {
+                  const typeInfo = getRewardTypeInfo(rewardItem.type);
+                  const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
+                  
+                  return {
+                    level: rewardLevel.level,
+                    type: typeInfo.type,
+                    description: typeInfo.description,
+                    quantity: rewardItem.amount,
+                    status: status,
+                    icon: typeInfo.icon,
+                    claimStatus: rewardLevel.claimStatus,
+                    rewardType: rewardItem.type
+                  };
+                });
                 
                 return {
                   level: rewardLevel.level,
-                  type: typeInfo.type,
-                  description: typeInfo.description,
-                  quantity: rewardItem.amount,
-                  status: status,
-                  icon: typeInfo.icon,
-                  claimStatus: rewardLevel.claimStatus
+                  claimStatus: rewardLevel.claimStatus,
+                  rewards: rewards
                 };
               }
               return null;
             }).filter(reward => reward !== null);
             
             setRewards(processedRewards);
-            console.log('✅ Processed rewards:', processedRewards);
+            console.log('✅ Processed rewards with multiple items per level:', processedRewards);
           }
         } else {
           console.log('Unexpected premium data API response format:', data);
@@ -153,6 +163,96 @@ const Premium = ({ isOpen, onClose = 0 }) => {
       }
     } catch (error) {
       console.error('Error fetching premium data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // FAKE DATA FOR TESTING - Keep for testing purposes
+  const fetchPremiumDataFake = async () => {
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // FAKE DATA with multiple rewards per level
+      const fakeData = {
+        "code": 0,
+        "data": {
+          "isMembership": true,
+          "endTime": 1761868799000,
+          "level": 5,
+          "exp": 1200,
+          "type": 1,
+          "rewards": [
+            { "level": 1, "claimStatus": true, "list": [{ "level": 1, "type": 10020, "amount": 500 }] },
+            { "level": 2, "claimStatus": true, "list": [{ "level": 2, "type": 10020, "amount": 600 }] },
+            { "level": 3, "claimStatus": false, "list": [{ "level": 3, "type": 10020, "amount": 700 }] },
+            { "level": 4, "claimStatus": false, "list": [{ "level": 4, "type": 10110, "amount": 1 }] },
+            { "level": 5, "claimStatus": false, "list": [{ "level": 5, "type": 10120, "amount": 1 }] },
+            { "level": 6, "claimStatus": false, "list": [{ "level": 6, "type": 10020, "amount": 800 }, { "level": 6, "type": 10110, "amount": 1 }] },
+            { "level": 7, "claimStatus": false, "list": [{ "level": 7, "type": 10121, "amount": 1 }] },
+            { "level": 8, "claimStatus": false, "list": [{ "level": 8, "type": 10030, "amount": 1000 }] },
+            { "level": 9, "claimStatus": false, "list": [{ "level": 9, "type": 10020, "amount": 900 }, { "level": 9, "type": 10120, "amount": 1 }] },
+            { "level": 10, "claimStatus": false, "list": [{ "level": 10, "type": 10030, "amount": 2000 }, { "level": 10, "type": 10110, "amount": 2 }] },
+            { "level": 11, "claimStatus": false, "list": [{ "level": 11, "type": 10020, "amount": 1000 }, { "level": 11, "type": 10121, "amount": 1 }, { "level": 11, "type": 10030, "amount": 500 }] },
+            { "level": 12, "claimStatus": false, "list": [{ "level": 12, "type": 10030, "amount": 5000 }, { "level": 12, "type": 10121, "amount": 2 }] },
+            { "level": 13, "claimStatus": false, "list": [{ "level": 13, "type": 10020, "amount": 1200 }] },
+            { "level": 14, "claimStatus": false, "list": [{ "level": 14, "type": 10110, "amount": 3 }] },
+            { "level": 15, "claimStatus": false, "list": [{ "level": 15, "type": 10121, "amount": 2 }] },
+            { "level": 16, "claimStatus": false, "list": [{ "level": 16, "type": 10030, "amount": 3000 }] },
+            { "level": 17, "claimStatus": false, "list": [{ "level": 17, "type": 10020, "amount": 1500 }, { "level": 17, "type": 10110, "amount": 2 }] },
+            { "level": 18, "claimStatus": false, "list": [{ "level": 18, "type": 10121, "amount": 3 }] },
+            { "level": 19, "claimStatus": false, "list": [{ "level": 19, "type": 10030, "amount": 4000 }] },
+            { "level": 20, "claimStatus": false, "list": [{ "level": 20, "type": 10020, "amount": 2000 }, { "level": 20, "type": 10121, "amount": 2 }, { "level": 20, "type": 10030, "amount": 1000 }] }
+          ]
+        }
+      };
+      
+      console.log('Using FAKE premium data:', fakeData);
+      
+      const premiumData = fakeData.data;
+      
+      // Set basic info
+      setCurrentXP(premiumData.exp || 0);
+      setCurrentLevel(premiumData.level || 0);
+      setIsMembership(premiumData.isMembership || false);
+      setEndTime(premiumData.endTime || 0);
+      
+      // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
+      if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
+        const processedRewards = premiumData.rewards.map(rewardLevel => {
+          if (rewardLevel.list && rewardLevel.list.length > 0) {
+            // Process each reward in the list
+            const rewards = rewardLevel.list.map(rewardItem => {
+              const typeInfo = getRewardTypeInfo(rewardItem.type);
+              const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
+              
+              return {
+                level: rewardLevel.level,
+                type: typeInfo.type,
+                description: typeInfo.description,
+                quantity: rewardItem.amount,
+                status: status,
+                icon: typeInfo.icon,
+                claimStatus: rewardLevel.claimStatus,
+                rewardType: rewardItem.type
+              };
+            });
+            
+            return {
+              level: rewardLevel.level,
+              claimStatus: rewardLevel.claimStatus,
+              rewards: rewards
+            };
+          }
+          return null;
+        }).filter(reward => reward !== null);
+        
+        setRewards(processedRewards);
+        console.log('✅ Processed rewards with multiple items per level:', processedRewards);
+      }
+    } catch (error) {
+      console.error('Error with fake premium data:', error);
     } finally {
       setLoading(false);
     }
@@ -385,35 +485,41 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           <div className="premium-level">LEVEL 12</div>
         </div>
         
-        {/* Rewards List */}
+        {/* Rewards List - Back to Original Design */}
         <div className="premium-rewards">
-          {rewards.map((reward, index) => (
+          {rewards.map((rewardLevel, levelIndex) => (
             <div 
-              key={reward.level} 
-              className={`premium-reward-item premium-reward-${reward.type.toLowerCase().replace(' ', '-')} ${reward.status === 'UNLOCKED' ? 'premium-reward-clickable' : ''}`}
-              onClick={() => reward.status === 'UNLOCKED' && handleClaimReward(index)}
+              key={rewardLevel.level} 
+              className={`premium-reward-item ${!rewardLevel.claimStatus && rewardLevel.level <= currentLevel ? 'premium-reward-clickable' : ''}`}
+              onClick={() => !rewardLevel.claimStatus && rewardLevel.level <= currentLevel && handleClaimReward(levelIndex)}
             >
               <div className="premium-reward-item-left">
-                <span className={`premium-reward-number premium-number-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.level}</span>
-                <span className={`premium-reward-text premium-text-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.description}</span>
+                <img 
+                  src={rewardLevel.claimStatus ? premiumDiamond : 
+                       (rewardLevel.level <= currentLevel ? unlockIcon : lockIcon)} 
+                  alt="Status Icon" 
+                  className={`premium-status-icon premium-status-icon-${rewardLevel.claimStatus ? 'diamond' : (rewardLevel.level <= currentLevel ? 'unlock' : 'lock')}`}
+                />
+                <span className="premium-reward-number">{rewardLevel.level}</span>
               </div>
               <div className="premium-reward-item-right">
-                <div className="premium-status-group">
-                  <img 
-                    src={reward.status === 'CLAIMED' ? premiumDiamond : 
-                         reward.status === 'UNLOCKED' ? unlockIcon : lockIcon} 
-                    alt="Status Icon" 
-                    className="premium-status-icon" 
-                  />
-                  <span className={`premium-reward-status premium-status-${reward.status.toLowerCase()} premium-status-type-${reward.type.toLowerCase().replace(' ', '-')}`}>{reward.status}</span>
+                <div className="premium-reward-info">
+                  {rewardLevel.rewards.map((reward, rewardIndex) => (
+                    <div key={rewardIndex} className="premium-reward-item-info">
+                      <span className="premium-reward-quantity">{reward.quantity}</span>
+                      <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
+                    </div>
+                  ))}
                 </div>
-                <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
-                <span className="premium-reward-quantity">{reward.quantity}</span>
+                <div className="premium-status-container">
+                  <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>
+                    {rewardLevel.claimStatus ? 'CLAIMED' : (rewardLevel.level <= currentLevel ? 'UNLOCKED' : 'LOCKED')}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
         </div>
-        
         {/* Footer */}
         <div className="premium-footer">
           {/* Corner borders for header */}
