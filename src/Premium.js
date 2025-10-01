@@ -38,13 +38,13 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         return {
           type: 'STEP BOOST',
           description: shared.mappingText[type] || '1.5X BOOST STEPS', 
-          icon: iconStepBoostReward
+          icon: shared.mappingIcon[type]
         };
       case 10121: // STEP BOOST 2x
         return {
           type: 'STEP BOOST',
           description: shared.mappingText[type] || '2X BOOST STEPS', 
-          icon: shared.mappingIcon[type]
+          icon: iconStepBoostReward
         };
       case 10030: // SGC TOKENS
         return {
@@ -84,16 +84,6 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   //   { level: 12, type: 'SGC TOKENS', description: '1000 SGC TOKENS', quantity: 3, status: 'CLAIMED', icon: bCoin },
   // ];
 
-  // Function to determine reward status based on level and current level
-  const getRewardStatus = (rewardLevel, claimStatus, userLevel) => {
-    if (claimStatus) {
-      return 'CLAIMED';
-    } else if (rewardLevel <= userLevel) {
-      return 'UNLOCKED';
-    } else {
-      return 'LOCKED';
-    }
-  };
 
   // Fetch premium data from API
   const fetchPremiumData = async () => {
@@ -129,14 +119,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
                 // Process each reward in the list
                 const rewards = rewardLevel.list.map(rewardItem => {
                   const typeInfo = getRewardTypeInfo(rewardItem.type);
-                  const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
                   
                   return {
                     level: rewardLevel.level,
                     type: typeInfo.type,
                     description: typeInfo.description,
                     quantity: rewardItem.amount,
-                    status: status,
                     icon: typeInfo.icon,
                     claimStatus: rewardLevel.claimStatus,
                     rewardType: rewardItem.type
@@ -225,14 +213,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
             // Process each reward in the list
             const rewards = rewardLevel.list.map(rewardItem => {
               const typeInfo = getRewardTypeInfo(rewardItem.type);
-              const status = getRewardStatus(rewardLevel.level, rewardLevel.claimStatus, premiumData.level);
               
               return {
                 level: rewardLevel.level,
                 type: typeInfo.type,
                 description: typeInfo.description,
                 quantity: rewardItem.amount,
-                status: status,
                 icon: typeInfo.icon,
                 claimStatus: rewardLevel.claimStatus,
                 rewardType: rewardItem.type
@@ -292,7 +278,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
 
   // Function to claim reward and show popup
   const handleClaimReward = async (rewardIndex) => {
-    if (rewards[rewardIndex].status !== 'UNLOCKED') return;
+    if (rewards[rewardIndex].claimStatus || rewards[rewardIndex].level > currentLevel) return;
     
     const reward = rewards[rewardIndex];
     
@@ -315,24 +301,30 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           // Update UI state to show as claimed
           setRewards(prevRewards => {
             const newRewards = [...prevRewards];
-            newRewards[rewardIndex].status = 'CLAIMED';
             newRewards[rewardIndex].claimStatus = true;
             return newRewards;
           });
           
           // Set reward data from API response for popup
           if (data.data.reward && data.data.reward.length > 0) {
-            const apiReward = data.data.reward[0];
-            const typeInfo = getRewardTypeInfo(apiReward.type);
+            // Process all rewards from API response
+            const processedRewards = data.data.reward.map(apiReward => {
+              const typeInfo = getRewardTypeInfo(apiReward.type);
+              return {
+                level: apiReward.level,
+                type: typeInfo.type,
+                description: typeInfo.description,
+                quantity: apiReward.amount,
+                status: 'CLAIMED',
+                icon: typeInfo.icon,
+                rewardType: apiReward.type
+              };
+            });
             
             setSelectedReward({
-              level: apiReward.level,
-              type: typeInfo.type,
-              description: typeInfo.description,
-              quantity: apiReward.amount,
-              status: 'CLAIMED',
-              icon: typeInfo.icon,
+              level: reward.level,
               claimStatus: true,
+              rewards: processedRewards,
               index: rewardIndex
             });
             
