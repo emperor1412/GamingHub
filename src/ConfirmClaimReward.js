@@ -52,14 +52,19 @@ const ConfirmClaimReward = ({ isOpen, onClose, onConfirm, reward }) => {
               <div className="ccr-corner ccr-bottom-right-rewards"></div>
               
               {/* Display all rewards with auto layout */}
-              <div className={`ccr-rewards-grid ${reward.rewards && reward.rewards.length === 1 ? 'ccr-single-reward' : ''}`}>
-                {reward.rewards && reward.rewards.map((rewardItem, index) => (
-                  <div key={index} className="ccr-reward-item">
-                    <img src={rewardItem.icon} alt="Reward Icon" className="ccr-reward-icon" />
-                    <div className="ccr-quantity">{rewardItem.quantity.toString().padStart(2, '0')}</div>
+              {(() => {
+                const filteredRewards = reward.rewards ? reward.rewards.filter(rewardItem => rewardItem.quantity > 0) : [];
+                return (
+                  <div className={`ccr-rewards-grid ${filteredRewards.length === 1 ? 'ccr-single-reward' : ''}`}>
+                    {filteredRewards.map((rewardItem, index) => (
+                      <div key={index} className="ccr-reward-item">
+                        <img src={rewardItem.icon} alt="Reward Icon" className="ccr-reward-icon" />
+                        <div className="ccr-quantity">{rewardItem.quantity.toString().padStart(2, '0')}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </div>
             
             {/* <div className="ccr-reward-name">

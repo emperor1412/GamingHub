@@ -496,12 +496,14 @@ const Premium = ({ isOpen, onClose = 0 }) => {
               </div>
               <div className="premium-reward-item-right">
                 <div className="premium-reward-info">
-                  {rewardLevel.rewards.map((reward, rewardIndex) => (
-                    <div key={rewardIndex} className="premium-reward-item-info">
-                      <span className="premium-reward-quantity">{reward.quantity}</span>
-                      <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
-                    </div>
-                  ))}
+                  {rewardLevel.rewards
+                    .filter(reward => reward.quantity > 0) // Filter out rewards with quantity = 0
+                    .map((reward, rewardIndex) => (
+                      <div key={rewardIndex} className="premium-reward-item-info">
+                        <span className="premium-reward-quantity">{reward.quantity}</span>
+                        <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
+                      </div>
+                    ))}
                 </div>
                 <div className="premium-status-container">
                   <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>

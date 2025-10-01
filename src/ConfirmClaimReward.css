@@ -282,8 +282,10 @@
   .ccr-rewards-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 10px;
     margin: 20px 0;
+    min-height: 120px; /* Fixed height to maintain consistent size */
     /* max-width: 300px; */
   }
 
@@ -305,6 +307,11 @@
   /* Four or more rewards layout */
   .ccr-rewards-grid:has(.ccr-reward-item:nth-child(4)) {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .ccr-single-reward .ccr-reward-item {
+    position: relative;
+    top: -20px;
   }
 
   .ccr-reward-item {
