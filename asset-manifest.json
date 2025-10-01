@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.1047ea8c.css",
-    "main.js": "./static/js/main.2500c498.js",
+    "main.css": "./static/css/main.c817a639.css",
+    "main.js": "./static/js/main.83f7b8b1.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
@@ -169,12 +169,12 @@
     "static/media/Chest_Icon.png": "./static/media/Chest_Icon.d38d3f21ccc21b6d100d.png",
     "static/media/FreezeStreaksText.png": "./static/media/FreezeStreaksText.fb8af22d2914c1685ae0.png",
     "static/media/Egglets_Description_2.png": "./static/media/Egglets_Description_2.1bafb46d6285270f7d12.png",
+    "static/media/StepBoosts_Icon_Reward.png": "./static/media/StepBoosts_Icon_Reward.433b15c17834be226cac.png",
     "static/media/trophy_2_200px.png": "./static/media/trophy_2_200px.121e6ec8645f06825bbd.png",
     "static/media/shadow.png": "./static/media/shadow.27395acaf6c283eab075.png",
     "static/media/stepngo_code.png": "./static/media/stepngo_code.feddfc2b2086c5e84ff7.png",
     "static/media/trophy_3_200px.png": "./static/media/trophy_3_200px.d5ea6ef4daff09c97db3.png",
     "static/media/Icon_Pop_Stepboosts_1_5X.png": "./static/media/Icon_Pop_Stepboosts_1_5X.060a5d7ea21ee665975a.png",
-    "static/media/lock_icon.png": "./static/media/lock_icon.046ba4298cecfd0426ba.png",
     "static/media/trophy_1_200px.png": "./static/media/trophy_1_200px.e4c9f6d5767024684519.png",
     "static/media/banking_step_icon.png": "./static/media/banking_step_icon.7ccf4cf49700df606c0e.png",
     "static/media/Icon_Pop_Stepboosts_2X.png": "./static/media/Icon_Pop_Stepboosts_2X.0b40744ac209b3d10ce1.png",
@@ -187,7 +187,9 @@
     "static/media/FSLID_Masterlogo_logo_version1_color_white_nobg.png": "./static/media/FSLID_Masterlogo_logo_version1_color_white_nobg.6a59f836553faeb83323.png",
     "static/media/Bg_streak_5.png": "./static/media/Bg_streak_5.f50825d6d60602cbf5b6.png",
     "static/media/text_turn_your_step.png": "./static/media/text_turn_your_step.63ea6486db1e656c8d1b.png",
+    "static/media/lock_icon.png": "./static/media/lock_icon.20a56493a1322b2144e3.png",
     "static/media/bs_receive_starlet_text_claim.png": "./static/media/bs_receive_starlet_text_claim.7ff55cb29f8a1c49d6c7.png",
+    "static/media/unlock.png": "./static/media/unlock.6a3e533e24488da1094f.png",
     "static/media/ticket_lock_icon.svg": "./static/media/ticket_lock_icon.9c2c199055bd6432e2b5235a0ab282a1.svg",
     "static/media/background_avatar_selection.svg": "./static/media/background_avatar_selection.4f3881654e97f2cfaa6b4234a3d42246.svg",
     "static/media/incorrect_answer.svg": "./static/media/incorrect_answer.4332fe220d5766da38132dc21a1b27bc.svg",
@@ -224,12 +226,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.1047ea8c.css.map": "./static/css/main.1047ea8c.css.map",
-    "main.2500c498.js.map": "./static/js/main.2500c498.js.map",
+    "main.c817a639.css.map": "./static/css/main.c817a639.css.map",
+    "main.83f7b8b1.js.map": "./static/js/main.83f7b8b1.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1047ea8c.css",
-    "static/js/main.2500c498.js"
+    "static/css/main.c817a639.css",
+    "static/js/main.83f7b8b1.js"
   ]
 }
