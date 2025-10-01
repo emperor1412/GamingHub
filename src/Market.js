@@ -1855,7 +1855,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   </div>
                                   
                                   {/* Price Section */}
-                                  <div className="mk-market-ticket-price">
+                                  <div className={`mk-market-ticket-price ${disabledReason === 'YEARLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
                                     {isAvailable ? (
                                       <span>{membershipData.membershipMonthlyPrice} STARLETS</span>
                                     ) : (
