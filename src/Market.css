@@ -690,6 +690,11 @@ body.mk-market-open {
   background: #808080;
 }
 
+/* Smaller font size for specific disabled reasons */
+.mk-market-ticket-button.sold-out .mk-market-ticket-price.yearly-membership-active {
+  font-size: 9px;
+}
+
 .mk-market-ticket-info {
   flex: 1;
   display: flex;
