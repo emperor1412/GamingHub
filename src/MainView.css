@@ -953,6 +953,17 @@
     position: relative;
 }
 
+.ticket-button.premium-button.disabled,
+.ticket-button.premium-button:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.ticket-button.premium-button:disabled {
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
 .premium-diamond-container {
     position: absolute;
     top: 50%;
