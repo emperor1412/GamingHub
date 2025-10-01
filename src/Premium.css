@@ -196,7 +196,202 @@
 
 
 
-/* Rewards List */
+/* New Horizontal Rewards List Design with Multiple Rewards per Level */
+.premium-rewards-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.premium-reward-tier {
+  background: #000000;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #FF00F6; /* Default border color */
+}
+
+.premium-reward-clickable {
+  cursor: pointer;
+}
+
+.premium-reward-clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(0, 241, 255, 0.4);
+}
+
+/* Tier Indicator */
+.premium-tier-indicator {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.premium-tier-circle {
+  width: 40px;
+  height: 40px;
+  background: #A9A7A7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #A9A7A7;
+}
+
+.premium-tier-number {
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+  font-family: "PP Neue Machina", sans-serif;
+  font-style: italic;
+}
+
+/* Rewards Container */
+.premium-rewards-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 0 30px 0 40px;
+  background: #000000;
+  border-radius: 30px;
+}
+
+/* Reward Items Container */
+.premium-reward-items {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+/* Individual Reward Item */
+.premium-reward-item-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.premium-reward-quantity-horizontal {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-family: "PP Neue Machina", sans-serif;
+  white-space: nowrap;
+}
+
+.premium-reward-icon-horizontal {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+/* Status Button */
+.premium-status-button-container {
+  display: flex;
+  align-items: center;
+}
+
+.premium-status-button {
+  background: #373737;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.premium-status-button .premium-status-unlocked {
+  background: #00F1FF;
+  color: #000000;
+}
+
+.premium-status-button.premium-status-claimed {
+  background: #000FEF;
+  color: #FFFFFF;
+}
+
+.premium-status-button.premium-status-locked {
+  background: #373737;
+  color: #FFFFFF;
+}
+
+/* Type-specific border colors for individual reward items */
+.premium-reward-item-horizontal.premium-reward-bank-steps {
+  background: rgba(255, 0, 246, 0.2);
+  border: 1px solid #FF00F6;
+}
+
+.premium-reward-item-horizontal.premium-reward-freeze-streak {
+  background: rgba(0, 255, 238, 0.2);
+  border: 1px solid #00FFEE;
+}
+
+.premium-reward-item-horizontal.premium-reward-step-boost {
+  background: rgba(255, 95, 87, 0.2);
+  border: 1px solid #FF5F57;
+}
+
+.premium-reward-item-horizontal.premium-reward-sgc-tokens {
+  background: rgba(249, 223, 38, 0.2);
+  border: 1px solid #F9DF26;
+}
+
+/* Tier border colors based on primary reward type */
+.premium-reward-tier:has(.premium-reward-bank-steps) {
+  border-color: #FF00F6;
+}
+
+.premium-reward-tier:has(.premium-reward-freeze-streak) {
+  border-color: #00FFEE;
+}
+
+.premium-reward-tier:has(.premium-reward-step-boost) {
+  border-color: #FF5F57;
+}
+
+.premium-reward-tier:has(.premium-reward-sgc-tokens) {
+  border-color: #F9DF26;
+}
+
+/* Locked state styling */
+.premium-reward-tier:has(.premium-status-locked) {
+  border-color: #A9A7A7 !important;
+}
+
+.premium-reward-tier:has(.premium-status-locked) .premium-tier-circle {
+  background: #A9A7A7 !important;
+  border-color: #A9A7A7 !important;
+}
+
+.premium-reward-tier:has(.premium-status-locked) .premium-tier-number {
+  color: #000000 !important;
+}
+
+.premium-reward-tier:has(.premium-status-locked) .premium-reward-quantity-horizontal {
+  color: #83807F !important;
+}
+
+/* OLD Rewards List - Keep for reference */
 .premium-rewards {
   display: flex;
   flex-direction: column;
@@ -225,65 +420,43 @@
   box-shadow: 0 0 10px rgba(0, 241, 255, 0.3);
 }
 
-/* Type-specific colors */
-.premium-reward-bank-steps {
-  border-color: #FF00F6; /* Pink - default */
-}
-
-.premium-reward-freeze-streak {
-  border-color: #00FFEE; /* Cyan */
-}
-
-.premium-reward-step-boost {
-  border-color: #FF5F57; /* Orange */
-}
-
-.premium-reward-sgc-tokens {
-  border-color: #F9DF26; /* Yellow */
-}
-
-/* Locked state - override with gray colors */
-.premium-reward-item:has(.premium-status-locked) {
-  border-color: #A9A7A7 !important; /* Dark gray border */
-}
-
-.premium-reward-item:has(.premium-status-locked) .premium-reward-number {
-  background: #A9A7A7 !important; /* Dark gray number */
-  color: #000000 !important; /* Light gray text */
-}
-
-.premium-reward-item:has(.premium-status-locked) .premium-reward-quantity {
-  color: #83807F !important; /* Gray color for locked quantity */
-}
-
-.premium-reward-item:has(.premium-status-locked) .premium-reward-text {
-  background: #8C8C8C !important; /* Dark gray text background */
-  box-shadow: 0 0 0 1px #B8B8B8 !important; /* Outer border with #B8B8B8 color */
-}
-
-.premium-reward-item:has(.premium-status-unlocked) .premium-reward-text {
-  background: transparent !important; /* No background for unlocked */
-  color: white !important; /* Light gray text */
-}
-
 .premium-reward-item-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  position: relative;
 }
 
 .premium-reward-item-right {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-right: auto;
+  justify-content: space-between;
+  width: 100%;
+  margin: 05px;
 }
 
-.premium-status-group {
+.premium-reward-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.premium-reward-item-info {
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.premium-status-container {
+  display: flex;
+  align-items: center;
 }
 
 .premium-reward-number {
@@ -300,23 +473,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Type-specific number colors */
-.premium-number-bank-steps {
-  background: #FF00F6; /* Pink */
-}
-
-.premium-number-freeze-streak {
-  background: #00FFEE; /* Cyan */
-}
-
-.premium-number-step-boost {
-  background: #FF5F57; /* Orange */
-}
-
-.premium-number-sgc-tokens {
-  background: #F9DF26; /* Yellow */
 }
 
 .premium-reward-text {
@@ -339,26 +495,6 @@
   background: #FF00F6;
 }
 
-/* Type-specific text colors */
-.premium-text-bank-steps {
-  background: #FF00F6; /* Pink */
-  box-shadow: 0 0 0 1px #FF00F6 !important; /* Outer border with #FF00F6 color */
-}
-
-.premium-text-freeze-streak {
-  background: #00FFEE; /* Cyan */
-  box-shadow: 0 0 0 1px #00FFEE !important; /* Outer border with #FF00F6 color */
-}
-
-.premium-text-step-boost {
-  background: #FF5F57; /* Orange */
-  box-shadow: 0 0 0 1px #FF5F57 !important; /* Outer border with #FF00F6 color */
-}
-
-.premium-text-sgc-tokens {
-  background: #F9DF26; /* Yellow */
-  box-shadow: 0 0 0 1px #F9DF26 !important; /* Outer border with #FF00F6 color */
-}
 
 .premium-reward-status {
   font-size: 8px;
@@ -375,42 +511,37 @@
   white-space: nowrap;
   text-transform: uppercase;
   border-radius: 30px;
-  background: #000FEF;
 }
 
-/* Status-specific colors */
+/* Status colors */
 .premium-status-claimed {
   background: #000FEF; /* Blue */
   color: #FFFFFF;
-  box-shadow: 0 0 0 1px #000FEF !important; /* Outer border with #FF00F6 color */
 }
 
 .premium-status-unlocked {
   background: transparent !important; /* No background for unlocked */
-  color: white !important; /* Light gray text */
-}
-
-/* Unlocked status specific colors for each type */
-.premium-status-unlocked.premium-status-type-bank-steps {
-  box-shadow: 0 0 0 1px #FF00F6 !important; /* Pink border for unlocked bank steps */
-}
-
-.premium-status-unlocked.premium-status-type-freeze-streak {
-  box-shadow: 0 0 0 1px #00FFEE !important; /* Cyan border for unlocked freeze streak */
-}
-
-.premium-status-unlocked.premium-status-type-step-boost {
-  box-shadow: 0 0 0 1px #FF5F57 !important; /* Orange border for unlocked step boost */
-}
-
-.premium-status-unlocked.premium-status-type-sgc-tokens {
-  box-shadow: 0 0 0 1px #F9DF26 !important; /* Yellow border for unlocked sgc tokens */
+  box-shadow: 0 0 0 1px #FF00F6 !important;
+  color: white !important; /* White text */
 }
 
 .premium-status-locked {
   background: #373737; /* Dark gray */
-  color: #FFFFFF; /* Light gray text */
-  box-shadow: 0 0 0 1px #373737 !important; /* Yellow border for unlocked sgc tokens */
+  color: #FFFFFF; /* White text */
+}
+
+/* Locked state styling */
+.premium-reward-item:has(.premium-status-locked) {
+  border-color: #A9A7A7 !important; /* Dark gray border */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-number {
+  background: #A9A7A7 !important; /* Dark gray number */
+  color: #000000 !important; /* Black text */
+}
+
+.premium-reward-item:has(.premium-status-locked) .premium-reward-quantity {
+  color: #83807F !important; /* Gray color for locked quantity */
 }
 
 .premium-reward-quantity {
@@ -419,23 +550,42 @@
   color: #FFFFFF;
   white-space: nowrap;
   font-family: "PP Neue Machina", sans-serif;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  min-width: 30px;
 }
 
 /* Status Icon - thể hiện trạng thái CLAIMED/UNLOCKED/LOCKED */
 .premium-status-icon {
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
   object-fit: contain;
+  z-index: 10;
+}
+
+/* Specific status icon styles */
+.premium-status-icon-diamond {
+  width: 20px;
+  height: 20px;
+}
+
+.premium-status-icon-lock {
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.premium-status-icon-unlock {
+  width: 30px !important;
+  height: 30px !important;
+  left: -17px !important;
+  top: 50% !important;
 }
 
 /* Reward Icon - thể hiện loại reward, nằm chung với quantity */
 .premium-reward-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
 }
 

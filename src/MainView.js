@@ -61,6 +61,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showEggletPage, setShowEggletPage] = useState(false);
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
+    const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -163,6 +164,8 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     // Function to check premium membership status
     const checkPremiumStatus = async () => {
         try {
+            setIsCheckingPremiumStatus(true);
+
             if (!shared.loginData?.token) {
                 console.log('No login token available for premium status check');
                 return;
@@ -180,6 +183,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                     setIsPremiumMember(newPremiumStatus);
                     shared.isPremiumMember = newPremiumStatus; // Update shared state
                     console.log('Premium status updated:', newPremiumStatus);
+                    console.log('shared.isPremiumMember:', shared.isPremiumMember);
                     
                     // Auto-adjust avatar if premium status changed and avatar doesn't match
                     if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
@@ -193,13 +197,27 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
             }
         } catch (error) {
             console.error('Error checking premium status:', error);
+        } finally {
+            setIsCheckingPremiumStatus(false);
+            console.log('Premium check completed, isCheckingPremiumStatus set to false');
         }
     };
     
     const onClickPremium = () => {
-        if (isPremiumMember) {
+        console.log('onClickPremium called');
+        console.log('isCheckingPremiumStatus:', isCheckingPremiumStatus);
+        console.log('shared.isPremiumMember:', shared.isPremiumMember);
+        
+        if (isCheckingPremiumStatus) {
+            console.log('Premium check in progress, returning early');
+            return; // Disable khi đang loading
+        }
+        
+        if (shared.isPremiumMember) {
+            console.log('User is premium member, opening Premium page');
             setShowPremium(true); // Mở trang Premium
         } else {
+            console.log('User is not premium member, opening IntroducePremium page');
             setShowIntroducePremium(true); // Mở trang IntroducePremium
         }
     };
@@ -1254,7 +1272,11 @@ Response:
                 </section>
 
                 <section className="tickets-section">
-                    <button className="ticket-button premium-button" onClick={() => onClickPremium()}>
+                    <button 
+                        className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
+                        onClick={() => onClickPremium()}
+                        disabled={isCheckingPremiumStatus}
+                    >
                         <div className='ticket-button-image-container'>
                             <img
                                 src={premiumBg}

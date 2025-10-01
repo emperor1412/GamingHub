@@ -38,24 +38,38 @@ const ConfirmClaimReward = ({ isOpen, onClose, onConfirm, reward }) => {
             <div className="confirm-claim-title">PREMIUM REWARDS</div>
             <div className="ccr-message">
               <div className="ccr-highlight">KEEP IT UP!</div>
-              <div className="ccr-text">YOUR STEPS ARE PAYING OFF</div>
-              <div className="ccr-text">YOU'VE REACHED THE NEXT</div>
-              <div className="ccr-text">MILESTONE AND EARNED:</div>
+              <div className="ccr-text">Your efforts are paying</div>
+              <div className="ccr-text">off</div>
+              {/* <div className="ccr-text">MILESTONE AND EARNED:</div> */}
             </div>
             
-            <div className="ccr-reward">
-              <img src={reward.icon} alt="Reward Icon" className="ccr-reward-icon" />
-              <div className="ccr-quantity">{reward.quantity}</div>
+            {/* Rewards container with corners (like diamond container) */}
+            <div className="ccr-rewards-container">
+              {/* Corner borders for rewards */}
+              <div className="ccr-corner ccr-top-left-rewards"></div>
+              <div className="ccr-corner ccr-top-right-rewards"></div>
+              <div className="ccr-corner ccr-bottom-left-rewards"></div>
+              <div className="ccr-corner ccr-bottom-right-rewards"></div>
+              
+              {/* Display all rewards with auto layout */}
+              <div className={`ccr-rewards-grid ${reward.rewards && reward.rewards.length === 1 ? 'ccr-single-reward' : ''}`}>
+                {reward.rewards && reward.rewards.map((rewardItem, index) => (
+                  <div key={index} className="ccr-reward-item">
+                    <img src={rewardItem.icon} alt="Reward Icon" className="ccr-reward-icon" />
+                    <div className="ccr-quantity">{rewardItem.quantity.toString().padStart(2, '0')}</div>
+                  </div>
+                ))}
+              </div>
             </div>
             
-            <div className="ccr-reward-name">
-              {reward.description || reward.type}
+            {/* <div className="ccr-reward-name">
+              LEVEL {reward.level} REWARDS
             </div>
             
             <div className="ccr-encourage">
               <div className="ccr-text">STAY ACTIVE TO UNLOCK</div>
               <div className="ccr-text">EVEN MORE REWARDS!</div>
-            </div>
+            </div> */}
             
             <button className="ccr-claim-button" onClick={onConfirm}>
               CLAIM REWARDS
