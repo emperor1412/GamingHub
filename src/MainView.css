@@ -46,7 +46,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    /* max-width: 430px; */
+    max-width: 430px;
     z-index: 1000;
     display: flex;
     justify-content: space-between;
@@ -676,6 +676,8 @@
     -webkit-overflow-scrolling: touch;
     position: relative;
     overscroll-behavior: none;
+    max-width: 430px;
+    margin: 0 auto;
 
     /* Hide scrollbars while maintaining functionality */
     scrollbar-width: none;  /* Firefox */
@@ -966,16 +968,19 @@
 
 .premium-diamond-container {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-55%, -70%);
     z-index: 9;
     pointer-events: none;
+    width: 150px;
+    height: 150px;
 }
 
 .premium-diamond {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
+    transform: scale(1.1);
     object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
 }

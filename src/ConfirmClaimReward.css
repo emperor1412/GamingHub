@@ -159,7 +159,7 @@
     --ccr-corner-size: 8px;
     --ccr-corner-color: #00F1FF;
     --ccr-corner-border: 2px;
-    --ccr-corner-offset: -4px;
+    --ccr-corner-offset: 0px;
   }
 
   .ccr-rewards-container .ccr-corner {
@@ -191,7 +191,7 @@
   }
 
   .ccr-rewards-container .ccr-corner.ccr-bottom-right-rewards {
-    bottom: calc(var(--ccr-corner-offset) + 50px);
+    bottom: calc(var(--ccr-corner-offset) + 40px);
     right: var(--ccr-corner-offset);
     border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
     border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
@@ -220,7 +220,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+    /* filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); */
   }
   
   /* Content Section */
