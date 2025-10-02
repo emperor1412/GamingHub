@@ -8,7 +8,7 @@ import SuccessfulPurchasePremium from './SuccessfulPurchasePremium';
 import shared from './Shared';
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, refreshUserProfile }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -273,6 +273,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         // Call onPurchaseComplete for starlet products and premium to trigger market reload
         if ((result.isStarletProduct || result.isPremium) && onPurchaseComplete) {
           onPurchaseComplete();
+        }
+
+        if(optionId === 'free' && onPurchaseComplete) {
+          onFreeItemComplete();
         }
       } else if (result?.status === "cancelled") {
         onClose();

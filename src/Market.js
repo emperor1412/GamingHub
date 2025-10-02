@@ -452,6 +452,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowBuyView(true);
   };
 
+  const handleFreeItemClick = () => {
+    if (shared.userProfile.fslId === 0) {
+      showFSLIDScreen();
+      return;
+    }
+    setSelectedPurchase({ amount: 50, stars: 0, optionId: 'free' });
+    setIsPopupOpen(true);
+  };
+
   const handleStarletProductPurchase = (product) => {
     const productInfo = getStarletProductInfo(product);
     const purchaseData = { 
@@ -1244,7 +1253,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                           {type === 0 && (
                             <button 
                               className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                              onClick={() => !isFreeItemClaimed && handleStarletPurchase(50, 0, 'FREE', 'free')}
+                              onClick={() => !isFreeItemClaimed && handleFreeItemClick()}
                               disabled={isFreeItemClaimed}
                             >
                               <div className="mk-market-ticket-button-image-container">
@@ -1980,6 +1989,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         setShowProfileView={setShowProfileView}
         setShowBuyView={setShowBuyView}
         onPurchaseComplete={() => setIsStarletPurchaseComplete(true)}
+        onFreeItemComplete={() => {
+          checkFreeRewardTime();
+          refreshUserProfile();
+        }}
       />
       
       {/* Freeze Streak Popup */}
