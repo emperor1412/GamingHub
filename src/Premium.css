@@ -5,8 +5,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  /* backdrop-filter: blur(8px); - Disabled for iOS WebView compatibility */
+  -webkit-backdrop-filter: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,14 +80,14 @@ top: var(--premium-corner-offset);
 
 .pm_back-button {
   /* Telegram iOS specific background fix */
-  background: rgba(255, 255, 255, 0.001);
+  background: transparent;
   border: none;
   padding: 0px;
   cursor: pointer;
-  /* Force hardware acceleration and visibility on Telegram iOS */
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-  will-change: transform;
+  /* Removed transform to avoid iOS layer compositing issues */
+  /* transform: translate3d(0, 0, 0); */
+  /* -webkit-transform: translate3d(0, 0, 0); */
+  will-change: auto;
   backface-visibility: visible;
   -webkit-backface-visibility: visible;
   pointer-events: auto;
