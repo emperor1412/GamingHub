@@ -39,6 +39,8 @@ import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
+import challengesBg from './images/challenges_bg.png';
+import ChallengesMenu from './ChallengesMenu';
 
 let isMouseDown = false;
 let startX;
@@ -62,6 +64,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
+    const [showChallengesMenu, setShowChallengesMenu] = useState(false);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -1230,6 +1233,19 @@ Response:
                         /> */}
                     </button>
 
+                    {/* Challenges */}
+                    <button className="locked-card" onClick={() => setShowChallengesMenu(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={challengesBg}
+                                alt="Leaderboard Coming Soon"   
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            <div className='challenges-text'>CHALLENGES</div>
+                        </div>
+                    </button>
+
                     {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='locked-card-image-container'>
                             <div className="flipping-stars-card-bg">
@@ -1406,6 +1422,11 @@ Response:
                     shared.setActiveTab('market');
                 }}
             />
+
+            {/* Challenges Menu */}
+            {showChallengesMenu && (
+                <ChallengesMenu onClose={() => setShowChallengesMenu(false)} />
+            )}
         </>
     );
 };
