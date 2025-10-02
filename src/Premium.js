@@ -433,14 +433,14 @@ const Premium = ({ isOpen, onClose = 0 }) => {
 
   return (
     <div className="premium-overlay">
-
-      <div className="premium-container">
-      { !showConfirmPopup &&
-        (<button className="pm_back-button pm_back-button-alignment" onClick={onClose}>
+      {/* Back Button - Move outside container */}
+      {!showConfirmPopup && (
+        <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
-        </button>)
-      }
-        
+        </button>
+      )}
+      
+      <div className="premium-container">
         {/* Header */}
         <div className="premium-header">
           {/* Corner borders for header */}

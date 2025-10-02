@@ -7,7 +7,7 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
   /* backdrop-filter: blur(8px); - Disabled for iOS WebView compatibility */
-  -webkit-backdrop-filter: none;
+  /* -webkit-backdrop-filter: none; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,44 +53,6 @@ top: var(--premium-corner-offset);
   right: var(--premium-corner-offset);
   border-top: var(--premium-corner-border) solid var(--premium-corner-color);
   border-right: var(--premium-corner-border) solid var(--premium-corner-color);
-}
-
-.pm_back-button-alignment {
-  width: 32px;
-  height: 32px;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 10px;
-  left: 20px;
-  z-index: 3000;
-}
-
-.pm_back-button-alignment img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  /* Ensure image is visible on Telegram iOS */
-  opacity: 1;
-  visibility: visible;
-  display: block;
-  pointer-events: auto;
-}
-
-.pm_back-button {
-  /* Telegram iOS specific background fix */
-  background: transparent;
-  border: none;
-  padding: 0px;
-  cursor: pointer;
-  /* Removed transform to avoid iOS layer compositing issues */
-  /* transform: translate3d(0, 0, 0); */
-  /* -webkit-transform: translate3d(0, 0, 0); */
-  will-change: auto;
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
-  pointer-events: auto;
 }
 
 .premium-header .premium-bottom-left {
