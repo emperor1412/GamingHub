@@ -1,0 +1,313 @@
+/* Challenge Info Page Styles */
+.challenge-info-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: "PP Neue Machina", sans-serif;
+    overflow-y: auto;
+    z-index: 999;
+    padding-top: 60px;
+    padding-bottom: 80px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.challenge-info-content {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Challenge Banner */
+.info-challenge-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 3px solid #0000FF;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    height: 50px;
+}
+
+.info-challenge-info {
+    flex: 1;
+}
+
+.info-challenge-type {
+    font-size: 14px;
+    color: #01FFD9;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 100%;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina";
+}
+
+.info-challenge-name {
+    font-size: 14px;
+    color: white;
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina";
+    font-size: clamp(10px, 2.9vw, 14px);
+}
+
+.info-challenge-reward {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-reward-amount {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    line-height: 100%;
+    font-family: "PP Neue Machina";
+}
+
+.info-starlet-icon {
+    width: 19px;
+    height: 19px;
+    object-fit: contain;
+}
+
+/* Main Description */
+.main-description {
+    text-align: center;
+    margin: 0;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.description-text {
+    font-size: 26.98px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -1.9%;
+    line-height: 100%;
+}
+
+/* Challenge End */
+.challenge-end {
+    text-align: center;
+    font-size: 14px;
+    color: #00F1FF;
+    font-weight: 600;
+}
+
+/* Corner decorations */
+:root {
+    --challenges-corner-size: 20px;
+    --challenges-corner-color: #00F1FF;
+    --challenges-corner-border: 2px;
+    --challenges-corner-offset-top: 0px;
+    --challenges-corner-offset-bottom: 0px;
+    --challenges-corner-offset-left: 30px;
+    --challenges-corner-offset-right: 30px;
+}
+
+.challenges-corner {
+    position: absolute;
+    width: var(--challenges-corner-size);
+    height: var(--challenges-corner-size);
+    z-index: 5;
+}
+
+.challenges-top-left {
+    top: var(--challenges-corner-offset-top);
+    left: var(--challenges-corner-offset-left);
+    border-top: var(--challenges-corner-border) solid var(--challenges-corner-color);
+    border-left: var(--challenges-corner-border) solid var(--challenges-corner-color);
+}
+
+.challenges-top-right {
+    top: var(--challenges-corner-offset-top);
+    right: var(--challenges-corner-offset-right);
+    border-top: var(--challenges-corner-border) solid var(--challenges-corner-color);
+    border-right: var(--challenges-corner-border) solid var(--challenges-corner-color);
+}
+
+.challenges-bottom-left {
+    bottom: var(--challenges-corner-offset-bottom);
+    left: var(--challenges-corner-offset-left);
+    border-bottom: var(--challenges-corner-border) solid var(--challenges-corner-color);
+    border-left: var(--challenges-corner-border) solid var(--challenges-corner-color);
+}
+
+.challenges-bottom-right {
+    bottom: var(--challenges-corner-offset-bottom);
+    right: var(--challenges-corner-offset-right);
+    border-bottom: var(--challenges-corner-border) solid var(--challenges-corner-color);
+    border-right: var(--challenges-corner-border) solid var(--challenges-corner-color);
+}
+
+/* Challenge Details Wrapper */
+.challenge-details-wrapper {
+    position: relative;
+    padding: 20px;
+}
+
+/* Action Steps */
+.action-steps {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.step-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.step-content {
+    flex: 1;
+    text-align: center;
+}
+
+.step-button {
+    width: 115px;
+    height: 31px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #0000FF;
+    color: #00F1FF;
+    font-size: 18.27px;
+    font-weight: 700;
+    line-height: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: default;
+    pointer-events: none;
+}
+
+.step-description-container {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.step-description {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina";
+    opacity: 0.9;
+}
+
+/* Entry Fee Info */
+.entry-fee-info {
+    margin: 20px 0 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.fee-content {
+    flex: 1;
+    text-align: center;
+}
+
+.fee-text {
+    font-family: "Sora";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 119%;
+    letter-spacing: 0%;
+    text-align: center;
+    text-transform: capitalize;
+    opacity: 0.7;
+}
+
+.burn-warning-container {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.burn-warning {
+    font-family: "Sora";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 9px;
+    line-height: 119%;
+    letter-spacing: 0%;
+    text-align: center;
+    text-transform: capitalize;
+    opacity: 0.7;
+}
+
+/* Join Button */
+.join-section {
+    margin: 40px 20px;
+    text-align: center;
+}
+
+.join-button {
+    background: #00F1FF;
+    color: #000000;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "PP Neue Machina", sans-serif;
+    line-height: 100%;
+}
+
+.join-button:hover {
+    background: #00F1FF;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+/* @media (max-width: 480px) {
+    .description-text {
+        font-size: 20px;
+    }
+    
+    .step-button {
+        width: 100px;
+        height: 36px;
+        font-size: 14px;
+    }
+    
+    .join-button {
+        height: 45px;
+        font-size: 16px;
+    }
+} */
