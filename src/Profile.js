@@ -10,6 +10,8 @@ import infoIcon from './images/Info_Icon.png';
 import premiumDiamond from './images/Premium_icon.png';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
+import IntroducePremium from './IntroducePremium';
+import Premium from './Premium';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -27,6 +29,155 @@ import trophiesIcon from './images/trophy_4_200px.png';
 const maskEmail = (email) => {
     if (!email) return '';
     return `${email.substring(0, 2)}...${email.substring(email.length - 4)}`;
+};
+
+const EarnablesSection = ({ onBack }) => {
+    return (
+        <div className="profile-container">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onBack}>
+                <img src={backIcon} alt="Back" />
+            </button>
+
+            {/* Header */}
+            <div className="section-header">
+                <img src={earnablesIcon} alt="Earnables" className="section-header-icon" />
+                <h1 className="section-title">EARNABLES</h1>
+            </div>
+
+            {/* Earnables List */}
+            <div className="navigation-list">
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
+                        <span className="navigation-item-text">STARLETS</span>
+                    </div>
+                    <span className="navigation-item-value">2,598</span>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={earnablesIcon} alt="B$" className="navigation-item-icon" />
+                        <span className="navigation-item-text">B$</span>
+                    </div>
+                    <span className="navigation-item-value">6,987</span>
+                </div>
+            </div>
+
+            {/* Promotional Text Box */}
+            <div className="promotional-box">
+                EARN STARLETS AND B$ BY: DAILY CHECK-IN: KEEP YOUR STREAK! TICKETS: TRY YOUR LUCK AND WIN MORE POINTS TASKS: ENGAGE WITH TASKS TO UNLOCK REWARDS.
+            </div>
+        </div>
+    );
+};
+
+const CollectiblesSection = ({ onBack }) => {
+    return (
+        <div className="profile-container">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onBack}>
+                <img src={backIcon} alt="Back" />
+            </button>
+
+            {/* Header */}
+            <div className="section-header">
+                <img src={collectiblesIcon} alt="Collectibles" className="section-header-icon" />
+                <h1 className="section-title">COLLECTIBLES</h1>
+            </div>
+
+            {/* Collectibles List */}
+            <div className="navigation-list">
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={collectiblesIcon} alt="Tickets" className="navigation-item-icon" />
+                        <span className="navigation-item-text">TICKETS</span>
+                    </div>
+                    <span className="navigation-item-value">64</span>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={earnablesIcon} alt="GMT" className="navigation-item-icon" />
+                        <span className="navigation-item-text">GMT</span>
+                    </div>
+                    <div className="navigation-item-right">
+                        <span className="navigation-item-value">3</span>
+                        <button className="claim-button">CLAIM</button>
+                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                    </div>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={earnablesIcon} alt="MooAR+" className="navigation-item-icon" />
+                        <span className="navigation-item-text">MOOAR+</span>
+                    </div>
+                    <div className="navigation-item-right">
+                        <span className="navigation-item-value">1</span>
+                        <button className="claim-button">CLAIM</button>
+                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                    </div>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={trophiesIcon} alt="Alpha Chests" className="navigation-item-icon" />
+                        <span className="navigation-item-text">ALPHA CHESTS</span>
+                    </div>
+                    <span className="navigation-item-value">45</span>
+                </div>
+            </div>
+
+            {/* Promotional Text Box */}
+            <div className="promotional-box">
+                EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+            </div>
+        </div>
+    );
+};
+
+const PowerupsSection = ({ onBack }) => {
+    return (
+        <div className="profile-container">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onBack}>
+                <img src={backIcon} alt="Back" />
+            </button>
+
+            {/* Header */}
+            <div className="section-header">
+                <img src={powerupsIcon} alt="Power-ups" className="section-header-icon" />
+                <h1 className="section-title">POWER-UPS</h1>
+            </div>
+
+            {/* Power-ups List */}
+            <div className="navigation-list">
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={powerupsIcon} alt="Freeze Streak" className="navigation-item-icon" />
+                        <span className="navigation-item-text">FREEZE STREAK</span>
+                    </div>
+                    <span className="navigation-item-value">45</span>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={powerupsIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
+                        <span className="navigation-item-text">1.5X STEP BOOST</span>
+                    </div>
+                    <span className="navigation-item-value">1</span>
+                </div>
+                <div className="navigation-item">
+                    <div className="navigation-item-left">
+                        <img src={powerupsIcon} alt="2X Step Boost" className="navigation-item-icon" />
+                        <span className="navigation-item-text">2X STEP BOOST</span>
+                    </div>
+                    <span className="navigation-item-value">3</span>
+                </div>
+            </div>
+
+            {/* Promotional Text Box */}
+            <div className="promotional-box">
+                EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+            </div>
+        </div>
+    );
 };
 
 const GoldenTicketList = ({ onClose, tickets }) => {
@@ -89,8 +240,72 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showLevelUp, setShowLevelUp] = useState(false);
     const [showFullEmail, setShowFullEmail] = useState(false);
     const [showGoldenTickets, setShowGoldenTickets] = useState(false);
+    const [currentSection, setCurrentSection] = useState('profile'); // 'profile', 'earnables', 'collectibles', 'powerups'
+    const [showIntroducePremium, setShowIntroducePremium] = useState(false);
+    const [showPremium, setShowPremium] = useState(false);
+    const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
 
     console.log('Current Window URL:', window.location.href);    
+
+    // Function to check premium membership status (from MainView.js)
+    const checkPremiumStatus = async () => {
+        try {
+            setIsCheckingPremiumStatus(true);
+
+            if (!shared.loginData?.token) {
+                console.log('No login token available for premium status check');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.code === 0 && data.data) {
+                    const premiumData = data.data;
+                    const newPremiumStatus = premiumData.isMembership || false;
+                    
+                    shared.isPremiumMember = newPremiumStatus; // Update shared state
+                    console.log('Premium status updated:', newPremiumStatus);
+                    console.log('shared.isPremiumMember:', shared.isPremiumMember);
+                    
+                    // Auto-adjust avatar if premium status changed and avatar doesn't match
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
+                        console.log('Premium status is false but user has premium avatar, auto-adjusting...');
+                        const adjustResult = await shared.autoAdjustAvatar(getProfileData);
+                        if (adjustResult.success) {
+                            console.log('Avatar auto-adjusted:', adjustResult.message);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking premium status:', error);
+        } finally {
+            setIsCheckingPremiumStatus(false);
+            console.log('Premium check completed, isCheckingPremiumStatus set to false');
+        }
+    };
+    
+    const onClickPremium = () => {
+        console.log('onClickPremium called');
+        console.log('isCheckingPremiumStatus:', isCheckingPremiumStatus);
+        console.log('shared.isPremiumMember:', shared.isPremiumMember);
+        
+        if (isCheckingPremiumStatus) {
+            console.log('Premium check in progress, returning early');
+            return; // Disable khi đang loading
+        }
+        
+        if (shared.isPremiumMember) {
+            console.log('User is premium member, opening Premium page');
+            setShowPremium(true); // Mở trang Premium
+        } else {
+            console.log('User is not premium member, opening IntroducePremium page');
+            setShowIntroducePremium(true); // Mở trang IntroducePremium
+        }
+    };
 
     const onClickLevel = () => {
         console.log('Level clicked');
@@ -205,6 +420,8 @@ Response:
     useEffect(() => {
         getProfileData(shared.loginData);
         console.log('Available avatars:', shared.avatars);
+        // Check premium status on component mount
+        checkPremiumStatus();
     }, []);
 
     // Navigation items data
@@ -213,7 +430,7 @@ Response:
             id: 'premium',
             text: 'PREMIUM MEMBERSHIP',
             icon: premiumIcon,
-            onClick: () => console.log('Premium clicked')
+            onClick: () => onClickPremium()
         },
         {
             id: 'level',
@@ -225,19 +442,19 @@ Response:
             id: 'earnables',
             text: 'EARNABLES',
             icon: earnablesIcon,
-            onClick: () => console.log('Earnables clicked')
+            onClick: () => setCurrentSection('earnables')
         },
         {
             id: 'collectibles',
             text: 'COLLECTIBLES',
             icon: collectiblesIcon,
-            onClick: () => console.log('Collectibles clicked')
+            onClick: () => setCurrentSection('collectibles')
         },
         {
             id: 'powerups',
             text: 'POWER-UPS',
             icon: powerupsIcon,
-            onClick: () => console.log('Power-ups clicked')
+            onClick: () => setCurrentSection('powerups')
         },
         {
             id: 'trophies',
@@ -268,6 +485,12 @@ Response:
                     onClose={() => setShowGoldenTickets(false)}
                     tickets={shared.userProfile.goldenTicketList}
                 />
+            ) : currentSection === 'earnables' ? (
+                <EarnablesSection onBack={() => setCurrentSection('profile')} />
+            ) : currentSection === 'collectibles' ? (
+                <CollectiblesSection onBack={() => setCurrentSection('profile')} />
+            ) : currentSection === 'powerups' ? (
+                <PowerupsSection onBack={() => setCurrentSection('profile')} />
             ) : (
                 <div className="profile-container">
                     {/* Back Button */}
@@ -276,13 +499,16 @@ Response:
                     </button>
 
                     {/* User Profile Card */}
-                    <div className="user-profile-card">
+                    <div className="user-profile-card" onClick={() => showFSLIDScreen()}>
                         <div className="profile-avatar-container">
                             <img
                                 src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
                                 alt="Avatar"
                                 className="profile-avatar"
-                                onClick={() => setShowAvatarSelector(true)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowAvatarSelector(true);
+                                }}
                             />
                             {/* Premium icon overlay */}
                             {shared.isPremiumMember && (
@@ -306,6 +532,7 @@ Response:
                                 </span>
                             </div>
                         </div>
+                        <img src={arrowIcon} alt="Arrow" className="profile-card-arrow" />
                     </div>
 
                     {/* Navigation Items */}
@@ -327,6 +554,30 @@ Response:
                     </div>
                 </div>
             )}
+            
+            {/* Premium Popup */}
+            <Premium 
+                isOpen={showPremium} 
+                onClose={async () => {
+                    setShowPremium(false);
+                    // Refresh all data when closing premium to match Market → MainView behavior
+                    await getProfileData(shared.loginData);
+                    await checkPremiumStatus();
+                }}
+            />
+            
+            {/* Introduce Premium Popup */}
+            <IntroducePremium 
+                isOpen={showIntroducePremium} 
+                onClose={() => setShowIntroducePremium(false)}
+                onSelectPlan={(plan) => {
+                    console.log('Selected plan:', plan);
+                    setShowIntroducePremium(false);
+                    // Navigate to market with starlet tab to show premium packages
+                    shared.setInitialMarketTab('starlet');
+                    shared.setActiveTab('market');
+                }}
+            />
         </div>
     );
 };

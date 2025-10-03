@@ -13,33 +13,63 @@
   margin: 0 auto;
 }
 
-/* Back Button */
-.profile-back {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: #333333;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+
+
+
+/* Section Header */
+.section-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
+  margin: 80px 20px 24px 20px;
+  padding: 20px;
+  background: #343434;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.section-header-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.section-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Claim Button */
+.claim-button {
+  background: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
-  z-index: 10;
+  font-family: "PP Neue Machina", sans-serif;
+  transition: all 0.2s ease;
 }
 
-.profile-back img {
-  width: 16px;
-  height: 16px;
-  filter: invert(1);
+.claim-button:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
 }
 
-.back-button-alignment {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+/* Navigation Item Value */
+.navigation-item-value {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
 /* User Profile Card */
@@ -52,6 +82,30 @@
   margin: 80px 20px 24px 20px;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.user-profile-card:hover {
+  background: #484848;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.profile-card-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.user-profile-card:hover .profile-card-arrow {
+  transform: translateY(-50%) translateX(4px);
 }
 
 .profile-avatar-container {
@@ -239,12 +293,23 @@
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
+  .user-profile-card {
+    margin: 80px 16px 16px 16px;
+  }
+  
+  .navigation-list {
+    margin: 0 16px 16px 16px;
+  }
   
   .promotional-box {
     margin: 0 16px 16px 16px;
   }
   
-  .profile-back {
+  .section-header {
+    margin: 80px 16px 24px 16px;
+  }
+  
+  .back-button {
     left: 16px;
   }
   
