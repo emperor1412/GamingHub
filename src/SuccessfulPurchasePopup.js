@@ -4,7 +4,7 @@ import starletIcon from './images/starlet.png';
 import ticketIcon from './images/ticket_scratch_icon.svg';
 import shared from './Shared';
 
-const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyView, tickets, productName, isStarletProduct, packageType, packageValue }) => {
+const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyView, tickets, productName, isStarletProduct, packageType, packageValue, isFreeItem }) => {
   useEffect(() => {
     // Clean up payment_success when component unmounts
     return () => {
@@ -45,8 +45,12 @@ const SuccessfulPurchasePopup = ({ isOpen, onClaim, onClose, amount, setShowBuyV
             <img src={starletIcon} alt="Starlet" />
           </div>
           
-          <h2 className="sp-popup-title">PURCHASE</h2>
-          <div className="sp-popup-subtitle">SUCCESSFUL</div>
+          {!isFreeItem && (
+            <>
+              <h2 className="sp-popup-title">PURCHASE</h2>
+              <div className="sp-popup-subtitle">SUCCESSFUL</div>
+            </>
+          )}
           
           {isStarletProduct ? (
             <div className="sp-scrollable-content">
