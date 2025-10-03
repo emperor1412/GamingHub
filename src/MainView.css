@@ -19,6 +19,7 @@
 .profile-pic-container {
     position: relative;
     display: inline-block;
+    margin-right: 6px;
 }
 
 /* Premium icon overlay - positioned outside button */

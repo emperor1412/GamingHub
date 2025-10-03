@@ -5,8 +5,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  /* backdrop-filter: blur(8px); - Disabled for iOS WebView compatibility */
+  /* -webkit-backdrop-filter: none; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +25,7 @@
   overflow-y: auto;
   position: relative;
   padding: 15px;
-  margin-top: 50px;
+  margin-top: 30px;
   
   /* Corner borders variables */
   --premium-corner-size: 15px;
@@ -48,7 +49,7 @@
 }
 
 .premium-header .premium-top-right {
-  top: var(--premium-corner-offset);
+top: var(--premium-corner-offset);
   right: var(--premium-corner-offset);
   border-top: var(--premium-corner-border) solid var(--premium-corner-color);
   border-right: var(--premium-corner-border) solid var(--premium-corner-color);
