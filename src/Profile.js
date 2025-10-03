@@ -16,6 +16,14 @@ import { popup, openLink } from '@telegram-apps/sdk';
 import shared from './Shared';
 import FSLAuthorization from 'fsl-authorization';
 
+// Import icons for navigation items
+import premiumIcon from './images/Premium_icon.png';
+import levelIcon from './images/account_level.png';
+import earnablesIcon from './images/starlet.png';
+import collectiblesIcon from './images/ticket_scratch_icon.png';
+import powerupsIcon from './images/Icon_Step_Boost.png';
+import trophiesIcon from './images/trophy_4_200px.png';
+
 const maskEmail = (email) => {
     if (!email) return '';
     return `${email.substring(0, 2)}...${email.substring(email.length - 4)}`;
@@ -199,6 +207,46 @@ Response:
         console.log('Available avatars:', shared.avatars);
     }, []);
 
+    // Navigation items data
+    const navigationItems = [
+        {
+            id: 'premium',
+            text: 'PREMIUM MEMBERSHIP',
+            icon: premiumIcon,
+            onClick: () => console.log('Premium clicked')
+        },
+        {
+            id: 'level',
+            text: 'ACCOUNT LEVEL',
+            icon: levelIcon,
+            onClick: () => onClickLevel()
+        },
+        {
+            id: 'earnables',
+            text: 'EARNABLES',
+            icon: earnablesIcon,
+            onClick: () => console.log('Earnables clicked')
+        },
+        {
+            id: 'collectibles',
+            text: 'COLLECTIBLES',
+            icon: collectiblesIcon,
+            onClick: () => console.log('Collectibles clicked')
+        },
+        {
+            id: 'powerups',
+            text: 'POWER-UPS',
+            icon: powerupsIcon,
+            onClick: () => console.log('Power-ups clicked')
+        },
+        {
+            id: 'trophies',
+            text: 'TROPHIES AND BADGES',
+            icon: trophiesIcon,
+            onClick: () => console.log('Trophies clicked')
+        }
+    ];
+
     return (
         <div className="app-container">
             {showLevelUp ? (
@@ -222,117 +270,60 @@ Response:
                 />
             ) : (
                 <div className="profile-container">
-                    <div className="profile-header">
-                        <button className="profile-back back-button-alignment" onClick={onClose}>
-                            <img src={backIcon} alt="Back" />
-                        </button>
-                        <div className="profile-user" onClick={() => onClickLevel()}>
-                            <div className="profile-avatar-container">
-                                <img
-                                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                                    alt="Avatar"
-                                    className="profile-avatar"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setShowAvatarSelector(true);
-                                    }}
-                                />
-                                {/* Premium icon overlay */}
-                                {shared.isPremiumMember && (
-                                    <div className="premium-icon-overlay-profile">
-                                        <img src={premiumDiamond} alt="Premium" className="premium-icon-profile" />
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <div className="profile-username">
-                                    {shared.telegramUserData.firstName}
-                                    <button className="level-badge" onClick={() => onClickLevel()}>LV.{shared.userProfile.level || 0}</button>
-                                    {shared.loginData.link && <span className="profile-link">id: {shared.loginData.link}</span>}
-                                </div>
-                                <div className="profile-id">
-                                    {shared.userProfile.email && (
-                                        <div 
-                                            className="profile-email-container"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setShowFullEmail(!showFullEmail);
-                                            }}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-                                            <span className={`profile-email ${!showFullEmail ? 'masked' : ''}`}>
-                                                {showFullEmail ? shared.userProfile.email : maskEmail(shared.userProfile.email)}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <img src={arrowIcon} alt="Open Avatar Selector" className="profile-user-arrow"/>
-                        </div>
-                    </div>
+                    {/* Back Button */}
+                    <button className="back-button back-button-alignment" onClick={onClose}>
+                        <img src={backIcon} alt="Back" />
+                    </button>
 
-                    <div className="profile-content-wrapper">
-                        <div className="profile-content">
-                            {shared.profileItems.filter(item => (!item.claimText || item.claimText !== "Claimed")) // Filter out items with type 10030 and Claimed status
-                                        .map((item, index) => (
-                                <div key={index} className="profile-item">
-                                    <div className="profile-item-left">
-                                        <img src={item.icon} alt="" className="profile-item-icon" />
-                                        <span className="profile-item-text">{item.text}</span>
-                                    {item.type === 30020 && (
-                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/MOOAR-Membership-19395c775fea80b3ab52e55972ddd555?pvs=4', '_blank')}>
-                                            <img src={infoIcon} alt="Info" />
-                                        </button>
-                                    )}
-                                    {item.type === 10110 && (
-                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FREEZE-STREAK-FAQ-26895c775fea807393e0c4917cf9a0c3', '_blank')}>
-                                            <img src={infoIcon} alt="Info" />
-                                        </button>
-                                    )}
-                                    {item.type === 10030 && (
-                                        <button className="info-button" onClick={() => window.open('https://www.notion.so/fsl-web3/FLIPPING-STARS-Player-FAQ-24f95c775fea80eabed0f722a601ab48', '_blank')}>
-                                            <img src={infoIcon} alt="Info" />
-                                        </button>
-                                    )}
-                                    </div>
-                                    <div className="profile-item-right">
-                                        {item.showClaim && (
-                                            <button className="profile-claim" disabled={!item.clickAble} onClick={() => onClickClaim(item)}> {item.claimText} </button>
-                                        )}
-                                        <span className="profile-item-value">{(item.type === 20010 || item.type === 20020) ? item.value / 100 : item.value}</span>
-                                    </div>
-                                    {item.showClaim && (
-                                        <img src={arrowIcon} alt="" className="profile-item-arrow" />
-                                    )}
-                                </div>
-                            ))}
-
-                            {/* Add Golden Ticket section at the bottom */}
-                            {shared.userProfile?.goldenTicketList?.length > 0 && (
-                                <div className="profile-item">
-                                    <div className="profile-item-left">
-                                        <img src={ticketDiscountIcon} alt="" className="profile-item-icon" />
-                                        <span className="profile-item-text">Golden Tickets</span>
-                                    </div>
-                                    <div className="profile-item-right">
-                                        <button 
-                                            className="profile-claim" 
-                                            onClick={() => setShowGoldenTickets(true)}
-                                        >
-                                            View Details
-                                        </button>
-                                        <span className="profile-item-value">
-                                            {shared.userProfile.goldenTicketList.filter(ticket => ticket.state === 0).length}
-                                        </span>
-                                    </div>
-                                    <img src={arrowIcon} alt="" className="profile-item-arrow" />
+                    {/* User Profile Card */}
+                    <div className="user-profile-card">
+                        <div className="profile-avatar-container">
+                            <img
+                                src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                                alt="Avatar"
+                                className="profile-avatar"
+                                onClick={() => setShowAvatarSelector(true)}
+                            />
+                            {/* Premium icon overlay */}
+                            {shared.isPremiumMember && (
+                                <div className="premium-icon-overlay-profile">
+                                    <img src={premiumDiamond} alt="Premium" className="premium-icon-profile" />
                                 </div>
                             )}
                         </div>
+                        <div className="profile-info">
+                            <div className="profile-username">
+                                {shared.telegramUserData.firstName || 'RUNNER'}
+                                {shared.loginData.link && <span className="profile-id-badge">id: {shared.loginData.link}</span>}
+                            </div>
+                            <div className="profile-wallet">
+                                <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
+                                <span className="profile-wallet-address">
+                                    {shared.userProfile.email ? 
+                                        (showFullEmail ? shared.userProfile.email : maskEmail(shared.userProfile.email)) :
+                                        '4CfsH8Wz...AafCHfcF'
+                                    }
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="profile-info-box">
-                        Earn extra rewards by inviting frens or by completing daily tasks. The more you engage, the more rewards you'll unlock.
+
+                    {/* Navigation Items */}
+                    <div className="navigation-list">
+                        {navigationItems.map((item, index) => (
+                            <div key={item.id} className="navigation-item" onClick={item.onClick}>
+                                <div className="navigation-item-left">
+                                    <img src={item.icon} alt={item.text} className="navigation-item-icon" />
+                                    <span className="navigation-item-text">{item.text}</span>
+                                </div>
+                                <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Promotional Text Box */}
+                    <div className="promotional-box">
+                        EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
                     </div>
                 </div>
             )}
