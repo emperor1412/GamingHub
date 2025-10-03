@@ -8,7 +8,7 @@ import SuccessfulPurchasePremium from './SuccessfulPurchasePremium';
 import shared from './Shared';
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, isFreeItem, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -315,6 +315,16 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
       return;
     }
 
+    // For free items, show success popup directly
+    if (isFreeItem) {
+      setPurchaseData({ 
+        initialStarlets: amount,
+        tickets: 1
+      });
+      setShowSuccessPopup(true);
+      return;
+    }
+
     const paymentSuccess = localStorage.getItem('payment_success');
     if (paymentSuccess) {
       try {
@@ -329,7 +339,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         localStorage.removeItem('payment_success');
       }
     }
-  }, [isOpen]);
+  }, [isOpen, isFreeItem, amount]);
 
   return (
     <>
@@ -360,6 +370,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                 isStarletProduct={purchaseData?.isStarletProduct}
                 packageType={purchaseData?.packageType}
                 packageValue={purchaseData?.packageValue}
+                isFreeItem={isFreeItem}
                 setShowBuyView={setShowBuyView}
               />
             )
