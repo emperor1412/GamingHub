@@ -18,19 +18,57 @@
   background: rgba(30, 30, 30, 0.9);
   border: 1px solid #000FEF;
   border-radius: 12px;
-  width: 83%;
+  width: 90%;
   max-width: 350px;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-height: 85vh;
+  overflow: hidden; /* Hide overflow to contain scrollable content */
   position: relative;
-  padding: 15px;
+  padding: 0; /* Remove padding from container */
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
   
   /* Corner borders variables */
   --premium-corner-size: 15px;
   --premium-corner-color: #00F1FF;
   --premium-corner-border: 0.5px;
   --premium-corner-offset: 15px;
+}
+
+/* Premium Scrollable Content Wrapper */
+.premium-scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 15px;
+  
+  /* Hide scrollbars */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  /* 👇 Mask fade chỉ áp dụng cho vùng scrollable */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 4%,
+    black 96%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 4%,
+    black 98%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+}
+
+.premium-scrollable-content::-webkit-scrollbar {
+  display: none;
 }
 
 .premium-header .premium-corner {
