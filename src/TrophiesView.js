@@ -71,6 +71,21 @@ const TrophiesView = ({ onBack }) => {
         10070: trophy_10070_locked,
     };
 
+    // Create locked versions of social trophies (1-6) since they don't have locked versions
+    const createLockedTrophy = (trophyId, trophyName, description, min, max) => {
+        return {
+            id: trophyId,
+            name: trophyName,
+            description: description,
+            min: min,
+            max: max,
+            state: 0,
+            status: 'locked',
+            icon: trophyIcon[trophyId],
+            isLocked: true
+        };
+    };
+
     const getTrophyData = async (depth = 0) => {
         if (depth > 3) {
             console.error('Get trophy data failed after 3 attempts');
@@ -108,8 +123,31 @@ const TrophiesView = ({ onBack }) => {
                               trophy.id === 10050 && trophy.state === 0 ? trophy_10050_locked :
                               trophy.id === 10060 && trophy.state === 0 ? trophy_10060_locked :
                               trophy.id === 10070 && trophy.state === 0 ? trophy_10070_locked :
-                              trophyIcon[trophy.id]
+                              trophyIcon[trophy.id],
+                        isLocked: false
                     }));
+
+                    // Add locked versions of social trophies (1-6) if they don't exist
+                    const socialTrophyIds = [1, 2, 3, 4, 5, 6];
+                    const existingIds = trophiesData.map(t => t.id);
+                    
+                    socialTrophyIds.forEach(id => {
+                        if (!existingIds.includes(id)) {
+                            const lockedTrophy = createLockedTrophy(
+                                id,
+                                id === 1 ? "ROOKIE RECRUITER" :
+                                id === 2 ? "JUNIOR AMBASSADOR" :
+                                id === 3 ? "SENIOR AMBASSADOR" :
+                                id === 4 ? "MASTER CONNECTOR" :
+                                id === 5 ? "ELITE INFLUENCER" :
+                                id === 6 ? "LEGENDARY LUMINARY" : "UNKNOWN",
+                                "Complete achievements to unlock this trophy",
+                                id === 1 ? 1 : id === 2 ? 5 : id === 3 ? 10 : id === 4 ? 20 : id === 5 ? 50 : 100,
+                                id === 1 ? 4 : id === 2 ? 9 : id === 3 ? 19 : id === 4 ? 49 : id === 5 ? 99 : -1
+                            );
+                            trophiesData.push(lockedTrophy);
+                        }
+                    });
 
                     setTrophies(trophiesData);
                 } else if (data.code === 102002 || data.code === 102001) {
