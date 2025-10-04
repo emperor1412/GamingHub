@@ -8,6 +8,12 @@ import ID_selected from './images/ID_selected.svg';
 import ticketDiscountIcon from './images/ticket-discount.png';
 import infoIcon from './images/Info_Icon.png';
 import premiumDiamond from './images/Premium_icon.png';
+import bCoinIcon from './images/bCoin_icon.png';
+import gmtIcon from './images/GMT_1.png';
+import mooarIcon from './images/Mooar.svg';
+import alphaChestIcon from './images/Chest_Icon.png';
+import stepBoostIcon from './images/Boost_Icon.png';
+import freezeStreakIcon from './images/streakFreezeIcon.png';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 import IntroducePremium from './IntroducePremium';
@@ -42,7 +48,7 @@ const EarnablesSection = ({ onBack }) => {
             {/* Header */}
             <div className="section-header">
                 <img src={earnablesIcon} alt="Earnables" className="section-header-icon" />
-                <h1 className="section-title">EARNABLES</h1>
+                <h1 className="pf_section-title">EARNABLES</h1>
             </div>
 
             {/* Earnables List */}
@@ -56,7 +62,7 @@ const EarnablesSection = ({ onBack }) => {
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={earnablesIcon} alt="B$" className="navigation-item-icon" />
+                        <img src={bCoinIcon} alt="B$" className="navigation-item-icon" />
                         <span className="navigation-item-text">B$</span>
                     </div>
                     <span className="navigation-item-value">6,987</span>
@@ -82,7 +88,7 @@ const CollectiblesSection = ({ onBack }) => {
             {/* Header */}
             <div className="section-header">
                 <img src={collectiblesIcon} alt="Collectibles" className="section-header-icon" />
-                <h1 className="section-title">COLLECTIBLES</h1>
+                <h1 className="pf_section-title">COLLECTIBLES</h1>
             </div>
 
             {/* Collectibles List */}
@@ -96,7 +102,7 @@ const CollectiblesSection = ({ onBack }) => {
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={earnablesIcon} alt="GMT" className="navigation-item-icon" />
+                        <img src={gmtIcon} alt="GMT" className="navigation-item-icon" />
                         <span className="navigation-item-text">GMT</span>
                     </div>
                     <div className="navigation-item-right">
@@ -107,7 +113,7 @@ const CollectiblesSection = ({ onBack }) => {
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={earnablesIcon} alt="MooAR+" className="navigation-item-icon" />
+                        <img src={mooarIcon} alt="MooAR+" className="navigation-item-icon" />
                         <span className="navigation-item-text">MOOAR+</span>
                     </div>
                     <div className="navigation-item-right">
@@ -118,7 +124,7 @@ const CollectiblesSection = ({ onBack }) => {
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={trophiesIcon} alt="Alpha Chests" className="navigation-item-icon" />
+                        <img src={alphaChestIcon} alt="Alpha Chests" className="navigation-item-icon" />
                         <span className="navigation-item-text">ALPHA CHESTS</span>
                     </div>
                     <span className="navigation-item-value">45</span>
@@ -144,28 +150,28 @@ const PowerupsSection = ({ onBack }) => {
             {/* Header */}
             <div className="section-header">
                 <img src={powerupsIcon} alt="Power-ups" className="section-header-icon" />
-                <h1 className="section-title">POWER-UPS</h1>
+                <h1 className="pf_section-title">POWER-UPS</h1>
             </div>
 
             {/* Power-ups List */}
             <div className="navigation-list">
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={powerupsIcon} alt="Freeze Streak" className="navigation-item-icon" />
+                        <img src={freezeStreakIcon} alt="Freeze Streak" className="navigation-item-icon" />
                         <span className="navigation-item-text">FREEZE STREAK</span>
                     </div>
                     <span className="navigation-item-value">45</span>
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={powerupsIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
+                        <img src={stepBoostIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
                         <span className="navigation-item-text">1.5X STEP BOOST</span>
                     </div>
                     <span className="navigation-item-value">1</span>
                 </div>
                 <div className="navigation-item">
                     <div className="navigation-item-left">
-                        <img src={powerupsIcon} alt="2X Step Boost" className="navigation-item-icon" />
+                        <img src={stepBoostIcon} alt="2X Step Boost" className="navigation-item-icon" />
                         <span className="navigation-item-text">2X STEP BOOST</span>
                     </div>
                     <span className="navigation-item-value">3</span>
@@ -493,10 +499,12 @@ Response:
                 <PowerupsSection onBack={() => setCurrentSection('profile')} />
             ) : (
                 <div className="profile-container">
-                    {/* Back Button */}
-                    <button className="back-button back-button-alignment" onClick={onClose}>
-                        <img src={backIcon} alt="Back" />
-                    </button>
+                    {/* Back Button - Hidden when premium popup is shown */}
+                    {!showPremium && (
+                        <button className="back-button back-button-alignment" onClick={onClose}>
+                            <img src={backIcon} alt="Back" />
+                        </button>
+                    )}
 
                     {/* User Profile Card */}
                     <div className="user-profile-card" onClick={() => showFSLIDScreen()}>
