@@ -18,6 +18,7 @@ import freezeStreakIcon from './images/streakFreezeIcon.png';
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
+import TrophiesView from './TrophiesView';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -193,6 +194,12 @@ const PowerupsSection = ({ onBack }) => {
 };
 
 const TrophiesSection = ({ onBack }) => {
+    const [showTrophiesView, setShowTrophiesView] = useState(false);
+
+    if (showTrophiesView) {
+        return <TrophiesView onBack={() => setShowTrophiesView(false)} />;
+    }
+
     return (
         <div className="profile-container">
             {/* Back Button */}
@@ -209,13 +216,12 @@ const TrophiesSection = ({ onBack }) => {
             {/* Trophies & Badges List */}
             <div className="navigation-scroll-wrapper">
                 <div className="navigation-list">
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => setShowTrophiesView(true)}>
                         <div className="navigation-item-left">
                             <img src={trophiesIcon} alt="Trophies" className="navigation-item-icon" />
                             <span className="navigation-item-text">TROPHIES</span>
                         </div>
                         <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
-
                     </div>
                     <div className="navigation-item">
                         <div className="navigation-item-left">
@@ -223,7 +229,6 @@ const TrophiesSection = ({ onBack }) => {
                             <span className="navigation-item-text">BADGES</span>
                         </div>
                         <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
-
                     </div>
                 </div>
             </div>
