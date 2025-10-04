@@ -34,7 +34,7 @@ import trophiesIcon from './images/trophy_4_200px.png';
 
 const maskEmail = (email) => {
     if (!email) return '';
-    return `${email.substring(0, 2)}...${email.substring(email.length - 4)}`;
+    return `${email.substring(0, 6)}...${email.substring(email.length - 4)}`;
 };
 
 const EarnablesSection = ({ onBack }) => {
@@ -52,20 +52,22 @@ const EarnablesSection = ({ onBack }) => {
             </div>
 
             {/* Earnables List */}
-            <div className="navigation-list">
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
-                        <span className="navigation-item-text">STARLETS</span>
+            <div className="navigation-scroll-wrapper">
+                <div className="navigation-list">
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
+                            <span className="navigation-item-text">STARLETS</span>
+                        </div>
+                        <span className="navigation-item-value">2,598</span>
                     </div>
-                    <span className="navigation-item-value">2,598</span>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={bCoinIcon} alt="B$" className="navigation-item-icon" />
-                        <span className="navigation-item-text">B$</span>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={bCoinIcon} alt="B$" className="navigation-item-icon" />
+                            <span className="navigation-item-text">B$</span>
+                        </div>
+                        <span className="navigation-item-value">6,987</span>
                     </div>
-                    <span className="navigation-item-value">6,987</span>
                 </div>
             </div>
 
@@ -92,42 +94,44 @@ const CollectiblesSection = ({ onBack }) => {
             </div>
 
             {/* Collectibles List */}
-            <div className="navigation-list">
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={collectiblesIcon} alt="Tickets" className="navigation-item-icon" />
-                        <span className="navigation-item-text">TICKETS</span>
+            <div className="navigation-scroll-wrapper">
+                <div className="navigation-list">
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={collectiblesIcon} alt="Tickets" className="navigation-item-icon" />
+                            <span className="navigation-item-text">TICKETS</span>
+                        </div>
+                        <span className="navigation-item-value">64</span>
                     </div>
-                    <span className="navigation-item-value">64</span>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={gmtIcon} alt="GMT" className="navigation-item-icon" />
-                        <span className="navigation-item-text">GMT</span>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={gmtIcon} alt="GMT" className="navigation-item-icon" />
+                            <span className="navigation-item-text">GMT</span>
+                        </div>
+                        <div className="navigation-item-right">
+                            <span className="navigation-item-value">3</span>
+                            <button className="pf_claim-button">CLAIM</button>
+                            <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                        </div>
                     </div>
-                    <div className="navigation-item-right">
-                        <span className="navigation-item-value">3</span>
-                        <button className="claim-button">CLAIM</button>
-                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={mooarIcon} alt="MooAR+" className="navigation-item-icon" />
+                            <span className="navigation-item-text">MOOAR+</span>
+                        </div>
+                        <div className="navigation-item-right">
+                            <span className="navigation-item-value">1</span>
+                            <button className="pf_claim-button">CLAIM</button>
+                            <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                        </div>
                     </div>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={mooarIcon} alt="MooAR+" className="navigation-item-icon" />
-                        <span className="navigation-item-text">MOOAR+</span>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={alphaChestIcon} alt="Alpha Chests" className="navigation-item-icon" />
+                            <span className="navigation-item-text">ALPHA CHESTS</span>
+                        </div>
+                        <span className="navigation-item-value">45</span>
                     </div>
-                    <div className="navigation-item-right">
-                        <span className="navigation-item-value">1</span>
-                        <button className="claim-button">CLAIM</button>
-                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
-                    </div>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={alphaChestIcon} alt="Alpha Chests" className="navigation-item-icon" />
-                        <span className="navigation-item-text">ALPHA CHESTS</span>
-                    </div>
-                    <span className="navigation-item-value">45</span>
                 </div>
             </div>
 
@@ -154,33 +158,79 @@ const PowerupsSection = ({ onBack }) => {
             </div>
 
             {/* Power-ups List */}
-            <div className="navigation-list">
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={freezeStreakIcon} alt="Freeze Streak" className="navigation-item-icon" />
-                        <span className="navigation-item-text">FREEZE STREAK</span>
+            <div className="navigation-scroll-wrapper">
+                <div className="navigation-list">
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={freezeStreakIcon} alt="Freeze Streak" className="navigation-item-icon" />
+                            <span className="navigation-item-text">FREEZE STREAK</span>
+                        </div>
+                        <span className="navigation-item-value">45</span>
                     </div>
-                    <span className="navigation-item-value">45</span>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={stepBoostIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
-                        <span className="navigation-item-text">1.5X STEP BOOST</span>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={stepBoostIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
+                            <span className="navigation-item-text">1.5X STEP BOOST</span>
+                        </div>
+                        <span className="navigation-item-value">1</span>
                     </div>
-                    <span className="navigation-item-value">1</span>
-                </div>
-                <div className="navigation-item">
-                    <div className="navigation-item-left">
-                        <img src={stepBoostIcon} alt="2X Step Boost" className="navigation-item-icon" />
-                        <span className="navigation-item-text">2X STEP BOOST</span>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={stepBoostIcon} alt="2X Step Boost" className="navigation-item-icon" />
+                            <span className="navigation-item-text">2X STEP BOOST</span>
+                        </div>
+                        <span className="navigation-item-value">3</span>
                     </div>
-                    <span className="navigation-item-value">3</span>
                 </div>
             </div>
 
             {/* Promotional Text Box */}
             <div className="promotional-box">
                 EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+            </div>
+        </div>
+    );
+};
+
+const TrophiesSection = ({ onBack }) => {
+    return (
+        <div className="profile-container">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onBack}>
+                <img src={backIcon} alt="Back" />
+            </button>
+
+            {/* Header */}
+            <div className="section-header">
+                <img src={trophiesIcon} alt="Trophies" className="section-header-icon" />
+                <h1 className="pf_section-title">TROPHIES & BADGES</h1>
+            </div>
+
+            {/* Trophies & Badges List */}
+            <div className="navigation-scroll-wrapper">
+                <div className="navigation-list">
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={trophiesIcon} alt="Trophies" className="navigation-item-icon" />
+                            <span className="navigation-item-text">TROPHIES</span>
+                        </div>
+                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+
+                    </div>
+                    <div className="navigation-item">
+                        <div className="navigation-item-left">
+                            <img src={trophiesIcon} alt="Badges" className="navigation-item-icon" />
+                            <span className="navigation-item-text">BADGES</span>
+                        </div>
+                        <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+
+                    </div>
+                </div>
+            </div>
+
+            {/* Promotional Text Box */}
+            <div className="promotional-box">
+                UNLOCK TROPHIES AND BADGES BY COMPLETING SPECIAL ACHIEVEMENTS AND MILESTONES. SHOWCASE YOUR PROGRESS AND ACCOMPLISHMENTS!
             </div>
         </div>
     );
@@ -246,7 +296,7 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showLevelUp, setShowLevelUp] = useState(false);
     const [showFullEmail, setShowFullEmail] = useState(false);
     const [showGoldenTickets, setShowGoldenTickets] = useState(false);
-    const [currentSection, setCurrentSection] = useState('profile'); // 'profile', 'earnables', 'collectibles', 'powerups'
+    const [currentSection, setCurrentSection] = useState('profile'); // 'profile', 'earnables', 'collectibles', 'powerups', 'trophies'
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
@@ -466,7 +516,7 @@ Response:
             id: 'trophies',
             text: 'TROPHIES AND BADGES',
             icon: trophiesIcon,
-            onClick: () => console.log('Trophies clicked')
+            onClick: () => setCurrentSection('trophies')
         }
     ];
 
@@ -497,6 +547,8 @@ Response:
                 <CollectiblesSection onBack={() => setCurrentSection('profile')} />
             ) : currentSection === 'powerups' ? (
                 <PowerupsSection onBack={() => setCurrentSection('profile')} />
+            ) : currentSection === 'trophies' ? (
+                <TrophiesSection onBack={() => setCurrentSection('profile')} />
             ) : (
                 <div className="profile-container">
                     {/* Back Button - Hidden when premium popup is shown */}
@@ -533,9 +585,9 @@ Response:
                             <div className="profile-wallet">
                                 <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
                                 <span className="profile-wallet-address">
-                                    {shared.userProfile.email ? 
-                                        (showFullEmail ? shared.userProfile.email : maskEmail(shared.userProfile.email)) :
-                                        '4CfsH8Wz...AafCHfcF'
+                                    {shared.userProfile ? 
+                                        (showFullEmail ? shared.userProfile.solAddr : maskEmail(shared.userProfile.solAddr)) :
+                                        'Not connected'
                                     }
                                 </span>
                             </div>
@@ -544,16 +596,18 @@ Response:
                     </div>
 
                     {/* Navigation Items */}
-                    <div className="navigation-list">
-                        {navigationItems.map((item, index) => (
-                            <div key={item.id} className="navigation-item" onClick={item.onClick}>
-                                <div className="navigation-item-left">
-                                    <img src={item.icon} alt={item.text} className="navigation-item-icon" />
-                                    <span className="navigation-item-text">{item.text}</span>
+                    <div className="navigation-scroll-wrapper">
+                        <div className="navigation-list">
+                            {navigationItems.map((item, index) => (
+                                <div key={item.id} className="navigation-item" onClick={item.onClick}>
+                                    <div className="navigation-item-left">
+                                        <img src={item.icon} alt={item.text} className="navigation-item-icon" />
+                                        <span className="navigation-item-text">{item.text}</span>
+                                    </div>
+                                    <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                                 </div>
-                                <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
 
                     {/* Promotional Text Box */}
