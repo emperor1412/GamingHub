@@ -441,89 +441,93 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         </button>)
       }
         
-        {/* Header */}
-        <div className="premium-header">
-          {/* Corner borders for header */}
-          <div className="premium-corner premium-top-left"></div>
-          <div className="premium-corner premium-top-right"></div>
-          <div className="premium-corner premium-bottom-left"></div>
-          <div className="premium-corner premium-bottom-right"></div>
-          
-          <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
-          <div className="premium-title">
-            <span className="premium-title-line">PREMIUM</span>
-            <span className="premium-title-line">REWARDS</span>
+        {/* Scrollable Content Wrapper */}
+        <div className="premium-scrollable-content">
+          {/* Header */}
+          <div className="premium-header">
+            {/* Corner borders for header */}
+            <div className="premium-corner premium-top-left"></div>
+            <div className="premium-corner premium-top-right"></div>
+            <div className="premium-corner premium-bottom-left"></div>
+            <div className="premium-corner premium-bottom-right"></div>
+            
+            <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
+            <div className="premium-title">
+              <span className="premium-title-line">PREMIUM</span>
+              <span className="premium-title-line">REWARDS</span>
+            </div>
           </div>
-        </div>
-        
-        {/* Progress Bar */}
-        <div className="premium-progress">
-          <div className="premium-progress-bar">
-            <div className="premium-progress-fill" style={{width: `${getProgressPercentage()}%`}}></div>
-            {/* Segment dividers */}
-            {Array.from({ length: 11 }, (_, index) => (
+          
+          {/* Progress Bar */}
+          <div className="premium-progress">
+            <div className="premium-progress-bar">
+              <div className="premium-progress-fill" style={{width: `${getProgressPercentage()}%`}}></div>
+              {/* Segment dividers */}
+              {Array.from({ length: 11 }, (_, index) => (
+                <div 
+                  key={index}
+                  className="premium-segment-divider"
+                  style={{left: `${((index + 1) / 12) * 100}%`}}
+                ></div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Level Labels */}
+          <div className="premium-level-labels">
+            <div className="premium-level">LEVEL 1</div>
+            <div className="premium-level">LEVEL 12</div>
+          </div>
+          
+          {/* Rewards List - Back to Original Design */}
+          <div className="premium-rewards">
+            {rewards.map((rewardLevel, levelIndex) => (
               <div 
-                key={index}
-                className="premium-segment-divider"
-                style={{left: `${((index + 1) / 12) * 100}%`}}
-              ></div>
+                key={rewardLevel.level} 
+                className={`premium-reward-item ${!rewardLevel.claimStatus && rewardLevel.level <= currentLevel ? 'premium-reward-clickable' : ''}`}
+                onClick={() => !rewardLevel.claimStatus && rewardLevel.level <= currentLevel && handleClaimReward(levelIndex)}
+              >
+                <div className="premium-reward-item-left">
+                  <img 
+                    src={rewardLevel.claimStatus ? premiumDiamond : 
+                         (rewardLevel.level <= currentLevel ? unlockIcon : lockIcon)} 
+                    alt="Status Icon" 
+                    className={`premium-status-icon premium-status-icon-${rewardLevel.claimStatus ? 'diamond' : (rewardLevel.level <= currentLevel ? 'unlock' : 'lock')}`}
+                  />
+                  <span className="premium-reward-number">{rewardLevel.level}</span>
+                </div>
+                <div className="premium-reward-item-right">
+                  <div className="premium-reward-info">
+                    {rewardLevel.rewards
+                      .filter(reward => reward.quantity > 0) // Filter out rewards with quantity = 0
+                      .map((reward, rewardIndex) => (
+                        <div key={rewardIndex} className="premium-reward-item-info">
+                          <span className="premium-reward-quantity">{reward.quantity}</span>
+                          <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
+                        </div>
+                      ))}
+                  </div>
+                  <div className="premium-status-container">
+                    <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>
+                      {rewardLevel.claimStatus ? 'CLAIMED' : (rewardLevel.level <= currentLevel ? 'UNLOCKED' : 'LOCKED')}
+                    </span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-        
-        {/* Level Labels */}
-        <div className="premium-level-labels">
-          <div className="premium-level">LEVEL 1</div>
-          <div className="premium-level">LEVEL 12</div>
-        </div>
-        
-        {/* Rewards List - Back to Original Design */}
-        <div className="premium-rewards">
-          {rewards.map((rewardLevel, levelIndex) => (
-            <div 
-              key={rewardLevel.level} 
-              className={`premium-reward-item ${!rewardLevel.claimStatus && rewardLevel.level <= currentLevel ? 'premium-reward-clickable' : ''}`}
-              onClick={() => !rewardLevel.claimStatus && rewardLevel.level <= currentLevel && handleClaimReward(levelIndex)}
-            >
-              <div className="premium-reward-item-left">
-                <img 
-                  src={rewardLevel.claimStatus ? premiumDiamond : 
-                       (rewardLevel.level <= currentLevel ? unlockIcon : lockIcon)} 
-                  alt="Status Icon" 
-                  className={`premium-status-icon premium-status-icon-${rewardLevel.claimStatus ? 'diamond' : (rewardLevel.level <= currentLevel ? 'unlock' : 'lock')}`}
-                />
-                <span className="premium-reward-number">{rewardLevel.level}</span>
-              </div>
-              <div className="premium-reward-item-right">
-                <div className="premium-reward-info">
-                  {rewardLevel.rewards
-                    .filter(reward => reward.quantity > 0) // Filter out rewards with quantity = 0
-                    .map((reward, rewardIndex) => (
-                      <div key={rewardIndex} className="premium-reward-item-info">
-                        <span className="premium-reward-quantity">{reward.quantity}</span>
-                        <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
-                      </div>
-                    ))}
-                </div>
-                <div className="premium-status-container">
-                  <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>
-                    {rewardLevel.claimStatus ? 'CLAIMED' : (rewardLevel.level <= currentLevel ? 'UNLOCKED' : 'LOCKED')}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Footer */}
-        <div className="premium-footer">
-          {/* Corner borders for header */}
-          <div className="premium-corner premium-top-left"></div>
-          <div className="premium-corner premium-top-right"></div>
-          <div className="premium-corner premium-bottom-left"></div>
-          <div className="premium-corner premium-bottom-right"></div>
+          
+          {/* Footer */}
+          <div className="premium-footer">
+            {/* Corner borders for header */}
+            <div className="premium-corner premium-top-left"></div>
+            <div className="premium-corner premium-top-right"></div>
+            <div className="premium-corner premium-bottom-left"></div>
+            <div className="premium-corner premium-bottom-right"></div>
 
-          <div className="premium-time-remaining">{getRemainingTime()}</div>
-          <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
+            <div className="premium-time-remaining">{getRemainingTime()}</div>
+            <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
+          </div>
         </div>
       </div>
       
