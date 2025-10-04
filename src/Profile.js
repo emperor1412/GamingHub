@@ -21,6 +21,7 @@ import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
 import TrophiesView from './TrophiesView';
 import StarletsDetailView from './StarletsDetailView';
+import ProfileTokenDetailView from './ProfileTokenDetailView';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -40,11 +41,11 @@ const maskEmail = (email) => {
     return `${email.substring(0, 6)}...${email.substring(email.length - 4)}`;
 };
 
-const EarnablesSection = ({ onBack, onShowStarletsDetail }) => {
+const EarnablesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail }) => {
     return (
         <div className="profile-container">
             {/* Back Button */}
-            <button className="back-button back-button-alignment" onClick={onBack}>
+            <button className="back-button back-button-alignment" onClick={showTokenDetail ? onCloseTokenDetail : onBack}>
                 <img src={backIcon} alt="Back" />
             </button>
 
@@ -57,14 +58,14 @@ const EarnablesSection = ({ onBack, onShowStarletsDetail }) => {
             {/* Earnables List */}
             <div className="navigation-scroll-wrapper">
                 <div className="navigation-list">
-                    <div className="navigation-item" onClick={onShowStarletsDetail}>
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('starlets')}>
                         <div className="navigation-item-left">
                             <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
                             <span className="navigation-item-text">STARLETS</span>
                         </div>
                         <span className="navigation-item-value">2,598</span>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('bcoin')}>
                         <div className="navigation-item-left">
                             <img src={bCoinIcon} alt="B$" className="navigation-item-icon" />
                             <span className="navigation-item-text">B$</span>
@@ -82,11 +83,11 @@ const EarnablesSection = ({ onBack, onShowStarletsDetail }) => {
     );
 };
 
-const CollectiblesSection = ({ onBack }) => {
+const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail }) => {
     return (
         <div className="profile-container">
             {/* Back Button */}
-            <button className="back-button back-button-alignment" onClick={onBack}>
+            <button className="back-button back-button-alignment" onClick={showTokenDetail ? onCloseTokenDetail : onBack}>
                 <img src={backIcon} alt="Back" />
             </button>
 
@@ -99,14 +100,14 @@ const CollectiblesSection = ({ onBack }) => {
             {/* Collectibles List */}
             <div className="navigation-scroll-wrapper">
                 <div className="navigation-list">
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('tickets')}>
                         <div className="navigation-item-left">
                             <img src={collectiblesIcon} alt="Tickets" className="navigation-item-icon" />
                             <span className="navigation-item-text">TICKETS</span>
                         </div>
                         <span className="navigation-item-value">64</span>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('gmt')}>
                         <div className="navigation-item-left">
                             <img src={gmtIcon} alt="GMT" className="navigation-item-icon" />
                             <span className="navigation-item-text">GMT</span>
@@ -117,7 +118,7 @@ const CollectiblesSection = ({ onBack }) => {
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('mooar')}>
                         <div className="navigation-item-left">
                             <img src={mooarIcon} alt="MooAR+" className="navigation-item-icon" />
                             <span className="navigation-item-text">MOOAR+</span>
@@ -128,7 +129,7 @@ const CollectiblesSection = ({ onBack }) => {
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('alphaChest')}>
                         <div className="navigation-item-left">
                             <img src={alphaChestIcon} alt="Alpha Chests" className="navigation-item-icon" />
                             <span className="navigation-item-text">ALPHA CHESTS</span>
@@ -146,11 +147,11 @@ const CollectiblesSection = ({ onBack }) => {
     );
 };
 
-const PowerupsSection = ({ onBack }) => {
+const PowerupsSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail }) => {
     return (
         <div className="profile-container">
             {/* Back Button */}
-            <button className="back-button back-button-alignment" onClick={onBack}>
+            <button className="back-button back-button-alignment" onClick={showTokenDetail ? onCloseTokenDetail : onBack}>
                 <img src={backIcon} alt="Back" />
             </button>
 
@@ -163,7 +164,7 @@ const PowerupsSection = ({ onBack }) => {
             {/* Power-ups List */}
             <div className="navigation-scroll-wrapper">
                 <div className="navigation-list">
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('freezeStreak')}>
                         <div className="navigation-item-left">
                             <img src={freezeStreakIcon} alt="Freeze Streak" className="navigation-item-icon" />
                             <span className="navigation-item-text">FREEZE STREAK</span>
@@ -308,6 +309,8 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showPremium, setShowPremium] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
     const [showStarletsDetail, setShowStarletsDetail] = useState(false);
+    const [showTokenDetail, setShowTokenDetail] = useState(false);
+    const [currentTokenType, setCurrentTokenType] = useState('starlets');
 
     console.log('Current Window URL:', window.location.href);    
 
@@ -540,12 +543,33 @@ Response:
             ) : currentSection === 'earnables' ? (
                 <EarnablesSection 
                     onBack={() => setCurrentSection('profile')} 
-                    onShowStarletsDetail={() => setShowStarletsDetail(true)}
+                    onShowTokenDetail={(tokenType) => {
+                        setCurrentTokenType(tokenType);
+                        setShowTokenDetail(true);
+                    }}
+                    showTokenDetail={showTokenDetail}
+                    onCloseTokenDetail={() => setShowTokenDetail(false)}
                 />
             ) : currentSection === 'collectibles' ? (
-                <CollectiblesSection onBack={() => setCurrentSection('profile')} />
+                <CollectiblesSection 
+                    onBack={() => setCurrentSection('profile')} 
+                    onShowTokenDetail={(tokenType) => {
+                        setCurrentTokenType(tokenType);
+                        setShowTokenDetail(true);
+                    }}
+                    showTokenDetail={showTokenDetail}
+                    onCloseTokenDetail={() => setShowTokenDetail(false)}
+                />
             ) : currentSection === 'powerups' ? (
-                <PowerupsSection onBack={() => setCurrentSection('profile')} />
+                <PowerupsSection 
+                    onBack={() => setCurrentSection('profile')} 
+                    onShowTokenDetail={(tokenType) => {
+                        setCurrentTokenType(tokenType);
+                        setShowTokenDetail(true);
+                    }}
+                    showTokenDetail={showTokenDetail}
+                    onCloseTokenDetail={() => setShowTokenDetail(false)}
+                />
             ) : currentSection === 'trophies' ? (
                 <TrophiesSection onBack={() => setCurrentSection('profile')} />
             ) : (
@@ -661,6 +685,13 @@ Response:
             <StarletsDetailView 
                 isOpen={showStarletsDetail} 
                 onClose={() => setShowStarletsDetail(false)}
+            />
+            
+            {/* Profile Token Detail View */}
+            <ProfileTokenDetailView 
+                isOpen={showTokenDetail} 
+                onClose={() => setShowTokenDetail(false)}
+                tokenType={currentTokenType}
             />
         </div>
     );
