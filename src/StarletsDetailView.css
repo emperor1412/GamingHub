@@ -1,0 +1,261 @@
+.starlets-detail-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(35, 31, 32, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.starlets-detail-popup {
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 0 18px;
+  text-align: center;
+  font-family: "PP Neue Machina", sans-serif;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1001;
+  margin-top: 0;
+}
+
+/* Header section with star icon */
+.starlets-detail-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+}
+
+.starlets-detail-icon-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.starlets-detail-icon {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+/* Content area */
+.starlets-detail-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.starlets-detail-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.starlets-detail-description {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 40px;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 1.4;
+  max-width: 90%;
+}
+
+.starlets-detail-earning-section {
+  width: 100%;
+  max-width: 90%;
+  text-align: center;
+}
+
+.starlets-detail-earning-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  text-align: center;
+}
+
+.starlets-detail-earning-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.starlets-detail-earning-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  text-align: center;
+}
+
+.starlets-detail-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.starlets-detail-earning-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "PP Neue Machina", sans-serif;
+  text-align: center;
+}
+
+/* Action buttons */
+.starlets-detail-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: auto;
+  padding-bottom: 20px;
+  position: sticky;
+  bottom: 0;
+  background: rgba(35, 31, 32, 0.9);
+}
+
+.starlets-detail-okay-button {
+  background: #000FEF;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "PP Neue Machina", sans-serif;
+  padding: 12px 24px;
+  line-height: 1;
+  width: 100%;
+  max-width: 330px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.starlets-detail-okay-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 15, 239, 0.6);
+}
+
+.starlets-detail-okay-button:active {
+  transform: translateY(0);
+}
+
+/* Body layout */
+.starlets-detail-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+}
+
+/* Corner borders */
+.starlets-detail-popup {
+  /* Customizable variables for corner decoration */
+  --mk-corner-size: 7px;              /* corner box size */
+  --mk-corner-color: #ffffff;          /* border color */
+  --mk-corner-border: 0.3px;           /* border thickness */
+
+  /* Per-side offsets so you can tweak position easily */
+  --mk-corner-offset-top: 150px;
+  --mk-corner-offset-right: 20px;
+  /* Ensure vertical span between top and bottom corners is exactly 330px */
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 160px);
+  --mk-corner-offset-left: 20px;
+}
+
+.starlets-detail-popup .mk-corner {
+  position: absolute;
+  width: var(--mk-corner-size);
+  height: var(--mk-corner-size);
+  z-index: 5; /* above content background */
+}
+
+.starlets-detail-popup .mk-top-left {
+  top: var(--mk-corner-offset-top);
+  left: var(--mk-corner-offset-left);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.starlets-detail-popup .mk-top-right {
+  top: var(--mk-corner-offset-top);
+  right: var(--mk-corner-offset-right);
+  border-top: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.starlets-detail-popup .mk-bottom-left {
+  bottom: var(--mk-corner-offset-bottom);
+  left: var(--mk-corner-offset-left);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-left: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+.starlets-detail-popup .mk-bottom-right {
+  bottom: var(--mk-corner-offset-bottom);
+  right: var(--mk-corner-offset-right);
+  border-bottom: var(--mk-corner-border) solid var(--mk-corner-color);
+  border-right: var(--mk-corner-border) solid var(--mk-corner-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

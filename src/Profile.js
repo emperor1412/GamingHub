@@ -20,6 +20,7 @@ import ProfileAvatarSelector from './ProfileAvatarSelector';
 import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
 import TrophiesView from './TrophiesView';
+import StarletsDetailView from './StarletsDetailView';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -39,7 +40,7 @@ const maskEmail = (email) => {
     return `${email.substring(0, 6)}...${email.substring(email.length - 4)}`;
 };
 
-const EarnablesSection = ({ onBack }) => {
+const EarnablesSection = ({ onBack, onShowStarletsDetail }) => {
     return (
         <div className="profile-container">
             {/* Back Button */}
@@ -56,7 +57,7 @@ const EarnablesSection = ({ onBack }) => {
             {/* Earnables List */}
             <div className="navigation-scroll-wrapper">
                 <div className="navigation-list">
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={onShowStarletsDetail}>
                         <div className="navigation-item-left">
                             <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
                             <span className="navigation-item-text">STARLETS</span>
@@ -306,6 +307,7 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
+    const [showStarletsDetail, setShowStarletsDetail] = useState(false);
 
     console.log('Current Window URL:', window.location.href);    
 
@@ -536,7 +538,10 @@ Response:
                     tickets={shared.userProfile.goldenTicketList}
                 />
             ) : currentSection === 'earnables' ? (
-                <EarnablesSection onBack={() => setCurrentSection('profile')} />
+                <EarnablesSection 
+                    onBack={() => setCurrentSection('profile')} 
+                    onShowStarletsDetail={() => setShowStarletsDetail(true)}
+                />
             ) : currentSection === 'collectibles' ? (
                 <CollectiblesSection onBack={() => setCurrentSection('profile')} />
             ) : currentSection === 'powerups' ? (
@@ -650,6 +655,12 @@ Response:
                     shared.setInitialMarketTab('starlet');
                     shared.setActiveTab('market');
                 }}
+            />
+            
+            {/* Starlets Detail View */}
+            <StarletsDetailView 
+                isOpen={showStarletsDetail} 
+                onClose={() => setShowStarletsDetail(false)}
             />
         </div>
     );
