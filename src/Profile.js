@@ -14,6 +14,7 @@ import mooarIcon from './images/Mooar.svg';
 import alphaChestIcon from './images/Chest_Icon.png';
 import stepBoostIcon from './images/Boost_Icon.png';
 import freezeStreakIcon from './images/streakFreezeIcon.png';
+import badgesIcon from './images/Badges_Icon.png';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 import IntroducePremium from './IntroducePremium';
@@ -225,7 +226,7 @@ const TrophiesSection = ({ onBack }) => {
                     </div>
                     <div className="navigation-item">
                         <div className="navigation-item-left">
-                            <img src={trophiesIcon} alt="Badges" className="navigation-item-icon" />
+                            <img src={badgesIcon} alt="Badges" className="navigation-item-icon" />
                             <span className="navigation-item-text">BADGES</span>
                         </div>
                         <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
@@ -529,18 +530,6 @@ Response:
         <div className="app-container">
             {showLevelUp ? (
                 <LevelUp onClose={() => setShowLevelUp(false)} />
-            ) : showAvatarSelector ? (
-                <ProfileAvatarSelector
-                    onClose={() => setShowAvatarSelector(false)}
-                    onSelect={(avatar) => {
-                        console.log('Selected avatar:', avatar);
-                    }}
-                    getProfileData={getProfileData}
-                    onLevelUp={() => {
-                        setShowAvatarSelector(false);
-                        setShowLevelUp(true);
-                    }}
-                />
             ) : showGoldenTickets ? (
                 <GoldenTicketList 
                     onClose={() => setShowGoldenTickets(false)}
@@ -558,7 +547,7 @@ Response:
                 <div className="profile-container">
                     {/* Back Button - Hidden when premium popup is shown */}
                     {!showPremium && (
-                        <button className="back-button back-button-alignment" onClick={onClose}>
+                        <button className="back-button back-button-alignment" onClick={showAvatarSelector ? () => setShowAvatarSelector(false) : onClose}>
                             <img src={backIcon} alt="Back" />
                         </button>
                     )}
@@ -600,25 +589,42 @@ Response:
                         <img src={arrowIcon} alt="Arrow" className="profile-card-arrow" />
                     </div>
 
-                    {/* Navigation Items */}
-                    <div className="navigation-scroll-wrapper">
-                        <div className="navigation-list">
-                            {navigationItems.map((item, index) => (
-                                <div key={item.id} className="navigation-item" onClick={item.onClick}>
-                                    <div className="navigation-item-left">
-                                        <img src={item.icon} alt={item.text} className="navigation-item-icon" />
-                                        <span className="navigation-item-text">{item.text}</span>
-                                    </div>
-                                    <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                    {/* Conditional content - Avatar Selector or Navigation */}
+                    {showAvatarSelector ? (
+                        <ProfileAvatarSelector
+                            onClose={() => setShowAvatarSelector(false)}
+                            onSelect={(avatar) => {
+                                console.log('Selected avatar:', avatar);
+                            }}
+                            getProfileData={getProfileData}
+                            onLevelUp={() => {
+                                setShowAvatarSelector(false);
+                                setShowLevelUp(true);
+                            }}
+                        />
+                    ) : (
+                        <>
+                            {/* Navigation Items */}
+                            <div className="navigation-scroll-wrapper">
+                                <div className="navigation-list">
+                                    {navigationItems.map((item, index) => (
+                                        <div key={item.id} className="navigation-item" onClick={item.onClick}>
+                                            <div className="navigation-item-left">
+                                                <img src={item.icon} alt={item.text} className="navigation-item-icon" />
+                                                <span className="navigation-item-text">{item.text}</span>
+                                            </div>
+                                            <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
 
-                    {/* Promotional Text Box */}
-                    <div className="promotional-box">
-                        EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
-                    </div>
+                            {/* Promotional Text Box */}
+                            <div className="promotional-box">
+                                EARN EXTRA REWARDS BY INVITING FRENS OR BY COMPLETING DAILY TASKS. THE MORE YOU ENGAGE, THE MORE REWARDS YOU'LL UNLOCK.
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
             

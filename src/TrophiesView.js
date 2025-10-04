@@ -188,7 +188,7 @@ const TrophiesView = ({ onBack }) => {
         return groupNames[groupIndex] || `GROUP ${groupIndex + 1}`;
     };
 
-    const renderTrophyGroup = (group, groupIndex) => {
+    const renderTrophyGroup = (group, groupIndex) => {              
         return (
             <div key={groupIndex} className="trophy-group">
                 <div className="trophy-group-header">
@@ -200,11 +200,11 @@ const TrophiesView = ({ onBack }) => {
                     <div className="trophy-group-corner trophy-group-bottom-left"></div>
                     <div className="trophy-group-corner trophy-group-bottom-right"></div>
                     
-                    <div className="trophies-grid">
+                    <div className="pf_trophies-grid">
                         {group.map((trophy, index) => (
                             <div key={trophy.id} className={`trophy-item ${trophy.status}`}>
                                 <div className="trophy-content">
-                                    <div className="trophy-icon">
+                                    <div className="pf_trophy-icon">
                                         <img src={trophy.icon} alt={trophy.name} />
                                     </div>
                                     <div className="trophy-name">{trophy.name}</div>

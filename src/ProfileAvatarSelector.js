@@ -199,31 +199,6 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
         <LevelUp onClose={onCloseLevelup} />
       ) : (
         <>
-          <div className="profile-header">
-            <button className="profile-back back-button-alignment" onClick={onClose}>
-              <img src={backIcon} alt="Back" />
-            </button>
-            <div className="profile-user">
-              <img 
-                src={shared.avatars[shared.userProfile.pictureIndex]?.src} 
-                alt="Avatar" 
-                className="profile-avatar"
-              />
-              <div>
-                <div className="profile-username">{shared.telegramUserData.firstName}
-                <div className="level-badge">LV.{shared.userProfile.level || 0}</div>
-                </div>
-                <div className="profile-id">
-                {shared.userProfile.email && (
-                    <>
-                        <img src={ID_selected} alt="FSL ID" className="profile-id-icon" />
-                        {shared.userProfile.email}
-                    </>
-                )}
-               </div>
-              </div>
-            </div>
-          </div>
 
           <div className="avatar-selector-container">
           <div className="avatar-selector-inner">

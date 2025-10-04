@@ -1,17 +1,13 @@
 .avatar-selector-overlay {
-  position: fixed;
+  position: relative;
   width: 100%;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
   background: rgba(0, 0, 0, 0);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
-  height: 100vh;
+  z-index: 1;
   overflow: hidden;
   overscroll-behavior: none;
+  flex: 1;
 }
 
 .profile-back {

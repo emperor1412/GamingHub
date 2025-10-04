@@ -177,10 +177,16 @@
 }
 
 /* Trophies Grid */
-.trophies-grid {
+.pf_trophies-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 10px;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  overflow-x: hidden;
 }
 
 .trophy-item {
@@ -239,7 +245,7 @@
   box-sizing: border-box;
 }
 
-.trophy-icon {
+.pf_trophy-icon {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -249,7 +255,7 @@
   justify-content: center;
 }
 
-.trophy-icon img {
+.pf_trophy-icon img {
   width: auto;
   height: 80px;
   object-fit: contain;
