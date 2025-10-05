@@ -300,7 +300,7 @@ const GoldenTicketList = ({ onClose, tickets }) => {
     );
 };
 
-const Profile = ({ onClose, getProfileData, showFSLIDScreen }) => {
+const Profile = ({ onClose, getProfileData, showFSLIDScreen, onNavigateToTicket, onOpenTadokami, onNavigateToMarket }) => {
     const [showAvatarSelector, setShowAvatarSelector] = useState(false);
     const [showLevelUp, setShowLevelUp] = useState(false);
     const [showFullEmail, setShowFullEmail] = useState(false);
@@ -693,6 +693,9 @@ Response:
                 isOpen={showTokenDetail} 
                 onClose={() => setShowTokenDetail(false)}
                 tokenType={currentTokenType}
+                onNavigateToTicket={onNavigateToTicket}
+                onOpenTadokami={onOpenTadokami}
+                onNavigateToMarket={onNavigateToMarket}
             />
         </div>
     );

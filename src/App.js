@@ -54,7 +54,7 @@ import loading_background from "./images/GamesHubLoading.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 // import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
 
-import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup } from '@telegram-apps/sdk';
+import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retrieveLaunchParams, popup, openLink } from '@telegram-apps/sdk';
 import { analytics } from './Firebase';
 import Market from './Market';
 import FlippingStars from './FlippingStars';
@@ -578,6 +578,40 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  // Function to open Tadokami game (similar to MainView's onClickOpenGame)
+  const handleOpenTadokami = async () => {
+    try {
+      trackUserAction('minigame_clicked', {
+        game_name: 'Tadokami',
+        game_url: shared.game_link,
+      }, shared.loginData?.link);
+      
+      // Use Telegram WebApp API to open the mini app directly within Telegram
+      if (window.Telegram?.WebApp?.openTelegramLink) {
+        // This method will open the link within Telegram without launching a browser
+        window.Telegram.WebApp.openTelegramLink(shared.game_link);
+      } else {
+        // Fallback to SDK method if the direct method isn't available
+        openLink(shared.game_link);
+      }
+    } catch (e) {
+      console.log('Error opening Tadokami game:', e);
+      // Fallback in case of error
+      openLink(shared.game_link);
+    }
+  };
+
+  // Function to navigate to marketplace with starlet tab (similar to MainView's onClickMarketplace)
+  const handleNavigateToMarket = () => {
+    // Close profile view first
+    handleOverlayClose('profile');
+    setShowProfileView(false);
+    // Set the initial market tab to 'starlet'
+    shared.setInitialMarketTab('starlet');
+    // Navigate to market tab
+    shared.setActiveTab('market');
+  };
+
   const handleFlippingStarsClose = () => {
     handleOverlayClose('flippingstars');
     setShowFlippingStarsView(false);
@@ -764,6 +798,13 @@ const bind_fslid = async () => {
             setShowProfileView(false);
             setActiveTab('fslid');
           }}
+          onNavigateToTicket={() => {
+            handleOverlayClose('profile');
+            setShowProfileView(false);
+            setShowTicketView(true);
+          }}
+          onOpenTadokami={handleOpenTadokami}
+          onNavigateToMarket={handleNavigateToMarket}
         />
       )
       : showTicketView ?

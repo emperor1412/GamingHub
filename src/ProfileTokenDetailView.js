@@ -13,7 +13,10 @@ import stepBoost2xIcon from './images/Icon_Pop_Stepboosts_2X.png';
 const ProfileTokenDetailView = ({ 
   isOpen, 
   onClose,
-  tokenType = 'starlets' // 'starlets', 'bcoin', 'tickets', 'gmt', 'alphaChest', 'mooar', 'freezeStreak', 'stepBoost1_5x', 'stepBoost2x'
+  tokenType = 'starlets', // 'starlets', 'bcoin', 'tickets', 'gmt', 'alphaChest', 'mooar', 'freezeStreak', 'stepBoost1_5x', 'stepBoost2x'
+  onNavigateToTicket,
+  onOpenTadokami,
+  onNavigateToMarket
 }) => {
   // Token configuration
   const tokenConfig = {
@@ -185,10 +188,25 @@ const ProfileTokenDetailView = ({
             </div>
           </div>
 
-          {/* OKAY button */}
+          {/* Action button */}
           <div className="starlets-detail-actions">
-            <button className="starlets-detail-okay-button" onClick={onClose}>
-              OKAY
+            <button 
+              className="starlets-detail-okay-button" 
+              onClick={() => {
+                if (tokenType === 'tickets' && onNavigateToTicket) {
+                  onNavigateToTicket();
+                } else if (tokenType === 'alphaChest' && onOpenTadokami) {
+                  onOpenTadokami();
+                } else if ((tokenType === 'freezeStreak' || tokenType === 'stepBoost1_5x' || tokenType === 'stepBoost2x') && onNavigateToMarket) {
+                  onNavigateToMarket();
+                } else {
+                  onClose();
+                }
+              }}
+            >
+              {tokenType === 'tickets' ? 'SCRATCH' : 
+               tokenType === 'alphaChest' ? 'PLAY' : 
+               (tokenType === 'freezeStreak' || tokenType === 'stepBoost1_5x' || tokenType === 'stepBoost2x') ? 'BUY' : 'OKAY'}
             </button>
           </div>
         </div>
