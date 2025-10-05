@@ -450,13 +450,14 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
 
   return (
     <div className="premium-overlay">
+      {/* Back Button - Move outside container */}
       {!showConfirmPopup && (
-        <button className="pm_back-button pm_back-button-alignment" onClick={onClose}>
+        <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
         </button>
       )}
+      
       <div className="premium-container">
-        {/* Scrollable Content Wrapper */}
         <div className="premium-scrollable-content">
           {/* Header */}
           <div className="premium-header">
