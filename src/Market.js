@@ -447,18 +447,112 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     showFSLIDScreen();
   };
 
+  const showError = async (message) => {
+    if (window.Telegram?.WebApp?.showPopup) {
+      try {
+        await window.Telegram.WebApp.showPopup({
+          title: 'Error',
+          message: message,
+          buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+        });
+      } catch (error) {
+        console.error('Failed to show popup:', error);
+        alert(message);
+      }
+    } else {
+      alert(message);
+    }
+  };
+
   const handleStarletPurchase = (amount, stars, price, optionId = null) => {
     setSelectedPurchase({ amount, stars, optionId });
     setShowBuyView(true);
   };
 
-  const handleFreeItemClick = () => {
+  const handleFreeItemClick = async () => {
     if (shared.userProfile.fslId === 0) {
       showFSLIDScreen();
       return;
     }
-    setSelectedPurchase({ amount: 50, stars: 0, optionId: 'free' });
-    setIsPopupOpen(true);
+    
+    // Call API directly for free items and show success popup
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+      const data = await response.json();
+      if (data.code === 0 && data.data.success) {
+        // Update next claim time
+        setNextClaimTime(data.data.time);
+        setIsFreeItemClaimed(true);
+        
+        // Update user profile to reflect new starlets and tickets
+        await shared.getProfileWithRetry();
+        
+        // Update local state
+        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+        if (userStarlets) {
+          setStarlets(userStarlets.num);
+        }
+
+        const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+        if (userTicket) {
+          setTickets(userTicket.num);
+        }
+
+        // Refresh market content to update free reward status
+        await refreshMarketContent();
+
+        // Show success popup directly
+        setSelectedPurchase({ 
+          amount: 50, 
+          stars: 0, 
+          optionId: 'free',
+          isFreeItem: true
+        });
+        setIsPopupOpen(true);
+      } else if (data.code === 102002 || data.code === 102001) {
+        console.log('Token expired, attempting to refresh...');
+        const result = await shared.login(shared.initData);
+        if (result.success) {
+          const retryResponse = await fetch(`${shared.server_url}/api/app/claimFreeReward?token=${shared.loginData.token}`);
+          const retryData = await retryResponse.json();
+          if (retryData.code === 0 && retryData.data.success) {
+            setNextClaimTime(retryData.data.time);
+            setIsFreeItemClaimed(true);
+            await shared.getProfileWithRetry();
+            
+            const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
+            if (userStarlets) {
+              setStarlets(userStarlets.num);
+            }
+
+            const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
+            if (userTicket) {
+              setTickets(userTicket.num);
+            }
+
+            await refreshMarketContent();
+
+            // Show success popup directly
+            setSelectedPurchase({ 
+              amount: 50, 
+              stars: 0, 
+              optionId: 'free',
+              isFreeItem: true
+            });
+            setIsPopupOpen(true);
+          } else {
+            await showError(retryData.msg || 'Claim failed. Please try again.');
+          }
+        } else {
+          await showError('Session expired. Please try again.');
+        }
+      } else {
+        await showError(data.msg || 'Claim failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Failed to claim free reward:', error);
+      await showError('Failed to claim free reward. Please try again.');
+    }
   };
 
   const handleStarletProductPurchase = (product) => {
@@ -1985,6 +2079,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         productId={selectedPurchase?.productId}
         productName={selectedPurchase?.productName}
         isStarletProduct={selectedPurchase?.isStarletProduct}
+        isFreeItem={selectedPurchase?.isFreeItem}
         onConfirm={handleConfirmPurchase}
         setShowProfileView={setShowProfileView}
         setShowBuyView={setShowBuyView}
