@@ -371,12 +371,12 @@ const TrophiesView = ({ onBack }) => {
                                         alt={selectedTrophy.name}
                                         className="pf_trophy-overlay-icon"
                                     />
-                                    <div className='pf_stars' style={{top: 176, left: -32}}>
-                                        <img src={shared.starImages.star1} alt="Star" className="pf_single-star pf_single-star-1" />
-                                        <img src={shared.starImages.star2} alt="Star" className="pf_single-star pf_single-star-2" />
-                                        <img src={shared.starImages.star3} alt="Star" className="pf_single-star pf_single-star-3" />
-                                        <img src={shared.starImages.star4} alt="Star" className="pf_single-star pf_single-star-4" />
-                                        <img src={shared.starImages.star5} alt="Star" className="pf_single-star pf_single-star-5" />
+                                    <div className='stars' style={{top: 176, left: -32}}>
+                                        <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
+                                        <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
+                                        <img src={shared.starImages.star3} alt="Star" className="single-star single-star-3" />
+                                        <img src={shared.starImages.star4} alt="Star" className="single-star single-star-4" />
+                                        <img src={shared.starImages.star5} alt="Star" className="single-star single-star-5" />
                                     </div>
                                 </div>
                                 <div className="pf_trophy-overlay-promotion">
