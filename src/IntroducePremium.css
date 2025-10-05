@@ -1,15 +1,32 @@
 .ip-popup-overlay {
   position: fixed;
-  top: 60px;
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 80px;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
+}
+
+/* Full screen variant when opened from Profile (no bottom bar) */
+.ip-popup-overlay.fullscreen {
+  top: 60px; /* Dành chỗ cho top-bar */
+  bottom: 0;
+}
+
+.ip-popup-overlay.fullscreen .ip-popup-container {
+  margin-bottom: 40px;
+}
+
+/* MainView variant (with header and bottom bar) */
+.ip-popup-overlay.mainview {
+  top: 60px;
+  bottom: 80px;
+  align-items: flex-start;
 }
 
 .ip-popup-container {
@@ -306,8 +323,8 @@ background-repeat: no-repeat; */
   }
 } */
 
-/* Animations - Same as FreezeStreakPopup */
-/* @keyframes fadeIn {
+/* Animations */
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -315,17 +332,6 @@ background-repeat: no-repeat; */
     opacity: 1;
   }
 }
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-} */
 
 /* @media screen and (max-width: 375px) {
   .ip-main-content {

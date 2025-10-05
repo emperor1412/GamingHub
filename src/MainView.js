@@ -1401,10 +1401,9 @@ Response:
                 onSelectPlan={(plan) => {
                     console.log('Selected plan:', plan);
                     setShowIntroducePremium(false);
-                    // Navigate to market with starlet tab to show premium packages
-                    shared.setInitialMarketTab('starlet');
-                    shared.setActiveTab('market');
+                    // Navigation will be handled by IntroducePremium component itself
                 }}
+                isFromProfile={false}
             />
         </>
     );
