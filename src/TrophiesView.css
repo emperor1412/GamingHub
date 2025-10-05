@@ -180,13 +180,13 @@
 .pf_trophies-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 16px;
   width: 100%;
   margin-bottom: 10px;
   min-height: 100%;
   box-sizing: border-box;
   padding: 8px;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 .trophy-item {
@@ -257,12 +257,8 @@
 
 .pf_trophy-icon img {
   width: auto;
-  height: 80px;
+  height: 90px;
   object-fit: contain;
-  transform: scale(1.2);
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
 }
 
 .trophy-name {

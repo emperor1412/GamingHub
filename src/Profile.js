@@ -101,7 +101,7 @@ const EarnablesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseT
     );
 };
 
-const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail }) => {
+const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail, onClickClaim }) => {
     return (
         <div className="profile-container">
             {/* Back Button */}
@@ -132,7 +132,18 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                         </div>
                         <div className="navigation-item-right">
                             <span className="navigation-item-value">{getGMTQuantity()}</span>
-                            <button className="pf_claim-button">CLAIM</button>
+                            <button 
+                                className={`pf_claim-button ${getGMTQuantity() <= 0 ? 'disabled' : ''}`}
+                                disabled={getGMTQuantity() <= 0}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (getGMTQuantity() > 0) {
+                                        onClickClaim({ record: { prop_id: 20020, num: getGMTQuantity() } });
+                                    }
+                                }}
+                            >
+                                CLAIM
+                            </button>
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
                     </div>
@@ -143,7 +154,18 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                         </div>
                         <div className="navigation-item-right">
                             <span className="navigation-item-value">{getMooarQuantity()}</span>
-                            <button className="pf_claim-button">CLAIM</button>
+                            <button 
+                                className={`pf_claim-button ${getMooarQuantity() <= 0 ? 'disabled' : ''}`}
+                                disabled={getMooarQuantity() <= 0}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (getMooarQuantity() > 0) {
+                                        onClickClaim({ record: { prop_id: 30020, num: getMooarQuantity() } });
+                                    }
+                                }}
+                            >
+                                CLAIM
+                            </button>
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
                     </div>
@@ -577,6 +599,7 @@ Response:
                     }}
                     showTokenDetail={showTokenDetail}
                     onCloseTokenDetail={() => setShowTokenDetail(false)}
+                    onClickClaim={onClickClaim}
                 />
             ) : currentSection === 'powerups' ? (
                 <PowerupsSection 

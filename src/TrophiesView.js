@@ -171,28 +171,29 @@ const TrophiesView = ({ onBack }) => {
         getTrophyData();
     }, []);
 
-    // Group trophies into 3 groups of 6 trophies each
+    // Group trophies by category
     const groupTrophies = (trophies) => {
-        const groups = [];
-        for (let i = 0; i < trophies.length; i += 6) {
-            groups.push(trophies.slice(i, i + 6));
-        }
-        return groups;
+        const socialTrophies = trophies.filter(trophy => trophy.id >= 1 && trophy.id <= 6);
+        const streakTrophies = trophies.filter(trophy => trophy.id >= 10040 && trophy.id <= 10043);
+        const gameplayTrophies = trophies.filter(trophy => 
+            !(trophy.id >= 1 && trophy.id <= 6) && 
+            !(trophy.id >= 10040 && trophy.id <= 10043)
+        );
+        
+        return [
+            { category: 'SOCIAL', trophies: socialTrophies },
+            { category: 'STREAK', trophies: streakTrophies },
+            { category: 'GAMEPLAY', trophies: gameplayTrophies }
+        ];
     };
 
     const trophyGroups = groupTrophies(trophies);
-
-    // Define group names based on trophy types
-    const getGroupName = (groupIndex) => {
-        const groupNames = ['SOCIAL', 'ACHIEVEMENT', 'SPECIAL'];
-        return groupNames[groupIndex] || `GROUP ${groupIndex + 1}`;
-    };
 
     const renderTrophyGroup = (group, groupIndex) => {              
         return (
             <div key={groupIndex} className="trophy-group">
                 <div className="trophy-group-header">
-                    <h3 className="trophy-group-title">{getGroupName(groupIndex)}</h3>
+                    <h3 className="trophy-group-title">{group.category}</h3>
                 </div>
                 <div className="trophy-group-content">
                     <div className="trophy-group-corner trophy-group-top-left"></div>
@@ -201,7 +202,7 @@ const TrophiesView = ({ onBack }) => {
                     <div className="trophy-group-corner trophy-group-bottom-right"></div>
                     
                     <div className="pf_trophies-grid">
-                        {group.map((trophy, index) => (
+                        {group.trophies.map((trophy, index) => (
                             <div key={trophy.id} className={`trophy-item ${trophy.status}`}>
                                 <div className="trophy-content">
                                     <div className="pf_trophy-icon">
