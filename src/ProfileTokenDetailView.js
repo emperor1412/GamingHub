@@ -2,16 +2,18 @@ import React from 'react';
 import './ProfileTokenDetailView.css';
 import starletIcon from './images/starlet.png';
 import bCoinIcon from './images/bCoin_icon.png';
-import collectiblesIcon from './images/ticket_scratch_icon.png';
+import collectiblesIcon from './images/ticket-profile-detail-icon.png';
 import gmtIcon from './images/GMT_1.png';
 import alphaChestIcon from './images/Chest_Icon.png';
 import mooarIcon from './images/Mooar.svg';
-import freezeStreakIcon from './images/streakFreezeIcon.png';
+import freezeStreakIcon from './images/Icon_streak_1_day.png';
+import stepBoost1_5xIcon from './images/Icon_Pop_Stepboosts_1_5X.png';
+import stepBoost2xIcon from './images/Icon_Pop_Stepboosts_2X.png';
 
 const ProfileTokenDetailView = ({ 
   isOpen, 
   onClose,
-  tokenType = 'starlets' // 'starlets', 'bcoin', 'tickets', 'gmt', 'alphaChest', 'mooar', 'freezeStreak'
+  tokenType = 'starlets' // 'starlets', 'bcoin', 'tickets', 'gmt', 'alphaChest', 'mooar', 'freezeStreak', 'stepBoost1_5x', 'stepBoost2x'
 }) => {
   // Token configuration
   const tokenConfig = {
@@ -54,7 +56,7 @@ const ProfileTokenDetailView = ({
       title: 'GMT',
       description: 'GMT IS THE CORE TOKEN IN THE FSL ECOSYSTEM.',
       subDescription: 'EARN IT BY SCRATCHING TICKETS, JOINING EVENTS, AND COMPLETING SPECIAL ACTIVITIES.',
-      earningTitle: 'YOU CAN WITHDRAW ONCE YOU\'VE REACHED 50 GMT. MAKE SURE YOUR FSL ID IS CONNECTED TO UNLOCK WITHDRAWALS.',
+      subNote: 'YOU CAN WITHDRAW ONCE YOU\'VE REACHED 50 GMT. MAKE SURE YOUR FSL ID IS CONNECTED TO UNLOCK WITHDRAWALS.',
       earningMethods: [
       ]
     },
@@ -76,9 +78,27 @@ const ProfileTokenDetailView = ({
     },
     freezeStreak: {
       icon: freezeStreakIcon,
-      title: 'FREEZE STREAK',
+      title: 'FREEZE STREAKS',
       description: 'FREEZE STREAK PROTECTS YOUR LOGIN STREAK WHEN YOU MISS A DAY!',
       subDescription: 'THE FIRST TIME YOU USE ONE, YOU\'LL UNLOCK A SPECIAL TROPHY.',
+      earningMethods: [
+      ]
+    },
+    stepBoost1_5x: {
+      icon: stepBoost1_5xIcon,
+      title: '1.5X STEP BOOST',
+      titleImage: stepBoost1_5xIcon, // Option to show image instead of text
+      description: 'FOR 10 MINUTES IN YOUR DAY WE WILL MULTIPLY THE STARLETS YOU EARN WHILE USING STEPN!',
+      subNote: '\[NOTE: YOUR CAN EARN UP TO 500 STARLETS PER DAY FROM USING STEPN\]',
+      earningMethods: [
+      ]
+    },
+    stepBoost2x: {
+      icon: stepBoost2xIcon,
+      title: '2X STEP BOOST',
+      titleImage: stepBoost2xIcon, // Option to show image instead of text
+      description: 'FOR 10 MINUTES IN YOUR DAY WE WILL MULTIPLY THE STARLETS YOU EARN WHILE USING STEPN!',
+      subNote: '\[NOTE: YOUR CAN EARN UP TO 500 STARLETS PER DAY FROM USING STEPN\]',
       earningMethods: [
       ]
     }
@@ -93,7 +113,7 @@ const ProfileTokenDetailView = ({
     <>
       <div className="starlets-detail-overlay" onClick={onClose}>
         <div
-          className="starlets-detail-popup"
+          className={`starlets-detail-popup ${config.titleImage ? 'has-title-image' : ''}`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Corner borders */}
@@ -104,22 +124,34 @@ const ProfileTokenDetailView = ({
 
           {/* Main content */}
           <div className="starlets-detail-body">
-            {/* Token icon */}
-            <div className="starlets-detail-header">
-              <div className="starlets-detail-icon-container">
-                <img
-                  src={config.icon}
-                  alt={`${config.title} icon`}
-                  className="starlets-detail-icon"
-                />
+            {/* Token icon - only show if no titleImage */}
+            {!config.titleImage && (
+              <div className="starlets-detail-header">
+                <div className="starlets-detail-icon-container">
+                  <img
+                    src={config.icon}
+                    alt={`${config.title} icon`}
+                    className="starlets-detail-icon"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Content area */}
             <div className="starlets-detail-content">
-              <div className="starlets-detail-title">
-                {config.title}
-              </div>
+              {config.titleImage ? (
+                <div className="starlets-detail-title-image-container">
+                  <img
+                    src={config.titleImage}
+                    alt={config.title}
+                    className="starlets-detail-title-image"
+                  />
+                </div>
+              ) : (
+                <div className="starlets-detail-title">
+                  {config.title}
+                </div>
+              )}
               
               <div className="starlets-detail-description">
                 {config.description}
@@ -128,6 +160,11 @@ const ProfileTokenDetailView = ({
               {config.subDescription && (
               <div className="starlets-detail-description">
                 {config.subDescription}
+              </div>
+              )}
+              {config.subNote && (
+              <div className="starlets-detail-sub-note">
+                {config.subNote}
               </div>
               )}
               <div className="starlets-detail-earning-section">

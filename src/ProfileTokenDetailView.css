@@ -20,7 +20,7 @@
   flex-direction: column;
   padding: 0 18px 0 18px;
   text-align: center;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   max-width: 100%;
   width: 100%;
   height: 100%;
@@ -68,24 +68,42 @@
 }
 
 .starlets-detail-title {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 700;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  line-height: 0.9em;
   margin-bottom: 20px;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+}
+
+.starlets-detail-title-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.starlets-detail-title-image {
+  max-width: 420px; /* 300px * 1.4 = 420px */
+  max-height: 200px; /* 120px * 1.4 = 168px */
+  object-fit: contain;
+  width: auto;
+  height: auto;
 }
 
 .starlets-detail-description {
-  font-size: 16px;
-  font-weight: 500;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 40px;
-  font-family: "PP Neue Machina", sans-serif;
-  line-height: 1.4;
+  letter-spacing: 0.7px;
+  margin-bottom: 20px;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  line-height: 0.93em;
   max-width: 90%;
 }
 
@@ -96,19 +114,30 @@
 }
 
 .starlets-detail-earning-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   text-align: center;
+}
+
+.starlets-detail-sub-note {
+  font-size: 9px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  text-align: center;
+  width: 85%;
 }
 
 .starlets-detail-earning-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1px;
   align-items: center;
   text-align: center;
 }
@@ -131,12 +160,11 @@
 }
 
 .starlets-detail-earning-text {
-  font-size: 16px;
+  font-size: 10px;
   font-weight: 500;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   text-align: center;
 }
 
@@ -160,7 +188,7 @@
   color: white;
   font-weight: 700;
   cursor: pointer;
-  font-family: "PP Neue Machina", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   padding: 12px 24px;
   line-height: 1;
   width: 100%;
@@ -200,8 +228,14 @@
   --mk-corner-offset-top: 150px;
   --mk-corner-offset-right: 20px;
   /* Ensure vertical span between top and bottom corners is exactly 330px */
-  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 160px);
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 142px);
   --mk-corner-offset-left: 20px;
+}
+
+/* Corner adjustments when titleImage is used */
+.starlets-detail-popup.has-title-image {
+  --mk-corner-offset-top: 70px; /* 150px - 50px = 100px */
+  --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 160px);
 }
 
 .starlets-detail-popup .mk-corner {

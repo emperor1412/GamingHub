@@ -33,7 +33,8 @@ import premiumIcon from './images/Premium_icon.png';
 import levelIcon from './images/account_level.png';
 import earnablesIcon from './images/starlet.png';
 import collectiblesIcon from './images/ticket_scratch_icon.png';
-import powerupsIcon from './images/Icon_Step_Boost.png';
+import powerupsIcon from './images/Icon_StepBoosts_x2.png';
+import powerupsIcon2 from './images/Icon_StepBoosts_x1_5.png';
 import trophiesIcon from './images/trophy_4_200px.png';
 
 const maskEmail = (email) => {
@@ -157,7 +158,7 @@ const PowerupsSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTo
 
             {/* Header */}
             <div className="section-header">
-                <img src={powerupsIcon} alt="Power-ups" className="section-header-icon" />
+                <img src={powerupsIcon2} alt="Power-ups" className="section-header-icon" />
                 <h1 className="pf_section-title">POWER-UPS</h1>
             </div>
 
@@ -171,14 +172,14 @@ const PowerupsSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTo
                         </div>
                         <span className="navigation-item-value">45</span>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('stepBoost1_5x')}>
                         <div className="navigation-item-left">
                             <img src={stepBoostIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
                             <span className="navigation-item-text">1.5X STEP BOOST</span>
                         </div>
                         <span className="navigation-item-value">1</span>
                     </div>
-                    <div className="navigation-item">
+                    <div className="navigation-item" onClick={() => onShowTokenDetail('stepBoost2x')}>
                         <div className="navigation-item-left">
                             <img src={stepBoostIcon} alt="2X Step Boost" className="navigation-item-icon" />
                             <span className="navigation-item-text">2X STEP BOOST</span>
