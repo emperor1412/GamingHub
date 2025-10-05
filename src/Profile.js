@@ -707,6 +707,7 @@ Response:
                     await getProfileData(shared.loginData);
                     await checkPremiumStatus();
                 }}
+                onNavigateToMarket={onNavigateToMarket}
             />
             
             {/* Introduce Premium Popup */}

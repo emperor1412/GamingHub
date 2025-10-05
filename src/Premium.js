@@ -8,7 +8,7 @@ import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
 import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
 
-const Premium = ({ isOpen, onClose = 0 }) => {
+const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
 
   const [currentXP, setCurrentXP] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(0);
@@ -278,7 +278,14 @@ const Premium = ({ isOpen, onClose = 0 }) => {
 
   // Function to claim reward and show popup
   const handleClaimReward = async (rewardIndex) => {
-    if (rewards[rewardIndex].claimStatus || rewards[rewardIndex].level > currentLevel) return;
+    console.log('handleClaimReward called with index:', rewardIndex);
+    console.log('rewards[rewardIndex]:', rewards[rewardIndex]);
+    console.log('currentLevel:', currentLevel);
+    
+    if (rewards[rewardIndex].claimStatus || rewards[rewardIndex].level > currentLevel) {
+      console.log('Reward already claimed or level too high, returning');
+      return;
+    }
     
     const reward = rewards[rewardIndex];
     
@@ -357,15 +364,25 @@ const Premium = ({ isOpen, onClose = 0 }) => {
 
   // Function to handle renew button click
   const handleRenew = () => {
+    console.log('handleRenew called');
+    console.log('onNavigateToMarket:', onNavigateToMarket);
+    console.log('shared.setActiveTab:', typeof shared.setActiveTab);
+    
     // Close premium popup first
     onClose();
     
     // Navigate to market/shop
-    if (typeof shared.setActiveTab === 'function') {
+    if (onNavigateToMarket) {
+      console.log('Using onNavigateToMarket prop');
+      // Use the navigation prop passed from parent component
+      onNavigateToMarket();
+    } else if (typeof shared.setActiveTab === 'function') {
+      console.log('Using shared.setActiveTab fallback');
+      // Fallback to shared method for backward compatibility
       shared.setInitialMarketTab('starlet');
       shared.setActiveTab('market');
     } else {
-      console.log('setActiveTab function not available');
+      console.log('No navigation method available');
     }
   };
 

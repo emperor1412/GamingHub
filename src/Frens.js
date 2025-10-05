@@ -10,47 +10,49 @@ import ticketIcon from './images/ticket.svg';
 import friendsIcon from './images/friends_icon.svg';
 // import kmIcon from './images/km.svg';
 import starletIcon from './images/starlet.png';
-import trophy_1 from './images/trophy_1_200px.png';
-import trophy_2 from './images/trophy_2_200px.png';
-import trophy_3 from './images/trophy_3_200px.png';
-import trophy_4 from './images/trophy_4_200px.png';
-import trophy_5 from './images/trophy_5_200px.png';
-import trophy_6 from './images/trophy_6_200px.png';
-import trophy_10000 from './images/trophy_10000_200px.png';
-import trophy_10000_locked from './images/trophy_10000_locked.png';
-import trophy_10010 from './images/Trophy-ALPHA_TESTER_Unlocked.png';
-import trophy_10010_locked from './images/Trophy-ALPHA_TESTER2-Locked.png';
-import trophy_10020 from './images/Runner-Trophy_Colour.png';
-import trophy_10020_locked from './images/Runner-Trophy_Bw.png';
-import trophy_10030 from './images/FSLGAMES-newtrophyicons_1360.png';
-import trophy_10030_locked from './images/FSLGAMES-newtrophyicons_1360_1.png';
-import trophy_10040 from './images/TheFirstHunded_Unlocked.png';
-import trophy_10040_locked from './images/TheFirstHunded_Locked.png';
-import trophy_10041 from './images/TwoHundredStrong_Unlocked.png';
-import trophy_10041_locked from './images/TwoHundredStrong_Locked.png';
-import trophy_10042 from './images/Spartan_Unlocked.png';
-import trophy_10042_locked from './images/Spartan_Locked.png';
-import trophy_10043 from './images/UnbrokenYear_Unlocked.png';
-import trophy_10043_locked from './images/UnbrokenYear_Locked.png';
-import trophy_10050 from './images/stepBoost_trophy_unlocked.png';
-import trophy_10050_locked from './images/stepBoost_trophy_locked.png';
-import trophy_10060 from './images/BToken.png';
-import trophy_10060_locked from './images/BToken_Locked.png';
-import trophy_10070 from './images/FSLGamesHub_PremiumMembership_1441.png';
-import trophy_10070_locked from './images/FSLGamesHub_PremiumMembership_1441_1.png';
-import locker from './images/locker.png';
-import unlock from './images/unlock.png';
+// TEMPORARILY COMMENTED OUT - TROPHY IMPORTS
+// import trophy_1 from './images/trophy_1_200px.png';
+// import trophy_2 from './images/trophy_2_200px.png';
+// import trophy_3 from './images/trophy_3_200px.png';
+// import trophy_4 from './images/trophy_4_200px.png';
+// import trophy_5 from './images/trophy_5_200px.png';
+// import trophy_6 from './images/trophy_6_200px.png';
+// import trophy_10000 from './images/trophy_10000_200px.png';
+// import trophy_10000_locked from './images/trophy_10000_locked.png';
+// import trophy_10010 from './images/Trophy-ALPHA_TESTER_Unlocked.png';
+// import trophy_10010_locked from './images/Trophy-ALPHA_TESTER2-Locked.png';
+// import trophy_10020 from './images/Runner-Trophy_Colour.png';
+// import trophy_10020_locked from './images/Runner-Trophy_Bw.png';
+// import trophy_10030 from './images/FSLGAMES-newtrophyicons_1360.png';
+// import trophy_10030_locked from './images/FSLGAMES-newtrophyicons_1360_1.png';
+// import trophy_10040 from './images/TheFirstHunded_Unlocked.png';
+// import trophy_10040_locked from './images/TheFirstHunded_Locked.png';
+// import trophy_10041 from './images/TwoHundredStrong_Unlocked.png';
+// import trophy_10041_locked from './images/TwoHundredStrong_Locked.png';
+// import trophy_10042 from './images/Spartan_Unlocked.png';
+// import trophy_10042_locked from './images/Spartan_Locked.png';
+// import trophy_10043 from './images/UnbrokenYear_Unlocked.png';
+// import trophy_10043_locked from './images/UnbrokenYear_Locked.png';
+// import trophy_10050 from './images/stepBoost_trophy_unlocked.png';
+// import trophy_10050_locked from './images/stepBoost_trophy_locked.png';
+// import trophy_10060 from './images/BToken.png';
+// import trophy_10060_locked from './images/BToken_Locked.png';
+// import trophy_10070 from './images/FSLGamesHub_PremiumMembership_1441.png';
+// import trophy_10070_locked from './images/FSLGamesHub_PremiumMembership_1441_1.png';
+// import locker from './images/locker.png';
+// import unlock from './images/unlock.png';
 import link from './images/checkout.svg';
-import particle from './images/particle.svg';
-import lock_trophy from './images/lock_trophy.png';
-import close from './images/close.svg';
+// import particle from './images/particle.svg';
+// import lock_trophy from './images/lock_trophy.png';
+// import close from './images/close.svg';
 
 
 const Frens = () => {
-  const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
-  const [selectedTrophy, setSelectedTrophy] = useState(null);
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [trophies, setTrophies] = useState([]);
+  // TEMPORARILY COMMENTED OUT - TROPHY TAB
+  // const [activeTab, setActiveTab] = useState('friends'); // 'friends' or 'trophies'
+  // const [selectedTrophy, setSelectedTrophy] = useState(null);
+  // const [showOverlay, setShowOverlay] = useState(false);
+  // const [trophies, setTrophies] = useState([]);
   const [friendsData, setFriendsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMorePages, setHasMorePages] = useState(true);
@@ -115,6 +117,8 @@ const Frens = () => {
       ]
           */
 
+  // TEMPORARILY COMMENTED OUT - TROPHY ICONS
+  /*
   const trophyIcon = {
     1: trophy_1,
     2: trophy_2,
@@ -148,7 +152,10 @@ const Frens = () => {
     10060: trophy_10060_locked,
     10070: trophy_10070_locked,
   }
+  */
   
+  // TEMPORARILY COMMENTED OUT - TROPHY FUNCTIONS
+  /*
   const getTrophyData = async (depth = 0) => {
     if (depth > 3) {
       console.error('Get trophy data failed after 3 attempts');
@@ -239,6 +246,7 @@ const Frens = () => {
       console.error('Unlock trophy data error:', response);
     }
   };
+  */
 
   /*
 
@@ -376,8 +384,7 @@ const Frens = () => {
     setIsLoading(false);
   };
 
-  /* Removed shareStoryAPI function as it's no longer needed */
-
+  /* TEMPORARILY COMMENTED OUT - TROPHY STORY SHARE
   const onClickShareStory = () => {
     console.log('Share story');
     closeOverlay();
@@ -404,6 +411,7 @@ const Frens = () => {
       });
     }
   };
+  */
 
   const onClickInviteFriends = () => {
     console.log('Invite friends');
@@ -419,6 +427,8 @@ const Frens = () => {
     shareURL(url);
   };
 
+  // TEMPORARILY COMMENTED OUT - TROPHY CLICK HANDLERS
+  /*
   const handleTrophyClick = (trophy) => {
     setSelectedTrophy(trophy);
     setShowOverlay(true);
@@ -434,6 +444,7 @@ const Frens = () => {
     setShowOverlay(false);
     setSelectedTrophy(null);
   };
+  */
 
   useEffect(() => {
     /*
@@ -490,7 +501,7 @@ const Frens = () => {
     ]);  
     */
 
-    getTrophyData();
+    // getTrophyData(); // TEMPORARILY COMMENTED OUT
     getFriendsData();
   }, []);
 
@@ -539,12 +550,14 @@ const Frens = () => {
     );
   };
 
-  // Track overlay views
+  // TEMPORARILY COMMENTED OUT - Track trophy overlay views
+  /*
   useEffect(() => {
     if (showOverlay && selectedTrophy) {
       trackOverlayView('trophy_details', shared.loginData?.link, 'frens');
     }
   }, [showOverlay, selectedTrophy]);
+  */
 
   return (
     <div className="frens-content">
@@ -566,81 +579,25 @@ const Frens = () => {
           </div>
         </div>
 
-        {activeTab === 'friends' ? (
-          <div className="friends-container">
-            <div className="tabs">
-              <button
-                className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
-                onClick={() => setActiveTab('friends')}
-              >
-                Friends
-              </button>
-              <button
-                className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
-                onClick={() => setActiveTab('trophies')}
-              >
-                Trophies
-              </button>
-            </div>
-            <div className="friends-list" onScroll={handleScroll}>
-              {renderFriendsList()}
-            </div>
-            <div className="invite-button-container">
-              <button className="invite-button" onClick={onClickInviteFriends}>
-                Invite Friends
-                <img src={link} alt="Link" className="invite-icon" />
-              </button>
-            </div>
+        {/* SHOWING ONLY FRIENDS TAB */}
+        <div className="friends-container">
+          <div className="tabs">
+            <button className="tab active" style={{width: '100%'}}>
+              Friends
+            </button>
           </div>
-        ) : (
-          <div className="friends-container">
-            <div className="tabs">
-              <button
-                className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
-                onClick={() => setActiveTab('friends')}
-              >
-                Friends
-              </button>
-              <button
-                className={`tab ${activeTab === 'trophies' ? 'active' : ''}`}
-                onClick={() => setActiveTab('trophies')}
-              >
-                Trophies
-              </button>
-            </div>
-            <div className="trophies-list">
-              <div className="trophies-grid">
-                {trophies.map(trophy => (
-                  <button
-                    key={trophy.id}
-                    className={`trophy-item ${trophy.status}`}
-                    onClick={() => handleTrophyClick(trophy)}
-                  >
-                    {(trophy.status === 'locked' || trophy.status === 'ready') && (
-                      <div className="trophy-overlay"></div>
-                    )}
-                    <div className="trophy-content">
-                      <span className="trophy-icon">
-                        <img src={trophy.icon} alt="Trophy" />
-                      </span>
-                      {trophy.status === 'locked' && (
-                        <img src={locker} alt="Locked" className="trophy-status-icon" />
-                      )}
-                      {trophy.status === 'ready' && (
-                        <img src={unlock} alt="Ready to unlock" className="trophy-status-icon" />
-                      )}
-                      {trophy.status === 'ready' && <span className="ready-icon">✨</span>}
-                      <span className="trophy-name">
-                        {trophy.id === 10000 && trophy.status === 'unlocked' ? "Starlets Champion" : trophy.name}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="friends-list" onScroll={handleScroll}>
+            {renderFriendsList()}
           </div>
-        )}
+          <div className="invite-button-container">
+            <button className="invite-button" onClick={onClickInviteFriends}>
+              Invite Friends
+              <img src={link} alt="Link" className="invite-icon" />
+            </button>
+          </div>
+        </div>
 
+        {/* TEMPORARILY COMMENTED OUT - TROPHY OVERLAY
         {showOverlay && selectedTrophy && (
           <div className="trophy-overlay-container" onClick={closeOverlay}>
             <button className="trophy-overlay-close" onClick={closeOverlay}>
@@ -676,11 +633,6 @@ const Frens = () => {
                       alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    {/* <img
-                      src={particle}
-                      alt="Particle"
-                      className="trophy-overlay-particle"
-                    /> */}
                     <div className='stars' style={{top: 176, left: -32}}>
                       <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
                       <img src={shared.starImages.star2} alt="Star" className="single-star single-star-2" />
@@ -731,11 +683,6 @@ const Frens = () => {
                       alt={selectedTrophy.name}
                       className="trophy-overlay-icon"
                     />
-                    {/* <img
-                      src={particle}
-                      alt="Particle"
-                      className="trophy-overlay-particle"
-                    /> */}
 
                     <div className='stars' style={{top: 176, left: -32}}>
                       <img src={shared.starImages.star1} alt="Star" className="single-star single-star-1" />
@@ -760,6 +707,7 @@ const Frens = () => {
             </div>
           </div>
         )}
+        */}
 
       </div>
     </div>
