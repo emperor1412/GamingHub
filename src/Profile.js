@@ -42,6 +42,23 @@ const maskEmail = (email) => {
     return `${email.substring(0, 6)}...${email.substring(email.length - 4)}`;
 };
 
+// Helper functions to get token quantities from user profile
+const getTokenQuantity = (propId) => {
+    if (!shared.userProfile || !shared.userProfile.UserToken) return 0;
+    const token = shared.userProfile.UserToken.find(t => t.prop_id === propId);
+    return token ? token.num : 0;
+};
+
+const getTicketQuantity = () => getTokenQuantity(10010);
+const getStarletsQuantity = () => getTokenQuantity(10020);
+const getBCoinQuantity = () => getTokenQuantity(10030);
+const getGMTQuantity = () => getTokenQuantity(20020);
+const getMooarQuantity = () => getTokenQuantity(30020);
+const getAlphaChestQuantity = () => getTokenQuantity(50010);
+const getFreezeStreakQuantity = () => getTokenQuantity(10110);
+const getStepBoost1_5xQuantity = () => getTokenQuantity(10120);
+const getStepBoost2xQuantity = () => getTokenQuantity(10121);
+
 const EarnablesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTokenDetail }) => {
     return (
         <div className="profile-container">
@@ -64,14 +81,14 @@ const EarnablesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseT
                             <img src={earnablesIcon} alt="Starlets" className="navigation-item-icon" />
                             <span className="navigation-item-text">STARLETS</span>
                         </div>
-                        <span className="navigation-item-value">2,598</span>
+                        <span className="navigation-item-value">{getStarletsQuantity().toLocaleString()}</span>
                     </div>
                     <div className="navigation-item" onClick={() => onShowTokenDetail('bcoin')}>
                         <div className="navigation-item-left">
                             <img src={bCoinIcon} alt="B$" className="navigation-item-icon" />
                             <span className="navigation-item-text">B$</span>
                         </div>
-                        <span className="navigation-item-value">6,987</span>
+                        <span className="navigation-item-value">{getBCoinQuantity().toLocaleString()}</span>
                     </div>
                 </div>
             </div>
@@ -106,7 +123,7 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                             <img src={collectiblesIcon} alt="Tickets" className="navigation-item-icon" />
                             <span className="navigation-item-text">TICKETS</span>
                         </div>
-                        <span className="navigation-item-value">64</span>
+                        <span className="navigation-item-value">{getTicketQuantity()}</span>
                     </div>
                     <div className="navigation-item" onClick={() => onShowTokenDetail('gmt')}>
                         <div className="navigation-item-left">
@@ -114,7 +131,7 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                             <span className="navigation-item-text">GMT</span>
                         </div>
                         <div className="navigation-item-right">
-                            <span className="navigation-item-value">3</span>
+                            <span className="navigation-item-value">{getGMTQuantity()}</span>
                             <button className="pf_claim-button">CLAIM</button>
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
@@ -125,7 +142,7 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                             <span className="navigation-item-text">MOOAR+</span>
                         </div>
                         <div className="navigation-item-right">
-                            <span className="navigation-item-value">1</span>
+                            <span className="navigation-item-value">{getMooarQuantity()}</span>
                             <button className="pf_claim-button">CLAIM</button>
                             <img src={arrowIcon} alt="Arrow" className="navigation-item-arrow" />
                         </div>
@@ -135,7 +152,7 @@ const CollectiblesSection = ({ onBack, onShowTokenDetail, showTokenDetail, onClo
                             <img src={alphaChestIcon} alt="Alpha Chests" className="navigation-item-icon" />
                             <span className="navigation-item-text">ALPHA CHESTS</span>
                         </div>
-                        <span className="navigation-item-value">45</span>
+                        <span className="navigation-item-value">{getAlphaChestQuantity()}</span>
                     </div>
                 </div>
             </div>
@@ -170,21 +187,21 @@ const PowerupsSection = ({ onBack, onShowTokenDetail, showTokenDetail, onCloseTo
                             <img src={freezeStreakIcon} alt="Freeze Streak" className="navigation-item-icon" />
                             <span className="navigation-item-text">FREEZE STREAK</span>
                         </div>
-                        <span className="navigation-item-value">45</span>
+                        <span className="navigation-item-value">{getFreezeStreakQuantity()}</span>
                     </div>
                     <div className="navigation-item" onClick={() => onShowTokenDetail('stepBoost1_5x')}>
                         <div className="navigation-item-left">
                             <img src={stepBoostIcon} alt="1.5X Step Boost" className="navigation-item-icon" />
                             <span className="navigation-item-text">1.5X STEP BOOST</span>
                         </div>
-                        <span className="navigation-item-value">1</span>
+                        <span className="navigation-item-value">{getStepBoost1_5xQuantity()}</span>
                     </div>
                     <div className="navigation-item" onClick={() => onShowTokenDetail('stepBoost2x')}>
                         <div className="navigation-item-left">
                             <img src={stepBoostIcon} alt="2X Step Boost" className="navigation-item-icon" />
                             <span className="navigation-item-text">2X STEP BOOST</span>
                         </div>
-                        <span className="navigation-item-value">3</span>
+                        <span className="navigation-item-value">{getStepBoost2xQuantity()}</span>
                     </div>
                 </div>
             </div>
