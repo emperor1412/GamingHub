@@ -61,10 +61,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   flex: 1;
   margin-bottom: 20px;
+  padding-top: 0;
 }
 
 .starlets-detail-title {
@@ -215,6 +216,7 @@
   justify-content: flex-start;
   align-items: center;
   flex: 1;
+  padding-top: 0;
 }
 
 /* Corner borders */
@@ -234,7 +236,7 @@
 
 /* Corner adjustments when titleImage is used */
 .starlets-detail-popup.has-title-image {
-  --mk-corner-offset-top: 70px; /* 150px - 50px = 100px */
+  --mk-corner-offset-top: 30px; /* 150px - 50px = 100px */
   --mk-corner-offset-bottom: calc(100% - var(--mk-corner-offset-top) - 160px);
 }
 
