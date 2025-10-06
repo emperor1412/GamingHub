@@ -34,10 +34,10 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
 
                 {/* Action Steps & Entry Fee */}
                 <div className="challenge-details-wrapper">
-                    <div className="challenges-corner challenges-top-left"></div>
-                    <div className="challenges-corner challenges-top-right"></div>
-                    <div className="challenges-corner challenges-bottom-left"></div>
-                    <div className="challenges-corner challenges-bottom-right"></div>
+                    <div className="challenge-info-corner challenge-info-top-left"></div>
+                    <div className="challenge-info-corner challenge-info-top-right"></div>
+                    <div className="challenge-info-corner challenge-info-bottom-left"></div>
+                    <div className="challenge-info-corner challenge-info-bottom-right"></div>
                     
                     {/* Action Steps */}
                     <div className="action-steps">
