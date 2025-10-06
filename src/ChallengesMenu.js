@@ -8,9 +8,13 @@ import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
 import { getCurrentChallenge } from './data/challengesData';
 import ChallengeInfo from './ChallengeInfo';
+import JoinConfirmation from './JoinConfirmation';
+import ChallengeUpdate from './ChallengeUpdate';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
+    const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
+    const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
 
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
@@ -42,15 +46,76 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         
         // Only allow click if not disabled
         if (!state.isDisabled) {
-            setSelectedChallenge(challenge);
+            // If it's weekly challenge, go directly to ChallengeUpdate
+            if (challengeType === 'weekly') {
+                setSelectedChallenge(challenge);
+                setShowChallengeUpdate(true);
+            } else {
+                setSelectedChallenge(challenge);
+            }
         }
     };
 
     const handleJoinChallenge = () => {
-        // Handle join challenge logic here
-        console.log('Joining challenge:', selectedChallenge);
-        // You can add your join logic here
+        // Show JoinConfirmation page
+        setShowJoinConfirmation(true);
     };
+
+    const handleConfirmJoin = () => {
+        // Handle actual join logic here
+        console.log('Confirming join challenge:', selectedChallenge);
+        // You can add your actual join API call here
+        
+        // Close JoinConfirmation and go back to challenges menu
+        setShowJoinConfirmation(false);
+        setSelectedChallenge(null);
+    };
+
+    const handleBackFromConfirmation = () => {
+        // Go back to ChallengeInfo
+        setShowJoinConfirmation(false);
+    };
+
+    const handleBackFromUpdate = () => {
+        // Go back to challenges menu
+        setShowChallengeUpdate(false);
+        setSelectedChallenge(null);
+    };
+
+    const handleDoneFromUpdate = () => {
+        // Handle done action from ChallengeUpdate
+        console.log('Done from ChallengeUpdate');
+        setShowChallengeUpdate(false);
+        setSelectedChallenge(null);
+    };
+
+    // Show ChallengeUpdate if user clicked weekly challenge
+    if (showChallengeUpdate && selectedChallenge) {
+        return (
+            <ChallengeUpdate
+                challengeData={selectedChallenge}
+                onDone={handleDoneFromUpdate}
+                onBack={handleBackFromUpdate}
+            />
+        );
+    }
+
+    // Show JoinConfirmation if user clicked join
+    if (showJoinConfirmation && selectedChallenge) {
+        return (
+            <JoinConfirmation 
+                challengeData={{
+                    steps: 56000,
+                    days: 7,
+                    starletsCost: selectedChallenge.reward || 200,
+                    badgeName: "EXPLORER BADGE",
+                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
+                }}
+                onJoinChallenge={handleConfirmJoin}
+                onBack={handleBackFromConfirmation}
+            />
+        );
+    }
 
     // Show ChallengeInfo if a challenge is selected
     if (selectedChallenge) {

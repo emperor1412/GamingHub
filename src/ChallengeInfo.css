@@ -123,48 +123,48 @@
 
 /* Corner decorations */
 :root {
-    --challenges-corner-size: 20px;
-    --challenges-corner-color: #00F1FF;
-    --challenges-corner-border: 2px;
-    --challenges-corner-offset-top: 0px;
-    --challenges-corner-offset-bottom: 0px;
-    --challenges-corner-offset-left: 30px;
-    --challenges-corner-offset-right: 30px;
+    --challenge-info-corner-size: 20px;
+    --challenge-info-corner-color: #00F1FF;
+    --challenge-info-corner-border: 2px;
+    --challenge-info-corner-offset-top: 0px;
+    --challenge-info-corner-offset-bottom: 0px;
+    --challenge-info-corner-offset-left: 30px;
+    --challenge-info-corner-offset-right: 30px;
 }
 
-.challenges-corner {
+.challenge-info-corner {
     position: absolute;
-    width: var(--challenges-corner-size);
-    height: var(--challenges-corner-size);
+    width: var(--challenge-info-corner-size);
+    height: var(--challenge-info-corner-size);
     z-index: 5;
 }
 
-.challenges-top-left {
-    top: var(--challenges-corner-offset-top);
-    left: var(--challenges-corner-offset-left);
-    border-top: var(--challenges-corner-border) solid var(--challenges-corner-color);
-    border-left: var(--challenges-corner-border) solid var(--challenges-corner-color);
+.challenge-info-top-left {
+    top: var(--challenge-info-corner-offset-top);
+    left: var(--challenge-info-corner-offset-left);
+    border-top: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
+    border-left: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
 }
 
-.challenges-top-right {
-    top: var(--challenges-corner-offset-top);
-    right: var(--challenges-corner-offset-right);
-    border-top: var(--challenges-corner-border) solid var(--challenges-corner-color);
-    border-right: var(--challenges-corner-border) solid var(--challenges-corner-color);
+.challenge-info-top-right {
+    top: var(--challenge-info-corner-offset-top);
+    right: var(--challenge-info-corner-offset-right);
+    border-top: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
+    border-right: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
 }
 
-.challenges-bottom-left {
-    bottom: var(--challenges-corner-offset-bottom);
-    left: var(--challenges-corner-offset-left);
-    border-bottom: var(--challenges-corner-border) solid var(--challenges-corner-color);
-    border-left: var(--challenges-corner-border) solid var(--challenges-corner-color);
+.challenge-info-bottom-left {
+    bottom: var(--challenge-info-corner-offset-bottom);
+    left: var(--challenge-info-corner-offset-left);
+    border-bottom: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
+    border-left: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
 }
 
-.challenges-bottom-right {
-    bottom: var(--challenges-corner-offset-bottom);
-    right: var(--challenges-corner-offset-right);
-    border-bottom: var(--challenges-corner-border) solid var(--challenges-corner-color);
-    border-right: var(--challenges-corner-border) solid var(--challenges-corner-color);
+.challenge-info-bottom-right {
+    bottom: var(--challenge-info-corner-offset-bottom);
+    right: var(--challenge-info-corner-offset-right);
+    border-bottom: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
+    border-right: var(--challenge-info-corner-border) solid var(--challenge-info-corner-color);
 }
 
 /* Challenge Details Wrapper */
