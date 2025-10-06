@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.e56ffdca.css",
-    "main.js": "./static/js/main.95ef07b7.js",
+    "main.css": "./static/css/main.7a6d9883.css",
+    "main.js": "./static/js/main.22c72661.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
@@ -24,7 +24,6 @@
     "static/media/BToken.png": "./static/media/BToken.7712e6a35d8aa15a80fa.png",
     "static/media/FSL Games UI 2-08.png": "./static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
     "static/media/FSLGAMES-newtrophyicons_1360_1.png": "./static/media/FSLGAMES-newtrophyicons_1360_1.a01a14689f9d833d2179.png",
-    "static/media/ticket-profile-detail-icon.png": "./static/media/ticket-profile-detail-icon.bad29cacebd04e46eb52.png",
     "static/media/scratch_ticket.svg": "./static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
     "static/media/bank_ticket.svg": "./static/media/bank_ticket.59a113c097caac3a3d525cd39bb62511.svg",
     "static/media/burn_ticket.svg": "./static/media/burn_ticket.56e0ccb83c698133e4bf15727d9c254e.svg",
@@ -155,8 +154,6 @@
     "static/media/sneaker_icon.png": "./static/media/sneaker_icon.320259d366757b32997e.png",
     "static/media/Premium_icon.png": "./static/media/Premium_icon.e388da05a0b55c833a47.png",
     "static/media/trophy_10000_locked.png": "./static/media/trophy_10000_locked.22418ed22f822c5b8699.png",
-    "static/media/Badges_Icon.png": "./static/media/Badges_Icon.aad8817e56db058abd09.png",
-    "static/media/account_level.png": "./static/media/account_level.a958e20e70b4ccb0c9ab.png",
     "static/media/Egglets_Description_3.png": "./static/media/Egglets_Description_3.fa4392c05f39c61550df.png",
     "static/media/calendar.png": "./static/media/calendar.deb3adf73191b312d9b2.png",
     "static/media/bCoin_icon.png": "./static/media/bCoin_icon.f38620117d3f2d9ffeff.png",
@@ -189,7 +186,6 @@
     "static/media/fsl_point.png": "./static/media/fsl_point.3e44128da658a4241a45.png",
     "static/media/FSLID_Masterlogo_logo_version1_color_white_nobg.png": "./static/media/FSLID_Masterlogo_logo_version1_color_white_nobg.6a59f836553faeb83323.png",
     "static/media/Bg_streak_5.png": "./static/media/Bg_streak_5.f50825d6d60602cbf5b6.png",
-    "static/media/BG_profile.png": "./static/media/BG_profile.fa21954d87eeb139cad9.png",
     "static/media/text_turn_your_step.png": "./static/media/text_turn_your_step.63ea6486db1e656c8d1b.png",
     "static/media/lock_icon.png": "./static/media/lock_icon.20a56493a1322b2144e3.png",
     "static/media/bs_receive_starlet_text_claim.png": "./static/media/bs_receive_starlet_text_claim.7ff55cb29f8a1c49d6c7.png",
@@ -230,12 +226,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.e56ffdca.css.map": "./static/css/main.e56ffdca.css.map",
-    "main.95ef07b7.js.map": "./static/js/main.95ef07b7.js.map",
+    "main.7a6d9883.css.map": "./static/css/main.7a6d9883.css.map",
+    "main.22c72661.js.map": "./static/js/main.22c72661.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e56ffdca.css",
-    "static/js/main.95ef07b7.js"
+    "static/css/main.7a6d9883.css",
+    "static/js/main.22c72661.js"
   ]
 }
