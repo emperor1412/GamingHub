@@ -1,6 +1,7 @@
 import React from 'react';
 import './ChallengeUpdate.css';
 import backIcon from './images/back.svg';
+import shoe_image from './images/shoe_image.png';
 
 const ChallengeUpdate = ({ 
   challengeData, 
@@ -9,7 +10,7 @@ const ChallengeUpdate = ({
 }) => {
   const {
     challengeEndDate = "DD/MM/YY HH:MM",
-    currentSteps = 300,
+    currentSteps = 100,
     totalSteps = 500,
     stepSegments = [100, 200, 300, 400, 500]
   } = challengeData || {};
@@ -48,10 +49,16 @@ const ChallengeUpdate = ({
 
         {/* Challenge Description */}
         <div className="cu-challenge-description">
-          <p className="cu-description-text">Trek through rugged terrain, overcome steep</p>
-          <p className="cu-description-text">challenges, and uncover legendary wonders</p>
-          <p className="cu-description-text">along the way.</p>
-          <p className="cu-description-text">Complete the quest in time to double your Starlets - but fail, and your hard-earned rewards will be claimed as tribute!</p>
+          <div className="cu-description-block">
+            <p className="cu-description-text">Trek through rugged terrain, overcome steep</p>
+            <p className="cu-description-text">challenges, and uncover legendary wonders</p>
+            <p className="cu-description-text">along the way.</p>
+          </div>
+          <div className="cu-description-block">
+            <p className="cu-description-text">Complete the quest in time to double your</p>
+            <p className="cu-description-text">Starlets - but fail, and your hard-earned rewards</p>
+            <p className="cu-description-text">will be claimed as tribute!</p>
+          </div>
         </div>
 
         {/* Challenge End Date */}
@@ -70,29 +77,27 @@ const ChallengeUpdate = ({
           {/* Progress Bar */}
           <div className="cu-progress-container">
             <div className="cu-progress-bar">
-              {stepSegments.map((step, index) => (
+              <div className="cu-progress-fill" style={{width: `${(currentSteps / totalSteps) * 100}%`}}></div>
+              {/* Segment dividers */}
+              {Array.from({ length: 4 }, (_, index) => (
                 <div 
                   key={index}
-                  className={`cu-progress-segment ${index < 3 ? 'completed' : 'pending'}`}
-                >
-                  <span className="cu-segment-number">{step}</span>
-                </div>
+                  className="cu-segment-divider"
+                  style={{left: `${((index + 1) / 5) * 100}%`}}
+                ></div>
+              ))}
+            </div>
+            {/* Step numbers */}
+            <div className="cu-step-numbers">
+              {stepSegments.map((step, index) => (
+                <span key={index} className="cu-step-number">{step}</span>
               ))}
             </div>
           </div>
 
           {/* Shoe Graphic */}
           <div className="cu-shoe-container">
-            <div className="cu-shoe-graphic">
-              <div className="cu-shoe-outline"></div>
-              <div className="cu-energy-lines">
-                <div className="cu-line cu-line-1"></div>
-                <div className="cu-line cu-line-2"></div>
-                <div className="cu-line cu-line-3"></div>
-                <div className="cu-line cu-line-4"></div>
-                <div className="cu-line cu-line-5"></div>
-              </div>
-            </div>
+            <img src={shoe_image} alt="Shoe" className="cu-shoe-image" />
           </div>
         </div>
 
@@ -100,25 +105,6 @@ const ChallengeUpdate = ({
         <button className="cu-done-button" onClick={handleDone}>
           DONE
         </button>
-      </div>
-
-      {/* Bottom Navigation */}
-      <div className="cu-bottom-nav">
-        <div className="cu-nav-item cu-nav-active">
-          <div className="cu-nav-icon cu-gamepad-icon">🎮</div>
-        </div>
-        <div className="cu-nav-item">
-          <div className="cu-nav-icon cu-store-icon">💰</div>
-        </div>
-        <div className="cu-nav-item">
-          <div className="cu-nav-icon cu-group-icon">👥</div>
-        </div>
-        <div className="cu-nav-item">
-          <div className="cu-nav-icon cu-cart-icon">🛒</div>
-        </div>
-        <div className="cu-nav-item">
-          <div className="cu-nav-icon cu-profile-icon">👤</div>
-        </div>
       </div>
     </div>
   );

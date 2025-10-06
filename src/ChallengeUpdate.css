@@ -2,12 +2,9 @@
 .challenge-update-container {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 100%;
-  max-width: 430px;
   height: 100vh;
-  background: #000;
   background-image: url('./images/background_2.png');
   background-size: cover;
   background-position: center;
@@ -67,9 +64,11 @@
   text-align: center;
   position: relative;
   z-index: 5;
-  padding: 80px 20px 120px;
+  padding: 80px 20px 40px;
   min-height: 100vh;
   box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
 }
 
 /* Challenge Title */
@@ -113,7 +112,7 @@
 
 /* Challenge Description */
 .cu-challenge-description {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   max-width: 350px;
 }
 
@@ -121,14 +120,23 @@
   font-family: 'Sora', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 10.99px;
+  font-size: 12px;
   line-height: 108%;
   letter-spacing: -1.9%;
   text-align: center;
   vertical-align: middle;
   color: white;
-  margin-bottom: 0px;
+  margin: 0px;
   white-space: nowrap;
+  opacity: 0.8;
+}
+
+.cu-description-block {
+  margin-bottom: 15px;
+}
+
+.cu-description-text:last-child {
+  margin-bottom: 15px;
 }
 
 /* Challenge End Date */
@@ -157,64 +165,71 @@
 
 /* Steps Box */
 .cu-steps-box {
-  background: rgba(0, 0, 0, 0.3);
-  border: 3px solid #00F1FF;
-  border-radius: 12px;
-  padding: 15px 20px;
+  border: 3px solid #000FEF;
+  padding: 5px 20px;
   margin-bottom: 20px;
-  backdrop-filter: blur(10px);
+  width: 302px;
 }
 
 .cu-steps-text {
-  font-size: 24px;
+  font-size: 46.8px;
   font-weight: 700;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  letter-spacing: 0%;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 /* Progress Bar */
 .cu-progress-container {
   margin-bottom: 30px;
+  width: 100%;
+  max-width: 350px;
 }
 
 .cu-progress-bar {
+  height: 30px;
+  background: #0000FF; /* Dark blue background */
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.cu-progress-fill {
+  height: 100%;
+  background: #00F1FF; /* Cyan fill */
+  border-radius: 30px;
+  transition: width 0.3s ease;
+}
+
+.cu-segment-divider {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: #000;
+  z-index: 2;
+}
+
+.cu-step-numbers {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  padding: 10px;
-  border: 2px solid #00F1FF;
+  width: 300px;
+  margin: 0 auto;
 }
 
-.cu-progress-segment {
-  flex: 1;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-right: 2px solid white;
-}
-
-.cu-progress-segment:last-child {
-  border-right: none;
-}
-
-.cu-progress-segment.completed {
-  background: #00F1FF;
-}
-
-.cu-progress-segment.pending {
-  background: #0080FF;
-}
-
-.cu-segment-number {
-  font-size: 16px;
+.cu-step-number {
+  font-size: 11.57px;
   font-weight: 700;
-  color: white;
-  z-index: 2;
+  font-family: "PP Neue Machina", sans-serif;
+  color: #333333;
+  text-align: center;
+  position: relative;
+  top: -25px;
+  transform: translateY(-50%);
 }
 
 /* Shoe Graphic */
@@ -223,112 +238,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120px;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.cu-shoe-graphic {
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-
-.cu-shoe-outline {
-  width: 100%;
-  height: 100%;
-  border: 3px solid white;
-  border-radius: 20px 20px 40px 20px;
-  position: relative;
-  z-index: 2;
-}
-
-.cu-shoe-outline::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 20px;
-  border: 2px solid white;
-  border-radius: 10px 10px 20px 10px;
-}
-
-.cu-shoe-outline::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 10px;
-  background: white;
-  border-radius: 0 0 10px 10px;
-}
-
-/* Energy Lines */
-.cu-energy-lines {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  pointer-events: none;
-}
-
-.cu-line {
-  position: absolute;
-  background: #00F1FF;
-  height: 2px;
-  transform-origin: left center;
-}
-
-.cu-line-1 {
-  width: 60px;
-  top: 20%;
-  left: 50%;
-  transform: rotate(-30deg);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.cu-line-2 {
-  width: 80px;
-  top: 30%;
-  left: 50%;
-  transform: rotate(-15deg);
-  animation: pulse 2s ease-in-out infinite 0.2s;
-}
-
-.cu-line-3 {
-  width: 100px;
-  top: 50%;
-  left: 50%;
-  transform: rotate(0deg);
-  animation: pulse 2s ease-in-out infinite 0.4s;
-}
-
-.cu-line-4 {
-  width: 80px;
-  top: 70%;
-  left: 50%;
-  transform: rotate(15deg);
-  animation: pulse 2s ease-in-out infinite 0.6s;
-}
-
-.cu-line-5 {
-  width: 60px;
-  top: 80%;
-  left: 50%;
-  transform: rotate(30deg);
-  animation: pulse 2s ease-in-out infinite 0.8s;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
+.cu-shoe-image {
+  width: 220px;
+  height: 135px;
+  object-fit: contain;
 }
 
 /* Done Button */
@@ -345,56 +264,12 @@
   transition: all 0.3s ease;
   font-family: "PP Neue Machina", sans-serif;
   line-height: 100%;
-  margin: 20px 0;
+  width: 308px;
 }
 
 .cu-done-button:hover {
   background: #00F1FF;
   transform: translateY(-2px);
-}
-
-/* Bottom Navigation */
-.cu-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  height: 80px;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 20px;
-  z-index: 10;
-}
-
-.cu-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.cu-nav-item:hover {
-  opacity: 0.7;
-}
-
-.cu-nav-icon {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 4px;
-  font-size: 20px;
-}
-
-.cu-nav-active .cu-nav-icon {
-  color: #00F1FF;
-  border: 2px solid #00F1FF;
-  border-radius: 4px;
-  padding: 2px;
 }
 
 /* Responsive Design */
