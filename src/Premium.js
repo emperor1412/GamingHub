@@ -7,6 +7,7 @@ import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
 import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
+import PremiumTasks from './PremiumTasks';
 
 const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
 
@@ -18,6 +19,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showTasksPopup, setShowTasksPopup] = useState(false);
 
   // Mapping reward types from API to display format
   const getRewardTypeInfo = (type) => {
@@ -542,6 +544,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             <div className="premium-corner premium-bottom-right"></div>
 
             <div className="premium-time-remaining">{getRemainingTime()}</div>
+            <button className="premium-tasks-btn" onClick={() => setShowTasksPopup(true)}>TASKS</button>
             <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
           </div>
         </div>
@@ -553,6 +556,12 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
         onClose={handleClosePopup}
         onConfirm={handleConfirmClaim}
         reward={selectedReward}
+      />
+      
+      {/* Premium Tasks Popup */}
+      <PremiumTasks
+        isOpen={showTasksPopup}
+        onClose={() => setShowTasksPopup(false)}
       />
     </div>
   );
