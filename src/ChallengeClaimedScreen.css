@@ -1,0 +1,299 @@
+/* Challenge Claimed Screen Styles */
+.ccs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.ccs-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Large Background Text */
+.ccs-container::before {
+  content: "REWARDS";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  font-weight: 900;
+  color: rgba(0, 241, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 20px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Main Content */
+.ccs-main-content {
+  position: relative;
+  z-index: 5;
+  padding: 60px 20px 100px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* YOU'VE RECEIVED Section */
+.ccs-received-section {
+  margin-bottom: 30px;
+}
+
+.ccs-received-box {
+  background: transparent;
+  border: 2px solid #00F1FF;
+  border-radius: 8px;
+  padding: 8px 20px;
+  color: #00F1FF;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(0, 241, 255, 0.3);
+}
+
+/* Reward Details */
+.ccs-reward-details {
+  position: relative;
+  margin-bottom: 40px;
+  padding: 20px;
+}
+
+.ccs-reward-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+/* Corner Brackets */
+.ccs-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00F1FF;
+  pointer-events: none;
+}
+
+.ccs-corner.ccs-top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.ccs-corner.ccs-top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.ccs-corner.ccs-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.ccs-corner.ccs-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* Central Badge */
+.ccs-badge-container {
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.ccs-badge-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.5));
+}
+
+/* Floating Stars */
+.ccs-floating-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ccs-star {
+  position: absolute;
+  opacity: 0.8;
+  animation: ccs-float 3s ease-in-out infinite;
+}
+
+.ccs-star.s1 {
+  width: 20px;
+  height: 20px;
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.ccs-star.s2 {
+  width: 16px;
+  height: 16px;
+  top: 25%;
+  right: 15%;
+  animation-delay: 0.5s;
+}
+
+.ccs-star.s3 {
+  width: 24px;
+  height: 24px;
+  top: 60%;
+  left: 20%;
+  animation-delay: 1s;
+}
+
+.ccs-star.s4 {
+  width: 18px;
+  height: 18px;
+  top: 70%;
+  right: 25%;
+  animation-delay: 1.5s;
+}
+
+.ccs-star.s5 {
+  width: 22px;
+  height: 22px;
+  top: 40%;
+  left: 5%;
+  animation-delay: 2s;
+}
+
+.ccs-star.s6 {
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  right: 10%;
+  animation-delay: 2.5s;
+}
+
+@keyframes ccs-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+  }
+}
+
+/* VIEW BADGES Button */
+.ccs-view-badges-button {
+  background: transparent;
+  border: 2px solid #00F1FF;
+  border-radius: 30px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 15px 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(0, 241, 255, 0.3);
+  margin-bottom: 20px;
+}
+
+.ccs-view-badges-button:hover {
+  background: rgba(0, 241, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 241, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Bottom Navigation */
+.ccs-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1001;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ccs-nav-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.ccs-nav-icon:hover {
+  opacity: 1;
+}
+
+.ccs-nav-number {
+  background: #00F1FF;
+  border-radius: 50%;
+  color: #000000;
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .ccs-main-content {
+    padding: 40px 15px 80px;
+  }
+  
+  .ccs-badge-image {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .ccs-reward-text {
+    font-size: 20px;
+  }
+  
+  .ccs-received-box {
+    font-size: 16px;
+  }
+}

@@ -1121,8 +1121,6 @@ Response:
                 </div>
             </header>
 
-
-
             <div className="scrollable-content">
                 <section className="tickets-section">
                     <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>

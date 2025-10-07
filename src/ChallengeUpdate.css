@@ -1,4 +1,11 @@
 /* Challenge Update Styles */
+:root {
+  --cu-corner-size: 30px;
+  --cu-corner-color: #00F1FF;
+  --cu-corner-border: 3px;
+  --cu-corner-offset: 0px;
+}
+
 .challenge-update-container {
   position: fixed;
   top: 0;
@@ -64,16 +71,62 @@
   text-align: center;
   position: relative;
   z-index: 5;
-  padding: 80px 20px 40px;
+  padding: 50px 20px 100px;
   min-height: 100vh;
   box-sizing: border-box;
   max-width: 430px;
   margin: 0 auto;
 }
 
+/* Challenge Info Container */
+.cu-challenge-info-container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Corner Decorations */
+.cu-corner {
+  position: absolute;
+  width: var(--cu-corner-size);
+  height: var(--cu-corner-size);
+  z-index: 10;
+}
+
+.cu-top-left {
+  top: var(--cu-corner-offset);
+  left: var(--cu-corner-offset);
+  border-top: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-left: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-top-right {
+  top: var(--cu-corner-offset);
+  right: var(--cu-corner-offset);
+  border-top: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-right: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-bottom-left {
+  bottom: var(--cu-corner-offset);
+  left: var(--cu-corner-offset);
+  border-bottom: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-left: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-bottom-right {
+  bottom: var(--cu-corner-offset);
+  right: var(--cu-corner-offset);
+  border-bottom: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-right: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
 /* Challenge Title */
 .cu-challenge-title {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   position: relative;
   background-image: url('./images/doodle_extra.png');
   background-size: 100%;
@@ -112,8 +165,8 @@
 
 /* Challenge Description */
 .cu-challenge-description {
-  margin-bottom: 10px;
-  max-width: 350px;
+  margin-bottom: 15px;
+  max-width: 100%;
 }
 
 .cu-description-text {
@@ -141,7 +194,7 @@
 
 /* Challenge End Date */
 .cu-challenge-end {
-  margin-bottom: 40px;
+  margin-bottom: 0;
 }
 
 .cu-end-label {
@@ -183,7 +236,6 @@
 
 /* Progress Bar */
 .cu-progress-container {
-  margin-bottom: 30px;
   width: 100%;
   max-width: 350px;
 }
