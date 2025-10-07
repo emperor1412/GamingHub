@@ -6,7 +6,9 @@ import loginIcon from './images/icon_gamehub.png';
 import ticketIcon from './images/ticket_scratch_icon.png';
 import tadokamiIcon from './images/icon_tadokami.png';
 import flippinStarsIcon from './images/icon_flipping_star.png';
-import checkmarkIcon from './images/icon_task.png';
+import friendsIcon from './images/friends_icon.svg';
+import bankStepsIcon from './images/banking_step_icon.png';
+import stepBoostIcon from './images/Icon_Step_Boost.png';
 import shared from './Shared';
 
 const PremiumTasks = ({ isOpen, onClose }) => {
@@ -66,7 +68,7 @@ const PremiumTasks = ({ isOpen, onClose }) => {
           {
             id: 2,
             title: "SCRATCH 1 TICKET",
-            xp: 33,
+            xp: 20,
             progress: 1,
             total: 1,
             status: "DONE",
@@ -75,16 +77,16 @@ const PremiumTasks = ({ isOpen, onClose }) => {
           {
             id: 3,
             title: "PLAY TADOKAIII",
-            xp: 18,
+            xp: 50,
             progress: 0,
             total: 1,
-            status: "DONE",
+            status: "INCOMPLETE",
             icon: tadokamiIcon
           },
           {
             id: 4,
             title: "PLAY FLIPPIN STARS",
-            xp: 18,
+            xp: 50,
             progress: 0,
             total: 1,
             status: "INCOMPLETE",
@@ -92,21 +94,30 @@ const PremiumTasks = ({ isOpen, onClose }) => {
           },
           {
             id: 5,
-            title: "DO x3 TASKS",
-            xp: 50,
+            title: "INVITE 3 FRIENDS",
+            xp: 30,
             progress: 0,
             total: 3,
             status: "INCOMPLETE",
-            icon: checkmarkIcon
+            icon: friendsIcon
           },
           {
             id: 6,
-            title: "DO x6 TASKS",
-            xp: 50,
+            title: "BANK STEPS",
+            xp: 30,
             progress: 0,
-            total: 6,
+            total: 1,
             status: "INCOMPLETE",
-            icon: checkmarkIcon
+            icon: bankStepsIcon
+          },
+          {
+            id: 7,
+            title: "USE A STEP BOOST",
+            xp: 30,
+            progress: 0,
+            total: 1,
+            status: "INCOMPLETE",
+            icon: stepBoostIcon
           }
         ]
       };
@@ -197,10 +208,10 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             </div>
             
             {/* Level Labels */}
-            <div className="premium-tasks-level-labels">
+            {/* <div className="premium-tasks-level-labels">
               <div className="premium-tasks-level">LEVEL 1</div>
               <div className="premium-tasks-level">LEVEL 12</div>
-            </div>
+            </div> */}
           </div>
           
           {/* Tasks Grid - Using pt_ prefixed classes (copied from Market.css) */}
