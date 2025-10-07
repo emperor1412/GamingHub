@@ -685,6 +685,29 @@ top: var(--premium-corner-offset);
   line-height: 100%;
 }
 
+.premium-tasks-btn {
+  background: #FF00F6;
+  color: #000000;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 24px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  margin-bottom: 10px;
+}
+
+.premium-tasks-btn:hover {
+  background: #FF00F6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.4);
+}
+
 .premium-renew-btn {
   background: #000FEF;
   color: #ffffff;
