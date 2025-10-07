@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.7a6d9883.css",
-    "main.js": "./static/js/main.22c72661.js",
+    "main.css": "./static/css/main.41612ff1.css",
+    "main.js": "./static/js/main.06051f45.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
@@ -88,9 +88,12 @@
     "static/media/PPNeueMachina-InktrapThin.ttf": "./static/media/PPNeueMachina-InktrapThin.5956ed4985dc9ef5e067.ttf",
     "static/media/PPNeueMachina-PlainUltralight.ttf": "./static/media/PPNeueMachina-PlainUltralight.63f986759c4f621c4899.ttf",
     "static/media/PPNeueMachina-PlainThin.ttf": "./static/media/PPNeueMachina-PlainThin.d6746b933117ca4f8d13.ttf",
+    "static/media/tadokami_mainview.jpg": "./static/media/tadokami_mainview.a74d6f33e32499620d08.jpg",
     "static/media/avatar_14_Robot_300px.png": "./static/media/avatar_14_Robot_300px.64f3a597702cd717f8f9.png",
+    "static/media/flippingstars_mainview.jpg": "./static/media/flippingstars_mainview.fe35ec8409470097e420.jpg",
     "static/media/Egglet_Image_2.png": "./static/media/Egglet_Image_2.d5497fdf491dd1ec9dce.png",
     "static/media/FSL Games UI 2-09.png": "./static/media/FSL Games UI 2-09.abbb5e687860ee007e63.png",
+    "static/media/premium_mainview.jpg": "./static/media/premium_mainview.41a43b93a3513b63159d.jpg",
     "static/media/lv10.png": "./static/media/lv10.df26c66fb1afa941c30d.png",
     "static/media/lv_generic.png": "./static/media/lv_generic.9e37a1f9d889cc1681bd.png",
     "static/media/FreezeStreaksBG.png": "./static/media/FreezeStreaksBG.62b1c63e117e3a2d35bd.png",
@@ -226,12 +229,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.7a6d9883.css.map": "./static/css/main.7a6d9883.css.map",
-    "main.22c72661.js.map": "./static/js/main.22c72661.js.map",
+    "main.41612ff1.css.map": "./static/css/main.41612ff1.css.map",
+    "main.06051f45.js.map": "./static/js/main.06051f45.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7a6d9883.css",
-    "static/js/main.22c72661.js"
+    "static/css/main.41612ff1.css",
+    "static/js/main.06051f45.js"
   ]
 }
