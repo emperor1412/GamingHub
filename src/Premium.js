@@ -7,6 +7,7 @@ import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
 import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
+import PremiumTasks from './PremiumTasks';
 
 const Premium = ({ isOpen, onClose = 0 }) => {
 
@@ -18,6 +19,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showPremiumTasks, setShowPremiumTasks] = useState(false);
 
   // Mapping reward types from API to display format
   const getRewardTypeInfo = (type) => {
@@ -434,7 +436,7 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   return (
     <div className="premium-overlay">
       {/* Back Button - Move outside container */}
-      {!showConfirmPopup && (
+      {!showConfirmPopup && !showPremiumTasks && (
         <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
         </button>
@@ -454,6 +456,11 @@ const Premium = ({ isOpen, onClose = 0 }) => {
             <span className="premium-title-line">PREMIUM</span>
             <span className="premium-title-line">REWARDS</span>
           </div>
+          
+          {/* Tasks Button */}
+          <button className="premium-tasks-btn" onClick={() => setShowPremiumTasks(true)}>
+            TASKS
+          </button>
         </div>
         
         {/* Progress Bar */}
@@ -533,6 +540,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
         onClose={handleClosePopup}
         onConfirm={handleConfirmClaim}
         reward={selectedReward}
+      />
+      
+      {/* Premium Tasks Popup */}
+      <PremiumTasks 
+        isOpen={showPremiumTasks}
+        onClose={() => setShowPremiumTasks(false)}
       />
     </div>
   );
