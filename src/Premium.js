@@ -453,7 +453,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
   return (
     <div className="premium-overlay">
       {/* Back Button - Move outside container */}
-      {!showConfirmPopup && (
+      {!showConfirmPopup && !showTasksPopup && (
         <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
         </button>
