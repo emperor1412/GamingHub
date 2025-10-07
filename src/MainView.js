@@ -28,6 +28,9 @@ import dailyTasks from './images/one_shot.2827c4f3c969098979d4.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
+import premium_mainview from './images/premium_mainview.jpg';
+import tadokami_mainview from './images/tadokami_mainview.jpg';
+import flippingstars_mainview from './images/flippingstars_mainview.jpg';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -1121,69 +1124,37 @@ Response:
 
 
             <div className="scrollable-content">
+                {/* Premium Section - Top Row */}
                 <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
+                    <button 
+                        className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
+                        onClick={() => onClickPremium()}
+                        disabled={isCheckingPremiumStatus}
+                    >
                         <div className='ticket-button-image-container'>
                             <img
-                                src={flipping_stars}
-                                alt="Flipping Stars"
+                                src={premium_mainview}
+                                alt="Premium Background"
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
+                            
+                            {/* Premium Text */}
+                            {/* <div className="premium-text">PREMIUM</div> */}
                         </div>
-                        <div className="ticket-total-flips">
-                            <span className="ticket-total-flips-label">GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
-                        </div>
-                        <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">GRAND JACKPOT</span>
-                            <span className="ticket-total-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
-                        </div>
+                        
+                        {/* Premium Diamond */}
+                        {/* <div className="premium-diamond-container">
+                            <img
+                                src={premiumDiamond}
+                                alt="Premium Diamond"
+                                className="premium-diamond"
+                            />
+                        </div> */}
                     </button>
                 </section>
 
-                {/* <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => onClickMarketplace()}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={marketplace}
-                                alt="My Tickets"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                        </div>
-                    </button>
-                </section> */}
-                
-                
-
-                <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={tadokami}
-                                alt="My Tickets"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                        </div>
-                    </button>
-                </section>
-
-
-                {/* Egglet Event Section - only shown if event is active */}
-                {eventActive && (
-                    <section className="egglet-section">
-                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
-                            <div className="egglet-event-content">
-                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
-                                <div className="egglet-date">17 – 27 APRIL</div>
-                            </div>
-                            <div className="egglet-event-tag">EGGLET EVENT</div>
-                        </button>
-                    </section>
-                )}
-
+                {/* Daily Tasks and BANK STEPS - Second Row */}
                 <section className="locked-sections">
                     <button 
                         className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
@@ -1198,60 +1169,67 @@ Response:
                                 style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
                             /> 
                             <div className='ticket-button-container-border'></div>
-                            {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
+                            {/* <div className='check-out-button'>Daily Tasks</div> */}
                             <div className='locked-card-text'></div>
                         </div>
                         {dailyTaskStatus === 1 && (
                             <div className="sold-out-overlay">COMPLETED</div>
                         )}
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
 
                     <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
                         <div className='locked-card-image-container'>
                             <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                                 src={stepn_background}
-                                alt="Leaderboard Coming Soon"
+                                alt="Bank Steps"
                                 className="locked-card-image"
                             />
                             <div className='ticket-button-container-border'></div>
                             <div className='check-out-button'>BANK STEPS</div>
-                            {/* <div className='locked-card-text'>STEPN</div> */}
                         </div>
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
-
-                    {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='locked-card-image-container'>
-                            <div className="flipping-stars-card-bg">
-                                <div className="flipping-stars-title">FLIPPING STARS</div>
-                                <div className="flipping-stars-subtitle">Flip coins & win rewards!</div>
-                            </div>
-                            <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>PLAY NOW</div>
-                        </div>
-                    </button> */}
                 </section>
 
-                <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
-                        <img
-                            // src={Frame4556}
-                            src = {my_ticket}
-                            alt="My Tickets"
-                            className="ticket-card-image-main"
-                        />
-                    </button> */}
+                {/* Tadokami and Flipping Stars - Third Row with new images */}
+                <section className="locked-sections">
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={tadokami_mainview}
+                                alt="Tadokami"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='check-out-button'>TADOKAMI</div> */}
+                            <div className='locked-card-text'></div>
+                        </div>
+                    </button>
 
+                    <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={flippingstars_mainview}
+                                alt="Flipping Stars"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='check-out-button'>FLIPPING STARS</div> */}
+                            <div className='locked-card-text'></div>
+                        </div>
+                        <div className="locked-card-flips">
+                            <span className="locked-card-flips-label">GLOBAL FLIPS</span>
+                            <span className="locked-card-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                        </div>
+                        <div className="locked-card-jackpot">
+                            <span className="locked-card-jackpot-label">GRAND JACKPOT</span>
+                            <span className="locked-card-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
+                        </div>
+                    </button>
+                </section>
+
+
+                {/* Tickets underneath the games */}
+                <section className="tickets-section">
                     <button className="ticket-button" onClick={() => setShowTicketView(true)}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -1260,45 +1238,27 @@ Response:
                                 className="ticket-button-image"
                             />
                         <div className='ticket-button-container-border'></div>
-                            {/* <div className="ticket-button-content"> */}
-                                <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
-                                <div className="check-out-button ticket">
-                                    Scratch Tickets
-                                </div>
-                            {/* </div> */}
+                            <h3 className="event-card-title">MY TICKETS</h3>
+                            <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                            <div className="check-out-button ticket">
+                                Scratch Tickets
+                            </div>
                         </div>
                     </button>
                 </section>
 
-                <section className="tickets-section">
-                    <button 
-                        className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
-                        onClick={() => onClickPremium()}
-                        disabled={isCheckingPremiumStatus}
-                    >
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={premiumBg}
-                                alt="Premium Background"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                            
-                            {/* Premium Text */}
-                            <div className="premium-text">PREMIUM</div>
-                        </div>
-                        
-                        {/* Premium Diamond */}
-                        <div className="premium-diamond-container">
-                            <img
-                                src={premiumDiamond}
-                                alt="Premium Diamond"
-                                className="premium-diamond"
-                            />
-                        </div>
-                    </button>
-                </section>
+                {/* Egglet Event Section - only shown if event is active */}
+                {eventActive && (
+                    <section className="egglet-section">
+                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                            <div className="egglet-event-content">
+                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                                <div className="egglet-date">17 – 27 APRIL</div>
+                            </div>
+                            <div className="egglet-event-tag">EGGLET EVENT</div>
+                        </button>
+                    </section>
+                )}
 
                 <section className="events-section">
                     <div 
