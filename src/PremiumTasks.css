@@ -5,78 +5,31 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2001;
+  z-index: 2100;
 }
 
 /* Premium Tasks Container */
-.premium-tasks-container-main {
-  width: 90%;
+.premium-tasks-container {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #000FEF;
+  border-radius: 12px;
+  width: 83%;
   max-width: 350px;
-  max-height: 85vh;
-  overflow: hidden;
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
-  padding: 0;
+  padding: 15px;
   margin-top: 30px;
-  display: flex;
-  flex-direction: column;
   
   /* Corner borders variables */
   --premium-tasks-corner-size: 15px;
   --premium-tasks-corner-color: #00F1FF;
   --premium-tasks-corner-border: 0.5px;
   --premium-tasks-corner-offset: 15px;
-}
-
-.premium-tasks-container-content {
-  background: rgba(30, 30, 30, 0.9);
-  border: 1px solid #000FEF;
-  border-radius: 12px;
-  width: 99%;
-  overflow: hidden;
-  position: relative;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Premium Tasks Scrollable Content Wrapper */
-.premium-tasks-scrollable-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 15px;
-  
-  /* Hide scrollbars */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  
-  /* Mask fade */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
-    black 4%,
-    black 96%,
-    rgba(0, 0, 0, 0.1) 98%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
-    black 4%,
-    black 98%,
-    rgba(0, 0, 0, 0.1) 98%,
-    transparent 100%
-  );
-}
-
-.premium-tasks-scrollable-content::-webkit-scrollbar {
-  display: none;
 }
 
 /* Header */
@@ -144,7 +97,7 @@
   line-height: 30.08px;
   letter-spacing: 1px;
   color: white;
-  font-family: "PP Neue Machina Inktrap Inktrap", sans-serif;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
   text-transform: uppercase;
   display: flex;
   flex-direction: column; 
@@ -160,22 +113,20 @@
   font-family: inherit;
 }
 
-/* Progress Section */
-.premium-tasks-progress-section {
-  margin-bottom: 15px;
-}
-
-.premium-tasks-exp-label {
-  font-size: 14px;
+/* Daily XP Text */
+.premium-tasks-daily-xp {
+  font-size: 16px;
   font-weight: 700;
   color: #FFFFFF;
   text-align: center;
-  font-family: "PP Neue Machina Inktrap", sans-serif;
-  margin-bottom: 10px;
+  font-family: "PP Neue Machina", sans-serif;
   text-transform: uppercase;
+  margin-top: 20px;
+  margin-bottom: 10px;
   letter-spacing: 1px;
 }
 
+/* Progress Bar */
 .premium-tasks-progress {
   display: flex;
   align-items: center;
@@ -186,7 +137,7 @@
 .premium-tasks-progress-bar {
   flex: 1;
   height: 30px;
-  background: #0000FF;
+  background: #0000FF; /* Dark blue background */
   border-radius: 30px;
   overflow: hidden;
   position: relative;
@@ -194,7 +145,7 @@
 
 .premium-tasks-progress-fill {
   height: 100%;
-  background: #00F1FF;
+  background: #00F1FF; /* Cyan fill */
   border-radius: 30px;
   transition: width 0.3s ease;
 }
@@ -209,15 +160,17 @@
   z-index: 2;
 }
 
+/* Level Labels */
 .premium-tasks-level-labels {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .premium-tasks-level {
   font-size: 10px;
   font-weight: 800;
-  font-family: "PP Neue Machina Inktrap";
+  font-family: "PP Neue Machina";
   font-style: italic;
   color: #ffffff;
   text-transform: uppercase;
@@ -228,17 +181,24 @@
   letter-spacing: 1.2px;
 }
 
-/* Tasks Grid - 2 items per row */
+/* Tasks Grid - 2 columns (same as Market) */
 .premium-tasks-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 20px;
+  padding: 0 5px;
 }
 
-/* ========== COPIED FROM MARKET.CSS WITH pt_ PREFIX ========== */
+/* Individual Task Card - Copy from Market items */
+.premium-task-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: auto;
+  overflow: visible;
+}
 
-.pt_market-ticket-button {
+.premium-task-button {
   position: relative;
   width: 100%;
   height: 100%;
@@ -246,201 +206,142 @@
   background: transparent;
   padding: 0;
   cursor: pointer;
-  margin-bottom: 0px;
+  transition: transform 0.2s ease;
 }
 
-.pt_market-ticket-button-image-container {
+.premium-task-button:hover {
+  transform: translateY(-2px);
+}
+
+.premium-task-container {
   position: relative;
   width: 100%;
   height: 100%;
-    /* gradient từ figma */
-  background: linear-gradient(
-    60deg,
-    rgba(255, 0, 246, 0.03) 30%,
-    rgba(255, 0, 246, 0.6) 100%
-  );  
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid #0000FF;
   display: flex;
   flex-direction: column;
 }
 
-.pt_market-ticket-content {
+.premium-task-content {
   display: flex;
   align-items: center;
   padding: 8px;
+  background: rgba(0, 0, 0, 0.5);
   gap: 8px;
   border-bottom: 1px solid #0000FF;
   flex: 1;
   min-height: 55px;
   backdrop-filter: blur(5px);
   position: relative;
+  overflow: hidden;
 }
 
-.pt_market-ticket-icon {
+.premium-task-icon-wrapper {
   width: 35%;
   height: 100%;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  background: transparent;
-  position: relative;
-  transform: scale(1.2);
 }
 
-.pt_market-ticket-icon::after {
-  display: none;
-}
-
-.pt_market-ticket-icon img {
+.premium-task-icon {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  position: relative;
-  z-index: 1;
 }
 
-/* Icon Size Variants */
-.pt_market-ticket-icon.icon-small {
-  transform: scale(1.32);
-}
-
-.pt_market-ticket-icon.icon-medium {
-  transform: scale(1.45);
-}
-
-.pt_market-ticket-icon.icon-large {
-  transform: scale(1.8);
-}
-
-.pt_market-ticket-icon.icon-very-large {
-  transform: scale(1.9);
-  left: 4px;
-  top: 3.5px;
-}
-
-.pt_market-ticket-text {
+.premium-task-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  justify-content: center;
   align-items: flex-start;
-  text-align: left;
-  gap: 3px;
-  width: fit-content;
+  width: 65%;
+  padding-left: 4px;
+  position: relative;
+  z-index: 5;
 }
 
-.pt_market-ticket-amount {
-  font-family: "PP Neue Machina Inktrap";
-  font-size: 23px;
+.premium-task-xp {
+  font-size: 12px;
+  color: #FFF;
   font-weight: 700;
-  color: white;
-  line-height: 1;
-}
-
-/* Responsive font size for different screen sizes */
-/* @media screen and (min-width: 400px) {
-  .pt_market-ticket-amount {
-    font-size: 28px;
-  }
-}
-
-@media screen and (min-width: 500px) {
-  .pt_market-ticket-amount {
-    font-size: 32px;
-  }
-} */
-
-.pt_market-ticket-label {
-  font-family: "PP Neue Machina Inktrap";
-  font-size: 10px;
-  color: white;
-  opacity: 1;
-  line-height: 1;
   text-transform: uppercase;
-  margin-top: -2px;
-  min-width: 70px;
-  text-align: left;
-  font-weight: 550;
-  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
-.pt_market-ticket-bonus {
-  padding: 0.5px 4px;
-  background: #00FF00;
-  color: black;
-  font-family: "PP Neue Machina Inktrap";
-  font-size: 10px;
-  font-weight: bold;
-  box-sizing: border-box;
+.premium-task-progress-status {
   display: flex;
   align-items: center;
-  justify-content: left;
-  white-space: nowrap;
-  line-height: 15px;
+  gap: 6px;
 }
 
-.pt_market-ticket-price {
+.premium-task-progress-text {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.premium-task-status {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+  white-space: nowrap;
+}
+
+.premium-task-status-done {
+  background: #00FF00;
+  color: #000000;
+}
+
+.premium-task-status-incomplete {
+  background: #F9DF26;
+  color: #000000;
+}
+
+/* Bottom Section - Title (same as Market price) */
+.premium-task-title {
   min-height: 20px;
+  height: 25%;
   background: #0000FF;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "PP Neue Machina Inktrap";
-  font-size: 12px;
-  font-weight: 600;
+  font-family: "PP Neue Machina", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px;
+  text-align: center;
+  line-height: 1.2;
 }
 
-.pt_market-ticket-button.sold-out {
-  cursor: not-allowed;
-  opacity: 0.7;
+/* Scrollbar styling for container */
+.premium-tasks-container::-webkit-scrollbar {
+  width: 6px;
 }
 
-.pt_market-ticket-button.sold-out:hover {
-  transform: none;
+.premium-tasks-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
-.pt_market-ticket-button.sold-out .pt_market-ticket-price {
-  background: #808080;
+.premium-tasks-container::-webkit-scrollbar-thumb {
+  background: #00F1FF;
+  border-radius: 10px;
 }
 
-.pt_market-ticket-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  justify-content: center;
-  align-items: flex-start;
-  width: 65%;
-  padding-left: 4px;
-}
-
-/* ========== PREMIUM TASKS SPECIFIC OVERRIDES ========== */
-/* Task status labels - background colors */
-.pt_market-ticket-button.task-done .pt_market-ticket-bonus {
-  background: #00FF00;
-  color: #000000;
-}
-
-.pt_market-ticket-button.task-incomplete .pt_market-ticket-bonus {
-  background: #A9A7A7;
-  color: #000000;
-}
-
-.premium-tasks-grid .mk-market-ticket-button.task-done .mk-market-ticket-button-image-container {
-  border-color: #00FF00;
-}
-
-.premium-tasks-grid .mk-market-ticket-button.task-incomplete .mk-market-ticket-button-image-container {
-  border-color: #A9A7A7;
-}
-
-.premium-tasks-grid .mk-market-ticket-button.task-done .mk-market-ticket-bonus {
-  background: #00FF00;
-  color: #000000;
-}
-
-.premium-tasks-grid .mk-market-ticket-button.task-incomplete .mk-market-ticket-bonus {
-  background: #A9A7A7;
-  color: #FFFFFF;
+.premium-tasks-container::-webkit-scrollbar-thumb:hover {
+  background: #00D1DF;
 }
 
