@@ -30,8 +30,9 @@ const ChallengeClaimedScreen = ({
             {claimedRewards.starlets} STARLETS
           </div>
           <div className="ccs-reward-text">
-            {claimedRewards.badgeName} BADGE
+            {claimedRewards.badgeName} 
           </div>
+          <div className="ccs-reward-text">BADGE</div>
           
           {/* Corner Brackets */}
           <div className="ccs-corner ccs-top-left"></div>
@@ -65,14 +66,6 @@ const ChallengeClaimedScreen = ({
         </button>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="ccs-bottom-nav">
-        <div className="ccs-nav-icon">🎮</div>
-        <div className="ccs-nav-icon">💰</div>
-        <div className="ccs-nav-icon">👥</div>
-        <div className="ccs-nav-icon">🛒</div>
-        <div className="ccs-nav-icon ccs-nav-number">0</div>
-      </div>
     </div>
   );
 };
