@@ -182,7 +182,7 @@ top: var(--premium-corner-offset);
 .premium-progress {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   margin-top: 30px;
   margin-bottom: 10px;
 }
@@ -191,6 +191,7 @@ top: var(--premium-corner-offset);
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  padding-right: 50px; /* Account for tasks button width */
 }
 
 .premium-level {
@@ -231,6 +232,29 @@ top: var(--premium-corner-offset);
   height: 60%;
   background: #000;
   z-index: 2;
+}
+
+/* Inline Tasks Button */
+.premium-tasks-btn-inline {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-tasks-btn-inline:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.premium-tasks-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
 

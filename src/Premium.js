@@ -7,6 +7,7 @@ import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
 import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
+import taskButtonIcon from './images/task_button.png';
 import PremiumTasks from './PremiumTasks';
 
 const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
@@ -476,7 +477,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             </div>
           </div>
           
-          {/* Progress Bar */}
+          {/* Progress Bar with Tasks Button */}
           <div className="premium-progress">
             <div className="premium-progress-bar">
               <div className="premium-progress-fill" style={{width: `${getProgressPercentage()}%`}}></div>
@@ -489,6 +490,9 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
                 ></div>
               ))}
             </div>
+            <button className="premium-tasks-btn-inline" onClick={() => setShowTasksPopup(true)}>
+              <img src={taskButtonIcon} alt="Tasks" className="premium-tasks-icon" />
+            </button>
           </div>
           
           {/* Level Labels */}
@@ -544,7 +548,6 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             <div className="premium-corner premium-bottom-right"></div>
 
             <div className="premium-time-remaining">{getRemainingTime()}</div>
-            <button className="premium-tasks-btn" onClick={() => setShowTasksPopup(true)}>TASKS</button>
             <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
           </div>
         </div>
