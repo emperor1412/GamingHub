@@ -172,11 +172,10 @@ const PremiumTasks = ({ isOpen, onClose }) => {
       <button className="back-button back-button-alignment" onClick={onClose}>
         <img src={back} alt="Back" />
       </button>
-      
-      <div className="premium-tasks-container">
-        <div className="premium-tasks-scrollable-content">
-          {/* Header */}
-          <div className="premium-tasks-header">
+
+      <div className="premium-tasks-container-main">
+        {/* Header */}
+        <div className="premium-tasks-header">
             {/* Corner borders for header */}
             <div className="premium-tasks-corner premium-tasks-top-left"></div>
             <div className="premium-tasks-corner premium-tasks-top-right"></div>
@@ -213,37 +212,40 @@ const PremiumTasks = ({ isOpen, onClose }) => {
               <div className="premium-tasks-level">LEVEL 12</div>
             </div> */}
           </div>
-          
-          {/* Tasks Grid - Using pt_ prefixed classes (copied from Market.css) */}
-          <div className="premium-tasks-grid">
-            {tasks.map((task) => (
-              <button 
-                key={task.id} 
-                className={`pt_market-ticket-button ${task.status === 'DONE' ? 'task-done' : 'task-incomplete'}`}
-              >
-                <div className="pt_market-ticket-button-image-container">
-                  <div className="pt_market-ticket-content">
-                    <div className="pt_market-ticket-icon">
-                      <img src={task.icon} alt={task.title} />
-                    </div>
-                    <div className="pt_market-ticket-info">
-                      <div className="pt_market-ticket-text">
-                        <div className="pt_market-ticket-amount">{task.xp} XP</div>
-                        <div className="pt_market-ticket-label">{task.progress}/{task.total}</div>
+
+          <div className="premium-tasks-container-content">
+            <div className="premium-tasks-scrollable-content">
+              {/* Tasks Grid - Using pt_ prefixed classes (copied from Market.css) */}
+              <div className="premium-tasks-grid">
+                {tasks.map((task) => (
+                  <button 
+                    key={task.id} 
+                    className={`pt_market-ticket-button ${task.status === 'DONE' ? 'task-done' : 'task-incomplete'}`}
+                  >
+                    <div className="pt_market-ticket-button-image-container">
+                      <div className="pt_market-ticket-content">
+                        <div className="pt_market-ticket-icon">
+                          <img src={task.icon} alt={task.title} />
+                        </div>
+                        <div className="pt_market-ticket-info">
+                          <div className="pt_market-ticket-text">
+                            <div className="pt_market-ticket-amount">{task.xp} XP</div>
+                            <div className="pt_market-ticket-label">{task.progress}/{task.total}</div>
+                          </div>
+                          <div className="pt_market-ticket-bonus">
+                            <span>{task.status}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="pt_market-ticket-bonus">
-                        <span>{task.status}</span>
+                      <div className="pt_market-ticket-price">
+                        {task.title}
                       </div>
                     </div>
-                  </div>
-                  <div className="pt_market-ticket-price">
-                    {task.title}
-                  </div>
-                </div>
-              </button>
-            ))}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
       </div>
     </div>
   );
