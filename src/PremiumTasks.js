@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './PremiumTasks.css';
 import back from './images/back.svg';
 import premiumDiamond from './images/Premium_icon.png';
-import loginIcon from './images/calendar.png';
-import ticketIcon from './images/ticket.png';
-import tadokamiIcon from './images/Tadokami_Logo.png';
-import flippinStarsIcon from './images/Flipping_stars.png';
-import checkmarkIcon from './images/checkmark.png';
+import loginIcon from './images/icon_gamehub.png';
+import ticketIcon from './images/ticket_scratch_icon.png';
+import tadokamiIcon from './images/icon_tadokami.png';
+import flippinStarsIcon from './images/icon_flipping_star.png';
+import checkmarkIcon from './images/icon_task.png';
 import shared from './Shared';
 
 const PremiumTasks = ({ isOpen, onClose }) => {
