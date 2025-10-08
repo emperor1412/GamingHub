@@ -21,7 +21,10 @@ const JoinConfirmation = ({
   } = challengeData || {};
 
   const handleJoinChallenge = () => {
-    setShowChallengeUpdate(true);
+    // Call the parent's join handler instead of directly showing ChallengeUpdate
+    if (onJoinChallenge) {
+      onJoinChallenge();
+    }
   };
 
   const handleDoneFromUpdate = () => {

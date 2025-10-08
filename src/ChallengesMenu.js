@@ -6,15 +6,24 @@ import doodleExtra from './images/doodle_extra.png';
 import background from './images/background_2.png';
 import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
-import { getCurrentChallenge } from './data/challengesData';
+import { 
+    getCurrentChallenge, 
+    getUserData, 
+    hasJoinedChallenge, 
+    hasEnoughStarlets, 
+    joinChallenge 
+} from './data/challengesData';
 import ChallengeInfo from './ChallengeInfo';
 import JoinConfirmation from './JoinConfirmation';
 import ChallengeUpdate from './ChallengeUpdate';
+import ChallengeError from './ChallengeError';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
     const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
     const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
+    const [showChallengeError, setShowChallengeError] = useState(false);
+    const [selectedChallengeType, setSelectedChallengeType] = useState(null);
 
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
@@ -46,12 +55,16 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         
         // Only allow click if not disabled
         if (!state.isDisabled) {
-            // If it's weekly challenge, go directly to ChallengeUpdate
-            if (challengeType === 'weekly') {
-                setSelectedChallenge(challenge);
+            setSelectedChallenge(challenge);
+            setSelectedChallengeType(challengeType);
+            
+            // Check if user has already joined this challenge
+            if (hasJoinedChallenge(challengeType)) {
+                // User has joined -> go to Challenge Update
                 setShowChallengeUpdate(true);
             } else {
-                setSelectedChallenge(challenge);
+                // User hasn't joined -> go to Challenge Info
+                // ChallengeInfo will be shown automatically
             }
         }
     };
@@ -62,13 +75,20 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleConfirmJoin = () => {
-        // Handle actual join logic here
-        console.log('Confirming join challenge:', selectedChallenge);
-        // You can add your actual join API call here
+        // Check if user has enough starlets
+        const challenge = getCurrentChallenge(selectedChallengeType);
+        const requiredStarlets = challenge.entryFee;
         
-        // Close JoinConfirmation and go back to challenges menu
-        setShowJoinConfirmation(false);
-        setSelectedChallenge(null);
+        if (hasEnoughStarlets(requiredStarlets)) {
+            // User has enough starlets -> join challenge and go to Challenge Update
+            joinChallenge(selectedChallengeType);
+            setShowJoinConfirmation(false);
+            setShowChallengeUpdate(true);
+        } else {
+            // User doesn't have enough starlets -> show error
+            setShowJoinConfirmation(false);
+            setShowChallengeError(true);
+        }
     };
 
     const handleBackFromConfirmation = () => {
@@ -80,6 +100,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         // Go back to challenges menu
         setShowChallengeUpdate(false);
         setSelectedChallenge(null);
+        setSelectedChallengeType(null);
     };
 
     const handleDoneFromUpdate = () => {
@@ -87,13 +108,44 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         console.log('Done from ChallengeUpdate');
         setShowChallengeUpdate(false);
         setSelectedChallenge(null);
+        setSelectedChallengeType(null);
     };
 
-    // Show ChallengeUpdate if user clicked weekly challenge
+    const handleGoToMarket = () => {
+        // Close error and go to market (you can implement market navigation here)
+        setShowChallengeError(false);
+        setSelectedChallenge(null);
+        setSelectedChallengeType(null);
+        // You can add navigation to market here
+        console.log('Navigate to market');
+    };
+
+    const handleBackFromError = () => {
+        // Go back to ChallengeInfo
+        setShowChallengeError(false);
+    };
+
+    // Show ChallengeError if user doesn't have enough starlets
+    if (showChallengeError) {
+        return (
+            <ChallengeError
+                onGoToMarket={handleGoToMarket}
+                onBack={handleBackFromError}
+            />
+        );
+    }
+
+    // Show ChallengeUpdate if user has joined challenge
     if (showChallengeUpdate && selectedChallenge) {
         return (
             <ChallengeUpdate
-                challengeData={selectedChallenge}
+                challengeData={{
+                    ...selectedChallenge,
+                    currentSteps: selectedChallenge.currentSteps || 0,
+                    totalSteps: selectedChallenge.steps,
+                    stepSegments: [selectedChallenge.steps * 0.2, selectedChallenge.steps * 0.4, selectedChallenge.steps * 0.6, selectedChallenge.steps * 0.8, selectedChallenge.steps],
+                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
+                }}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
             />
@@ -105,9 +157,9 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return (
             <JoinConfirmation 
                 challengeData={{
-                    steps: 56000,
-                    days: 7,
-                    starletsCost: selectedChallenge.reward || 200,
+                    steps: selectedChallenge.steps,
+                    days: 7, // You can calculate this based on dateStart and dateEnd
+                    starletsCost: selectedChallenge.entryFee,
                     badgeName: "EXPLORER BADGE",
                     challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
                 }}
@@ -122,7 +174,10 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return (
             <ChallengeInfo 
                 challenge={selectedChallenge}
-                onClose={() => setSelectedChallenge(null)}
+                onClose={() => {
+                    setSelectedChallenge(null);
+                    setSelectedChallengeType(null);
+                }}
                 onJoinChallenge={handleJoinChallenge}
             />
         );

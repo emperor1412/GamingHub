@@ -15,7 +15,7 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
                     </div>
                     <div className="info-challenge-reward">
                         <img src={starletIcon} alt="Starlet" className="info-starlet-icon" />
-                        <span className="info-reward-amount">9999</span>
+                        <span className="info-reward-amount">{challenge.reward}</span>
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
                     {/* Entry Fee Info */}
                     <div className="entry-fee-info">
                     <div className="fee-content">
-                        <div className="fee-text">ENTRY FEE = {challenge.reward} STARLETS</div>
+                        <div className="fee-text">ENTRY FEE = {challenge.entryFee || challenge.reward} STARLETS</div>
                         <div className="burn-warning-container">
                             <div className="burn-warning">IF YOU DON'T COMPLETE THE CHALLENGE IN TIME,</div>
                             <div className="burn-warning">YOUR STARLETS WILL BE BURNED</div>
