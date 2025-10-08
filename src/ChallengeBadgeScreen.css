@@ -1,0 +1,503 @@
+/* Challenge Badge Screen Styles */
+:root {
+  --cbs-corner-size: 20px;
+  --cbs-corner-color: #00F1FF;
+  --cbs-corner-border: 4px;
+  --cbs-corner-offset: -10px;
+}
+
+.challenge-badge-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'PP Neue Machina', sans-serif;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Background Pattern */
+.cbs-background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+}
+
+/* Main Content */
+.cbs-main-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+    padding: 60px 20px 100px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    max-width: 430px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.cbs-header-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.cbs-header-brackets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cbs-bracket {
+    position: absolute;
+    width: var(--cbs-corner-size);
+    height: var(--cbs-corner-size);
+    border: var(--cbs-corner-border) solid var(--cbs-corner-color);
+}
+
+.cbs-bracket-tl {
+    top: var(--cbs-corner-offset);
+    left: var(--cbs-corner-offset);
+    border-right: none;
+    border-bottom: none;
+}
+
+.cbs-bracket-br {
+    bottom: var(--cbs-corner-offset);
+    right: var(--cbs-corner-offset);
+    border-left: none;
+    border-top: none;
+}
+
+.cbs-title-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0;
+}
+
+.cbs-title {
+    font-size: 32.52px;
+    font-weight: 700;
+    line-height: 89%;
+    letter-spacing: -2.2%;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 20px;
+}
+
+.cbs-subtitle {
+    font-size: 16.23px;
+    font-weight: 700;
+    color: #01FFD9;
+    text-transform: uppercase;
+    letter-spacing: -1.1%;
+    line-height: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.cbs-robot-character {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+}
+
+.cbs-robot-image {
+    width: 134px;
+    height: 134px;
+    object-fit: contain;
+}
+
+/* Summary Cards */
+.cbs-summary-cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.cbs-summary-card {
+    flex: 1;
+    background: #0000FF;
+    border-radius: 12px;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.cbs-card-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    justify-content: flex-start;
+    padding-top: 0;
+}
+
+.cbs-card-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.cbs-card-header {
+    margin-bottom: 5px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #FFFFFF;
+    display: inline-block;
+    text-align: center;
+    width: 55px;
+}
+
+.cbs-card-number {
+    color: #FFFFFF;
+    font-size: 13.83px;
+    font-weight: 700;
+}
+
+.cbs-card-title {
+    font-size: 13.83px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    margin-bottom: 0;
+    line-height: 13.12px;
+}
+
+.cbs-card-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cbs-starlet-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.cbs-badge-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.cbs-badge-image-explorer {
+    transform: scale(1.5);
+}
+
+.cbs-badge-image-starlets {
+    transform: scale(1);
+}
+
+/* Weekly Section */
+.cbs-weekly-section {
+    margin-bottom: 40px;
+}
+
+.cbs-weekly-header {
+    position: relative;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.cbs-weekly-brackets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cbs-weekly-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: left;
+    margin: 0;
+}
+
+/* Badges Container */
+.cbs-badges-container {
+    position: relative;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.cbs-corner {
+    position: absolute;
+    width: var(--cbs-corner-size);
+    height: var(--cbs-corner-size);
+    border: var(--cbs-corner-border) solid var(--cbs-corner-color);
+}
+
+.cbs-top-left {
+    top: var(--cbs-corner-offset);
+    left: var(--cbs-corner-offset);
+    border-right: none;
+    border-bottom: none;
+}
+
+.cbs-top-right {
+    top: var(--cbs-corner-offset);
+    right: var(--cbs-corner-offset);
+    border-left: none;
+    border-bottom: none;
+}
+
+.cbs-bottom-left {
+    bottom: var(--cbs-corner-offset);
+    left: var(--cbs-corner-offset);
+    border-right: none;
+    border-top: none;
+}
+
+.cbs-bottom-right {
+    bottom: var(--cbs-corner-offset);
+    right: var(--cbs-corner-offset);
+    border-left: none;
+    border-top: none;
+}
+
+/* Badges Grid */
+.cbs-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+}
+
+.cbs-badge-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    width: 104px;
+    transition: transform 0.2s ease;
+}
+
+.cbs-badge-item:hover {
+    transform: scale(1.05);
+}
+
+.cbs-badge-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.cbs-badge-icon {
+    width: 104px;
+    height: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cbs-badge-icon img {
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+    transform: scale(1.2);
+}
+
+.cbs-badge-status-icon {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #FFFFFF;
+    z-index: 2;
+}
+
+.cbs-badge-locked-icon {
+    top: 20%;
+    left: 10%;
+}
+
+.cbs-badge-unknown-icon {
+    top: 45%;
+}
+
+.cbs-badge-locked-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.cbs-badge-unknown-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cbs-badge-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.cbs-badge-green {
+    background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    border-color: #81C784;
+}
+
+.cbs-badge-silver {
+    background: linear-gradient(135deg, #9E9E9E 0%, #BDBDBD 100%);
+    border-color: #757575;
+}
+
+.cbs-badge-blue {
+    background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%);
+    border-color: #64B5F6;
+}
+
+/* .cbs-badge-unlocked {
+    opacity: 1;
+}
+
+.cbs-badge-locked {
+    opacity: 0.6;
+}
+
+.cbs-badge-unknown {
+    opacity: 0.8;
+} */
+
+.cbs-lock-icon {
+    font-size: 24px;
+    color: #757575;
+}
+
+.cbs-question-icon {
+    font-size: 32px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cbs-badge-symbol {
+    width: 30px;
+    height: 30px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    position: relative;
+}
+
+.cbs-badge-ring-text {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.cbs-ring-top {
+    position: absolute;
+    top: 5px;
+    line-height: 1;
+}
+
+.cbs-ring-bottom {
+    position: absolute;
+    bottom: 5px;
+    line-height: 1;
+}
+
+.cbs-badge-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+    .cbs-main-content {
+        padding: 50px 15px 30px;
+    }
+    
+    .cbs-title {
+        font-size: 24px;
+    }
+    
+    .cbs-summary-cards {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .cbs-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .cbs-badge-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cbs-badge-symbol {
+        width: 20px;
+        height: 20px;
+    }
+} */
