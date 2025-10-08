@@ -1,0 +1,308 @@
+/* Challenge Error Page Styles */
+:root {
+  --ce-corner-size: 20px;
+  --ce-corner-color: #00F1FF;
+  --ce-corner-border: 4px;
+  --ce-corner-offset: -10px;
+}
+
+.challenge-error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'PP Neue Machina', sans-serif;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Background Pattern */
+.ce-background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+}
+
+/* Main Content */
+.ce-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+    padding: 40px 20px 100px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Error Header */
+.ce-error-header {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.ce-error-text {
+    font-size: 59.33px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'PP Neue Machina', sans-serif;
+    position: relative;
+    border: 3px solid #0000FF;
+    padding: 2px 30px;
+    line-height: 100%;
+    letter-spacing: -1.9%;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Error Message */
+.ce-error-message {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.ce-message-line {
+    font-size: 18.88px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    font-family: 'PP Neue Machina', sans-serif;
+    line-height: 100%;
+}
+
+.ce-message-group {
+    margin-top: 15px;
+}
+
+.ce-message-group .ce-message-line {
+    margin-bottom: 2px;
+}
+
+/* Central Starlet Container */
+.ce-starlet-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Corner Decorations */
+.ce-corner {
+    position: absolute;
+    width: var(--ce-corner-size);
+    height: var(--ce-corner-size);
+    border: var(--ce-corner-border) solid var(--ce-corner-color);
+    pointer-events: none;
+}
+
+.ce-corner.ce-top-left {
+    top: var(--ce-corner-offset);
+    left: var(--ce-corner-offset);
+    border-right: none;
+    border-bottom: none;
+}
+
+.ce-corner.ce-top-right {
+    top: var(--ce-corner-offset);
+    right: var(--ce-corner-offset);
+    border-left: none;
+    border-bottom: none;
+}
+
+.ce-corner.ce-bottom-left {
+    bottom: var(--ce-corner-offset);
+    left: var(--ce-corner-offset);
+    border-right: none;
+    border-top: none;
+}
+
+.ce-corner.ce-bottom-right {
+    bottom: var(--ce-corner-offset);
+    right: var(--ce-corner-offset);
+    border-left: none;
+    border-top: none;
+}
+
+/* Main Starlet Circle */
+.ce-starlet-circle {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.ce-starlet-icon {
+    width: 200px;
+    height: 200px;
+}
+
+/* Floating Starlets */
+.ce-floating-starlets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.ce-floating-starlet {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1E3A8A 0%, #EC4899 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    z-index: 0;
+    border: 2px solid rgba(0, 241, 255, 0.3);
+}
+
+.ce-floating-starlet img {
+    width: 20px;
+    height: 20px;
+}
+
+.ce-floating-starlet.s1 {
+    top: 70%;
+    left: 10px;
+    animation: float1 3s ease-in-out infinite;
+    width: 70px;
+    height: 70px;
+}
+
+.ce-floating-starlet.s2 {
+    top: 10%;
+    right: 30px;
+    animation: float2 3s ease-in-out infinite;
+    width: 50px;
+    height: 50px;
+    z-index: 2;
+}
+
+@keyframes float1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes float2 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
+}
+
+@keyframes float3 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+@keyframes float4 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(-3deg); }
+}
+
+@keyframes float5 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(7deg); }
+}
+
+@keyframes float6 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(-7deg); }
+}
+
+/* Go to Market Button */
+.ce-go-to-market-button {
+    color: #FFFFFF;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0%;
+    line-height: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-family: 'PP Neue Machina', sans-serif;
+    background: #0000FF;
+    width: 100%;
+    max-width: 300px;
+    height: 50px;
+}
+
+.ce-go-to-market-button:hover {
+    transform: translateY(-3px);
+}
+
+.ce-go-to-market-button:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+    .ce-main-content {
+        padding: 30px 15px 30px;
+    }
+    
+    .ce-error-text {
+        font-size: 28px;
+        padding: 12px 25px;
+    }
+    
+    .ce-starlet-container {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 40px;
+    }
+    
+    .ce-starlet-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .ce-starlet-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .ce-floating-starlet {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .ce-floating-starlet img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .ce-go-to-market-button {
+        padding: 15px 40px;
+        font-size: 16px;
+    }
+} */
