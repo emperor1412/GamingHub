@@ -17,6 +17,7 @@ import ChallengeInfo from './ChallengeInfo';
 import JoinConfirmation from './JoinConfirmation';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeError from './ChallengeError';
+import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -24,6 +25,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
     const [showChallengeError, setShowChallengeError] = useState(false);
     const [selectedChallengeType, setSelectedChallengeType] = useState(null);
+    const [showBadgeScreen, setShowBadgeScreen] = useState(false);
 
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
@@ -124,6 +126,23 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         // Go back to ChallengeInfo
         setShowChallengeError(false);
     };
+
+    const handleExplorerJourney = () => {
+        setShowBadgeScreen(true);
+    };
+
+    const handleBackFromBadgeScreen = () => {
+        setShowBadgeScreen(false);
+    };
+
+    // Show ChallengeBadgeScreen if user clicked Explorer Journey
+    if (showBadgeScreen) {
+        return (
+            <ChallengeBadgeScreen
+                onClose={handleBackFromBadgeScreen}
+            />
+        );
+    }
 
     // Show ChallengeError if user doesn't have enough starlets
     if (showChallengeError) {
@@ -303,7 +322,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     </div>
 
                     {/* Explorer Journey Button */}
-                    <div className="challenge-card">
+                    <div className="challenge-card" onClick={handleExplorerJourney}>
                         <div className="challenge-info">
                             <div className="challenge-name-explorer">YOUR EXPLORER JOURNEY</div>
                         </div>
