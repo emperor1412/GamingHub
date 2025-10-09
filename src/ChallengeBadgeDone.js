@@ -3,6 +3,7 @@ import './ChallengeBadgeDone.css';
 import backIcon from './images/back.svg';
 import badge_incatrail from './images/badge_incatrail.png';
 import starlet from './images/starlet.png';
+import km_icon from './images/km_icon.png';
 
 const ChallengeBadgeDone = ({ 
   onClose,
@@ -30,6 +31,11 @@ const ChallengeBadgeDone = ({
       <div className="cbd-main-content">
         {/* Congratulations Section */}
         <div className="cbd-congratulations-section">
+          {/* Close Button */}
+          <button className="cbd-close-button" onClick={onClose}>
+            <span className="cbd-close-icon">×</span>
+          </button>
+          
           {/* Corner Brackets */}
           {/* <div className="cbd-corner cbd-top-left"></div>
           <div className="cbd-corner cbd-top-right"></div>
@@ -61,8 +67,6 @@ const ChallengeBadgeDone = ({
           </div>
         </div>
 
-
-
         {/* Stats Section */}
         <div className="cbd-stats-section">
           {/* Corner Brackets */}
@@ -74,16 +78,17 @@ const ChallengeBadgeDone = ({
           <div className="cbd-stats-grid">
             <div className="cbd-stat-item">
               <div className="cbd-stat-icon cbd-distance-icon">
-                <span className="cbd-stat-text">KM</span>
+                {/* <span className="cbd-stat-text">KM</span> */}
+                <img src={km_icon} alt="KM" className="cbd-km-image" />
+                <div className="cbd-stat-value">{challengeData.distance}</div>
               </div>
-              <div className="cbd-stat-value">{challengeData.distance}</div>
             </div>
             
             <div className="cbd-stat-item">
               <div className="cbd-stat-icon cbd-starlets-icon">
                 <img src={starlet} alt="Starlet" className="cbd-starlet-image" />
+                <div className="cbd-stat-value">{challengeData.starletsReward}</div>
               </div>
-              <div className="cbd-stat-value">{challengeData.starletsReward}</div>
             </div>
           </div>
           
