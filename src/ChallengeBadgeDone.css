@@ -63,6 +63,35 @@
   object-fit: contain;
 }
 
+/* Close Button */
+.cbd-close-button {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -20px;
+  left: -20px;
+  z-index: 10;
+  background: #0000FF;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cbd-close-button:hover {
+  opacity: 0.8;
+}
+
+.cbd-close-icon {
+  color: #FFFFFF;
+  font-size: 35px;
+  font-weight: bold;
+  line-height: 1px;
+}
+
 /* Main Content */
 .cbd-main-content {
   display: flex;
@@ -71,7 +100,7 @@
   text-align: center;
   position: relative;
   z-index: 5;
-  padding: 60px 20px 100px;
+  padding: 80px 20px 130px;
   min-height: 100vh;
   box-sizing: border-box;
   max-width: 430px;
@@ -208,7 +237,7 @@
   width: 100%;
   max-width: 300px;
   margin-top: 20px;
-  padding: 20px;
+  padding: 5px 5px;
   box-sizing: border-box;
 }
 
@@ -234,37 +263,49 @@
   justify-content: center;
   font-weight: 700;
   font-size: 12px;
+  gap: 8px;
 }
 
 .cbd-distance-icon {
-  background: linear-gradient(135deg, #8B5CF6, #A855F7);
   color: white;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .cbd-starlets-icon {
-  background: linear-gradient(135deg, #8B5CF6, #A855F7);
   color: white;
 }
 
 .cbd-starlet-image {
-  width: 25px;
-  height: 25px;
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.cbd-km-image {
+  width: 45px;
+  height: 45px;
   object-fit: contain;
 }
 
 .cbd-stat-value {
-  font-size: 24px;
+  font-size: 24.26px;
   font-weight: 700;
   color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  letter-spacing: 0%;
 }
 
 .cbd-steps-completed {
-  font-size: 20px;
+  font-size: 29.94px;
   font-weight: 700;
   color: white;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0px;
+  line-height: 100%;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
 /* Corner Decorations */
