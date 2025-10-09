@@ -1,8 +1,8 @@
 /* Challenge Badge Screen Styles */
 :root {
-  --cbs-corner-size: 20px;
+  --cbs-corner-size: 35px;
   --cbs-corner-color: #00F1FF;
-  --cbs-corner-border: 4px;
+  --cbs-corner-border: 3px;
   --cbs-corner-offset: -10px;
 }
 
@@ -62,6 +62,7 @@
     width: 100%;
     max-width: 350px;
     margin: 0 auto;
+    padding: 5px;
 }
 
 .cbs-header-brackets {
@@ -304,6 +305,8 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     justify-items: center;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .cbs-badge-item {
@@ -341,6 +344,58 @@
     height: 104px;
     object-fit: contain;
     transform: scale(1.2);
+}
+
+/* Responsive cho badges container - chỉ giảm size khi cần */
+@media (max-width: 400px) {
+    .cbs-badge-item {
+        width: 90px;
+    }
+    
+    .cbs-badge-icon {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 90px;
+        height: 90px;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 350px) {
+    .cbs-badge-item {
+        width: 80px;
+    }
+    
+    .cbs-badge-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 80px;
+        height: 80px;
+        transform: scale(1.0);
+    }
+}
+
+@media (max-width: 300px) {
+    .cbs-badge-item {
+        width: 70px;
+    }
+    
+    .cbs-badge-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 70px;
+        height: 70px;
+        transform: scale(0.9);
+    }
 }
 
 .cbs-badge-status-icon {
@@ -501,3 +556,73 @@
         height: 20px;
     }
 } */
+
+/* Status Modal Styles */
+.cbs-status-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.cbs-status-content {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    border: 2px solid #00F1FF;
+}
+
+.cbs-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cbs-status-header h3 {
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.cbs-close-btn {
+    background: none;
+    border: none;
+    color: #00F1FF;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cbs-status-display {
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cbs-status-description {
+    color: #CCCCCC;
+    font-size: 14px;
+    line-height: 1.5;
+}
