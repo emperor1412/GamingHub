@@ -6,9 +6,9 @@ import loginIcon from './images/icon_gamehub.png';
 import ticketIcon from './images/ticket_scratch_icon.png';
 import tadokamiIcon from './images/icon_tadokami.png';
 import flippinStarsIcon from './images/icon_flipping_star.png';
-import friendsIcon from './images/friends_icon.svg';
+import friendsIcon from './images/icon_friend.png';
 import bankStepsIcon from './images/banking_step_icon.png';
-import stepBoostIcon from './images/Icon_Step_Boost.png';
+import stepBoostIcon from './images/icon_step_boost_ptask.png';
 import shared from './Shared';
 
 const PremiumTasks = ({ isOpen, onClose }) => {
@@ -63,25 +63,28 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             progress: 1,
             total: 1,
             status: "DONE",
-            icon: loginIcon
+            icon: loginIcon,
+            size: "small"
           },
           {
             id: 2,
-            title: "SCRATCH 1 TICKET",
+            title: "SCRATCH A TICKET",
             xp: 20,
             progress: 1,
             total: 1,
             status: "DONE",
-            icon: ticketIcon
+            icon: ticketIcon,
+            size: "medium"
           },
           {
             id: 3,
-            title: "PLAY TADOKAIII",
+            title: "PLAY TADOKAMI",
             xp: 50,
             progress: 0,
             total: 1,
             status: "INCOMPLETE",
-            icon: tadokamiIcon
+            icon: tadokamiIcon,
+            size: "very-large"
           },
           {
             id: 4,
@@ -90,7 +93,8 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             progress: 0,
             total: 1,
             status: "INCOMPLETE",
-            icon: flippinStarsIcon
+            icon: flippinStarsIcon,
+            size: "large"
           },
           {
             id: 5,
@@ -99,7 +103,8 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             progress: 0,
             total: 3,
             status: "INCOMPLETE",
-            icon: friendsIcon
+            icon: friendsIcon,
+            size: "medium"
           },
           {
             id: 6,
@@ -108,7 +113,8 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             progress: 0,
             total: 1,
             status: "INCOMPLETE",
-            icon: bankStepsIcon
+            icon: bankStepsIcon,
+            size: "small"
           },
           {
             id: 7,
@@ -117,7 +123,8 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             progress: 0,
             total: 1,
             status: "INCOMPLETE",
-            icon: stepBoostIcon
+            icon: stepBoostIcon,
+            size: "medium"
           }
         ]
       };
@@ -142,6 +149,25 @@ const PremiumTasks = ({ isOpen, onClose }) => {
   const getProgressPercentage = () => {
     const maxExp = 180;
     return Math.min((dailyExp / maxExp) * 100, 100);
+  };
+
+  // Determine icon size class based on task properties
+  const getIconSizeClass = (size) => {
+    // Small icons for high XP tasks (50+ XP)
+    if (size === 'small') {
+      return 'icon-small';
+    }
+    // Large icons for completed tasks
+    else if (size === 'large') {
+      return 'icon-large';
+    }
+    // Medium icons for everything else
+    else if (size === 'medium') {
+      return 'icon-medium';
+    }
+    else if (size === 'very-large') {
+      return 'icon-very-large';
+    }
   };
 
   if (!isOpen) return null;
@@ -224,7 +250,7 @@ const PremiumTasks = ({ isOpen, onClose }) => {
                   >
                     <div className="pt_market-ticket-button-image-container">
                       <div className="pt_market-ticket-content">
-                        <div className="pt_market-ticket-icon">
+                        <div className={`pt_market-ticket-icon ${getIconSizeClass(task.size)}`}>
                           <img src={task.icon} alt={task.title} />
                         </div>
                         <div className="pt_market-ticket-info">

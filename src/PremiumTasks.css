@@ -256,9 +256,9 @@
   height: 100%;
     /* gradient từ figma */
   background: linear-gradient(
-    235deg,
-    rgba(255, 0, 246, 0.03) 10%,
-    rgba(255, 0, 246, 1) 100%
+    60deg,
+    rgba(255, 0, 246, 0.03) 30%,
+    rgba(255, 0, 246, 0.6) 100%
   );  
   border: 1px solid #0000FF;
   display: flex;
@@ -299,6 +299,25 @@
   object-fit: contain;
   position: relative;
   z-index: 1;
+}
+
+/* Icon Size Variants */
+.pt_market-ticket-icon.icon-small {
+  transform: scale(1.32);
+}
+
+.pt_market-ticket-icon.icon-medium {
+  transform: scale(1.45);
+}
+
+.pt_market-ticket-icon.icon-large {
+  transform: scale(1.8);
+}
+
+.pt_market-ticket-icon.icon-very-large {
+  transform: scale(1.9);
+  left: 4px;
+  top: 3.5px;
 }
 
 .pt_market-ticket-text {
@@ -370,11 +389,6 @@
   font-family: "PP Neue Machina Inktrap";
   font-size: 12px;
   font-weight: 600;
-}
-
-.pt_market-ticket-button:hover {
-  transform: translateY(-2px);
-  transition: transform 0.2s ease;
 }
 
 .pt_market-ticket-button.sold-out {
