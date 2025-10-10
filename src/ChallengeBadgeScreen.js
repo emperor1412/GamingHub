@@ -11,11 +11,14 @@ import badgeUnlocked from './images/trophy_4.png';
 import badgeLocked from './images/TwoHundredStrong_Locked.png';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
+import ChallengeStatus from './ChallengeStatus';
 
 const ChallengeBadgeScreen = ({ onClose }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
     const [showChallengeUpdate, setShowChallengeUpdate] = React.useState(false);
     const [showChallengeBadgeDone, setShowChallengeBadgeDone] = React.useState(false);
+    const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
+    const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
 
     // Mock data for badges
     const badgeData = {
@@ -108,8 +111,16 @@ const ChallengeBadgeScreen = ({ onClose }) => {
             } else if (badge.clickStatus === 'done') {
                 // Mở ChallengeBadgeDone cho completed challenge
                 setShowChallengeBadgeDone(true);
+            } else if (badge.clickStatus === 'incomplete') {
+                // Mở ChallengeStatus cho incomplete challenge
+                setChallengeStatusType('incomplete');
+                setShowChallengeStatus(true);
+            } else if (badge.clickStatus === 'missed') {
+                // Mở ChallengeStatus cho missed challenge
+                setChallengeStatusType('missed');
+                setShowChallengeStatus(true);
             } else {
-                // Hiển thị modal cho các status khác (incomplete, missed)
+                // Hiển thị modal cho các status khác
                 setSelectedBadge(badge);
             }
         }
@@ -163,6 +174,11 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         setShowChallengeBadgeDone(false);
     };
 
+    // Function to handle back from ChallengeStatus
+    const handleBackFromStatus = () => {
+        setShowChallengeStatus(false);
+    };
+
     // Show ChallengeBadgeDone if state is true
     if (showChallengeBadgeDone) {
         return (
@@ -176,6 +192,20 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     starletsReward: 400,
                     challengeEndDate: "15/10/2025 23:59",
                     description: "Your path through challenges, discoveries, and untold wonders has earned you the title of"
+                }}
+            />
+        );
+    }
+
+    // Show ChallengeStatus if state is true
+    if (showChallengeStatus) {
+        return (
+            <ChallengeStatus
+                status={challengeStatusType}
+                onClose={handleBackFromStatus}
+                challengeData={{
+                    challengeTitle: "INCA TRAIL",
+                    stepsCompleted: challengeStatusType === 'incomplete' ? 23000 : 15000
                 }}
             />
         );
