@@ -565,6 +565,8 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
       <PremiumTasks
         isOpen={showTasksPopup}
         onClose={() => setShowTasksPopup(false)}
+        currentXP={currentXP}
+        dailyExp={53} // TODO: Get this from API when available
       />
     </div>
   );

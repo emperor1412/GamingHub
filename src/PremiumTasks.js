@@ -11,126 +11,91 @@ import bankStepsIcon from './images/banking_step_icon.png';
 import stepBoostIcon from './images/icon_step_boost_ptask.png';
 import shared from './Shared';
 
-const PremiumTasks = ({ isOpen, onClose }) => {
-  const [dailyExp, setDailyExp] = useState(0);
+const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0 }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch premium tasks data from API
-  const fetchPremiumTasksData = async () => {
-    try {
-      if (!shared.loginData?.token) {
-        console.log('No login token available for premium tasks API');
-        setLoading(false);
-        return;
-      }
-      
-      const url = `${shared.server_url}/api/app/getPremiumTasks?token=${shared.loginData.token}`;
-      console.log('Fetching premium tasks from:', url);
-      
-      const response = await fetch(url);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Premium tasks API response:', data);
-        
-        if (data.code === 0 && data.data) {
-          setDailyExp(data.data.dailyExp || 0);
-          setTasks(data.data.tasks || []);
-        }
-      } else {
-        console.error('Premium tasks API response not ok:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching premium tasks:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch premium tasks data from API (REMOVED - now using data from Premium.js)
 
-  // FAKE DATA for testing
+  // FAKE DATA for testing (tasks only - dailyExp comes from props)
   const fetchPremiumTasksDataFake = async () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      const fakeData = {
-        dailyExp: 53,
-        tasks: [
-          {
-            id: 1,
-            title: "LOGIN FOR THE DAY",
-            xp: 20,
-            progress: 1,
-            total: 1,
-            status: "DONE",
-            icon: loginIcon,
-            size: "small"
-          },
-          {
-            id: 2,
-            title: "SCRATCH A TICKET",
-            xp: 20,
-            progress: 1,
-            total: 1,
-            status: "DONE",
-            icon: ticketIcon,
-            size: "medium"
-          },
-          {
-            id: 3,
-            title: "PLAY TADOKAMI",
-            xp: 50,
-            progress: 0,
-            total: 1,
-            status: "INCOMPLETE",
-            icon: tadokamiIcon,
-            size: "very-large"
-          },
-          {
-            id: 4,
-            title: "PLAY FLIPPIN STARS",
-            xp: 50,
-            progress: 0,
-            total: 1,
-            status: "INCOMPLETE",
-            icon: flippinStarsIcon,
-            size: "large"
-          },
-          {
-            id: 5,
-            title: "INVITE 3 FRIENDS",
-            xp: 30,
-            progress: 0,
-            total: 3,
-            status: "INCOMPLETE",
-            icon: friendsIcon,
-            size: "medium"
-          },
-          {
-            id: 6,
-            title: "BANK STEPS",
-            xp: 30,
-            progress: 0,
-            total: 1,
-            status: "INCOMPLETE",
-            icon: bankStepsIcon,
-            size: "small"
-          },
-          {
-            id: 7,
-            title: "USE A STEP BOOST",
-            xp: 30,
-            progress: 0,
-            total: 1,
-            status: "INCOMPLETE",
-            icon: stepBoostIcon,
-            size: "medium"
-          }
-        ]
-      };
+      const fakeTasks = [
+        {
+          id: 1,
+          title: "LOGIN FOR THE DAY",
+          xp: 20,
+          progress: 1,
+          total: 1,
+          status: "DONE",
+          icon: loginIcon,
+          size: "small"
+        },
+        {
+          id: 2,
+          title: "SCRATCH A TICKET",
+          xp: 20,
+          progress: 1,
+          total: 1,
+          status: "DONE",
+          icon: ticketIcon,
+          size: "medium"
+        },
+        {
+          id: 3,
+          title: "PLAY TADOKAMI",
+          xp: 50,
+          progress: 0,
+          total: 1,
+          status: "INCOMPLETE",
+          icon: tadokamiIcon,
+          size: "very-large"
+        },
+        {
+          id: 4,
+          title: "PLAY FLIPPIN STARS",
+          xp: 50,
+          progress: 0,
+          total: 1,
+          status: "INCOMPLETE",
+          icon: flippinStarsIcon,
+          size: "large"
+        },
+        {
+          id: 5,
+          title: "INVITE 3 FRIENDS",
+          xp: 30,
+          progress: 0,
+          total: 3,
+          status: "INCOMPLETE",
+          icon: friendsIcon,
+          size: "medium"
+        },
+        {
+          id: 6,
+          title: "BANK STEPS",
+          xp: 30,
+          progress: 0,
+          total: 1,
+          status: "INCOMPLETE",
+          icon: bankStepsIcon,
+          size: "small"
+        },
+        {
+          id: 7,
+          title: "USE A STEP BOOST",
+          xp: 30,
+          progress: 0,
+          total: 1,
+          status: "INCOMPLETE",
+          icon: stepBoostIcon,
+          size: "medium"
+        }
+      ];
       
-      setDailyExp(fakeData.dailyExp);
-      setTasks(fakeData.tasks);
+      setTasks(fakeTasks);
     } catch (error) {
       console.error('Error with fake premium tasks data:', error);
     } finally {
@@ -145,10 +110,44 @@ const PremiumTasks = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // Calculate progress percentage
+  // Dữ liệu XP cho từng level (giống Premium.js)
+  const levelData = [
+    { level: 1, xpNeeded: 120, cumulativeXP: 120 },
+    { level: 2, xpNeeded: 120, cumulativeXP: 240 },
+    { level: 3, xpNeeded: 360, cumulativeXP: 600 },
+    { level: 4, xpNeeded: 420, cumulativeXP: 1020 },
+    { level: 5, xpNeeded: 460, cumulativeXP: 1480 },
+    { level: 6, xpNeeded: 480, cumulativeXP: 1960 },
+    { level: 7, xpNeeded: 500, cumulativeXP: 2460 },
+    { level: 8, xpNeeded: 520, cumulativeXP: 2980 },
+    { level: 9, xpNeeded: 540, cumulativeXP: 3520 },
+    { level: 10, xpNeeded: 560, cumulativeXP: 4080 },
+    { level: 11, xpNeeded: 570, cumulativeXP: 4650 },
+    { level: 12, xpNeeded: 570, cumulativeXP: 5220 }
+  ];
+
+  // Tính level hiện tại dựa trên XP (giống Premium.js)
+  const calculateCurrentLevel = () => {
+    for (let i = levelData.length - 1; i >= 0; i--) {
+      if (currentXP >= levelData[i].cumulativeXP) {
+        return i + 1;
+      }
+    }
+    return 1;
+  };
+  
+  const calculatedLevel = calculateCurrentLevel();
+  
+  // Tính progress percentage dựa trên XP hiện tại (giống Premium.js)
   const getProgressPercentage = () => {
-    const maxExp = 180;
-    return Math.min((dailyExp / maxExp) * 100, 100);
+    if (currentXP >= 5220) return 100; // Max level
+    
+    const currentLevelIndex = calculatedLevel - 1;
+    const currentLevelStartXP = currentLevelIndex > 0 ? levelData[currentLevelIndex - 1].cumulativeXP : 0;
+    const currentLevelEndXP = levelData[currentLevelIndex].cumulativeXP;
+    const currentLevelProgress = (currentXP - currentLevelStartXP) / (currentLevelEndXP - currentLevelStartXP);
+    
+    return ((currentLevelIndex + currentLevelProgress) / 12) * 100;
   };
 
   // Determine icon size class based on task properties
