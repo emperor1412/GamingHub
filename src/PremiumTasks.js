@@ -233,10 +233,10 @@ const PremiumTasks = ({ isOpen, onClose }) => {
             </div>
             
             {/* Level Labels */}
-            {/* <div className="premium-tasks-level-labels">
+            <div className="premium-tasks-level-labels">
               <div className="premium-tasks-level">LEVEL 1</div>
               <div className="premium-tasks-level">LEVEL 12</div>
-            </div> */}
+            </div>
           </div>
 
           <div className="premium-tasks-container-content">
