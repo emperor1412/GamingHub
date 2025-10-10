@@ -16,6 +16,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
   const [currentLevel, setCurrentLevel] = useState(0);
   const [isMembership, setIsMembership] = useState(false);
   const [endTime, setEndTime] = useState(0);
+  const [dailyExp, setDailyExp] = useState(0);
   const [rewards, setRewards] = useState([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
@@ -114,6 +115,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
           setCurrentLevel(premiumData.level || 0);
           setIsMembership(premiumData.isMembership || false);
           setEndTime(premiumData.endTime || 0);
+          setDailyExp(premiumData.dailyExp || 0);
           
           // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
           if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -173,6 +175,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
           "endTime": 1761868799000,
           "level": 5,
           "exp": 1200,
+          "dailyExp": 53,
           "type": 1,
           "rewards": [
             { "level": 1, "claimStatus": true, "list": [{ "level": 1, "type": 10020, "amount": 500 }] },
@@ -208,6 +211,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
       setCurrentLevel(premiumData.level || 0);
       setIsMembership(premiumData.isMembership || false);
       setEndTime(premiumData.endTime || 0);
+      setDailyExp(premiumData.dailyExp || 0);
       
       // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
       if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -566,7 +570,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
         isOpen={showTasksPopup}
         onClose={() => setShowTasksPopup(false)}
         currentXP={currentXP}
-        dailyExp={53} // TODO: Get this from API when available
+        dailyExp={dailyExp}
       />
     </div>
   );
