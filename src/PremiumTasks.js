@@ -11,11 +11,102 @@ import bankStepsIcon from './images/banking_step_icon.png';
 import stepBoostIcon from './images/icon_step_boost_ptask.png';
 import shared from './Shared';
 
-const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0 }) => {
+// Activity mapping constants
+const Activity_Login = 1;
+const Activity_Scratch = 2;
+const Activity_PlayTadokami = 3;
+const Activity_PlayFlippinStars = 4;
+const Activity_InviteFriends = 5;
+const Activity_BankSteps = 6;
+const Activity_UseStepBoost = 7;
+
+const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activitiesList = [] }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch premium tasks data from API (REMOVED - now using data from Premium.js)
+  // Generate tasks based on activitiesList from API
+  const generateTasksFromActivities = (activitiesList) => {
+    // Helper function to get activity count from activitiesList
+    const getActivityCount = (activityType) => {
+      const activity = activitiesList.find(act => act.day === activityType);
+      return activity ? activity.num : 0;
+    };
+
+    const tasks = [
+      {
+        id: 1,
+        title: "LOGIN FOR THE DAY",
+        xp: 20,
+        progress: getActivityCount(Activity_Login),
+        total: 1,
+        status: getActivityCount(Activity_Login) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: loginIcon,
+        size: "small"
+      },
+      {
+        id: 2,
+        title: "SCRATCH A TICKET",
+        xp: 20,
+        progress: getActivityCount(Activity_Scratch),
+        total: 1,
+        status: getActivityCount(Activity_Scratch) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: ticketIcon,
+        size: "medium"
+      },
+      {
+        id: 3,
+        title: "PLAY TADOKAMI",
+        xp: 50,
+        progress: getActivityCount(Activity_PlayTadokami),
+        total: 1,
+        status: getActivityCount(Activity_PlayTadokami) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: tadokamiIcon,
+        size: "very-large"
+      },
+      {
+        id: 4,
+        title: "PLAY FLIPPIN STARS",
+        xp: 50,
+        progress: getActivityCount(Activity_PlayFlippinStars),
+        total: 1,
+        status: getActivityCount(Activity_PlayFlippinStars) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: flippinStarsIcon,
+        size: "large"
+      },
+      {
+        id: 5,
+        title: "INVITE 3 FRIENDS",
+        xp: 30,
+        progress: getActivityCount(Activity_InviteFriends),
+        total: 3,
+        status: getActivityCount(Activity_InviteFriends) >= 3 ? "DONE" : "INCOMPLETE",
+        icon: friendsIcon,
+        size: "medium"
+      },
+      {
+        id: 6,
+        title: "BANK STEPS",
+        xp: 30,
+        progress: getActivityCount(Activity_BankSteps),
+        total: 1,
+        status: getActivityCount(Activity_BankSteps) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: bankStepsIcon,
+        size: "small"
+      },
+      {
+        id: 7,
+        title: "USE A STEP BOOST",
+        xp: 30,
+        progress: getActivityCount(Activity_UseStepBoost),
+        total: 1,
+        status: getActivityCount(Activity_UseStepBoost) >= 1 ? "DONE" : "INCOMPLETE",
+        icon: stepBoostIcon,
+        size: "medium"
+      }
+    ];
+
+    return tasks;
+  };
 
   // FAKE DATA for testing (tasks only - dailyExp comes from props)
   const fetchPremiumTasksDataFake = async () => {
@@ -105,10 +196,18 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0 }) => {
 
   useEffect(() => {
     if (isOpen) {
-      // Use fake data for testing - replace with fetchPremiumTasksData() when API is ready
-      fetchPremiumTasksDataFake();
+      // Generate tasks from activitiesList if available, otherwise use fake data
+      if (activitiesList && activitiesList.length > 0) {
+        console.log('Using activitiesList from API:', activitiesList);
+        const generatedTasks = generateTasksFromActivities(activitiesList);
+        setTasks(generatedTasks);
+        setLoading(false);
+      } else {
+        // Fallback to fake data for testing
+        fetchPremiumTasksDataFake();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, activitiesList]);
 
   // Dữ liệu XP cho từng level (giống Premium.js)
   const levelData = [

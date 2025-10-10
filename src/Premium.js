@@ -17,6 +17,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
   const [isMembership, setIsMembership] = useState(false);
   const [endTime, setEndTime] = useState(0);
   const [dailyExp, setDailyExp] = useState(0);
+  const [activitiesList, setActivitiesList] = useState([]);
   const [rewards, setRewards] = useState([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
@@ -116,6 +117,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
           setIsMembership(premiumData.isMembership || false);
           setEndTime(premiumData.endTime || 0);
           setDailyExp(premiumData.dailyExp || 0);
+          setActivitiesList(premiumData.activitiesList || []);
           
           // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
           if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -177,6 +179,11 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
           "exp": 1200,
           "dailyExp": 53,
           "type": 1,
+          "activitiesList": [
+            { "day": 1, "num": 1 }, // LOGIN
+            { "day": 2, "num": 1 }, // SCRATCH
+            { "day": 5, "num": 2 }  // INVITE FRIENDS (2/3)
+          ],
           "rewards": [
             { "level": 1, "claimStatus": true, "list": [{ "level": 1, "type": 10020, "amount": 500 }] },
             { "level": 2, "claimStatus": true, "list": [{ "level": 2, "type": 10020, "amount": 600 }] },
@@ -212,6 +219,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
       setIsMembership(premiumData.isMembership || false);
       setEndTime(premiumData.endTime || 0);
       setDailyExp(premiumData.dailyExp || 0);
+      setActivitiesList(premiumData.activitiesList || []);
       
       // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
       if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -571,6 +579,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
         onClose={() => setShowTasksPopup(false)}
         currentXP={currentXP}
         dailyExp={dailyExp}
+        activitiesList={activitiesList}
       />
     </div>
   );
