@@ -347,7 +347,7 @@
 }
 
 /* Responsive cho badges container - chỉ giảm size khi cần */
-@media (max-width: 400px) {
+@media (max-width: 420px) {
     .cbs-badge-item {
         width: 90px;
     }
@@ -364,7 +364,7 @@
     }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 380px) {
     .cbs-badge-item {
         width: 80px;
     }
