@@ -1471,6 +1471,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
                             
+                            // Get premium options from buyOptions API
+                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
+                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
+                            
                             // Check conditions for Premium Membership
                             let isDisabled = false;
                             let disabledReason = '';
@@ -1495,10 +1499,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               isDisabled = true;
                               disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
                             }
-                            // 4. Not enough starlets
-                            else if (userStarlets < membershipData.membershipMonthlyPrice) {
+                            // 4. Not enough starlets (use API data)
+                            else if (monthlyPremium && userStarlets < monthlyPremium.starlet) {
                               isDisabled = true;
-                              disabledReason = membershipData.membershipMonthlyPrice.toLocaleString() + ' STARLETS';
+                              disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            }
+                            // 5. Check if can buy from API
+                            else if (monthlyPremium && !monthlyPremium.canBuy) {
+                              isDisabled = true;
+                              disabledReason = 'NOT AVAILABLE';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1549,7 +1558,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   {/* Price Section */}
                                   <div className={`mk-market-ticket-price ${disabledReason === 'YEARLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
                                     {isAvailable ? (
-                                      <span>{membershipData.membershipMonthlyPrice} STARLETS</span>
+                                      <div>
+                                        <div>{monthlyPremium ? monthlyPremium.stars : 9999} TELEGRAM STARS</div>
+                                        {/* <div style={{ fontSize: '0.8em', opacity: 0.8 }}>
+                                          {monthlyPremium ? monthlyPremium.stars : 1} TELEGRAM STARS
+                                        </div> */}
+                                      </div>
                                     ) : (
                                       <span>{disabledReason}</span>
                                     )}
@@ -1565,6 +1579,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userLevel = shared.userProfile?.level || 0;
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
+                            
+                            // Get premium options from buyOptions API
+                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
+                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
                             
                             // Check conditions for Premium Membership
                             let isDisabled = false;
@@ -1585,10 +1603,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               isDisabled = true;
                               disabledReason = 'BANK STEPS NOT CONNECTED';
                             }
-                            // 3. Not enough starlets
-                            else if (userStarlets < membershipData.membershipYearlyPrice) {
+                            // 3. Already have monthly membership (disable yearly)
+                            else if (premiumType === 1) {
                               isDisabled = true;
-                              disabledReason = membershipData.membershipYearlyPrice.toLocaleString() + ' STARLETS';
+                              disabledReason = 'MONTHLY MEMBERSHIP ACTIVE';
+                            }
+                            // 4. Not enough starlets (use API data)
+                            else if (yearlyPremium && userStarlets < yearlyPremium.starlet) {
+                              isDisabled = true;
+                              disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            }
+                            // 5. Check if can buy from API
+                            else if (yearlyPremium && !yearlyPremium.canBuy) {
+                              isDisabled = true;
+                              disabledReason = 'NOT AVAILABLE';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1639,7 +1667,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   {/* Price Section */}
                                   <div className="mk-market-ticket-price">
                                     {isAvailable ? (
-                                      <span>{membershipData.membershipYearlyPrice} STARLETS</span>
+                                      <span>{yearlyPremium ? yearlyPremium.stars : 9999} TELEGRAM STARS</span>
                                     ) : (
                                       <span>{disabledReason}</span>
                                     )}

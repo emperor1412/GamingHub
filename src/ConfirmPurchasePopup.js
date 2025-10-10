@@ -87,59 +87,16 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     try {
       let result;
       if (isPremium) {
-        console.log('Making premium membership purchase API call...');
-        // Handle premium membership purchase
-        const response = await fetch(`${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        console.log('Making premium membership purchase using Telegram Stars...');
+        // Handle premium membership purchase using Telegram Stars
+        const premiumOptionId = productId === 1 ? 4001 : 4002; // 1 = monthly (4001), 2 = yearly (4002)
+        const premiumOption = currentOption || { id: premiumOptionId, starlet: amount, stars: productId === 1 ? 1 : 2 };
+        
+        result = await handleStarletsPurchase({ 
+          amount: premiumOption.starlet, 
+          stars: premiumOption.stars,
+          optionId: premiumOptionId 
         });
-        const data = await response.json();
-        console.log('Premium membership API response:', data);
-        if (data.code === 0) {
-          result = {
-            status: "paid",
-            productName: productName,
-            amount: amount,
-            isPremium: true,
-            membershipType: productId,
-            membershipPrice: amount
-          };
-        } else if (data.code === 102002 || data.code === 102001) {
-          console.log('Token expired, attempting to refresh...');
-          const loginResult = await shared.login(shared.initData);
-          if (loginResult.success) {
-            const retryResponse = await fetch(`${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            const retryData = await retryResponse.json();
-            if (retryData.code === 0) {
-              result = {
-                status: "paid",
-                productName: productName,
-                amount: amount,
-                isPremium: true,
-                membershipType: productId,
-                membershipPrice: amount
-              };
-            } else {
-              console.log('Retry failed:', retryData);
-              await showError(retryData.msg || 'Premium purchase failed. Please try again.');
-              return;
-            }
-          } else {
-            await showError('Session expired. Please try again.');
-            return;
-          }
-        } else {
-          console.log('Premium API call failed:', data);
-          await showError(data.msg || 'Premium purchase failed. Please try again.');
-          return;
-        }
       } else if (isStarletProduct && productId) {
         console.log('Making starlet product purchase API call...');
         // Handle starlet product purchase
@@ -256,22 +213,36 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
 
       console.log('Final result:', result);
       if (result?.status === "paid") {
-        setPurchaseData({ 
-          initialStarlets: result.initialStarlets,
-          tickets: result.tickets,
-          productName: result.productName,
-          amount: result.amount,
-          isStarletProduct: result.isStarletProduct,
-          isPremium: result.isPremium,
-          membershipType: result.membershipType,
-          membershipPrice: result.membershipPrice,
-          packageType: result.packageType,
-          packageValue: result.packageValue
-        });
+        // For premium purchases via Telegram Stars, we need to set the premium data
+        if (isPremium) {
+          setPurchaseData({ 
+            initialStarlets: result.initialStarlets,
+            tickets: result.tickets,
+            productName: productName,
+            amount: amount,
+            isStarletProduct: false,
+            isPremium: true,
+            membershipType: productId,
+            membershipPrice: amount
+          });
+        } else {
+          setPurchaseData({ 
+            initialStarlets: result.initialStarlets,
+            tickets: result.tickets,
+            productName: result.productName,
+            amount: result.amount,
+            isStarletProduct: result.isStarletProduct,
+            isPremium: result.isPremium,
+            membershipType: result.membershipType,
+            membershipPrice: result.membershipPrice,
+            packageType: result.packageType,
+            packageValue: result.packageValue
+          });
+        }
         setShowSuccessPopup(true);
         
         // Call onPurchaseComplete for starlet products and premium to trigger market reload
-        if ((result.isStarletProduct || result.isPremium) && onPurchaseComplete) {
+        if ((result.isStarletProduct || isPremium) && onPurchaseComplete) {
           onPurchaseComplete();
         }
 
