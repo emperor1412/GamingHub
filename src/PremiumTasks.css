@@ -162,7 +162,7 @@
 
 /* Progress Section */
 .premium-tasks-progress-section {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .premium-tasks-exp-label {
@@ -212,7 +212,6 @@
 .premium-tasks-level-labels {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
 }
 
 .premium-tasks-level {
@@ -338,7 +337,7 @@
 }
 
 /* Responsive font size for different screen sizes */
-@media screen and (min-width: 400px) {
+/* @media screen and (min-width: 400px) {
   .pt_market-ticket-amount {
     font-size: 28px;
   }
@@ -348,7 +347,7 @@
   .pt_market-ticket-amount {
     font-size: 32px;
   }
-}
+} */
 
 .pt_market-ticket-label {
   font-family: "PP Neue Machina Inktrap";
