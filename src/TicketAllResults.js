@@ -5,6 +5,7 @@ import shared from './Shared';
 import { trackStoryShare } from './analytics';
 import back from './images/back.svg';
 import ticketIcon from './images/ticket.svg';
+import ticketScratchedIcon from './images/ticket_scratched_all.png';
 
 /*- API for Scratching all the current available tickets
     - Request:
@@ -63,9 +64,11 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     // Define reward types and their positions
     const rewardPositions = [
-        { type: 10010, position: { top: '50%', left: '50%', right: '50%' } },      // Ticket
-        { type: 20020, position: { top: '50%', left: '7%' } },     // GMT
-        { type: 30020, position: { top: '50%', right: '7%' } },      // MOOAR
+        { type: 10010, position: { top: '65%', right: '10%' } },      // Ticket
+        { type: 20020, position: { top: '65%', left: '10%' }, size: 'sa-size-gmt' },     // GMT
+        { type: 30020, position: { top: '65%', left: '50%', right: '50%' }, size: 'sa-size-mooar' },      // MOOAR
+        { type: 10030, position: { top: '35%', left: '5%' } },     // FSL
+        { type: 10020, position: { top: '35%', left: '50%', right: '50%' } },   
         // { type: 10030, position: { top: '25%', right: '7%' } },     // FSL
         // { type: 20010, position: { top: '45%', left: '7%' } },   // Starlet
         // { type: 30010, position: { top: '45%', right: '7%' } }   // Plus
@@ -198,14 +201,19 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                         <div className="sa_rewards-content">
                             <div className="sa_rewards-container">
                                 {/* Main Starlets Reward in center */}
-                                <div key={0} className="sa_reward-item" style={{ top: '1%', right: '-2%' }}>
+                                <div key={0} className="sa_reward-item" style={{ top: '1%', left: '-1%' }}>
                                     <img 
                                         src={require("./images/FSL Game Hub logo-02.png")}
                                         alt="FSL Game Hub"
                                         className="sa_main-reward-logo"
                                     />
                                 </div>
-                                <div className="sa_main-reward">
+                                <div key={0} className="sa_reward-item" style={{ top: '10%', right: '-7%' }}>
+                                    <span className="sa_reward-title">
+                                        I SCRATCHED AND WON
+                                    </span>
+                                </div>
+                                {/* <div className="sa_main-reward">
                                     
                                     <img 
                                         src={shared.mappingIcon[10020]} 
@@ -214,6 +222,23 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     />
                                     <span className="sa_main-reward-amount">
                                         X{formatAmount(10020, totalRewards[10020] || 0)}
+                                    </span>
+                                </div> */}
+
+                                {/* Scratched Tickets Count */}
+                                <div
+                                    className="sa_reward-item"
+                                    style={{ top: '35%', right: '8%' }}
+                                >
+                                    <div className="sa_reward-icon-wrapper">
+                                        <img 
+                                            src={ticketScratchedIcon}
+                                            alt="Scratched Tickets"
+                                            className="sa_reward-icon"
+                                        />
+                                    </div>
+                                    <span className="sa_reward-amount-scratched">
+                                        X{totalTicketsUsed}
                                     </span>
                                 </div>
 
@@ -232,7 +257,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                                 <img 
                                                     src={shared.mappingIcon[item.type]}
                                                     alt={`Reward ${item.type}`}
-                                                    className="sa_reward-icon"
+                                                    className={`sa_reward-icon ${item.size}`}
                                                 />
                                             </div>
                                             <span className="sa_reward-amount">
@@ -241,9 +266,10 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                         </div>
                                     );
                                 })}
+                            </div>
 
-                                {/* Buttons inside rewards container */}
-                                <div className="sa_buttons-container">
+                            {/* Buttons inside rewards container */}
+                            <div className="sa_buttons-container">
                                     {showShareStory && (
                                         <button className="sa_share-story-button" onClick={onClickShareStory}>
                                             SHARE TO STORY
@@ -254,7 +280,6 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                         CLAIM LOOT
                                     </button>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </>
