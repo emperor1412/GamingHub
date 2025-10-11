@@ -189,7 +189,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const updateProgressBar = (received) => {
         const progressBar = document.querySelector('.bs_progress-bar-track');
         if (progressBar) {
-            const progress = Math.min(Math.max(received / 500, 0), 1) * 100;
+            const maxValue = shared.isPremiumMember ? 750 : 500;
+            const progress = Math.min(Math.max(received / maxValue, 0), 1) * 100;
             progressBar.style.setProperty('--progress-width', `${progress}%`);
         }
     };
@@ -392,6 +393,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
+                            {shared.isPremiumMember && <div>&nbsp;</div>}
+                            {shared.isPremiumMember && <div>&nbsp;</div>}
                             <div style={{ backgroundColor: '#000FEF' }}>&nbsp;</div>
                         </div>
                         <div className="bs_progress-steps">
@@ -400,6 +403,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <div className="bs_progress-step">300</div>
                             <div className="bs_progress-step">400</div>
                             <div className="bs_progress-step">500</div>
+                            {shared.isPremiumMember && <div className="bs_progress-step">600</div>}
+                            {shared.isPremiumMember && <div className="bs_progress-step">750</div>}
                         </div>
                     </div>
 
