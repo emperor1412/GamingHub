@@ -1500,10 +1500,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
                             }
                             // 4. Not enough starlets (use API data)
-                            else if (monthlyPremium && userStarlets < monthlyPremium.starlet) {
-                              isDisabled = true;
-                              disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
-                            }
+                            // else if (monthlyPremium && userStarlets < monthlyPremium.starlet) {
+                            //   isDisabled = true;
+                            //   disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            // }
                             // 5. Check if can buy from API
                             else if (monthlyPremium && !monthlyPremium.canBuy) {
                               isDisabled = true;
@@ -1604,15 +1604,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               disabledReason = 'BANK STEPS NOT CONNECTED';
                             }
                             // 3. Already have monthly membership (disable yearly)
-                            else if (premiumType === 1) {
-                              isDisabled = true;
-                              disabledReason = 'MONTHLY MEMBERSHIP ACTIVE';
-                            }
+                            // else if (premiumType === 1) {
+                            //   isDisabled = true;
+                            //   disabledReason = 'MONTHLY MEMBERSHIP ACTIVE';
+                            // }
                             // 4. Not enough starlets (use API data)
-                            else if (yearlyPremium && userStarlets < yearlyPremium.starlet) {
-                              isDisabled = true;
-                              disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
-                            }
+                            // else if (yearlyPremium && userStarlets < yearlyPremium.starlet) {
+                            //   isDisabled = true;
+                            //   disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            // }
                             // 5. Check if can buy from API
                             else if (yearlyPremium && !yearlyPremium.canBuy) {
                               isDisabled = true;
@@ -1665,7 +1665,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   </div>
                                   
                                   {/* Price Section */}
-                                  <div className="mk-market-ticket-price">
+                                  <div className={`mk-market-ticket-price ${disabledReason === 'MONTHLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
                                     {isAvailable ? (
                                       <span>{yearlyPremium ? yearlyPremium.stars : 9999} TELEGRAM STARS</span>
                                     ) : (

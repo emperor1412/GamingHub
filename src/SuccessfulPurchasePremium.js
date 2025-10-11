@@ -23,15 +23,9 @@ const SuccessfulPurchasePremium = ({ isOpen, onClaim, onClose, setShowBuyView })
       // Refresh user profile
       await shared.getProfileWithRetry();
       
-      // Navigate to home and trigger Premium
+      // Navigate to home (MainView)
       if (typeof shared.setActiveTab === 'function') {
         shared.setActiveTab('home');
-        // Small delay to ensure MainView is mounted, then trigger Premium
-        setTimeout(() => {
-          if (typeof shared.setShowPremium === 'function') {
-            shared.setShowPremium();
-          }
-        }, 100);
       } else {
         setShowBuyView(false);
       }

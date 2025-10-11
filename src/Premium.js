@@ -377,6 +377,19 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
     setSelectedReward(null);
   };
 
+  // Function to check if renew button should be disabled
+  const isRenewDisabled = () => {
+    if (!endTime || endTime === 0) {
+      return false; // No active membership, allow renew
+    }
+    
+    const now = Date.now();
+    const timeLeft = endTime - now;
+    const twoDays = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+    
+    return timeLeft > twoDays; // Disable if more than 2 days left
+  };
+
   // Function to handle renew button click
   const handleRenew = () => {
     console.log('handleRenew called');
@@ -394,7 +407,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
     } else if (typeof shared.setActiveTab === 'function') {
       console.log('Using shared.setActiveTab fallback');
       // Fallback to shared method for backward compatibility
-      shared.setInitialMarketTab('starlet');
+      shared.setInitialMarketTab('telegram'); // Open telegram packages tab
       shared.setActiveTab('market');
     } else {
       console.log('No navigation method available');
@@ -560,7 +573,13 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             <div className="premium-corner premium-bottom-right"></div>
 
             <div className="premium-time-remaining">{getRemainingTime()}</div>
-            <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
+            <button 
+              className={`premium-renew-btn ${isRenewDisabled() ? 'disabled' : ''}`} 
+              onClick={handleRenew}
+              disabled={isRenewDisabled()}
+            >
+              RENEW
+            </button>
           </div>
         </div>
       </div>
