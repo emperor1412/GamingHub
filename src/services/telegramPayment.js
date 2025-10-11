@@ -96,6 +96,14 @@ export const handleStarletsPurchase = async (product) => {
     const data = await response.json();
     console.log('API response:', data);
 
+    // Check for parameter error on premium purchases
+    if (data.code === 100001 && isPremiumPurchase) {
+      console.log('Parameter error detected for premium purchase');
+      const error = new Error(data.msg || 'Parameter Error');
+      error.code = data.code;
+      throw error;
+    }
+
     if (data.code === 0) {
       return new Promise((resolve) => {
         let isPaymentHandled = false;
@@ -226,7 +234,9 @@ export const handleStarletsPurchase = async (product) => {
         throw new Error('Failed to refresh token');
       }
     } else {
-      throw new Error(data.msg || 'Failed to get payment URL');
+      const error = new Error(data.msg || 'Failed to get payment URL');
+      error.code = data.code;
+      throw error;
     }
   } catch (error) {
     console.error('Purchase error:', error);

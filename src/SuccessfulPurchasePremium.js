@@ -25,18 +25,18 @@ const SuccessfulPurchasePremium = ({ isOpen, onClaim, onClose, setShowBuyView })
       
       // Navigate to home (MainView) and open Premium
       if (typeof shared.setActiveTab === 'function') {
-        // Set flag để MainView tự động mở Premium popup
-        shared.shouldOpenPremiumOnHome = true;
+        // // Set flag để MainView tự động mở Premium popup
+        // shared.shouldOpenPremiumOnHome = true;
         
-        // Navigate to home
-        shared.setActiveTab('home');
+        // // Navigate to home
+        // shared.setActiveTab('home');
         
-        // Đợi một chút để đảm bảo MainView đã render xong, sau đó mở Premium
-        setTimeout(() => {
-          if (typeof shared.setShowPremium === 'function') {
-            shared.setShowPremium();
-          }
-        }, 300); // Đợi 300ms
+        // // Đợi một chút để đảm bảo MainView đã render xong, sau đó mở Premium
+        // setTimeout(() => {
+        //   if (typeof shared.setShowPremium === 'function') {
+        //     shared.setShowPremium();
+        //   }
+        // }, 300); // Đợi 300ms
       } else {
         setShowBuyView(false);
       }

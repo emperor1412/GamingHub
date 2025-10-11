@@ -118,9 +118,9 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
           id: 1,
           title: "LOGIN FOR THE DAY",
           xp: 20,
-          progress: 1,
+          progress: 0,
           total: 1,
-          status: "DONE",
+          status: "INCOMPLETE",
           icon: loginIcon,
           size: "small"
         },
@@ -128,9 +128,9 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
           id: 2,
           title: "SCRATCH A TICKET",
           xp: 20,
-          progress: 1,
+          progress: 0,
           total: 1,
-          status: "DONE",
+          status: "INCOMPLETE",
           icon: ticketIcon,
           size: "medium"
         },
