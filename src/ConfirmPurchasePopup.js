@@ -14,17 +14,6 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
 
-  // Debug log to check premium data
-  useEffect(() => {
-    console.log('ConfirmPurchasePopup - Premium data:', {
-      isPremium,
-      amount,
-      productName,
-      productId,
-      isStarletProduct
-    });
-  }, [isPremium, amount, productName, productId, isStarletProduct]);
-
   useEffect(() => {
     const fetchOptionData = async () => {
       if (!optionId) return;
