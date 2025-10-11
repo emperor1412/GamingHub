@@ -164,7 +164,18 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setShowPremium = () => setShowPremium(true);
     }, []);
     
-    // Function to check premium membership status
+    // Check if we should auto-open Premium popup when returning to home
+    useEffect(() => {
+        if (shared.shouldOpenPremiumOnHome) {
+            console.log('Auto-opening Premium popup after successful purchase');
+            // Reset flag
+            shared.shouldOpenPremiumOnHome = false;
+            // Open Premium popup
+            setShowPremium(true);
+        }
+    }, []); // Run once on mount
+    
+    // Function to check premium membership status (lightweight version)
     const checkPremiumStatus = async () => {
         try {
             setIsCheckingPremiumStatus(true);
@@ -174,14 +185,13 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 return;
             }
             
-            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const url = `${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`;
             const response = await fetch(url);
             
             if (response.ok) {
                 const data = await response.json();
-                if (data.code === 0 && data.data) {
-                    const premiumData = data.data;
-                    const newPremiumStatus = premiumData.isMembership || false;
+                if (data.code === 0) {
+                    const newPremiumStatus = data.data || false;
                     
                     setIsPremiumMember(newPremiumStatus);
                     shared.isPremiumMember = newPremiumStatus; // Update shared state
@@ -1361,10 +1371,9 @@ Response:
                 onSelectPlan={(plan) => {
                     console.log('Selected plan:', plan);
                     setShowIntroducePremium(false);
-                    // Navigate to market with starlet tab to show premium packages
-                    shared.setInitialMarketTab('starlet');
-                    shared.setActiveTab('market');
+                    // Navigation will be handled by IntroducePremium component itself
                 }}
+                isFromProfile={false}
             />
         </>
     );

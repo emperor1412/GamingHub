@@ -19,19 +19,57 @@
   background: rgba(30, 30, 30, 0.9);
   border: 1px solid #000FEF;
   border-radius: 12px;
-  width: 83%;
+  width: 90%;
   max-width: 350px;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-height: 85vh;
+  overflow: hidden; /* Hide overflow to contain scrollable content */
   position: relative;
-  padding: 15px;
+  padding: 0; /* Remove padding from container */
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
   
   /* Corner borders variables */
   --premium-corner-size: 15px;
   --premium-corner-color: #00F1FF;
   --premium-corner-border: 0.5px;
   --premium-corner-offset: 15px;
+}
+
+/* Premium Scrollable Content Wrapper */
+.premium-scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 15px;
+  
+  /* Hide scrollbars */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  /* 👇 Mask fade chỉ áp dụng cho vùng scrollable */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 4%,
+    black 96%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 2%,
+    black 4%,
+    black 98%,
+    rgba(0, 0, 0, 0.1) 98%,
+    transparent 100%
+  );
+}
+
+.premium-scrollable-content::-webkit-scrollbar {
+  display: none;
 }
 
 .premium-header .premium-corner {
@@ -109,6 +147,33 @@ top: var(--premium-corner-offset);
   --premium-corner-offset: -20px;
 }
 
+/* Tasks Button */
+.premium-tasks-btn {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  background: #FF00F6;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  letter-spacing: 0.5px;
+}
+
+.premium-tasks-btn:hover {
+  background: #D600CE;
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 0, 246, 0.5);
+}
+
 .premium-diamond-img {
   flex: 3;
   width: 90px;
@@ -144,7 +209,7 @@ top: var(--premium-corner-offset);
 .premium-progress {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   margin-top: 30px;
   margin-bottom: 10px;
 }
@@ -153,6 +218,7 @@ top: var(--premium-corner-offset);
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  padding-right: 50px; /* Account for tasks button width */
 }
 
 .premium-level {
@@ -181,7 +247,8 @@ top: var(--premium-corner-offset);
 .premium-progress-fill {
   height: 100%;
   background: #00F1FF; /* Cyan fill */
-  border-radius: 30px;
+  border-top-left-radius: 30px;
+border-bottom-left-radius: 30px;
   transition: width 0.3s ease;
 }
 
@@ -193,6 +260,29 @@ top: var(--premium-corner-offset);
   height: 60%;
   background: #000;
   z-index: 2;
+}
+
+/* Inline Tasks Button */
+.premium-tasks-btn-inline {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-tasks-btn-inline:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.premium-tasks-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
 
@@ -647,6 +737,29 @@ top: var(--premium-corner-offset);
   line-height: 100%;
 }
 
+.premium-tasks-btn {
+  background: #FF00F6;
+  color: #000000;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 24px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  margin-bottom: 10px;
+}
+
+.premium-tasks-btn:hover {
+  background: #FF00F6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 0, 246, 0.4);
+}
+
 .premium-renew-btn {
   background: #000FEF;
   color: #ffffff;
@@ -666,6 +779,18 @@ top: var(--premium-corner-offset);
 .premium-renew-btn:hover {
   background: #000FEF;
   transform: translateY(-2px);
+}
+
+.premium-renew-btn.disabled {
+  background: #666666;
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.premium-renew-btn.disabled:hover {
+  background: #666666;
+  transform: none;
 }
 
 /* Responsive */
