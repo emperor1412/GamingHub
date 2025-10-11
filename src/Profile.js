@@ -354,7 +354,7 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen, onNavigateToTicket,
 
     console.log('Current Window URL:', window.location.href);    
 
-    // Function to check premium membership status (from MainView.js)
+    // Function to check premium membership status (lightweight version)
     const checkPremiumStatus = async () => {
         try {
             setIsCheckingPremiumStatus(true);
@@ -364,14 +364,13 @@ const Profile = ({ onClose, getProfileData, showFSLIDScreen, onNavigateToTicket,
                 return;
             }
             
-            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const url = `${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`;
             const response = await fetch(url);
             
             if (response.ok) {
                 const data = await response.json();
-                if (data.code === 0 && data.data) {
-                    const premiumData = data.data;
-                    const newPremiumStatus = premiumData.isMembership || false;
+                if (data.code === 0) {
+                    const newPremiumStatus = data.data || false;
                     
                     shared.isPremiumMember = newPremiumStatus; // Update shared state
                     console.log('Premium status updated:', newPremiumStatus);
