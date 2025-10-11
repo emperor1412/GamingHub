@@ -366,7 +366,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                           <br />
                           IN FSL GAME HUB
                           <br />
-                          FOR <span className="highlight-value">{amount} STARLETS</span>?
+                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
                         </>
                       ) : isStarletProduct ? (
                         <>

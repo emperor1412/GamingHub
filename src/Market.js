@@ -234,9 +234,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         // Check free reward time
         await checkFreeRewardTime();
 
-        // Fetch membership pricing data
-        await fetchMembershipPricing();
-
         // Setup profile data
         const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
         if (userStarlets) {
@@ -396,50 +393,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
         });
       }
-    }
-  };
-
-  // Fetch membership pricing data from API
-  const fetchMembershipPricing = async () => {
-    try {
-      if (!shared.loginData?.token) {
-        console.log('No login token available for membership pricing API');
-        return;
-      }
-      
-      const url = `${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`;
-      console.log('Fetching membership pricing from:', url);
-      
-      const response = await fetch(url);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Membership pricing API response:', data);
-        
-        if (data.code === 0 && data.data) {
-          const pricingData = data.data;
-          
-          setMembershipData({
-            typeMonthly: pricingData.type_monthly || 1,
-            typeYearly: pricingData.type_yearLy || 2,
-            membershipMonthlyPrice: pricingData.membershipMonthlyPrice || 100,
-            membershipYearlyPrice: pricingData.membershipYearlyPrice || 1000
-          });
-          
-          console.log('✅ Membership pricing data set:', {
-            typeMonthly: pricingData.type_monthly,
-            typeYearly: pricingData.type_yearLy,
-            monthlyPrice: pricingData.membershipMonthlyPrice,
-            yearlyPrice: pricingData.membershipYearlyPrice
-          });
-        } else {
-          console.log('Unexpected membership pricing API response format:', data);
-        }
-      } else {
-        console.error('Membership pricing API response not ok:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching membership pricing:', error);
     }
   };
 
@@ -847,17 +800,26 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   const handlePurchasePremium = (type = 'monthly') => {
-    const price = type === 'monthly' ? membershipData.membershipMonthlyPrice : membershipData.membershipYearlyPrice;
-    const membershipType = type === 'monthly' ? membershipData.typeMonthly : membershipData.typeYearly;
+    // Get premium options from buyOptions API
+    const monthlyPremium = buyOptions.find(option => option.id === 4001);
+    const yearlyPremium = buyOptions.find(option => option.id === 4002);
+    
+    const premiumOption = type === 'monthly' ? monthlyPremium : yearlyPremium;
+    const membershipType = type === 'monthly' ? 1 : 2;
+    
+    if (!premiumOption) {
+      console.error(`Premium ${type} option not found in buyOptions`);
+      return;
+    }
     
     setSelectedPurchase({
-      amount: price,
-      stars: 0,
+      amount: premiumOption.starlet, // Keep starlet for display purposes
+      stars: premiumOption.stars,      // Use stars (Telegram Stars) for payment
       productId: membershipType,
       productName: `Premium Membership ${type === 'monthly' ? 'Monthly' : 'Yearly'}`,
-      isStarletProduct: true,
+      isStarletProduct: false,        // Premium is not a starlet product
       isPremium: true,
-      optionId: null
+      optionId: premiumOption.id      // Use the actual option ID from API
     });
     setShowBuyView(true);
   };
