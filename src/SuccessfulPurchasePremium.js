@@ -23,9 +23,20 @@ const SuccessfulPurchasePremium = ({ isOpen, onClaim, onClose, setShowBuyView })
       // Refresh user profile
       await shared.getProfileWithRetry();
       
-      // Navigate to home (MainView)
+      // Navigate to home (MainView) and open Premium
       if (typeof shared.setActiveTab === 'function') {
+        // Set flag để MainView tự động mở Premium popup
+        shared.shouldOpenPremiumOnHome = true;
+        
+        // Navigate to home
         shared.setActiveTab('home');
+        
+        // Đợi một chút để đảm bảo MainView đã render xong, sau đó mở Premium
+        setTimeout(() => {
+          if (typeof shared.setShowPremium === 'function') {
+            shared.setShowPremium();
+          }
+        }, 300); // Đợi 300ms
       } else {
         setShowBuyView(false);
       }
