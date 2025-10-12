@@ -646,8 +646,9 @@ Response:
     };
 
     // Fetch event status data
+    // COMMENTED OUT: Egglet event is currently closed
     const fetchEventStatus = async (depth = 0) => {
-        if (depth > 3) {
+        /* if (depth > 3) {
             console.error('Get event status failed after 3 attempts');
             return null;
         }
@@ -683,13 +684,14 @@ Response:
         } catch (error) {
             console.error('Error fetching event status:', error);
         }
-        
+        */
         return null;
     };
 
     // Check if the Egglet popup should be shown (once daily)
+    // COMMENTED OUT: Egglet event is currently closed
     const checkEggletPopup = async () => {
-        // If in mockup mode, skip daily checking
+        /* // If in mockup mode, skip daily checking
         if (isMockup) {
             console.log('Mockup mode: Skipping daily check for egglet popup');
             await updateEventStatus(true);
@@ -719,12 +721,14 @@ Response:
         }
         
         // Not shown today or never shown, proceed with checking event status
-        await updateEventStatus(true);
+        await updateEventStatus(true); */
+        console.log('Egglet event is currently closed - checkEggletPopup disabled');
     };
     
     // Separate function to update event status and conditionally show popup
+    // COMMENTED OUT: Egglet event is currently closed
     const updateEventStatus = async (showPopupIfActive = false) => {
-        // Fetch event status to determine if popup should be shown
+        /* // Fetch event status to determine if popup should be shown
         const eventData = await fetchEventStatus();
         
         if (eventData) {
@@ -749,7 +753,10 @@ Response:
             console.error('Failed to fetch event status data');
             setEventActive(false);
             setShowEggletPopup(false);
-        }
+        } */
+        console.log('Egglet event is currently closed - updateEventStatus disabled');
+        setEventActive(false);
+        setShowEggletPopup(false);
     };
 
     const closeEggletPopup = () => {

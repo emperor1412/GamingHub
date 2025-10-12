@@ -19,8 +19,9 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
     }
 
     // Check if MOOAR is linked from shared data or fetch from API
+    // COMMENTED OUT: Egglet event is currently closed
     const checkMooarStatus = async () => {
-      try {
+      /* try {
         const response = await fetch(`${shared.server_url}/api/app/eventPointData?token=${shared.loginData.token}`, {
           method: 'GET',
           headers: {
@@ -36,7 +37,8 @@ const AccountLinkPopup = ({ isOpen, onClose, linkType }) => {
         }
       } catch (error) {
         console.error('Error checking MOOAR status:', error);
-      }
+      } */
+      console.log('Egglet event is currently closed - checkMooarStatus disabled');
     };
 
     if (isOpen) {
