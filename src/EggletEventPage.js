@@ -129,8 +129,9 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
         };
     }, [checkInData]);
 
+    // COMMENTED OUT: Egglet event is currently closed
     const fetchEventPointData = async (depth = 0) => {
-        if (depth > 3) {
+        /* if (depth > 3) {
             console.error('Get event point data failed after 3 attempts');
             return null;
         }
@@ -170,7 +171,8 @@ const EggletEventPage = ({ onClose, setShowProfileView, setShowCheckInView, chec
             console.error('Error fetching event point data:', error);
             shared.showPopup({ message: 'Failed to connect to server. Please check your connection.' });
         }
-        
+        */
+        console.log('Egglet event is currently closed - fetchEventPointData disabled');
         return null;
     };
 
