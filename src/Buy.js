@@ -17,7 +17,8 @@ const Buy = ({
   showFSLIDScreen,
   setSelectedPurchase,
   setShowProfileView,
-  refreshUserProfile
+  refreshUserProfile,
+  onPurchaseError
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
@@ -277,6 +278,7 @@ const Buy = ({
               await refreshUserProfile();
             }
           }}
+          onPurchaseError={onPurchaseError}
         />
       </div>
     </>

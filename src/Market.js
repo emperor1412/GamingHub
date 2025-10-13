@@ -8,6 +8,7 @@ import gmtCard from './images/gmtCard.png';
 import merchCouponBg from './images/merch_coupon_bg.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
+import PurchaseErrorPopup from './PurchaseErrorPopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
 import arrow_2 from './images/arrow_2.svg';
@@ -131,6 +132,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   // Step Boosts popup states
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
+
+  // Purchase Error popup state
+  const [showPurchaseErrorPopup, setShowPurchaseErrorPopup] = useState(false);
 
   // Refs for category sections to enable auto scroll
   const categoryRefs = useRef({});
@@ -871,6 +875,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowBuyView(true);
   };
 
+  // Function to handle purchase error (VIP already exists)
+  const handlePurchaseError = () => {
+    console.log('Market: handlePurchaseError called');
+    console.log('Market: Setting showPurchaseErrorPopup to true');
+    setShowPurchaseErrorPopup(true);
+    console.log('Market: showPurchaseErrorPopup should now be true');
+  };
+
   // Function to handle membership purchase
   const handleMembershipPurchase = async (type) => {
     try {
@@ -1192,6 +1204,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         setSelectedPurchase={setSelectedPurchase}
         setShowProfileView={setShowProfileView}
         refreshUserProfile={refreshUserProfile}
+        onPurchaseError={handlePurchaseError}
       />
     );
   }
@@ -2126,6 +2139,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           checkFreeRewardTime();
           refreshUserProfile();
         }}
+        onPurchaseError={handlePurchaseError}
       />
       
       {/* Freeze Streak Popup */}
@@ -2145,6 +2159,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         selectedPackage={selectedStepBoost}
         onPurchase={handleStepBoostsPurchase}
         refreshStarletProduct={refreshMarketContent}
+      />
+
+      {/* Purchase Error Popup */}
+      {console.log('Market render: showPurchaseErrorPopup =', showPurchaseErrorPopup)}
+      <PurchaseErrorPopup
+        isOpen={showPurchaseErrorPopup}
+        onClose={() => setShowPurchaseErrorPopup(false)}
       />
 
     </>
