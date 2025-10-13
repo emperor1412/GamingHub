@@ -81,7 +81,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
       onNavigateToMarket();
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
-      shared.setInitialMarketTab('starlet');
+      shared.setInitialMarketTab('telegram');
       shared.setActiveTab('market');
     }
   };
@@ -97,7 +97,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
       onNavigateToMarket();
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
-      shared.setInitialMarketTab('starlet');
+      shared.setInitialMarketTab('telegram');
       shared.setActiveTab('market');
     }
   };
