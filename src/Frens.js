@@ -718,7 +718,7 @@ const Frens = () => {
                       selectedTrophy.description
                     )}
                   </p>
-                  <button className="share-story-button" onClick={onClickShareStory}>
+                  <button className="share-story-button" onClick={() => onClickShareStory()}>
                     SHARE A STORY
                     <div className="trophy-reward">
                       <img src={starletIcon} alt="Starlets" className="stat-icon" />
