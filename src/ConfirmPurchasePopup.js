@@ -54,6 +54,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
 
   const showError = useCallback(async (message) => {
     onClose();
+    // Đóng Buy view khi có lỗi
+    if (setShowBuyView) {
+      setShowBuyView(false);
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
 
     if (window.Telegram?.WebApp?.showPopup) {
@@ -70,7 +74,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     } else {
       alert(message);
     }
-  }, [onClose]);
+  }, [onClose, setShowBuyView]);
 
   const checkPremiumStatus = useCallback(async () => {
     try {
@@ -118,6 +122,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
               console.log('User has active premium, showing error popup');
               setIsProcessing(false);
               onClose();
+              // Đóng Buy view khi user đã có Premium
+              if (setShowBuyView) {
+                setShowBuyView(false);
+              }
               await new Promise(resolve => setTimeout(resolve, 100));
               setShowErrorPopup(true);
               return;
@@ -280,6 +288,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         }
       } else if (result?.status === "cancelled") {
         onClose();
+        // Đóng Buy view giống như khi thanh toán thành công
+        if (setShowBuyView) {
+          setShowBuyView(false);
+        }
       }
     } catch (error) {
       console.error('Purchase failed:', error);
