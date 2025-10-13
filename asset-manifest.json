@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.ea60d06c.css",
-    "main.js": "./static/js/main.1bdc8119.js",
+    "main.js": "./static/js/main.73ef2579.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
@@ -9,9 +9,21 @@
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
     "static/media/Robot.png": "./static/media/Robot.840d966a97bba02c3f60.png",
     "static/media/check_in_animation_540.gif": "./static/media/check_in_animation_540.f79e00a6220ffb8d5a81.gif",
+    "static/media/1463 FSL avatars_Goldfishy.png": "./static/media/1463 FSL avatars_Goldfishy.a3767a57824b75e053e3.png",
+    "static/media/1463 FSL avatars_Tree.png": "./static/media/1463 FSL avatars_Tree.d2080f8bac17e9a5076b.png",
+    "static/media/1463 FSL avatars_PandaDJ.png": "./static/media/1463 FSL avatars_PandaDJ.899b9b1ee04d3d298fd4.png",
+    "static/media/1463 FSL avatars_Racoon.png": "./static/media/1463 FSL avatars_Racoon.2f0c6013c6ce239e581a.png",
+    "static/media/1463 FSL avatars_Pumpkin.png": "./static/media/1463 FSL avatars_Pumpkin.a768341e6f7361d14312.png",
     "static/media/FSL Games UI 2-10.png": "./static/media/FSL Games UI 2-10.423b8be012eb806cfc40.png",
+    "static/media/1463 FSL avatars_Capib.png": "./static/media/1463 FSL avatars_Capib.95a4c0a126a579fc6630.png",
+    "static/media/1463 FSL avatars_Cactguy.png": "./static/media/1463 FSL avatars_Cactguy.5077d7ed5a637e06685a.png",
+    "static/media/1463 FSL avatars_Surfshark.png": "./static/media/1463 FSL avatars_Surfshark.f5ab9f382e369a79c3ec.png",
+    "static/media/1463 FSL avatars_Skelly.png": "./static/media/1463 FSL avatars_Skelly.9be07efd8e511bd65153.png",
     "static/media/scratch_ticket_background_full.png": "./static/media/scratch_ticket_background_full.10686c8b948d08378f20.png",
+    "static/media/1463 FSL avatars_Hippo.png": "./static/media/1463 FSL avatars_Hippo.04db7efee78c5fd68ad5.png",
     "static/media/snoop_dogg_raffle.svg": "./static/media/snoop_dogg_raffle.dd0d52c3515042f13f6ec5c80446b906.svg",
+    "static/media/1463 FSL avatars_Evil Duck.png": "./static/media/1463 FSL avatars_Evil Duck.f241e09ac6159da66ae0.png",
+    "static/media/1463 FSL avatars_Duck Wizard.png": "./static/media/1463 FSL avatars_Duck Wizard.8c8d0a16d1b20bdd92f5.png",
     "static/media/FSLGamesHub_PremiumMembership_1441.png": "./static/media/FSLGamesHub_PremiumMembership_1441.cbf9c9a1815839cbb658.png",
     "static/media/FSLGAMES-newtrophyicons_1360.png": "./static/media/FSLGAMES-newtrophyicons_1360.29252a207f17a9087f03.png",
     "static/media/FSL Games UI 2-07.png": "./static/media/FSL Games UI 2-07.4542adfdae1b5731003d.png",
@@ -234,11 +246,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.ea60d06c.css.map": "./static/css/main.ea60d06c.css.map",
-    "main.1bdc8119.js.map": "./static/js/main.1bdc8119.js.map",
+    "main.73ef2579.js.map": "./static/js/main.73ef2579.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ea60d06c.css",
-    "static/js/main.1bdc8119.js"
+    "static/js/main.73ef2579.js"
   ]
 }
