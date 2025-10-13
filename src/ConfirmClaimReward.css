@@ -170,7 +170,7 @@
   }
 
   .ccr-rewards-container .ccr-corner.ccr-top-left-rewards {
-    top: calc(var(--ccr-corner-offset) - 115px);
+    top: calc(var(--ccr-corner-offset));
     left: var(--ccr-corner-offset);
     border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
     border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
@@ -184,14 +184,13 @@
   }
 
   .ccr-rewards-container .ccr-corner.ccr-bottom-left-rewards {
-    bottom: calc(var(--ccr-corner-offset) + 130px);
-    left: var(--ccr-corner-offset);
+    bottom: var(--ccr-corner-offset);
     border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
     border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
   }
 
   .ccr-rewards-container .ccr-corner.ccr-bottom-right-rewards {
-    bottom: calc(var(--ccr-corner-offset) + 40px);
+    bottom: var(--ccr-corner-offset);
     right: var(--ccr-corner-offset);
     border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
     border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
