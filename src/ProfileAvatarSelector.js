@@ -60,8 +60,8 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
       return;
     }
 
-    // Handle premium avatars (13-15)
-    if (index >= 13 && index <= 15) {
+    // Handle premium avatars (13-27)
+    if (index >= 13 && index <= 27) {
       if (shared.isPremiumMember) {
         setSelectedAvatar(index);
         setHasChanged(index !== shared.userProfile.pictureIndex);
@@ -239,7 +239,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                     className={`avatar-option ${index === selectedAvatar ? 'selected' : ''} ${
                       index === 12 
                         ? (!shared.userProfile.buyStarlets ? 'locked' : '')
-                        : (index >= 13 && index <= 15)
+                        : (index >= 13 && index <= 27)
                         ? (!shared.isPremiumMember ? 'locked' : '')
                         : (index >= shared.userProfile.avatarNum ? 'locked' : '')
                     }`}
@@ -253,7 +253,7 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                     )}
                     <img src={shared.avatars[index].src} alt={`Avatar option ${index + 1}`} className="avatar-option-img" />
                     {(index === 12 && !shared.userProfile.buyStarlets) || 
-                     (index >= 13 && index <= 15 && !shared.isPremiumMember) ||
+                     (index >= 13 && index <= 27 && !shared.isPremiumMember) ||
                      (index < 12 && index >= shared.userProfile.avatarNum) ? (
                       <div className="lock-overlay">
                         <img src={lock_icon} alt="Locked" className="lock-icon" />
@@ -302,11 +302,11 @@ const ProfileAvatarSelector = ({ onClose, onSelect, getProfileData }) => {
                 <div className="lock-overlay-description">
                   {selectedIndex === 12 ? 
                     'SOME SECRETS ARE MEANT TO BE\nDISCOVERED. CAN YOU UNLOCK IT?' :
-                    (selectedIndex >= 13 && selectedIndex <= 15) ?
+                    (selectedIndex >= 13 && selectedIndex <= 27) ?
                     'UNLOCK PREMIUM MEMBERSHIP\nTO ACCESS EXCLUSIVE PFPS!' :
                     'LEVEL UP YOUR ACCOUNT\nTO UNLOCK EXCLUSIVE PFPS!'}
                 </div>
-                {selectedIndex === 12 || (selectedIndex >= 13 && selectedIndex <= 15) ? null : (
+                {selectedIndex === 12 || (selectedIndex >= 13 && selectedIndex <= 27) ? null : (
                   <button className="level-up-button-pfp" onClick={handleLevelUpClick}>
                     LEVEL UP
                   </button>

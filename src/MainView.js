@@ -199,7 +199,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                     console.log('shared.isPremiumMember:', shared.isPremiumMember);
                     
                     // Auto-adjust avatar if premium status changed and avatar doesn't match
-                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 27 && !newPremiumStatus) {
                         console.log('Premium status is false but user has premium avatar, auto-adjusting...');
                         const adjustResult = await shared.autoAdjustAvatar(getProfileData);
                         if (adjustResult.success) {
