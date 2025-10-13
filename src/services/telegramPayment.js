@@ -78,8 +78,27 @@ export const handleStarletsPurchase = async (product) => {
     
     // Lưu trạng thái Premium ban đầu (nếu là premium purchase)
     const isPremiumPurchase = product.optionId === 4001 || product.optionId === 4002;
-    const initialIsPremium = shared.userProfile?.isPremium || false;
-    const initialEndTime = shared.userProfile?.endTime || 0;
+    let initialIsPremium = false;
+    let initialEndTime = 0;
+    
+    // Gọi API để lấy trạng thái Premium chính xác
+    if (isPremiumPurchase) {
+      try {
+        const premiumResponse = await fetch(`${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`);
+        const premiumData = await premiumResponse.json();
+        if (premiumData.code === 0) {
+          initialIsPremium = premiumData.data === true;
+          // Lấy endTime từ userProfile sau khi đã refresh
+          await shared.getProfileWithRetry();
+          initialEndTime = shared.userProfile?.endTime || 0;
+        }
+      } catch (error) {
+        console.error('Failed to get initial premium status:', error);
+        // Fallback to userProfile data
+        initialIsPremium = shared.userProfile?.isPremium || false;
+        initialEndTime = shared.userProfile?.endTime || 0;
+      }
+    }
     
     console.log('Initial Starlets:', initialStarlets);
     console.log('Initial Tickets:', initialTickets);
@@ -120,13 +139,9 @@ export const handleStarletsPurchase = async (product) => {
             await shared.getProfileWithRetry();
             const currentStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
             const currentTickets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0;
-            const currentIsPremium = shared.userProfile?.isPremium || false;
-            const currentEndTime = shared.userProfile?.endTime || 0;
             
             console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
             console.log('Checking payment - Current Tickets:', currentTickets, 'Initial:', initialTickets);
-            console.log('Checking payment - Current Premium:', { isPremium: currentIsPremium, endTime: currentEndTime });
-            console.log('Checking payment - Initial Premium:', { isPremium: initialIsPremium, endTime: initialEndTime });
 
             if (currentStarlets > initialStarlets && currentTickets >= initialTickets) {
               // For regular starlets purchases, check token changes (original logic)
@@ -146,6 +161,29 @@ export const handleStarletsPurchase = async (product) => {
               });
             } else if (isPremiumPurchase) {
               // For premium purchases, check if isPremium became true
+              // Gọi API để lấy trạng thái Premium chính xác sau khi thanh toán
+              let currentIsPremium = false;
+              let currentEndTime = 0;
+              
+              try {
+                const premiumResponse = await fetch(`${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`);
+                const premiumData = await premiumResponse.json();
+                if (premiumData.code === 0) {
+                  currentIsPremium = premiumData.data === true;
+                  // Lấy endTime từ userProfile sau khi đã refresh
+                  await shared.getProfileWithRetry();
+                  currentEndTime = shared.userProfile?.endTime || 0;
+                }
+              } catch (error) {
+                console.error('Failed to get current premium status:', error);
+                // Fallback to userProfile data
+                currentIsPremium = shared.userProfile?.isPremium || false;
+                currentEndTime = shared.userProfile?.endTime || 0;
+              }
+              
+              console.log('Checking payment - Current Premium:', { isPremium: currentIsPremium, endTime: currentEndTime });
+              console.log('Checking payment - Initial Premium:', { isPremium: initialIsPremium, endTime: initialEndTime });
+
               // For new purchase: only check isPremium (no previous Premium)
               // For renew: check both isPremium and endTime (ensure proper renewal)
               const isRenew = initialIsPremium === true;
@@ -153,6 +191,7 @@ export const handleStarletsPurchase = async (product) => {
               let premiumSuccess;
               if (isRenew) {
                 // Renew case: check if endTime was updated properly
+                // Tính toán thời gian từ thời điểm hiện tại (khi check payment)
                 const now = Date.now();
                 const expectedDuration = product.optionId === 4001 ? 30 * 24 * 60 * 60 * 1000 : 365 * 24 * 60 * 60 * 1000;
                 const expectedEndTime = now + expectedDuration;
