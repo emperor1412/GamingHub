@@ -117,13 +117,19 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
         return null;
     }
 
-    const onClickShareStory = () => {
+    const onClickShareStory = async () => {
+        console.log('Share story');
+
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2545.png";
 
             shareStory(url, {
                 text: 'I just won big with multiple tickets! 🎉',
+                widgetLink: {
+                    url: inviteLink,
+                    name: 'Join Now'
+                }
             });
 
             trackStoryShare('ticket_all', {
@@ -271,7 +277,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                             {/* Buttons inside rewards container */}
                             <div className="sa_buttons-container">
                                     {showShareStory && (
-                                        <button className="sa_share-story-button" onClick={onClickShareStory}>
+                                        <button className="sa_share-story-button" onClick={() => onClickShareStory()}>
                                             SHARE TO STORY
                                         </button>
                                     )}

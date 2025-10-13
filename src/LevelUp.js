@@ -87,10 +87,15 @@ const LevelUp = ({ onClose }) => {
         console.log('Share story clicked');
         
         if (shareStory.isSupported()) {
+            const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2544.png";
 
             shareStory(url, {
                 text: `ONLY LEGENDS REACH LEVEL ${shared.userProfile.level}! 🏆`,
+                widgetLink: {
+                    url: inviteLink,
+                    name: 'Join Now'
+                }
             });
 
             trackStoryShare('level_up', {

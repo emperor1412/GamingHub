@@ -378,14 +378,20 @@ const Frens = () => {
 
   /* Removed shareStoryAPI function as it's no longer needed */
 
-  const onClickShareStory = () => {
+  const onClickShareStory = async () => {
     console.log('Share story');
     closeOverlay();
 
     if (shareStory.isSupported()) {
+      const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+
       const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2542.png";
       shareStory(url, {
         text: 'Yay! I just unlocked a trophy in FSL Gaming Hub! 🏆',
+        widgetLink: {
+          url: inviteLink,
+          name: 'Join Now'
+        }
       });
 
       trackStoryShare('trophy', {
@@ -712,7 +718,7 @@ const Frens = () => {
                       selectedTrophy.description
                     )}
                   </p>
-                  <button className="share-story-button" onClick={onClickShareStory}>
+                  <button className="share-story-button" onClick={() => onClickShareStory()}>
                     SHARE A STORY
                     <div className="trophy-reward">
                       <img src={starletIcon} alt="Starlets" className="stat-icon" />
