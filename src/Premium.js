@@ -7,19 +7,22 @@ import lockIcon from './images/lock_icon.png';
 import ConfirmClaimReward from './ConfirmClaimReward';
 import shared from './Shared';
 import iconStepBoostReward from './images/StepBoosts_Icon_Reward.png';
+import taskButtonIcon from './images/task_button.png';
 import PremiumTasks from './PremiumTasks';
 
-const Premium = ({ isOpen, onClose = 0 }) => {
+const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
 
   const [currentXP, setCurrentXP] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(0);
   const [isMembership, setIsMembership] = useState(false);
   const [endTime, setEndTime] = useState(0);
+  const [dailyExp, setDailyExp] = useState(0);
+  const [activitiesList, setActivitiesList] = useState([]);
   const [rewards, setRewards] = useState([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedReward, setSelectedReward] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showPremiumTasks, setShowPremiumTasks] = useState(false);
+  const [showTasksPopup, setShowTasksPopup] = useState(false);
 
   // Mapping reward types from API to display format
   const getRewardTypeInfo = (type) => {
@@ -113,6 +116,8 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           setCurrentLevel(premiumData.level || 0);
           setIsMembership(premiumData.isMembership || false);
           setEndTime(premiumData.endTime || 0);
+          setDailyExp(premiumData.dailyExp || 0);
+          setActivitiesList(premiumData.activitiesList || []);
           
           // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
           if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -172,7 +177,13 @@ const Premium = ({ isOpen, onClose = 0 }) => {
           "endTime": 1761868799000,
           "level": 5,
           "exp": 1200,
+          "dailyExp": 53,
           "type": 1,
+          "activitiesList": [
+            { "day": 1, "num": 1 }, // LOGIN
+            { "day": 2, "num": 1 }, // SCRATCH
+            { "day": 5, "num": 2 }  // INVITE FRIENDS (2/3)
+          ],
           "rewards": [
             { "level": 1, "claimStatus": true, "list": [{ "level": 1, "type": 10020, "amount": 500 }] },
             { "level": 2, "claimStatus": true, "list": [{ "level": 2, "type": 10020, "amount": 600 }] },
@@ -207,6 +218,8 @@ const Premium = ({ isOpen, onClose = 0 }) => {
       setCurrentLevel(premiumData.level || 0);
       setIsMembership(premiumData.isMembership || false);
       setEndTime(premiumData.endTime || 0);
+      setDailyExp(premiumData.dailyExp || 0);
+      setActivitiesList(premiumData.activitiesList || []);
       
       // Process rewards - NOW HANDLES MULTIPLE REWARDS PER LEVEL
       if (premiumData.rewards && Array.isArray(premiumData.rewards)) {
@@ -280,7 +293,14 @@ const Premium = ({ isOpen, onClose = 0 }) => {
 
   // Function to claim reward and show popup
   const handleClaimReward = async (rewardIndex) => {
-    if (rewards[rewardIndex].claimStatus || rewards[rewardIndex].level > currentLevel) return;
+    console.log('handleClaimReward called with index:', rewardIndex);
+    console.log('rewards[rewardIndex]:', rewards[rewardIndex]);
+    console.log('currentLevel:', currentLevel);
+    
+    if (rewards[rewardIndex].claimStatus || rewards[rewardIndex].level > currentLevel) {
+      console.log('Reward already claimed or level too high, returning');
+      return;
+    }
     
     const reward = rewards[rewardIndex];
     
@@ -357,17 +377,41 @@ const Premium = ({ isOpen, onClose = 0 }) => {
     setSelectedReward(null);
   };
 
+  // Function to check if renew button should be disabled
+  const isRenewDisabled = () => {
+    if (!endTime || endTime === 0) {
+      return false; // No active membership, allow renew
+    }
+    
+    const now = Date.now();
+    const timeLeft = endTime - now;
+    const twoDays = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+    
+    return timeLeft > twoDays; // Disable if more than 2 days left
+  };
+
   // Function to handle renew button click
   const handleRenew = () => {
+    console.log('handleRenew called');
+    console.log('onNavigateToMarket:', onNavigateToMarket);
+    console.log('shared.setActiveTab:', typeof shared.setActiveTab);
+    
     // Close premium popup first
     onClose();
     
     // Navigate to market/shop
-    if (typeof shared.setActiveTab === 'function') {
-      shared.setInitialMarketTab('starlet');
+    if (onNavigateToMarket) {
+      console.log('Using onNavigateToMarket prop');
+      // Use the navigation prop passed from parent component
+      onNavigateToMarket();
+    } else if (typeof shared.setActiveTab === 'function') {
+      console.log('Using shared.setActiveTab fallback');
+      // Fallback to shared method for backward compatibility
+      shared.setInitialMarketTab('telegram'); // Open telegram packages tab
+      shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     } else {
-      console.log('setActiveTab function not available');
+      console.log('No navigation method available');
     }
   };
 
@@ -436,101 +480,108 @@ const Premium = ({ isOpen, onClose = 0 }) => {
   return (
     <div className="premium-overlay">
       {/* Back Button - Move outside container */}
-      {!showConfirmPopup && !showPremiumTasks && (
+      {!showConfirmPopup && !showTasksPopup && (
         <button className="back-button back-button-alignment" onClick={onClose}>
           <img src={back} alt="Back" />
         </button>
       )}
       
       <div className="premium-container">
-        {/* Header */}
-        <div className="premium-header">
-          {/* Corner borders for header */}
-          <div className="premium-corner premium-top-left"></div>
-          <div className="premium-corner premium-top-right"></div>
-          <div className="premium-corner premium-bottom-left"></div>
-          <div className="premium-corner premium-bottom-right"></div>
-          
-          <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
-          <div className="premium-title">
-            <span className="premium-title-line">PREMIUM</span>
-            <span className="premium-title-line">REWARDS</span>
+        <div className="premium-scrollable-content">
+          {/* Header */}
+          <div className="premium-header">
+            {/* Corner borders for header */}
+            <div className="premium-corner premium-top-left"></div>
+            <div className="premium-corner premium-top-right"></div>
+            <div className="premium-corner premium-bottom-left"></div>
+            <div className="premium-corner premium-bottom-right"></div>
+            
+            <img src={premiumDiamond} alt="Premium Diamond" className="premium-diamond-img" />
+            <div className="premium-title">
+              <span className="premium-title-line">PREMIUM</span>
+              <span className="premium-title-line">REWARDS</span>
+            </div>
           </div>
           
-          {/* Tasks Button */}
-          <button className="premium-tasks-btn" onClick={() => setShowPremiumTasks(true)}>
-            TASKS
-          </button>
-        </div>
-        
-        {/* Progress Bar */}
-        <div className="premium-progress">
-          <div className="premium-progress-bar">
-            <div className="premium-progress-fill" style={{width: `${getProgressPercentage()}%`}}></div>
-            {/* Segment dividers */}
-            {Array.from({ length: 11 }, (_, index) => (
+          {/* Progress Bar with Tasks Button */}
+          <div className="premium-progress">
+            <div className="premium-progress-bar">
+              <div className="premium-progress-fill" style={{width: `${getProgressPercentage()}%`}}></div>
+              {/* Segment dividers */}
+              {Array.from({ length: 11 }, (_, index) => (
+                <div 
+                  key={index}
+                  className="premium-segment-divider"
+                  style={{left: `${((index + 1) / 12) * 100}%`}}
+                ></div>
+              ))}
+            </div>
+            <button className="premium-tasks-btn-inline" onClick={() => setShowTasksPopup(true)}>
+              <img src={taskButtonIcon} alt="Tasks" className="premium-tasks-icon" />
+            </button>
+          </div>
+          
+          {/* Level Labels */}
+          <div className="premium-level-labels">
+            <div className="premium-level">LEVEL 1</div>
+            <div className="premium-level">LEVEL 12</div>
+          </div>
+          
+          {/* Rewards List - Back to Original Design */}
+          <div className="premium-rewards">
+            {rewards.map((rewardLevel, levelIndex) => (
               <div 
-                key={index}
-                className="premium-segment-divider"
-                style={{left: `${((index + 1) / 12) * 100}%`}}
-              ></div>
+                key={rewardLevel.level} 
+                className={`premium-reward-item ${!rewardLevel.claimStatus && rewardLevel.level <= currentLevel ? 'premium-reward-clickable' : ''}`}
+                onClick={() => !rewardLevel.claimStatus && rewardLevel.level <= currentLevel && handleClaimReward(levelIndex)}
+              >
+                <div className="premium-reward-item-left">
+                  <img 
+                    src={rewardLevel.claimStatus ? premiumDiamond : 
+                         (rewardLevel.level <= currentLevel ? unlockIcon : lockIcon)} 
+                    alt="Status Icon" 
+                    className={`premium-status-icon premium-status-icon-${rewardLevel.claimStatus ? 'diamond' : (rewardLevel.level <= currentLevel ? 'unlock' : 'lock')}`}
+                  />
+                  <span className="premium-reward-number">{rewardLevel.level}</span>
+                </div>
+                <div className="premium-reward-item-right">
+                  <div className="premium-reward-info">
+                    {rewardLevel.rewards
+                      .filter(reward => reward.quantity > 0) // Filter out rewards with quantity = 0
+                      .map((reward, rewardIndex) => (
+                        <div key={rewardIndex} className="premium-reward-item-info">
+                          <span className="premium-reward-quantity">{reward.quantity}</span>
+                          <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
+                        </div>
+                      ))}
+                  </div>
+                  <div className="premium-status-container">
+                    <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>
+                      {rewardLevel.claimStatus ? 'CLAIMED' : (rewardLevel.level <= currentLevel ? 'UNLOCKED' : 'LOCKED')}
+                    </span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-        
-        {/* Level Labels */}
-        <div className="premium-level-labels">
-          <div className="premium-level">LEVEL 1</div>
-          <div className="premium-level">LEVEL 12</div>
-        </div>
-        
-        {/* Rewards List - Back to Original Design */}
-        <div className="premium-rewards">
-          {rewards.map((rewardLevel, levelIndex) => (
-            <div 
-              key={rewardLevel.level} 
-              className={`premium-reward-item ${!rewardLevel.claimStatus && rewardLevel.level <= currentLevel ? 'premium-reward-clickable' : ''}`}
-              onClick={() => !rewardLevel.claimStatus && rewardLevel.level <= currentLevel && handleClaimReward(levelIndex)}
-            >
-              <div className="premium-reward-item-left">
-                <img 
-                  src={rewardLevel.claimStatus ? premiumDiamond : 
-                       (rewardLevel.level <= currentLevel ? unlockIcon : lockIcon)} 
-                  alt="Status Icon" 
-                  className={`premium-status-icon premium-status-icon-${rewardLevel.claimStatus ? 'diamond' : (rewardLevel.level <= currentLevel ? 'unlock' : 'lock')}`}
-                />
-                <span className="premium-reward-number">{rewardLevel.level}</span>
-              </div>
-              <div className="premium-reward-item-right">
-                <div className="premium-reward-info">
-                  {rewardLevel.rewards
-                    .filter(reward => reward.quantity > 0) // Filter out rewards with quantity = 0
-                    .map((reward, rewardIndex) => (
-                      <div key={rewardIndex} className="premium-reward-item-info">
-                        <span className="premium-reward-quantity">{reward.quantity}</span>
-                        <img src={reward.icon} alt="Reward Icon" className="premium-reward-icon" />
-                      </div>
-                    ))}
-                </div>
-                <div className="premium-status-container">
-                  <span className={`premium-reward-status premium-status-${rewardLevel.claimStatus ? 'claimed' : (rewardLevel.level <= currentLevel ? 'unlocked' : 'locked')}`}>
-                    {rewardLevel.claimStatus ? 'CLAIMED' : (rewardLevel.level <= currentLevel ? 'UNLOCKED' : 'LOCKED')}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Footer */}
-        <div className="premium-footer">
-          {/* Corner borders for header */}
-          <div className="premium-corner premium-top-left"></div>
-          <div className="premium-corner premium-top-right"></div>
-          <div className="premium-corner premium-bottom-left"></div>
-          <div className="premium-corner premium-bottom-right"></div>
+          
+          {/* Footer */}
+          <div className="premium-footer">
+            {/* Corner borders for header */}
+            <div className="premium-corner premium-top-left"></div>
+            <div className="premium-corner premium-top-right"></div>
+            <div className="premium-corner premium-bottom-left"></div>
+            <div className="premium-corner premium-bottom-right"></div>
 
-          <div className="premium-time-remaining">{getRemainingTime()}</div>
-          <button className="premium-renew-btn" onClick={handleRenew}>RENEW</button>
+            <div className="premium-time-remaining">{getRemainingTime()}</div>
+            <button 
+              className={`premium-renew-btn ${isRenewDisabled() ? 'disabled' : ''}`} 
+              onClick={handleRenew}
+              disabled={isRenewDisabled()}
+            >
+              RENEW
+            </button>
+          </div>
         </div>
       </div>
       
@@ -543,9 +594,12 @@ const Premium = ({ isOpen, onClose = 0 }) => {
       />
       
       {/* Premium Tasks Popup */}
-      <PremiumTasks 
-        isOpen={showPremiumTasks}
-        onClose={() => setShowPremiumTasks(false)}
+      <PremiumTasks
+        isOpen={showTasksPopup}
+        onClose={() => setShowTasksPopup(false)}
+        currentXP={currentXP}
+        dailyExp={dailyExp}
+        activitiesList={activitiesList}
       />
     </div>
   );

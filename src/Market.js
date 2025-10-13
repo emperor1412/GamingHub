@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Market.css';
 import { trackUserAction } from './analytics';
 import shared from './Shared';
@@ -132,6 +132,38 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
+  // Refs for category sections to enable auto scroll
+  const categoryRefs = useRef({});
+
+  // Function to scroll to specific category
+  const scrollToCategory = (category) => {
+    if (categoryRefs.current[category]) {
+      // First expand the category if it's collapsed
+      if (category.startsWith('telegram-')) {
+        const type = parseInt(category.split('-')[1]);
+        if (!getExpansionState(type)) {
+          setExpansionState(type, true);
+        }
+      } else if (category === 'premium-membership' && !premiumExpanded) {
+        setPremiumExpanded(true);
+      } else if (category === 'freeze-streak' && !freezeStreakExpanded) {
+        setFreezeStreakExpanded(true);
+      } else if (category === 'merch-coupon' && !merchCouponExpanded) {
+        setMerchCouponExpanded(true);
+      } else if (category === 'step-boosts' && !stepBoostsExpanded) {
+        setStepBoostsExpanded(true);
+      }
+      
+      // Then scroll to the category
+      setTimeout(() => {
+        categoryRefs.current[category].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 200); // Longer delay to allow expansion animation
+    }
+  };
+
   // Function to fetch premium membership type
   const fetchPremiumType = async () => {
     try {
@@ -163,6 +195,21 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       delete shared.marketTargetTab;
     }
   }, []);
+
+  // Auto scroll to specific category if set
+  useEffect(() => {
+    if (shared.initialMarketCategory) {
+      const category = shared.initialMarketCategory;
+      console.log('Auto scrolling to category:', category);
+      
+      // Scroll to category after a delay to ensure content is loaded
+      setTimeout(() => {
+        scrollToCategory(category);
+        // Clear the initial category after scrolling
+        delete shared.initialMarketCategory;
+      }, 500);
+    }
+  }, [buyOptions, starletProducts]); // Trigger when data is loaded
 
   // Fetch premium type on component mount
   useEffect(() => {
@@ -233,9 +280,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
 
         // Check free reward time
         await checkFreeRewardTime();
-
-        // Fetch membership pricing data
-        await fetchMembershipPricing();
 
         // Setup profile data
         const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
@@ -396,50 +440,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
         });
       }
-    }
-  };
-
-  // Fetch membership pricing data from API
-  const fetchMembershipPricing = async () => {
-    try {
-      if (!shared.loginData?.token) {
-        console.log('No login token available for membership pricing API');
-        return;
-      }
-      
-      const url = `${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`;
-      console.log('Fetching membership pricing from:', url);
-      
-      const response = await fetch(url);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Membership pricing API response:', data);
-        
-        if (data.code === 0 && data.data) {
-          const pricingData = data.data;
-          
-          setMembershipData({
-            typeMonthly: pricingData.type_monthly || 1,
-            typeYearly: pricingData.type_yearLy || 2,
-            membershipMonthlyPrice: pricingData.membershipMonthlyPrice || 100,
-            membershipYearlyPrice: pricingData.membershipYearlyPrice || 1000
-          });
-          
-          console.log('✅ Membership pricing data set:', {
-            typeMonthly: pricingData.type_monthly,
-            typeYearly: pricingData.type_yearLy,
-            monthlyPrice: pricingData.membershipMonthlyPrice,
-            yearlyPrice: pricingData.membershipYearlyPrice
-          });
-        } else {
-          console.log('Unexpected membership pricing API response format:', data);
-        }
-      } else {
-        console.error('Membership pricing API response not ok:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching membership pricing:', error);
     }
   };
 
@@ -847,17 +847,26 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   };
 
   const handlePurchasePremium = (type = 'monthly') => {
-    const price = type === 'monthly' ? membershipData.membershipMonthlyPrice : membershipData.membershipYearlyPrice;
-    const membershipType = type === 'monthly' ? membershipData.typeMonthly : membershipData.typeYearly;
+    // Get premium options from buyOptions API
+    const monthlyPremium = buyOptions.find(option => option.id === 4001);
+    const yearlyPremium = buyOptions.find(option => option.id === 4002);
+    
+    const premiumOption = type === 'monthly' ? monthlyPremium : yearlyPremium;
+    const membershipType = type === 'monthly' ? 1 : 2;
+    
+    if (!premiumOption) {
+      console.error(`Premium ${type} option not found in buyOptions`);
+      return;
+    }
     
     setSelectedPurchase({
-      amount: price,
-      stars: 0,
+      amount: premiumOption.starlet, // Keep starlet for display purposes
+      stars: premiumOption.stars,      // Use stars (Telegram Stars) for payment
       productId: membershipType,
       productName: `Premium Membership ${type === 'monthly' ? 'Monthly' : 'Yearly'}`,
-      isStarletProduct: true,
+      isStarletProduct: false,        // Premium is not a starlet product
       isPremium: true,
-      optionId: null
+      optionId: premiumOption.id      // Use the actual option ID from API
     });
     setShowBuyView(true);
   };
@@ -1318,7 +1327,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                       }
                       
                       return (
-                        <div key={type} className="mk-market-section">
+                        <div key={type} className="mk-market-section" ref={el => categoryRefs.current[`telegram-${type}`] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setExpansionState(type, !isExpanded)}
@@ -1443,7 +1452,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 })}
                 
                     {/* Premium Membership Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setPremiumExpanded(!premiumExpanded)}
@@ -1471,6 +1480,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
                             
+                            // Get premium options from buyOptions API
+                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
+                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
+                            
                             // Check conditions for Premium Membership
                             let isDisabled = false;
                             let disabledReason = '';
@@ -1495,10 +1508,15 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               isDisabled = true;
                               disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
                             }
-                            // 4. Not enough starlets
-                            else if (userStarlets < membershipData.membershipMonthlyPrice) {
+                            // 4. Not enough starlets (use API data)
+                            // else if (monthlyPremium && userStarlets < monthlyPremium.starlet) {
+                            //   isDisabled = true;
+                            //   disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            // }
+                            // 5. Check if can buy from API
+                            else if (monthlyPremium && !monthlyPremium.canBuy) {
                               isDisabled = true;
-                              disabledReason = membershipData.membershipMonthlyPrice.toLocaleString() + ' STARLETS';
+                              disabledReason = 'NOT AVAILABLE';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1549,7 +1567,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   {/* Price Section */}
                                   <div className={`mk-market-ticket-price ${disabledReason === 'YEARLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
                                     {isAvailable ? (
-                                      <span>{membershipData.membershipMonthlyPrice} STARLETS</span>
+                                      <div>
+                                        <div>{monthlyPremium ? monthlyPremium.stars : 9999} TELEGRAM STARS</div>
+                                        {/* <div style={{ fontSize: '0.8em', opacity: 0.8 }}>
+                                          {monthlyPremium ? monthlyPremium.stars : 1} TELEGRAM STARS
+                                        </div> */}
+                                      </div>
                                     ) : (
                                       <span>{disabledReason}</span>
                                     )}
@@ -1565,6 +1588,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userLevel = shared.userProfile?.level || 0;
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
+                            
+                            // Get premium options from buyOptions API
+                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
+                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
                             
                             // Check conditions for Premium Membership
                             let isDisabled = false;
@@ -1585,10 +1612,20 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                               isDisabled = true;
                               disabledReason = 'BANK STEPS NOT CONNECTED';
                             }
-                            // 3. Not enough starlets
-                            else if (userStarlets < membershipData.membershipYearlyPrice) {
+                            // 3. Already have monthly membership (disable yearly)
+                            // else if (premiumType === 1) {
+                            //   isDisabled = true;
+                            //   disabledReason = 'MONTHLY MEMBERSHIP ACTIVE';
+                            // }
+                            // 4. Not enough starlets (use API data)
+                            // else if (yearlyPremium && userStarlets < yearlyPremium.starlet) {
+                            //   isDisabled = true;
+                            //   disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
+                            // }
+                            // 5. Check if can buy from API
+                            else if (yearlyPremium && !yearlyPremium.canBuy) {
                               isDisabled = true;
-                              disabledReason = membershipData.membershipYearlyPrice.toLocaleString() + ' STARLETS';
+                              disabledReason = 'NOT AVAILABLE';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1637,9 +1674,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   </div>
                                   
                                   {/* Price Section */}
-                                  <div className="mk-market-ticket-price">
+                                  <div className={`mk-market-ticket-price ${disabledReason === 'MONTHLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
                                     {isAvailable ? (
-                                      <span>{membershipData.membershipYearlyPrice} STARLETS</span>
+                                      <span>{yearlyPremium ? yearlyPremium.stars : 9999} TELEGRAM STARS</span>
                                     ) : (
                                       <span>{disabledReason}</span>
                                     )}
@@ -1658,7 +1695,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                   <div className="mk-starlet-products-container">
 
                     {/* Freeze Streak Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['freeze-streak'] = el}>
                       <div
                         className="mk-section-header"
                         onClick={() => setFreezeStreakExpanded(!freezeStreakExpanded)}
@@ -1788,7 +1825,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                     </div>
 
                     {/* Merch Coupon Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['merch-coupon'] = el}>
                       <div
                         className="mk-section-header"
                         onClick={() => setMerchCouponExpanded(!merchCouponExpanded)}
@@ -1939,7 +1976,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                     </div>
 
                     {/* Step Boosts Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['step-boosts'] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setStepBoostsExpanded(!stepBoostsExpanded)}

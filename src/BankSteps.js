@@ -106,6 +106,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const handleOpenMarket = () => {
         onClose();
         shared.setInitialMarketTab('starlet');
+        shared.setInitialMarketCategory('step-boosts');
         shared.setActiveTab('market');
     }
 
@@ -189,7 +190,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const updateProgressBar = (received) => {
         const progressBar = document.querySelector('.bs_progress-bar-track');
         if (progressBar) {
-            const progress = Math.min(Math.max(received / 500, 0), 1) * 100;
+            const maxValue = shared.isPremiumMember ? 750 : 500;
+            const progress = Math.min(Math.max(received / maxValue, 0), 1) * 100;
             progressBar.style.setProperty('--progress-width', `${progress}%`);
         }
     };
@@ -271,11 +273,15 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2546.png";
             try {
                 await shareStory({
                     media: 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png',
-                    text: inviteLink,
-                    button_text: 'Join Now',
+                    text: url,
+                    widgetLink: {
+                        url: inviteLink,
+                        name: 'Join Now'
+                    }
                 });
 
                 trackStoryShare('bank_steps', {
@@ -392,6 +398,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
+                            {shared.isPremiumMember && <div>&nbsp;</div>}
+                            {shared.isPremiumMember && <div>&nbsp;</div>}
                             <div style={{ backgroundColor: '#000FEF' }}>&nbsp;</div>
                         </div>
                         <div className="bs_progress-steps">
@@ -400,6 +408,8 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
                             <div className="bs_progress-step">300</div>
                             <div className="bs_progress-step">400</div>
                             <div className="bs_progress-step">500</div>
+                            {shared.isPremiumMember && <div className="bs_progress-step">600</div>}
+                            {shared.isPremiumMember && <div className="bs_progress-step">750</div>}
                         </div>
                     </div>
 

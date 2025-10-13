@@ -8,7 +8,7 @@ import stairs from './images/step_challenges_icon.png';
 import shared from './Shared';
 
 
-const IntroducePremium = ({ isOpen, onClose, onSelectPlan }) => {
+const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false, onNavigateToMarket }) => {
   // Premium membership pricing data
   const [membershipData, setMembershipData] = useState({
     typeMonthly: 1,
@@ -74,16 +74,38 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan }) => {
     if (onSelectPlan) {
       onSelectPlan('yearly');
     }
+    
+    // Navigate to market
+    if (isFromProfile && onNavigateToMarket) {
+      // Use the navigation prop passed from Profile component
+      onNavigateToMarket();
+    } else if (typeof shared.setActiveTab === 'function') {
+      // Fallback to shared method for MainView context
+      shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketCategory('premium-membership');
+      shared.setActiveTab('market');
+    }
   };
 
   const handleMonthlySelect = () => {
     if (onSelectPlan) {
       onSelectPlan('monthly');
     }
+    
+    // Navigate to market
+    if (isFromProfile && onNavigateToMarket) {
+      // Use the navigation prop passed from Profile component
+      onNavigateToMarket();
+    } else if (typeof shared.setActiveTab === 'function') {
+      // Fallback to shared method for MainView context
+      shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketCategory('premium-membership');
+      shared.setActiveTab('market');
+    }
   };
 
   return (
-    <div className="ip-popup-overlay">
+    <div className={`ip-popup-overlay ${isFromProfile ? 'fullscreen' : 'mainview'}`}>
       <div className="ip-popup-container">
         
         {/* Main Content */}
