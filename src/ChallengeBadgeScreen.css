@@ -315,6 +315,7 @@
     cursor: pointer;
     position: relative;
     width: 104px;
+    height: 140px;
     transition: transform 0.2s ease;
 }
 
@@ -328,6 +329,8 @@
     align-items: center;
     gap: 8px;
     position: relative;
+    width: 100%;
+    height: 100%;
     z-index: 1;
 }
 
@@ -372,6 +375,7 @@
     .cbs-badge-icon {
         width: 80px;
         height: 80px;
+        top: 5px;
     }
     
     .cbs-badge-icon img {
@@ -416,7 +420,7 @@
 }
 
 .cbs-badge-unknown-icon {
-    top: 45%;
+    top: 35%;
 }
 
 .cbs-badge-locked-icon img {

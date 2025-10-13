@@ -12,12 +12,14 @@ import badgeLocked from './images/TwoHundredStrong_Locked.png';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
+import ChallengeClaimReward from './ChallengeClaimReward';
 
 const ChallengeBadgeScreen = ({ onClose }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
     const [showChallengeUpdate, setShowChallengeUpdate] = React.useState(false);
     const [showChallengeBadgeDone, setShowChallengeBadgeDone] = React.useState(false);
     const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
+    const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
 
     // Mock data for badges
@@ -25,134 +27,159 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         explorerBadges: { earned: 4, total: 52 },
         starletsEarned: 2500,
         weeklyBadges: [
+            // Visual Type: unlocked - Logic State: on-going
             {
                 id: 1,
                 name: "INCA TRAIL",
-                status: "unlocked", // unlocked, locked, unknown
+                visualType: "unlocked", // unlocked, locked, unknown
+                logicState: "on-going", // on-going, done-and-claimed, done-and-unclaimed, unfinished, unjoined, nextbadge
                 badgeType: "FSL GAMER",
                 badgeTitle: "JUNIOR AMBASSADOR",
                 color: "green",
                 img: badgeUnlocked,
                 imgLocked: badgeLocked
             },
+            // Visual Type: unlocked - Logic State: done-and-claimed
             {
                 id: 2,
-                name: "INCA TRAIL",
-                status: "locked",
+                name: "CAMINO DE SANTIAGO",
+                visualType: "unlocked",
+                logicState: "done-and-claimed",
                 badgeType: "FSL GAMER", 
                 badgeTitle: "STARLETS CHAMPION",
                 color: "silver",
                 img: badgeUnlocked,
                 imgLocked: badgeLocked
             },
+            // Visual Type: locked - Logic State: unfinished
             {
                 id: 3,
-                name: "INCA TRAIL",
-                status: "unlocked",
+                name: "PACIFIC CREST TRAIL",
+                visualType: "locked",
+                logicState: "unfinished",
                 badgeType: "FSL GAMER",
                 badgeTitle: "SENIOR AMBASSADOR", 
                 color: "blue",
                 img: badgeUnlocked,
                 imgLocked: badgeLocked
             },
+            // Visual Type: unknown - Logic State: nextbadge
             {
                 id: 4,
-                name: "INCA TRAIL",
-                status: "unknown",
+                name: "APPALACHIAN TRAIL",
+                visualType: "unknown",
+                logicState: "nextbadge",
                 badgeType: "",
                 badgeTitle: "",
                 color: "silver",
                 img: badgeUnlocked,
-                imgLocked: badgeLocked,
-                clickStatus: "ongoing" // Trạng thái sẽ hiển thị khi click
+                imgLocked: badgeLocked
             },
+            // Visual Type: locked - Logic State: unjoined
             {
                 id: 5,
-                name: "INCA TRAIL",
-                status: "unknown",
-                badgeType: "",
-                badgeTitle: "",
+                name: "MARKURY TRAIL",
+                visualType: "locked",
+                logicState: "unjoined",
+                badgeType: "FSL GAMER",
+                badgeTitle: "SENIOR AMBASSADOR",
                 color: "silver",
                 img: badgeUnlocked,
-                imgLocked: badgeLocked,
-                clickStatus: "done"
-            },
-            {
-                id: 6,
-                name: "INCA TRAIL",
-                status: "unknown",
-                badgeType: "",
-                badgeTitle: "",
-                color: "silver",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked,
-                clickStatus: "incomplete"
-            },
-            {
-                id: 7,
-                name: "INCA TRAIL",
-                status: "unknown",
-                badgeType: "",
-                badgeTitle: "",
-                color: "silver",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked,
-                clickStatus: "missed"
+                imgLocked: badgeLocked
             }
         ]
     };
 
     // Function to handle badge click
     const handleBadgeClick = (badge) => {
-        if (badge.status === 'unknown' && badge.clickStatus) {
-            if (badge.clickStatus === 'ongoing') {
-                // Mở ChallengeUpdate cho ongoing challenge
-                setShowChallengeUpdate(true);
-            } else if (badge.clickStatus === 'done') {
-                // Mở ChallengeBadgeDone cho completed challenge
-                setShowChallengeBadgeDone(true);
-            } else if (badge.clickStatus === 'incomplete') {
-                // Mở ChallengeStatus cho incomplete challenge
-                setChallengeStatusType('incomplete');
-                setShowChallengeStatus(true);
-            } else if (badge.clickStatus === 'missed') {
-                // Mở ChallengeStatus cho missed challenge
-                setChallengeStatusType('missed');
-                setShowChallengeStatus(true);
-            } else {
-                // Hiển thị modal cho các status khác
+        // Handle routing based on visual type and logic state
+        switch (badge.visualType) {
+            case 'unlocked':
+                switch (badge.logicState) {
+                    case 'on-going':
+                        // Show Challenge Update Screen
+                        setShowChallengeUpdate(true);
+                        break;
+                    case 'done-and-claimed':
+                        // Show Challenge Badge Done Screen
+                        setShowChallengeBadgeDone(true);
+                        break;
+                    case 'done-and-unclaimed':
+                        // Show Challenge Claim Reward Screen
+                        setShowChallengeClaimReward(true);
+                        break;
+                    default:
+                        setSelectedBadge(badge);
+                        break;
+                }
+                break;
+                
+            case 'locked':
+                switch (badge.logicState) {
+                    case 'unfinished':
+                        // Show Challenge Status with incomplete status
+                        setChallengeStatusType('incomplete');
+                        setShowChallengeStatus(true);
+                        break;
+                    case 'unjoined':
+                        // Show Challenge Status with missed status
+                        setChallengeStatusType('missed');
+                        setShowChallengeStatus(true);
+                        break;
+                    default:
+                        setSelectedBadge(badge);
+                        break;
+                }
+                break;
+                
+            case 'unknown':
+                if (badge.logicState === 'nextbadge') {
+                    // Show modal for next badge
+                    setSelectedBadge(badge);
+                }
+                break;
+                
+            default:
                 setSelectedBadge(badge);
-            }
+                break;
         }
     };
 
     // Function to get status display text
-    const getStatusText = (status) => {
-        switch (status) {
-            case 'ongoing':
+    const getStatusText = (logicState) => {
+        switch (logicState) {
+            case 'on-going':
                 return 'ONGOING';
-            case 'done':
+            case 'done-and-claimed':
                 return 'COMPLETED';
-            case 'incomplete':
+            case 'done-and-unclaimed':
+                return 'CLAIM REWARD';
+            case 'unfinished':
                 return 'INCOMPLETE';
-            case 'missed':
+            case 'unjoined':
                 return 'MISSED';
+            case 'nextbadge':
+                return 'NEXT BADGE';
             default:
                 return '';
         }
     };
 
     // Function to get status color
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'ongoing':
+    const getStatusColor = (logicState) => {
+        switch (logicState) {
+            case 'on-going':
                 return '#00F1FF';
-            case 'done':
+            case 'done-and-claimed':
                 return '#FFD700';
-            case 'incomplete':
+            case 'done-and-unclaimed':
+                return '#00FF00';
+            case 'unfinished':
                 return '#FFA500';
-            case 'missed':
+            case 'unjoined':
                 return '#FF4444';
+            case 'nextbadge':
+                return '#9B59B6';
             default:
                 return '#FFFFFF';
         }
@@ -174,10 +201,38 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         setShowChallengeBadgeDone(false);
     };
 
+    // Function to handle back from ChallengeClaimReward
+    const handleBackFromClaimReward = () => {
+        setShowChallengeClaimReward(false);
+    };
+
+    // Function to handle done from ChallengeClaimReward
+    const handleDoneFromClaimReward = () => {
+        setShowChallengeClaimReward(false);
+        // Có thể thêm logic khác nếu cần
+    };
+
     // Function to handle back from ChallengeStatus
     const handleBackFromStatus = () => {
         setShowChallengeStatus(false);
     };
+
+    // Show ChallengeClaimReward if state is true
+    if (showChallengeClaimReward) {
+        return (
+            <ChallengeClaimReward
+                challengeData={{
+                    stepsCompleted: 56000,
+                    badgeName: "TRAILBLAZER OF MACHU PICCHU",
+                    challengeTitle: "INCA TRAIL",
+                    starletsReward: 400,
+                    challengeEndDate: "15/10/2025 23:59"
+                }}
+                onClaimRewards={handleDoneFromClaimReward}
+                onBack={handleBackFromClaimReward}
+            />
+        );
+    }
 
     // Show ChallengeBadgeDone if state is true
     if (showChallengeBadgeDone) {
@@ -303,27 +358,27 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                             {badgeData.weeklyBadges.map((badge, index) => (
                                 <button
                                     key={badge.id}
-                                    className={`cbs-badge-item cbs-badge-${badge.status}`}
+                                    className={`cbs-badge-item cbs-badge-${badge.visualType}`}
                                     onClick={() => handleBadgeClick(badge)}
                                 >
                                     <div className="cbs-badge-content">
                                         <span className="cbs-badge-icon">
                                             <img 
-                                                src={badge.status === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
                                                 alt="Badge" 
                                             />
                                         </span>
-                                        {badge.status === 'locked' && (
+                                        {badge.visualType === 'locked' && (
                                             <div className="cbs-badge-status-icon cbs-badge-locked-icon">
                                                 <img src={lockIcon} alt="Locked" />
                                             </div>
                                         )}
-                                        {badge.status === 'unknown' && (
+                                        {badge.visualType === 'unknown' && (
                                             <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
                                                 <img src={questionIcon} alt="Unknown" />
                                             </div>
                                         )}
-                                        {/* {badge.status === 'unlocked' && (
+                                        {/* {badge.visualType === 'unlocked' && (
                                             <div className="cbs-badge-status-icon">✨</div>
                                         )} */}
                                         <span className="cbs-badge-name">{badge.name}</span>
@@ -350,17 +405,44 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                             <div 
                                 className="cbs-status-display"
                                 style={{ 
-                                    backgroundColor: getStatusColor(selectedBadge.clickStatus),
+                                    backgroundColor: getStatusColor(selectedBadge.logicState),
                                     color: '#000'
                                 }}
                             >
-                                {getStatusText(selectedBadge.clickStatus)}
+                                {getStatusText(selectedBadge.logicState)}
                             </div>
                             <div className="cbs-status-description">
-                                {selectedBadge.clickStatus === 'ongoing' && 'Challenge is currently in progress'}
-                                {selectedBadge.clickStatus === 'done' && 'Challenge has been completed successfully'}
-                                {selectedBadge.clickStatus === 'incomplete' && 'Challenge was started but not finished'}
-                                {selectedBadge.clickStatus === 'missed' && 'Challenge opportunity was missed'}
+                                {(() => {
+                                    const visualType = selectedBadge.visualType;
+                                    const logicState = selectedBadge.logicState;
+                                    
+                                    if (visualType === 'unlocked') {
+                                        switch (logicState) {
+                                            case 'on-going':
+                                                return 'Challenge is currently in progress';
+                                            case 'done-and-claimed':
+                                                return 'Challenge has been completed and rewards claimed';
+                                            case 'done-and-unclaimed':
+                                                return 'Challenge completed but rewards not claimed yet';
+                                            default:
+                                                return 'Unlocked badge available';
+                                        }
+                                    } else if (visualType === 'locked') {
+                                        switch (logicState) {
+                                            case 'unfinished':
+                                                return 'Challenge was started but not finished';
+                                            case 'unjoined':
+                                                return 'Challenge opportunity was missed';
+                                            default:
+                                                return 'This badge is locked';
+                                        }
+                                    } else if (visualType === 'unknown') {
+                                        if (logicState === 'nextbadge') {
+                                            return 'This is the next badge to be revealed';
+                                        }
+                                    }
+                                    return 'Status unknown';
+                                })()}
                             </div>
                         </div>
                     </div>
