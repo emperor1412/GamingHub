@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Market.css';
 import { trackUserAction } from './analytics';
 import shared from './Shared';
@@ -132,6 +132,38 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
+  // Refs for category sections to enable auto scroll
+  const categoryRefs = useRef({});
+
+  // Function to scroll to specific category
+  const scrollToCategory = (category) => {
+    if (categoryRefs.current[category]) {
+      // First expand the category if it's collapsed
+      if (category.startsWith('telegram-')) {
+        const type = parseInt(category.split('-')[1]);
+        if (!getExpansionState(type)) {
+          setExpansionState(type, true);
+        }
+      } else if (category === 'premium-membership' && !premiumExpanded) {
+        setPremiumExpanded(true);
+      } else if (category === 'freeze-streak' && !freezeStreakExpanded) {
+        setFreezeStreakExpanded(true);
+      } else if (category === 'merch-coupon' && !merchCouponExpanded) {
+        setMerchCouponExpanded(true);
+      } else if (category === 'step-boosts' && !stepBoostsExpanded) {
+        setStepBoostsExpanded(true);
+      }
+      
+      // Then scroll to the category
+      setTimeout(() => {
+        categoryRefs.current[category].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 200); // Longer delay to allow expansion animation
+    }
+  };
+
   // Function to fetch premium membership type
   const fetchPremiumType = async () => {
     try {
@@ -163,6 +195,21 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       delete shared.marketTargetTab;
     }
   }, []);
+
+  // Auto scroll to specific category if set
+  useEffect(() => {
+    if (shared.initialMarketCategory) {
+      const category = shared.initialMarketCategory;
+      console.log('Auto scrolling to category:', category);
+      
+      // Scroll to category after a delay to ensure content is loaded
+      setTimeout(() => {
+        scrollToCategory(category);
+        // Clear the initial category after scrolling
+        delete shared.initialMarketCategory;
+      }, 500);
+    }
+  }, [buyOptions, starletProducts]); // Trigger when data is loaded
 
   // Fetch premium type on component mount
   useEffect(() => {
@@ -1280,7 +1327,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                       }
                       
                       return (
-                        <div key={type} className="mk-market-section">
+                        <div key={type} className="mk-market-section" ref={el => categoryRefs.current[`telegram-${type}`] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setExpansionState(type, !isExpanded)}
@@ -1405,7 +1452,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 })}
                 
                     {/* Premium Membership Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setPremiumExpanded(!premiumExpanded)}
@@ -1648,7 +1695,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                   <div className="mk-starlet-products-container">
 
                     {/* Freeze Streak Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['freeze-streak'] = el}>
                       <div
                         className="mk-section-header"
                         onClick={() => setFreezeStreakExpanded(!freezeStreakExpanded)}
@@ -1778,7 +1825,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                     </div>
 
                     {/* Merch Coupon Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['merch-coupon'] = el}>
                       <div
                         className="mk-section-header"
                         onClick={() => setMerchCouponExpanded(!merchCouponExpanded)}
@@ -1929,7 +1976,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                     </div>
 
                     {/* Step Boosts Section */}
-                    <div className="mk-market-section">
+                    <div className="mk-market-section" ref={el => categoryRefs.current['step-boosts'] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setStepBoostsExpanded(!stepBoostsExpanded)}

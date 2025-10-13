@@ -82,6 +82,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
       shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     }
   };
@@ -98,6 +99,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
       shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     }
   };

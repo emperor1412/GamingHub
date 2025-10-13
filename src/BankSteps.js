@@ -106,6 +106,7 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
     const handleOpenMarket = () => {
         onClose();
         shared.setInitialMarketTab('starlet');
+        shared.setInitialMarketCategory('step-boosts');
         shared.setActiveTab('market');
     }
 
