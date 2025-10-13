@@ -1,5 +1,5 @@
-/* Join Confirmation Styles */
-.join-confirmation-container {
+/* Challenge Join Confirmation Styles */
+.challenge-join-confirmation-container {
   position: fixed;
   top: 0;
   left: 50%;
@@ -19,7 +19,7 @@
 }
 
 /* Background Pattern */
-.jc-background-pattern {
+.cjc-background-pattern {
   position: absolute;
   top: 0;
   left: 0;
@@ -33,7 +33,7 @@
 }
 
 /* Main Content */
-.jc-main-content {
+.cjc-main-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +46,7 @@
 }
 
 /* Challenge Goal */
-.jc-challenge-goal {
+.cjc-challenge-goal {
   font-size: 24.75px;
   font-weight: 700;
   color: #00FFFF;
@@ -55,7 +55,7 @@
 }
 
 /* Reward Information */
-.jc-reward-info {
+.cjc-reward-info {
   font-size: 37.51px;
   font-weight: 700;
   color: white;
@@ -73,7 +73,7 @@
 }
 
 /* Central Graphic */
-.jc-central-graphic {
+.cjc-central-graphic {
   width: 400px;
   height: 200px;
   display: flex;
@@ -85,7 +85,7 @@
   background-repeat: no-repeat;
 }
 
-.jc-left-image {
+.cjc-left-image {
   width: 130px;
   height: 130px;
   object-fit: contain;
@@ -95,7 +95,7 @@
   position: relative;
 }
 
-.jc-center-image {
+.cjc-center-image {
   width: 132px;
   height: 132px;
   object-fit: contain;
@@ -104,7 +104,7 @@
   position: relative;
 }
 
-.jc-right-image {
+.cjc-right-image {
   width: 126px;
   height: 116px;
   object-fit: contain;
@@ -115,13 +115,13 @@
 }
 
 /* Warning Section */
-.jc-warning-section {
+.cjc-warning-section {
   position: relative;
   margin: 20px 0;
   padding: 10px;
 }
 
-.jc-warning-brackets {
+.cjc-warning-brackets {
   position: absolute;
   top: 0;
   left: 0;
@@ -130,42 +130,42 @@
   pointer-events: none;
 }
 
-.jc-bracket {
+.cjc-bracket {
   position: absolute;
   width: 20px;
   height: 20px;
   border: 3px solid #00FFFF;
 }
 
-.jc-bracket-tl {
+.cjc-bracket-tl {
   top: 30px;
   left: 0;
   border-right: none;
   border-bottom: none;
 }
 
-.jc-bracket-tr {
+.cjc-bracket-tr {
   top: 30px;
   right: 0;
   border-left: none;
   border-bottom: none;
 }
 
-.jc-bracket-bl {
+.cjc-bracket-bl {
   bottom: 10px;
   left: 0;
   border-right: none;
   border-top: none;
 }
 
-.jc-bracket-br {
+.cjc-bracket-br {
   bottom: 10px;
   right: 0;
   border-left: none;
   border-top: none;
 }
 
-.jc-warning-banner {
+.cjc-warning-banner {
   background: #0000FF;
   color: white;
   font-size: 27.48px;
@@ -177,7 +177,7 @@
   display: inline-block;
 }
 
-.jc-warning-text {
+.cjc-warning-text {
   font-size: 22.47px;
   font-weight: 700;
   font-family: 'PP Neue Machina', sans-serif;
@@ -188,7 +188,7 @@
 }
 
 /* Join Button */
-.jc-join-button {
+.cjc-join-button {
   background: #00F1FF;
   color: #000000;
   border: none;
@@ -205,13 +205,13 @@
   margin: 20px 0;
 }
 
-.jc-join-button:hover {
+.cjc-join-button:hover {
   background: #00F1FF;
   transform: translateY(-2px);
 }
 
 /* Challenge End Date */
-.jc-challenge-end {
+.cjc-challenge-end {
   font-size: 14px;
   color: white;
   text-transform: uppercase;
@@ -224,47 +224,47 @@
 
 /* Responsive Design */
 /* @media (max-width: 480px) {
-  .jc-main-content {
+  .cjc-main-content {
     padding: 60px 15px 100px;
   }
   
-  .jc-central-graphic {
+  .cjc-central-graphic {
     width: 280px;
     height: 180px;
   }
   
-  .jc-starlet-icon {
+  .cjc-starlet-icon {
     width: 60px;
     height: 60px;
   }
   
-  .jc-badge-icon,
-  .jc-robot-icon {
+  .cjc-badge-icon,
+  .cjc-robot-icon {
     width: 45px;
     height: 45px;
   }
   
-  .jc-warning-section {
+  .cjc-warning-section {
     margin: 30px 0;
     padding: 15px;
   }
   
-  .jc-join-button {
+  .cjc-join-button {
     padding: 12px 30px;
     font-size: 16px;
   }
 } */
 /* 
 @media (max-width: 360px) {
-  .jc-challenge-goal {
+  .cjc-challenge-goal {
     font-size: 20px;
   }
   
-  .jc-reward-info {
+  .cjc-reward-info {
     font-size: 16px;
   }
   
-  .jc-central-graphic {
+  .cjc-central-graphic {
     width: 240px;
     height: 160px;
   }

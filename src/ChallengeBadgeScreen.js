@@ -2,7 +2,7 @@ import React from 'react';
 import './ChallengeBadgeScreen.css';
 import starletIcon from './images/starlet.png';
 import doodleExtra from './images/doodle_extra.png';
-import challengesRobot from './images/challenges_robot.png';
+import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import lockIcon from './images/lock_icon.png';
 import questionIcon from './images/question_icon.png';
 import badgeIncatrail from './images/trophy_4.png';
@@ -247,7 +247,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     </div>
                     
                     <div className="cbs-robot-character">
-                        <img src={challengesRobot} alt="Robot Character" className="cbs-robot-image" />
+                        <img src={robotCowboyChallenges} alt="Robot Character" className="cbs-robot-image" />
                     </div>
                 </div>
                 
