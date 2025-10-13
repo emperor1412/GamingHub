@@ -123,6 +123,14 @@ export const handleStarletsPurchase = async (product) => {
       throw error;
     }
 
+    // Check for VIP already exists error
+    if (data.code === 214003) {
+      console.log('VIP already exists error detected');
+      const error = new Error(data.msg || 'You are already a VIP');
+      error.code = data.code;
+      throw error;
+    }
+
     if (data.code === 0) {
       return new Promise((resolve) => {
         let isPaymentHandled = false;
