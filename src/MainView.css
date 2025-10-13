@@ -428,6 +428,10 @@
     height: auto;
     display: block;
     object-fit: cover;
+    transform: scale(1);
+}
+
+.locked-card-image.bankstep {
     transform: scale(1.1);
 }
 

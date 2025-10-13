@@ -61,16 +61,20 @@ Response:
 
 /* Removed claimRewardFromSharingStory function as it's no longer needed */
 
-    const onClickShareStory = () => {
+    const onClickShareStory = async () => {
         console.log('Share story');
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
             const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2543.png";
 
-            // shareStory(url, {
-            //     text: 'I just scratched a ticket and claimed a reward!',
-            //   });
+            shareStory(url, {
+                text: 'I just scratched a ticket and claimed a reward!',
+                widgetLink: {
+                    url: inviteLink,
+                    name: 'Join Now'
+                }
+              });
 
             trackStoryShare('ticket', {
                 reward_claimed: true,

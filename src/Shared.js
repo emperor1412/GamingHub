@@ -32,6 +32,18 @@ import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
 import avatar17 from './images/PirateParrot.png';
 import avatar18 from './images/Robot.png';
 import avatar19 from './images/Squirrel.png';
+import avatar20 from './images/Avatars/1463 FSL avatars_Cactguy.png';
+import avatar21 from './images/Avatars/1463 FSL avatars_Capib.png';
+import avatar22 from './images/Avatars/1463 FSL avatars_Duck Wizard.png';
+import avatar23 from './images/Avatars/1463 FSL avatars_Evil Duck.png';
+import avatar24 from './images/Avatars/1463 FSL avatars_Goldfishy.png';
+import avatar25 from './images/Avatars/1463 FSL avatars_Hippo.png';
+import avatar26 from './images/Avatars/1463 FSL avatars_PandaDJ.png';
+import avatar27 from './images/Avatars/1463 FSL avatars_Pumpkin.png';
+import avatar28 from './images/Avatars/1463 FSL avatars_Racoon.png';
+import avatar29 from './images/Avatars/1463 FSL avatars_Skelly.png';
+import avatar30 from './images/Avatars/1463 FSL avatars_Surfshark.png';
+import avatar31 from './images/Avatars/1463 FSL avatars_Tree.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
@@ -90,6 +102,18 @@ const shared = {
         { id: 13, src: avatar17 },
         { id: 14, src: avatar18 },
         { id: 15, src: avatar19 },
+        { id: 16, src: avatar20 },
+        { id: 17, src: avatar21 },
+        { id: 18, src: avatar22 },
+        { id: 19, src: avatar23 },
+        { id: 20, src: avatar24 },
+        { id: 21, src: avatar25 },
+        { id: 22, src: avatar26 },
+        { id: 23, src: avatar27 },
+        { id: 24, src: avatar28 },
+        { id: 25, src: avatar29 },
+        { id: 26, src: avatar30 },
+        { id: 27, src: avatar31 },
     ],
 
     mappingIcon : {
@@ -124,6 +148,20 @@ const shared = {
     // Function to set initial market tab
     setInitialMarketTab: function(tab) {
         this.initialMarketTab = tab;
+    },
+    
+    // Function to set initial market category for auto scroll
+    // Usage examples:
+    // shared.setInitialMarketCategory('premium-membership'); // Scroll to Premium Membership
+    // shared.setInitialMarketCategory('freeze-streak'); // Scroll to Freeze Streak
+    // shared.setInitialMarketCategory('merch-coupon'); // Scroll to Merch Coupon
+    // shared.setInitialMarketCategory('step-boosts'); // Scroll to Step Boosts
+    // shared.setInitialMarketCategory('telegram-0'); // Scroll to Standard Pack
+    // shared.setInitialMarketCategory('telegram-10'); // Scroll to Limited Weekly Offer
+    // shared.setInitialMarketCategory('telegram-20'); // Scroll to Limited Monthly Offer
+    // shared.setInitialMarketCategory('telegram-30'); // Scroll to Exclusive One-Time Offer
+    setInitialMarketCategory: function(category) {
+        this.initialMarketCategory = category;
     },
     
     profileItems : [],
@@ -928,8 +966,8 @@ data object
             return { success: false, error: 'No user profile or login data' };
         }
 
-        // Check if current avatar is premium (13-15) but user doesn't have premium membership
-        if (shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !shared.isPremiumMember) {
+        // Check if current avatar is premium (13-27) but user doesn't have premium membership
+        if (shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 27 && !shared.isPremiumMember) {
             console.log(`Avatar ${shared.userProfile.pictureIndex} is premium but user doesn't have premium membership`);
             
             // Find the lowest available avatar index

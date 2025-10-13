@@ -28,9 +28,9 @@ import dailyTasks from './images/one_shot.2827c4f3c969098979d4.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
-import premium_mainview from './images/premium_mainview.jpg';
-import tadokami_mainview from './images/tadokami_mainview.jpg';
-import flippingstars_mainview from './images/flippingstars_mainview.jpg';
+import premium_mainview from './images/premium_mainview.png';
+import tadokami_mainview from './images/tadokami_mainview.png';
+import flippingstars_mainview from './images/flippingstars_mainview.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -202,7 +202,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                     console.log('shared.isPremiumMember:', shared.isPremiumMember);
                     
                     // Auto-adjust avatar if premium status changed and avatar doesn't match
-                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 15 && !newPremiumStatus) {
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 27 && !newPremiumStatus) {
                         console.log('Premium status is false but user has premium avatar, auto-adjusting...');
                         const adjustResult = await shared.autoAdjustAvatar(getProfileData);
                         if (adjustResult.success) {
@@ -1200,7 +1200,7 @@ Response:
                             <img
                                 src={stepn_background}
                                 alt="Bank Steps"
-                                className="locked-card-image"
+                                className="locked-card-image bankstep"
                             />
                             <div className='ticket-button-container-border'></div>
                             <div className='check-out-button'>BANK STEPS</div>
