@@ -50,14 +50,14 @@
 
 .sa_stat-item span {
     color: white;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-style: italic;
     font-weight: 800;
 }
 
 .sa_results-title {
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 72px;
     font-style: italic;
     font-weight: 800;
@@ -69,7 +69,7 @@
 
 .sa_results-subtitle {
     color: rgba(131,128,127,255);
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 14px;
     font-style: italic;
     font-weight: 600;
@@ -94,7 +94,6 @@
 .sa_rewards-content {
     position: relative;
     width: 100%;
-    max-width: 320px;
     height: 450px;
     aspect-ratio: 1;
 }
@@ -102,7 +101,7 @@
 .sa_rewards-container {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -132,7 +131,7 @@
 
 .sa_main-reward-text {
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 24px;
     font-weight: 600;
     text-transform: uppercase;
@@ -142,7 +141,7 @@
 
 .sa_main-reward-amount {
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 21.383px;
     font-style: normal;
     font-weight: 700;
@@ -172,20 +171,50 @@
 
 .sa_main-reward-logo {
     margin-bottom: 10%;
-    width: 130px;
-    height: 60px;
-}
-
-.sa_reward-icon-wrapper:hover {
-    transform: scale(1.1);
+    width: 200px;
+    height: auto;
 }
 
 .sa_reward-icon {
-    width: 42px;
-    height: 42px;
-    margin-bottom: -40%;
+    width: auto;
+    height: 50px;
     z-index: 2;
     position: relative;
+}
+
+.sa-size-mooar {
+    transform: scale(1.4);
+}
+
+.sa-size-gmt {
+    transform: scale(1.3);
+}
+
+.sa_reward-amount-scratched {
+    color: #0000FF;
+    font-size: 21.383px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    font-family: "PP Neue Machina Inktrap";
+    padding: 2px 8px;
+    border-radius: 8px;
+    z-index: 1;
+    position: relative;
+}
+
+.sa_reward-title {
+    color: #FFF;
+    font-size: 14.383px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    font-family: "PP Neue Machina Inktrap";
+    padding: 2px 8px;
+    border-radius: 8px;
+    z-index: 1;
+    position: relative;
+    width: 53%;
 }
 
 .sa_reward-amount {
@@ -194,7 +223,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     padding: 2px 8px;
     border-radius: 8px;
     z-index: 1;
@@ -202,13 +231,14 @@
 }
 
 .sa_buttons-container {
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 25px;
     align-items: center;
-    margin-top: auto;
-    padding-top: 20px;
+    padding-top: 30px;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .sa_share-story-button,
@@ -216,7 +246,7 @@
     width: 100%;
     height: 38px;
     border-radius: 32px;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 15.166px;
     font-weight: 700;
     text-transform: uppercase;
@@ -243,7 +273,7 @@
     width: 100%;
     height: 38px;
     border-radius: 32px;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;

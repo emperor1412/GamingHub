@@ -167,7 +167,18 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setShowPremium = () => setShowPremium(true);
     }, []);
     
-    // Function to check premium membership status
+    // Check if we should auto-open Premium popup when returning to home
+    useEffect(() => {
+        if (shared.shouldOpenPremiumOnHome) {
+            console.log('Auto-opening Premium popup after successful purchase');
+            // Reset flag
+            shared.shouldOpenPremiumOnHome = false;
+            // Open Premium popup
+            setShowPremium(true);
+        }
+    }, []); // Run once on mount
+    
+    // Function to check premium membership status (lightweight version)
     const checkPremiumStatus = async () => {
         try {
             setIsCheckingPremiumStatus(true);
@@ -177,14 +188,13 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 return;
             }
             
-            const url = `${shared.server_url}/api/app/getPremiumDetail?token=${shared.loginData.token}`;
+            const url = `${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`;
             const response = await fetch(url);
             
             if (response.ok) {
                 const data = await response.json();
-                if (data.code === 0 && data.data) {
-                    const premiumData = data.data;
-                    const newPremiumStatus = premiumData.isMembership || false;
+                if (data.code === 0) {
+                    const newPremiumStatus = data.data || false;
                     
                     setIsPremiumMember(newPremiumStatus);
                     shared.isPremiumMember = newPremiumStatus; // Update shared state
@@ -642,8 +652,9 @@ Response:
     };
 
     // Fetch event status data
+    // COMMENTED OUT: Egglet event is currently closed
     const fetchEventStatus = async (depth = 0) => {
-        if (depth > 3) {
+        /* if (depth > 3) {
             console.error('Get event status failed after 3 attempts');
             return null;
         }
@@ -679,13 +690,14 @@ Response:
         } catch (error) {
             console.error('Error fetching event status:', error);
         }
-        
+        */
         return null;
     };
 
     // Check if the Egglet popup should be shown (once daily)
+    // COMMENTED OUT: Egglet event is currently closed
     const checkEggletPopup = async () => {
-        // If in mockup mode, skip daily checking
+        /* // If in mockup mode, skip daily checking
         if (isMockup) {
             console.log('Mockup mode: Skipping daily check for egglet popup');
             await updateEventStatus(true);
@@ -715,12 +727,14 @@ Response:
         }
         
         // Not shown today or never shown, proceed with checking event status
-        await updateEventStatus(true);
+        await updateEventStatus(true); */
+        console.log('Egglet event is currently closed - checkEggletPopup disabled');
     };
     
     // Separate function to update event status and conditionally show popup
+    // COMMENTED OUT: Egglet event is currently closed
     const updateEventStatus = async (showPopupIfActive = false) => {
-        // Fetch event status to determine if popup should be shown
+        /* // Fetch event status to determine if popup should be shown
         const eventData = await fetchEventStatus();
         
         if (eventData) {
@@ -745,7 +759,10 @@ Response:
             console.error('Failed to fetch event status data');
             setEventActive(false);
             setShowEggletPopup(false);
-        }
+        } */
+        console.log('Egglet event is currently closed - updateEventStatus disabled');
+        setEventActive(false);
+        setShowEggletPopup(false);
     };
 
     const closeEggletPopup = () => {
@@ -1386,10 +1403,9 @@ Response:
                 onSelectPlan={(plan) => {
                     console.log('Selected plan:', plan);
                     setShowIntroducePremium(false);
-                    // Navigate to market with starlet tab to show premium packages
-                    shared.setInitialMarketTab('starlet');
-                    shared.setActiveTab('market');
+                    // Navigation will be handled by IntroducePremium component itself
                 }}
+                isFromProfile={false}
             />
 
             {/* Challenges Menu */}

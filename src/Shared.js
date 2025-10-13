@@ -71,6 +71,7 @@ const shared = {
     // Premium membership status - shared across all components
     isPremiumMember: false,
     setIsPremiumMember: null, // Will be set by MainView component
+    shouldOpenPremiumOnHome: false, // Flag to auto-open Premium when returning to home
     
     avatars : [
         { id: 0, src: avatar1 },
