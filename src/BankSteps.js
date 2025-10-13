@@ -272,11 +272,15 @@ const BankSteps = ({ showFSLIDScreen, onClose }) => {
 
         if (shareStory.isSupported()) {
             const inviteLink = `${shared.app_link}?startapp=invite_${shared.loginData.link}`;
+            const url = "https://fsl-minigame-res.s3.ap-east-1.amazonaws.com/miniGameHub/2546.png";
             try {
                 await shareStory({
                     media: 'https://storage.googleapis.com/text2image-118de.appspot.com/Test/FSL.png',
-                    text: inviteLink,
-                    button_text: 'Join Now',
+                    text: url,
+                    widgetLink: {
+                        url: inviteLink,
+                        name: 'Join Now'
+                    }
                 });
 
                 trackStoryShare('bank_steps', {
