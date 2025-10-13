@@ -150,6 +150,20 @@ const shared = {
         this.initialMarketTab = tab;
     },
     
+    // Function to set initial market category for auto scroll
+    // Usage examples:
+    // shared.setInitialMarketCategory('premium-membership'); // Scroll to Premium Membership
+    // shared.setInitialMarketCategory('freeze-streak'); // Scroll to Freeze Streak
+    // shared.setInitialMarketCategory('merch-coupon'); // Scroll to Merch Coupon
+    // shared.setInitialMarketCategory('step-boosts'); // Scroll to Step Boosts
+    // shared.setInitialMarketCategory('telegram-0'); // Scroll to Standard Pack
+    // shared.setInitialMarketCategory('telegram-10'); // Scroll to Limited Weekly Offer
+    // shared.setInitialMarketCategory('telegram-20'); // Scroll to Limited Monthly Offer
+    // shared.setInitialMarketCategory('telegram-30'); // Scroll to Exclusive One-Time Offer
+    setInitialMarketCategory: function(category) {
+        this.initialMarketCategory = category;
+    },
+    
     profileItems : [],
     userProfile : null,
     loginData : null,
