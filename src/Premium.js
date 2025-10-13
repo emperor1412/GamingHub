@@ -408,6 +408,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
       console.log('Using shared.setActiveTab fallback');
       // Fallback to shared method for backward compatibility
       shared.setInitialMarketTab('telegram'); // Open telegram packages tab
+      shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     } else {
       console.log('No navigation method available');
