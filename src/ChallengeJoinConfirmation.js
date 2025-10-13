@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './JoinConfirmation.css';
+import './ChallengeJoinConfirmation.css';
 import ChallengeUpdate from './ChallengeUpdate';
 import shared from './Shared';
 import challenges_robot from './images/challenges_robot.png';
 import starlet from './images/starlet.png';
 import trophy_4 from './images/trophy_4.png';
 
-const JoinConfirmation = ({ 
+const ChallengeJoinConfirmation = ({ 
   challengeData, 
   onJoinChallenge, 
   onBack 
@@ -56,66 +56,66 @@ const JoinConfirmation = ({
   }
 
   return (
-    <div className="join-confirmation-container">
+    <div className="challenge-join-confirmation-container">
       {/* Background Pattern */}
-      <div className="jc-background-pattern"></div>
+      <div className="cjc-background-pattern"></div>
       
       {/* Main Content */}
-      <div className="jc-main-content">
+      <div className="cjc-main-content">
         {/* Challenge Goal */}
-        <div className="jc-challenge-goal">
+        <div className="cjc-challenge-goal">
           {steps.toLocaleString()} STEPS IN {days} DAYS!
         </div>
 
         {/* Reward Information */}
-        <div className="jc-reward-info">
+        <div className="cjc-reward-info">
           EARN EXPLORER BADGE AND STARLETS
         </div>
 
         {/* Central Graphic - 3 Images */}
-        <div className="jc-central-graphic">
+        <div className="cjc-central-graphic">
           <img 
             src={trophy_4} 
             alt="Left Image" 
-            className="jc-left-image"
+            className="cjc-left-image"
           />
           <img 
             src={starlet}
             alt="Center Image" 
-            className="jc-center-image"
+            className="cjc-center-image"
           />
           <img 
             src={challenges_robot}
             alt="Right Image" 
-            className="jc-right-image"
+            className="cjc-right-image"
           />
         </div>
 
         {/* Warning Section */}
-        <div className="jc-warning-section">
-          <div className="jc-warning-brackets">
-            <div className="jc-bracket jc-bracket-tl"></div>
-            <div className="jc-bracket jc-bracket-tr"></div>
-            <div className="jc-bracket jc-bracket-bl"></div>
-            <div className="jc-bracket jc-bracket-br"></div>
+        <div className="cjc-warning-section">
+          <div className="cjc-warning-brackets">
+            <div className="cjc-bracket cjc-bracket-tl"></div>
+            <div className="cjc-bracket cjc-bracket-tr"></div>
+            <div className="cjc-bracket cjc-bracket-bl"></div>
+            <div className="cjc-bracket cjc-bracket-br"></div>
           </div>
           
-          <div className="jc-warning-banner">
+          <div className="cjc-warning-banner">
             WARNING!
           </div>
           
-          <div className="jc-warning-text">
+          <div className="cjc-warning-text">
             YOU ARE ABOUT TO ENTER THE WEEKLY CHALLENGE USING {starletsCost} STARLETS.
           </div>
 
             {/* Join Button */}
-            <button className="jc-join-button" onClick={handleJoinChallenge}>
+            <button className="cjc-join-button" onClick={handleJoinChallenge}>
                 JOIN CHALLENGE
             </button>
         </div>
 
         {/* Challenge End Date */}
-        <div className="jc-challenge-end">
+        <div className="cjc-challenge-end">
           <span style={{color: '#00FFFF'}}>CHALLENGE END:</span> {challengeEndDate}
         </div>
       </div>
@@ -123,4 +123,4 @@ const JoinConfirmation = ({
   );
 };
 
-export default JoinConfirmation;
+export default ChallengeJoinConfirmation;

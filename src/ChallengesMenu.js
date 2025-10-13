@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import './ChallengesMenu.css';
-import robotChallenges from './images/challenges_robot.png';
-import starletExtra from './images/Starlets_Ticket_Extra.png';
-import doodleExtra from './images/doodle_extra.png';
-import background from './images/background_2.png';
+import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
 import { 
@@ -14,14 +11,14 @@ import {
     joinChallenge 
 } from './data/challengesData';
 import ChallengeInfo from './ChallengeInfo';
-import JoinConfirmation from './JoinConfirmation';
+import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
-    const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
+    const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
     const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
     const [showChallengeError, setShowChallengeError] = useState(false);
     const [selectedChallengeType, setSelectedChallengeType] = useState(null);
@@ -72,8 +69,8 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleJoinChallenge = () => {
-        // Show JoinConfirmation page
-        setShowJoinConfirmation(true);
+        // Show ChallengeJoinConfirmation page
+        setShowChallengeJoinConfirmation(true);
     };
 
     const handleConfirmJoin = () => {
@@ -84,18 +81,18 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         if (hasEnoughStarlets(requiredStarlets)) {
             // User has enough starlets -> join challenge and go to Challenge Update
             joinChallenge(selectedChallengeType);
-            setShowJoinConfirmation(false);
+            setShowChallengeJoinConfirmation(false);
             setShowChallengeUpdate(true);
         } else {
             // User doesn't have enough starlets -> show error
-            setShowJoinConfirmation(false);
+            setShowChallengeJoinConfirmation(false);
             setShowChallengeError(true);
         }
     };
 
     const handleBackFromConfirmation = () => {
         // Go back to ChallengeInfo
-        setShowJoinConfirmation(false);
+        setShowChallengeJoinConfirmation(false);
     };
 
     const handleBackFromUpdate = () => {
@@ -171,10 +168,10 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         );
     }
 
-    // Show JoinConfirmation if user clicked join
-    if (showJoinConfirmation && selectedChallenge) {
+    // Show ChallengeJoinConfirmation if user clicked join
+    if (showChallengeJoinConfirmation && selectedChallenge) {
         return (
-            <JoinConfirmation 
+            <ChallengeJoinConfirmation 
                 challengeData={{
                     steps: selectedChallenge.steps,
                     days: 7, // You can calculate this based on dateStart and dateEnd
@@ -332,14 +329,12 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     </div>
                 </div>
 
-
-
                 {/* Badges Section */}
                 <div className="badges-section">
                     <div className="badges-content">
                         <div className="robot-illustration">
                             <img
-                                src={robotChallenges}
+                                src={robotCowboyChallenges}
                                 alt="Robot Character"
                                 className="robot-image"
                             />
