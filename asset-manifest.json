@@ -1,13 +1,10 @@
 {
   "files": {
-    "main.css": "./static/css/main.40b4035f.css",
-    "main.js": "./static/js/main.ab1a7291.js",
+    "main.css": "./static/css/main.07464740.css",
+    "main.js": "./static/js/main.3f6988af.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
-    "static/media/Squirrel.png": "./static/media/Squirrel.2c51c41a54c64082c5ef.png",
-    "static/media/PirateParrot.png": "./static/media/PirateParrot.8e497d96efbf7ae1361c.png",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
-    "static/media/Robot.png": "./static/media/Robot.840d966a97bba02c3f60.png",
     "static/media/check_in_animation_540.gif": "./static/media/check_in_animation_540.f79e00a6220ffb8d5a81.gif",
     "static/media/FSL Games UI 2-10.png": "./static/media/FSL Games UI 2-10.423b8be012eb806cfc40.png",
     "static/media/scratch_ticket_background_full.png": "./static/media/scratch_ticket_background_full.10686c8b948d08378f20.png",
@@ -24,6 +21,7 @@
     "static/media/BToken.png": "./static/media/BToken.7712e6a35d8aa15a80fa.png",
     "static/media/FSL Games UI 2-08.png": "./static/media/FSL Games UI 2-08.169c8102ef42da418edd.png",
     "static/media/FSLGAMES-newtrophyicons_1360_1.png": "./static/media/FSLGAMES-newtrophyicons_1360_1.a01a14689f9d833d2179.png",
+    "static/media/flippingstars_mainview.png": "./static/media/flippingstars_mainview.46fd63007fe97a61ab63.png",
     "static/media/scratch_ticket.svg": "./static/media/scratch_ticket.c318f557b9e5d7a66ea092adf3ad5bdc.svg",
     "static/media/bank_ticket.svg": "./static/media/bank_ticket.59a113c097caac3a3d525cd39bb62511.svg",
     "static/media/burn_ticket.svg": "./static/media/burn_ticket.56e0ccb83c698133e4bf15727d9c254e.svg",
@@ -33,7 +31,9 @@
     "static/media/bank_step_background.png": "./static/media/bank_step_background.cfe263233c5148b147d7.png",
     "static/media/Tadokami_Logo.png": "./static/media/Tadokami_Logo.b377a1a50450299c5d4b.png",
     "static/media/FlippingStarBanner.png": "./static/media/FlippingStarBanner.964c033f14299086d004.png",
+    "static/media/premium_mainview.png": "./static/media/premium_mainview.0d6a5ebbbe7b8e2e9c3c.png",
     "static/media/stepn_background.png": "./static/media/stepn_background.3a589c6bf46691f2580f.png",
+    "static/media/tadokami_mainview.png": "./static/media/tadokami_mainview.a8926d41b9025fbb2abf.png",
     "static/media/BToken_Locked.png": "./static/media/BToken_Locked.3584d6b5007064c4442a.png",
     "static/media/Egglet_Image_4.png": "./static/media/Egglet_Image_4.637a3cf0706a989e77a9.png",
     "static/media/Egglet_Image_3.png": "./static/media/Egglet_Image_3.c22d8075cf24267f509b.png",
@@ -88,12 +88,9 @@
     "static/media/PPNeueMachina-InktrapThin.ttf": "./static/media/PPNeueMachina-InktrapThin.5956ed4985dc9ef5e067.ttf",
     "static/media/PPNeueMachina-PlainUltralight.ttf": "./static/media/PPNeueMachina-PlainUltralight.63f986759c4f621c4899.ttf",
     "static/media/PPNeueMachina-PlainThin.ttf": "./static/media/PPNeueMachina-PlainThin.d6746b933117ca4f8d13.ttf",
-    "static/media/tadokami_mainview.jpg": "./static/media/tadokami_mainview.a74d6f33e32499620d08.jpg",
     "static/media/avatar_14_Robot_300px.png": "./static/media/avatar_14_Robot_300px.64f3a597702cd717f8f9.png",
-    "static/media/flippingstars_mainview.jpg": "./static/media/flippingstars_mainview.fe35ec8409470097e420.jpg",
     "static/media/Egglet_Image_2.png": "./static/media/Egglet_Image_2.d5497fdf491dd1ec9dce.png",
     "static/media/FSL Games UI 2-09.png": "./static/media/FSL Games UI 2-09.abbb5e687860ee007e63.png",
-    "static/media/premium_mainview.jpg": "./static/media/premium_mainview.41a43b93a3513b63159d.jpg",
     "static/media/lv10.png": "./static/media/lv10.df26c66fb1afa941c30d.png",
     "static/media/lv_generic.png": "./static/media/lv_generic.9e37a1f9d889cc1681bd.png",
     "static/media/FreezeStreaksBG.png": "./static/media/FreezeStreaksBG.62b1c63e117e3a2d35bd.png",
@@ -245,12 +242,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.40b4035f.css.map": "./static/css/main.40b4035f.css.map",
-    "main.ab1a7291.js.map": "./static/js/main.ab1a7291.js.map",
+    "main.07464740.css.map": "./static/css/main.07464740.css.map",
+    "main.3f6988af.js.map": "./static/js/main.3f6988af.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.40b4035f.css",
-    "static/js/main.ab1a7291.js"
+    "static/css/main.07464740.css",
+    "static/js/main.3f6988af.js"
   ]
 }
