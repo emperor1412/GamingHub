@@ -162,7 +162,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       setTimeout(() => {
         categoryRefs.current[category].scrollIntoView({
           behavior: 'smooth',
-          block: 'start'
+          block: 'center'
         });
       }, 200); // Longer delay to allow expansion animation
     }
