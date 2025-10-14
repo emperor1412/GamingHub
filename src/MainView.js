@@ -1142,7 +1142,7 @@ Response:
 
             <div className="scrollable-content">
                 {/* Premium Section - Top Row */}
-                {/* <section className="tickets-section">
+                <section className="tickets-section">
                     <button 
                         className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
                         onClick={() => onClickPremium()}
@@ -1157,7 +1157,7 @@ Response:
                             <div className='ticket-button-container-border'></div>
                         </div>
                     </button>
-                </section> */}
+                </section>
 
                 {/* Daily Tasks and BANK STEPS - Second Row */}
                 <section className="locked-sections">
