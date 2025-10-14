@@ -28,6 +28,9 @@ import dailyTasks from './images/one_shot.2827c4f3c969098979d4.png';
 import checkout from './images/checkout.svg';
 import eggletLogo from './images/Egglets_Logo.png';
 import eggletBackground from './images/Egglets_Background.png';
+import premium_mainview from './images/premium_mainview.png';
+import tadokami_mainview from './images/tadokami_mainview.png';
+import flippingstars_mainview from './images/flippingstars_mainview.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -35,6 +38,10 @@ import shared from './Shared';
 import { trackUserAction } from './analytics';
 import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
+import IntroducePremium from './IntroducePremium';
+import Premium from './Premium';
+import premiumBg from './images/Premium_background_buy.png';
+import premiumDiamond from './images/Premium_icon.png';
 
 let isMouseDown = false;
 let startX;
@@ -55,6 +62,9 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const intervalRef = useRef(null);
     const [showEggletPopup, setShowEggletPopup] = useState(false);
     const [showEggletPage, setShowEggletPage] = useState(false);
+    const [showIntroducePremium, setShowIntroducePremium] = useState(false);
+    const [showPremium, setShowPremium] = useState(false);
+    const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
 
     // Fetch total flips from API
     const fetchTotalFlips = async () => {
@@ -72,10 +82,18 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
                 const data = await response.json();
                 console.log('Total flips API response:', data);
                 
-                // Handle API response format: {"code": 0, "data": 159}
+                // Handle API response format: {"code": 0, "data": {"totalFlips": 1859, "userFlips": 27}}
                 if (data.code === 0 && data.data !== undefined) {
-                    setTotalFlips(data.data.totalFlips);
-                    console.log('✅ Found totalFlips in data.data:', data.data);
+                    if (typeof data.data === 'object' && data.data.totalFlips !== undefined) {
+                        setTotalFlips(data.data.totalFlips);
+                        console.log('✅ Found totalFlips in data.data.totalFlips:', data.data.totalFlips);
+                    } else if (typeof data.data === 'number') {
+                        // Fallback for old format: {"code": 0, "data": 159}
+                        setTotalFlips(data.data);
+                        console.log('✅ Found totalFlips in data.data (number):', data.data);
+                    } else {
+                        console.log('Unexpected totalFlips API response format:', data);
+                    }
                 } else {
                     console.log('Unexpected totalFlips API response format:', data);
                 }
@@ -135,6 +153,86 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
         shared.setInitialMarketTab('starlet');
         // Navigate to market tab
         shared.setActiveTab('market');
+    };
+
+    // Premium membership status
+    const [isPremiumMember, setIsPremiumMember] = useState(false);
+    
+    // Set setIsPremiumMember function to shared so other components can use it
+    useEffect(() => {
+        shared.setIsPremiumMember = setIsPremiumMember;
+        shared.setShowPremium = () => setShowPremium(true);
+    }, []);
+    
+    // Check if we should auto-open Premium popup when returning to home
+    useEffect(() => {
+        if (shared.shouldOpenPremiumOnHome) {
+            console.log('Auto-opening Premium popup after successful purchase');
+            // Reset flag
+            shared.shouldOpenPremiumOnHome = false;
+            // Open Premium popup
+            setShowPremium(true);
+        }
+    }, []); // Run once on mount
+    
+    // Function to check premium membership status (lightweight version)
+    const checkPremiumStatus = async () => {
+        try {
+            setIsCheckingPremiumStatus(true);
+
+            if (!shared.loginData?.token) {
+                console.log('No login token available for premium status check');
+                return;
+            }
+            
+            const url = `${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.code === 0) {
+                    const newPremiumStatus = data.data || false;
+                    
+                    setIsPremiumMember(newPremiumStatus);
+                    shared.isPremiumMember = newPremiumStatus; // Update shared state
+                    console.log('Premium status updated:', newPremiumStatus);
+                    console.log('shared.isPremiumMember:', shared.isPremiumMember);
+                    
+                    // Auto-adjust avatar if premium status changed and avatar doesn't match
+                    if (shared.userProfile && shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 27 && !newPremiumStatus) {
+                        console.log('Premium status is false but user has premium avatar, auto-adjusting...');
+                        const adjustResult = await shared.autoAdjustAvatar(getProfileData);
+                        if (adjustResult.success) {
+                            console.log('Avatar auto-adjusted:', adjustResult.message);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking premium status:', error);
+        } finally {
+            setIsCheckingPremiumStatus(false);
+            console.log('Premium check completed, isCheckingPremiumStatus set to false');
+        }
+    };
+    
+    const onClickPremium = () => {
+        console.log('onClickPremium called');
+        console.log('isCheckingPremiumStatus:', isCheckingPremiumStatus);
+        console.log('shared.isPremiumMember:', shared.isPremiumMember);
+        
+        if (isCheckingPremiumStatus) {
+            console.log('Premium check in progress, returning early');
+            return; // Disable khi đang loading
+        }
+        
+        if (shared.isPremiumMember) {
+            console.log('User is premium member, opening Premium page');
+            setShowPremium(true); // Mở trang Premium
+        } else {
+            console.log('User is not premium member, opening IntroducePremium page');
+            setShowIntroducePremium(true); // Mở trang IntroducePremium
+        }
     };
 
     // const [scrollLeft, setScrollLeft] = useState(0);
@@ -551,8 +649,9 @@ Response:
     };
 
     // Fetch event status data
+    // COMMENTED OUT: Egglet event is currently closed
     const fetchEventStatus = async (depth = 0) => {
-        if (depth > 3) {
+        /* if (depth > 3) {
             console.error('Get event status failed after 3 attempts');
             return null;
         }
@@ -588,13 +687,14 @@ Response:
         } catch (error) {
             console.error('Error fetching event status:', error);
         }
-        
+        */
         return null;
     };
 
     // Check if the Egglet popup should be shown (once daily)
+    // COMMENTED OUT: Egglet event is currently closed
     const checkEggletPopup = async () => {
-        // If in mockup mode, skip daily checking
+        /* // If in mockup mode, skip daily checking
         if (isMockup) {
             console.log('Mockup mode: Skipping daily check for egglet popup');
             await updateEventStatus(true);
@@ -624,12 +724,14 @@ Response:
         }
         
         // Not shown today or never shown, proceed with checking event status
-        await updateEventStatus(true);
+        await updateEventStatus(true); */
+        console.log('Egglet event is currently closed - checkEggletPopup disabled');
     };
     
     // Separate function to update event status and conditionally show popup
+    // COMMENTED OUT: Egglet event is currently closed
     const updateEventStatus = async (showPopupIfActive = false) => {
-        // Fetch event status to determine if popup should be shown
+        /* // Fetch event status to determine if popup should be shown
         const eventData = await fetchEventStatus();
         
         if (eventData) {
@@ -654,7 +756,10 @@ Response:
             console.error('Failed to fetch event status data');
             setEventActive(false);
             setShowEggletPopup(false);
-        }
+        } */
+        console.log('Egglet event is currently closed - updateEventStatus disabled');
+        setEventActive(false);
+        setShowEggletPopup(false);
     };
 
     const closeEggletPopup = () => {
@@ -672,6 +777,9 @@ Response:
                 await setupProfileData();
                 await setupEvents();
                 await getDailyTask();
+                
+                // Check premium status
+                await checkPremiumStatus();
                 
                 // OPTIMIZED: Remove duplicate fetchTotalFlips() call here since interval will handle it
                 // fetchTotalFlips(); // ← Removed to prevent duplicate call
@@ -978,14 +1086,22 @@ Response:
     return (
         <>
             <header className="stats-header">
-                <button 
-                    className="profile-pic-main"
-                    onClick={() => setShowProfileView(true)}
-                >
-                    <img 
-                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                    alt="Profile" />
-                </button>
+                <div className="profile-pic-container">
+                    <button 
+                        className="profile-pic-main"
+                        onClick={() => setShowProfileView(true)}
+                    >
+                        <img 
+                        src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                        alt="Profile" />
+                    </button>
+                    {/* Premium icon overlay */}
+                    {shared.isPremiumMember && (
+                        <div className="premium-icon-overlay">
+                            <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+                        </div>
+                    )}
+                </div>
                 <div className="level-badge" onClick={() => setShowProfileView(true)}>
                     LV.{shared.userProfile ? shared.userProfile.level || 0 : 0}
                 </div>
@@ -1025,67 +1141,25 @@ Response:
 
 
             <div className="scrollable-content">
-                <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={flipping_stars}
-                                alt="Flipping Stars"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                        </div>
-                        <div className="ticket-total-flips">
-                            <span className="ticket-total-flips-label">GLOBAL FLIPS</span>
-                            <span className="ticket-total-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
-                        </div>
-                        <div className="ticket-total-jackpot">
-                            <span className="ticket-total-jackpot-label">GRAND JACKPOT</span>
-                            <span className="ticket-total-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
-                        </div>
-                    </button>
-                </section>
-
+                {/* Premium Section - Top Row */}
                 {/* <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => onClickMarketplace()}>
+                    <button 
+                        className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
+                        onClick={() => onClickPremium()}
+                        disabled={isCheckingPremiumStatus}
+                    >
                         <div className='ticket-button-image-container'>
                             <img
-                                src={marketplace}
-                                alt="My Tickets"
+                                src={premium_mainview}
+                                alt="Premium Background"
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
                         </div>
                     </button>
                 </section> */}
-                
-                <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => onClickOpenGame()}>
-                        <div className='ticket-button-image-container'>
-                            <img
-                                src={tadokami}
-                                alt="My Tickets"
-                                className="ticket-button-image"
-                            />
-                            <div className='ticket-button-container-border'></div>
-                        </div>
-                    </button>
-                </section>
 
-
-                {/* Egglet Event Section - only shown if event is active */}
-                {eventActive && (
-                    <section className="egglet-section">
-                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
-                            <div className="egglet-event-content">
-                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
-                                <div className="egglet-date">17 – 27 APRIL</div>
-                            </div>
-                            <div className="egglet-event-tag">EGGLET EVENT</div>
-                        </button>
-                    </section>
-                )}
-
+                {/* Daily Tasks and BANK STEPS - Second Row */}
                 <section className="locked-sections">
                     <button 
                         className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
@@ -1100,60 +1174,67 @@ Response:
                                 style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
                             /> 
                             <div className='ticket-button-container-border'></div>
-                            {/* <div className='coming-soon-button'>Pre-Alpha</div> */}
+                            {/* <div className='check-out-button'>Daily Tasks</div> */}
                             <div className='locked-card-text'></div>
                         </div>
                         {dailyTaskStatus === 1 && (
                             <div className="sold-out-overlay">COMPLETED</div>
                         )}
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
 
                     <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
                         <div className='locked-card-image-container'>
                             <img
-                                // src={`${process.env.PUBLIC_URL}/images/Frame4561.png`}
                                 src={stepn_background}
-                                alt="Leaderboard Coming Soon"
-                                className="locked-card-image"
+                                alt="Bank Steps"
+                                className="locked-card-image bankstep"
                             />
                             <div className='ticket-button-container-border'></div>
                             <div className='check-out-button'>BANK STEPS</div>
-                            {/* <div className='locked-card-text'>STEPN</div> */}
                         </div>
-                        {/* <img
-                            src={locker}
-                            alt="Locker"
-                            className="locker-icon"
-                        /> */}
                     </button>
-
-                    {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='locked-card-image-container'>
-                            <div className="flipping-stars-card-bg">
-                                <div className="flipping-stars-title">FLIPPING STARS</div>
-                                <div className="flipping-stars-subtitle">Flip coins & win rewards!</div>
-                            </div>
-                            <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>PLAY NOW</div>
-                        </div>
-                    </button> */}
                 </section>
 
-                <section className="tickets-section">
-                    {/* <button className="ticket-card" onClick={() => setShowTicketView(true)}>
-                        <img
-                            // src={Frame4556}
-                            src = {my_ticket}
-                            alt="My Tickets"
-                            className="ticket-card-image-main"
-                        />
-                    </button> */}
+                {/* Tadokami and Flipping Stars - Third Row with new images */}
+                <section className="locked-sections">
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={tadokami_mainview}
+                                alt="Tadokami"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='check-out-button'>TADOKAMI</div> */}
+                            <div className='locked-card-text'></div>
+                        </div>
+                    </button>
 
+                    <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={flippingstars_mainview}
+                                alt="Flipping Stars"
+                                className="locked-card-image"
+                            />
+                            <div className='ticket-button-container-border'></div>
+                            {/* <div className='check-out-button'>FLIPPING STARS</div> */}
+                            <div className='locked-card-text'></div>
+                        </div>
+                        <div className="locked-card-flips">
+                            <span className="locked-card-flips-label">GLOBAL FLIPS</span>
+                            <span className="locked-card-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
+                        </div>
+                        <div className="locked-card-jackpot">
+                            <span className="locked-card-jackpot-label">GRAND JACKPOT</span>
+                            <span className="locked-card-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
+                        </div>
+                    </button>
+                </section>
+
+
+                {/* Tickets underneath the games */}
+                <section className="tickets-section">
                     <button className="ticket-button" onClick={() => setShowTicketView(true)}>
                         <div className='ticket-button-image-container'>
                             <img
@@ -1161,17 +1242,28 @@ Response:
                                 alt="My Tickets"
                                 className="ticket-button-image"
                             />
-                            <div className='ticket-button-container-border'></div>
-                            {/* <div className="ticket-button-content"> */}
-                                <h3 className="event-card-title">MY TICKETS</h3>
-                                <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
-                                <div className="check-out-button ticket">
-                                    Scratch Tickets
-                                </div>
-                            {/* </div> */}
+                        <div className='ticket-button-container-border'></div>
+                            <h3 className="event-card-title">MY TICKETS</h3>
+                            <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
+                            <div className="check-out-button ticket">
+                                Scratch Tickets
+                            </div>
                         </div>
                     </button>
                 </section>
+
+                {/* Egglet Event Section - only shown if event is active */}
+                {eventActive && (
+                    <section className="egglet-section">
+                        <button className="egglet-button" onClick={() => setShowEggletPage(true)}>
+                            <div className="egglet-event-content">
+                                <div className="egglet-title"><span>EARN EGGLETS</span></div>
+                                <div className="egglet-date">17 – 27 APRIL</div>
+                            </div>
+                            <div className="egglet-event-tag">EGGLET EVENT</div>
+                        </button>
+                    </section>
+                )}
 
                 <section className="events-section">
                     <div 
@@ -1254,6 +1346,30 @@ Response:
 
             {/* Egglet Event Popup - only shown if event is active */}
             {eventActive && <EggletEventPopup isOpen={showEggletPopup} onClose={closeEggletPopup} />}
+            
+            {/* Premium Popup */}
+            <Premium 
+                isOpen={showPremium} 
+                onClose={async () => {
+                    setShowPremium(false);
+                    // Refresh all data when closing premium to match Market → MainView behavior
+                    await getProfileData();
+                    await checkPremiumStatus();
+                    await fetchTotalFlips();
+                }}
+            />
+            
+            {/* Introduce Premium Popup */}
+            <IntroducePremium 
+                isOpen={showIntroducePremium} 
+                onClose={() => setShowIntroducePremium(false)}
+                onSelectPlan={(plan) => {
+                    console.log('Selected plan:', plan);
+                    setShowIntroducePremium(false);
+                    // Navigation will be handled by IntroducePremium component itself
+                }}
+                isFromProfile={false}
+            />
         </>
     );
 };

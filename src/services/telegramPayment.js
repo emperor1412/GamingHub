@@ -75,8 +75,15 @@ export const handleStarletsPurchase = async (product) => {
     // Lưu số Starlets và Tickets ban đầu
     const initialStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
     const initialTickets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0;
+    
+    // Lưu trạng thái Premium ban đầu (nếu là premium purchase)
+    const isPremiumPurchase = product.optionId === 4001 || product.optionId === 4002;
+    const initialIsPremium = shared.userProfile?.isPremium || false;
+    const initialEndTime = shared.userProfile?.endTime || 0;
+    
     console.log('Initial Starlets:', initialStarlets);
     console.log('Initial Tickets:', initialTickets);
+    console.log('Initial Premium status:', { isPremium: initialIsPremium, endTime: initialEndTime });
 
     // Gọi API buyStarlets với optionId từ product
     const response = await fetch(`${shared.server_url}/api/app/buyStarlets?token=${shared.loginData.token}&optionId=${product.optionId || 1}&note=${shared.host_environment}`, {
@@ -88,6 +95,14 @@ export const handleStarletsPurchase = async (product) => {
 
     const data = await response.json();
     console.log('API response:', data);
+
+    // Check for parameter error on premium purchases
+    if (data.code === 100001 && isPremiumPurchase) {
+      console.log('Parameter error detected for premium purchase');
+      const error = new Error(data.msg || 'Parameter Error');
+      error.code = data.code;
+      throw error;
+    }
 
     if (data.code === 0) {
       return new Promise((resolve) => {
@@ -105,10 +120,17 @@ export const handleStarletsPurchase = async (product) => {
             await shared.getProfileWithRetry();
             const currentStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
             const currentTickets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010)?.num || 0;
+            const currentIsPremium = shared.userProfile?.isPremium || false;
+            const currentEndTime = shared.userProfile?.endTime || 0;
+            
             console.log('Checking payment - Current Starlets:', currentStarlets, 'Initial:', initialStarlets);
             console.log('Checking payment - Current Tickets:', currentTickets, 'Initial:', initialTickets);
+            console.log('Checking payment - Current Premium:', { isPremium: currentIsPremium, endTime: currentEndTime });
+            console.log('Checking payment - Initial Premium:', { isPremium: initialIsPremium, endTime: initialEndTime });
 
             if (currentStarlets > initialStarlets && currentTickets >= initialTickets) {
+              // For regular starlets purchases, check token changes (original logic)
+              console.log('Starlets purchase check result: SUCCESS');
               cleanup();
               localStorage.setItem('payment_success', JSON.stringify({
                 amount: product.amount,
@@ -122,7 +144,59 @@ export const handleStarletsPurchase = async (product) => {
                 initialStarlets,
                 tickets: currentTickets - initialTickets
               });
+            } else if (isPremiumPurchase) {
+              // For premium purchases, check if isPremium became true
+              // For new purchase: only check isPremium (no previous Premium)
+              // For renew: check both isPremium and endTime (ensure proper renewal)
+              const isRenew = initialIsPremium === true;
+              
+              let premiumSuccess;
+              if (isRenew) {
+                // Renew case: check if endTime was updated properly
+                const now = Date.now();
+                const expectedDuration = product.optionId === 4001 ? 30 * 24 * 60 * 60 * 1000 : 365 * 24 * 60 * 60 * 1000;
+                const expectedEndTime = now + expectedDuration;
+                const timeDiff = Math.abs(currentEndTime - expectedEndTime);
+                premiumSuccess = currentIsPremium === true && timeDiff < 24 * 60 * 60 * 1000;
+                console.log('Premium RENEW check - checking if endTime updated properly');
+                console.log('Expected endTime:', new Date(expectedEndTime));
+                console.log('Actual endTime:', new Date(currentEndTime));
+                console.log('Time difference (hours):', timeDiff / (60 * 60 * 1000));
+              } else {
+                // New purchase case: only check isPremium
+                premiumSuccess = currentIsPremium === true;
+                console.log('Premium NEW PURCHASE check - only checking isPremium');
+              }
+              
+              console.log('Premium purchase check result:', premiumSuccess, {
+                currentIsPremium: currentIsPremium,
+                currentEndTime: currentEndTime,
+                initialIsPremium: initialIsPremium,
+                isRenew: isRenew,
+                optionId: product.optionId
+              });
+              
+              if (premiumSuccess) {
+                cleanup();
+                localStorage.setItem('payment_success', JSON.stringify({
+                  amount: product.amount,
+                  initialStarlets,
+                  tickets: currentTickets - initialTickets,
+                  timestamp: Date.now()
+                }));
+                resolve({
+                  status: "paid",
+                  amount: product.amount,
+                  initialStarlets,
+                  tickets: currentTickets - initialTickets
+                });
+              } else {
+                cleanup();
+                resolve({ status: "cancelled" });
+              }
             } else {
+              // Payment failed or cancelled
+              console.log('Payment check result: FAILED/CANCELLED');
               cleanup();
               resolve({ status: "cancelled" });
             }
@@ -160,7 +234,9 @@ export const handleStarletsPurchase = async (product) => {
         throw new Error('Failed to refresh token');
       }
     } else {
-      throw new Error(data.msg || 'Failed to get payment URL');
+      const error = new Error(data.msg || 'Failed to get payment URL');
+      error.code = data.code;
+      throw error;
     }
   } catch (error) {
     console.error('Purchase error:', error);

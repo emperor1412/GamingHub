@@ -1,0 +1,838 @@
+  .ccr-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(35, 31, 32, 0.95);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    font-family: "PP Neue Machina", sans-serif;
+    color: white;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .ccr-popup-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+    max-height: 100vh;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  /* Main Content */
+  .ccr-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 60px;
+  }
+  
+  /* Welcome Section */
+  .ccr-welcome-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+  
+  .ccr-welcome-text {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .ccr-welcome-text-part {
+    font-size: 33.51px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    position: relative;
+    z-index: 2;
+    font-family: "PP Neue Machina", sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: -10px;
+  }
+  
+  .ccr-welcome-text-part2 {
+    font-size: 55.41px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    display: block;
+    position: relative;
+    z-index: 2;
+    font-family: "PP Neue Machina", sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .spp-market-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: 200;
+    color: rgba(255, 255, 255, 0.08);
+    text-transform: uppercase;
+    z-index: 1;
+    font-family: "PP Neue Machina", sans-serif;
+    letter-spacing: 4px;
+  }
+  
+  /* Diamond Container */
+  .ccr-popup-purchased {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 11;
+    pointer-events: none;
+    width: fit-content;
+    height: fit-content;
+    margin: 5px 0;
+    
+    /* Corner borders variables */
+    --ccr-corner-size: 8px;
+    --ccr-corner-color: #00F1FF;
+    --ccr-corner-border: 2px;
+    --ccr-corner-offset: -4px;
+  }
+  
+  .ccr-popup-purchased .ccr-corner {
+    position: absolute;
+    width: var(--ccr-corner-size);
+    height: var(--ccr-corner-size);
+    z-index: 5;
+  }
+  
+  .ccr-popup-purchased .ccr-top-left-purchased {
+    top: var(--ccr-corner-offset);
+    left: var(--ccr-corner-offset);
+    border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+  
+  .ccr-popup-purchased .ccr-top-right-purchased {
+    top: var(--ccr-corner-offset);
+    right: var(--ccr-corner-offset);
+    border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+  
+  .ccr-popup-purchased .ccr-bottom-left-purchased {
+    bottom: var(--ccr-corner-offset);
+    left: var(--ccr-corner-offset);
+    border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+  
+  .ccr-popup-purchased .ccr-bottom-right-purchased {
+    bottom: var(--ccr-corner-offset);
+    right: var(--ccr-corner-offset);
+    border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+
+  /* Rewards container with corners (like diamond container) */
+  .ccr-rewards-container {
+    position: relative;
+    
+    /* Corner borders variables */
+    --ccr-corner-size: 8px;
+    --ccr-corner-color: #00F1FF;
+    --ccr-corner-border: 2px;
+    --ccr-corner-offset: 0px;
+  }
+
+  .ccr-rewards-container .ccr-corner {
+    position: absolute;
+    width: var(--ccr-corner-size);
+    height: var(--ccr-corner-size);
+    z-index: 1;
+  }
+
+  .ccr-rewards-container .ccr-corner.ccr-top-left-rewards {
+    top: calc(var(--ccr-corner-offset) - 115px);
+    left: var(--ccr-corner-offset);
+    border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+
+  .ccr-rewards-container .ccr-corner.ccr-top-right-rewards {
+    top: var(--ccr-corner-offset);
+    right: var(--ccr-corner-offset);
+    border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+
+  .ccr-rewards-container .ccr-corner.ccr-bottom-left-rewards {
+    bottom: calc(var(--ccr-corner-offset) + 130px);
+    left: var(--ccr-corner-offset);
+    border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+
+  .ccr-rewards-container .ccr-corner.ccr-bottom-right-rewards {
+    bottom: calc(var(--ccr-corner-offset) + 40px);
+    right: var(--ccr-corner-offset);
+    border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+    border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  }
+  
+  /* Body and content */
+  .ccr-body { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .ccr-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Diamond image styling */
+  .ccr-diamond-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); */
+  }
+  
+  /* Content Section */
+  .ccr-content-section {
+    background: #292929;
+    border: 1px solid #000FEF;
+    border-radius: 15px;
+    padding: 35px 20px 25px 20px;
+    width: 100%;
+    max-width: 320px;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .confirm-claim-title {
+    font-size: 45.06px;
+    font-weight: 700;
+    line-height: 41.31px;
+    color: white;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  
+  .ccr-highlight {
+    background: #FF00F6;
+    color: rgb(0, 0, 0);
+    padding: 4px 8px;
+    font-size: 28.77px;
+    font-weight: 700;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+  
+  .ccr-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    line-height: 0.8;
+  }
+  
+  .ccr-reward {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 5px 0;
+  }
+
+  /* Grid layout for multiple rewards */
+  .ccr-rewards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+    min-height: 120px; /* Fixed height to maintain consistent size */
+    /* max-width: 300px; */
+  }
+
+  /* Single reward layout */
+  .ccr-rewards-grid.ccr-single-reward {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Three rewards layout - 2x2 grid with empty bottom right */
+  .ccr-rewards-grid:has(.ccr-reward-item:nth-child(3):last-child) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  /* Four or more rewards layout */
+  .ccr-rewards-grid:has(.ccr-reward-item:nth-child(4)) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ccr-single-reward .ccr-reward-item {
+    position: relative;
+    top: -20px;
+  }
+
+  .ccr-reward-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /* background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px; */
+    padding: 5px;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Cột trái căn phải, cột phải căn trái */
+  .ccr-reward-item:nth-child(odd) {
+    justify-self: end; /* Item lẻ (1,3,5...) căn phải */
+  }
+
+  .ccr-reward-item:nth-child(even) {
+    justify-self: start; /* Item chẵn (2,4,6...) căn trái */
+  }
+  
+  .ccr-reward-icon {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+  }
+
+  .ccr-quantity {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    font-family: "PP Neue Machina", sans-serif;
+    width: 50px;
+  }
+
+  /* Adjust icon and quantity size for grid items */
+  .ccr-reward-item .ccr-reward-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ccr-reward-item .ccr-quantity {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .ccr-reward-name {
+    background: #000FEF;
+    color: white;
+    padding: 8px 16px;
+    font-size: 33px;
+    font-weight: 700;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+    line-height: 100%;
+    letter-spacing: 1px;
+  }
+  
+  .ccr-encourage {
+    margin-top: 20px;
+  }
+  
+  .ccr-claim-button {
+    background: #0000FF;
+    color: white;
+    border: none;
+    padding: 0;
+    font-size: 26.97px;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    transition: transform 0.2s, opacity 0.2s;
+    text-shadow: none;
+    box-shadow: none;
+    margin-top: 20px;
+  }
+  
+  .ccr-claim-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+  
+  
+  /* Unlocked Section */
+  .spp-unlocked-section {
+    background: #292929;
+    border: 1px solid #000FEF;
+    border-radius: 15px;
+    padding: 35px 20px 25px 20px;
+    width: 100%;
+    max-width: 320px;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .spp-unlocked-banner {
+    background: #FF00F6;
+    color: #000000;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 100%;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 0;
+    font-family: "PP Neue Machina", sans-serif;
+    letter-spacing: 0px;
+    display: inline-block;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    white-space: nowrap;
+  }
+  
+  /* .spp-benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 30px;
+    align-items: center;
+  } */
+  
+  .spp-benefit-item {
+    font-size: 29.61px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina", sans-serif;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .spp-claim-button {
+    background: #0000FF;
+    color: white;
+    border: none;
+    padding: 0;
+    font-size: 26.97px;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    transition: transform 0.2s, opacity 0.2s;
+    text-shadow: none;
+    box-shadow: none;
+  }
+  
+   .spp-claim-button:hover {
+     transform: translateY(-2px);
+     opacity: 0.9;
+   }
+   
+   /* Reward Content Styles */
+   .spp-reward-content {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     text-align: center;
+     z-index: 10;
+     background: rgba(41, 41, 41, 0.9);
+     padding: 20px;
+     border-radius: 12px;
+     border: 1px solid #000FEF;
+     min-width: 280px;
+   }
+   
+   .spp-message {
+     margin-bottom: 20px;
+   }
+   
+   .spp-highlight {
+     background: #FF00F6;
+     color: white;
+     padding: 8px 16px;
+     border-radius: 20px;
+     font-size: 16px;
+     font-weight: 700;
+     font-family: "PP Neue Machina", sans-serif;
+     text-transform: uppercase;
+     display: inline-block;
+     margin-bottom: 15px;
+   }
+   
+   .spp-text {
+     font-size: 14px;
+     font-weight: 600;
+     color: white;
+     font-family: "PP Neue Machina", sans-serif;
+     text-transform: uppercase;
+     margin-bottom: 5px;
+     line-height: 1.2;
+   }
+   
+   .spp-reward {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 15px;
+     margin: 20px 0;
+   }
+   
+   .spp-reward-icon {
+     width: 40px;
+     height: 40px;
+     object-fit: contain;
+   }
+   
+   .spp-quantity {
+     font-size: 48px;
+     font-weight: 700;
+     color: white;
+     font-family: "PP Neue Machina", sans-serif;
+   }
+   
+   .spp-reward-name {
+     background: #000FEF;
+     color: white;
+     padding: 8px 16px;
+     border-radius: 20px;
+     font-size: 16px;
+     font-weight: 700;
+     font-family: "PP Neue Machina", sans-serif;
+     text-transform: uppercase;
+     display: inline-block;
+     margin-bottom: 20px;
+   }
+   
+   .spp-encourage {
+     margin-top: 20px;
+   }
+  
+  
+  /* Responsive Design */
+  
+  /* Large Desktop (1200px+) */
+  /* @media screen and (min-width: 1200px) {
+    .spp-unlocked-section {
+      max-width: 400px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 36px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 60px;
+    }
+  } */
+  
+  /* Desktop (992px - 1199px) */
+  /* @media screen and (max-width: 1199px) and (min-width: 992px) {
+    .spp-unlocked-section {
+      max-width: 350px;
+    }
+  } */
+  
+  /* Tablet Landscape (768px - 991px) */
+  /* @media screen and (max-width: 991px) and (min-width: 768px) {
+    .spp-main-content {
+      padding: 15px 15px 50px 15px;
+      gap: 25px;
+      margin-top: 25px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 30px;
+      letter-spacing: 1px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 50px;
+      letter-spacing: 3px;
+    }
+    
+    .spp-popup-purchased {
+      height: 220px;
+      margin: 25px 0;
+    }
+    
+    .spp-diamond-img {
+      max-width: 180px;
+      max-height: 180px;
+    }
+    
+    .spp-unlocked-section {
+      padding: 30px 18px 25px 18px;
+      margin: 25px 0;
+      max-width: 100%;
+    }
+    
+    .spp-unlocked-banner {
+      font-size: 18px;
+      padding: 7px 14px;
+    }
+    
+    .spp-benefit-item {
+      font-size: 26px;
+    }
+    
+    .spp-claim-button {
+      font-size: 24px;
+      height: 48px;
+    }
+  } */
+  
+  /* Tablet Portrait (576px - 767px) */
+  /* @media screen and (max-width: 767px) and (min-width: 576px) {
+    .spp-main-content {
+      padding: 12px 12px 45px 12px;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 42px;
+      letter-spacing: 2px;
+    }
+    
+    .spp-popup-purchased {
+      height: 200px;
+      margin: 20px 0;
+    }
+    
+    .spp-diamond-img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    
+    .spp-unlocked-section {
+      padding: 28px 15px 20px 15px;
+      margin: 20px 0;
+    }
+    
+    .spp-unlocked-banner {
+      font-size: 16px;
+      padding: 6px 12px;
+    }
+    
+    .spp-benefit-item {
+      font-size: 22px;
+    }
+    
+    .spp-claim-button {
+      font-size: 20px;
+      height: 44px;
+    }
+  } */
+  
+  /* Mobile Large (481px - 575px) */
+  /* @media screen and (max-width: 575px) and (min-width: 481px) {
+    .spp-main-content {
+      padding: 10px 10px 40px 10px;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 38px;
+      letter-spacing: 2px;
+    }
+    
+    .spp-popup-purchased {
+      height: 180px;
+      margin: 18px 0;
+    }
+    
+    .spp-unlocked-section {
+      padding: 25px 12px 18px 12px;
+      margin: 18px 0;
+    }
+    
+    .spp-unlocked-banner {
+      font-size: 15px;
+      padding: 5px 10px;
+    }
+    
+    .spp-benefit-item {
+      font-size: 20px;
+    }
+    
+    .spp-claim-button {
+      font-size: 18px;
+      height: 42px;
+    }
+  } */
+  
+  /* Mobile Medium (376px - 480px) */
+  /* @media screen and (max-width: 480px) and (min-width: 376px) {
+    .spp-main-content {
+      padding: 8px 8px 35px 8px;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 34px;
+      letter-spacing: 2px;
+    }
+    
+    .spp-popup-purchased {
+      height: 160px;
+      margin: 15px 0;
+    }
+    
+    .spp-unlocked-section {
+      padding: 22px 10px 15px 10px;
+      margin: 15px 0;
+    }
+    
+    .spp-unlocked-banner {
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+    
+    .spp-benefit-item {
+      font-size: 18px;
+    }
+    
+    .spp-claim-button {
+      font-size: 16px;
+      height: 40px;
+    }
+  } */
+  
+  /* Mobile Small (320px - 375px) */
+  /* @media screen and (max-width: 375px) {
+    .spp-main-content {
+      padding: 6px 6px 30px 6px;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .spp-welcome-text-part {
+      font-size: 20px;
+      letter-spacing: 0px;
+    }
+    
+    .spp-welcome-text-part2 {
+      font-size: 30px;
+      letter-spacing: 1px;
+    }
+    
+    .spp-popup-purchased {
+      height: 140px;
+      margin: 12px 0;
+    }
+    
+    .spp-unlocked-section {
+      padding: 20px 8px 12px 8px;
+      margin: 12px 0;
+    }
+    
+    .spp-unlocked-banner {
+      font-size: 13px;
+      padding: 3px 6px;
+    }
+    
+    .spp-benefit-item {
+      font-size: 16px;
+    }
+    
+    .spp-claim-button {
+      font-size: 14px;
+      height: 36px;
+    }
+    
+    .spp-benefits-list {
+      gap: 6px;
+    }
+  } */
+  
+  /* Landscape Orientation */
+  /* @media screen and (orientation: landscape) and (max-height: 500px) {
+    .spp-popup-purchased {
+      height: 120px;
+      margin: 10px 0;
+    }
+    
+    .spp-main-content {
+      gap: 10px;
+      margin-top: 10px;
+      padding: 10px 10px 25px 10px;
+    }
+    
+    .spp-unlocked-section {
+      padding: 15px 10px 10px 10px;
+      margin: 10px 0;
+    }
+    
+    .spp-benefits-list {
+      gap: 4px;
+      margin-bottom: 15px;
+    }
+  } */

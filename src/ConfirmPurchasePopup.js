@@ -1,19 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import './ConfirmPurchasePopup.css';
-import starlet from './images/starlet.png';
+import logo from './images/confirmpurchase.png';
 import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
+import SuccessfulPurchasePremium from './SuccessfulPurchasePremium';
+import PurchaseErrorPopup from './PurchaseErrorPopup';
 import shared from './Shared';
 
 
-
-
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, isFreeItem, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
 
   useEffect(() => {
     const fetchOptionData = async () => {
@@ -71,12 +72,61 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     }
   }, [onClose]);
 
+  const checkPremiumStatus = useCallback(async () => {
+    try {
+      const response = await fetch(`${shared.server_url}/api/app/getPremiumStatus?token=${shared.loginData.token}`);
+      const data = await response.json();
+      console.log('Premium status API response:', data);
+      if (data.code === 0) {
+        const hasPremium = data.data === true;
+        console.log('Has premium result:', hasPremium);
+        return hasPremium;
+      }
+      console.log('Premium status check failed, returning false');
+      return false;
+    } catch (error) {
+      console.error('Failed to check premium status:', error);
+      return false;
+    }
+  }, []);
+
   const handleConfirmAndPay = useCallback(async () => {
-    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName });
+    console.log('handleConfirmAndPay called with:', { isStarletProduct, productId, amount, productName, isPremium });
     setIsProcessing(true);
     try {
       let result;
-      if (isStarletProduct && productId) {
+      if (isPremium) {
+        console.log('Making premium membership purchase using Telegram Stars...');
+        // Handle premium membership purchase using Telegram Stars
+        const premiumOptionId = productId === 1 ? 4001 : 4002; // 1 = monthly (4001), 2 = yearly (4002)
+        const premiumOption = currentOption || { id: premiumOptionId, starlet: amount, stars: productId === 1 ? 1 : 2 };
+        
+        try {
+          result = await handleStarletsPurchase({ 
+            amount: premiumOption.starlet, 
+            stars: premiumOption.stars,
+            optionId: premiumOptionId 
+          });
+        } catch (purchaseError) {
+          // Check if it's a parameter error (code 100001)
+          console.log('Purchase error caught:', purchaseError);
+          console.log('Error code:', purchaseError?.code);
+          if (purchaseError?.code === 100001) {
+            console.log('Parameter error detected, checking premium status...');
+            const hasPremium = await checkPremiumStatus();
+            if (hasPremium) {
+              console.log('User has active premium, showing error popup');
+              setIsProcessing(false);
+              onClose();
+              await new Promise(resolve => setTimeout(resolve, 100));
+              setShowErrorPopup(true);
+              return;
+            }
+          }
+          // Re-throw error if it's not the specific case we're handling
+          throw purchaseError;
+        }
+      } else if (isStarletProduct && productId) {
         console.log('Making starlet product purchase API call...');
         // Handle starlet product purchase
         const response = await fetch(`${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, {
@@ -192,20 +242,41 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
 
       console.log('Final result:', result);
       if (result?.status === "paid") {
-        setPurchaseData({ 
-          initialStarlets: result.initialStarlets,
-          tickets: result.tickets,
-          productName: result.productName,
-          amount: result.amount,
-          isStarletProduct: result.isStarletProduct,
-          packageType: result.packageType,
-          packageValue: result.packageValue
-        });
+        // For premium purchases via Telegram Stars, we need to set the premium data
+        if (isPremium) {
+          setPurchaseData({ 
+            initialStarlets: result.initialStarlets,
+            tickets: result.tickets,
+            productName: productName,
+            amount: amount,
+            isStarletProduct: false,
+            isPremium: true,
+            membershipType: productId,
+            membershipPrice: amount
+          });
+        } else {
+          setPurchaseData({ 
+            initialStarlets: result.initialStarlets,
+            tickets: result.tickets,
+            productName: result.productName,
+            amount: result.amount,
+            isStarletProduct: result.isStarletProduct,
+            isPremium: result.isPremium,
+            membershipType: result.membershipType,
+            membershipPrice: result.membershipPrice,
+            packageType: result.packageType,
+            packageValue: result.packageValue
+          });
+        }
         setShowSuccessPopup(true);
         
-        // Call onPurchaseComplete for starlet products to trigger market reload
-        if (result.isStarletProduct && onPurchaseComplete) {
+        // Call onPurchaseComplete for starlet products and premium to trigger market reload
+        if ((result.isStarletProduct || isPremium) && onPurchaseComplete) {
           onPurchaseComplete();
+        }
+
+        if(optionId === 'free' && onPurchaseComplete) {
+          onFreeItemComplete();
         }
       } else if (result?.status === "cancelled") {
         onClose();
@@ -216,7 +287,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     } finally {
       setIsProcessing(false);
     }
-  }, [amount, stars, optionId, productId, productName, isStarletProduct, showError, onClose, onPurchaseComplete]);
+  }, [amount, stars, optionId, productId, productName, isStarletProduct, isPremium, showError, onClose, onPurchaseComplete, checkPremiumStatus, currentOption]);
 
   const handleClaim = useCallback(async () => {
     setShowSuccessPopup(false);
@@ -244,6 +315,16 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
       return;
     }
 
+    // For free items, show success popup directly
+    if (isFreeItem) {
+      setPurchaseData({ 
+        initialStarlets: amount,
+        tickets: 1
+      });
+      setShowSuccessPopup(true);
+      return;
+    }
+
     const paymentSuccess = localStorage.getItem('payment_success');
     if (paymentSuccess) {
       try {
@@ -258,10 +339,17 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         localStorage.removeItem('payment_success');
       }
     }
-  }, [isOpen]);
+  }, [isOpen, isFreeItem, amount]);
 
   return (
     <>
+      {showErrorPopup && (
+        <PurchaseErrorPopup 
+          isOpen={showErrorPopup}
+          onClose={() => setShowErrorPopup(false)}
+        />
+      )}
+      
       {(isOpen || showSuccessPopup) && (
         <>
           {isProcessing && (
@@ -271,18 +359,28 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           )}
           
           {showSuccessPopup ? (
-            <SuccessfulPurchasePopup 
-              isOpen={true}
-              onClaim={handleClaim}
-              onClose={onClose}
-              amount={purchaseData?.isStarletProduct ? null : amount}
-              tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
-              productName={purchaseData?.productName}
-              isStarletProduct={purchaseData?.isStarletProduct}
-              packageType={purchaseData?.packageType}
-              packageValue={purchaseData?.packageValue}
-              setShowBuyView={setShowBuyView}
-            />
+            isPremium ? (
+              <SuccessfulPurchasePremium 
+                isOpen={true}
+                onClaim={handleClaim}
+                onClose={onClose}
+                setShowBuyView={setShowBuyView}
+              />
+            ) : (
+              <SuccessfulPurchasePopup 
+                isOpen={true}
+                onClaim={handleClaim}
+                onClose={onClose}
+                amount={purchaseData?.isStarletProduct ? null : amount}
+                tickets={optionId === 'free' ? 1 : (purchaseData?.tickets || currentOption?.ticket || 10)}
+                productName={purchaseData?.productName}
+                isStarletProduct={purchaseData?.isStarletProduct}
+                packageType={purchaseData?.packageType}
+                packageValue={purchaseData?.packageValue}
+                isFreeItem={isFreeItem}
+                setShowBuyView={setShowBuyView}
+              />
+            )
           ) : isOpen && (
             <div className="popup-overlay">
               <div className="popup-container">
@@ -291,14 +389,22 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                 </button>
                 <div className="popup-content">
                   <div className="popup-icon">
-                    <img src={starlet} alt="Starlet" />
+                    <img src={logo} alt="Starlet" />
                   </div>
                   <h2 className="popup-title">CONFIRM</h2>
                   <div className="popup-subtitle">YOUR PURCHASE</div>
                   
                   <div className="purchase-details">
                     <div className="purchase-text">
-                      {isStarletProduct ? (
+                      {isPremium ? (
+                        <>
+                          DO YOU WANT TO BUY <span className="highlight-value">{productName}</span>
+                          <br />
+                          IN FSL GAME HUB
+                          <br />
+                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                        </>
+                      ) : isStarletProduct ? (
                         <>
                           DO YOU WANT TO BUY A <span className="highlight-value">{productName}</span>
                           <br />

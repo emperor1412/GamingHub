@@ -29,6 +29,21 @@ import avatar13 from './images/avatar_13_Squirrel_300px.png';
 import avatar14 from './images/avatar_14_Robot_300px.png';
 import avatar15 from './images/avatar_15_Pirate_Parrot_300px.png';
 import avatar16 from './images/FSLGames_mysterytrophy_PFP_1.png';
+import avatar17 from './images/avatar_13_Squirrel_300px.png';
+import avatar18 from './images/avatar_14_Robot_300px.png';
+import avatar19 from './images/avatar_15_Pirate_Parrot_300px.png';
+import avatar20 from './images/Avatars/1463 FSL avatars_Cactguy.png';
+import avatar21 from './images/Avatars/1463 FSL avatars_Capib.png';
+import avatar22 from './images/Avatars/1463 FSL avatars_Duck Wizard.png';
+import avatar23 from './images/Avatars/1463 FSL avatars_Evil Duck.png';
+import avatar24 from './images/Avatars/1463 FSL avatars_Goldfishy.png';
+import avatar25 from './images/Avatars/1463 FSL avatars_Hippo.png';
+import avatar26 from './images/Avatars/1463 FSL avatars_PandaDJ.png';
+import avatar27 from './images/Avatars/1463 FSL avatars_Pumpkin.png';
+import avatar28 from './images/Avatars/1463 FSL avatars_Racoon.png';
+import avatar29 from './images/Avatars/1463 FSL avatars_Skelly.png';
+import avatar30 from './images/Avatars/1463 FSL avatars_Surfshark.png';
+import avatar31 from './images/Avatars/1463 FSL avatars_Tree.png';
 import { popup } from '@telegram-apps/sdk';
 import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
@@ -64,6 +79,12 @@ const shared = {
     game_link: 'https://t.me/FSLGameHub_Bot/Tadokami',
     host_environment: 'production',
     initialMarketTab: 'telegram', // Default tab for Market component
+    
+    // Premium membership status - shared across all components
+    isPremiumMember: false,
+    setIsPremiumMember: null, // Will be set by MainView component
+    shouldOpenPremiumOnHome: false, // Flag to auto-open Premium when returning to home
+    
     avatars : [
         { id: 0, src: avatar1 },
         { id: 1, src: avatar2 },
@@ -78,6 +99,21 @@ const shared = {
         { id: 10, src: avatar11 },
         { id: 11, src: avatar12 },
         { id: 12, src: avatar16 },
+        { id: 13, src: avatar17 },
+        { id: 14, src: avatar18 },
+        { id: 15, src: avatar19 },
+        { id: 16, src: avatar20 },
+        { id: 17, src: avatar21 },
+        { id: 18, src: avatar22 },
+        { id: 19, src: avatar23 },
+        { id: 20, src: avatar24 },
+        { id: 21, src: avatar25 },
+        { id: 22, src: avatar26 },
+        { id: 23, src: avatar27 },
+        { id: 24, src: avatar28 },
+        { id: 25, src: avatar29 },
+        { id: 26, src: avatar30 },
+        { id: 27, src: avatar31 },
     ],
 
     mappingIcon : {
@@ -112,6 +148,20 @@ const shared = {
     // Function to set initial market tab
     setInitialMarketTab: function(tab) {
         this.initialMarketTab = tab;
+    },
+    
+    // Function to set initial market category for auto scroll
+    // Usage examples:
+    // shared.setInitialMarketCategory('premium-membership'); // Scroll to Premium Membership
+    // shared.setInitialMarketCategory('freeze-streak'); // Scroll to Freeze Streak
+    // shared.setInitialMarketCategory('merch-coupon'); // Scroll to Merch Coupon
+    // shared.setInitialMarketCategory('step-boosts'); // Scroll to Step Boosts
+    // shared.setInitialMarketCategory('telegram-0'); // Scroll to Standard Pack
+    // shared.setInitialMarketCategory('telegram-10'); // Scroll to Limited Weekly Offer
+    // shared.setInitialMarketCategory('telegram-20'); // Scroll to Limited Monthly Offer
+    // shared.setInitialMarketCategory('telegram-30'); // Scroll to Exclusive One-Time Offer
+    setInitialMarketCategory: function(category) {
+        this.initialMarketCategory = category;
     },
     
     profileItems : [],
@@ -908,6 +958,74 @@ data object
                 data: null
             };
         }
+    },
+
+    // Auto-adjust avatar if it's premium but user doesn't have premium membership
+    autoAdjustAvatar: async (getProfileData) => {
+        if (!shared.userProfile || !shared.loginData?.token) {
+            return { success: false, error: 'No user profile or login data' };
+        }
+
+        // Check if current avatar is premium (13-27) but user doesn't have premium membership
+        if (shared.userProfile.pictureIndex >= 13 && shared.userProfile.pictureIndex <= 27 && !shared.isPremiumMember) {
+            console.log(`Avatar ${shared.userProfile.pictureIndex} is premium but user doesn't have premium membership`);
+            
+            // Find the lowest available avatar index
+            let minAvailableIndex = 0;
+            
+            // Always use avatar 0 (the smallest/basic avatar)
+            minAvailableIndex = 0;
+            
+            // Set to the lowest available avatar and auto-save
+            if (minAvailableIndex >= 0) {
+                console.log(`Auto-adjusting avatar from ${shared.userProfile.pictureIndex} to ${minAvailableIndex}`);
+                
+                try {
+                    // Auto-save the avatar change
+                    const response = await fetch(`${shared.server_url}/api/app/changePicture?token=${shared.loginData.token}&index=${minAvailableIndex}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Auto-save avatar response:', data);
+                    
+                    if (data.code === 0) {
+                        // Refresh profile data to get updated pictureIndex
+                        if (getProfileData) {
+                            await getProfileData();
+                        } else {
+                            await shared.getProfileWithRetry();
+                        }
+                        console.log('Avatar auto-saved successfully');
+                        
+                        return {
+                            success: true,
+                            adjustedFrom: shared.userProfile.pictureIndex,
+                            adjustedTo: minAvailableIndex,
+                            message: `Avatar auto-adjusted from ${shared.userProfile.pictureIndex} to ${minAvailableIndex}`
+                        };
+                    } else {
+                        console.error('Failed to auto-save avatar:', data);
+                        return {
+                            success: false,
+                            error: data.msg || 'Failed to auto-save avatar',
+                            data: data
+                        };
+                    }
+                } catch (error) {
+                    console.error('Error auto-saving avatar:', error);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+        }
+        
+        return { success: false, message: 'No adjustment needed' };
     }
 
 };

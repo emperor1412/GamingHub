@@ -598,6 +598,7 @@ const bind_fslid = async () => {
     // TH2: User ấn PURCHASE ANOTHER -> gọi onClickMarketplace
     // Set the initial market tab to 'starlet'
     shared.setInitialMarketTab('starlet');
+    shared.setInitialMarketCategory('freeze-streak');
     // Navigate to market tab
     setActiveTab('market');
   };

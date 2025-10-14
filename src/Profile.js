@@ -7,6 +7,7 @@ import arrowIcon from './images/arrow.svg';
 import ID_selected from './images/ID_selected.svg';
 import ticketDiscountIcon from './images/ticket-discount.png';
 import infoIcon from './images/Info_Icon.png';
+import premiumDiamond from './images/Premium_icon.png';
 
 import ProfileAvatarSelector from './ProfileAvatarSelector';
 
@@ -226,15 +227,23 @@ Response:
                             <img src={backIcon} alt="Back" />
                         </button>
                         <div className="profile-user" onClick={() => onClickLevel()}>
-                            <img
-                                src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                                alt="Avatar"
-                                className="profile-avatar"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowAvatarSelector(true);
-                                }}
-                            />
+                            <div className="profile-avatar-container">
+                                <img
+                                    src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
+                                    alt="Avatar"
+                                    className="profile-avatar"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowAvatarSelector(true);
+                                    }}
+                                />
+                                {/* Premium icon overlay */}
+                                {shared.isPremiumMember && (
+                                    <div className="premium-icon-overlay-profile">
+                                        <img src={premiumDiamond} alt="Premium" className="premium-icon-profile" />
+                                    </div>
+                                )}
+                            </div>
                             <div>
                                 <div className="profile-username">
                                     {shared.telegramUserData.firstName}

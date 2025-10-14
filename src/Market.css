@@ -690,6 +690,11 @@ body.mk-market-open {
   background: #808080;
 }
 
+/* Smaller font size for specific disabled reasons */
+.mk-market-ticket-button.sold-out .mk-market-ticket-price.yearly-membership-active {
+  font-size: 9px;
+}
+
 .mk-market-ticket-info {
   flex: 1;
   display: flex;
@@ -1265,4 +1270,85 @@ body.mk-market-open::-webkit-scrollbar {
 .mk-step-boost-product .mk-market-ticket-content {
   background: transparent !important;
   background-color: transparent !important;
-} 
+}
+
+
+/* Premium Membership Product Styling */
+
+/* .mk-premium-membership-product .mk-market-ticket-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 191, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+} */
+
+.mk-premium-membership-product .mk-market-ticket-content {
+  padding: 2px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.mk-premium-membership-product .mk-market-ticket-info {
+  flex: 1;
+  z-index: 2;
+}
+
+.mk-premium-membership-product .mk-market-ticket-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+
+.mk-premium-membership-product .mk-market-ticket-amount {
+  background: #FF00F6;
+  color: #000000;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  font-size: 13.42px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 4px;
+  display: inline-block;
+  width: fit-content;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.mk-premium-membership-product .mk-market-ticket-label {
+  color: #FFFFFF;
+  font-family: "PP Neue Machina Inktrap", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.mk-premium-membership-product .mk-market-ticket-icon {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transform: scale(1.2);
+  z-index: 2;
+}
+
+.mk-premium-membership-product .mk-premium-diamond-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  filter: none;
+}

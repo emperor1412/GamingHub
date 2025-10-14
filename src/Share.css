@@ -133,7 +133,7 @@
     justify-content: center;
     top: 10px;
     left: 20px;
-    z-index: 1001;
+    z-index: 1001; 
 }
 
 .back-button-alignment img {
