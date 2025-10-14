@@ -1465,7 +1465,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 })}
                 
                     {/* Premium Membership Section */}
-                    <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
+                    {(() => {
+                      // Get premium options from buyOptions API
+                      const monthlyPremium = buyOptions.find(option => option.id === 4001);
+                      const yearlyPremium = buyOptions.find(option => option.id === 4002);
+                      
+                      // Only show premium section if at least one premium option exists
+                      if (!monthlyPremium && !yearlyPremium) {
+                        return null;
+                      }
+                      
+                      return (
+                        <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
                       <div 
                         className="mk-section-header"
                         onClick={() => setPremiumExpanded(!premiumExpanded)}
@@ -1492,10 +1503,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userLevel = shared.userProfile?.level || 0;
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
-                            
-                            // Get premium options from buyOptions API
-                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
-                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
                             
                             // Check conditions for Premium Membership
                             let isDisabled = false;
@@ -1602,10 +1609,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                             const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
                             
-                            // Get premium options from buyOptions API
-                            const monthlyPremium = buyOptions.find(option => option.id === 4001);
-                            const yearlyPremium = buyOptions.find(option => option.id === 4002);
-                            
                             // Check conditions for Premium Membership
                             let isDisabled = false;
                             let disabledReason = '';
@@ -1701,6 +1704,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                         </div>
                       </div>
                     </div>
+                      );
+                    })()}
                   </>
                 )}
                 

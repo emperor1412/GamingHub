@@ -140,8 +140,10 @@ export const handleStarletsPurchase = async (product) => {
           isPaymentHandled = true;
         };
 
-        const checkPayment = async () => {
+        const checkPayment = async (attemptNumber = 1) => {
           if (isPaymentHandled) return;
+
+          console.log(`Payment check attempt ${attemptNumber}/5`);
 
           try {
             await shared.getProfileWithRetry();
@@ -238,19 +240,42 @@ export const handleStarletsPurchase = async (product) => {
                   tickets: currentTickets - initialTickets
                 });
               } else {
-                cleanup();
-                resolve({ status: "cancelled" });
+                // Payment not yet processed, will retry if attempts remaining
+                console.log(`Premium payment not yet processed (attempt ${attemptNumber}/5)`);
+                if (attemptNumber < 5) {
+                  // Retry after 4 seconds
+                  setTimeout(() => checkPayment(attemptNumber + 1), 4000);
+                } else {
+                  // Max attempts reached, cancel payment
+                  console.log('Max payment check attempts reached, marking as cancelled');
+                  cleanup();
+                  resolve({ status: "cancelled" });
+                }
               }
             } else {
               // Payment failed or cancelled
-              console.log('Payment check result: FAILED/CANCELLED');
+              console.log(`Regular payment not yet processed (attempt ${attemptNumber}/5)`);
+              if (attemptNumber < 5) {
+                // Retry after 4 seconds
+                setTimeout(() => checkPayment(attemptNumber + 1), 4000);
+              } else {
+                // Max attempts reached, cancel payment
+                console.log('Max payment check attempts reached, marking as cancelled');
+                cleanup();
+                resolve({ status: "cancelled" });
+              }
+            }
+          } catch (error) {
+            console.error(`Error checking payment (attempt ${attemptNumber}/5):`, error);
+            if (attemptNumber < 5) {
+              // Retry after 4 seconds on error
+              setTimeout(() => checkPayment(attemptNumber + 1), 4000);
+            } else {
+              // Max attempts reached, cancel payment
+              console.log('Max payment check attempts reached due to errors, marking as cancelled');
               cleanup();
               resolve({ status: "cancelled" });
             }
-          } catch (error) {
-            console.error('Error checking payment:', error);
-            cleanup();
-            resolve({ status: "cancelled" });
           }
         };
 
@@ -260,7 +285,7 @@ export const handleStarletsPurchase = async (product) => {
 
         // Open invoice URL and check payment after a delay
         window.Telegram.WebApp.openInvoice(data.data);
-        setTimeout(checkPayment, 4000);
+        setTimeout(() => checkPayment(1), 4000);
 
         // Set a timeout for the entire payment process
         setTimeout(() => {
