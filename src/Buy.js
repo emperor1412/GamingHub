@@ -181,7 +181,7 @@ const Buy = ({
                   </div>
                   <div className="bmk-item-detail-box">
                     <div className="bmk-item-amount">
-                      <span className="x-mark"></span>X Premium
+                      <span className="x-mark"></span>Premium
                     </div>
                   </div>
                 </>
