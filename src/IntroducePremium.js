@@ -182,7 +182,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 <img src={badges} alt="Stairs" className="ip-benefit-icon ip-benefit-stairs" />
                 <div className="ip-benefit-text-container">
                   <span className="ip-benefit-text">STEP CHALLENGES!</span>
-                  <span className="ip-benefit-text ip-benefit-text-small">EARN STEPIN BACKGROUNDS AND BADGES!</span>
+                  <span className="ip-benefit-text ip-benefit-text-small">COMING SOON</span>
                 </div>
               </div>
             </div>
