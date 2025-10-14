@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.07464740.css",
-    "main.js": "./static/js/main.3f6988af.js",
+    "main.css": "./static/css/main.963fc701.css",
+    "main.js": "./static/js/main.ebd0c522.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
@@ -174,7 +174,6 @@
     "static/media/Egglets_Description_4.png": "./static/media/Egglets_Description_4.6d50e70fbb04a52d6109.png",
     "static/media/Premium_icon_unlocked.png": "./static/media/Premium_icon_unlocked.2e69bb901449286b1222.png",
     "static/media/Coming soon-05.png": "./static/media/Coming soon-05.2a90ee886501e9436007.png",
-    "static/media/step_challenges_icon.png": "./static/media/step_challenges_icon.422ee3725bb93b83598e.png",
     "static/media/LFGO.png": "./static/media/LFGO.364707930addb09f1e2a.png",
     "static/media/Icon_Status_Stepboosts.png": "./static/media/Icon_Status_Stepboosts.8b459286fe785736c091.png",
     "static/media/Egglets_Description_1.png": "./static/media/Egglets_Description_1.a37b3eaf28e4e9a771c3.png",
@@ -193,7 +192,6 @@
     "static/media/trophy_1_200px.png": "./static/media/trophy_1_200px.e4c9f6d5767024684519.png",
     "static/media/banking_step_icon.png": "./static/media/banking_step_icon.7ccf4cf49700df606c0e.png",
     "static/media/Icon_Pop_Stepboosts_2X.png": "./static/media/Icon_Pop_Stepboosts_2X.0b40744ac209b3d10ce1.png",
-    "static/media/icon_flipping_star.png": "./static/media/icon_flipping_star.7a5fc54333e0138f8ca8.png",
     "static/media/Icon_streak_2_day.png": "./static/media/Icon_streak_2_day.4f2eff7387e1a3f8af03.png",
     "static/media/bank_step_coin.png": "./static/media/bank_step_coin.03673377f82706998b96.png",
     "static/media/Bg_streak_1.png": "./static/media/Bg_streak_1.8f614a0f9c213ee0a0a9.png",
@@ -206,6 +204,8 @@
     "static/media/lock_icon.png": "./static/media/lock_icon.20a56493a1322b2144e3.png",
     "static/media/bs_receive_starlet_text_claim.png": "./static/media/bs_receive_starlet_text_claim.7ff55cb29f8a1c49d6c7.png",
     "static/media/unlock.png": "./static/media/unlock.6a3e533e24488da1094f.png",
+    "static/media/ticket2_scratch_icon.png": "./static/media/ticket2_scratch_icon.617dcc88cd0417402d1a.png",
+    "static/media/icon_flipping_star.png": "./static/media/icon_flipping_star.a0898eab535055e05a90.png",
     "static/media/ticket_lock_icon.svg": "./static/media/ticket_lock_icon.9c2c199055bd6432e2b5235a0ab282a1.svg",
     "static/media/background_avatar_selection.svg": "./static/media/background_avatar_selection.4f3881654e97f2cfaa6b4234a3d42246.svg",
     "static/media/incorrect_answer.svg": "./static/media/incorrect_answer.4332fe220d5766da38132dc21a1b27bc.svg",
@@ -242,12 +242,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.07464740.css.map": "./static/css/main.07464740.css.map",
-    "main.3f6988af.js.map": "./static/js/main.3f6988af.js.map",
+    "main.963fc701.css.map": "./static/css/main.963fc701.css.map",
+    "main.ebd0c522.js.map": "./static/js/main.ebd0c522.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.07464740.css",
-    "static/js/main.3f6988af.js"
+    "static/css/main.963fc701.css",
+    "static/js/main.ebd0c522.js"
   ]
 }
