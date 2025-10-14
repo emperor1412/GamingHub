@@ -16,11 +16,12 @@
 .premium-tasks-container-main {
   width: 100%;
   max-width: 350px;
-  height: 85vh;
-  overflow-y: auto;
+  height: 100vh;
+  /* overflow-y: auto; */
+  overflow: hidden;
   position: relative;
   padding: 0;
-  margin-top: 10px;
+  margin-top: 10vh;
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
@@ -36,7 +37,7 @@
   background: rgba(30, 30, 30, 0.9);
   border-radius: 12px;
   width: 100%;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   padding: 0;
   display: flex;
@@ -59,7 +60,7 @@
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
+    rgba(0, 0, 0, 0.1) 4%,
     black 4%,
     black 96%,
     rgba(0, 0, 0, 0.1) 98%,
@@ -68,12 +69,32 @@
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(0, 0, 0, 0.1) 2%,
+    rgba(0, 0, 0, 0.1) 4%,
     black 4%,
     black 98%,
     rgba(0, 0, 0, 0.1) 98%,
     transparent 100%
   );
+
+    /* Mask fade */
+    -webkit-mask-image: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 4%,
+      black 4%,
+      black 96%,
+      rgba(0, 0, 0, 0.1) 98%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 4%,
+      black 4%,
+      black 98%,
+      rgba(0, 0, 0, 0.1) 98%,
+      transparent 100%
+    );
 }
 
 .premium-tasks-scrollable-content::-webkit-scrollbar {
@@ -450,7 +471,9 @@
   text-transform: uppercase;
   cursor: pointer;
   font-family: "PP Neue Machina", sans-serif;
-  margin: 20px auto;
+  margin: auto;
+  margin-top: 2vh;
+  margin-bottom: 5vh;
   transition: transform 0.2s ease;
   flex-shrink: 0;
 }
