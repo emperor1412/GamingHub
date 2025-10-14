@@ -316,7 +316,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
     /* background: rgba(255, 255, 255, 0.1);
     border-radius: 10px; */
     padding: 5px;
@@ -344,6 +344,7 @@
     color: white;
     font-family: "PP Neue Machina", sans-serif;
     width: 50px;
+    text-align: left;
   }
 
   /* Adjust icon and quantity size for grid items */
