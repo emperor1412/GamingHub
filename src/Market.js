@@ -8,6 +8,7 @@ import gmtCard from './images/gmtCard.png';
 import merchCouponBg from './images/merch_coupon_bg.png';
 import scratch_ticket_button_bg from './images/scratch_ticket_button_bg.png';
 import ConfirmPurchasePopup from './ConfirmPurchasePopup';
+import PurchaseErrorPopup from './PurchaseErrorPopup';
 import Buy from './Buy';
 import background from './images/background_2.png';
 import arrow_2 from './images/arrow_2.svg';
@@ -132,6 +133,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   const [showStepBoostsPopup, setShowStepBoostsPopup] = useState(false);
   const [selectedStepBoost, setSelectedStepBoost] = useState(null);
 
+  // Purchase Error popup state
+  const [showPurchaseErrorPopup, setShowPurchaseErrorPopup] = useState(false);
+
   // Refs for category sections to enable auto scroll
   const categoryRefs = useRef({});
 
@@ -158,7 +162,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       setTimeout(() => {
         categoryRefs.current[category].scrollIntoView({
           behavior: 'smooth',
-          block: 'start'
+          block: 'center'
         });
       }, 200); // Longer delay to allow expansion animation
     }
@@ -871,6 +875,14 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     setShowBuyView(true);
   };
 
+  // Function to handle purchase error (VIP already exists)
+  const handlePurchaseError = () => {
+    console.log('Market: handlePurchaseError called');
+    console.log('Market: Setting showPurchaseErrorPopup to true');
+    setShowPurchaseErrorPopup(true);
+    console.log('Market: showPurchaseErrorPopup should now be true');
+  };
+
   // Function to handle membership purchase
   const handleMembershipPurchase = async (type) => {
     try {
@@ -1192,6 +1204,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         setSelectedPurchase={setSelectedPurchase}
         setShowProfileView={setShowProfileView}
         refreshUserProfile={refreshUserProfile}
+        onPurchaseError={handlePurchaseError}
       />
     );
   }
@@ -1315,142 +1328,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 {/* Show content based on active tab */}
                 {activeTab === 'telegram' && (
                   <>
-                    {/* Render each category in order */}
-                    {categoryOrder.map((type) => {
-                      const categoryInfo = getCategoryInfo(type);
-                      const isExpanded = getExpansionState(type);
-                      const options = groupedOptions[type] || [];
-                      
-                      // Skip empty sections except Standard Pack (type 0) which should always show for free item
-                      if (options.length === 0 && type !== 0) {
-                        return null;
-                      }
-                      
-                      return (
-                        <div key={type} className="mk-market-section" ref={el => categoryRefs.current[`telegram-${type}`] = el}>
-                      <div 
-                        className="mk-section-header"
-                        onClick={() => setExpansionState(type, !isExpanded)}
-                      >
-                        {/* Corner borders */}
-                        <div className="mk-corner mk-top-left"></div>
-                        <div className="mk-corner mk-top-right"></div>
-                        
-                        <div 
-                          className="mk-section-title-container"
-                          style={{ backgroundColor: categoryInfo.color }}
-                        >
-                          <span className="mk-section-title">
-                            {categoryInfo.title}
-                          </span>
-                          <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
-                        </div>
-                      </div>
-                      <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
-                        {/* Corner borders for content */}
-                        <div className="mk-corner mk-bottom-left"></div>
-                        <div className="mk-corner mk-bottom-right"></div>
-                        
-                        <div className="mk-starlet-grid">
-                          {/* Show free item only in Standard Pack (type 0) */}
-                          {type === 0 && (
-                            <button 
-                              className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
-                              onClick={() => !isFreeItemClaimed && handleFreeItemClick()}
-                              disabled={isFreeItemClaimed}
-                            >
-                              <div className="mk-market-ticket-button-image-container">
-                                <div className="mk-market-ticket-content">
-                                  <div className="mk-market-ticket-icon">
-                                    <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
-                                  </div>
-                                  <div className="mk-market-ticket-info">
-                                    <div className="mk-market-ticket-text">
-                                      <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
-                                      <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
-                                    </div>
-                                    <div className="mk-market-ticket-bonus">
-                                      <span>X1</span>&nbsp;<span>TICKETS</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="mk-market-ticket-price">
-                                  {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
-                                </div>
-                              </div>
-                            </button>
-                          )}
-                          
-                          {/* Show regular options */}
-                          {options.map((option) => {
-                            // Check if option is available (state 0 = available, 1 = unavailable)
-                            const isAvailable = option.state === 0 && option.canBuy;
-                            
-                            // Calculate bonus for special offers
-                            let bonusText = null;
-                            if (type === 30) { // Exclusive One-Time Offer
-                              if (option.stars === 0) bonusText = "BONUS: 50";
-                              else if (option.stars === 5) bonusText = "BONUS: 325";
-                              else if (option.stars === 10) bonusText = "BONUS: 325";
-                            } else if (type === 10) { // Limited Weekly Offer
-                              if (option.stars === 0) bonusText = "BONUS: 25";
-                              else if (option.stars === 5) {
-                                if (option.starlet === 100) bonusText = "BONUS: 195";
-                                else bonusText = "BONUS: 675";
-                              }
-                            } else if (type === 20) { // Limited Monthly Offer
-                              if (option.stars === 0) bonusText = "50% VALUE";
-                              else if (option.stars === 5) bonusText = "100% VALUE";
-                            }
-                            
-                            return (
-                              <button 
-                                key={option.id}
-                                className={`mk-market-ticket-button ${!isAvailable ? 'sold-out' : ''}`}
-                                onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
-                                disabled={!isAvailable}
-                              >
-                                {/* Bonus box in top-left corner */}
-                                {option.bonus > 0 && type !== 0 && (
-                                  <div className="mk-market-ticket-bonus-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                    <div className="mk-market-ticket-bonus-corner-text">
-                                      {type === 20 ? `${option.bonusPercentage}% VALUE` : `BONUS: ${option.bonus}`}
-                                    </div>
-                                  </div>
-                                )}
-                                <div className="mk-market-ticket-button-image-container">
-                                  <div className="mk-market-ticket-content">
-                                    <div className="mk-market-ticket-icon">
-                                      <img src={starlet} alt="Starlet" style={{ opacity: isAvailable ? 1 : 0.5 }} />
-                                    </div>
-                                    <div className="mk-market-ticket-info">
-                                      {bonusText && (
-                                        <div className="mk-market-ticket-bonus-text" style={{ opacity: isAvailable ? 1 : 0.5 }}>{bonusText}</div>
-                                      )}
-                                      <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
-                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
-                                      </div>
-                                      {option.ticket > 0 && (
-                                        <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
-                                    {!isAvailable ? 'SOLD OUT' : `${option.stars} TELEGRAM STARS`}
-                                  </div>
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-                
                     {/* Premium Membership Section */}
                     {(() => {
                       // Get premium options from buyOptions API
@@ -1693,6 +1570,142 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                     </div>
                       );
                     })()}
+
+                    {/* Render each category in order */}
+                    {categoryOrder.map((type) => {
+                      const categoryInfo = getCategoryInfo(type);
+                      const isExpanded = getExpansionState(type);
+                      const options = groupedOptions[type] || [];
+                      
+                      // Skip empty sections except Standard Pack (type 0) which should always show for free item
+                      if (options.length === 0 && type !== 0) {
+                        return null;
+                      }
+                      
+                      return (
+                        <div key={type} className="mk-market-section" ref={el => categoryRefs.current[`telegram-${type}`] = el}>
+                      <div 
+                        className="mk-section-header"
+                        onClick={() => setExpansionState(type, !isExpanded)}
+                      >
+                        {/* Corner borders */}
+                        <div className="mk-corner mk-top-left"></div>
+                        <div className="mk-corner mk-top-right"></div>
+                        
+                        <div 
+                          className="mk-section-title-container"
+                          style={{ backgroundColor: categoryInfo.color }}
+                        >
+                          <span className="mk-section-title">
+                            {categoryInfo.title}
+                          </span>
+                          <img src={arrow_2} className={`mk-section-arrow ${isExpanded ? 'expanded' : ''}`} alt="arrow" />
+                        </div>
+                      </div>
+                      <div className={`mk-section-content ${isExpanded ? 'expanded' : ''}`}>
+                        {/* Corner borders for content */}
+                        <div className="mk-corner mk-bottom-left"></div>
+                        <div className="mk-corner mk-bottom-right"></div>
+                        
+                        <div className="mk-starlet-grid">
+                          {/* Show free item only in Standard Pack (type 0) */}
+                          {type === 0 && (
+                            <button 
+                              className={`mk-market-ticket-button ${isFreeItemClaimed ? 'sold-out' : ''}`} 
+                              onClick={() => !isFreeItemClaimed && handleFreeItemClick()}
+                              disabled={isFreeItemClaimed}
+                            >
+                              <div className="mk-market-ticket-button-image-container">
+                                <div className="mk-market-ticket-content">
+                                  <div className="mk-market-ticket-icon">
+                                    <img src={starlet} alt="Starlet" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }} />
+                                  </div>
+                                  <div className="mk-market-ticket-info">
+                                    <div className="mk-market-ticket-text">
+                                      <div className="mk-market-ticket-amount" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>50</div>
+                                      <div className="mk-market-ticket-label" style={{ opacity: isFreeItemClaimed ? 0.5 : 1 }}>STARLETS</div>
+                                    </div>
+                                    <div className="mk-market-ticket-bonus">
+                                      <span>X1</span>&nbsp;<span>TICKETS</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mk-market-ticket-price">
+                                  {isFreeItemClaimed ? 'SOLD OUT' : 'FREE'}
+                                </div>
+                              </div>
+                            </button>
+                          )}
+                          
+                          {/* Show regular options */}
+                          {options.map((option) => {
+                            // Check if option is available (state 0 = available, 1 = unavailable)
+                            const isAvailable = option.state === 0 && option.canBuy;
+                            
+                            // Calculate bonus for special offers
+                            let bonusText = null;
+                            if (type === 30) { // Exclusive One-Time Offer
+                              if (option.stars === 0) bonusText = "BONUS: 50";
+                              else if (option.stars === 5) bonusText = "BONUS: 325";
+                              else if (option.stars === 10) bonusText = "BONUS: 325";
+                            } else if (type === 10) { // Limited Weekly Offer
+                              if (option.stars === 0) bonusText = "BONUS: 25";
+                              else if (option.stars === 5) {
+                                if (option.starlet === 100) bonusText = "BONUS: 195";
+                                else bonusText = "BONUS: 675";
+                              }
+                            } else if (type === 20) { // Limited Monthly Offer
+                              if (option.stars === 0) bonusText = "50% VALUE";
+                              else if (option.stars === 5) bonusText = "100% VALUE";
+                            }
+                            
+                            return (
+                              <button 
+                                key={option.id}
+                                className={`mk-market-ticket-button ${!isAvailable ? 'sold-out' : ''}`}
+                                onClick={() => isAvailable && handleStarletPurchase(option.starlet, option.stars, null, option.id)}
+                                disabled={!isAvailable}
+                              >
+                                {/* Bonus box in top-left corner */}
+                                {option.bonus > 0 && type !== 0 && (
+                                  <div className="mk-market-ticket-bonus-corner" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    <div className="mk-market-ticket-bonus-corner-text">
+                                      {type === 20 ? `${option.bonusPercentage}% VALUE` : `BONUS: ${option.bonus}`}
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="mk-market-ticket-button-image-container">
+                                  <div className="mk-market-ticket-content">
+                                    <div className="mk-market-ticket-icon">
+                                      <img src={starlet} alt="Starlet" style={{ opacity: isAvailable ? 1 : 0.5 }} />
+                                    </div>
+                                    <div className="mk-market-ticket-info">
+                                      {bonusText && (
+                                        <div className="mk-market-ticket-bonus-text" style={{ opacity: isAvailable ? 1 : 0.5 }}>{bonusText}</div>
+                                      )}
+                                      <div className="mk-market-ticket-text">
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>{option.starlet}</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>STARLETS</div>
+                                      </div>
+                                      {option.ticket > 0 && (
+                                        <div className="mk-market-ticket-bonus" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                          <span>X{option.ticket}</span>&nbsp;<span>TICKETS</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="mk-market-ticket-price" style={{ opacity: isAvailable ? 1 : 0.5 }}>
+                                    {!isAvailable ? 'SOLD OUT' : `${option.stars} TELEGRAM STARS`}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
                   </>
                 )}
                 
@@ -2131,6 +2144,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
           checkFreeRewardTime();
           refreshUserProfile();
         }}
+        onPurchaseError={handlePurchaseError}
       />
       
       {/* Freeze Streak Popup */}
@@ -2150,6 +2164,13 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         selectedPackage={selectedStepBoost}
         onPurchase={handleStepBoostsPurchase}
         refreshStarletProduct={refreshMarketContent}
+      />
+
+      {/* Purchase Error Popup */}
+      {console.log('Market render: showPurchaseErrorPopup =', showPurchaseErrorPopup)}
+      <PurchaseErrorPopup
+        isOpen={showPurchaseErrorPopup}
+        onClose={() => setShowPurchaseErrorPopup(false)}
       />
 
     </>

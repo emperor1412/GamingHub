@@ -4,7 +4,7 @@ import background from './images/background_2.png';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
 import sneaker from './images/banking_step_icon.png';
-import stairs from './images/step_challenges_icon.png';
+import badges from './images/stepBoost_trophy_unlocked.png';
 import shared from './Shared';
 
 
@@ -122,22 +122,36 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
           {/* Subscription Options */}
           <div className="ip-subscription-options">
             {/* Corner borders */}
-            <div className="ip-corner ip-top-left"></div>
+            {/* <div className="ip-corner ip-top-left"></div>
             <div className="ip-corner ip-top-right"></div>
             <div className="ip-corner ip-bottom-left"></div>
-            <div className="ip-corner ip-bottom-right"></div>
+            <div className="ip-corner ip-bottom-right"></div> */}
             {/* Premium Title */}
             <div className="ip-premium-title">PREMIUM</div>
             <div className="ip-subscription-container">
-              <div className="ip-subscription-item ip-yearly-item" onClick={handleYearlySelect}>
-                <span className="ip-plan-type">YEARLY</span>
+              <div className="ip-subscription-item ip-yearly-item">
+                <span className="ip-plan-type" onClick={handleYearlySelect}>
+                  {/* Corner borders cho plan type */}
+                  <div className="ip-corner ip-top-left-plan"></div>
+                  <div className="ip-corner ip-top-right-plan"></div>
+                  <div className="ip-corner ip-bottom-left-plan"></div>
+                  <div className="ip-corner ip-bottom-right-plan"></div>
+                  YEARLY
+                </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipYearlyPrice.toLocaleString()}</span>
                   <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
-              <div className="ip-subscription-item ip-monthly-item" onClick={handleMonthlySelect}>
-                <span className="ip-plan-type">MONTHLY</span>
+              <div className="ip-subscription-item ip-monthly-item">
+                <span className="ip-plan-type" onClick={handleMonthlySelect}>
+                  {/* Corner borders cho plan type */}
+                  <div className="ip-corner ip-top-left-plan"></div>
+                  <div className="ip-corner ip-top-right-plan"></div>
+                  <div className="ip-corner ip-bottom-left-plan"></div>
+                  <div className="ip-corner ip-bottom-right-plan"></div>
+                  MONTHLY
+                </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipMonthlyPrice.toLocaleString()}</span>
                   <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
@@ -165,10 +179,10 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </div>
               </div>
               <div className="ip-benefit-item">
-                <img src={stairs} alt="Stairs" className="ip-benefit-icon ip-benefit-stairs" />
+                <img src={badges} alt="Stairs" className="ip-benefit-icon ip-benefit-stairs" />
                 <div className="ip-benefit-text-container">
                   <span className="ip-benefit-text">STEP CHALLENGES!</span>
-                  <span className="ip-benefit-text ip-benefit-text-small">EARN STEPIN BACKGROUNDS AND BADGES!</span>
+                  <span className="ip-benefit-text ip-benefit-text-small">COMING SOON</span>
                 </div>
               </div>
             </div>
