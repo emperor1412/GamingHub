@@ -5,16 +5,14 @@ import back from './images/back.svg';
 import { handleStarletsPurchase } from './services/telegramPayment';
 import SuccessfulPurchasePopup from './SuccessfulPurchasePopup';
 import SuccessfulPurchasePremium from './SuccessfulPurchasePremium';
-import PurchaseErrorPopup from './PurchaseErrorPopup';
 import shared from './Shared';
 
 
-const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, isFreeItem, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile }) => {
+const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, productId, productName, isStarletProduct, isPremium, isFreeItem, onConfirm, setShowProfileView, setShowBuyView, onPurchaseComplete, onFreeItemComplete, refreshUserProfile, onPurchaseError }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [purchaseData, setPurchaseData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentOption, setCurrentOption] = useState(null);
-  const [showErrorPopup, setShowErrorPopup] = useState(false);
 
   useEffect(() => {
     const fetchOptionData = async () => {
@@ -54,6 +52,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
 
   const showError = useCallback(async (message) => {
     onClose();
+    // Đóng Buy view khi có lỗi
+    if (setShowBuyView) {
+      setShowBuyView(false);
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
 
     if (window.Telegram?.WebApp?.showPopup) {
@@ -70,7 +72,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     } else {
       alert(message);
     }
-  }, [onClose]);
+  }, [onClose, setShowBuyView]);
 
   const checkPremiumStatus = useCallback(async () => {
     try {
@@ -108,20 +110,50 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
             optionId: premiumOptionId 
           });
         } catch (purchaseError) {
-          // Check if it's a parameter error (code 100001)
+          // Check if it's a parameter error (code 100001) or VIP already exists error (code 214003)
           console.log('Purchase error caught:', purchaseError);
           console.log('Error code:', purchaseError?.code);
           if (purchaseError?.code === 100001) {
             console.log('Parameter error detected, checking premium status...');
             const hasPremium = await checkPremiumStatus();
             if (hasPremium) {
-              console.log('User has active premium, showing error popup');
+              console.log('User has active premium, calling parent error handler');
               setIsProcessing(false);
-              onClose();
-              await new Promise(resolve => setTimeout(resolve, 100));
-              setShowErrorPopup(true);
+              // Gọi callback để show error popup từ Market.js TRƯỚC KHI đóng popup
+              if (onPurchaseError) {
+                console.log('Calling onPurchaseError callback for parameter error');
+                onPurchaseError();
+              }
+              // Delay một chút để đảm bảo callback được thực thi
+              setTimeout(() => {
+                onClose();
+                // Đóng Buy view khi user đã có Premium
+                if (setShowBuyView) {
+                  setShowBuyView(false);
+                }
+              }, 100);
               return;
             }
+          } else if (purchaseError?.code === 214003) {
+            console.log('VIP already exists error detected, calling parent error handler');
+            console.log('onPurchaseError callback exists:', !!onPurchaseError);
+            setIsProcessing(false);
+            // Gọi callback để show error popup từ Market.js TRƯỚC KHI đóng popup
+            if (onPurchaseError) {
+              console.log('Calling onPurchaseError callback');
+              onPurchaseError();
+            } else {
+              console.log('onPurchaseError callback is not available');
+            }
+            // Delay một chút để đảm bảo callback được thực thi
+            setTimeout(() => {
+              onClose();
+              // Đóng Buy view khi user đã có VIP
+              if (setShowBuyView) {
+                setShowBuyView(false);
+              }
+            }, 100);
+            return;
           }
           // Re-throw error if it's not the specific case we're handling
           throw purchaseError;
@@ -280,6 +312,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         }
       } else if (result?.status === "cancelled") {
         onClose();
+        // Đóng Buy view giống như khi thanh toán thành công
+        if (setShowBuyView) {
+          setShowBuyView(false);
+        }
       }
     } catch (error) {
       console.error('Purchase failed:', error);
@@ -343,13 +379,6 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
 
   return (
     <>
-      {showErrorPopup && (
-        <PurchaseErrorPopup 
-          isOpen={showErrorPopup}
-          onClose={() => setShowErrorPopup(false)}
-        />
-      )}
-      
       {(isOpen || showSuccessPopup) && (
         <>
           {isProcessing && (

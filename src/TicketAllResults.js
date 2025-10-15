@@ -64,11 +64,11 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
     // Define reward types and their positions
     const rewardPositions = [
-        { type: 10010, position: { top: '65%', right: '10%' } },      // Ticket
-        { type: 20020, position: { top: '65%', left: '10%' }, size: 'sa-size-gmt' },     // GMT
-        { type: 30020, position: { top: '65%', left: '50%', right: '50%' }, size: 'sa-size-mooar' },      // MOOAR
-        { type: 10030, position: { top: '35%', left: '5%' } },     // FSL
-        { type: 10020, position: { top: '35%', left: '50%', right: '50%' } },   
+        { type: 10010, position: { top: '65%', right: '10%' }, alignment: 'align-right' },      // Ticket
+        { type: 20020, position: { top: '65%', left: '10%' }, size: 'sa-size-gmt', alignment: 'align-left' },     // GMT
+        { type: 30020, position: { top: '65%', left: '50%', right: '50%' }, size: 'sa-size-mooar', alignment: 'align-center' },      // MOOAR
+        { type: 10030, position: { top: '35%', left: '10%' }, alignment: 'align-left' },     // B$
+        { type: 10020, position: { top: '35%', left: '50%', right: '50%' }, alignment: 'align-center' },   //Starlet
         // { type: 10030, position: { top: '25%', right: '7%' } },     // FSL
         // { type: 20010, position: { top: '45%', left: '7%' } },   // Starlet
         // { type: 30010, position: { top: '45%', right: '7%' } }   // Plus
@@ -232,8 +232,8 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
 
                                 {/* Scratched Tickets Count */}
                                 <div
-                                    className="sa_reward-item"
-                                    style={{ top: '35%', right: '8%' }}
+                                    className="sa_reward-item align-right"
+                                    style={{ top: '35%', right: '10%' }}
                                 >
                                     <div className="sa_reward-icon-wrapper">
                                         <img 
@@ -242,7 +242,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                             className="sa_reward-icon"
                                         />
                                     </div>
-                                    <span className="sa_reward-amount-scratched">
+                                    <span className="sa_reward-amount-scratched align-right">
                                         X{totalTicketsUsed}
                                     </span>
                                 </div>
@@ -253,7 +253,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                     return (
                                         <div
                                             key={index}
-                                            className="sa_reward-item"
+                                            className={`sa_reward-item ${item.alignment || 'align-center'}`}
                                             style={item.position}
                                         >
                                             <div 
@@ -262,7 +262,7 @@ const TicketAllResults = ({ rewards, totalTicketsUsed, onClose }) => {
                                                 <img 
                                                     src={shared.mappingIcon[item.type]}
                                                     alt={`Reward ${item.type}`}
-                                                    className={`sa_reward-icon ${item.size}`}
+                                                    className={`sa_reward-icon ${item.size || ''}`}
                                                 />
                                             </div>
                                             <span className="sa_reward-amount">

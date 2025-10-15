@@ -1155,19 +1155,7 @@ Response:
                                 className="ticket-button-image"
                             />
                             <div className='ticket-button-container-border'></div>
-                            
-                            {/* Premium Text */}
-                            {/* <div className="premium-text">PREMIUM</div> */}
                         </div>
-                        
-                        {/* Premium Diamond */}
-                        {/* <div className="premium-diamond-container">
-                            <img
-                                src={premiumDiamond}
-                                alt="Premium Diamond"
-                                className="premium-diamond"
-                            />
-                        </div> */}
                     </button>
                 </section>
 
