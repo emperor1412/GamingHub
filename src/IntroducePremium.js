@@ -3,6 +3,7 @@ import './IntroducePremium.css';
 import background from './images/background_2.png';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
+import telegram_premium from './images/Telegram_Premium.png';
 import sneaker from './images/banking_step_icon.png';
 import badges from './images/stepBoost_trophy_unlocked.png';
 import shared from './Shared';
@@ -166,7 +167,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipYearlyPrice.toLocaleString()}</span>
-                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
               <div className="ip-subscription-item ip-monthly-item">
@@ -180,7 +181,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipMonthlyPrice.toLocaleString()}</span>
-                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
             </div>
