@@ -3,7 +3,7 @@ import './PremiumTasks.css';
 import back from './images/back.svg';
 import premiumDiamond from './images/Premium_icon.png';
 import loginIcon from './images/icon_gamehub.png';
-import ticketIcon from './images/ticket_scratch_icon.png';
+import ticketIcon from './images/ticket2_scratch_icon.png';
 import tadokamiIcon from './images/icon_tadokami.png';
 import flippinStarsIcon from './images/icon_flipping_star.png';
 import friendsIcon from './images/icon_friend.png';
@@ -75,11 +75,11 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
       },
       {
         id: 5,
-        title: "INVITE 3 FRIENDS",
+        title: "INVITE 1 FRIEND",
         xp: 30,
         progress: getActivityCount(Activity_InviteFriends),
-        total: 3,
-        status: getActivityCount(Activity_InviteFriends) >= 3 ? "DONE" : "INCOMPLETE",
+        total: 1,
+        status: getActivityCount(Activity_InviteFriends) >= 1 ? "DONE" : "INCOMPLETE",
         icon: friendsIcon,
         size: "medium"
       },
@@ -132,7 +132,7 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
           total: 1,
           status: "INCOMPLETE",
           icon: ticketIcon,
-          size: "medium"
+          size: "large"
         },
         {
           id: 3,
@@ -156,10 +156,10 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
         },
         {
           id: 5,
-          title: "INVITE 3 FRIENDS",
+          title: "INVITE 1 FRIEND",
           xp: 30,
           progress: 0,
-          total: 3,
+          total: 1,
           status: "INCOMPLETE",
           icon: friendsIcon,
           size: "medium"
@@ -292,11 +292,6 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
 
   return (
     <div className="premium-tasks-overlay">
-      {/* Back Button */}
-      <button className="back-button back-button-alignment" onClick={onClose}>
-        <img src={back} alt="Back" />
-      </button>
-
       <div className="premium-tasks-container-main">
         {/* Header */}
         <div className="premium-tasks-header">
@@ -353,8 +348,8 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
                         </div>
                         <div className="pt_market-ticket-info">
                           <div className="pt_market-ticket-text">
-                            <div className="pt_market-ticket-amount">{task.xp} XP</div>
                             <div className="pt_market-ticket-label">{task.progress}/{task.total}</div>
+                            <div className="pt_market-ticket-amount">{task.xp} XP</div>
                           </div>
                           <div className="pt_market-ticket-bonus">
                             <span>{task.status}</span>
@@ -370,6 +365,12 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
               </div>
             </div>
           </div>
+
+          {/* Back Button */}
+          <button className="pt-back-btn" onClick={onClose}>
+            BACK
+          </button>
+          
       </div>
     </div>
   );
