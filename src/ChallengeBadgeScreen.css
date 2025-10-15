@@ -309,6 +309,17 @@
     margin: 0 auto;
 }
 
+/* Weekly badges special layout - 4 badges: 3 on top row, 1 centered on bottom row */
+.cbs-weekly-section .cbs-badges-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+}
+
+.cbs-weekly-section .cbs-badge-item:nth-child(4) {
+    grid-column: 2; /* Center the 4th badge */
+    grid-row: 2;
+}
+
 .cbs-badge-item {
     background: none;
     border: none;
@@ -320,6 +331,15 @@
 }
 
 .cbs-badge-item:hover {
+    transform: scale(1.05);
+}
+
+/* Unknown badges - not clickable but keep hover effect */
+.cbs-badge-item.cbs-badge-unknown {
+    cursor: default;
+}
+
+.cbs-badge-item.cbs-badge-unknown:hover {
     transform: scale(1.05);
 }
 

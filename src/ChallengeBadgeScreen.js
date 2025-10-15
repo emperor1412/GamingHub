@@ -12,6 +12,9 @@ import badgeLocked from './images/TwoHundredStrong_Locked.png';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
+
+// Import real data and API mock
+import { mockChallengeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
 import ChallengeClaimReward from './ChallengeClaimReward';
 
 const ChallengeBadgeScreen = ({ onClose }) => {
@@ -22,76 +25,88 @@ const ChallengeBadgeScreen = ({ onClose }) => {
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
 
-    // Mock data for badges
-    const badgeData = {
-        explorerBadges: { earned: 4, total: 52 },
-        starletsEarned: 2500,
-        weeklyBadges: [
-            // Visual Type: unlocked - Logic State: on-going
-            {
-                id: 1,
-                name: "INCA TRAIL",
-                visualType: "unlocked", // unlocked, locked, unknown
-                logicState: "on-going", // on-going, done-and-claimed, done-and-unclaimed, unfinished, unjoined, nextbadge
-                badgeType: "FSL GAMER",
-                badgeTitle: "JUNIOR AMBASSADOR",
-                color: "green",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked
-            },
-            // Visual Type: unlocked - Logic State: done-and-claimed
-            {
-                id: 2,
-                name: "CAMINO DE SANTIAGO",
-                visualType: "unlocked",
-                logicState: "done-and-claimed",
-                badgeType: "FSL GAMER", 
-                badgeTitle: "STARLETS CHAMPION",
-                color: "silver",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked
-            },
-            // Visual Type: locked - Logic State: unfinished
-            {
-                id: 3,
-                name: "PACIFIC CREST TRAIL",
-                visualType: "locked",
-                logicState: "unfinished",
-                badgeType: "FSL GAMER",
-                badgeTitle: "SENIOR AMBASSADOR", 
-                color: "blue",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked
-            },
-            // Visual Type: unknown - Logic State: nextbadge
-            {
-                id: 4,
-                name: "APPALACHIAN TRAIL",
-                visualType: "unknown",
-                logicState: "nextbadge",
-                badgeType: "",
-                badgeTitle: "",
-                color: "silver",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked
-            },
-            // Visual Type: locked - Logic State: unjoined
-            {
-                id: 5,
-                name: "MARKURY TRAIL",
-                visualType: "locked",
-                logicState: "unjoined",
-                badgeType: "FSL GAMER",
-                badgeTitle: "SENIOR AMBASSADOR",
-                color: "silver",
-                img: badgeUnlocked,
-                imgLocked: badgeLocked
+    // Process real challenge data from API response
+    const processChallengeData = () => {
+        const processedData = {
+            explorerBadges: { earned: 4, total: 52 },
+            starletsEarned: 2500,
+            weeklyBadges: [],
+            monthlyBadges: [],
+            yearlyBadges: []
+        };
+
+        // Process Weekly Challenges
+        mockChallengeApiResponse.weekly.forEach(apiChallenge => {
+            const challengeData = getChallengeDataById(apiChallenge.id, 'weekly');
+            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
+            
+            if (challengeData) {
+                processedData.weeklyBadges.push({
+                    id: apiChallenge.id,
+                    name: challengeData.name,
+                    visualType: visualState.visualType,
+                    logicState: visualState.logicState,
+                    badgeType: challengeData.badgeType,
+                    badgeTitle: challengeData.badgeTitle,
+                    color: challengeData.color,
+                    img: badgeUnlocked,
+                    imgLocked: badgeLocked
+                });
             }
-        ]
+        });
+
+        // Process Monthly Challenges
+        mockChallengeApiResponse.monthly.forEach(apiChallenge => {
+            const challengeData = getChallengeDataById(apiChallenge.id, 'monthly');
+            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
+            
+            if (challengeData) {
+                processedData.monthlyBadges.push({
+                    id: apiChallenge.id,
+                    name: challengeData.name,
+                    visualType: visualState.visualType,
+                    logicState: visualState.logicState,
+                    badgeType: challengeData.badgeType,
+                    badgeTitle: challengeData.badgeTitle,
+                    color: challengeData.color,
+                    img: badgeUnlocked,
+                    imgLocked: badgeLocked
+                });
+            }
+        });
+
+        // Process Yearly Challenges
+        mockChallengeApiResponse.yearly.forEach(apiChallenge => {
+            const challengeData = getChallengeDataById(apiChallenge.id, 'yearly');
+            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
+            
+            if (challengeData) {
+                processedData.yearlyBadges.push({
+                    id: apiChallenge.id,
+                    name: challengeData.name,
+                    visualType: visualState.visualType,
+                    logicState: visualState.logicState,
+                    badgeType: challengeData.badgeType,
+                    badgeTitle: challengeData.badgeTitle,
+                    color: challengeData.color,
+                    img: badgeUnlocked,
+                    imgLocked: badgeLocked
+                });
+            }
+        });
+
+        return processedData;
     };
+
+    const badgeData = processChallengeData();
 
     // Function to handle badge click
     const handleBadgeClick = (badge) => {
+        // Don't allow clicking on unknown badges
+        if (badge.visualType === 'unknown') {
+            return;
+        }
+
         // Handle routing based on visual type and logic state
         switch (badge.visualType) {
             case 'unlocked':
@@ -129,13 +144,6 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     default:
                         setSelectedBadge(badge);
                         break;
-                }
-                break;
-                
-            case 'unknown':
-                if (badge.logicState === 'nextbadge') {
-                    // Show modal for next badge
-                    setSelectedBadge(badge);
                 }
                 break;
                 
@@ -381,6 +389,96 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                         {/* {badge.visualType === 'unlocked' && (
                                             <div className="cbs-badge-status-icon">✨</div>
                                         )} */}
+                                        <span className="cbs-badge-name">{badge.name}</span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Monthly Badges Section */}
+                <div className="cbs-weekly-section">
+                    <div className="cbs-badges-container">
+                        {/* Corner Brackets */}
+                        <div className="cbs-corner cbs-top-left"></div>
+                        <div className="cbs-corner cbs-top-right"></div>
+                        <div className="cbs-corner cbs-bottom-left"></div>
+                        <div className="cbs-corner cbs-bottom-right"></div>
+                        
+                        <div className="cbs-weekly-header">
+                            <div className="cbs-weekly-title">MONTHLY</div>
+                        </div>
+
+                        <div className="cbs-badges-grid">
+                            {badgeData.monthlyBadges.map((badge, index) => (
+                                <button
+                                    key={badge.id}
+                                    className={`cbs-badge-item cbs-badge-${badge.visualType}`}
+                                    onClick={() => handleBadgeClick(badge)}
+                                >
+                                    <div className="cbs-badge-content">
+                                        <span className="cbs-badge-icon">
+                                            <img 
+                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                alt="Badge" 
+                                            />
+                                        </span>
+                                        {badge.visualType === 'locked' && (
+                                            <div className="cbs-badge-status-icon cbs-badge-locked-icon">
+                                                <img src={lockIcon} alt="Locked" />
+                                            </div>
+                                        )}
+                                        {badge.visualType === 'unknown' && (
+                                            <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
+                                                <img src={questionIcon} alt="Unknown" />
+                                            </div>
+                                        )}
+                                        <span className="cbs-badge-name">{badge.name}</span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Yearly Badges Section */}
+                <div className="cbs-weekly-section">
+                    <div className="cbs-badges-container">
+                        {/* Corner Brackets */}
+                        <div className="cbs-corner cbs-top-left"></div>
+                        <div className="cbs-corner cbs-top-right"></div>
+                        <div className="cbs-corner cbs-bottom-left"></div>
+                        <div className="cbs-corner cbs-bottom-right"></div>
+                        
+                        <div className="cbs-weekly-header">
+                            <div className="cbs-weekly-title">YEARLY</div>
+                        </div>
+
+                        <div className="cbs-badges-grid">
+                            {badgeData.yearlyBadges.map((badge, index) => (
+                                <button
+                                    key={badge.id}
+                                    className={`cbs-badge-item cbs-badge-${badge.visualType}`}
+                                    onClick={() => handleBadgeClick(badge)}
+                                >
+                                    <div className="cbs-badge-content">
+                                        <span className="cbs-badge-icon">
+                                            <img 
+                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                alt="Badge" 
+                                            />
+                                        </span>
+                                        {badge.visualType === 'locked' && (
+                                            <div className="cbs-badge-status-icon cbs-badge-locked-icon">
+                                                <img src={lockIcon} alt="Locked" />
+                                            </div>
+                                        )}
+                                        {badge.visualType === 'unknown' && (
+                                            <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
+                                                <img src={questionIcon} alt="Unknown" />
+                                            </div>
+                                        )}
                                         <span className="cbs-badge-name">{badge.name}</span>
                                     </div>
                                 </button>
