@@ -44,13 +44,13 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
             setMembershipData({
               typeMonthly: 1,
               typeYearly: 2,
-              membershipMonthlyPrice: monthlyPremium.starlet || 100,
-              membershipYearlyPrice: yearlyPremium.starlet || 1000
+              membershipMonthlyPrice: monthlyPremium.stars || 100,
+              membershipYearlyPrice: yearlyPremium.stars || 1000
             });
             
             console.log('✅ Membership pricing data set from buyOptions:', {
-              monthlyPrice: monthlyPremium.starlet,
-              yearlyPrice: yearlyPremium.starlet
+              monthlyPrice: monthlyPremium.stars,
+              yearlyPrice: yearlyPremium.stars
             });
           } else {
             console.log('Premium options not found in buyOptions');
@@ -71,8 +71,8 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 setMembershipData({
                   typeMonthly: 1,
                   typeYearly: 2,
-                  membershipMonthlyPrice: monthlyPremium.starlet || 100,
-                  membershipYearlyPrice: yearlyPremium.starlet || 1000
+                  membershipMonthlyPrice: monthlyPremium.stars || 100,
+                  membershipYearlyPrice: yearlyPremium.stars || 1000
                 });
               }
             }
