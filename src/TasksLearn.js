@@ -7,6 +7,7 @@ import './TaskWordInput.css';
 import correct_answer from './images/correct_answer.svg';
 import incorrect_answer from './images/incorrect_answer.svg';
 import { trackTaskFunnel, trackTaskAttempt, trackTaskContent } from './analytics';
+import { popup } from '@telegram-apps/sdk';
 
 const TasksLearn = ({ task, onClose, onComplete }) => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -137,6 +138,47 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
             trackTaskContent(task.id, currentStep, 'view', shared.loginData?.userId);
         }
     }, [currentStep, task.id, task.contentList]);
+
+    // Show Telegram popup when entering word input form for task type 6
+    const showWordInputWarning = async () => {
+        if (popup.open.isAvailable()) {
+            const promise = popup.open({
+                title: '⚠️ IMPORTANT WARNING',
+                message: 'You have ONE CHANCE to enter the correct word.\n\nMake sure you type it exactly as shown - this task is case sensitive (uppercase and lowercase matter).\n\nDouble-check your answer before you submit.',
+                buttons: [
+                    { id: 'understand', type: 'default', text: 'I UNDERSTAND' }
+                ]
+            });
+            const buttonId = await promise;
+        } else {
+            // Fallback to browser alert if popup.open is not available
+            alert(
+                "⚠️ IMPORTANT WARNING\n\n" +
+                "You have ONE CHANCE to enter the correct word.\n\n" +
+                "Make sure you type it exactly as shown - this task is case sensitive (uppercase and lowercase matter).\n\n" +
+                "Double-check your answer before you submit."
+            );
+        }
+    };
+
+    // Show Telegram popup when entering word input form for task type 6
+    useEffect(() => {
+        if (task.type === 6) {
+            // Check if we're showing the word input form (not content or result)
+            const isShowingWordInputForm = (
+                (!task.contentList || task.contentList.length === 0) && 
+                !showResult
+            ) || (
+                task.contentList && 
+                currentStep >= task.contentList.length && 
+                !showResult
+            );
+            
+            if (isShowingWordInputForm) {
+                showWordInputWarning();
+            }
+        }
+    }, [task.type, task.contentList, currentStep, showResult]);
 
     // Update tryCount when trying again (only for task type 2)
     const handleTryAgain = () => {

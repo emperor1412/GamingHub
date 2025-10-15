@@ -3,13 +3,14 @@ import './IntroducePremium.css';
 import background from './images/background_2.png';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
+import telegram_premium from './images/Telegram_Premium.png';
 import sneaker from './images/banking_step_icon.png';
 import badges from './images/stepBoost_trophy_unlocked.png';
 import shared from './Shared';
 
 
 const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false, onNavigateToMarket }) => {
-  // Premium membership pricing data
+  // Premium membership pricing data - using same approach as Market.js
   const [membershipData, setMembershipData] = useState({
     typeMonthly: 1,
     typeYearly: 2,
@@ -17,7 +18,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
     membershipYearlyPrice: 1000
   });
 
-  // Fetch membership pricing data from API
+  // Fetch membership pricing data from buyOptions API (same as Market.js)
   const fetchMembershipPricing = async () => {
     try {
       if (!shared.loginData?.token) {
@@ -25,36 +26,62 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
         return;
       }
       
-      const url = `${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`;
-      console.log('Fetching membership pricing from:', url);
+      const url = `${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`;
+      console.log('Fetching membership pricing from buyOptions:', url);
       
       const response = await fetch(url);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Membership pricing API response:', data);
+        console.log('BuyOptions API response:', data);
         
-        if (data.code === 0 && data.data) {
-          const pricingData = data.data;
+        if (data.code === 0 && Array.isArray(data.data)) {
+          // Find premium options from buyOptions (same as Market.js)
+          const monthlyPremium = data.data.find(option => option.id === 4001);
+          const yearlyPremium = data.data.find(option => option.id === 4002);
           
-          setMembershipData({
-            typeMonthly: pricingData.type_monthly || 1,
-            typeYearly: pricingData.type_yearLy || 2,
-            membershipMonthlyPrice: pricingData.membershipMonthlyPrice || 100,
-            membershipYearlyPrice: pricingData.membershipYearlyPrice || 1000
-          });
-          
-          console.log('✅ Membership pricing data set:', {
-            typeMonthly: pricingData.type_monthly,
-            typeYearly: pricingData.type_yearLy,
-            monthlyPrice: pricingData.membershipMonthlyPrice,
-            yearlyPrice: pricingData.membershipYearlyPrice
-          });
+          if (monthlyPremium && yearlyPremium) {
+            setMembershipData({
+              typeMonthly: 1,
+              typeYearly: 2,
+              membershipMonthlyPrice: monthlyPremium.starlet || 100,
+              membershipYearlyPrice: yearlyPremium.starlet || 1000
+            });
+            
+            console.log('✅ Membership pricing data set from buyOptions:', {
+              monthlyPrice: monthlyPremium.starlet,
+              yearlyPrice: yearlyPremium.starlet
+            });
+          } else {
+            console.log('Premium options not found in buyOptions');
+          }
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh (same as Market.js)
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            // Retry the fetch after login
+            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && Array.isArray(retryData.data)) {
+              const monthlyPremium = retryData.data.find(option => option.id === 4001);
+              const yearlyPremium = retryData.data.find(option => option.id === 4002);
+              
+              if (monthlyPremium && yearlyPremium) {
+                setMembershipData({
+                  typeMonthly: 1,
+                  typeYearly: 2,
+                  membershipMonthlyPrice: monthlyPremium.starlet || 100,
+                  membershipYearlyPrice: yearlyPremium.starlet || 1000
+                });
+              }
+            }
+          }
         } else {
-          console.log('Unexpected membership pricing API response format:', data);
+          console.log('Unexpected buyOptions API response format:', data);
         }
       } else {
-        console.error('Membership pricing API response not ok:', response.status);
+        console.error('BuyOptions API response not ok:', response.status);
       }
     } catch (error) {
       console.error('Error fetching membership pricing:', error);
@@ -140,7 +167,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipYearlyPrice.toLocaleString()}</span>
-                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
               <div className="ip-subscription-item ip-monthly-item">
@@ -154,7 +181,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipMonthlyPrice.toLocaleString()}</span>
-                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
             </div>

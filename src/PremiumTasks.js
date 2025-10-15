@@ -75,11 +75,11 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
       },
       {
         id: 5,
-        title: "INVITE 3 FRIENDS",
+        title: "INVITE 1 FRIEND",
         xp: 30,
         progress: getActivityCount(Activity_InviteFriends),
-        total: 3,
-        status: getActivityCount(Activity_InviteFriends) >= 3 ? "DONE" : "INCOMPLETE",
+        total: 1,
+        status: getActivityCount(Activity_InviteFriends) >= 1 ? "DONE" : "INCOMPLETE",
         icon: friendsIcon,
         size: "medium"
       },
@@ -156,10 +156,10 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
         },
         {
           id: 5,
-          title: "INVITE 3 FRIENDS",
+          title: "INVITE 1 FRIEND",
           xp: 30,
           progress: 0,
-          total: 3,
+          total: 1,
           status: "INCOMPLETE",
           icon: friendsIcon,
           size: "medium"
