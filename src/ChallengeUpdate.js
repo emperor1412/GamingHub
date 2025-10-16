@@ -15,7 +15,15 @@ const ChallengeUpdate = ({
     challengeEndDate = "DD/MM/YY HH:MM",
     currentSteps = 100,
     totalSteps = 500,
-    stepSegments = [100, 200, 300, 400, 500]
+    stepSegments = [100, 200, 300, 400, 500],
+    // Additional fields from CSV
+    stepsEst = 9999,
+    distanceKm = 9999,
+    name = "########",
+    shortTitle = "########",
+    blurb = "#####################################################",
+    location = "######",
+    starletsReward = 400
   } = challengeData || {};
 
   const handleDone = () => {
@@ -45,11 +53,14 @@ const ChallengeUpdate = ({
     return (
       <ChallengeClaimReward
         challengeData={{
-          stepsCompleted: 56000,
-          badgeName: "TRAILBLAZER OF MACHU PICCHU",
-          challengeTitle: "INCA TRAIL",
-          starletsReward: 400,
-          challengeEndDate: challengeEndDate
+          stepsCompleted: stepsEst,
+          distanceKm: distanceKm,
+          badgeName: `${name}`,
+          challengeTitle: shortTitle,
+          starletsReward: starletsReward,
+          challengeEndDate: challengeEndDate,
+          blurb: blurb,
+          location: location
         }}
         onClaimRewards={handleClaimRewards}
         onBack={handleBackFromClaim}
@@ -80,7 +91,7 @@ const ChallengeUpdate = ({
           {/* Challenge Title */}
           <div className="cu-challenge-title">
             <div className="cu-title-background">
-              <span className="cu-title-text">WEEKLY</span>
+              <span className="cu-title-text">{challengeData?.type?.toUpperCase() || "#####"}</span>
             </div>
             <span className="cu-subtitle-text">CHALLENGE</span>
           </div>

@@ -233,7 +233,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     challengeTitle: selectedChallengeData.shortTitle,
                     starletsReward: 400,
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
-                    successBlurb: selectedChallengeData.successBlurb || "##########################",
+                    blurb: selectedChallengeData.blurb || "##########################",
                     location: selectedChallengeData.location || "Unknown Location"
                 } : {}}
                 onClaimRewards={handleDoneFromClaimReward}
@@ -254,7 +254,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: 400, // Có thể lấy từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
-                    description: selectedChallengeData.successBlurb || "Your path through challenges, discoveries, and untold wonders has earned you the title of"
+                    description: selectedChallengeData.blurb || "#######################################################"
                 } : {}}
             />
         );
@@ -266,10 +266,11 @@ const ChallengeBadgeScreen = ({ onClose }) => {
             <ChallengeStatus
                 status={challengeStatusType}
                 onClose={handleBackFromStatus}
-                challengeData={{
-                    challengeTitle: "INCA TRAIL",
-                    stepsCompleted: challengeStatusType === 'incomplete' ? 23000 : 15000
-                }}
+                challengeData={selectedChallengeData ? {
+                    challengeTitle: selectedChallengeData.name,
+                    stepsCompleted: challengeStatusType === 'incomplete' ? 23000 : 15000,
+                    failBlurb: selectedChallengeData.failBlurb || "The challenge proved to be tougher than expected."
+                } : {}}
             />
         );
     }
@@ -278,12 +279,17 @@ const ChallengeBadgeScreen = ({ onClose }) => {
     if (showChallengeUpdate) {
         return (
             <ChallengeUpdate
-                challengeData={{
-                    challengeEndDate: "15/10/2025 23:59",
-                    currentSteps: 15000,
-                    totalSteps: 25000,
-                    stepSegments: [5000, 10000, 15000, 20000, 25000]
-                }}
+                challengeData={selectedChallengeData ? {
+                    challengeEndDate: `${selectedChallengeData.dateEnd} 23:59` || "DD/MM/YYYY 23:59",
+                    stepsEst: selectedChallengeData.stepsEst || 9999,
+                    distanceKm: selectedChallengeData.distanceKm || 9999,
+                    name: selectedChallengeData.name || "########",
+                    shortTitle: selectedChallengeData.shortTitle || "########",
+                    blurb: selectedChallengeData.blurb || "#####################################################",
+                    location: selectedChallengeData.location || "######",
+                    starletsReward: 400,
+                    type: selectedChallengeData.type || "WEEKLY"
+                } : {}}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
             />
