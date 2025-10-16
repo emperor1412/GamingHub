@@ -84,7 +84,7 @@
   width: 100%;
   max-width: 350px;
   margin-bottom: 20px;
-  padding: 20px;
+  padding: 20px 10px;
   box-sizing: border-box;
 }
 
@@ -154,9 +154,9 @@
 .cu-subtitle-text {
   font-size: 50.19px;
   font-weight: 700;
+  letter-spacing: -2.2%;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 1px;
   display: block;
   line-height: 100%;
   font-family: "PP Neue Machina", sans-serif;
