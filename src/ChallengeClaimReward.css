@@ -151,6 +151,17 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 8px;
+}
+
+.ccr-distance-info {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 100%;
+  color: #00F1FF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
 }
 
 /* Title Section */

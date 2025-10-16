@@ -5,10 +5,7 @@ import starlet from './images/starlet.png';
 
 const ChallengeClaimedScreen = ({ 
   onClose,
-  claimedRewards = {
-    starlets: 400,
-    badgeName: "INCA TRAIL"
-  }
+  claimedRewards = {}
 }) => {
   return (
     <div className="ccs-container">

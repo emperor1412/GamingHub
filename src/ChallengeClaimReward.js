@@ -19,10 +19,13 @@ const ChallengeClaimReward = ({
   
   const {
     stepsCompleted = 56000,
+    distanceKm = 11,
     badgeName = "TRAILBLAZER OF MACHU PICCHU",
     challengeTitle = "INCA TRAIL",
     starletsReward = 400,
-    challengeEndDate = "DD/MM/YY HH:MM"
+    challengeEndDate = "DD/MM/YY HH:MM",
+    successBlurb = "Your path through challenges, discoveries and untold wonders has earned you the title of",
+    location = "Peru"
   } = challengeData || {};
 
   const handleClaimRewards = () => {
@@ -71,20 +74,19 @@ const ChallengeClaimReward = ({
             <span>CONGRATULATIONS!</span>
           </div>
           <div className="ccr-trail-description">STEP BY STEP, YOU CONQUERED</div>
-          <div className="ccr-trail-description">THE LEGENDARY INCA TRAIL!</div>
+          <div className="ccr-trail-description">THE LEGENDARY {challengeTitle.toUpperCase()}!</div>
           </div>
 
         {/* Steps Completed Section */}
         <div className="ccr-steps-section">
           <div className="ccr-steps-number">{stepsCompleted.toLocaleString()}</div>
           <div className="ccr-steps-label">STEPS COMPLETED</div>
+          <div className="ccr-distance-info">{distanceKm} KM CONQUERED</div>
         </div>
 
         {/* Title & Badge Section */}
         <div className="ccr-title-section">
-          <div className="ccr-title-description">Your path through challenges, discoveries</div>
-          <div className="ccr-title-description">and untold wonders</div>
-          <div className="ccr-title-description">has earned you the title of...</div>
+          <div className="ccr-title-description">{successBlurb}</div>
           
           <div className="ccr-title-box">
             <span>{badgeName}</span>

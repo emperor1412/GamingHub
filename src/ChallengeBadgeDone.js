@@ -7,16 +7,17 @@ import km_icon from './images/km_icon.png';
 
 const ChallengeBadgeDone = ({ 
   onClose,
-  challengeData = {
-    challengeTitle: "INCA TRAIL",
-    badgeName: "TRAILBLAZER OF MACHU PICCHU",
-    stepsCompleted: 56000,
-    distance: 11,
-    starletsReward: 400,
-    challengeEndDate: "15/10/2025 23:59",
-    description: "Your path through challenges, discoveries, and untold wonders has earned you the title of"
-  }
+  challengeData = {}
 }) => {
+  const {
+    challengeTitle = "INCA TRAIL",
+    badgeName = "TRAILBLAZER OF MACHU PICCHU",
+    stepsCompleted = 56000,
+    distance = 11,
+    starletsReward = 400,
+    challengeEndDate = "15/10/2025 23:59",
+    description = "Your path through challenges, discoveries, and untold wonders has earned you the title of"
+  } = challengeData;
   return (
     <div className="cbd-container">
       {/* Background Pattern */}

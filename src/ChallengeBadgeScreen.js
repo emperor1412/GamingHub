@@ -19,6 +19,7 @@ import ChallengeClaimReward from './ChallengeClaimReward';
 
 const ChallengeBadgeScreen = ({ onClose }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
+    const [selectedChallengeData, setSelectedChallengeData] = React.useState(null);
     const [showChallengeUpdate, setShowChallengeUpdate] = React.useState(false);
     const [showChallengeBadgeDone, setShowChallengeBadgeDone] = React.useState(false);
     const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
@@ -46,9 +47,6 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     name: challengeData.name,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    badgeType: challengeData.badgeType,
-                    badgeTitle: challengeData.badgeTitle,
-                    color: challengeData.color,
                     img: badgeUnlocked,
                     imgLocked: badgeLocked
                 });
@@ -66,9 +64,6 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     name: challengeData.name,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    badgeType: challengeData.badgeType,
-                    badgeTitle: challengeData.badgeTitle,
-                    color: challengeData.color,
                     img: badgeUnlocked,
                     imgLocked: badgeLocked
                 });
@@ -86,9 +81,6 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     name: challengeData.name,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    badgeType: challengeData.badgeType,
-                    badgeTitle: challengeData.badgeTitle,
-                    color: challengeData.color,
                     img: badgeUnlocked,
                     imgLocked: badgeLocked
                 });
@@ -102,6 +94,11 @@ const ChallengeBadgeScreen = ({ onClose }) => {
 
     // Function to handle badge click
     const handleBadgeClick = (badge) => {
+        // Lưu challenge data để truyền cho các screens
+        const challengeData = getChallengeDataById(badge.id, badge.type || 'weekly');
+        console.log('Selected challenge data:', challengeData); // Debug log
+        setSelectedChallengeData(challengeData);
+        
         // Don't allow clicking on unknown badges
         if (badge.visualType === 'unknown') {
             return;
@@ -229,13 +226,16 @@ const ChallengeBadgeScreen = ({ onClose }) => {
     if (showChallengeClaimReward) {
         return (
             <ChallengeClaimReward
-                challengeData={{
-                    stepsCompleted: 56000,
-                    badgeName: "TRAILBLAZER OF MACHU PICCHU",
-                    challengeTitle: "INCA TRAIL",
+                challengeData={selectedChallengeData ? {
+                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    distanceKm: selectedChallengeData.distanceKm || 9999,
+                    badgeName: `${selectedChallengeData.name}`,
+                    challengeTitle: selectedChallengeData.shortTitle,
                     starletsReward: 400,
-                    challengeEndDate: "15/10/2025 23:59"
-                }}
+                    challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
+                    successBlurb: selectedChallengeData.successBlurb || "##########################",
+                    location: selectedChallengeData.location || "Unknown Location"
+                } : {}}
                 onClaimRewards={handleDoneFromClaimReward}
                 onBack={handleBackFromClaimReward}
             />
@@ -247,15 +247,15 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         return (
             <ChallengeBadgeDone
                 onClose={handleBackFromBadgeDone}
-                challengeData={{
-                    challengeTitle: "INCA TRAIL",
-                    badgeName: "TRAILBLAZER OF MACHU PICCHU",
-                    stepsCompleted: 56000,
-                    distance: 11,
-                    starletsReward: 400,
-                    challengeEndDate: "15/10/2025 23:59",
-                    description: "Your path through challenges, discoveries, and untold wonders has earned you the title of"
-                }}
+                challengeData={selectedChallengeData ? {
+                    challengeTitle: selectedChallengeData.shortTitle,
+                    badgeName: `${selectedChallengeData.name}`,
+                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    distance: selectedChallengeData.distanceKm || 9999,
+                    starletsReward: 400, // Có thể lấy từ API
+                    challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
+                    description: selectedChallengeData.successBlurb || "Your path through challenges, discoveries, and untold wonders has earned you the title of"
+                } : {}}
             />
         );
     }

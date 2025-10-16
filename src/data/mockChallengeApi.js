@@ -109,13 +109,16 @@ export const getChallengeDataById = (challengeId, challengeType) => {
       return {
         id: challenge.id,
         name: challenge.title,
-        type: "weekly",
-        badgeType: "WEEKLY EXPLORER",
-        badgeTitle: "TRAILBLAZER",
-        color: "blue",
+        type: challenge.type,
         shortTitle: challenge.shortTitle,
+        distanceKm: challenge.distanceKm,
+        stepsEst: challenge.stepsEst,
         location: challenge.location,
-        blurb: challenge.blurb
+        blurb: challenge.blurb,
+        successBlurb: challenge.successBlurb,
+        failBlurb: challenge.failBlurb,
+        dateStart: challenge.dateStart,
+        dateEnd: challenge.dateEnd
       };
     }
   } else if (challengeId >= 10001 && challengeId <= 10012) {
@@ -125,13 +128,16 @@ export const getChallengeDataById = (challengeId, challengeType) => {
       return {
         id: challenge.id,
         name: challenge.title,
-        type: "monthly",
-        badgeType: "MONTHLY CHALLENGER",
-        badgeTitle: "EXPEDITION MASTER",
-        color: "gold",
+        type: challenge.type,
         shortTitle: challenge.shortTitle,
+        distanceKm: challenge.distanceKm,
+        stepsEst: challenge.stepsEst,
         location: challenge.location,
-        blurb: challenge.blurb
+        blurb: challenge.blurb,
+        successBlurb: challenge.successBlurb,
+        failBlurb: challenge.failBlurb,
+        dateStart: challenge.dateStart,
+        dateEnd: challenge.dateEnd
       };
     }
   } else if (challengeId >= 100001 && challengeId <= 100003) {
@@ -141,13 +147,16 @@ export const getChallengeDataById = (challengeId, challengeType) => {
       return {
         id: challenge.id,
         name: challenge.title,
-        type: "yearly",
-        badgeType: "YEARLY LEGEND",
-        badgeTitle: "WORLD EXPLORER",
-        color: "diamond",
+        type: challenge.type,
         shortTitle: challenge.shortTitle,
+        distanceKm: challenge.distanceKm,
+        stepsEst: challenge.stepsEst,
         region: challenge.region,
-        blurb: challenge.blurb
+        blurb: challenge.blurb,
+        successBlurb: challenge.successBlurb,
+        failBlurb: challenge.failBlurb,
+        dateStart: challenge.dateStart,
+        dateEnd: challenge.dateEnd
       };
     }
   }
