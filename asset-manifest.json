@@ -1,12 +1,11 @@
 {
   "files": {
     "main.css": "./static/css/main.89f6ad48.css",
-    "main.js": "./static/js/main.715690fe.js",
+    "main.js": "./static/js/main.b7c826b7.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
     "static/media/FSL Games Scratch Animation-01.png": "./static/media/FSL Games Scratch Animation-01.877c4524925391a03ed6.png",
     "static/media/check_in_animation_540.gif": "./static/media/check_in_animation_540.f79e00a6220ffb8d5a81.gif",
-    "static/media/FSLGameHub_halloween_1586_1@2x.png": "./static/media/FSLGameHub_halloween_1586_1@2x.eb71369a8896b3dfcaa7.png",
     "static/media/FSL Games UI 2-10.png": "./static/media/FSL Games UI 2-10.423b8be012eb806cfc40.png",
     "static/media/scratch_ticket_background_full.png": "./static/media/scratch_ticket_background_full.10686c8b948d08378f20.png",
     "static/media/snoop_dogg_raffle.svg": "./static/media/snoop_dogg_raffle.dd0d52c3515042f13f6ec5c80446b906.svg",
@@ -139,6 +138,7 @@
     "static/media/lv4.png": "./static/media/lv4.8270aa7f7a5887fcf5e0.png",
     "static/media/1463 FSL avatars_Evil Duck.png": "./static/media/1463 FSL avatars_Evil Duck.5d10bd60bdd29fbda364.png",
     "static/media/1463 FSL avatars_Duck Wizard.png": "./static/media/1463 FSL avatars_Duck Wizard.3f70a65aa0d70b7bd9d7.png",
+    "static/media/FSLGameHub_halloween_1586_1@2x.png": "./static/media/FSLGameHub_halloween_1586_1@2x.bcc665733f9c7fed1727.png",
     "static/media/Lose.mp3": "./static/media/Lose.4ba5c94cf3dc7d057cfa.mp3",
     "static/media/MooAR_Login_Logo.png": "./static/media/MooAR_Login_Logo.b5c247a4297785ae1cc2.png",
     "static/media/one_shot.png": "./static/media/one_shot.2827c4f3c969098979d4.2827c4f3c969098979d4.png",
@@ -243,11 +243,11 @@
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
     "main.89f6ad48.css.map": "./static/css/main.89f6ad48.css.map",
-    "main.715690fe.js.map": "./static/js/main.715690fe.js.map",
+    "main.b7c826b7.js.map": "./static/js/main.b7c826b7.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.89f6ad48.css",
-    "static/js/main.715690fe.js"
+    "static/js/main.b7c826b7.js"
   ]
 }
