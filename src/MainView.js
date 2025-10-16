@@ -1144,17 +1144,17 @@ Response:
                 {/* Premium Section - Top Row */}
                 <section className="tickets-section">
                     <button 
-                        className={`ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
+                        className={`mv_ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
                         onClick={() => onClickPremium()}
                         disabled={isCheckingPremiumStatus}
                     >
-                        <div className='ticket-button-image-container'>
+                        <div className='mv_ticket-button-image-container'>
                             <img
                                 src={premium_mainview}
                                 alt="Premium Background"
-                                className="ticket-button-image"
+                                className="mv_ticket-button-image"
                             />
-                            <div className='ticket-button-container-border'></div>
+                            <div className='mv_ticket-button-container-border'></div>
                         </div>
                     </button>
                 </section>
@@ -1173,7 +1173,7 @@ Response:
                                 className="locked-card-image minigames"
                                 style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
                             /> 
-                            <div className='ticket-button-container-border'></div>
+                            <div className='mv_ticket-button-container-border'></div>
                             {/* <div className='check-out-button'>Daily Tasks</div> */}
                             <div className='locked-card-text'></div>
                         </div>
@@ -1189,7 +1189,7 @@ Response:
                                 alt="Bank Steps"
                                 className="locked-card-image bankstep"
                             />
-                            <div className='ticket-button-container-border'></div>
+                            <div className='mv_ticket-button-container-border'></div>
                             <div className='check-out-button'>BANK STEPS</div>
                         </div>
                     </button>
@@ -1204,7 +1204,7 @@ Response:
                                 alt="Tadokami"
                                 className="locked-card-image"
                             />
-                            <div className='ticket-button-container-border'></div>
+                            <div className='mv_ticket-button-container-border'></div>
                             {/* <div className='check-out-button'>TADOKAMI</div> */}
                             <div className='locked-card-text'></div>
                         </div>
@@ -1217,7 +1217,7 @@ Response:
                                 alt="Flipping Stars"
                                 className="locked-card-image"
                             />
-                            <div className='ticket-button-container-border'></div>
+                            <div className='mv_ticket-button-container-border'></div>
                             {/* <div className='check-out-button'>FLIPPING STARS</div> */}
                             <div className='locked-card-text'></div>
                         </div>
@@ -1235,14 +1235,14 @@ Response:
 
                 {/* Tickets underneath the games */}
                 <section className="tickets-section">
-                    <button className="ticket-button" onClick={() => setShowTicketView(true)}>
-                        <div className='ticket-button-image-container'>
+                    <button className="mv_ticket-button" onClick={() => setShowTicketView(true)}>
+                        <div className='mv_ticket-button-image-container'>
                             <img
                                 src={my_ticket}
                                 alt="My Tickets"
-                                className="ticket-button-image"
+                                className="mv_ticket-button-image"
                             />
-                        <div className='ticket-button-container-border'></div>
+                        <div className='mv_ticket-button-container-border'></div>
                             <h3 className="event-card-title">MY TICKETS</h3>
                             <p className="event-card-subtitle">Scratch<br></br> Tickets and <br></br> Unlock <br></br>Rewards!</p>
                             <div className="check-out-button ticket">
