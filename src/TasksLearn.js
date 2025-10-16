@@ -144,7 +144,7 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
         if (popup.open.isAvailable()) {
             const promise = popup.open({
                 title: '⚠️ IMPORTANT WARNING',
-                message: 'You have ONE CHANCE to enter the correct word.\n\nMake sure you type it exactly as shown - this task is case sensitive (uppercase and lowercase matter).\n\nDouble-check your answer before you submit.',
+                message: 'You have ONE CHANCE to enter the correct word.\n\nMake sure you type it exactly as shown - this task is case sensitive (uppercase and lowercase matter).\n\nDouble-check your answer before you submit.\n\nFollow @FSLGameHub on X for more info.',
                 buttons: [
                     { id: 'understand', type: 'default', text: 'I UNDERSTAND' }
                 ]
@@ -156,7 +156,8 @@ const TasksLearn = ({ task, onClose, onComplete }) => {
                 "⚠️ IMPORTANT WARNING\n\n" +
                 "You have ONE CHANCE to enter the correct word.\n\n" +
                 "Make sure you type it exactly as shown - this task is case sensitive (uppercase and lowercase matter).\n\n" +
-                "Double-check your answer before you submit."
+                "Double-check your answer before you submit.\n\n" +
+                "Follow @FSLGameHub on X for more info."
             );
         }
     };
