@@ -115,7 +115,6 @@ export const getChallengeDataById = (challengeId, challengeType) => {
         stepsEst: challenge.stepsEst,
         location: challenge.location,
         blurb: challenge.blurb,
-        successBlurb: challenge.successBlurb,
         failBlurb: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd
@@ -134,7 +133,6 @@ export const getChallengeDataById = (challengeId, challengeType) => {
         stepsEst: challenge.stepsEst,
         location: challenge.location,
         blurb: challenge.blurb,
-        successBlurb: challenge.successBlurb,
         failBlurb: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd
@@ -153,7 +151,6 @@ export const getChallengeDataById = (challengeId, challengeType) => {
         stepsEst: challenge.stepsEst,
         region: challenge.region,
         blurb: challenge.blurb,
-        successBlurb: challenge.successBlurb,
         failBlurb: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd

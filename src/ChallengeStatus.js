@@ -16,14 +16,14 @@ const ChallengeStatus = ({
 
   const getStatusDescription = () => {
     if (isIncomplete) {
+      const failBlurb = challengeData.failBlurb || "###############################";
       return [
-        "The Inca Trail proved to be a tough one, and sadly, you didn't make it to Machu Picchu this time.",
-        "The ancient paths remain unconquered, and the Incas have claimed your Starlets as tribute.",
+        failBlurb,
         "But don't let this be the end of your journey! Every step counts, and there's always another challenge waiting."
       ];
     } else {
       return [
-        "You didn’t join this challenge.",
+        "You didn't join this challenge.",
         "Check out on-going challenges to prove",
         "your determination."
       ];
@@ -35,7 +35,7 @@ const ChallengeStatus = ({
   };
 
   const getStepsText = () => {
-    return isIncomplete ? "23,000 STEPS COMPLETED" : "15,000 STEPS COMPLETED";
+    return isIncomplete ? "23,000 STEPS COMPLETED" : "0 STEPS COMPLETED";
   };
 
   return (
