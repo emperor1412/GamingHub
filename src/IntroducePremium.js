@@ -139,7 +139,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
         <div className="ip-main-content">
           {/* Premium Diamond */}
           <div className="ip-diamond-container">
-            <img ư
+            <img
               src={premiumDiamond}
               alt="Premium Diamond" 
               className="ip-diamond-img"
