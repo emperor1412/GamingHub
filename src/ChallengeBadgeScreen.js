@@ -14,7 +14,7 @@ import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
 
 // Import real data and API mock
-import { mockChallengeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
+import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
 import ChallengeClaimReward from './ChallengeClaimReward';
 
 const ChallengeBadgeScreen = ({ onClose }) => {
@@ -37,14 +37,14 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         };
 
         // Process Weekly Challenges
-        mockChallengeApiResponse.weekly.forEach(apiChallenge => {
+        mockChallengeBadgeApiResponse.weekly.forEach(apiChallenge => {
             const challengeData = getChallengeDataById(apiChallenge.id, 'weekly');
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
             if (challengeData) {
                 processedData.weeklyBadges.push({
                     id: apiChallenge.id,
-                    name: challengeData.name,
+                    title: challengeData.title,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -54,14 +54,14 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         });
 
         // Process Monthly Challenges
-        mockChallengeApiResponse.monthly.forEach(apiChallenge => {
+        mockChallengeBadgeApiResponse.monthly.forEach(apiChallenge => {
             const challengeData = getChallengeDataById(apiChallenge.id, 'monthly');
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
             if (challengeData) {
                 processedData.monthlyBadges.push({
                     id: apiChallenge.id,
-                    name: challengeData.name,
+                    title: challengeData.title,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -71,14 +71,14 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         });
 
         // Process Yearly Challenges
-        mockChallengeApiResponse.yearly.forEach(apiChallenge => {
+        mockChallengeBadgeApiResponse.yearly.forEach(apiChallenge => {
             const challengeData = getChallengeDataById(apiChallenge.id, 'yearly');
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
             if (challengeData) {
                 processedData.yearlyBadges.push({
                     id: apiChallenge.id,
-                    name: challengeData.name,
+                    title: challengeData.title,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -229,11 +229,11 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 challengeData={selectedChallengeData ? {
                     stepsCompleted: selectedChallengeData.stepsEst || 99999,
                     distanceKm: selectedChallengeData.distanceKm || 9999,
-                    badgeName: `${selectedChallengeData.name}`,
+                    badgeName: `${selectedChallengeData.title}`,
                     challengeTitle: selectedChallengeData.shortTitle,
                     starletsReward: 400,
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
-                    blurb: selectedChallengeData.blurb || "##########################",
+                    description: selectedChallengeData.description || "##########################",
                     location: selectedChallengeData.location || "Unknown Location"
                 } : {}}
                 onClaimRewards={handleDoneFromClaimReward}
@@ -249,12 +249,12 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 onClose={handleBackFromBadgeDone}
                 challengeData={selectedChallengeData ? {
                     challengeTitle: selectedChallengeData.shortTitle,
-                    badgeName: `${selectedChallengeData.name}`,
+                    badgeName: `${selectedChallengeData.title}`,
                     stepsCompleted: selectedChallengeData.stepsEst || 99999,
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: 400, // Có thể lấy từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
-                    description: selectedChallengeData.blurb || "#######################################################"
+                    description: selectedChallengeData.description || "#######################################################"
                 } : {}}
             />
         );
@@ -267,9 +267,9 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 status={challengeStatusType}
                 onClose={handleBackFromStatus}
                 challengeData={selectedChallengeData ? {
-                    challengeTitle: selectedChallengeData.name,
+                    challengeTitle: selectedChallengeData.title,
                     stepsCompleted: challengeStatusType === 'incomplete' ? 23000 : 15000,
-                    failBlurb: selectedChallengeData.failBlurb || "The challenge proved to be tougher than expected."
+                    failDescription: selectedChallengeData.failDescription || "The challenge proved to be tougher than expected."
                 } : {}}
             />
         );
@@ -283,9 +283,9 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     challengeEndDate: `${selectedChallengeData.dateEnd} 23:59` || "DD/MM/YYYY 23:59",
                     stepsEst: selectedChallengeData.stepsEst || 9999,
                     distanceKm: selectedChallengeData.distanceKm || 9999,
-                    name: selectedChallengeData.name || "########",
+                    title: selectedChallengeData.title || "########",
                     shortTitle: selectedChallengeData.shortTitle || "########",
-                    blurb: selectedChallengeData.blurb || "#####################################################",
+                    description: selectedChallengeData.description || "#####################################################",
                     location: selectedChallengeData.location || "######",
                     starletsReward: 400,
                     type: selectedChallengeData.type || "WEEKLY"
@@ -395,7 +395,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                         {/* {badge.visualType === 'unlocked' && (
                                             <div className="cbs-badge-status-icon">✨</div>
                                         )} */}
-                                        <span className="cbs-badge-name">{badge.name}</span>
+                                        <span className="cbs-badge-name">{badge.title}</span>
                                     </div>
                                 </button>
                             ))}
@@ -440,7 +440,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                                 <img src={questionIcon} alt="Unknown" />
                                             </div>
                                         )}
-                                        <span className="cbs-badge-name">{badge.name}</span>
+                                        <span className="cbs-badge-name">{badge.title}</span>
                                     </div>
                                 </button>
                             ))}
@@ -485,7 +485,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                                 <img src={questionIcon} alt="Unknown" />
                                             </div>
                                         )}
-                                        <span className="cbs-badge-name">{badge.name}</span>
+                                        <span className="cbs-badge-name">{badge.title}</span>
                                     </div>
                                 </button>
                             ))}
@@ -498,7 +498,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                     <div className="cbs-status-modal">
                         <div className="cbs-status-content">
                             <div className="cbs-status-header">
-                                <h3>{selectedBadge.name}</h3>
+                                <h3>{selectedBadge.title}</h3>
                                 <button 
                                     className="cbs-close-btn"
                                     onClick={() => setSelectedBadge(null)}

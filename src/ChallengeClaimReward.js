@@ -24,7 +24,7 @@ const ChallengeClaimReward = ({
     challengeTitle = "INCA TRAIL",
     starletsReward = 400,
     challengeEndDate = "DD/MM/YY HH:MM",
-    blurb = "Your path through challenges, discoveries and untold wonders has earned you the title of",
+    description = "Your path through challenges, discoveries and untold wonders has earned you the title of",
     location = "Peru"
   } = challengeData || {};
 
@@ -86,7 +86,7 @@ const ChallengeClaimReward = ({
 
         {/* Title & Badge Section */}
         <div className="ccr-title-section">
-          <div className="ccr-title-description">{blurb}</div>
+          <div className="ccr-title-description">{description}</div>
           
           <div className="ccr-title-box">
             <span>{badgeName}</span>

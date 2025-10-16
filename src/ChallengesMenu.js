@@ -10,6 +10,7 @@ import {
     hasEnoughStarlets, 
     joinChallenge 
 } from './data/challengesData';
+import { mockCurrentChallengeDataApiResponse, getChallengeDataById } from './data/mockChallengeApi';
 import ChallengeInfo from './ChallengeInfo';
 import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
 import ChallengeUpdate from './ChallengeUpdate';
@@ -24,9 +25,29 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallengeType, setSelectedChallengeType] = useState(null);
     const [showBadgeScreen, setShowBadgeScreen] = useState(false);
 
+    // Helper function to get current challenge from API mock
+    const getCurrentChallengeFromApi = (challengeType) => {
+        const apiResponse = mockCurrentChallengeDataApiResponse[challengeType];
+        if (apiResponse) {
+            const detailedData = getChallengeDataById(apiResponse.id, challengeType);
+            if (detailedData) {
+                return {
+                    ...detailedData,
+                    entryFee: apiResponse.price,
+                    reward: apiResponse.price * 2, // Reward is double the entry fee
+                    levelRequired: 2,
+                    needPremium: challengeType === 'monthly',
+                    currentSteps: 0,
+                    isCompleted: false
+                };
+            }
+        }
+        return null;
+    };
+
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
-        const challenge = getCurrentChallenge(challengeType);
+        const challenge = getCurrentChallengeFromApi(challengeType);
         
         // Check conditions in order of priority
         let isDisabled = false;
@@ -49,7 +70,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleChallengeClick = (challengeType) => {
-        const challenge = getCurrentChallenge(challengeType);
+        const challenge = getCurrentChallengeFromApi(challengeType);
         const state = getChallengeState(challengeType);
         
         // Only allow click if not disabled
@@ -75,7 +96,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
 
     const handleConfirmJoin = () => {
         // Check if user has enough starlets
-        const challenge = getCurrentChallenge(selectedChallengeType);
+        const challenge = getCurrentChallengeFromApi(selectedChallengeType);
         const requiredStarlets = challenge.entryFee;
         
         if (hasEnoughStarlets(requiredStarlets)) {
@@ -157,9 +178,8 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
             <ChallengeUpdate
                 challengeData={{
                     ...selectedChallenge,
-                    currentSteps: selectedChallenge.currentSteps || 0,
-                    totalSteps: selectedChallenge.steps,
-                    stepSegments: [selectedChallenge.steps * 0.2, selectedChallenge.steps * 0.4, selectedChallenge.steps * 0.6, selectedChallenge.steps * 0.8, selectedChallenge.steps],
+                    currentSteps: 100,
+                    totalSteps: 500,
                     challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
                 }}
                 onDone={handleDoneFromUpdate}
@@ -173,7 +193,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return (
             <ChallengeJoinConfirmation 
                 challengeData={{
-                    steps: selectedChallenge.steps,
+                    steps: selectedChallenge.stepsEst,
                     days: 7, // You can calculate this based on dateStart and dateEnd
                     starletsCost: selectedChallenge.entryFee,
                     badgeName: "EXPLORER BADGE",
@@ -229,7 +249,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const weeklyState = getChallengeState('weekly');
-                            const weeklyChallenge = getCurrentChallenge('weekly');
+                            const weeklyChallenge = getCurrentChallengeFromApi('weekly');
                             
                             if (weeklyState.isDisabled) {
                                 return (
@@ -261,7 +281,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const monthlyState = getChallengeState('monthly');
-                            const monthlyChallenge = getCurrentChallenge('monthly');
+                            const monthlyChallenge = getCurrentChallengeFromApi('monthly');
                             
                             if (monthlyState.isDisabled) {
                                 return (
@@ -293,7 +313,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const yearlyState = getChallengeState('yearly');
-                            const yearlyChallenge = getCurrentChallenge('yearly');
+                            const yearlyChallenge = getCurrentChallengeFromApi('yearly');
                             
                             if (yearlyState.isDisabled) {
                                 return (

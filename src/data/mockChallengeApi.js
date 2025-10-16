@@ -1,7 +1,7 @@
 // Mock API Response - Challenge Badge Data
 // This simulates the API response structure for challenge badges with all 6 states
 
-export const mockChallengeApiResponse = {
+export const mockChallengeBadgeApiResponse = {
   weekly: [
     // State 0: Incoming (locked + nextbadge)
     { id: 1001, name: "Mount Olympus Trek", type: "weekly", state: 0 },
@@ -52,6 +52,24 @@ export const mockChallengeApiResponse = {
     // State 2: Completed with reward (unlocked + done-and-unclaimed)
     { id: 100003, name: "Pacific Ring Sampler", type: "yearly", state: 2, hasReward: true }
   ]
+};
+
+export const mockCurrentChallengeDataApiResponse = {
+  weekly: {
+    id: 1002, // Trolltunga Out-and-Back
+    price: 200,
+    type: "weekly"
+  },
+  monthly: {
+    id: 10002, // Camino Portugués Coastal Sampler  
+    price: 800,
+    type: "monthly"
+  },
+  yearly: {
+    id: 100002, // Great Rift Traverse
+    price: 2000,
+    type: "yearly"
+  }
 };
 
 // State mapping helper
@@ -108,14 +126,14 @@ export const getChallengeDataById = (challengeId, challengeType) => {
     if (challenge) {
       return {
         id: challenge.id,
-        name: challenge.title,
+        title: challenge.title,
         type: challenge.type,
         shortTitle: challenge.shortTitle,
         distanceKm: challenge.distanceKm,
         stepsEst: challenge.stepsEst,
         location: challenge.location,
-        blurb: challenge.blurb,
-        failBlurb: challenge.failBlurb,
+        description: challenge.blurb,
+        failDescription: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd
       };
@@ -126,14 +144,14 @@ export const getChallengeDataById = (challengeId, challengeType) => {
     if (challenge) {
       return {
         id: challenge.id,
-        name: challenge.title,
+        title: challenge.title,
         type: challenge.type,
         shortTitle: challenge.shortTitle,
         distanceKm: challenge.distanceKm,
         stepsEst: challenge.stepsEst,
         location: challenge.location,
-        blurb: challenge.blurb,
-        failBlurb: challenge.failBlurb,
+        description: challenge.blurb,
+        failDescription: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd
       };
@@ -144,14 +162,14 @@ export const getChallengeDataById = (challengeId, challengeType) => {
     if (challenge) {
       return {
         id: challenge.id,
-        name: challenge.title,
+        title: challenge.title,
         type: challenge.type,
         shortTitle: challenge.shortTitle,
         distanceKm: challenge.distanceKm,
         stepsEst: challenge.stepsEst,
         region: challenge.region,
-        blurb: challenge.blurb,
-        failBlurb: challenge.failBlurb,
+        description: challenge.blurb,
+        failDescription: challenge.failBlurb,
         dateStart: challenge.dateStart,
         dateEnd: challenge.dateEnd
       };
