@@ -19,9 +19,9 @@ const ChallengeUpdate = ({
     // Additional fields from CSV
     stepsEst = 9999,
     distanceKm = 9999,
-    name = "########",
+    title = "########",
     shortTitle = "########",
-    blurb = "#####################################################",
+    description = "#####################################################",
     location = "######",
     starletsReward = 400
   } = challengeData || {};
@@ -55,11 +55,11 @@ const ChallengeUpdate = ({
         challengeData={{
           stepsCompleted: stepsEst,
           distanceKm: distanceKm,
-          badgeName: `${name}`,
+          badgeName: `${title}`,
           challengeTitle: shortTitle,
           starletsReward: starletsReward,
           challengeEndDate: challengeEndDate,
-          blurb: blurb,
+          description: description,
           location: location
         }}
         onClaimRewards={handleClaimRewards}

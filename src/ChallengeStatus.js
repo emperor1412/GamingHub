@@ -16,9 +16,9 @@ const ChallengeStatus = ({
 
   const getStatusDescription = () => {
     if (isIncomplete) {
-      const failBlurb = challengeData.failBlurb || "###############################";
+      const failDescription = challengeData.failDescription || "###############################";
       return [
-        failBlurb,
+        failDescription,
         "But don't let this be the end of your journey! Every step counts, and there's always another challenge waiting."
       ];
     } else {
