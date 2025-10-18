@@ -89,7 +89,7 @@ const ChallengeClaimReward = ({
           <div className="ccr-title-description">{description}</div>
           
           <div className="ccr-title-box">
-            <span>{badgeName}</span>
+            <span>{`Trailblazer of ${challengeTitle}`}</span>
           </div>
 
           {/* Right Side Image */}
@@ -133,7 +133,7 @@ const ChallengeClaimReward = ({
           onClose={handleCloseClaimedScreen}
           claimedRewards={{
             starlets: starletsReward,
-            badgeName: challengeTitle
+            badgeName: badgeName
           }}
         />
       )}
