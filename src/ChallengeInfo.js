@@ -23,8 +23,8 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
                 <div className="main-description">
                     <div className="description-text">WALK THE</div>
                     <div className="description-text">ANCIENT PATH TO</div>
-                    <div className="description-text">MACHU PICCHU</div>
-                    <div className="description-text">IN ONE WEEK!</div>
+                    <div className="description-text">{challenge.shortTitle}</div>
+                    <div className="description-text">IN ONE {challenge.type}!</div>
                 </div>
 
                 {/* Challenge End */}

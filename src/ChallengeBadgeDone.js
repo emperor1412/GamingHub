@@ -55,7 +55,7 @@ const ChallengeBadgeDone = ({
             </div>
             
             <div className="cbd-badge-title">
-              {challengeData.badgeName}
+              Trailblazer of {challengeData.challengeTitle}
             </div>
           </div>
           {/* Badge Display */}
