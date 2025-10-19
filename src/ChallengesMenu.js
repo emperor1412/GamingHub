@@ -153,6 +153,16 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         setShowBadgeScreen(false);
     };
 
+    const handleViewBadges = () => {
+        // Close any open screens and show badge screen
+        setShowChallengeUpdate(false);
+        setShowChallengeJoinConfirmation(false);
+        setShowChallengeError(false);
+        setSelectedChallenge(null);
+        setSelectedChallengeType(null);
+        setShowBadgeScreen(true);
+    };
+
     // Show ChallengeBadgeScreen if user clicked Explorer Journey
     if (showBadgeScreen) {
         return (
@@ -191,6 +201,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                 }}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
+                onViewBadges={handleViewBadges}
             />
         );
     }
@@ -208,6 +219,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                 }}
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
+                onViewBadges={handleViewBadges}
             />
         );
     }

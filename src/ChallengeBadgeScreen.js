@@ -239,6 +239,10 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 } : {}}
                 onClaimRewards={handleDoneFromClaimReward}
                 onBack={handleBackFromClaimReward}
+                onViewBadges={() => {
+                    // Close the claim reward screen and stay on badge screen
+                    setShowChallengeClaimReward(false);
+                }}
             />
         );
     }
@@ -293,6 +297,10 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 } : {}}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
+                onViewBadges={() => {
+                    // Close the update screen and stay on badge screen
+                    setShowChallengeUpdate(false);
+                }}
             />
         );
     }

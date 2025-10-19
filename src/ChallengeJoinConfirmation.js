@@ -9,7 +9,8 @@ import trophy_4 from './images/trophy_4.png';
 const ChallengeJoinConfirmation = ({ 
   challengeData, 
   onJoinChallenge, 
-  onBack 
+  onBack,
+  onViewBadges
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
   const {
@@ -51,6 +52,7 @@ const ChallengeJoinConfirmation = ({
         challengeData={challengeData}
         onDone={handleDoneFromUpdate}
         onBack={handleBackFromUpdate}
+        onViewBadges={onViewBadges}
       />
     );
   }
