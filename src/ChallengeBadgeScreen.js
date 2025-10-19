@@ -6,6 +6,7 @@ import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import lockIcon from './images/lock_icon.png';
 import questionIcon from './images/question_icon.png';
 import badgeIncatrail from './images/trophy_4.png';
+import backIcon from './images/back.svg';
 
 import badgeUnlocked from './images/trophy_4.png';
 import badgeLocked from './images/TwoHundredStrong_Locked.png';
@@ -298,6 +299,11 @@ const ChallengeBadgeScreen = ({ onClose }) => {
 
     return (
         <div className="challenge-badge-screen">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onClose}>
+                <img src={backIcon} alt="Back" />
+            </button>
+            
             {/* Background Pattern */}
             <div className="cbs-background-pattern"></div>
             

@@ -92,8 +92,6 @@ const ChallengeClaimReward = ({
             <span>{`Trailblazer of ${challengeTitle}`}</span>
           </div>
 
-          {/* Right Side Image */}
-          <img src={badge_incatrail} alt="Right Side Image" className="ccr-right-side-image" />
         </div>
 
         {/* Reward Details Section */}
