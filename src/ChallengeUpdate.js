@@ -7,7 +7,8 @@ import ChallengeClaimReward from './ChallengeClaimReward';
 const ChallengeUpdate = ({ 
   challengeData, 
   onDone, 
-  onBack 
+  onBack,
+  onViewBadges
 }) => {
   const [showClaimReward, setShowClaimReward] = React.useState(false);
   
@@ -64,6 +65,7 @@ const ChallengeUpdate = ({
         }}
         onClaimRewards={handleClaimRewards}
         onBack={handleBackFromClaim}
+        onViewBadges={onViewBadges}
       />
     );
   }

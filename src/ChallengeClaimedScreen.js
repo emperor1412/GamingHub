@@ -5,6 +5,7 @@ import starlet from './images/starlet.png';
 
 const ChallengeClaimedScreen = ({ 
   onClose,
+  onViewBadges,
   claimedRewards = {}
 }) => {
   return (
@@ -58,7 +59,7 @@ const ChallengeClaimedScreen = ({
         </div>
 
         {/* VIEW BADGES Button */}
-        <button className="ccs-view-badges-button" onClick={onClose}>
+        <button className="ccs-view-badges-button" onClick={onViewBadges || onClose}>
           VIEW BADGES
         </button>
       </div>

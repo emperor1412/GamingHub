@@ -8,7 +8,8 @@ import ChallengeClaimedScreen from './ChallengeClaimedScreen';
 const ChallengeClaimReward = ({ 
   challengeData, 
   onClaimRewards, 
-  onBack 
+  onBack,
+  onViewBadges
 }) => {
   const [showClaimedScreen, setShowClaimedScreen] = React.useState(false);
   
@@ -51,6 +52,21 @@ const ChallengeClaimReward = ({
     // Navigate back to previous screen
     if (onBack) {
       onBack();
+    }
+  };
+
+  const handleViewBadges = () => {
+    console.log('View badges clicked');
+    setShowClaimedScreen(false);
+    
+    // Call onClaimRewards but don't call onBack - stay on current screen
+    if (onClaimRewards) {
+      onClaimRewards();
+    }
+    
+    // Call onViewBadges to handle navigation to badge screen
+    if (onViewBadges) {
+      onViewBadges();
     }
   };
 
@@ -129,6 +145,7 @@ const ChallengeClaimReward = ({
       {showClaimedScreen && (
         <ChallengeClaimedScreen 
           onClose={handleCloseClaimedScreen}
+          onViewBadges={handleViewBadges}
           claimedRewards={{
             starlets: starletsReward,
             badgeName: badgeName
