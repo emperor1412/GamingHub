@@ -1,9 +1,16 @@
 /* Challenge Badge Screen Styles */
 :root {
-  --cbs-corner-size: 35px;
+  --cbs-corner-size: 25px;
   --cbs-corner-color: #00F1FF;
   --cbs-corner-border: 3px;
-  --cbs-corner-offset: -10px;
+  --cbs-corner-offset-top: -20px;
+  --cbs-corner-offset-bottom: -20px;
+  --cbs-corner-offset-left: -10px;
+  --cbs-corner-offset-right: -10px;
+  --cbs-corner-offset-top-weekly:  -10px;
+  --cbs-corner-offset-bottom-weekly: -10px;
+  --cbs-corner-offset-left-weekly: -10px;
+  --cbs-corner-offset-right-weekly: -10px;
 }
 
 .challenge-badge-screen {
@@ -42,7 +49,7 @@
     flex-direction: column;
     position: relative;
     z-index: 5;
-    padding: 60px 20px 100px;
+    padding: 15vh 20px 100px;
     min-height: 100vh;
     box-sizing: border-box;
     max-width: 430px;
@@ -62,7 +69,6 @@
     width: 100%;
     max-width: 350px;
     margin: 0 auto;
-    padding: 5px;
 }
 
 .cbs-header-brackets {
@@ -82,15 +88,15 @@
 }
 
 .cbs-bracket-tl {
-    top: var(--cbs-corner-offset);
-    left: var(--cbs-corner-offset);
+    top: var(--cbs-corner-offset-top);
+    left: var(--cbs-corner-offset-left);
     border-right: none;
     border-bottom: none;
 }
 
 .cbs-bracket-br {
-    bottom: var(--cbs-corner-offset);
-    right: var(--cbs-corner-offset);
+    bottom: var(--cbs-corner-offset-bottom);
+    right: var(--cbs-corner-offset-right);
     border-left: none;
     border-top: none;
 }
@@ -111,7 +117,7 @@
     color: #FFFFFF;
     text-transform: uppercase;
     letter-spacing: 2px;
-    padding: 10px 20px;
+    padding: 10px 5px;
 }
 
 .cbs-subtitle {
@@ -261,7 +267,7 @@
 .cbs-badges-container {
     position: relative;
     border-radius: 12px;
-    padding: 20px;
+    padding: 0px 10px;
 }
 
 .cbs-corner {
@@ -272,29 +278,29 @@
 }
 
 .cbs-top-left {
-    top: var(--cbs-corner-offset);
-    left: var(--cbs-corner-offset);
+    top: var(--cbs-corner-offset-top-weekly);
+    left: var(--cbs-corner-offset-left-weekly);
     border-right: none;
     border-bottom: none;
 }
 
 .cbs-top-right {
-    top: var(--cbs-corner-offset);
-    right: var(--cbs-corner-offset);
+    top: var(--cbs-corner-offset-top-weekly);
+    right: var(--cbs-corner-offset-right-weekly);
     border-left: none;
     border-bottom: none;
 }
 
 .cbs-bottom-left {
-    bottom: var(--cbs-corner-offset);
-    left: var(--cbs-corner-offset);
+    bottom: var(--cbs-corner-offset-bottom-weekly);
+    left: var(--cbs-corner-offset-left-weekly);
     border-right: none;
     border-top: none;
 }
 
 .cbs-bottom-right {
-    bottom: var(--cbs-corner-offset);
-    right: var(--cbs-corner-offset);
+    bottom: var(--cbs-corner-offset-bottom-weekly);
+    right: var(--cbs-corner-offset-right-weekly);
     border-left: none;
     border-top: none;
 }
@@ -303,10 +309,11 @@
 .cbs-badges-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 12px;
     justify-items: center;
     max-width: 400px;
     margin: 0 auto;
+    padding-bottom: 20px;
 }
 
 /* Weekly badges special layout - 4 badges: 3 on top row, 1 centered on bottom row */
@@ -543,11 +550,10 @@
 }
 
 .cbs-badge-name {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #FFFFFF;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 /* Responsive Design */

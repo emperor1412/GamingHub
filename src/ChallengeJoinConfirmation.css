@@ -47,7 +47,7 @@
 
 /* Challenge Goal */
 .cjc-challenge-goal {
-  font-size: 24.75px;
+  font-size: 23.25px;
   font-weight: 700;
   color: #00FFFF;
   text-transform: uppercase;
@@ -61,7 +61,7 @@
   color: white;
   text-transform: uppercase;
   letter-spacing: 0%;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   line-height: 100%;
   background-image: url('./images/doodle_extra.png');
   background-size: 100%;
@@ -74,23 +74,22 @@
 
 /* Central Graphic */
 .cjc-central-graphic {
-  width: 400px;
-  height: 200px;
+  /* max-width: 420px; */
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-image: url('./images/bg-starlet-challenge.png');
-  background-size: 100%;
-  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
 }
 
 .cjc-left-image {
   width: 130px;
   height: 130px;
   object-fit: contain;
-  transform: scale(1.4);
-  left: 20px;
+  left: 30px;
   z-index: 1;
   position: relative;
 }
@@ -99,7 +98,6 @@
   width: 132px;
   height: 132px;
   object-fit: contain;
-  transform: scale(1.3);
   z-index: 2;
   position: relative;
 }
@@ -108,8 +106,7 @@
   width: 126px;
   height: 116px;
   object-fit: contain;
-  transform: scale(1.3);
-  left: -20px;
+  left: -30px;
   z-index: 3;
   position: relative;
 }
