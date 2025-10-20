@@ -11,6 +11,7 @@ import { getBadgeImage, getLockIcon, getQuestionIcon } from './utils/badgeImageM
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
+import ChallengeInfo from './ChallengeInfo';
 
 // Import real data and API mock
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
@@ -24,6 +25,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [showChallengeBadgeDone, setShowChallengeBadgeDone] = React.useState(false);
     const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
+    const [showChallengeInfo, setShowChallengeInfo] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
     
     // API state management
@@ -174,20 +176,32 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                 };
                                 
                                 setSelectedChallengeData(combinedChallengeData);
-                                setShowChallengeUpdate(true);
+                                
+                                // Determine which view to show based on API state (same logic as ChallengesMenu)
+                                if (challengeDetail.state === 10) {
+                                    // State_Joining = 10 -> User has joined -> go to Challenge Update
+                                    setShowChallengeUpdate(true);
+                                } else if (challengeDetail.state === 20) {
+                                    // State_Expired = 20 -> Challenge expired
+                                    console.log('Challenge expired');
+                                    setSelectedBadge(badge);
+                                } else if (challengeDetail.state === 30) {
+                                    // State_Complete = 30 -> User completed challenge
+                                    console.log('Challenge completed');
+                                    setShowChallengeBadgeDone(true);
+                                } else {
+                                    // User hasn't joined -> show ChallengeInfo
+                                    setShowChallengeInfo(true);
+                                }
                             } else {
                                 console.error('Failed to get challenge detail:', result.error);
                                 // Fallback to original behavior
-                                const challengeData = getChallengeDataById(badge.id, badge.type || 'weekly');
-                                setSelectedChallengeData(challengeData);
-                                setShowChallengeUpdate(true);
+                                setSelectedBadge(badge);
                             }
                         } catch (error) {
                             console.error('Error fetching challenge detail:', error);
                             // Fallback to original behavior
-                            const challengeData = getChallengeDataById(badge.id, badge.type || 'weekly');
-                            setSelectedChallengeData(challengeData);
-                            setShowChallengeUpdate(true);
+                            setSelectedBadge(badge);
                         }
                         break;
                     case 'done-and-claimed':
@@ -304,12 +318,34 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
         setShowChallengeStatus(false);
     };
 
+    // Function to handle back from ChallengeInfo
+    const handleBackFromInfo = () => {
+        setShowChallengeInfo(false);
+    };
+
+    // Function to handle join challenge from ChallengeInfo
+    const handleJoinChallenge = () => {
+        // This will be handled by ChallengeInfo component
+        console.log('Join challenge requested');
+    };
+
     // Function to handle Explorer Badges Card click
     const handleExplorerBadgesClick = () => {
         if (onExplorerBadgesClick) {
             onExplorerBadgesClick();
         }
     };
+
+    // Show ChallengeInfo if state is true
+    if (showChallengeInfo && selectedChallengeData) {
+        return (
+            <ChallengeInfo
+                challenge={selectedChallengeData}
+                onClose={handleBackFromInfo}
+                onJoinChallenge={handleJoinChallenge}
+            />
+        );
+    }
 
     // Show ChallengeClaimReward if state is true
     if (showChallengeClaimReward) {

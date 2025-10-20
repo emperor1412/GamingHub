@@ -1228,6 +1228,71 @@ data object
         }
     },
 
+    // API function to get badges earned (all challenges in Badge Collection view)
+    getBadgesEarned: async (depth = 0) => {
+        if (depth > 3) {
+            console.error('getBadgesEarned failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching badges earned...');
+            
+            const response = await fetch(`${shared.server_url}/api/app/badgesEarned?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getBadgesEarned Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getBadgesEarned Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getBadgesEarned: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getBadgesEarned: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return await shared.getBadgesEarned(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getBadgesEarned error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getBadgesEarned Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getBadgesEarned error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
     // Auto-adjust avatar if it's premium but user doesn't have premium membership
     autoAdjustAvatar: async (getProfileData) => {
         if (!shared.userProfile || !shared.loginData?.token) {
