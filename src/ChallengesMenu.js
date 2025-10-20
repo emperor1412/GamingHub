@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChallengesMenu.css';
 import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import backIcon from './images/back.svg';
@@ -17,6 +17,7 @@ import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
+import shared from './Shared';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -26,6 +27,46 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallengeType, setSelectedChallengeType] = useState(null);
     const [showBadgeScreen, setShowBadgeScreen] = useState(false);
     const [showBadgeCollection, setShowBadgeCollection] = useState(false);
+    const [apiChallenges, setApiChallenges] = useState([]); // from /api/app/challengeList
+    const [isLoadingChallenges, setIsLoadingChallenges] = useState(false);
+
+    // Fetch 3 challenges from backend (challengeList)
+    useEffect(() => {
+        const fetchChallengeList = async () => {
+            try {
+                setIsLoadingChallenges(true);
+                const token = (shared && shared.loginData && shared.loginData.token) ? shared.loginData.token : '';
+                const url = `${shared.server_url}/api/app/challengeList?token=${token}`;
+                const res = await fetch(url, { method: 'GET' });
+                const json = await res.json();
+                if (json && json.code === 0 && Array.isArray(json.data)) {
+                    setApiChallenges(json.data);
+                    console.log('[challengeList]', json.data);
+                } else {
+                    console.warn('[challengeList] unexpected response', json);
+                }
+            } catch (e) {
+                console.error('[challengeList] error', e);
+            } finally {
+                setIsLoadingChallenges(false);
+            }
+        };
+  
+        fetchChallengeList();
+    }, []);
+
+    const getApiChallengeByType = (typeInt) => {
+        return apiChallenges.find(c => c.type === typeInt);
+    };
+
+    const mapTypeStringToInt = (t) => {
+        switch (t) {
+            case 'weekly': return 1;
+            case 'monthly': return 2;
+            case 'yearly': return 3;
+            default: return 0;
+        }
+    };
 
     // Helper function to get current challenge from API mock
     const getCurrentChallengeFromApi = (challengeType) => {
@@ -72,11 +113,27 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleChallengeClick = (challengeType) => {
-        const challenge = getCurrentChallengeFromApi(challengeType);
         const state = getChallengeState(challengeType);
+        const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
+        const mockDetail = getCurrentChallengeFromApi(challengeType);
+        // Prefer API fields; fallback to mock detail for missing fields
+        const challenge = apiItem ? {
+            id: apiItem.id,
+            title: (apiItem.name || (mockDetail?.title) || '').trim(),
+            shortTitle: (mockDetail?.shortTitle) || (apiItem.name || '').trim(),
+            type: challengeType.toUpperCase(),
+            entryFee: typeof apiItem.price === 'number' ? apiItem.price : (mockDetail?.entryFee || 0),
+            reward: typeof apiItem.price === 'number' ? apiItem.price : (mockDetail?.reward || 0),
+            stepsEst: mockDetail?.stepsEst,
+            distanceKm: mockDetail?.distanceKm,
+            description: mockDetail?.description,
+            location: mockDetail?.location,
+            dateStart: mockDetail?.dateStart,
+            dateEnd: mockDetail?.dateEnd
+        } : mockDetail;
         
         // Only allow click if not disabled
-        if (!state.isDisabled) {
+        if (!state.isDisabled && challenge) {
             setSelectedChallenge(challenge);
             setSelectedChallengeType(challengeType);
             
@@ -288,6 +345,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const weeklyState = getChallengeState('weekly');
+                            const weeklyApi = getApiChallengeByType(1);
                             const weeklyChallenge = getCurrentChallengeFromApi('weekly');
                             
                             if (weeklyState.isDisabled) {
@@ -301,10 +359,10 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">WEEKLY CHALLENGE:</div>
-                                            <div className="challenge-name">{weeklyChallenge.title.toUpperCase()}</div>
+                                            <div className="challenge-name">{(weeklyApi ? (weeklyApi.name || '').toUpperCase() : weeklyChallenge.title.toUpperCase())}</div>
                                         </div>
                                         <div className="challenge-reward">
-                                            <span className="reward-amount">{weeklyChallenge.reward}</span>
+                                            <span className="reward-amount">{weeklyApi ? weeklyApi.price : weeklyChallenge.reward}</span>
                                             <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                         </div>
                                     </>
@@ -320,6 +378,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const monthlyState = getChallengeState('monthly');
+                            const monthlyApi = getApiChallengeByType(2);
                             const monthlyChallenge = getCurrentChallengeFromApi('monthly');
                             
                             if (monthlyState.isDisabled) {
@@ -333,10 +392,10 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">MONTHLY CHALLENGE:</div>
-                                            <div className="challenge-name">{monthlyChallenge.title.toUpperCase()}</div>
+                                            <div className="challenge-name">{(monthlyApi ? (monthlyApi.name || '').toUpperCase() : monthlyChallenge.title.toUpperCase())}</div>
                                         </div>
                                         <div className="challenge-reward">
-                                            <span className="reward-amount">{monthlyChallenge.reward}</span>
+                                            <span className="reward-amount">{monthlyApi ? monthlyApi.price : monthlyChallenge.reward}</span>
                                             <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                         </div>
                                     </>
@@ -352,6 +411,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     >
                         {(() => {
                             const yearlyState = getChallengeState('yearly');
+                            const yearlyApi = getApiChallengeByType(3);
                             const yearlyChallenge = getCurrentChallengeFromApi('yearly');
                             
                             if (yearlyState.isDisabled) {
@@ -365,10 +425,10 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">YEARLY CHALLENGE:</div>
-                                            <div className="challenge-name">{yearlyChallenge.title.toUpperCase()}</div>
+                                            <div className="challenge-name">{(yearlyApi ? (yearlyApi.name || '').toUpperCase() : yearlyChallenge.title.toUpperCase())}</div>
                                         </div>
                                         <div className="challenge-reward">
-                                            <span className="reward-amount">{yearlyChallenge.reward}</span>
+                                            <span className="reward-amount">{yearlyApi ? yearlyApi.price : yearlyChallenge.reward}</span>
                                             <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                         </div>
                                     </>
