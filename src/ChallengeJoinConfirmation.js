@@ -10,21 +10,50 @@ const ChallengeJoinConfirmation = ({
   challengeData, 
   onJoinChallenge, 
   onBack,
-  onViewBadges
+  onViewBadges,
+  onShowError
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const {
     steps = 56000,
     days = 7,
     starletsCost = 200,
     badgeName = "EXPLORER BADGE",
-    challengeEndDate = "DD/MM/YY HH:MM"
+    challengeEndDate = "DD/MM/YY HH:MM",
+    id: challengeId
   } = challengeData || {};
 
-  const handleJoinChallenge = () => {
-    // Call the parent's join handler instead of directly showing ChallengeUpdate
-    if (onJoinChallenge) {
-      onJoinChallenge();
+  const handleJoinChallenge = async () => {
+    if (!challengeId) {
+      console.error('No challenge ID provided');
+      return;
+    }
+
+    setIsJoining(true);
+    
+    try {
+      const result = await shared.joinChallenge(challengeId);
+      
+      if (result.success) {
+        // Successfully joined challenge
+        console.log('Successfully joined challenge');
+        setShowChallengeUpdate(true);
+      } else if (result.error === 'not_enough_starlets') {
+        // Show error screen for not enough starlets
+        console.log('Not enough starlets to join challenge');
+        if (onShowError) {
+          onShowError();
+        }
+      } else {
+        // Other errors
+        console.error('Failed to join challenge:', result.error);
+        // You can show a generic error message here
+      }
+    } catch (error) {
+      console.error('Error joining challenge:', error);
+    } finally {
+      setIsJoining(false);
     }
   };
 
@@ -111,8 +140,12 @@ const ChallengeJoinConfirmation = ({
           </div>
 
             {/* Join Button */}
-            <button className="cjc-join-button" onClick={handleJoinChallenge}>
-                JOIN CHALLENGE
+            <button 
+                className="cjc-join-button" 
+                onClick={handleJoinChallenge}
+                disabled={isJoining}
+            >
+                {isJoining ? 'JOINING...' : 'JOIN CHALLENGE'}
             </button>
         </div>
 

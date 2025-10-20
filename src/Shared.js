@@ -884,6 +884,79 @@ data object
         }
     },
 
+    // API function to join challenge
+    joinChallenge: async (challengeId, depth = 0) => {
+        if (depth > 3) {
+            console.error('joinChallenge failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Joining challenge with ID:', challengeId);
+            
+            const response = await fetch(`${shared.server_url}/api/app/joinChallenge?token=${shared.loginData.token}&challengeId=${challengeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('joinChallenge Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('joinChallenge Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('joinChallenge: success');
+                    return {
+                        success: true,
+                        data: data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('joinChallenge: login again');
+                    const result = await shared.login();
+                    if (result) {
+                        return await shared.joinChallenge(challengeId, depth + 1);
+                    }
+                }
+                else if (data.code === 210001) {
+                    console.log('joinChallenge: not enough starlets');
+                    return {
+                        success: false,
+                        error: 'not_enough_starlets',
+                        message: data.msg || 'Not enough starlets'
+                    };
+                }
+                else {
+                    console.log('joinChallenge error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('joinChallenge Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('joinChallenge error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
     // New function to handle coin flip game
     flipCoin: async (isHeads, betAmount, allin = false, depth = 0) => {
         if (depth > 3) {
