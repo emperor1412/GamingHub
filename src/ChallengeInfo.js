@@ -1,11 +1,17 @@
 import React from 'react';
 import './ChallengeInfo.css';
 import starletIcon from './images/starlet.png';
+import backIcon from './images/back.svg';
 // import legIcon from './images/legIcon.png';
 
 const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
     return (
         <div className="challenge-info-page">
+            {/* Back Button */}
+            <button className="back-button back-button-alignment" onClick={onClose}>
+                <img src={backIcon} alt="Back" />
+            </button>
+            
             <div className="challenge-info-content">
                 {/* Challenge Banner */}
                 <div className="info-challenge-banner">

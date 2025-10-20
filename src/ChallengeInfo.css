@@ -12,7 +12,7 @@
     color: white;
     font-family: "PP Neue Machina", sans-serif;
     overflow-y: auto;
-    z-index: 999;
+    z-index: 9999;
     padding-top: 60px;
     padding-bottom: 80px;
     box-sizing: border-box;
