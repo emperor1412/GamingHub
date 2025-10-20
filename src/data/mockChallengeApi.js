@@ -178,3 +178,53 @@ export const getChallengeDataById = (challengeId, challengeType) => {
   
   return null;
 };
+
+// ----------------------------------------------------------------------------
+// Mock API: Flat list of challenges for Badge Collection view
+// ----------------------------------------------------------------------------
+// This simulates a real API that returns a flat list of challenges with only
+// essential fields used to render the Badge Collection grid.
+//
+// Response shape (array of 12 items):
+// [
+//   {
+//     id: number,
+//     name: string,
+//     type: 'weekly' | 'monthly' | 'yearly',
+//     state: 0 | 1 | 2 | 3 | 4 | 5
+//   },
+//   ...
+// ]
+// ----------------------------------------------------------------------------
+
+const buildFlatBadgeChallenges = () => {
+  const flat = [
+    ...(mockChallengeBadgeApiResponse.weekly || []),
+    ...(mockChallengeBadgeApiResponse.monthly || []),
+    ...(mockChallengeBadgeApiResponse.yearly || []),
+  ];
+
+  // Normalize fields to the minimal contract used by the collection view
+  const normalized = flat.map((item) => ({
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    state: item.state,
+  }));
+
+  // Return first 12 items to match requested sample size
+  return normalized.slice(0, 12);
+};
+
+// Synchronous builder (useful for tests or non-async contexts)
+export const getMockBadgeChallenges = () => buildFlatBadgeChallenges();
+
+// Async fetcher to mimic real API behavior
+export const fetchBadgeChallenges = async () => {
+  return new Promise((resolve) => {
+    // Simulate small network delay
+    setTimeout(() => {
+      resolve(buildFlatBadgeChallenges());
+    }, 150);
+  });
+};
