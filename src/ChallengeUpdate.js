@@ -13,19 +13,40 @@ const ChallengeUpdate = ({
   const [showClaimReward, setShowClaimReward] = React.useState(false);
   
   const {
-    challengeEndDate = "DD/MM/YY HH:MM",
-    currentSteps = 100,
-    totalSteps = 500,
-    stepSegments = [100, 200, 300, 400, 500],
-    // Additional fields from CSV
-    stepsEst = 9999,
-    distanceKm = 9999,
-    title = "########",
-    shortTitle = "########",
-    description = "#####################################################",
-    location = "######",
-    starletsReward = 400
+    // API data
+    currentSteps = 0,
+    totalSteps = 0,
+    endTime = 0,
+    startTime = 0,
+    // Additional fields from mock/CSV
+    stepsEst = 0,
+    distanceKm = 0,
+    title = "Challenge",
+    shortTitle = "Challenge",
+    description = "Complete the challenge to earn rewards!",
+    location = "Unknown",
+    starletsReward = 0,
+    challengeEndDate = "DD/MM/YY HH:MM"
   } = challengeData || {};
+
+  // Calculate step segments based on totalSteps
+  const stepSegments = totalSteps > 0 ? [
+    Math.floor(totalSteps * 0.2),
+    Math.floor(totalSteps * 0.4),
+    Math.floor(totalSteps * 0.6),
+    Math.floor(totalSteps * 0.8),
+    totalSteps
+  ] : [0, 0, 0, 0, 0];
+
+  // Format end time from API
+  const formatEndDate = (endTime) => {
+    if (!endTime || endTime === 0) return challengeEndDate;
+    const date = new Date(endTime);
+    return date.toLocaleDateString('en-GB') + ' ' + date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Check if user has completed the challenge
+  const isChallengeCompleted = currentSteps >= totalSteps && totalSteps > 0;
 
   const handleDone = () => {
     // Show ChallengeClaimReward instead of calling onDone directly
@@ -115,7 +136,7 @@ const ChallengeUpdate = ({
           {/* Challenge End Date */}
           <div className="cu-challenge-end">
             <span className="cu-end-label">CHALLENGE END:</span>
-            <span className="cu-end-date">{challengeEndDate}</span>
+            <span className="cu-end-date">{formatEndDate(endTime)}</span>
           </div>
         </div>
 
@@ -129,7 +150,12 @@ const ChallengeUpdate = ({
           {/* Progress Bar */}
           <div className="cu-progress-container">
             <div className="cu-progress-bar">
-              <div className="cu-progress-fill" style={{width: `${(currentSteps / totalSteps) * 100}%`}}></div>
+              <div 
+                className="cu-progress-fill" 
+                style={{
+                  width: `${totalSteps > 0 ? (currentSteps / totalSteps) * 100 : 0}%`
+                }}
+              ></div>
               {/* Segment dividers */}
               {Array.from({ length: 4 }, (_, index) => (
                 <div 
@@ -142,7 +168,7 @@ const ChallengeUpdate = ({
             {/* Step numbers */}
             <div className="cu-step-numbers">
               {stepSegments.map((step, index) => (
-                <span key={index} className="cu-step-number">{step}</span>
+                <span key={index} className="cu-step-number">{step.toLocaleString()}</span>
               ))}
             </div>
           </div>
@@ -153,8 +179,12 @@ const ChallengeUpdate = ({
           </div>
         </div>
 
-        {/* Done Button */}
-        <button className="cu-done-button" onClick={handleDone}>
+        {/* Done Button - Disabled when challenge not completed */}
+        <button 
+          className={`cu-done-button ${!isChallengeCompleted ? 'cu-done-button-disabled' : ''}`}
+          onClick={handleDone}
+          disabled={!isChallengeCompleted}
+        >
           DONE
         </button>
       </div>

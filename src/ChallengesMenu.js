@@ -299,7 +299,12 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return (
             <ChallengeUpdate
                 challengeData={{
-                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 23:59` : "DD/MM/YYYY 23:59",
+                    // API data
+                    currentSteps: selectedChallenge.currentSteps || 0,
+                    totalSteps: selectedChallenge.totalSteps || selectedChallenge.stepsEst || 0,
+                    endTime: selectedChallenge.endTime || 0,
+                    startTime: selectedChallenge.startTime || 0,
+                    // Additional fields
                     stepsEst: selectedChallenge.stepsEst,
                     distanceKm: selectedChallenge.distanceKm,
                     title: selectedChallenge.title,
@@ -308,8 +313,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                     location: selectedChallenge.location,
                     starletsReward: selectedChallenge.reward,
                     type: selectedChallenge.type || "WEEKLY",
-                    currentSteps: 100,
-                    totalSteps: 500
+                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 23:59` : "DD/MM/YYYY 23:59"
                 }}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
