@@ -3,6 +3,7 @@ import './ChallengeUpdate.css';
 import backIcon from './images/back.svg';
 import shoe_image from './images/shoe_image.png';
 import ChallengeClaimReward from './ChallengeClaimReward';
+import shared from './Shared';
 
 const ChallengeUpdate = ({ 
   challengeData, 
@@ -18,6 +19,7 @@ const ChallengeUpdate = ({
     totalSteps = 0,
     endTime = 0,
     startTime = 0,
+    id: challengeId = 0,
     // Additional fields from mock/CSV
     stepsEst = 0,
     distanceKm = 0,
@@ -75,12 +77,13 @@ const ChallengeUpdate = ({
     return (
       <ChallengeClaimReward
         challengeData={{
-          stepsCompleted: stepsEst,
+          id: challengeId,
+          stepsCompleted: currentSteps,
           distanceKm: distanceKm,
           badgeName: `${title}`,
           challengeTitle: shortTitle,
           starletsReward: starletsReward,
-          challengeEndDate: challengeEndDate,
+          challengeEndDate: formatEndDate(endTime),
           description: description,
           location: location
         }}
