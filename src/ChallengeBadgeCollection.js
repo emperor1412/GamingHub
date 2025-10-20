@@ -10,9 +10,10 @@ import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
 import ChallengeClaimReward from './ChallengeClaimReward';
+import ChallengeInfo from './ChallengeInfo';
 
-// Import mock data
-import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
+// Import helper functions
+import { mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
 import shared from './Shared';
 
 const ChallengeBadgeCollection = ({ onClose }) => {
@@ -22,73 +23,84 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     const [showChallengeBadgeDone, setShowChallengeBadgeDone] = useState(false);
     const [showChallengeStatus, setShowChallengeStatus] = useState(false);
     const [showChallengeClaimReward, setShowChallengeClaimReward] = useState(false);
+    const [showChallengeInfo, setShowChallengeInfo] = useState(false);
     const [challengeStatusType, setChallengeStatusType] = useState('incomplete');
+    const [allBadges, setAllBadges] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [reloadTrigger, setReloadTrigger] = useState(0);
 
-    // Process all challenges from API response
-    const processAllChallenges = () => {
-        const allBadges = [];
+    // Process challenges from API response
+    const processChallengesFromApi = (apiChallenges) => {
+        const processedBadges = [];
 
-        // Process Weekly Challenges
-        mockChallengeBadgeApiResponse.weekly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'weekly');
+        apiChallenges.forEach(apiChallenge => {
+            // Determine challenge type based on ID ranges
+            let challengeType = 'weekly';
+            if (apiChallenge.id >= 10001 && apiChallenge.id <= 10012) {
+                challengeType = 'monthly';
+            } else if (apiChallenge.id >= 100001) {
+                challengeType = 'yearly';
+            }
+
+            const challengeData = getChallengeDataById(apiChallenge.id, challengeType);
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
             if (challengeData) {
-                allBadges.push({
+                processedBadges.push({
                     id: apiChallenge.id,
                     title: challengeData.title,
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: getBadgeImage(apiChallenge.id), // Same image for both states
-                    type: 'weekly',
+                    img: getBadgeImage(apiChallenge.id),
+                    type: challengeType,
                     trailName: 'INCA TRAIL' // Default trail name, can be from API
                 });
-            }
-        });
-
-        // Process Monthly Challenges
-        mockChallengeBadgeApiResponse.monthly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'monthly');
-            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
-            
-            if (challengeData) {
-                allBadges.push({
+            } else {
+                // Fallback for challenges not found in local data
+                processedBadges.push({
                     id: apiChallenge.id,
-                    title: challengeData.title,
-                    shortTitle: challengeData.shortTitle,
+                    title: apiChallenge.name || 'Unknown Challenge',
+                    shortTitle: apiChallenge.name || 'Unknown',
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: getBadgeImage(apiChallenge.id), // Same image for both states
-                    type: 'monthly',
+                    img: getBadgeImage(apiChallenge.id),
+                    type: challengeType,
                     trailName: 'INCA TRAIL'
                 });
             }
         });
 
-        // Process Yearly Challenges
-        mockChallengeBadgeApiResponse.yearly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'yearly');
-            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
-            
-            if (challengeData) {
-                allBadges.push({
-                    id: apiChallenge.id,
-                    title: challengeData.title,
-                    shortTitle: challengeData.shortTitle,
-                    visualType: visualState.visualType,
-                    logicState: visualState.logicState,
-                    img: getBadgeImage(apiChallenge.id), // Same image for both states
-                    type: 'yearly',
-                    trailName: 'INCA TRAIL'
-                });
-            }
-        });
-
-        return allBadges;
+        return processedBadges;
     };
 
-    const allBadges = processAllChallenges();
+    // Load badges from API
+    React.useEffect(() => {
+        const loadBadges = async () => {
+            setIsLoading(true);
+            setError(null);
+            
+            try {
+                const result = await shared.getBadgesEarned();
+                
+                if (result.success) {
+                    const processedBadges = processChallengesFromApi(result.data);
+                    setAllBadges(processedBadges);
+                } else {
+                    setError(result.error || 'Failed to load badges');
+                    console.error('Failed to load badges:', result.error);
+                }
+            } catch (err) {
+                setError('Network error occurred');
+                console.error('Error loading badges:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadBadges();
+    }, [reloadTrigger]);
 
     // Function to handle badge click
     const handleBadgeClick = async (badge) => {
@@ -133,20 +145,32 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                                 };
                                 
                                 setSelectedChallengeData(combinedChallengeData);
-                                setShowChallengeUpdate(true);
+                                
+                                // Determine which view to show based on API state (same logic as ChallengesMenu)
+                                if (challengeDetail.state === 10) {
+                                    // State_Joining = 10 -> User has joined -> go to Challenge Update
+                                    setShowChallengeUpdate(true);
+                                } else if (challengeDetail.state === 20) {
+                                    // State_Expired = 20 -> Challenge expired
+                                    console.log('Challenge expired');
+                                    setSelectedBadge(badge);
+                                } else if (challengeDetail.state === 30) {
+                                    // State_Complete = 30 -> User completed challenge
+                                    console.log('Challenge completed');
+                                    setShowChallengeBadgeDone(true);
+                                } else {
+                                    // User hasn't joined -> show ChallengeInfo
+                                    setShowChallengeInfo(true);
+                                }
                             } else {
                                 console.error('Failed to get challenge detail:', result.error);
                                 // Fallback to original behavior
-                                const challengeData = getChallengeDataById(badge.id, badge.type);
-                                setSelectedChallengeData(challengeData);
-                                setShowChallengeUpdate(true);
+                                setSelectedBadge(badge);
                             }
                         } catch (error) {
                             console.error('Error fetching challenge detail:', error);
                             // Fallback to original behavior
-                            const challengeData = getChallengeDataById(badge.id, badge.type);
-                            setSelectedChallengeData(challengeData);
-                            setShowChallengeUpdate(true);
+                            setSelectedBadge(badge);
                         }
                         break;
                     case 'done-and-claimed':
@@ -260,6 +284,28 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     const handleBackFromStatus = () => {
         setShowChallengeStatus(false);
     };
+
+    // Function to handle back from ChallengeInfo
+    const handleBackFromInfo = () => {
+        setShowChallengeInfo(false);
+    };
+
+    // Function to handle join challenge from ChallengeInfo
+    const handleJoinChallenge = () => {
+        // This will be handled by ChallengeInfo component
+        console.log('Join challenge requested');
+    };
+
+    // Show ChallengeInfo if state is true
+    if (showChallengeInfo && selectedChallengeData) {
+        return (
+            <ChallengeInfo
+                challenge={selectedChallengeData}
+                onClose={handleBackFromInfo}
+                onJoinChallenge={handleJoinChallenge}
+            />
+        );
+    }
 
     // Show ChallengeClaimReward if state is true
     if (showChallengeClaimReward) {
@@ -377,33 +423,56 @@ const ChallengeBadgeCollection = ({ onClose }) => {
 
                 {/* Badges Grid */}
                 <div className="challenge-badges-grid">
-                    {allBadges.map((badge, index) => (
-                        <button
-                            key={badge.id}
-                            className={`challenge-badge-item challenge-badge-${badge.visualType}`}
-                            onClick={() => handleBadgeClick(badge)}
-                        >
-                            <div className="challenge-badge-content">
-                                <span className={`challenge-badge-icon ${badge.visualType === 'locked' ? 'challenge-badge-locked' : badge.visualType === 'unknown' ? 'challenge-badge-unknown' : ''}`}>
-                                    <img 
-                                        src={badge.img} 
-                                        alt="Badge" 
-                                    />
-                                </span>
-                                {badge.visualType === 'locked' && (
-                                    <div className="challenge-badge-status-icon challenge-badge-locked-icon">
-                                                <img src={getLockIcon()} alt="Locked" />
-                                    </div>
-                                )}
-                                {badge.visualType === 'unknown' && (
-                                    <div className="challenge-badge-status-icon challenge-badge-unknown-icon">
-                                                <img src={getQuestionIcon()} alt="Unknown" />
-                                    </div>
-                                )}
-                                <span className="challenge-badge-name">{badge.shortTitle}</span>
-                            </div>
-                        </button>
-                    ))}
+                    {isLoading ? (
+                        <div className="challenge-badges-loading">
+                            <div className="loading-spinner"></div>
+                            <p>Loading badges...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="challenge-badges-error">
+                            <p>Error loading badges: {error}</p>
+                            <button 
+                                className="retry-button"
+                                onClick={() => {
+                                    setReloadTrigger(prev => prev + 1);
+                                }}
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    ) : allBadges.length === 0 ? (
+                        <div className="challenge-badges-empty">
+                            <p>No badges available</p>
+                        </div>
+                    ) : (
+                        allBadges.map((badge, index) => (
+                            <button
+                                key={badge.id}
+                                className={`challenge-badge-item challenge-badge-${badge.visualType}`}
+                                onClick={() => handleBadgeClick(badge)}
+                            >
+                                <div className="challenge-badge-content">
+                                    <span className={`challenge-badge-icon ${badge.visualType === 'locked' ? 'challenge-badge-locked' : badge.visualType === 'unknown' ? 'challenge-badge-unknown' : ''}`}>
+                                        <img 
+                                            src={badge.img} 
+                                            alt="Badge" 
+                                        />
+                                    </span>
+                                    {badge.visualType === 'locked' && (
+                                        <div className="challenge-badge-status-icon challenge-badge-locked-icon">
+                                                    <img src={getLockIcon()} alt="Locked" />
+                                        </div>
+                                    )}
+                                    {badge.visualType === 'unknown' && (
+                                        <div className="challenge-badge-status-icon challenge-badge-unknown-icon">
+                                                    <img src={getQuestionIcon()} alt="Unknown" />
+                                        </div>
+                                    )}
+                                    <span className="challenge-badge-name">{badge.shortTitle}</span>
+                                </div>
+                            </button>
+                        ))
+                    )}
                 </div>
             </div>
 
