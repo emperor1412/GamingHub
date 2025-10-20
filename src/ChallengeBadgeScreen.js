@@ -18,7 +18,7 @@ import ChallengeStatus from './ChallengeStatus';
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
 import ChallengeClaimReward from './ChallengeClaimReward';
 
-const ChallengeBadgeScreen = ({ onClose }) => {
+const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
     const [selectedChallengeData, setSelectedChallengeData] = React.useState(null);
     const [showChallengeUpdate, setShowChallengeUpdate] = React.useState(false);
@@ -46,6 +46,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 processedData.weeklyBadges.push({
                     id: apiChallenge.id,
                     title: challengeData.title,
+                    shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -63,6 +64,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 processedData.monthlyBadges.push({
                     id: apiChallenge.id,
                     title: challengeData.title,
+                    shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -80,6 +82,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 processedData.yearlyBadges.push({
                     id: apiChallenge.id,
                     title: challengeData.title,
+                    shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
@@ -223,6 +226,13 @@ const ChallengeBadgeScreen = ({ onClose }) => {
         setShowChallengeStatus(false);
     };
 
+    // Function to handle Explorer Badges Card click
+    const handleExplorerBadgesClick = () => {
+        if (onExplorerBadgesClick) {
+            onExplorerBadgesClick();
+        }
+    };
+
     // Show ChallengeClaimReward if state is true
     if (showChallengeClaimReward) {
         return (
@@ -336,10 +346,10 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                 
                 <div className="cbs-subtitle">COLLECT BADGES FROM LEGENDARY TRAILS ACROSS THE WORLD!</div>
 
-                {/* Summary Cards */}
+                {/* Summary Cards */}                                                                                                       
                 <div className="cbs-summary-cards">
                     {/* Explorer Badges Card */}
-                    <div className="cbs-summary-card">
+                    <button className="cbs-summary-card cbs-summary-card-clickable" onClick={handleExplorerBadgesClick}>
                         <div className="cbs-card-left">
                             <div className="cbs-card-header">
                                 <span className="cbs-card-number">{badgeData.explorerBadges.earned}/{badgeData.explorerBadges.total}</span>
@@ -351,7 +361,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                 <img src={badgeIncatrail} alt="Badge" className="cbs-badge-image cbs-badge-image-explorer" />
                             </div>
                         </div>
-                    </div>
+                    </button>
 
                     {/* Starlets Earned Card */}
                     <div className="cbs-summary-card">
@@ -409,7 +419,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                         {/* {badge.visualType === 'unlocked' && (
                                             <div className="cbs-badge-status-icon">✨</div>
                                         )} */}
-                                        <span className="cbs-badge-name">{badge.title}</span>
+                                        <span className="cbs-badge-name">{badge.shortTitle}</span>
                                     </div>
                                 </button>
                             ))}
@@ -454,7 +464,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                                 <img src={questionIcon} alt="Unknown" />
                                             </div>
                                         )}
-                                        <span className="cbs-badge-name">{badge.title}</span>
+                                        <span className="cbs-badge-name">{badge.shortTitle}</span>
                                     </div>
                                 </button>
                             ))}
@@ -499,7 +509,7 @@ const ChallengeBadgeScreen = ({ onClose }) => {
                                                 <img src={questionIcon} alt="Unknown" />
                                             </div>
                                         )}
-                                        <span className="cbs-badge-name">{badge.title}</span>
+                                        <span className="cbs-badge-name">{badge.shortTitle}</span>
                                     </div>
                                 </button>
                             ))}

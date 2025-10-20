@@ -49,7 +49,7 @@
     flex-direction: column;
     position: relative;
     z-index: 5;
-    padding: 15vh 20px 100px;
+    padding: 80px 20px 100px;
     min-height: 100vh;
     box-sizing: border-box;
     max-width: 430px;
@@ -164,6 +164,24 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+}
+
+.cbs-summary-card-clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+.cbs-summary-card-clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 241, 255, 0.3);
+    background: #1a1aff;
+}
+
+.cbs-summary-card-clickable:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 241, 255, 0.2);
 }
 
 .cbs-card-left {
@@ -333,7 +351,7 @@
     cursor: pointer;
     position: relative;
     width: 104px;
-    height: 140px;
+    max-height: 140px;
     transition: transform 0.2s ease;
 }
 
@@ -447,7 +465,7 @@
 }
 
 .cbs-badge-unknown-icon {
-    top: 35%;
+    top: 40%;
 }
 
 .cbs-badge-locked-icon img {
@@ -550,10 +568,15 @@
 }
 
 .cbs-badge-name {
-    font-size: 11px;
-    font-weight: 600;
-    color: #FFFFFF;
+    font-family: 'PP Neue Machina', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 0px;
+    text-align: center;
     text-transform: uppercase;
+    color: #FFFFFF;
 }
 
 /* Responsive Design */

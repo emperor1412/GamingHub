@@ -16,6 +16,7 @@ import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
+import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 
 const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -24,6 +25,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [showChallengeError, setShowChallengeError] = useState(false);
     const [selectedChallengeType, setSelectedChallengeType] = useState(null);
     const [showBadgeScreen, setShowBadgeScreen] = useState(false);
+    const [showBadgeCollection, setShowBadgeCollection] = useState(false);
 
     // Helper function to get current challenge from API mock
     const getCurrentChallengeFromApi = (challengeType) => {
@@ -153,6 +155,14 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         setShowBadgeScreen(false);
     };
 
+    const handleExplorerBadgesClick = () => {
+        setShowBadgeCollection(true);
+    };
+
+    const handleBackFromBadgeCollection = () => {
+        setShowBadgeCollection(false);
+    };
+
     const handleViewBadges = () => {
         // Close any open screens and show badge screen
         setShowChallengeUpdate(false);
@@ -163,11 +173,21 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         setShowBadgeScreen(true);
     };
 
+    // Show BadgeCollection if user clicked Explorer Badges
+    if (showBadgeCollection) {
+        return (
+            <ChallengeBadgeCollection
+                onClose={handleBackFromBadgeCollection}
+            />
+        );
+    }
+
     // Show ChallengeBadgeScreen if user clicked Explorer Journey
     if (showBadgeScreen) {
         return (
             <ChallengeBadgeScreen
                 onClose={handleBackFromBadgeScreen}
+                onExplorerBadgesClick={handleExplorerBadgesClick}
             />
         );
     }
