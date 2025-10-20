@@ -268,8 +268,8 @@
 .cu-step-numbers {
   display: flex;
   justify-content: space-between;
-  width: 300px;
   margin: 0 auto;
+  padding: 0 10px;
 }
 
 .cu-step-number {
@@ -321,6 +321,18 @@
 .cu-done-button:hover {
   background: #00F1FF;
   transform: translateY(-2px);
+}
+
+.cu-done-button-disabled {
+  background: #666666 !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+.cu-done-button-disabled:hover {
+  background: #666666 !important;
+  transform: none !important;
 }
 
 /* Responsive Design */
