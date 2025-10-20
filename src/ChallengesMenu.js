@@ -112,38 +112,78 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return { isDisabled, disabledReason };
     };
 
-    const handleChallengeClick = (challengeType) => {
+    const handleChallengeClick = async (challengeType) => {
         const state = getChallengeState(challengeType);
         const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
-        const mockDetail = getCurrentChallengeFromApi(challengeType);
-        // Prefer API fields; fallback to mock detail for missing fields
-        const challenge = apiItem ? {
-            id: apiItem.id,
-            title: (apiItem.name || (mockDetail?.title) || '').trim(),
-            shortTitle: (mockDetail?.shortTitle) || (apiItem.name || '').trim(),
-            type: challengeType.toUpperCase(),
-            entryFee: typeof apiItem.price === 'number' ? apiItem.price : (mockDetail?.entryFee || 0),
-            reward: typeof apiItem.price === 'number' ? apiItem.price : (mockDetail?.reward || 0),
-            stepsEst: mockDetail?.stepsEst,
-            distanceKm: mockDetail?.distanceKm,
-            description: mockDetail?.description,
-            location: mockDetail?.location,
-            dateStart: mockDetail?.dateStart,
-            dateEnd: mockDetail?.dateEnd
-        } : mockDetail;
         
-        // Only allow click if not disabled
-        if (!state.isDisabled && challenge) {
-            setSelectedChallenge(challenge);
-            setSelectedChallengeType(challengeType);
-            
-            // Check if user has already joined this challenge
-            if (hasJoinedChallenge(challengeType)) {
-                // User has joined -> go to Challenge Update
-                setShowChallengeUpdate(true);
-            } else {
-                // User hasn't joined -> go to Challenge Info
-                // ChallengeInfo will be shown automatically
+        // Only allow click if not disabled and we have API data
+        if (!state.isDisabled && apiItem) {
+            try {
+                // Call API to get challenge detail
+                const result = await shared.getChallengeDetail(apiItem.id);
+                
+                if (result.success) {
+                    const challengeDetail = result.data;
+                    const mockDetail = getCurrentChallengeFromApi(challengeType);
+                    
+                    // Combine API data with mock detail for missing fields
+                    const challenge = {
+                        id: challengeDetail.id,
+                        title: (challengeDetail.name || (mockDetail?.title) || '').trim(),
+                        shortTitle: (mockDetail?.shortTitle) || (challengeDetail.name || '').trim(),
+                        type: challengeType.toUpperCase(),
+                        entryFee: challengeDetail.price,
+                        reward: challengeDetail.price * 2, // Reward is double the entry fee
+                        stepsEst: challengeDetail.step,
+                        distanceKm: mockDetail?.distanceKm,
+                        description: mockDetail?.description,
+                        location: mockDetail?.location,
+                        dateStart: mockDetail?.dateStart,
+                        dateEnd: mockDetail?.dateEnd,
+                        // API data
+                        state: challengeDetail.state,
+                        currentSteps: challengeDetail.currSteps,
+                        totalSteps: challengeDetail.step,
+                        startTime: challengeDetail.startTime,
+                        endTime: challengeDetail.endTime
+                    };
+                    
+                    setSelectedChallenge(challenge);
+                    setSelectedChallengeType(challengeType);
+                    
+                    // Determine which view to show based on state
+                    if (challengeDetail.state === 10) {
+                        // State_Joining = 10 -> User has joined -> go to Challenge Update
+                        setShowChallengeUpdate(true);
+                    } else if (challengeDetail.state === 20) {
+                        // State_Expired = 20 -> Challenge expired
+                        console.log('Challenge expired');
+                        // You can show an error or different view here
+                    } else if (challengeDetail.state === 30) {
+                        // State_Complete = 30 -> User completed challenge
+                        console.log('Challenge completed');
+                        // You can show completion view here
+                    } else {
+                        // User hasn't joined -> go to Challenge Info
+                        // ChallengeInfo will be shown automatically
+                    }
+                } else {
+                    console.error('Failed to get challenge detail:', result.error);
+                    // Fallback to original behavior
+                    const mockDetail = getCurrentChallengeFromApi(challengeType);
+                    if (mockDetail) {
+                        setSelectedChallenge(mockDetail);
+                        setSelectedChallengeType(challengeType);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching challenge detail:', error);
+                // Fallback to original behavior
+                const mockDetail = getCurrentChallengeFromApi(challengeType);
+                if (mockDetail) {
+                    setSelectedChallenge(mockDetail);
+                    setSelectedChallengeType(challengeType);
+                }
             }
         }
     };

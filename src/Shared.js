@@ -819,6 +819,71 @@ data object
         }
     },
 
+    // API function to get challenge detail
+    getChallengeDetail: async (challengeId, depth = 0) => {
+        if (depth > 3) {
+            console.error('getChallengeDetail failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching challenge detail for ID:', challengeId);
+            
+            const response = await fetch(`${shared.server_url}/api/app/challengeDetail?token=${shared.loginData.token}&challengeId=${challengeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getChallengeDetail Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getChallengeDetail Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getChallengeDetail: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getChallengeDetail: login again');
+                    const result = await shared.login();
+                    if (result) {
+                        return await shared.getChallengeDetail(challengeId, depth + 1);
+                    }
+                }
+                else {
+                    console.log('getChallengeDetail error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getChallengeDetail Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getChallengeDetail error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
     // New function to handle coin flip game
     flipCoin: async (isHeads, betAmount, allin = false, depth = 0) => {
         if (depth > 3) {
