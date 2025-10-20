@@ -312,12 +312,16 @@
     filter: brightness(1.2) saturate(1.5);
 }
 
-.challenge-badge-locked .challenge-badge-icon img {
-    filter: grayscale(1) brightness(0.6);
+/* Locked badge state - make it dimmed */
+.challenge-badge-locked img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
 }
 
-.challenge-badge-unknown .challenge-badge-icon img {
-    filter: grayscale(1) brightness(0.6);
+/* Unknown/upcoming badge state - make it dimmed */
+.challenge-badge-unknown img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
 }
 
 /* Status Modal */

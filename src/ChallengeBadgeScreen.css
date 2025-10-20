@@ -394,6 +394,18 @@
     transform: scale(1.2);
 }
 
+/* Locked badge state - make it dimmed */
+.cbs-badge-locked img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
+/* Unknown/upcoming badge state - make it dimmed */
+.cbs-badge-unknown img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
 /* Responsive cho badges container - chỉ giảm size khi cần */
 @media (max-width: 420px) {
     .cbs-badge-item {

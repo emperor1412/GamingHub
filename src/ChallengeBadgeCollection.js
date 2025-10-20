@@ -1,10 +1,9 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     import React, { useState } from 'react';
 import './ChallengeBadgeCollection.css';
 import backIcon from './images/back.svg';
-import lockIcon from './images/lock_icon.png';
-import questionIcon from './images/question_icon.png';
-import badgeUnlocked from './images/trophy_4.png';
-import badgeLocked from './images/TwoHundredStrong_Locked.png';
+
+// Import badge image mapper
+import { getBadgeImage, getLockIcon, getQuestionIcon } from './utils/badgeImageMapper';
 
 // Import existing components for badge details
 import ChallengeUpdate from './ChallengeUpdate';
@@ -41,8 +40,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked,
+                    img: getBadgeImage(apiChallenge.id), // Same image for both states
                     type: 'weekly',
                     trailName: 'INCA TRAIL' // Default trail name, can be from API
                 });
@@ -61,8 +59,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked,
+                    img: getBadgeImage(apiChallenge.id), // Same image for both states
                     type: 'monthly',
                     trailName: 'INCA TRAIL'
                 });
@@ -81,8 +78,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked,
+                    img: getBadgeImage(apiChallenge.id), // Same image for both states
                     type: 'yearly',
                     trailName: 'INCA TRAIL'
                 });
@@ -388,20 +384,20 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                             onClick={() => handleBadgeClick(badge)}
                         >
                             <div className="challenge-badge-content">
-                                <span className="challenge-badge-icon">
+                                <span className={`challenge-badge-icon ${badge.visualType === 'locked' ? 'challenge-badge-locked' : badge.visualType === 'unknown' ? 'challenge-badge-unknown' : ''}`}>
                                     <img 
-                                        src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                        src={badge.img} 
                                         alt="Badge" 
                                     />
                                 </span>
                                 {badge.visualType === 'locked' && (
                                     <div className="challenge-badge-status-icon challenge-badge-locked-icon">
-                                        <img src={lockIcon} alt="Locked" />
+                                                <img src={getLockIcon()} alt="Locked" />
                                     </div>
                                 )}
                                 {badge.visualType === 'unknown' && (
                                     <div className="challenge-badge-status-icon challenge-badge-unknown-icon">
-                                        <img src={questionIcon} alt="Unknown" />
+                                                <img src={getQuestionIcon()} alt="Unknown" />
                                     </div>
                                 )}
                                 <span className="challenge-badge-name">{badge.shortTitle}</span>
