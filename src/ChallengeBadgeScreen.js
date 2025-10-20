@@ -32,30 +32,51 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [apiChallenges, setApiChallenges] = React.useState([]);
+    const [challengeEarnedData, setChallengeEarnedData] = React.useState({
+        starlets: 0,
+        badges: 0,
+        challenges: 0
+    });
 
-    // Fetch challenges from API
+    // Fetch challenges and earned data from API
     React.useEffect(() => {
-        const fetchChallenges = async () => {
+        const fetchData = async () => {
             setLoading(true);
             setError(null);
             
             try {
-                const result = await shared.getChallengesBadgeView();
+                // Fetch both APIs in parallel
+                const [challengesResult, earnedResult] = await Promise.all([
+                    shared.getChallengesBadgeView(),
+                    shared.getChallengeEarned()
+                ]);
                 
-                if (result.success) {
-                    console.log('API challenges loaded:', result.data);
-                    setApiChallenges(result.data);
+                // Handle challenges data
+                if (challengesResult.success) {
+                    console.log('API challenges loaded:', challengesResult.data);
+                    setApiChallenges(challengesResult.data);
                 } else {
-                    console.error('Failed to load challenges:', result.error);
-                    setError(result.error);
+                    console.error('Failed to load challenges:', challengesResult.error);
+                    setError(challengesResult.error);
                     // Fallback to mock data on error
                     setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
                         mockChallengeBadgeApiResponse.monthly,
                         mockChallengeBadgeApiResponse.yearly
                     ));
                 }
+
+                // Handle earned data
+                if (earnedResult.success) {
+                    console.log('Challenge earned data loaded:', earnedResult.data);
+                    // API returns object directly, not array
+                    const earnedData = earnedResult.data || { starlets: 0, badges: 0, challenges: 0 };
+                    setChallengeEarnedData(earnedData);
+                } else {
+                    console.error('Failed to load earned data:', earnedResult.error);
+                    // Keep default values on error
+                }
             } catch (err) {
-                console.error('Error fetching challenges:', err);
+                console.error('Error fetching data:', err);
                 setError(err.message);
                 // Fallback to mock data on error
                 setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
@@ -67,14 +88,17 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
             }
         };
 
-        fetchChallenges();
+        fetchData();
     }, []);
 
     // Process real challenge data from API response
     const processChallengeData = () => {
         const processedData = {
-            explorerBadges: { earned: 4, total: 52 },
-            starletsEarned: 2500,
+            explorerBadges: { 
+                earned: challengeEarnedData.badges || 0, 
+                total: challengeEarnedData.challenges || 0 
+            },
+            starletsEarned: challengeEarnedData.starlets || 0,
             weeklyBadges: [],
             monthlyBadges: [],
             yearlyBadges: []
@@ -518,7 +542,9 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     <button className="cbs-summary-card cbs-summary-card-clickable" onClick={handleExplorerBadgesClick}>
                         <div className="cbs-card-left">
                             <div className="cbs-card-header">
-                                <span className="cbs-card-number">{badgeData.explorerBadges.earned}/{badgeData.explorerBadges.total}</span>
+                                <span className="cbs-card-number">
+                                    {loading ? '...' : `${badgeData.explorerBadges.earned}/${badgeData.explorerBadges.total}`}
+                                </span>
                             </div>
                             <div className="cbs-card-title">EXPLORER BADGES EARNED</div>
                         </div>
@@ -533,7 +559,9 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     <div className="cbs-summary-card">
                         <div className="cbs-card-left">
                             <div className="cbs-card-header">
-                                <span className="cbs-card-number">{badgeData.starletsEarned.toLocaleString()}</span>
+                                <span className="cbs-card-number">
+                                    {loading ? '...' : badgeData.starletsEarned.toLocaleString()}
+                                </span>
                             </div>
                             <div className="cbs-card-title">STARLETS EARNED</div>
                         </div>
