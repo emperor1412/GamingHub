@@ -226,12 +226,17 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleGoToMarket = () => {
-        // Close error and go to market (you can implement market navigation here)
+        // Close error and go to market
         setShowChallengeError(false);
         setSelectedChallenge(null);
         setSelectedChallengeType(null);
-        // You can add navigation to market here
-        console.log('Navigate to market');
+        
+        // Navigate to market tab
+        if (shared.setActiveTab) {
+            shared.setActiveTab('market');
+        } else {
+            console.error('setActiveTab function not available');
+        }
     };
 
     const handleBackFromError = () => {
