@@ -3,13 +3,11 @@ import './ChallengeBadgeScreen.css';
 import starletIcon from './images/starlet.png';
 import doodleExtra from './images/doodle_extra.png';
 import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
-import lockIcon from './images/lock_icon.png';
-import questionIcon from './images/question_icon.png';
-import badgeIncatrail from './images/trophy_4.png';
 import backIcon from './images/back.svg';
+import defaultBadgeImage from './images/trophy_4.png';
 
-import badgeUnlocked from './images/trophy_4.png';
-import badgeLocked from './images/TwoHundredStrong_Locked.png';
+// Import badge image mapper
+import { getBadgeImage, getLockIcon, getQuestionIcon } from './utils/badgeImageMapper';
 import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
@@ -108,8 +106,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked,
+                    img: getBadgeImage(apiChallenge.id), // Same image for both states
                     type: challengeType
                 };
 
@@ -491,7 +488,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                         </div>
                         <div className="cbs-card-right">
                             <div className="cbs-card-icon">
-                                <img src={badgeIncatrail} alt="Badge" className="cbs-badge-image cbs-badge-image-explorer" />
+                                <img src={defaultBadgeImage} alt="Badge" className="cbs-badge-image cbs-badge-image-explorer" />
                             </div>
                         </div>
                     </button>
@@ -533,20 +530,20 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     onClick={() => handleBadgeClick(badge)}
                                 >
                                     <div className="cbs-badge-content">
-                                        <span className="cbs-badge-icon">
+                                        <span className={`cbs-badge-icon ${badge.visualType === 'locked' ? 'cbs-badge-locked' : badge.visualType === 'unknown' ? 'cbs-badge-unknown' : ''}`}>
                                             <img 
-                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                src={badge.img} 
                                                 alt="Badge" 
                                             />
                                         </span>
                                         {badge.visualType === 'locked' && (
                                             <div className="cbs-badge-status-icon cbs-badge-locked-icon">
-                                                <img src={lockIcon} alt="Locked" />
+                                                <img src={getLockIcon()} alt="Locked" />
                                             </div>
                                         )}
                                         {badge.visualType === 'unknown' && (
                                             <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
-                                                <img src={questionIcon} alt="Unknown" />
+                                                <img src={getQuestionIcon()} alt="Unknown" />
                                             </div>
                                         )}
                                         {/* {badge.visualType === 'unlocked' && (
@@ -581,20 +578,20 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     onClick={() => handleBadgeClick(badge)}
                                 >
                                     <div className="cbs-badge-content">
-                                        <span className="cbs-badge-icon">
+                                        <span className={`cbs-badge-icon ${badge.visualType === 'locked' ? 'cbs-badge-locked' : badge.visualType === 'unknown' ? 'cbs-badge-unknown' : ''}`}>
                                             <img 
-                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                src={badge.img} 
                                                 alt="Badge" 
                                             />
                                         </span>
                                         {badge.visualType === 'locked' && (
                                             <div className="cbs-badge-status-icon cbs-badge-locked-icon">
-                                                <img src={lockIcon} alt="Locked" />
+                                                <img src={getLockIcon()} alt="Locked" />
                                             </div>
                                         )}
                                         {badge.visualType === 'unknown' && (
                                             <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
-                                                <img src={questionIcon} alt="Unknown" />
+                                                <img src={getQuestionIcon()} alt="Unknown" />
                                             </div>
                                         )}
                                         <span className="cbs-badge-name">{badge.shortTitle}</span>
@@ -626,20 +623,20 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     onClick={() => handleBadgeClick(badge)}
                                 >
                                     <div className="cbs-badge-content">
-                                        <span className="cbs-badge-icon">
+                                        <span className={`cbs-badge-icon ${badge.visualType === 'locked' ? 'cbs-badge-locked' : badge.visualType === 'unknown' ? 'cbs-badge-unknown' : ''}`}>
                                             <img 
-                                                src={badge.visualType === 'unlocked' ? badge.img : badge.imgLocked} 
+                                                src={badge.img} 
                                                 alt="Badge" 
                                             />
                                         </span>
                                         {badge.visualType === 'locked' && (
                                             <div className="cbs-badge-status-icon cbs-badge-locked-icon">
-                                                <img src={lockIcon} alt="Locked" />
+                                                <img src={getLockIcon()} alt="Locked" />
                                             </div>
                                         )}
                                         {badge.visualType === 'unknown' && (
                                             <div className="cbs-badge-status-icon cbs-badge-unknown-icon">
-                                                <img src={questionIcon} alt="Unknown" />
+                                                <img src={getQuestionIcon()} alt="Unknown" />
                                             </div>
                                         )}
                                         <span className="cbs-badge-name">{badge.shortTitle}</span>
