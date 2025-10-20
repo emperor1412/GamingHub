@@ -17,6 +17,7 @@ import ChallengeStatus from './ChallengeStatus';
 // Import real data and API mock
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
 import ChallengeClaimReward from './ChallengeClaimReward';
+import shared from './Shared';
 
 const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
@@ -26,6 +27,48 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
+    
+    // API state management
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
+    const [apiChallenges, setApiChallenges] = React.useState([]);
+
+    // Fetch challenges from API
+    React.useEffect(() => {
+        const fetchChallenges = async () => {
+            setLoading(true);
+            setError(null);
+            
+            try {
+                const result = await shared.getChallengesBadgeView();
+                
+                if (result.success) {
+                    console.log('API challenges loaded:', result.data);
+                    setApiChallenges(result.data);
+                } else {
+                    console.error('Failed to load challenges:', result.error);
+                    setError(result.error);
+                    // Fallback to mock data on error
+                    setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
+                        mockChallengeBadgeApiResponse.monthly,
+                        mockChallengeBadgeApiResponse.yearly
+                    ));
+                }
+            } catch (err) {
+                console.error('Error fetching challenges:', err);
+                setError(err.message);
+                // Fallback to mock data on error
+                setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
+                    mockChallengeBadgeApiResponse.monthly,
+                    mockChallengeBadgeApiResponse.yearly
+                ));
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchChallenges();
+    }, []);
 
     // Process real challenge data from API response
     const processChallengeData = () => {
@@ -37,59 +80,54 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
             yearlyBadges: []
         };
 
-        // Process Weekly Challenges
-        mockChallengeBadgeApiResponse.weekly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'weekly');
+        // Process API challenges data
+        apiChallenges.forEach(apiChallenge => {
+            // Determine challenge type based on type field from API
+            let challengeType = 'weekly';
+            if (apiChallenge.type === 2) {
+                challengeType = 'monthly';
+            } else if (apiChallenge.type === 3) {
+                challengeType = 'yearly';
+            } else if (apiChallenge.type === 1) {
+                challengeType = 'weekly';
+            }
+            // Fallback to ID-based detection if type field is not available
+            else if (apiChallenge.id >= 10001 && apiChallenge.id <= 10012) {
+                challengeType = 'monthly';
+            } else if (apiChallenge.id >= 100001 && apiChallenge.id <= 100003) {
+                challengeType = 'yearly';
+            }
+
+            const challengeData = getChallengeDataById(apiChallenge.id, challengeType);
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
             if (challengeData) {
-                processedData.weeklyBadges.push({
+                const badgeData = {
                     id: apiChallenge.id,
                     title: challengeData.title,
                     shortTitle: challengeData.shortTitle,
                     visualType: visualState.visualType,
                     logicState: visualState.logicState,
                     img: badgeUnlocked,
-                    imgLocked: badgeLocked
-                });
+                    imgLocked: badgeLocked,
+                    type: challengeType
+                };
+
+                // Add to appropriate category based on type
+                if (challengeType === 'weekly') {
+                    processedData.weeklyBadges.push(badgeData);
+                } else if (challengeType === 'monthly') {
+                    processedData.monthlyBadges.push(badgeData);
+                } else if (challengeType === 'yearly') {
+                    processedData.yearlyBadges.push(badgeData);
+                }
             }
         });
 
-        // Process Monthly Challenges
-        mockChallengeBadgeApiResponse.monthly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'monthly');
-            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
-            
-            if (challengeData) {
-                processedData.monthlyBadges.push({
-                    id: apiChallenge.id,
-                    title: challengeData.title,
-                    shortTitle: challengeData.shortTitle,
-                    visualType: visualState.visualType,
-                    logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked
-                });
-            }
-        });
-
-        // Process Yearly Challenges
-        mockChallengeBadgeApiResponse.yearly.forEach(apiChallenge => {
-            const challengeData = getChallengeDataById(apiChallenge.id, 'yearly');
-            const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
-            
-            if (challengeData) {
-                processedData.yearlyBadges.push({
-                    id: apiChallenge.id,
-                    title: challengeData.title,
-                    shortTitle: challengeData.shortTitle,
-                    visualType: visualState.visualType,
-                    logicState: visualState.logicState,
-                    img: badgeUnlocked,
-                    imgLocked: badgeLocked
-                });
-            }
-        });
+        // Sort badges by ID to maintain consistent order
+        processedData.weeklyBadges.sort((a, b) => a.id - b.id);
+        processedData.monthlyBadges.sort((a, b) => a.id - b.id);
+        processedData.yearlyBadges.sort((a, b) => a.id - b.id);
 
         return processedData;
     };
@@ -312,6 +350,52 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     setShowChallengeUpdate(false);
                 }}
             />
+        );
+    }
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="challenge-badge-screen">
+                {/* Back Button */}
+                <button className="back-button back-button-alignment" onClick={onClose}>
+                    <img src={backIcon} alt="Back" />
+                </button>
+                
+                {/* Loading Content */}
+                <div className="cbs-main-content">
+                    <div className="cbs-loading-container">
+                        <div className="cbs-loading-spinner"></div>
+                        <div className="cbs-loading-text">Loading challenges...</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error && apiChallenges.length === 0) {
+        return (
+            <div className="challenge-badge-screen">
+                {/* Back Button */}
+                <button className="back-button back-button-alignment" onClick={onClose}>
+                    <img src={backIcon} alt="Back" />
+                </button>
+                
+                {/* Error Content */}
+                <div className="cbs-main-content">
+                    <div className="cbs-error-container">
+                        <div className="cbs-error-text">Failed to load challenges</div>
+                        <div className="cbs-error-details">{error}</div>
+                        <button 
+                            className="cbs-retry-button"
+                            onClick={() => window.location.reload()}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </div>
         );
     }
 
