@@ -3,54 +3,54 @@
 
 export const mockChallengeBadgeApiResponse = {
   weekly: [
-    // State 0: Incoming (locked + nextbadge)
-    { id: 1001, name: "Mount Olympus Trek", type: "weekly", state: 0 },
+    // State 0: Incoming (unknown + nextbadge) - Question mark
+    { id: 1001, name: "Mount Olympus Trek", type: 1, state: 0 },
     
-    // State 1: Ongoing (unlocked + on-going)
-    { id: 1002, name: "Trolltunga Out-and-Back", type: "weekly", state: 1 },
+    // State 1: Ongoing (unlocked + on-going) - Bright normal badge
+    { id: 1002, name: "Trolltunga Out-and-Back", type: 1, state: 1 },
     
-    // State 2: Completed with reward (unlocked + done-and-unclaimed)
-    { id: 1003, name: "Cinque Terre Classic Segment", type: "weekly", state: 2, hasReward: true },
+    // State 2: Completed with reward (unlocked + done-and-unclaimed) - Bright normal badge
+    { id: 1003, name: "Cinque Terre Classic Segment", type: 1, state: 2, hasReward: true },
     
-    // State 3: Completed and claimed (unlocked + done-and-claimed)
-    { id: 1004, name: "Table Mountain Panorama Loop", type: "weekly", state: 3, hasReward: false },
+    // State 3: Completed and claimed (unlocked + done-and-claimed) - Bright normal badge
+    { id: 1004, name: "Table Mountain Panorama Loop", type: 1, state: 3, hasReward: false },
     
-    // // State 4: Failed (locked + unfinished)
-    // { id: 1005, name: "Arthur's Seat & Coast Loop", type: "weekly", state: 4 },
+    // State 4: Failed (locked + unfinished) - Padlock
+    { id: 1005, name: "Arthur's Seat & Coast Loop", type: 1, state: 4 },
     
-    // // State 5: Missed (locked + unjoined)
-    // { id: 1006, name: "Mount Takao & Jimba Ridge", type: "weekly", state: 5 }
+    // State 5: Missed (locked + unjoined) - Padlock
+    { id: 1006, name: "Mount Takao & Jimba Ridge", type: 1, state: 5 }
   ],
   
   monthly: [
-    // State 0: Incoming (locked + nextbadge)
-    { id: 10001, name: "Athens Riviera plus Saronic Stitches", type: "monthly", state: 0 },
+    // State 0: Incoming (unknown + nextbadge) - Question mark
+    { id: 10001, name: "Athens Riviera plus Saronic Stitches", type: 2, state: 0 },
     
-    // State 1: Ongoing (unlocked + on-going)
-    { id: 10002, name: "Camino Portugués Coastal Sampler", type: "monthly", state: 1 },
+    // State 1: Ongoing (unlocked + on-going) - Bright normal badge
+    { id: 10002, name: "Camino Portugués Coastal Sampler", type: 2, state: 1 },
     
-    // State 2: Completed with reward (unlocked + done-and-unclaimed)
-    { id: 10003, name: "Kyoto to Koyasan Pilgrim Mix", type: "monthly", state: 2, hasReward: true },
+    // State 2: Completed with reward (unlocked + done-and-unclaimed) - Bright normal badge
+    { id: 10003, name: "Kyoto to Koyasan Pilgrim Mix", type: 2, state: 2, hasReward: true },
     
-    // State 3: Completed and claimed (unlocked + done-and-claimed)
-    { id: 10004, name: "Cape Town Coastal plus Winelands", type: "monthly", state: 3, hasReward: false },
+    // State 3: Completed and claimed (unlocked + done-and-claimed) - Bright normal badge
+    { id: 10004, name: "Cape Town Coastal plus Winelands", type: 2, state: 3, hasReward: false },
     
-    // State 4: Failed (locked + unfinished)
-    { id: 10005, name: "Patagonia Lakes District Link", type: "monthly", state: 4 },
+    // State 4: Failed (locked + unfinished) - Padlock
+    { id: 10005, name: "Patagonia Lakes District Link", type: 2, state: 4 },
     
-    // State 5: Missed (locked + unjoined)
-    { id: 10006, name: "Iceland South Coast Waterfalls", type: "monthly", state: 5 }
+    // State 5: Missed (locked + unjoined) - Padlock
+    { id: 10006, name: "Iceland South Coast Waterfalls", type: 2, state: 5 }
   ],
   
   yearly: [
-    // State 0: Incoming (locked + nextbadge)
-    { id: 100001, name: "Trans-Europe Ribbon", type: "yearly", state: 0 },
+    // State 0: Incoming (unknown + nextbadge) - Question mark
+    { id: 100001, name: "Trans-Europe Ribbon", type: 3, state: 0 },
     
-    // State 1: Ongoing (unlocked + on-going)
-    { id: 100002, name: "Great Rift Traverse", type: "yearly", state: 1 },
+    // State 1: Ongoing (unlocked + on-going) - Bright normal badge
+    { id: 100002, name: "Great Rift Traverse", type: 3, state: 1 },
     
-    // State 2: Completed with reward (unlocked + done-and-unclaimed)
-    { id: 100003, name: "Pacific Ring Sampler", type: "yearly", state: 2, hasReward: true }
+    // State 2: Completed with reward (unlocked + done-and-unclaimed) - Bright normal badge
+    { id: 100003, name: "Pacific Ring Sampler", type: 3, state: 2, hasReward: true }
   ]
 };
 
@@ -72,35 +72,35 @@ export const mockCurrentChallengeDataApiResponse = {
   }
 };
 
-// State mapping helper
+// State mapping helper - Updated according to design guide
 export const mapApiStateToVisualState = (apiState, hasReward = false) => {
   switch (apiState) {
-    case 0: // Incoming
+    case 0: // Incoming - next challenge (start time > current time)
       return {
-        visualType: 'unknown',
+        visualType: 'unknown', // Shows question mark icon
         logicState: 'nextbadge'
       };
-    case 1: // Ongoing
+    case 1: // Ongoing - bright normal badge
       return {
         visualType: 'unlocked',
         logicState: 'on-going'
       };
-    case 2: // Completed with reward
+    case 2: // Completed with reward - bright normal badge
       return {
         visualType: 'unlocked',
         logicState: 'done-and-unclaimed'
       };
-    case 3: // Completed and claimed
+    case 3: // Completed and claimed - bright normal badge
       return {
         visualType: 'unlocked',
         logicState: 'done-and-claimed'
       };
-    case 4: // Failed
+    case 4: // Failed - padlock icon
       return {
         visualType: 'locked',
         logicState: 'unfinished'
       };
-    case 5: // Missed
+    case 5: // Missed (didn't join) - padlock icon
       return {
         visualType: 'locked',
         logicState: 'unjoined'
