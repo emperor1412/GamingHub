@@ -194,20 +194,15 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     };
 
     const handleConfirmJoin = () => {
-        // Check if user has enough starlets
-        const challenge = getCurrentChallengeFromApi(selectedChallengeType);
-        const requiredStarlets = challenge.entryFee;
-        
-        if (hasEnoughStarlets(requiredStarlets)) {
-            // User has enough starlets -> join challenge and go to Challenge Update
-            joinChallenge(selectedChallengeType);
-            setShowChallengeJoinConfirmation(false);
-            setShowChallengeUpdate(true);
-        } else {
-            // User doesn't have enough starlets -> show error
-            setShowChallengeJoinConfirmation(false);
-            setShowChallengeError(true);
-        }
+        // This function is no longer needed since API handles the logic
+        // But keeping it for backward compatibility
+        console.log('handleConfirmJoin called - API will handle the logic');
+    };
+
+    const handleShowError = () => {
+        // Show error screen when API returns not enough starlets
+        setShowChallengeJoinConfirmation(false);
+        setShowChallengeError(true);
     };
 
     const handleBackFromConfirmation = () => {
@@ -328,6 +323,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         return (
             <ChallengeJoinConfirmation 
                 challengeData={{
+                    id: selectedChallenge.id,
                     steps: selectedChallenge.stepsEst,
                     days: 7, // You can calculate this based on dateStart and dateEnd
                     starletsCost: selectedChallenge.entryFee,
@@ -337,6 +333,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
                 onViewBadges={handleViewBadges}
+                onShowError={handleShowError}
             />
         );
     }
