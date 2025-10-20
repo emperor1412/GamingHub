@@ -15,6 +15,7 @@ const ChallengeJoinConfirmation = ({
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [challengeDetailData, setChallengeDetailData] = useState(null);
   const {
     steps = 56000,
     days = 7,
@@ -36,9 +37,44 @@ const ChallengeJoinConfirmation = ({
       const result = await shared.joinChallenge(challengeId);
       
       if (result.success) {
-        // Successfully joined challenge
-        console.log('Successfully joined challenge');
-        setShowChallengeUpdate(true);
+        // Successfully joined challenge - now get challenge detail
+        console.log('Successfully joined challenge, fetching details...');
+        
+        const detailResult = await shared.getChallengeDetail(challengeId);
+        
+        if (detailResult.success) {
+          const challengeDetail = detailResult.data;
+          
+          // Combine API data with original challenge data
+          const combinedData = {
+            id: challengeDetail.id,
+            title: (challengeDetail.name || challengeData.title || '').trim(),
+            shortTitle: challengeData.shortTitle || (challengeDetail.name || '').trim(),
+            type: challengeData.type || "WEEKLY",
+            entryFee: challengeDetail.price,
+            reward: challengeDetail.price * 2,
+            stepsEst: challengeDetail.step,
+            distanceKm: challengeData.distanceKm,
+            description: challengeData.description,
+            location: challengeData.location,
+            dateStart: challengeData.dateStart,
+            dateEnd: challengeData.dateEnd,
+            // API data
+            state: challengeDetail.state,
+            currentSteps: challengeDetail.currSteps,
+            totalSteps: challengeDetail.step,
+            startTime: challengeDetail.startTime,
+            endTime: challengeDetail.endTime
+          };
+          
+          setChallengeDetailData(combinedData);
+          setShowChallengeUpdate(true);
+        } else {
+          console.error('Failed to get challenge detail after join:', detailResult.error);
+          // Fallback to original data
+          setChallengeDetailData(challengeData);
+          setShowChallengeUpdate(true);
+        }
       } else if (result.error === 'not_enough_starlets') {
         // Show error screen for not enough starlets
         console.log('Not enough starlets to join challenge');
@@ -59,13 +95,18 @@ const ChallengeJoinConfirmation = ({
 
   const handleDoneFromUpdate = () => {
     setShowChallengeUpdate(false);
-    if (onJoinChallenge) {
-      onJoinChallenge();
+    // After completing challenge, go back to ChallengesMenu
+    if (onBack) {
+      onBack();
     }
   };
 
   const handleBackFromUpdate = () => {
     setShowChallengeUpdate(false);
+    // Don't stay in ChallengeJoinConfirmation, go back to ChallengesMenu
+    if (onBack) {
+      onBack();
+    }
   };
 
   const handleBack = () => {
@@ -78,7 +119,24 @@ const ChallengeJoinConfirmation = ({
   if (showChallengeUpdate) {
     return (
       <ChallengeUpdate
-        challengeData={challengeData}
+        challengeData={challengeDetailData ? {
+          // API data
+          id: challengeDetailData.id,
+          currentSteps: challengeDetailData.currentSteps || 0,
+          totalSteps: challengeDetailData.totalSteps || challengeDetailData.stepsEst || 0,
+          endTime: challengeDetailData.endTime || 0,
+          startTime: challengeDetailData.startTime || 0,
+          // Additional fields
+          stepsEst: challengeDetailData.stepsEst || 0,
+          distanceKm: challengeDetailData.distanceKm || 0,
+          title: challengeDetailData.title || "Challenge",
+          shortTitle: challengeDetailData.shortTitle || "Challenge",
+          description: challengeDetailData.description || "Complete the challenge to earn rewards!",
+          location: challengeDetailData.location || "Unknown",
+          starletsReward: challengeDetailData.reward || 0,
+          type: challengeDetailData.type || "WEEKLY",
+          challengeEndDate: challengeDetailData.dateEnd ? `${challengeDetailData.dateEnd} 23:59` : "DD/MM/YYYY 23:59"
+        } : {}}
         onDone={handleDoneFromUpdate}
         onBack={handleBackFromUpdate}
         onViewBadges={onViewBadges}
