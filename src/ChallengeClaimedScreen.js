@@ -8,6 +8,15 @@ const ChallengeClaimedScreen = ({
   onViewBadges,
   claimedRewards = {}
 }) => {
+  const {
+    starlets = 0,
+    badgeName = "TRAILBLAZER BADGE",
+    challengeTitle = "CHALLENGE",
+    stepsCompleted = 0,
+    distanceKm = 0,
+    location = "Unknown"
+  } = claimedRewards;
+
   return (
     <div className="ccs-container">
       {/* Background Pattern */}
@@ -25,10 +34,10 @@ const ChallengeClaimedScreen = ({
         {/* Reward Details */}
         <div className="ccs-reward-details">
           <div className="ccs-reward-text">
-            {claimedRewards.starlets} STARLETS
+            {starlets.toLocaleString()} STARLETS
           </div>
           <div className="ccs-reward-text">
-            {claimedRewards.badgeName} 
+            {badgeName} 
           </div>
           <div className="ccs-reward-text">BADGE</div>
           
@@ -43,7 +52,7 @@ const ChallengeClaimedScreen = ({
         <div className="ccs-badge-container">
           <img 
             src={badge_incatrail} 
-            alt="Inca Trail Badge" 
+            alt={`${challengeTitle} Badge`} 
             className="ccs-badge-image"
           />
         </div>

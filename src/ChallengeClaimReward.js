@@ -4,6 +4,7 @@ import backIcon from './images/back.svg';
 import starlet from './images/starlet.png';
 import badge_incatrail from './images/badge_incatrail.png';
 import ChallengeClaimedScreen from './ChallengeClaimedScreen';
+import shared from './Shared';
 
 const ChallengeClaimReward = ({ 
   challengeData, 
@@ -12,6 +13,8 @@ const ChallengeClaimReward = ({
   onViewBadges
 }) => {
   const [showClaimedScreen, setShowClaimedScreen] = React.useState(false);
+  const [isClaiming, setIsClaiming] = React.useState(false);
+  const [actualReward, setActualReward] = React.useState(null);
   
   // Debug state
   React.useEffect(() => {
@@ -19,6 +22,7 @@ const ChallengeClaimReward = ({
   }, [showClaimedScreen]);
   
   const {
+    id: challengeId = 0,
     stepsCompleted = 56000,
     distanceKm = 11,
     badgeName = "TRAILBLAZER OF MACHU PICCHU",
@@ -29,15 +33,35 @@ const ChallengeClaimReward = ({
     location = "Peru"
   } = challengeData || {};
 
-  const handleClaimRewards = () => {
-    console.log('Claim rewards button clicked!');
+  const handleClaimRewards = async () => {
+    if (!challengeId) {
+      console.error('No challenge ID provided');
+      return;
+    }
+
+    setIsClaiming(true);
     
-    // Show the claimed screen first
-    console.log('Setting showClaimedScreen to true');
-    setShowClaimedScreen(true);
-    
-    // Don't call onClaimRewards immediately - let user see the claimed screen first
-    // onClaimRewards will be called when they close the claimed screen
+    try {
+      const result = await shared.completeChallenge(challengeId);
+      
+      if (result.success) {
+        // API returned the actual reward amount
+        const actualStarletsReward = result.data;
+        setActualReward(actualStarletsReward);
+        
+        console.log('Challenge completed successfully, reward:', actualStarletsReward);
+        
+        // Show the claimed screen with actual reward
+        setShowClaimedScreen(true);
+      } else {
+        console.error('Failed to complete challenge:', result.error);
+        // You can show an error message here
+      }
+    } catch (error) {
+      console.error('Error completing challenge:', error);
+    } finally {
+      setIsClaiming(false);
+    }
   };
   
   const handleCloseClaimedScreen = () => {
@@ -97,7 +121,7 @@ const ChallengeClaimReward = ({
         <div className="ccr-steps-section">
           <div className="ccr-steps-number">{stepsCompleted.toLocaleString()}</div>
           <div className="ccr-steps-label">STEPS COMPLETED</div>
-          <div className="ccr-distance-info">{distanceKm} KM CONQUERED</div>
+          {/* <div className="ccr-distance-info">{distanceKm} KM CONQUERED</div> */}
         </div>
 
         {/* Title & Badge Section */}
@@ -135,8 +159,12 @@ const ChallengeClaimReward = ({
           <div className="ccr-badge-submessage">Hard work always pays off!</div>
 
           {/* Claim Rewards Button */}
-          <button className="ccr-claim-button" onClick={handleClaimRewards}>
-            CLAIM REWARDS
+          <button 
+            className="ccr-claim-button" 
+            onClick={handleClaimRewards}
+            disabled={isClaiming}
+          >
+            {isClaiming ? 'CLAIMING...' : 'CLAIM REWARDS'}
           </button>
         </div>
       </div>
@@ -147,8 +175,12 @@ const ChallengeClaimReward = ({
           onClose={handleCloseClaimedScreen}
           onViewBadges={handleViewBadges}
           claimedRewards={{
-            starlets: starletsReward,
-            badgeName: badgeName
+            starlets: actualReward || starletsReward, // Use actual reward from API, fallback to original
+            badgeName: badgeName,
+            challengeTitle: challengeTitle,
+            stepsCompleted: stepsCompleted,
+            distanceKm: distanceKm,
+            location: location
           }}
         />
       )}

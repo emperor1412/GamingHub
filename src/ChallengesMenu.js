@@ -300,6 +300,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
             <ChallengeUpdate
                 challengeData={{
                     // API data
+                    id: selectedChallenge.id,
                     currentSteps: selectedChallenge.currentSteps || 0,
                     totalSteps: selectedChallenge.totalSteps || selectedChallenge.stepsEst || 0,
                     endTime: selectedChallenge.endTime || 0,
