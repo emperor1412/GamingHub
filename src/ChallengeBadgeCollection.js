@@ -14,6 +14,7 @@ import ChallengeClaimReward from './ChallengeClaimReward';
 
 // Import mock data
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
+import shared from './Shared';
 
 const ChallengeBadgeCollection = ({ onClose }) => {
     const [selectedBadge, setSelectedBadge] = useState(null);
@@ -94,12 +95,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     const allBadges = processAllChallenges();
 
     // Function to handle badge click
-    const handleBadgeClick = (badge) => {
-        // Lưu challenge data để truyền cho các screens
-        const challengeData = getChallengeDataById(badge.id, badge.type);
-        console.log('Selected challenge data:', challengeData); // Debug log
-        setSelectedChallengeData(challengeData);
-        
+    const handleBadgeClick = async (badge) => {
         // Don't allow clicking on unknown badges
         if (badge.visualType === 'unknown') {
             return;
@@ -110,15 +106,63 @@ const ChallengeBadgeCollection = ({ onClose }) => {
             case 'unlocked':
                 switch (badge.logicState) {
                     case 'on-going':
-                        // Show Challenge Update Screen
-                        setShowChallengeUpdate(true);
+                        // Call API to get challenge detail for ongoing challenges
+                        try {
+                            const result = await shared.getChallengeDetail(badge.id);
+                            
+                            if (result.success) {
+                                const challengeDetail = result.data;
+                                const challengeData = getChallengeDataById(badge.id, badge.type);
+                                
+                                // Combine API data with mock detail for missing fields
+                                const combinedChallengeData = {
+                                    id: challengeDetail.id,
+                                    title: (challengeDetail.name || (challengeData?.title) || '').trim(),
+                                    shortTitle: (challengeData?.shortTitle) || (challengeDetail.name || '').trim(),
+                                    type: badge.type?.toUpperCase() || "WEEKLY",
+                                    entryFee: challengeDetail.price,
+                                    reward: challengeDetail.price * 2, // Reward is double the entry fee
+                                    stepsEst: challengeDetail.step,
+                                    distanceKm: challengeData?.distanceKm,
+                                    description: challengeData?.description,
+                                    location: challengeData?.location,
+                                    dateStart: challengeData?.dateStart,
+                                    dateEnd: challengeData?.dateEnd,
+                                    // API data
+                                    state: challengeDetail.state,
+                                    currentSteps: challengeDetail.currSteps,
+                                    totalSteps: challengeDetail.step,
+                                    startTime: challengeDetail.startTime,
+                                    endTime: challengeDetail.endTime
+                                };
+                                
+                                setSelectedChallengeData(combinedChallengeData);
+                                setShowChallengeUpdate(true);
+                            } else {
+                                console.error('Failed to get challenge detail:', result.error);
+                                // Fallback to original behavior
+                                const challengeData = getChallengeDataById(badge.id, badge.type);
+                                setSelectedChallengeData(challengeData);
+                                setShowChallengeUpdate(true);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching challenge detail:', error);
+                            // Fallback to original behavior
+                            const challengeData = getChallengeDataById(badge.id, badge.type);
+                            setSelectedChallengeData(challengeData);
+                            setShowChallengeUpdate(true);
+                        }
                         break;
                     case 'done-and-claimed':
                         // Show Challenge Badge Done Screen
+                        const challengeDataClaimed = getChallengeDataById(badge.id, badge.type);
+                        setSelectedChallengeData(challengeDataClaimed);
                         setShowChallengeBadgeDone(true);
                         break;
                     case 'done-and-unclaimed':
                         // Show Challenge Claim Reward Screen
+                        const challengeDataUnclaimed = getChallengeDataById(badge.id, badge.type);
+                        setSelectedChallengeData(challengeDataUnclaimed);
                         setShowChallengeClaimReward(true);
                         break;
                     default:
@@ -283,15 +327,21 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         return (
             <ChallengeUpdate
                 challengeData={selectedChallengeData ? {
-                    challengeEndDate: `${selectedChallengeData.dateEnd} 23:59` || "DD/MM/YYYY 23:59",
-                    stepsEst: selectedChallengeData.stepsEst || 9999,
-                    distanceKm: selectedChallengeData.distanceKm || 9999,
-                    title: selectedChallengeData.shortTitle || "########",
-                    shortTitle: selectedChallengeData.shortTitle || "########",
-                    description: selectedChallengeData.description || "#####################################################",
-                    location: selectedChallengeData.location || "######",
-                    starletsReward: 400,
-                    type: selectedChallengeData.type || "WEEKLY"
+                    // API data
+                    currentSteps: selectedChallengeData.currentSteps || 0,
+                    totalSteps: selectedChallengeData.totalSteps || selectedChallengeData.stepsEst || 0,
+                    endTime: selectedChallengeData.endTime || 0,
+                    startTime: selectedChallengeData.startTime || 0,
+                    // Additional fields
+                    stepsEst: selectedChallengeData.stepsEst || 0,
+                    distanceKm: selectedChallengeData.distanceKm || 0,
+                    title: selectedChallengeData.title || "Challenge",
+                    shortTitle: selectedChallengeData.shortTitle || "Challenge",
+                    description: selectedChallengeData.description || "Complete the challenge to earn rewards!",
+                    location: selectedChallengeData.location || "Unknown",
+                    starletsReward: selectedChallengeData.reward || 0,
+                    type: selectedChallengeData.type || "WEEKLY",
+                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 23:59` : "DD/MM/YYYY 23:59"
                 } : {}}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
