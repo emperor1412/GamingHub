@@ -204,6 +204,36 @@
     background: #373737E5;
 }
 
+/* Completed state styles */
+.challenge-card.completed {
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: #666666;
+}
+
+.challenge-card.completed:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #666666;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.challenge-completed-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.completed-text {
+    color: #888888;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
 
 .challenge-info {
     flex: 1;

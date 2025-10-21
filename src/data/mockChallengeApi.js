@@ -105,6 +105,26 @@ export const mapApiStateToVisualState = (apiState, hasReward = false) => {
         visualType: 'locked',
         logicState: 'unjoined'
       };
+    case 10: // State_Joining - User has joined the challenge
+      return {
+        visualType: 'unlocked',
+        logicState: 'on-going'
+      };
+    case 20: // State_Expired - Challenge expired
+      return {
+        visualType: 'locked',
+        logicState: 'unjoined'
+      };
+    case 30: // State_Complete - User completed challenge (can claim reward)
+      return {
+        visualType: 'unlocked',
+        logicState: 'done-and-unclaimed'
+      };
+    case 40: // State_RewardClaimed - User claimed the reward
+      return {
+        visualType: 'unlocked',
+        logicState: 'done-and-claimed'
+      };
     default:
       return {
         visualType: 'unknown',
