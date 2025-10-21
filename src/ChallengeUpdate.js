@@ -42,7 +42,7 @@ const ChallengeUpdate = ({
 
   // Format end time from API
   const formatEndDate = (endTime) => {
-    if (!endTime || endTime === 0) return challengeEndDate;
+    if (!endTime || endTime === 0) return challengeData.challengeEndDate + ' HH:MM UTC';
     const date = new Date(endTime);
     return date.toLocaleDateString('en-GB') + ' ' + date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   };

@@ -385,10 +385,11 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                 challengeData={{
                     id: selectedChallengeData.id,
                     steps: selectedChallengeData.stepsEst,
-                    days: 7, // You can calculate this based on dateStart and dateEnd
+                    days: selectedChallengeData.type === 'WEEKLY' ? 7 : selectedChallengeData.type === 'MONTHLY' ? 30 : 365,
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
+                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM",
+                    type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
