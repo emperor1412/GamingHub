@@ -2,6 +2,7 @@ import React from 'react';
 import './ChallengeClaimedScreen.css';
 import badge_incatrail from './images/badge_incatrail.png';
 import starlet from './images/starlet.png';
+import { getBadgeImage } from './utils/badgeImageMapper';
 
 const ChallengeClaimedScreen = ({ 
   onClose,
@@ -14,7 +15,8 @@ const ChallengeClaimedScreen = ({
     challengeTitle = "CHALLENGE",
     stepsCompleted = 0,
     distanceKm = 0,
-    location = "Unknown"
+    location = "Unknown",
+    challengeId = null
   } = claimedRewards;
 
   return (
@@ -51,7 +53,7 @@ const ChallengeClaimedScreen = ({
         {/* Central Badge */}
         <div className="ccs-badge-container">
           <img 
-            src={badge_incatrail} 
+            src={challengeId ? getBadgeImage(challengeId) : badge_incatrail} 
             alt={`${challengeTitle} Badge`} 
             className="ccs-badge-image"
           />

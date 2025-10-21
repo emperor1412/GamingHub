@@ -651,7 +651,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: selectedChallengeData.reward || 400, // ✅ Sử dụng reward từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
-                    description: selectedChallengeData.description || "#######################################################"
+                    description: selectedChallengeData.description || "#######################################################",
+                    challengeId: selectedChallengeData.id // ✅ Thêm challengeId để mapping badge đúng
                 } : {}}
             />
         );

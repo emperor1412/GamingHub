@@ -180,7 +180,8 @@ const ChallengeClaimReward = ({
             challengeTitle: challengeTitle,
             stepsCompleted: stepsCompleted,
             distanceKm: distanceKm,
-            location: location
+            location: location,
+            challengeId: challengeId // ✅ Thêm challengeId để mapping badge đúng
           }}
         />
       )}
