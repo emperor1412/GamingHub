@@ -505,6 +505,13 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         setShowChallengeJoinConfirmation(false);
     };
 
+    // Function to handle back from ChallengeUpdate after join
+    const handleBackFromUpdateAfterJoin = () => {
+        // After joining challenge, go back to badge collection (skip ChallengeInfo)
+        setShowChallengeUpdate(false);
+        setShowChallengeJoinConfirmation(false);
+    };
+
     // Function to handle confirm join
     const handleConfirmJoin = () => {
         // This will be handled by API
@@ -527,6 +534,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                 }}
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
+                onBackAfterJoin={handleBackFromUpdateAfterJoin}
                 onViewBadges={() => {
                     // Close the confirmation screen and stay on badge collection
                     setShowChallengeJoinConfirmation(false);
