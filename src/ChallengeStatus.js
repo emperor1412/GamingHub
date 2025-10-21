@@ -35,7 +35,12 @@ const ChallengeStatus = ({
   };
 
   const getStepsText = () => {
-    return isIncomplete ? "23,000 STEPS COMPLETED" : "0 STEPS COMPLETED";
+    if (isIncomplete) {
+      const stepsCompleted = challengeData.stepsCompleted || challengeData.currentSteps || 0;
+      return `${stepsCompleted.toLocaleString()} STEPS COMPLETED`;
+    } else {
+      return "0 STEPS COMPLETED";
+    }
   };
 
   return (
