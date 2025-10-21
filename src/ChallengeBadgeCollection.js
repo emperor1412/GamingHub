@@ -155,8 +155,12 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                                     console.log('Challenge expired');
                                     setSelectedBadge(badge);
                                 } else if (challengeDetail.state === 30) {
-                                    // State_Complete = 30 -> User completed challenge
-                                    console.log('Challenge completed');
+                                    // State_Complete = 30 -> User completed challenge (can claim reward)
+                                    console.log('Challenge completed - can claim reward');
+                                    setShowChallengeClaimReward(true);
+                                } else if (challengeDetail.state === 40) {
+                                    // State_RewardClaimed = 40 -> User claimed the reward
+                                    console.log('Challenge completed and reward claimed');
                                     setShowChallengeBadgeDone(true);
                                 } else {
                                     // User hasn't joined -> show ChallengeInfo

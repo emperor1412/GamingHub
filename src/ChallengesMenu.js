@@ -116,6 +116,11 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
         const state = getChallengeState(challengeType);
         const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
         
+        // Don't allow click if challenge is completed and reward claimed (state 40)
+        if (apiItem && apiItem.state === 40) {
+            return; // Don't do anything for completed challenges
+        }
+        
         // Only allow click if not disabled and we have API data
         if (!state.isDisabled && apiItem) {
             try {
@@ -160,9 +165,13 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                         console.log('Challenge expired');
                         // You can show an error or different view here
                     } else if (challengeDetail.state === 30) {
-                        // State_Complete = 30 -> User completed challenge
-                        console.log('Challenge completed');
-                        // You can show completion view here
+                        // State_Complete = 30 -> User completed challenge (can claim reward) -> go to Challenge Update
+                        console.log('Challenge completed - can claim reward');
+                        setShowChallengeUpdate(true);
+                    } else if (challengeDetail.state === 40) {
+                        // State_RewardClaimed = 40 -> User claimed the reward -> show dimmed button
+                        console.log('Challenge completed and reward claimed');
+                        // Don't show any screen, just keep the challenge card dimmed
                     } else {
                         // User hasn't joined -> go to Challenge Info
                         // ChallengeInfo will be shown automatically
@@ -387,7 +396,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                 <div className="challenge-cards">
                     {/* Weekly Challenge */}
                     <div 
-                        className={`challenge-card ${getChallengeState('weekly').isDisabled ? 'locked' : ''}`}
+                        className={`challenge-card ${getChallengeState('weekly').isDisabled ? 'locked' : ''} ${getApiChallengeByType(1)?.state === 40 ? 'completed' : ''}`}
                         onClick={() => handleChallengeClick('weekly')}
                     >
                         {(() => {
@@ -399,6 +408,12 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                 return (
                                     <div className="challenge-lock-overlay">
                                         <div className="lock-text">{weeklyState.disabledReason}</div>
+                                    </div>
+                                );
+                            } else if (weeklyApi?.state === 40) {
+                                return (
+                                    <div className="challenge-completed-overlay">
+                                        <div className="completed-text">CHALLENGE HAS COMPLETED</div>
                                     </div>
                                 );
                             } else {
@@ -420,7 +435,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
 
                     {/* Monthly Challenge */}
                     <div 
-                        className={`challenge-card ${getChallengeState('monthly').isDisabled ? 'locked' : ''}`}
+                        className={`challenge-card ${getChallengeState('monthly').isDisabled ? 'locked' : ''} ${getApiChallengeByType(2)?.state === 40 ? 'completed' : ''}`}
                         onClick={() => handleChallengeClick('monthly')}
                     >
                         {(() => {
@@ -432,6 +447,12 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                 return (
                                     <div className="challenge-lock-overlay">
                                         <div className="lock-text">{monthlyState.disabledReason}</div>
+                                    </div>
+                                );
+                            } else if (monthlyApi?.state === 40) {
+                                return (
+                                    <div className="challenge-completed-overlay">
+                                        <div className="completed-text">CHALLENGE HAS COMPLETED</div>
                                     </div>
                                 );
                             } else {
@@ -453,7 +474,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
 
                     {/* Yearly Challenge */}
                     <div 
-                        className={`challenge-card ${getChallengeState('yearly').isDisabled ? 'locked' : ''}`}
+                        className={`challenge-card ${getChallengeState('yearly').isDisabled ? 'locked' : ''} ${getApiChallengeByType(3)?.state === 40 ? 'completed' : ''}`}
                         onClick={() => handleChallengeClick('yearly')}
                     >
                         {(() => {
@@ -465,6 +486,12 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                                 return (
                                     <div className="challenge-lock-overlay">
                                         <div className="lock-text">{yearlyState.disabledReason}</div>
+                                    </div>
+                                );
+                            } else if (yearlyApi?.state === 40) {
+                                return (
+                                    <div className="challenge-completed-overlay">
+                                        <div className="completed-text">CHALLENGE HAS COMPLETED</div>
                                     </div>
                                 );
                             } else {
