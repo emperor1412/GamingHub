@@ -443,11 +443,12 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         return (
             <ChallengeClaimReward
                 challengeData={selectedChallengeData ? {
+                    id: selectedChallengeData.id, // ✅ Thêm challengeId
                     stepsCompleted: selectedChallengeData.stepsEst || 99999,
                     distanceKm: selectedChallengeData.distanceKm || 9999,
                     badgeName: `${selectedChallengeData.shortTitle}`,
                     challengeTitle: selectedChallengeData.shortTitle,
-                    starletsReward: 400,
+                    starletsReward: selectedChallengeData.reward || 400, // ✅ Sử dụng reward từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
                     description: selectedChallengeData.description || "##########################",
                     location: selectedChallengeData.location || "Unknown Location"
