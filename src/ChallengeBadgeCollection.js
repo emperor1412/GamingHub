@@ -200,14 +200,100 @@ const ChallengeBadgeCollection = ({ onClose }) => {
             case 'locked':
                 switch (badge.logicState) {
                     case 'unfinished':
-                        // Show Challenge Status with incomplete status
-                        setChallengeStatusType('incomplete');
-                        setShowChallengeStatus(true);
+                        // Call API to get challenge detail for incomplete challenges
+                        try {
+                            const result = await shared.getChallengeDetail(badge.id);
+                            
+                            if (result.success) {
+                                const challengeDetail = result.data;
+                                const challengeData = getChallengeDataById(badge.id, badge.type);
+                                
+                                // Combine API data with mock detail for missing fields
+                                const combinedChallengeData = {
+                                    id: challengeDetail.id,
+                                    title: (challengeDetail.name || (challengeData?.title) || '').trim(),
+                                    shortTitle: (challengeData?.shortTitle) || (challengeDetail.name || '').trim(),
+                                    type: badge.type?.toUpperCase() || "WEEKLY",
+                                    entryFee: challengeDetail.price,
+                                    reward: challengeDetail.price * 2, // Reward is double the entry fee
+                                    stepsEst: challengeDetail.step,
+                                    distanceKm: challengeData?.distanceKm,
+                                    description: challengeData?.description,
+                                    location: challengeData?.location,
+                                    dateStart: challengeData?.dateStart,
+                                    dateEnd: challengeData?.dateEnd,
+                                    // API data
+                                    state: challengeDetail.state,
+                                    currentSteps: challengeDetail.currSteps,
+                                    totalSteps: challengeDetail.step,
+                                    startTime: challengeDetail.startTime,
+                                    endTime: challengeDetail.endTime,
+                                    failDescription: challengeData?.failDescription || "The challenge proved to be tougher than expected."
+                                };
+                                
+                                setSelectedChallengeData(combinedChallengeData);
+                                setChallengeStatusType('incomplete');
+                                setShowChallengeStatus(true);
+                            } else {
+                                console.error('Failed to get challenge detail:', result.error);
+                                // Fallback to original behavior
+                                setChallengeStatusType('incomplete');
+                                setShowChallengeStatus(true);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching challenge detail:', error);
+                            // Fallback to original behavior
+                            setChallengeStatusType('incomplete');
+                            setShowChallengeStatus(true);
+                        }
                         break;
                     case 'unjoined':
-                        // Show Challenge Status with missed status
-                        setChallengeStatusType('missed');
-                        setShowChallengeStatus(true);
+                        // Call API to get challenge detail for missed challenges
+                        try {
+                            const result = await shared.getChallengeDetail(badge.id);
+                            
+                            if (result.success) {
+                                const challengeDetail = result.data;
+                                const challengeData = getChallengeDataById(badge.id, badge.type);
+                                
+                                // Combine API data with mock detail for missing fields
+                                const combinedChallengeData = {
+                                    id: challengeDetail.id,
+                                    title: (challengeDetail.name || (challengeData?.title) || '').trim(),
+                                    shortTitle: (challengeData?.shortTitle) || (challengeDetail.name || '').trim(),
+                                    type: badge.type?.toUpperCase() || "WEEKLY",
+                                    entryFee: challengeDetail.price,
+                                    reward: challengeDetail.price * 2, // Reward is double the entry fee
+                                    stepsEst: challengeDetail.step,
+                                    distanceKm: challengeData?.distanceKm,
+                                    description: challengeData?.description,
+                                    location: challengeData?.location,
+                                    dateStart: challengeData?.dateStart,
+                                    dateEnd: challengeData?.dateEnd,
+                                    // API data
+                                    state: challengeDetail.state,
+                                    currentSteps: challengeDetail.currSteps,
+                                    totalSteps: challengeDetail.step,
+                                    startTime: challengeDetail.startTime,
+                                    endTime: challengeDetail.endTime,
+                                    failDescription: challengeData?.failDescription || "You didn't join this challenge."
+                                };
+                                
+                                setSelectedChallengeData(combinedChallengeData);
+                                setChallengeStatusType('missed');
+                                setShowChallengeStatus(true);
+                            } else {
+                                console.error('Failed to get challenge detail:', result.error);
+                                // Fallback to original behavior
+                                setChallengeStatusType('missed');
+                                setShowChallengeStatus(true);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching challenge detail:', error);
+                            // Fallback to original behavior
+                            setChallengeStatusType('missed');
+                            setShowChallengeStatus(true);
+                        }
                         break;
                     default:
                         setSelectedBadge(badge);
@@ -402,7 +488,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                 onClose={handleBackFromStatus}
                 challengeData={selectedChallengeData ? {
                     challengeTitle: selectedChallengeData.shortTitle,
-                    stepsCompleted: challengeStatusType === 'incomplete' ? 23000 : 15000,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0,
                     failDescription: selectedChallengeData.failDescription || "The challenge proved to be tougher than expected."
                 } : {}}
             />
