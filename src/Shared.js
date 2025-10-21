@@ -789,7 +789,7 @@ data object
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('getChallengesBadgeView: login again');
-                    const result = await shared.login();
+                    const result = await shared.login(shared.initData);
                     if (result) {
                         return await shared.getChallengesBadgeView(depth + 1);
                     }
@@ -854,7 +854,7 @@ data object
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('getChallengeDetail: login again');
-                    const result = await shared.login();
+                    const result = await shared.login(shared.initData);
                     if (result) {
                         return await shared.getChallengeDetail(challengeId, depth + 1);
                     }
@@ -919,7 +919,7 @@ data object
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('joinChallenge: login again');
-                    const result = await shared.login();
+                    const result = await shared.login(shared.initData);
                     if (result) {
                         return await shared.joinChallenge(challengeId, depth + 1);
                     }
@@ -992,7 +992,7 @@ data object
                 }
                 else if (data.code === 102001 || data.code === 102002) {
                     console.log('completeChallenge: login again');
-                    const result = await shared.login();
+                    const result = await shared.login(shared.initData);
                     if (result) {
                         return await shared.completeChallenge(challengeId, depth + 1);
                     }

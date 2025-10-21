@@ -34,13 +34,21 @@ const ChallengesMenu = ({ onClose }) => {
 
     // Fetch 3 challenges from backend (challengeList)
     useEffect(() => {
-        const fetchChallengeList = async () => {
+        const fetchChallengeList = async (depth = 0) => {
+            if (depth > 3) {
+                console.error('fetchChallengeList: too many retries');
+                setHasApiError(true);
+                setIsLoadingChallenges(false);
+                return;
+            }
+
             try {
                 setIsLoadingChallenges(true);
                 const token = (shared && shared.loginData && shared.loginData.token) ? shared.loginData.token : '';
                 const url = `${shared.server_url}/api/app/challengeList?token=${token}`;
                 const res = await fetch(url, { method: 'GET' });
                 const json = await res.json();
+                
                 if (json && json.code === 0 && Array.isArray(json.data)) {
                     setApiChallenges(json.data);
                     console.log('[challengeList]', json.data);
@@ -67,6 +75,16 @@ const ChallengesMenu = ({ onClose }) => {
                     });
                     setChallengeDetails(detailsMap);
                     console.log('[challengeDetails]', detailsMap);
+                } else if (json.code === 102001 || json.code === 102002) {
+                    console.log('[challengeList] token expired, attempting to re-login');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        console.log('[challengeList] re-login successful, retrying');
+                        return fetchChallengeList(depth + 1);
+                    } else {
+                        console.error('[challengeList] re-login failed:', result.error);
+                        setHasApiError(true);
+                    }
                 } else {
                     console.warn('[challengeList] unexpected response', json);
                     setHasApiError(true);
