@@ -4,6 +4,7 @@ import backIcon from './images/back.svg';
 import badge_incatrail from './images/badge_incatrail.png';
 import starlet from './images/starlet.png';
 import km_icon from './images/km_icon.png';
+import { getBadgeImage } from './utils/badgeImageMapper';
 
 const ChallengeBadgeDone = ({ 
   onClose,
@@ -16,7 +17,8 @@ const ChallengeBadgeDone = ({
     distance = 11,
     starletsReward = 400,
     challengeEndDate = "15/10/2025 23:59",
-    description = "Your path through challenges, discoveries, and untold wonders has earned you the title of"
+    description = "Your path through challenges, discoveries, and untold wonders has earned you the title of",
+    challengeId = null
   } = challengeData;
   return (
     <div className="cbd-container">
@@ -61,7 +63,7 @@ const ChallengeBadgeDone = ({
           {/* Badge Display */}
           <div className="cbd-badge-container">
             <img 
-              src={badge_incatrail} 
+              src={challengeId ? getBadgeImage(challengeId) : badge_incatrail} 
               alt="Challenge Badge" 
               className="cbd-badge-image"
             />
