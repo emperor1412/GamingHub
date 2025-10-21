@@ -27,6 +27,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     const [showChallengeInfo, setShowChallengeInfo] = useState(false);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
     const [challengeStatusType, setChallengeStatusType] = useState('incomplete');
+    const [isFromJoinConfirmation, setIsFromJoinConfirmation] = useState(false); // Track if ChallengeUpdate is from join confirmation
     const [allBadges, setAllBadges] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -462,6 +463,11 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     // Function to handle back from ChallengeUpdate
     const handleBackFromUpdate = () => {
         setShowChallengeUpdate(false);
+        // If ChallengeUpdate was shown from join confirmation, go back to badge collection
+        if (isFromJoinConfirmation) {
+            setShowChallengeJoinConfirmation(false);
+            setIsFromJoinConfirmation(false);
+        }
     };
 
     // Function to handle done from ChallengeUpdate
@@ -510,6 +516,8 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         // After joining challenge, go back to badge collection (skip ChallengeInfo)
         setShowChallengeUpdate(false);
         setShowChallengeJoinConfirmation(false);
+        setShowChallengeInfo(false); // Close ChallengeInfo
+        setIsFromJoinConfirmation(false);
     };
 
     // Function to handle confirm join
@@ -517,6 +525,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         // This will be handled by API
         console.log('handleConfirmJoin called - API will handle the logic');
         setShowChallengeJoinConfirmation(false);
+        setIsFromJoinConfirmation(true); // Mark that ChallengeUpdate will be from join confirmation
     };
 
     // Show ChallengeJoinConfirmation if state is true

@@ -29,6 +29,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [showChallengeInfo, setShowChallengeInfo] = React.useState(false);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
+    const [isFromJoinConfirmation, setIsFromJoinConfirmation] = React.useState(false); // Track if ChallengeUpdate is from join confirmation
     
     // API state management
     const [loading, setLoading] = React.useState(true);
@@ -522,6 +523,11 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     // Function to handle back from ChallengeUpdate
     const handleBackFromUpdate = () => {
         setShowChallengeUpdate(false);
+        // If ChallengeUpdate was shown from join confirmation, go back to badge screen
+        if (isFromJoinConfirmation) {
+            setShowChallengeJoinConfirmation(false);
+            setIsFromJoinConfirmation(false);
+        }
     };
 
     // Function to handle done from ChallengeUpdate
@@ -572,6 +578,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
         // After joining challenge, go back to badge screen (skip ChallengeInfo)
         setShowChallengeUpdate(false);
         setShowChallengeJoinConfirmation(false);
+        setShowChallengeInfo(false); // Close ChallengeInfo
+        setIsFromJoinConfirmation(false);
     };
 
     // Function to handle confirm join
@@ -579,6 +587,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
         // This will be handled by API
         console.log('handleConfirmJoin called - API will handle the logic');
         setShowChallengeJoinConfirmation(false);
+        setIsFromJoinConfirmation(true); // Mark that ChallengeUpdate will be from join confirmation
     };
 
     // Function to handle Explorer Badges Card click
