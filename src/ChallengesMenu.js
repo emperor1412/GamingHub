@@ -19,7 +19,7 @@ import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
 
-const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
+const ChallengesMenu = ({ onClose }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
     const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
@@ -29,6 +29,7 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const [showBadgeCollection, setShowBadgeCollection] = useState(false);
     const [apiChallenges, setApiChallenges] = useState([]); // from /api/app/challengeList
     const [isLoadingChallenges, setIsLoadingChallenges] = useState(false);
+    const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
 
     // Fetch 3 challenges from backend (challengeList)
     useEffect(() => {
@@ -42,6 +43,29 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                 if (json && json.code === 0 && Array.isArray(json.data)) {
                     setApiChallenges(json.data);
                     console.log('[challengeList]', json.data);
+                    
+                    // Fetch challenge details for each challenge
+                    const detailsPromises = json.data.map(async (challenge) => {
+                        try {
+                            const result = await shared.getChallengeDetail(challenge.id);
+                            if (result.success) {
+                                return { id: challenge.id, detail: result.data };
+                            }
+                        } catch (error) {
+                            console.error(`Error fetching detail for challenge ${challenge.id}:`, error);
+                        }
+                        return null;
+                    });
+                    
+                    const detailsResults = await Promise.all(detailsPromises);
+                    const detailsMap = {};
+                    detailsResults.forEach(result => {
+                        if (result) {
+                            detailsMap[result.id] = result.detail;
+                        }
+                    });
+                    setChallengeDetails(detailsMap);
+                    console.log('[challengeDetails]', detailsMap);
                 } else {
                     console.warn('[challengeList] unexpected response', json);
                 }
@@ -92,24 +116,34 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
     const getChallengeState = (challengeType) => {
         const challenge = getCurrentChallengeFromApi(challengeType);
         
+        // Get user data from shared
+        const userLevel = shared.userProfile?.level || 0;
+        const isPremiumUser = shared.isPremiumMember || false;
+        const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
+        
         // Check conditions in order of priority
         let isDisabled = false;
         let disabledReason = '';
+        let subReason = '';
         
         // 1. Level required
-        if (userLevel < challenge.levelRequired) {
+        if (userLevel < 10) {
             isDisabled = true;
-            disabledReason = `ACCOUNT LVL ${challenge.levelRequired} REQUIRED TO UNLOCK`;
+            disabledReason = `ACCOUNT LVL 10 REQUIRED TO UNLOCK`;
         }
-        // 2. Premium pass required
-        else if (challenge.needPremium && !isPremiumUser) {
+        // 2. Premium pass required for weekly and yearly challenges
+        else if ((challengeType === 'weekly' || challengeType === 'yearly') && !isPremiumUser) {
             isDisabled = true;
             disabledReason = 'PREMIUM PASS USER CHALLENGE';
         }
-
-        isDisabled = false;
+        // 3. Challenge completed (state 40) - check from cached challenge details
+        else if (apiItem && challengeDetails[apiItem.id]?.state === 40) {
+            isDisabled = true;
+            disabledReason = 'CHALLENGE ACHIEVED';
+            subReason = '(Check explorer journey to view your badge)';
+        }
         
-        return { isDisabled, disabledReason };
+        return { isDisabled, disabledReason, subReason };
     };
 
     const handleChallengeClick = async (challengeType) => {
@@ -407,7 +441,14 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                             if (weeklyState.isDisabled) {
                                 return (
                                     <div className="challenge-lock-overlay">
-                                        <div className="lock-text">{weeklyState.disabledReason}</div>
+                                        {weeklyState.subReason ? (
+                                            <div className="lock-text-container">
+                                                <div className="lock-text">{weeklyState.disabledReason}</div>
+                                                <div className="lock-subtext">{weeklyState.subReason}</div>
+                                            </div>
+                                        ) : (
+                                            <div className="lock-text">{weeklyState.disabledReason}</div>
+                                        )}
                                     </div>
                                 );
                             } else if (weeklyApi?.state === 40) {
@@ -446,7 +487,14 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                             if (monthlyState.isDisabled) {
                                 return (
                                     <div className="challenge-lock-overlay">
-                                        <div className="lock-text">{monthlyState.disabledReason}</div>
+                                        {monthlyState.subReason ? (
+                                            <div className="lock-text-container">
+                                                <div className="lock-text">{monthlyState.disabledReason}</div>
+                                                <div className="lock-subtext">{monthlyState.subReason}</div>
+                                            </div>
+                                        ) : (
+                                            <div className="lock-text">{monthlyState.disabledReason}</div>
+                                        )}
                                     </div>
                                 );
                             } else if (monthlyApi?.state === 40) {
@@ -485,7 +533,14 @@ const ChallengesMenu = ({ onClose, userLevel = 0, isPremiumUser = false }) => {
                             if (yearlyState.isDisabled) {
                                 return (
                                     <div className="challenge-lock-overlay">
-                                        <div className="lock-text">{yearlyState.disabledReason}</div>
+                                        {yearlyState.subReason ? (
+                                            <div className="lock-text-container">
+                                                <div className="lock-text">{yearlyState.disabledReason}</div>
+                                                <div className="lock-subtext">{yearlyState.subReason}</div>
+                                            </div>
+                                        ) : (
+                                            <div className="lock-text">{yearlyState.disabledReason}</div>
+                                        )}
                                     </div>
                                 );
                             } else if (yearlyApi?.state === 40) {
