@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChallengeInfo.css';
 import starletIcon from './images/starlet.png';
 import backIcon from './images/back.svg';
 // import legIcon from './images/legIcon.png';
 
 const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
+    const [fontSize, setFontSize] = useState('14px');
+
+    useEffect(() => {
+        // Check text length and adjust font size
+        const textLength = challenge.title.length;
+        if (textLength > 35) {
+            setFontSize('10px');
+        } else if (textLength > 30) {
+            setFontSize('12px');
+        } else {
+            setFontSize('14px');
+        }
+    }, [challenge.title]);
+
+    // Format end time from API (consistent with ChallengeUpdate.js)
+    const formatEndDate = (endTime) => {
+        console.log('ChallengeInfo - endTime received:', endTime);
+        console.log('ChallengeInfo - challenge object:', challenge);
+        if (!endTime || endTime === 0) return challenge.dateEnd + ' HH:MM UTC';
+        const date = new Date(endTime);
+        console.log('ChallengeInfo - converted date:', date);
+        return date.toLocaleDateString('en-GB') + ' ' + date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    };
+
     return (
         <div className="challenge-info-page">
             {/* Back Button */}
@@ -17,7 +41,7 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
                 <div className="info-challenge-banner">
                     <div className="info-challenge-info">
                         <div className="info-challenge-type">{challenge.type.toUpperCase()} CHALLENGE:</div>
-                        <div className="info-challenge-name">{challenge.title.toUpperCase()}</div>
+                        <div className="info-challenge-name" style={{ fontSize: fontSize }}>{challenge.title.toUpperCase()}</div>
                     </div>
                     <div className="info-challenge-reward">
                         <img src={starletIcon} alt="Starlet" className="info-starlet-icon" />
@@ -35,7 +59,7 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
 
                 {/* Challenge End */}
                 <div className="challenge-end">
-                    CHALLENGE END: {challenge.dateEnd} 13:00 UTC
+                    CHALLENGE END: {formatEndDate(challenge.endTime)}
                 </div>
 
                 {/* Action Steps & Entry Fee */}

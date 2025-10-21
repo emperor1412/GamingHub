@@ -119,6 +119,18 @@ const ChallengesMenu = ({ onClose }) => {
         return null;
     };
 
+    // Helper function to get font size based on text length
+    const getFontSizeByTextLength = (text) => {
+        const textLength = text.length;
+        if (textLength > 35) {
+            return '10px';
+        } else if (textLength > 30) {
+            return '12px';
+        } else {
+            return '14px';
+        }
+    };
+
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
         const challenge = getCurrentChallengeFromApi(challengeType);
@@ -133,15 +145,16 @@ const ChallengesMenu = ({ onClose }) => {
         let disabledReason = '';
         let subReason = '';
         
-        // 1. Level required
-        if (userLevel < 10) {
-            isDisabled = true;
-            disabledReason = `ACCOUNT LVL 10 REQUIRED TO UNLOCK`;
-        }
-        // 2. Premium pass required for weekly and yearly challenges
-        else if ((challengeType === 'weekly' || challengeType === 'yearly') && !isPremiumUser) {
+
+        // 1. Premium pass required for weekly and yearly challenges
+         if ((challengeType === 'weekly' || challengeType === 'yearly') && !isPremiumUser) {
             isDisabled = true;
             disabledReason = 'PREMIUM PASS USER CHALLENGE';
+        }
+        // 2. Level required
+        else if (userLevel < 10 && !isPremiumUser) {
+            isDisabled = true;
+            disabledReason = `ACCOUNT LVL 10 REQUIRED TO UNLOCK`;
         }
         // 3. Challenge completed (state 40) - check from cached challenge details
         else if (apiItem && challengeDetails[apiItem.id]?.state === 40) {
@@ -369,7 +382,7 @@ const ChallengesMenu = ({ onClose }) => {
                     location: selectedChallenge.location,
                     starletsReward: selectedChallenge.reward,
                     type: selectedChallenge.type || "WEEKLY",
-                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 23:59` : "DD/MM/YYYY 23:59"
+                    challengeEndDate: selectedChallenge.dateEnd
                 }}
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
@@ -385,10 +398,11 @@ const ChallengesMenu = ({ onClose }) => {
                 challengeData={{
                     id: selectedChallenge.id,
                     steps: selectedChallenge.stepsEst,
-                    days: 7, // You can calculate this based on dateStart and dateEnd
+                    days: selectedChallengeType === 'weekly' ? 7 : selectedChallengeType === 'monthly' ? 30 : 365,
                     starletsCost: selectedChallenge.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallenge.dateEnd ? `${selectedChallenge.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
+                    challengeEndDate: selectedChallenge.dateEnd,
+                    type: selectedChallengeType
                 }}
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
@@ -495,7 +509,9 @@ const ChallengesMenu = ({ onClose }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">WEEKLY CHALLENGE:</div>
-                                            <div className="challenge-name">{(weeklyApi ? (weeklyApi.name || '').toUpperCase() : weeklyChallenge.title.toUpperCase())}</div>
+                                            <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(weeklyApi ? (weeklyApi.name || '') : weeklyChallenge.title) }}>
+                                                {(weeklyApi ? (weeklyApi.name || '').toUpperCase() : weeklyChallenge.title.toUpperCase())}
+                                            </div>
                                         </div>
                                         <div className="challenge-reward">
                                             <span className="reward-amount">{weeklyApi ? weeklyApi.price : weeklyChallenge.reward}</span>
@@ -541,7 +557,9 @@ const ChallengesMenu = ({ onClose }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">MONTHLY CHALLENGE:</div>
-                                            <div className="challenge-name">{(monthlyApi ? (monthlyApi.name || '').toUpperCase() : monthlyChallenge.title.toUpperCase())}</div>
+                                            <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(monthlyApi ? (monthlyApi.name || '') : monthlyChallenge.title) }}>
+                                                {(monthlyApi ? (monthlyApi.name || '').toUpperCase() : monthlyChallenge.title.toUpperCase())}
+                                            </div>
                                         </div>
                                         <div className="challenge-reward">
                                             <span className="reward-amount">{monthlyApi ? monthlyApi.price : monthlyChallenge.reward}</span>
@@ -587,7 +605,9 @@ const ChallengesMenu = ({ onClose }) => {
                                     <>
                                         <div className="challenge-info">
                                             <div className="challenge-type">YEARLY CHALLENGE:</div>
-                                            <div className="challenge-name">{(yearlyApi ? (yearlyApi.name || '').toUpperCase() : yearlyChallenge.title.toUpperCase())}</div>
+                                            <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(yearlyApi ? (yearlyApi.name || '') : yearlyChallenge.title) }}>
+                                                {(yearlyApi ? (yearlyApi.name || '').toUpperCase() : yearlyChallenge.title.toUpperCase())}
+                                            </div>
                                         </div>
                                         <div className="challenge-reward">
                                             <span className="reward-amount">{yearlyApi ? yearlyApi.price : yearlyChallenge.reward}</span>

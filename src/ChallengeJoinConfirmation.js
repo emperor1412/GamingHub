@@ -19,12 +19,23 @@ const ChallengeJoinConfirmation = ({
   const [challengeDetailData, setChallengeDetailData] = useState(null);
   const {
     steps = 56000,
-    days = 7,
+    days: inputDays,
     starletsCost = 200,
     badgeName = "EXPLORER BADGE",
     challengeEndDate = "DD/MM/YY HH:MM",
-    id: challengeId
+    id: challengeId,
+    type = "WEEKLY"
   } = challengeData || {};
+
+  // Calculate days based on challenge type
+  const days = inputDays || (type === 'weekly' ? 7 : type === 'monthly' ? 30 : 365);
+
+  // Format end time from API (consistent with ChallengeUpdate.js and ChallengeInfo.js)
+  const formatEndDate = (endTime) => {
+    if (!endTime || endTime === 0) return challengeData.challengeEndDate + ' HH:MM UTC';
+    const date = new Date(endTime);
+    return date.toLocaleDateString('en-GB') + ' ' + date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  };
 
   const handleJoinChallenge = async () => {
     if (!challengeId) {
@@ -136,7 +147,7 @@ const ChallengeJoinConfirmation = ({
           location: challengeDetailData.location || "Unknown",
           starletsReward: challengeDetailData.reward || 0,
           type: challengeDetailData.type || "WEEKLY",
-          challengeEndDate: challengeDetailData.dateEnd ? `${challengeDetailData.dateEnd} 23:59` : "DD/MM/YYYY 23:59"
+          challengeEndDate: formatEndDate(challengeDetailData.endTime || 0)
         } : {}}
         onDone={handleDoneFromUpdate}
         onBack={handleBackFromUpdate}
@@ -217,7 +228,7 @@ const ChallengeJoinConfirmation = ({
 
           {/* Challenge End Date */}
           <div className="cjc-challenge-end">
-            <span style={{color: '#00FFFF'}}>CHALLENGE END:</span> {challengeEndDate}
+            <span style={{color: '#00FFFF'}}>CHALLENGE END:</span> {formatEndDate(challengeDetailData?.endTime)}
           </div>
         </div>
       </div>
