@@ -117,12 +117,19 @@ const ChallengeJoinConfirmation = ({
   };
 
   const handleBackFromUpdate = () => {
+    console.log('ChallengeJoinConfirmation - handleBackFromUpdate called');
+    console.log('hasJoinedChallenge:', hasJoinedChallenge);
+    console.log('onBackAfterJoin exists:', !!onBackAfterJoin);
+    
     setShowChallengeUpdate(false);
     // After joining challenge, go back to the original view (ChallengesMenu/BadgeScreen/BadgeCollection)
     // Don't go back to ChallengeInfo as user has already joined
     if (hasJoinedChallenge && onBackAfterJoin) {
+      console.log('Calling onBackAfterJoin');
       // If user has joined, go back to the original view (skip ChallengeInfo)
       onBackAfterJoin();
+    } else {
+      console.log('Not calling onBackAfterJoin - hasJoinedChallenge:', hasJoinedChallenge, 'onBackAfterJoin exists:', !!onBackAfterJoin);
     }
   };
 
