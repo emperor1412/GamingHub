@@ -1,0 +1,511 @@
+/* Challenge Claim Reward Styles */
+:root {
+  --ccr-corner-size: 20px;
+  --ccr-corner-color: #00F1FF;
+  --ccr-corner-border: 2px;
+  --ccr-corner-offset: 05px;
+}
+
+.challenge-claim-reward-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: 'PP Neue Machina', sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.ccr-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Header */
+.ccr-back-button {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  left: 20px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.ccr-back-button:hover {
+  opacity: 0.7;
+}
+
+.ccr-back-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Main Content */
+.ccr-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  padding: 50px 20px 50px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* Congratulatory Section */
+.ccr-congratulations-section {
+  width: 100%;
+}
+
+.ccr-you-did-it {
+  font-size: 20.47px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.ccr-congratulations-box {
+  background: #0000FF;
+  padding: 2px 15px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.ccr-congratulations-box span {
+  font-size: 26.89px;
+  font-weight: 700;
+  color: #01FFDA;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.ccr-trail-description {
+  font-size: 15.88px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  line-height: 18px;
+  letter-spacing: -1.1%;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Steps Section */
+.ccr-steps-section {
+  position: relative;
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.ccr-steps-number {
+  font-size: 72px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+  margin-bottom: 10px;
+  font-family: "PP Neue Machina", sans-serif;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.ccr-steps-label {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 100%;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-bottom: 8px;
+}
+
+.ccr-distance-info {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 100%;
+  color: #00F1FF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Title Section */
+.ccr-title-section {
+  width: 100%;
+}
+
+.ccr-title-description {
+  font-size: 12.48px;
+  font-weight: 400;
+  color: white;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  font-family: "Sora", sans-serif;
+  opacity: 0.8;
+}
+
+.ccr-title-box {
+  background: #0000FF;
+  padding: 5px 15px;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.ccr-title-box span {
+  font-size: 16.28px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Reward Section */
+.ccr-reward-section {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 40px;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+/* Floating Starlets */
+.ccr-floating-starlets {
+  position: absolute;
+  width: 130%;
+  height: 130%;
+  pointer-events: none;
+  z-index: 2;
+  left: -15%;
+  top: -15%;
+  overflow: visible;
+}
+
+.ccr-floating-starlet {
+  position: absolute;
+  opacity: 0.8;
+}
+
+.ccr-floating-starlet.s1 {
+  width: 22px;
+  height: 22px;
+  top: 20%;
+  right: 15%;
+  animation: ccr-float 3s ease-in-out infinite 2s;
+}
+
+.ccr-floating-starlet.s2 {
+  width: 18px;
+  height: 18px;
+  top: 32%;
+  right: 12%;
+  animation: ccr-float 3s ease-in-out infinite 2s;
+}
+
+.ccr-floating-starlet.s3 {
+  width: 27px;
+  height: 27px;
+  top: 55%;
+  right: 15%;
+  animation: ccr-float 3s ease-in-out infinite 2s;
+}
+
+.ccr-floating-starlet.s4 {
+  width: 11px;
+  height: 11px;
+  top: 35%;
+  left: 50px;
+  animation: ccr-float 3s ease-in-out infinite 1s;
+}
+
+.ccr-floating-starlet.s5 {
+  width: 22px;
+  height: 22px;
+  top: 45%;
+  left: 55px;
+  animation: ccr-float 3s ease-in-out infinite 1s;
+}
+
+.ccr-floating-starlet.s6 {
+  width: 15px;
+  height: 15px;
+  top: 55%;
+  left: 75px;
+  animation: ccr-float 3s ease-in-out infinite 1s;
+}
+
+/* Right Side Image */
+.ccr-right-side-image {
+  position: absolute;
+  top: 45%;
+  right: -35px;
+  transform: translateY(-50%);
+  width: 130px;
+  height: 130px;
+  z-index: 10;
+  opacity: 0.9;
+}
+
+/* Starlet Icons positioned like in the image */
+.ccr-starlet-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.ccr-starlet-1 {
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+}
+
+.ccr-starlet-2 {
+  top: 50%;
+  left: -30px;
+  transform: translateY(-50%);
+}
+
+.ccr-starlet-3 {
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+}
+
+.ccr-starlet-4 {
+  bottom: -15px;
+  left: 20px;
+}
+
+.ccr-starlet-5 {
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+}
+
+/* Corner Decorations */
+.ccr-corner {
+  position: absolute;
+  width: var(--ccr-corner-size);
+  height: var(--ccr-corner-size);
+  z-index: 10;
+}
+
+.ccr-top-left {
+  top: var(--ccr-corner-offset);
+  left: var(--ccr-corner-offset);
+  border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+}
+
+.ccr-top-right {
+  top: var(--ccr-corner-offset);
+  right: var(--ccr-corner-offset);
+  border-top: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+}
+
+.ccr-bottom-left {
+  bottom: var(--ccr-corner-offset);
+  left: var(--ccr-corner-offset);
+  border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  border-left: var(--ccr-corner-border) solid var(--ccr-corner-color);
+}
+
+.ccr-bottom-right {
+  bottom: var(--ccr-corner-offset);
+  right: var(--ccr-corner-offset);
+  border-bottom: var(--ccr-corner-border) solid var(--ccr-corner-color);
+  border-right: var(--ccr-corner-border) solid var(--ccr-corner-color);
+}
+
+.ccr-badge-message {
+  font-size: 20px;
+  font-weight: 700;
+  color: #00F1FF;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.ccr-badge-submessage {
+  font-size: 17.4px;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 20px;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  opacity: 0.9;
+  font-family: "Sora", sans-serif;
+}
+
+/* Stars */
+/* .ccr-stars {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.ccr-star {
+  position: absolute;
+  font-size: 16px;
+  color: #FF69B4;
+  animation: twinkle 2s infinite;
+} */
+
+/* .ccr-star-1 { top: -10px; left: 20px; animation-delay: 0s; }
+.ccr-star-2 { top: 10px; right: 30px; animation-delay: 0.4s; }
+.ccr-star-3 { bottom: 20px; left: 40px; animation-delay: 0.8s; }
+.ccr-star-4 { top: 5px; left: 60%; animation-delay: 1.2s; }
+.ccr-star-5 { bottom: 10px; right: 20px; animation-delay: 1.6s; } */
+
+/* @keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+} */
+/* 
+.ccr-starlets-message {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00F1FF;
+  text-transform: uppercase;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.ccr-starlets-submessage {
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+} */
+
+/* Claim Button */
+.ccr-claim-button {
+  background: linear-gradient(90deg, #000FEF 0%, #FF00F6 100%);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  width: 100%;
+  max-width: 350px;
+  margin-top: 0; /* Reset margin-top */
+  padding: 15px 20px; /* Add padding for better spacing */
+}
+
+.ccr-claim-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 241, 255, 0.3);
+}
+
+/* Bottom Navigation */
+.ccr-bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+}
+
+.ccr-nav-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.ccr-nav-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.ccr-nav-number {
+  background: rgba(255, 0, 246, 0.2);
+  border: 1px solid #ff00f6;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .ccr-main-content {
+    padding: 60px 15px 100px;
+  }
+  
+  .ccr-steps-number {
+    font-size: 56px;
+  }
+  
+  .ccr-congratulations-box span {
+    font-size: 24px;
+  }
+  
+  .ccr-badge {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .ccr-badge-title {
+    font-size: 6px;
+  }
+  
+  .ccr-badge-subtitle {
+    font-size: 5px;
+  }
+  
+  .ccr-badge-icon {
+    font-size: 12px;
+  }
+} */

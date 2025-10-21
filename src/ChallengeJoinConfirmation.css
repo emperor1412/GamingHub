@@ -1,0 +1,269 @@
+/* Challenge Join Confirmation Styles */
+.challenge-join-confirmation-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  padding-top: 4vh;
+  background: #000;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: 'PP Neue Machina', sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.cjc-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Main Content */
+.cjc-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  padding: 40px 20px 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Challenge Goal */
+.cjc-challenge-goal {
+  font-size: 23.25px;
+  font-weight: 700;
+  color: #00FFFF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Reward Information */
+.cjc-reward-info {
+  font-size: 37.51px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0%;
+  margin-bottom: 20px;
+  line-height: 100%;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  position: relative;
+  padding-top: 10px;
+}
+
+/* Central Graphic */
+.cjc-central-graphic {
+  /* max-width: 420px; */
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('./images/bg-starlet-challenge.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cjc-left-image {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  left: 30px;
+  z-index: 1;
+  position: relative;
+}
+
+.cjc-center-image {
+  width: 132px;
+  height: 132px;
+  object-fit: contain;
+  z-index: 2;
+  position: relative;
+}
+
+.cjc-right-image {
+  width: 126px;
+  height: 116px;
+  object-fit: contain;
+  left: -30px;
+  z-index: 3;
+  position: relative;
+}
+
+/* Warning Section */
+.cjc-warning-section {
+  position: relative;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.cjc-warning-brackets {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.cjc-bracket {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #00FFFF;
+}
+
+.cjc-bracket-tl {
+  top: 30px;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.cjc-bracket-tr {
+  top: 30px;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.cjc-bracket-bl {
+  bottom: 10px;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.cjc-bracket-br {
+  bottom: 10px;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.cjc-warning-banner {
+  background: #0000FF;
+  color: white;
+  font-size: 27.48px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  display: inline-block;
+}
+
+.cjc-warning-text {
+  font-size: 22.47px;
+  font-weight: 700;
+  font-family: 'PP Neue Machina', sans-serif;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -1.9%;
+  line-height: 100%;
+}
+
+/* Join Button */
+.cjc-join-button {
+  background: #00F1FF;
+  color: #000000;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 25px;
+  width: 308px;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  margin: 20px 0;
+}
+
+.cjc-join-button:hover {
+  background: #00F1FF;
+  transform: translateY(-2px);
+}
+
+/* Challenge End Date */
+.cjc-challenge-end {
+  font-size: 14px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 1;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .cjc-main-content {
+    padding: 60px 15px 100px;
+  }
+  
+  .cjc-central-graphic {
+    width: 280px;
+    height: 180px;
+  }
+  
+  .cjc-starlet-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .cjc-badge-icon,
+  .cjc-robot-icon {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .cjc-warning-section {
+    margin: 30px 0;
+    padding: 15px;
+  }
+  
+  .cjc-join-button {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+} */
+/* 
+@media (max-width: 360px) {
+  .cjc-challenge-goal {
+    font-size: 20px;
+  }
+  
+  .cjc-reward-info {
+    font-size: 16px;
+  }
+  
+  .cjc-central-graphic {
+    width: 240px;
+    height: 160px;
+  }
+} */

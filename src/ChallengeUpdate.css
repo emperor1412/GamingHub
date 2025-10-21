@@ -1,0 +1,380 @@
+/* Challenge Update Styles */
+:root {
+  --cu-corner-size: 30px;
+  --cu-corner-color: #00F1FF;
+  --cu-corner-border: 3px;
+  --cu-corner-offset: 0px;
+}
+
+.challenge-update-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: 'PP Neue Machina', sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.cu-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Header */
+.cu-back-button {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  left: 20px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cu-back-button:hover {
+  opacity: 0.7;
+}
+
+.cu-back-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Main Content */
+.cu-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  padding: 50px 20px 100px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* Challenge Info Container */
+.cu-challenge-info-container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 20px;
+  padding: 20px 10px;
+  box-sizing: border-box;
+}
+
+/* Corner Decorations */
+.cu-corner {
+  position: absolute;
+  width: var(--cu-corner-size);
+  height: var(--cu-corner-size);
+  z-index: 10;
+}
+
+.cu-top-left {
+  top: var(--cu-corner-offset);
+  left: var(--cu-corner-offset);
+  border-top: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-left: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-top-right {
+  top: var(--cu-corner-offset);
+  right: var(--cu-corner-offset);
+  border-top: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-right: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-bottom-left {
+  bottom: var(--cu-corner-offset);
+  left: var(--cu-corner-offset);
+  border-bottom: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-left: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+.cu-bottom-right {
+  bottom: var(--cu-corner-offset);
+  right: var(--cu-corner-offset);
+  border-bottom: var(--cu-corner-border) solid var(--cu-corner-color);
+  border-right: var(--cu-corner-border) solid var(--cu-corner-color);
+}
+
+/* Challenge Title */
+.cu-challenge-title {
+  margin-bottom: 20px;
+  position: relative;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.cu-title-background {
+  padding: 2px 30px;
+  display: inline-block;
+}
+
+.cu-title-text {
+  font-size: 50.19px;
+  font-weight: 700;
+  line-height: 100%;
+  font-family: "PP Neue Machina", sans-serif;
+  color: #00F1FF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cu-subtitle-text {
+  font-size: 50.19px;
+  font-weight: 700;
+  letter-spacing: -2.2%;
+  color: white;
+  text-transform: uppercase;
+  display: block;
+  line-height: 100%;
+  font-family: "PP Neue Machina", sans-serif;
+  margin-top: 5px;
+}
+
+/* Challenge Description */
+.cu-challenge-description {
+  margin-bottom: 15px;
+  max-width: 100%;
+}
+
+.cu-description-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 108%;
+  letter-spacing: -1.9%;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  margin: 0px;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.cu-description-block {
+  margin-bottom: 15px;
+}
+
+.cu-description-text:last-child {
+  margin-bottom: 15px;
+}
+
+/* Challenge End Date */
+.cu-challenge-end {
+  margin-bottom: 0;
+}
+
+.cu-end-label {
+  font-size: 14px;
+  color: #00F1FF;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.cu-end-date {
+  font-size: 14px;
+  color: white;
+}
+
+/* Steps Progress Section */
+.cu-steps-section {
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 350px;
+}
+
+/* Steps Box */
+.cu-steps-box {
+  border: 3px solid #000FEF;
+  padding: 5px 20px;
+  margin-bottom: 20px;
+  width: 302px;
+}
+
+.cu-steps-text {
+  font-size: 46.8px;
+  font-weight: 700;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Progress Bar */
+.cu-progress-container {
+  width: 100%;
+  max-width: 350px;
+}
+
+.cu-progress-bar {
+  height: 30px;
+  background: #0000FF; /* Dark blue background */
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.cu-progress-fill {
+  height: 100%;
+  background: #00F1FF; /* Cyan fill */
+  border-radius: 30px;
+  transition: width 0.3s ease;
+}
+
+.cu-segment-divider {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: #000;
+  z-index: 2;
+}
+
+.cu-step-number {
+  font-size: 11.57px;
+  font-weight: 700;
+  font-family: "PP Neue Machina", sans-serif;
+  color: #333333;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: none;
+  line-height: 0%;
+}
+
+/* Shoe Graphic */
+.cu-shoe-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cu-shoe-image {
+  width: 220px;
+  height: 135px;
+  object-fit: contain;
+}
+
+/* Done Button */
+.cu-done-button {
+  background: #00F1FF;
+  color: #000000;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 40px;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  width: 308px;
+}
+
+.cu-done-button:hover {
+  background: #00F1FF;
+  transform: translateY(-2px);
+}
+
+.cu-done-button-disabled {
+  background: #666666 !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+.cu-done-button-disabled:hover {
+  background: #666666 !important;
+  transform: none !important;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .cu-main-content {
+    padding: 60px 15px 100px;
+  }
+  
+  .cu-title-text,
+  .cu-subtitle-text {
+    font-size: 28px;
+  }
+  
+  .cu-steps-text {
+    font-size: 20px;
+  }
+  
+  .cu-progress-segment {
+    height: 35px;
+  }
+  
+  .cu-segment-number {
+    font-size: 14px;
+  }
+  
+  .cu-done-button {
+    padding: 12px 30px;
+    font-size: 18px;
+  }
+} */
+/* 
+@media (max-width: 360px) {
+  .cu-title-text,
+  .cu-subtitle-text {
+    font-size: 24px;
+  }
+  
+  .cu-steps-text {
+    font-size: 18px;
+  }
+  
+  .cu-progress-segment {
+    height: 30px;
+  }
+  
+  .cu-segment-number {
+    font-size: 12px;
+  }
+} */

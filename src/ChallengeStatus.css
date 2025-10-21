@@ -1,0 +1,297 @@
+/* Challenge Status Page Styles */
+:root {
+  --cs-corner-size: 30px;
+  --cs-corner-color: #00F1FF;
+  --cs-corner-border: 3px;
+  --cs-corner-offset-top: -20px;
+  --cs-corner-offset-bottom: -10px;
+  --cs-corner-offset-left: -10px;
+  --cs-corner-offset-right: -10px;
+}
+
+.challenge-status-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: 'PP Neue Machina', sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.cs-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Back Button */
+.cs-back-button {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  left: 20px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cs-back-button:hover {
+  opacity: 0.7;
+}
+
+.cs-back-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Main Content */
+.cs-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  padding: 80px 20px 100px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* Status Header */
+.cs-status-header {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.cs-status-text {
+  font-size: 40.97px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'PP Neue Machina', sans-serif;
+  position: relative;
+  padding: 2px 30px;
+  line-height: 100%;
+  letter-spacing: -2.2%;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cs-status-main {
+  padding: 0 10px;
+  margin-bottom: 2px;
+}
+
+.cs-status-sub {
+  font-size: 40.97px;
+}
+
+/* Status Section */
+.cs-status-section {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+}
+
+/* Corner Decorations */
+.cs-corner {
+  position: absolute;
+  width: var(--cs-corner-size);
+  height: var(--cs-corner-size);
+  z-index: 10;
+}
+
+.cs-top-left {
+  top: var(--cs-corner-offset-top);
+  left: var(--cs-corner-offset-left);
+  border-top: var(--cs-corner-border) solid var(--cs-corner-color);
+  border-left: var(--cs-corner-border) solid var(--cs-corner-color);
+}
+
+.cs-top-right {
+  top: var(--cs-corner-offset-top);
+  right: var(--cs-corner-offset-right);
+  border-top: var(--cs-corner-border) solid var(--cs-corner-color);
+  border-right: var(--cs-corner-border) solid var(--cs-corner-color);
+}
+
+.cs-bottom-left {
+  bottom: var(--cs-corner-offset-bottom);
+  left: var(--cs-corner-offset-left);
+  border-bottom: var(--cs-corner-border) solid var(--cs-corner-color);
+  border-left: var(--cs-corner-border) solid var(--cs-corner-color);
+}
+
+.cs-bottom-right {
+  bottom: var(--cs-corner-offset-bottom);
+  right: var(--cs-corner-offset-right);
+  border-bottom: var(--cs-corner-border) solid var(--cs-corner-color);
+  border-right: var(--cs-corner-border) solid var(--cs-corner-color);
+}
+
+/* Status Description */
+.cs-status-description {
+  text-align: center;
+  max-width: 350px;
+  min-height: 200px;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cs-description-line {
+  font-size: 12.63px;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  margin-bottom: 10px;
+  opacity: 0.8;
+  font-family: 'Sora', sans-serif;
+}
+
+/* Call to Action */
+.cs-call-to-action {
+  position: relative;
+  max-width: 350px;
+}
+
+.cs-action-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: 'PP Neue Machina', sans-serif;
+  padding: 20px 60px;
+}
+
+/* Steps Completed */
+.cs-steps-container {
+  position: relative;
+  margin-bottom: 40px;
+  max-width: 350px;
+}
+
+.cs-steps-text {
+  font-size: 33px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-family: 'PP Neue Machina', sans-serif;
+  position: relative;
+  line-height: 100%;
+  letter-spacing: 0%;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 330px;
+  height: 70px;
+  border: 3px solid #0000FF;
+  padding: 10px 0px;
+}
+
+/* Done Button */
+.cs-done-button {
+  width: 100%;
+  width: 330px;
+  height: 50px;
+  background: #00F1FF;
+  border: none;
+  border-radius: 30px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'PP Neue Machina', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cs-done-button:hover {
+  background: #00D4E6;
+  transform: translateY(-2px);
+}
+
+.cs-done-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .cs-status-text {
+    font-size: 45px;
+  }
+  
+  .cs-status-sub {
+    font-size: 36px;
+  }
+  
+  .cs-description-line {
+    font-size: 16px;
+  }
+  
+  .cs-action-text {
+    font-size: 16px;
+  }
+  
+  .cs-steps-text {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cs-status-text {
+    font-size: 40px;
+  }
+  
+  .cs-status-sub {
+    font-size: 32px;
+  }
+  
+  .cs-description-line {
+    font-size: 14px;
+  }
+  
+  .cs-action-text {
+    font-size: 14px;
+  }
+  
+  .cs-steps-text {
+    font-size: 18px;
+  }
+} */
