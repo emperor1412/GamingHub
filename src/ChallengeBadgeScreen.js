@@ -12,6 +12,7 @@ import ChallengeUpdate from './ChallengeUpdate';
 import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
 import ChallengeInfo from './ChallengeInfo';
+import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
 
 // Import real data and API mock
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
@@ -26,6 +27,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     const [showChallengeStatus, setShowChallengeStatus] = React.useState(false);
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [showChallengeInfo, setShowChallengeInfo] = React.useState(false);
+    const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
     
     // API state management
@@ -353,8 +355,20 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
 
     // Function to handle join challenge from ChallengeInfo
     const handleJoinChallenge = () => {
-        // This will be handled by ChallengeInfo component
-        console.log('Join challenge requested');
+        // Show ChallengeJoinConfirmation page
+        setShowChallengeJoinConfirmation(true);
+    };
+
+    // Function to handle back from ChallengeJoinConfirmation
+    const handleBackFromConfirmation = () => {
+        setShowChallengeJoinConfirmation(false);
+    };
+
+    // Function to handle confirm join
+    const handleConfirmJoin = () => {
+        // This will be handled by API
+        console.log('handleConfirmJoin called - API will handle the logic');
+        setShowChallengeJoinConfirmation(false);
     };
 
     // Function to handle Explorer Badges Card click
@@ -363,6 +377,32 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
             onExplorerBadgesClick();
         }
     };
+
+    // Show ChallengeJoinConfirmation if state is true
+    if (showChallengeJoinConfirmation && selectedChallengeData) {
+        return (
+            <ChallengeJoinConfirmation 
+                challengeData={{
+                    id: selectedChallengeData.id,
+                    steps: selectedChallengeData.stepsEst,
+                    days: 7, // You can calculate this based on dateStart and dateEnd
+                    starletsCost: selectedChallengeData.entryFee,
+                    badgeName: "EXPLORER BADGE",
+                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM"
+                }}
+                onJoinChallenge={handleConfirmJoin}
+                onBack={handleBackFromConfirmation}
+                onViewBadges={() => {
+                    // Close the confirmation screen and stay on badge screen
+                    setShowChallengeJoinConfirmation(false);
+                }}
+                onShowError={() => {
+                    // Handle error case
+                    setShowChallengeJoinConfirmation(false);
+                }}
+            />
+        );
+    }
 
     // Show ChallengeInfo if state is true
     if (showChallengeInfo && selectedChallengeData) {
