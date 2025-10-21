@@ -9,7 +9,8 @@ const ChallengeUpdate = ({
   challengeData, 
   onDone, 
   onBack,
-  onViewBadges
+  onViewBadges,
+  onDataRefresh
 }) => {
   const [showClaimReward, setShowClaimReward] = React.useState(false);
   
@@ -90,6 +91,7 @@ const ChallengeUpdate = ({
         onClaimRewards={handleClaimRewards}
         onBack={handleBackFromClaim}
         onViewBadges={onViewBadges}
+        onDataRefresh={onDataRefresh}
       />
     );
   }

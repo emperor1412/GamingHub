@@ -19,7 +19,7 @@ import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
 
-const ChallengesMenu = ({ onClose }) => {
+const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
     const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
@@ -32,73 +32,81 @@ const ChallengesMenu = ({ onClose }) => {
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
     const [hasApiError, setHasApiError] = useState(false); // Track API error state
 
-    // Fetch 3 challenges from backend (challengeList)
-    useEffect(() => {
-        const fetchChallengeList = async (depth = 0) => {
-            if (depth > 3) {
-                console.error('fetchChallengeList: too many retries');
-                setHasApiError(true);
-                setIsLoadingChallenges(false);
-                return;
-            }
+    // Function to fetch challenge list
+    const fetchChallengeList = async (depth = 0) => {
+        if (depth > 3) {
+            console.error('fetchChallengeList: too many retries');
+            setHasApiError(true);
+            setIsLoadingChallenges(false);
+            return;
+        }
 
-            try {
-                setIsLoadingChallenges(true);
-                const token = (shared && shared.loginData && shared.loginData.token) ? shared.loginData.token : '';
-                const url = `${shared.server_url}/api/app/challengeList?token=${token}`;
-                const res = await fetch(url, { method: 'GET' });
-                const json = await res.json();
+        try {
+            setIsLoadingChallenges(true);
+            const token = (shared && shared.loginData && shared.loginData.token) ? shared.loginData.token : '';
+            const url = `${shared.server_url}/api/app/challengeList?token=${token}`;
+            const res = await fetch(url, { method: 'GET' });
+            const json = await res.json();
+            
+            if (json && json.code === 0 && Array.isArray(json.data)) {
+                setApiChallenges(json.data);
+                console.log('[challengeList]', json.data);
                 
-                if (json && json.code === 0 && Array.isArray(json.data)) {
-                    setApiChallenges(json.data);
-                    console.log('[challengeList]', json.data);
-                    
-                    // Fetch challenge details for each challenge
-                    const detailsPromises = json.data.map(async (challenge) => {
-                        try {
-                            const result = await shared.getChallengeDetail(challenge.id);
-                            if (result.success) {
-                                return { id: challenge.id, detail: result.data };
-                            }
-                        } catch (error) {
-                            console.error(`Error fetching detail for challenge ${challenge.id}:`, error);
+                // Fetch challenge details for each challenge
+                const detailsPromises = json.data.map(async (challenge) => {
+                    try {
+                        const result = await shared.getChallengeDetail(challenge.id);
+                        if (result.success) {
+                            return { id: challenge.id, detail: result.data };
                         }
-                        return null;
-                    });
-                    
-                    const detailsResults = await Promise.all(detailsPromises);
-                    const detailsMap = {};
-                    detailsResults.forEach(result => {
-                        if (result) {
-                            detailsMap[result.id] = result.detail;
-                        }
-                    });
-                    setChallengeDetails(detailsMap);
-                    console.log('[challengeDetails]', detailsMap);
-                } else if (json.code === 102001 || json.code === 102002) {
-                    console.log('[challengeList] token expired, attempting to re-login');
-                    const result = await shared.login(shared.initData);
-                    if (result.success) {
-                        console.log('[challengeList] re-login successful, retrying');
-                        return fetchChallengeList(depth + 1);
-                    } else {
-                        console.error('[challengeList] re-login failed:', result.error);
-                        setHasApiError(true);
+                    } catch (error) {
+                        console.error(`Error fetching detail for challenge ${challenge.id}:`, error);
                     }
+                    return null;
+                });
+                
+                const detailsResults = await Promise.all(detailsPromises);
+                const detailsMap = {};
+                detailsResults.forEach(result => {
+                    if (result) {
+                        detailsMap[result.id] = result.detail;
+                    }
+                });
+                setChallengeDetails(detailsMap);
+                console.log('[challengeDetails]', detailsMap);
+            } else if (json.code === 102001 || json.code === 102002) {
+                console.log('[challengeList] token expired, attempting to re-login');
+                const result = await shared.login(shared.initData);
+                if (result.success) {
+                    console.log('[challengeList] re-login successful, retrying');
+                    return fetchChallengeList(depth + 1);
                 } else {
-                    console.warn('[challengeList] unexpected response', json);
+                    console.error('[challengeList] re-login failed:', result.error);
                     setHasApiError(true);
                 }
-            } catch (e) {
-                console.error('[challengeList] error', e);
+            } else {
+                console.warn('[challengeList] unexpected response', json);
                 setHasApiError(true);
-            } finally {
-                setIsLoadingChallenges(false);
             }
-        };
-  
+        } catch (e) {
+            console.error('[challengeList] error', e);
+            setHasApiError(true);
+        } finally {
+            setIsLoadingChallenges(false);
+        }
+    };
+
+    // Fetch 3 challenges from backend (challengeList)
+    useEffect(() => {
         fetchChallengeList();
     }, []);
+
+    // Listen for data refresh requests
+    useEffect(() => {
+        if (onDataRefresh) {
+            fetchChallengeList();
+        }
+    }, [onDataRefresh]);
 
     const getApiChallengeByType = (typeInt) => {
         return apiChallenges.find(c => c.type === typeInt);
@@ -359,6 +367,12 @@ const ChallengesMenu = ({ onClose }) => {
         setShowBadgeScreen(true);
     };
 
+    // Function to handle data refresh from child components
+    const handleDataRefresh = () => {
+        // Refresh challenge list data
+        fetchChallengeList();
+    };
+
     // Show BadgeCollection if user clicked Explorer Badges
     if (showBadgeCollection) {
         return (
@@ -374,6 +388,7 @@ const ChallengesMenu = ({ onClose }) => {
             <ChallengeBadgeScreen
                 onClose={handleBackFromBadgeScreen}
                 onExplorerBadgesClick={handleExplorerBadgesClick}
+                onDataRefresh={handleDataRefresh}
             />
         );
     }
@@ -413,6 +428,7 @@ const ChallengesMenu = ({ onClose }) => {
                 onDone={handleDoneFromUpdate}
                 onBack={handleBackFromUpdate}
                 onViewBadges={handleViewBadges}
+                onDataRefresh={handleDataRefresh}
             />
         );
     }

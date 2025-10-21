@@ -10,7 +10,8 @@ const ChallengeClaimReward = ({
   challengeData, 
   onClaimRewards, 
   onBack,
-  onViewBadges
+  onViewBadges,
+  onDataRefresh
 }) => {
   const [showClaimedScreen, setShowClaimedScreen] = React.useState(false);
   const [isClaiming, setIsClaiming] = React.useState(false);
@@ -68,6 +69,11 @@ const ChallengeClaimReward = ({
     console.log('Closing claimed screen');
     setShowClaimedScreen(false);
     
+    // Trigger data refresh after claiming reward
+    if (onDataRefresh) {
+      onDataRefresh();
+    }
+    
     // Now call onClaimRewards after showing the claimed screen
     if (onClaimRewards) {
       onClaimRewards();
@@ -82,6 +88,11 @@ const ChallengeClaimReward = ({
   const handleViewBadges = () => {
     console.log('View badges clicked');
     setShowClaimedScreen(false);
+    
+    // Trigger data refresh after claiming reward
+    if (onDataRefresh) {
+      onDataRefresh();
+    }
     
     // Call onClaimRewards but don't call onBack - stay on current screen
     if (onClaimRewards) {
