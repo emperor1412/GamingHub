@@ -166,6 +166,9 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
             return;
         }
 
+        console.log(`badge.id: ${badge.id}, badge.type: ${badge.type}`);
+        console.log(`badge.visualType: ${badge.visualType}, badge.logicState: ${badge.logicState}`);
+
         // Handle routing based on visual type and logic state
         switch (badge.visualType) {
             case 'unlocked':
@@ -200,6 +203,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     startTime: challengeDetail.startTime,
                                     endTime: challengeDetail.endTime
                                 };
+                                
+                                console.log(`combinedChallengeData: ${combinedChallengeData}`);
                                 
                                 setSelectedChallengeData(combinedChallengeData);
                                 
@@ -245,7 +250,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     setShowChallengeClaimReward(true);
                                 } else if (challengeDetail.state === 40) {
                                     // State_RewardClaimed = 40 -> User claimed the reward
-                                    console.log('Challenge completed and reward claimed');
+                                    console.log(`Challenge completed and reward claimed ${selectedChallengeData}`);
                                     setShowChallengeBadgeDone(true);
                                 } else {
                                     // User hasn't joined -> show ChallengeInfo
@@ -266,11 +271,11 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                         // Call API to get challenge detail for claimed challenges
                         try {
                             const result = await shared.getChallengeDetail(badge.id);
-                            
+
                             if (result.success) {
                                 const challengeDetail = result.data;
                                 const challengeData = getChallengeDataById(badge.id, badge.type || 'weekly');
-                                
+                                console.log(`challengeData: ${challengeData}`);
                                 // Combine API data with mock detail for missing fields
                                 const combinedChallengeData = {
                                     id: challengeDetail.id,
@@ -292,7 +297,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                                     startTime: challengeDetail.startTime,
                                     endTime: challengeDetail.endTime
                                 };
-                                
+
                                 setSelectedChallengeData(combinedChallengeData);
                                 setShowChallengeBadgeDone(true);
                             } else {

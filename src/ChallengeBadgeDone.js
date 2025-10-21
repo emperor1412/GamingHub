@@ -21,6 +21,16 @@ const ChallengeBadgeDone = ({
     challengeId = null
   } = challengeData;
   return (
+    console.log(`challengeData: ${challengeData.starletsReward}`),
+    console.log(`challengeData: ${challengeData.challengeId}`),
+    console.log(`challengeData: ${challengeData.challengeTitle}`),
+    console.log(`challengeData: ${challengeData.badgeName}`),
+    console.log(`challengeData: ${challengeData.stepsCompleted}`),
+    console.log(`challengeData: ${challengeData.distance}`),
+    console.log(`challengeData: ${challengeData.starletsReward}`),
+    console.log(`challengeData: ${challengeData.challengeEndDate}`),
+    console.log(`challengeData: ${challengeData.description}`),
+
     <div className="cbd-container">
       {/* Background Pattern */}
       <div className="cbd-background-pattern"></div>
@@ -83,14 +93,14 @@ const ChallengeBadgeDone = ({
               <div className="cbd-stat-icon cbd-distance-icon">
                 {/* <span className="cbd-stat-text">KM</span> */}
                 <img src={km_icon} alt="KM" className="cbd-km-image" />
-                <div className="cbd-stat-value">{challengeData.distance}</div>
+                <div className="cbd-stat-value">{challengeData.distance.toLocaleString()}</div>
               </div>
             </div>
             
             <div className="cbd-stat-item">
               <div className="cbd-stat-icon cbd-starlets-icon">
                 <img src={starlet} alt="Starlet" className="cbd-starlet-image" />
-                <div className="cbd-stat-value">{challengeData.starletsReward}</div>
+                <div className="cbd-stat-value">{challengeData.starletsReward.toLocaleString()}</div>
               </div>
             </div>
           </div>
