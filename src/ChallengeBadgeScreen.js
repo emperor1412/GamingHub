@@ -19,7 +19,7 @@ import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDa
 import ChallengeClaimReward from './ChallengeClaimReward';
 import shared from './Shared';
 
-const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
+const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh }) => {
     const [selectedBadge, setSelectedBadge] = React.useState(null);
     const [selectedChallengeData, setSelectedChallengeData] = React.useState(null);
     const [showChallengeUpdate, setShowChallengeUpdate] = React.useState(false);
@@ -41,58 +41,66 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
         challenges: 0
     });
 
-    // Fetch challenges and earned data from API
-    React.useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            setError(null);
+    // Function to fetch data
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        
+        try {
+            // Fetch both APIs in parallel
+            const [challengesResult, earnedResult] = await Promise.all([
+                shared.getChallengesBadgeView(),
+                shared.getChallengeEarned()
+            ]);
             
-            try {
-                // Fetch both APIs in parallel
-                const [challengesResult, earnedResult] = await Promise.all([
-                    shared.getChallengesBadgeView(),
-                    shared.getChallengeEarned()
-                ]);
-                
-                // Handle challenges data
-                if (challengesResult.success) {
-                    console.log('API challenges loaded:', challengesResult.data);
-                    setApiChallenges(challengesResult.data);
-                } else {
-                    console.error('Failed to load challenges:', challengesResult.error);
-                    setError(challengesResult.error);
-                    // Fallback to mock data on error
-                    setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
-                        mockChallengeBadgeApiResponse.monthly,
-                        mockChallengeBadgeApiResponse.yearly
-                    ));
-                }
-
-                // Handle earned data
-                if (earnedResult.success) {
-                    console.log('Challenge earned data loaded:', earnedResult.data);
-                    // API returns object directly, not array
-                    const earnedData = earnedResult.data || { starlets: 0, badges: 0, challenges: 0 };
-                    setChallengeEarnedData(earnedData);
-                } else {
-                    console.error('Failed to load earned data:', earnedResult.error);
-                    // Keep default values on error
-                }
-            } catch (err) {
-                console.error('Error fetching data:', err);
-                setError(err.message);
+            // Handle challenges data
+            if (challengesResult.success) {
+                console.log('API challenges loaded:', challengesResult.data);
+                setApiChallenges(challengesResult.data);
+            } else {
+                console.error('Failed to load challenges:', challengesResult.error);
+                setError(challengesResult.error);
                 // Fallback to mock data on error
                 setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
                     mockChallengeBadgeApiResponse.monthly,
                     mockChallengeBadgeApiResponse.yearly
                 ));
-            } finally {
-                setLoading(false);
             }
-        };
 
+            // Handle earned data
+            if (earnedResult.success) {
+                console.log('Challenge earned data loaded:', earnedResult.data);
+                // API returns object directly, not array
+                const earnedData = earnedResult.data || { starlets: 0, badges: 0, challenges: 0 };
+                setChallengeEarnedData(earnedData);
+            } else {
+                console.error('Failed to load earned data:', earnedResult.error);
+                // Keep default values on error
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            setError(err.message);
+            // Fallback to mock data on error
+            setApiChallenges(mockChallengeBadgeApiResponse.weekly.concat(
+                mockChallengeBadgeApiResponse.monthly,
+                mockChallengeBadgeApiResponse.yearly
+            ));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch challenges and earned data from API
+    React.useEffect(() => {
         fetchData();
     }, []);
+
+    // Listen for data refresh requests
+    React.useEffect(() => {
+        if (onDataRefresh) {
+            fetchData();
+        }
+    }, [onDataRefresh]);
 
     // Process real challenge data from API response
     const processChallengeData = () => {
@@ -549,7 +557,10 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
     // Function to handle done from ChallengeClaimReward
     const handleDoneFromClaimReward = () => {
         setShowChallengeClaimReward(false);
-        // Có thể thêm logic khác nếu cần
+        // Trigger data refresh after claiming reward
+        if (onDataRefresh) {
+            onDataRefresh();
+        }
     };
 
     // Function to handle back from ChallengeStatus
@@ -657,6 +668,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     // Close the claim reward screen and stay on badge screen
                     setShowChallengeClaimReward(false);
                 }}
+                onDataRefresh={onDataRefresh}
             />
         );
     }
@@ -722,6 +734,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick }) => {
                     // Close the update screen and stay on badge screen
                     setShowChallengeUpdate(false);
                 }}
+                onDataRefresh={onDataRefresh}
             />
         );
     }
