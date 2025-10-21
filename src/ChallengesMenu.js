@@ -30,6 +30,7 @@ const ChallengesMenu = ({ onClose }) => {
     const [apiChallenges, setApiChallenges] = useState([]); // from /api/app/challengeList
     const [isLoadingChallenges, setIsLoadingChallenges] = useState(false);
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
+    const [hasApiError, setHasApiError] = useState(false); // Track API error state
 
     // Fetch 3 challenges from backend (challengeList)
     useEffect(() => {
@@ -68,9 +69,11 @@ const ChallengesMenu = ({ onClose }) => {
                     console.log('[challengeDetails]', detailsMap);
                 } else {
                     console.warn('[challengeList] unexpected response', json);
+                    setHasApiError(true);
                 }
             } catch (e) {
                 console.error('[challengeList] error', e);
+                setHasApiError(true);
             } finally {
                 setIsLoadingChallenges(false);
             }
@@ -92,8 +95,12 @@ const ChallengesMenu = ({ onClose }) => {
         }
     };
 
-    // Helper function to get current challenge from API mock
+    // Helper function to get current challenge from API mock (only if no API error)
     const getCurrentChallengeFromApi = (challengeType) => {
+        if (hasApiError) {
+            return null; // Don't use mock data if API failed
+        }
+        
         const apiResponse = mockCurrentChallengeDataApiResponse[challengeType];
         if (apiResponse) {
             const detailedData = getChallengeDataById(apiResponse.id, challengeType);
@@ -402,6 +409,32 @@ const ChallengesMenu = ({ onClose }) => {
                 }}
                 onJoinChallenge={handleJoinChallenge}
             />
+        );
+    }
+
+    // Show error state if API failed
+    if (hasApiError) {
+        return (
+            <div className="challenges-menu">
+                {/* Header */}
+                <button className="challenges-back-button" onClick={onClose}>
+                    <img src={backIcon} alt="Back" />
+                </button>
+                
+                {/* Error Content */}
+                <div className="challenges-content">
+                    <div className="challenges-error-container">
+                        <div className="challenges-error-text">Failed to load challenges</div>
+                        <div className="challenges-error-details">Please check your connection and try again</div>
+                        <button 
+                            className="challenges-retry-button"
+                            onClick={() => window.location.reload()}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </div>
         );
     }
 

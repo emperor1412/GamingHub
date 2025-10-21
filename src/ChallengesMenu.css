@@ -561,3 +561,51 @@
     display: block;
     text-align: center;
 }
+
+/* Error state styles */
+.challenges-error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    text-align: center;
+    padding: 20px;
+}
+
+.challenges-error-text {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: "PP Neue Machina", sans-serif;
+    color: #FF4444;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.challenges-error-details {
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "PP Neue Machina", sans-serif;
+    color: white;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.challenges-retry-button {
+    background: #000FEF;
+    border: 2px solid #000FEF;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "PP Neue Machina", sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.challenges-retry-button:hover {
+    background: transparent;
+    color: #000FEF;
+}
