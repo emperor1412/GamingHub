@@ -11,12 +11,14 @@ const ChallengeJoinConfirmation = ({
   challengeData, 
   onJoinChallenge, 
   onBack,
+  onBackAfterJoin, // New prop for handling back after join
   onViewBadges,
   onShowError
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [challengeDetailData, setChallengeDetailData] = useState(null);
+  const [hasJoinedChallenge, setHasJoinedChallenge] = useState(false); // Track if user has joined
   const {
     steps = 56000,
     days: inputDays,
@@ -51,6 +53,7 @@ const ChallengeJoinConfirmation = ({
       if (result.success) {
         // Successfully joined challenge - now get challenge detail
         console.log('Successfully joined challenge, fetching details...');
+        setHasJoinedChallenge(true); // Mark that user has joined
         
         const detailResult = await shared.getChallengeDetail(challengeId);
         
@@ -115,9 +118,11 @@ const ChallengeJoinConfirmation = ({
 
   const handleBackFromUpdate = () => {
     setShowChallengeUpdate(false);
-    // Don't stay in ChallengeJoinConfirmation, go back to ChallengesMenu
-    if (onBack) {
-      onBack();
+    // After joining challenge, go back to the original view (ChallengesMenu/BadgeScreen/BadgeCollection)
+    // Don't go back to ChallengeInfo as user has already joined
+    if (hasJoinedChallenge && onBackAfterJoin) {
+      // If user has joined, go back to the original view (skip ChallengeInfo)
+      onBackAfterJoin();
     }
   };
 

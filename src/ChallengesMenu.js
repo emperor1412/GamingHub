@@ -298,6 +298,14 @@ const ChallengesMenu = ({ onClose }) => {
         setSelectedChallengeType(null);
     };
 
+    const handleBackFromUpdateAfterJoin = () => {
+        // After joining challenge, go back to challenges menu (skip ChallengeInfo)
+        setShowChallengeUpdate(false);
+        setShowChallengeJoinConfirmation(false);
+        setSelectedChallenge(null);
+        setSelectedChallengeType(null);
+    };
+
     const handleDoneFromUpdate = () => {
         // Handle done action from ChallengeUpdate
         console.log('Done from ChallengeUpdate');
@@ -424,6 +432,7 @@ const ChallengesMenu = ({ onClose }) => {
                 }}
                 onJoinChallenge={handleConfirmJoin}
                 onBack={handleBackFromConfirmation}
+                onBackAfterJoin={handleBackFromUpdateAfterJoin}
                 onViewBadges={handleViewBadges}
                 onShowError={handleShowError}
             />
