@@ -265,22 +265,18 @@
   z-index: 2;
 }
 
-.cu-step-numbers {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 0 10px;
-}
-
 .cu-step-number {
   font-size: 11.57px;
   font-weight: 700;
   font-family: "PP Neue Machina", sans-serif;
   color: #333333;
   text-align: center;
-  position: relative;
-  top: -25px;
+  position: absolute;
+  top: 50%;
   transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: none;
+  line-height: 0%;
 }
 
 /* Shoe Graphic */

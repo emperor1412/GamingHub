@@ -167,11 +167,18 @@ const ChallengeUpdate = ({
                   style={{left: `${((index + 1) / 5) * 100}%`}}
                 ></div>
               ))}
-            </div>
-            {/* Step numbers */}
-            <div className="cu-step-numbers">
+              {/* Step numbers positioned within progress bar */}
               {stepSegments.map((step, index) => (
-                <span key={index} className="cu-step-number">{step.toLocaleString()}</span>
+                <span 
+                  key={index} 
+                  className="cu-step-number"
+                  style={{
+                    left: `${10 + (index * 20)}%`,
+                    transform: 'translateX(-50%)'
+                  }}
+                >
+                  {step.toLocaleString()}
+                </span>
               ))}
             </div>
           </div>
