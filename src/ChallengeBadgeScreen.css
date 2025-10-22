@@ -171,12 +171,13 @@
     transition: all 0.3s ease;
     border: none;
     outline: none;
+    background: #DC00D5;
 }
 
 .cbs-summary-card-clickable:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 241, 255, 0.3);
-    background: #1a1aff;
+    background: #DC00D5;
 }
 
 .cbs-summary-card-clickable:active {
