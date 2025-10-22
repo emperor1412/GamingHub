@@ -95,12 +95,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
         fetchData();
     }, []);
 
-    // Listen for data refresh requests
-    React.useEffect(() => {
-        if (onDataRefresh) {
-            fetchData();
-        }
-    }, [onDataRefresh]);
+    // Note: onDataRefresh is now only called explicitly from actions like claiming rewards
+    // No automatic refresh needed
 
     // Process real challenge data from API response
     const processChallengeData = () => {
@@ -558,9 +554,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
     const handleDoneFromClaimReward = () => {
         setShowChallengeClaimReward(false);
         // Trigger data refresh after claiming reward
-        if (onDataRefresh) {
-            onDataRefresh();
-        }
+        fetchData();
     };
 
     // Function to handle back from ChallengeStatus
@@ -618,7 +612,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     days: selectedChallengeData.type === 'WEEKLY' ? 7 : selectedChallengeData.type === 'MONTHLY' ? 30 : 365,
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM",
+                    challengeEndDate: selectedChallengeData.dateEnd,
                     type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
@@ -668,7 +662,6 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the claim reward screen and stay on badge screen
                     setShowChallengeClaimReward(false);
                 }}
-                onDataRefresh={onDataRefresh}
             />
         );
     }
@@ -734,7 +727,6 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the update screen and stay on badge screen
                     setShowChallengeUpdate(false);
                 }}
-                onDataRefresh={onDataRefresh}
             />
         );
     }
