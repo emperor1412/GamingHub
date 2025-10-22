@@ -538,7 +538,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     days: selectedChallengeData.type === 'WEEKLY' ? 7 : selectedChallengeData.type === 'MONTHLY' ? 30 : 365,
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM",
+                    challengeEndDate: selectedChallengeData.dateEnd,
                     type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
