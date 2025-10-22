@@ -25,6 +25,7 @@ const ChallengeJoinConfirmation = ({
     starletsCost = 200,
     badgeName = "EXPLORER BADGE",
     challengeEndDate = "DD/MM/YY HH:MM",
+    endTime = null, // ← Thêm endTime từ API
     id: challengeId,
     type = "WEEKLY"
   } = challengeData || {};
@@ -34,8 +35,11 @@ const ChallengeJoinConfirmation = ({
 
   // Format end time from API (consistent with ChallengeUpdate.js and ChallengeInfo.js)
   const formatEndDate = (endTime) => {
-    if (!endTime || endTime === 0) return challengeData.challengeEndDate + ' HH:MM UTC';
+    console.log('ChallengeInfo - endTime received:', endTime);
+    console.log('ChallengeInfo - challenge object:', challengeData);
+    if (!endTime || endTime === 0) return challengeData.dateEnd + ' HH:MM UTC';
     const date = new Date(endTime);
+    console.log('ChallengeInfo - converted date:', date);
     return date.toLocaleDateString('en-GB') + ' ' + date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   };
 
@@ -240,7 +244,7 @@ const ChallengeJoinConfirmation = ({
 
           {/* Challenge End Date */}
           <div className="cjc-challenge-end">
-            <span style={{color: '#00FFFF'}}>CHALLENGE END:</span> {formatEndDate(challengeDetailData?.endTime)}
+            <span style={{color: '#00FFFF'}}>CHALLENGE END:</span> {formatEndDate(endTime)}
           </div>
         </div>
       </div>

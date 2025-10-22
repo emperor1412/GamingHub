@@ -199,13 +199,20 @@
 .cu-end-label {
   font-size: 14px;
   color: #00F1FF;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: 0%;
   margin-right: 8px;
+  font-family: 'PP Neue Machina', sans-serif;
 }
 
 .cu-end-date {
   font-size: 14px;
   color: white;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: 0%;
+  font-family: 'PP Neue Machina', sans-serif;
 }
 
 /* Steps Progress Section */
