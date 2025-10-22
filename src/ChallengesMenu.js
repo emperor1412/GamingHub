@@ -444,6 +444,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                     starletsCost: selectedChallenge.entryFee,
                     badgeName: "EXPLORER BADGE",
                     challengeEndDate: selectedChallenge.dateEnd,
+                    endTime: selectedChallenge.endTime, // ← Thêm endTime từ API
                     type: selectedChallengeType
                 }}
                 onJoinChallenge={handleConfirmJoin}

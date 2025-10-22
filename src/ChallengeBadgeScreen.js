@@ -13,6 +13,7 @@ import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
 import ChallengeInfo from './ChallengeInfo';
 import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
+import ChallengeError from './ChallengeError';
 
 // Import real data and API mock
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
@@ -28,6 +29,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [showChallengeInfo, setShowChallengeInfo] = React.useState(false);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = React.useState(false);
+    const [showChallengeError, setShowChallengeError] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
     const [isFromJoinConfirmation, setIsFromJoinConfirmation] = React.useState(false); // Track if ChallengeUpdate is from join confirmation
     
@@ -595,6 +597,29 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
         setIsFromJoinConfirmation(true); // Mark that ChallengeUpdate will be from join confirmation
     };
 
+    // Function to handle show error (not enough starlets)
+    const handleShowError = () => {
+        setShowChallengeJoinConfirmation(false);
+        setShowChallengeError(true);
+    };
+
+    // Function to handle back from error
+    const handleBackFromError = () => {
+        setShowChallengeError(false);
+    };
+
+    // Function to handle go to market
+    const handleGoToMarket = () => {
+        setShowChallengeError(false);
+        setSelectedChallengeData(null);
+        // Navigate to market tab
+        if (shared.setActiveTab) {
+            shared.setActiveTab('market');
+        } else {
+            console.error('setActiveTab function not available');
+        }
+    };
+
     // Function to handle Explorer Badges Card click
     const handleExplorerBadgesClick = () => {
         if (onExplorerBadgesClick) {
@@ -613,6 +638,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
                     challengeEndDate: selectedChallengeData.dateEnd,
+                    endTime: selectedChallengeData.endTime, // ← Thêm endTime từ API
                     type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
@@ -622,10 +648,17 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the confirmation screen and stay on badge screen
                     setShowChallengeJoinConfirmation(false);
                 }}
-                onShowError={() => {
-                    // Handle error case
-                    setShowChallengeJoinConfirmation(false);
-                }}
+                onShowError={handleShowError}
+            />
+        );
+    }
+
+    // Show ChallengeError if user doesn't have enough starlets
+    if (showChallengeError) {
+        return (
+            <ChallengeError
+                onGoToMarket={handleGoToMarket}
+                onBack={handleBackFromError}
             />
         );
     }
