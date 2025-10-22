@@ -680,7 +680,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
             <ChallengeClaimReward
                 challengeData={selectedChallengeData ? {
                     id: selectedChallengeData.id, // ✅ Thêm challengeId
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distanceKm: selectedChallengeData.distanceKm || 9999,
                     badgeName: `${selectedChallengeData.title}`,
                     challengeTitle: selectedChallengeData.shortTitle,
@@ -707,7 +707,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                 challengeData={selectedChallengeData ? {
                     challengeTitle: selectedChallengeData.shortTitle,
                     badgeName: `${selectedChallengeData.title}`,
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: selectedChallengeData.reward || 400, // ✅ Sử dụng reward từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
