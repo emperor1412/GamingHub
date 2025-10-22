@@ -12,6 +12,7 @@ import ChallengeStatus from './ChallengeStatus';
 import ChallengeClaimReward from './ChallengeClaimReward';
 import ChallengeInfo from './ChallengeInfo';
 import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
+import ChallengeError from './ChallengeError';
 
 // Import helper functions
 import { mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
@@ -26,6 +27,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
     const [showChallengeClaimReward, setShowChallengeClaimReward] = useState(false);
     const [showChallengeInfo, setShowChallengeInfo] = useState(false);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
+    const [showChallengeError, setShowChallengeError] = useState(false);
     const [challengeStatusType, setChallengeStatusType] = useState('incomplete');
     const [isFromJoinConfirmation, setIsFromJoinConfirmation] = useState(false); // Track if ChallengeUpdate is from join confirmation
     const [allBadges, setAllBadges] = useState([]);
@@ -528,6 +530,29 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         setIsFromJoinConfirmation(true); // Mark that ChallengeUpdate will be from join confirmation
     };
 
+    // Function to handle show error (not enough starlets)
+    const handleShowError = () => {
+        setShowChallengeJoinConfirmation(false);
+        setShowChallengeError(true);
+    };
+
+    // Function to handle back from error
+    const handleBackFromError = () => {
+        setShowChallengeError(false);
+    };
+
+    // Function to handle go to market
+    const handleGoToMarket = () => {
+        setShowChallengeError(false);
+        setSelectedChallengeData(null);
+        // Navigate to market tab
+        if (shared.setActiveTab) {
+            shared.setActiveTab('market');
+        } else {
+            console.error('setActiveTab function not available');
+        }
+    };
+
     // Show ChallengeJoinConfirmation if state is true
     if (showChallengeJoinConfirmation && selectedChallengeData) {
         return (
@@ -538,7 +563,8 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     days: selectedChallengeData.type === 'WEEKLY' ? 7 : selectedChallengeData.type === 'MONTHLY' ? 30 : 365,
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM",
+                    challengeEndDate: selectedChallengeData.dateEnd,
+                    endTime: selectedChallengeData.endTime, // ← Thêm endTime từ API
                     type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
@@ -548,10 +574,17 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     // Close the confirmation screen and stay on badge collection
                     setShowChallengeJoinConfirmation(false);
                 }}
-                onShowError={() => {
-                    // Handle error case
-                    setShowChallengeJoinConfirmation(false);
-                }}
+                onShowError={handleShowError}
+            />
+        );
+    }
+
+    // Show ChallengeError if user doesn't have enough starlets
+    if (showChallengeError) {
+        return (
+            <ChallengeError
+                onGoToMarket={handleGoToMarket}
+                onBack={handleBackFromError}
             />
         );
     }
@@ -573,7 +606,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
             <ChallengeClaimReward
                 challengeData={selectedChallengeData ? {
                     id: selectedChallengeData.id, // ✅ Thêm challengeId
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distanceKm: selectedChallengeData.distanceKm || 9999,
                     badgeName: `${selectedChallengeData.shortTitle}`,
                     challengeTitle: selectedChallengeData.shortTitle,
@@ -600,7 +633,7 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                 challengeData={selectedChallengeData ? {
                     challengeTitle: selectedChallengeData.shortTitle,
                     badgeName: `${selectedChallengeData.shortTitle}`,
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: selectedChallengeData.reward || 400, // ✅ Sử dụng reward từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",

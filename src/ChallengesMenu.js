@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './ChallengesMenu.css';
 import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import backIcon from './images/back.svg';
@@ -150,7 +150,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         const textLength = text.length;
         if (textLength > 35) {
             return '10px';
-        } else if (textLength > 30) {
+        } else if (textLength > 23) {
             return '12px';
         } else {
             return '14px';
@@ -368,10 +368,10 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     };
 
     // Function to handle data refresh from child components
-    const handleDataRefresh = () => {
+    const handleDataRefresh = React.useCallback(() => {
         // Refresh challenge list data
         fetchChallengeList();
-    };
+    }, []); // Empty dependency array to prevent recreation
 
     // Show BadgeCollection if user clicked Explorer Badges
     if (showBadgeCollection) {
@@ -444,6 +444,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                     starletsCost: selectedChallenge.entryFee,
                     badgeName: "EXPLORER BADGE",
                     challengeEndDate: selectedChallenge.dateEnd,
+                    endTime: selectedChallenge.endTime, // ← Thêm endTime từ API
                     type: selectedChallengeType
                 }}
                 onJoinChallenge={handleConfirmJoin}

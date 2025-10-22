@@ -13,6 +13,7 @@ import ChallengeBadgeDone from './ChallengeBadgeDone';
 import ChallengeStatus from './ChallengeStatus';
 import ChallengeInfo from './ChallengeInfo';
 import ChallengeJoinConfirmation from './ChallengeJoinConfirmation';
+import ChallengeError from './ChallengeError';
 
 // Import real data and API mock
 import { mockChallengeBadgeApiResponse, mapApiStateToVisualState, getChallengeDataById } from './data/mockChallengeApi';
@@ -28,6 +29,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
     const [showChallengeClaimReward, setShowChallengeClaimReward] = React.useState(false);
     const [showChallengeInfo, setShowChallengeInfo] = React.useState(false);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = React.useState(false);
+    const [showChallengeError, setShowChallengeError] = React.useState(false);
     const [challengeStatusType, setChallengeStatusType] = React.useState('incomplete');
     const [isFromJoinConfirmation, setIsFromJoinConfirmation] = React.useState(false); // Track if ChallengeUpdate is from join confirmation
     
@@ -95,12 +97,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
         fetchData();
     }, []);
 
-    // Listen for data refresh requests
-    React.useEffect(() => {
-        if (onDataRefresh) {
-            fetchData();
-        }
-    }, [onDataRefresh]);
+    // Note: onDataRefresh is now only called explicitly from actions like claiming rewards
+    // No automatic refresh needed
 
     // Process real challenge data from API response
     const processChallengeData = () => {
@@ -558,9 +556,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
     const handleDoneFromClaimReward = () => {
         setShowChallengeClaimReward(false);
         // Trigger data refresh after claiming reward
-        if (onDataRefresh) {
-            onDataRefresh();
-        }
+        fetchData();
     };
 
     // Function to handle back from ChallengeStatus
@@ -601,6 +597,29 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
         setIsFromJoinConfirmation(true); // Mark that ChallengeUpdate will be from join confirmation
     };
 
+    // Function to handle show error (not enough starlets)
+    const handleShowError = () => {
+        setShowChallengeJoinConfirmation(false);
+        setShowChallengeError(true);
+    };
+
+    // Function to handle back from error
+    const handleBackFromError = () => {
+        setShowChallengeError(false);
+    };
+
+    // Function to handle go to market
+    const handleGoToMarket = () => {
+        setShowChallengeError(false);
+        setSelectedChallengeData(null);
+        // Navigate to market tab
+        if (shared.setActiveTab) {
+            shared.setActiveTab('market');
+        } else {
+            console.error('setActiveTab function not available');
+        }
+    };
+
     // Function to handle Explorer Badges Card click
     const handleExplorerBadgesClick = () => {
         if (onExplorerBadgesClick) {
@@ -618,7 +637,8 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     days: selectedChallengeData.type === 'WEEKLY' ? 7 : selectedChallengeData.type === 'MONTHLY' ? 30 : 365,
                     starletsCost: selectedChallengeData.entryFee,
                     badgeName: "EXPLORER BADGE",
-                    challengeEndDate: selectedChallengeData.dateEnd ? `${selectedChallengeData.dateEnd} 13:00 UTC` : "DD/MM/YY HH:MM",
+                    challengeEndDate: selectedChallengeData.dateEnd,
+                    endTime: selectedChallengeData.endTime, // ← Thêm endTime từ API
                     type: selectedChallengeData.type.toLowerCase()
                 }}
                 onJoinChallenge={handleConfirmJoin}
@@ -628,10 +648,17 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the confirmation screen and stay on badge screen
                     setShowChallengeJoinConfirmation(false);
                 }}
-                onShowError={() => {
-                    // Handle error case
-                    setShowChallengeJoinConfirmation(false);
-                }}
+                onShowError={handleShowError}
+            />
+        );
+    }
+
+    // Show ChallengeError if user doesn't have enough starlets
+    if (showChallengeError) {
+        return (
+            <ChallengeError
+                onGoToMarket={handleGoToMarket}
+                onBack={handleBackFromError}
             />
         );
     }
@@ -653,7 +680,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
             <ChallengeClaimReward
                 challengeData={selectedChallengeData ? {
                     id: selectedChallengeData.id, // ✅ Thêm challengeId
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distanceKm: selectedChallengeData.distanceKm || 9999,
                     badgeName: `${selectedChallengeData.title}`,
                     challengeTitle: selectedChallengeData.shortTitle,
@@ -668,7 +695,6 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the claim reward screen and stay on badge screen
                     setShowChallengeClaimReward(false);
                 }}
-                onDataRefresh={onDataRefresh}
             />
         );
     }
@@ -681,7 +707,7 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                 challengeData={selectedChallengeData ? {
                     challengeTitle: selectedChallengeData.shortTitle,
                     badgeName: `${selectedChallengeData.title}`,
-                    stepsCompleted: selectedChallengeData.stepsEst || 99999,
+                    stepsCompleted: selectedChallengeData.currentSteps || 0, // ✅ Sử dụng currentSteps thay vì stepsEst
                     distance: selectedChallengeData.distanceKm || 9999,
                     starletsReward: selectedChallengeData.reward || 400, // ✅ Sử dụng reward từ API
                     challengeEndDate: selectedChallengeData.dateEnd || "DD/MM/YYYY 23:59",
@@ -734,7 +760,6 @@ const ChallengeBadgeScreen = ({ onClose, onExplorerBadgesClick, onDataRefresh })
                     // Close the update screen and stay on badge screen
                     setShowChallengeUpdate(false);
                 }}
-                onDataRefresh={onDataRefresh}
             />
         );
     }
