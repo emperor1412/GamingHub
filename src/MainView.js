@@ -910,17 +910,22 @@ Response:
 
                     if (visibleSlideIndex < slides.length - 1) {
                         setCurrentSlide(visibleSlideIndex + 1);
-                        slides[visibleSlideIndex + 1].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'nearest',
-                            inline: 'start'
+                        // Calculate proper scroll position including gap and padding
+                        const nextSlide = slides[visibleSlideIndex + 1];
+                        const slideWidth = nextSlide.offsetWidth;
+                        const gap = 14; // CSS gap value
+                        const targetScrollLeft = (visibleSlideIndex + 1) * (slideWidth + gap);
+                        
+                        carouselRef.current.scrollTo({
+                            left: targetScrollLeft,
+                            behavior: 'smooth'
                         });
                     } else {
                         setCurrentSlide(0);
-                        slides[0].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'nearest',
-                            inline: 'start'
+                        // Reset to beginning
+                        carouselRef.current.scrollTo({
+                            left: 0,
+                            behavior: 'smooth'
                         });
                     }
                 }
@@ -1009,29 +1014,32 @@ Response:
 
             const isClick = moveDistance < 5 && moveTime < 200;
 
-            /*
-            if (carouselRef.current) {
+            // Custom snap logic - snap only if scrolled 80% or more
+            if (carouselRef.current && !isClick) {
                 const carousel = carouselRef.current;
                 const slides = carousel.children;
                 const currentScroll = carousel.scrollLeft;
-                const itemWidth = carousel.offsetWidth;
+                const slideWidth = slides[0].offsetWidth;
+                const gap = 14;
+                const totalSlideWidth = slideWidth + gap;
                 
-                const targetCard = Math.round(currentScroll / itemWidth);
-                const safeTargetCard = Math.min(Math.max(targetCard, 0), slides.length - 1);
+                // Calculate which slide we're closest to
+                const currentSlideIndex = Math.round(currentScroll / totalSlideWidth);
+                const targetScrollLeft = currentSlideIndex * totalSlideWidth;
                 
-                setCurrentSlide(safeTargetCard);
-
-                if (!isClick) {
-                    requestAnimationFrame(() => {
-                        slides[safeTargetCard].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'nearest',
-                            inline: 'start'
-                        });
+                // Calculate how much we've scrolled (as percentage)
+                const scrollProgress = Math.abs(currentScroll - targetScrollLeft) / totalSlideWidth;
+                
+                // Only snap if we've scrolled 80% or more
+                if (scrollProgress >= 0.8) {
+                    setCurrentSlide(currentSlideIndex);
+                    carousel.scrollTo({
+                        left: targetScrollLeft,
+                        behavior: 'smooth'
                     });
                 }
             }
-                */
+            
             startAutoScroll();
         }
         catch (e) {
@@ -1324,10 +1332,14 @@ Response:
                                 className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}
                                 onClick={() => {
                                     setCurrentSlide(index);
-                                    carouselRef.current.children[index].scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'nearest',
-                                        inline: 'start'
+                                    // Calculate proper scroll position including gap
+                                    const slideWidth = carouselRef.current.children[0].offsetWidth;
+                                    const gap = 14; // CSS gap value
+                                    const targetScrollLeft = index * (slideWidth + gap);
+                                    
+                                    carouselRef.current.scrollTo({
+                                        left: targetScrollLeft,
+                                        behavior: 'smooth'
                                     });
                                 }}
                             />
