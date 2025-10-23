@@ -135,7 +135,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 /* Games Row - Third Row with smaller thumbnails */
@@ -143,7 +143,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .game-card-small {
@@ -507,7 +507,6 @@
     flex-direction: column;
     align-items: center;
     gap: 0px;
-    margin-top: 15px;
 }
 
 .events-carousel {
@@ -517,7 +516,7 @@
     display: flex;
     overflow-x: auto;
     width: 100%;
-    gap: 16px;
+    gap: 14px;
     padding: 0 0px;
     cursor: grab;
     user-select: none;
@@ -537,7 +536,7 @@
 
 /* FREEZE STREAKS hero */
 .freeze-hero-section {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .freeze-hero {
@@ -621,14 +620,14 @@
     display: none !important;
 }
 
-.ticket-button {
+.mv_ticket-button {
     position: relative;
     width: 100%;
     border: none;
     background: transparent;
     padding: 0;
     cursor: pointer;
-    margin-bottom: 30px;
+    margin-bottom: 14px;
 }
 
 .egglet-button {
@@ -638,10 +637,10 @@
     background: transparent;
     padding: 0;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
-.ticket-button-image-container {
+.mv_ticket-button-image-container {
     position: relative;
     width: 100%;
     height: 190px;
@@ -656,7 +655,7 @@
     overflow: hidden;
 }
 
-.ticket-button-image {
+.mv_ticket-button-image {
     width: 100%;
     height: 100%;
     min-height: 190px;
@@ -746,7 +745,7 @@
     background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(128,0,255,0.3) 100%);
 }
 
-.ticket-button-container-border {
+.mv_ticket-button-container-border {
     position: absolute;
     top: 0;
     left: 0;
@@ -768,7 +767,7 @@
     pointer-events: none;
 }
 
-.ticket-button-content {
+.mv_ticket-button-content {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1040,7 +1039,7 @@
 }
 
 .egglet-section {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .egglet-button {
@@ -1198,14 +1197,14 @@
     position: relative;
 }
 
-.ticket-button.premium-button.disabled,
-.ticket-button.premium-button:disabled {
+.mv_ticket-button.premium-button.disabled,
+.mv_ticket-button.premium-button:disabled {
     opacity: 0.5 !important;
     cursor: not-allowed !important;
     pointer-events: none !important;
 }
 
-.ticket-button.premium-button:disabled {
+.mv_ticket-button.premium-button:disabled {
     background: rgba(0, 0, 0, 0.3) !important;
 }
 

@@ -1734,7 +1734,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             
             {/* LFG Button */}
             <button className="fc_welcome-lfg-btn" onClick={handleWelcomeClose}>
-              <div className="fc_flip-content">LFG!</div>
+              <div className="fc_flip-content welcome-lfg-text">Proceed to Game</div>
             </button>
           </div>
         </div>
@@ -1888,7 +1888,7 @@ const FlippingStars = ({ onClose, setShowProfileView, setActiveTab }) => {
             alt="Profile" 
           />
         </button>
-        <div className="fc_stat-item-main-text" onClick={() => setShowProfileView && setShowProfileView(true)}>
+        <div className="fc_stat-item-main-text right-avatar-text" onClick={() => setShowProfileView && setShowProfileView(true)}>
           GM {shared.telegramUserData?.firstName || 'User'}!
         </div>
         <div className="fc_stats-main">

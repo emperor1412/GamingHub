@@ -91,7 +91,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
 
 
   // Fetch premium data from API
-  const fetchPremiumData = async () => {
+  const fetchPremiumData = async (depth = 0) => {
     try {
       if (!shared.loginData?.token) {
         console.log('No login token available for premium data API');
@@ -149,6 +149,24 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             
             setRewards(processedRewards);
             console.log('✅ Processed rewards with multiple items per level:', processedRewards);
+          }
+        } else if (data.code === 102001 || data.code === 102002) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            console.log('Token refresh successful, retrying fetchPremiumData...');
+            return fetchPremiumData(depth + 1);
+          } else {
+            console.error('Token refresh failed:', loginResult.error);
+            // Show error popup for login failure
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Error',
+                message: 'Session expired. Please try again.',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
           }
         } else {
           console.log('Unexpected premium data API response format:', data);
@@ -292,7 +310,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
   }, [isOpen]);
 
   // Function to claim reward and show popup
-  const handleClaimReward = async (rewardIndex) => {
+  const handleClaimReward = async (rewardIndex, depth = 0) => {
     console.log('handleClaimReward called with index:', rewardIndex);
     console.log('rewards[rewardIndex]:', rewards[rewardIndex]);
     console.log('currentLevel:', currentLevel);
@@ -353,6 +371,24 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
             // Show success popup
             setShowConfirmPopup(true);
             console.log('✅ Reward claimed successfully!');
+          }
+        } else if (data.code === 102001 || data.code === 102002) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            console.log('Token refresh successful, retrying handleClaimReward...');
+            return handleClaimReward(rewardIndex, depth + 1);
+          } else {
+            console.error('Token refresh failed:', loginResult.error);
+            // Show error popup for login failure
+            if (window.Telegram?.WebApp?.showPopup) {
+              await window.Telegram.WebApp.showPopup({
+                title: 'Error',
+                message: 'Session expired. Please try again.',
+                buttons: [{ id: 'ok', type: 'ok', text: 'OK' }]
+              });
+            }
           }
         } else {
           console.error('Claim reward failed:', data.message || 'Unknown error');

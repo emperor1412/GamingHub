@@ -55,7 +55,7 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
       },
       {
         id: 3,
-        title: "PLAY TADOKAMI",
+        title: "COMPLETE CHAPTER",
         xp: 50,
         progress: getActivityCount(Activity_PlayTadokami),
         total: 1,
@@ -136,7 +136,7 @@ const PremiumTasks = ({ isOpen, onClose, currentXP = 0, dailyExp = 0, activities
         },
         {
           id: 3,
-          title: "PLAY TADOKAMI",
+          title: "COMPLETE CHAPTER",
           xp: 50,
           progress: 0,
           total: 1,

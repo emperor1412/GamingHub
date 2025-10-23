@@ -50,7 +50,7 @@ import lock_icon from "./images/lock_trophy.png";
 import freezeBG from './images/FreezeStreaksBG.png';
 import freezeText from './images/FreezeStreaksText.png';
 
-import loading_background from "./images/GamesHubLoading.png";
+import loading_background from "./images/FSLGameHub_halloween_1586_1@2x.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 // import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
 
