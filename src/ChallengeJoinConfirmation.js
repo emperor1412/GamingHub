@@ -239,7 +239,7 @@ const ChallengeJoinConfirmation = ({
             </div>
             
             <div className="cjc-warning-text">
-              YOU ARE ABOUT TO ENTER THE WEEKLY CHALLENGE USING {starletsCost} STARLETS.
+              YOU ARE ABOUT TO ENTER THE {type.toUpperCase()} CHALLENGE USING {starletsCost} STARLETS.
             </div>
 
               {/* Join Button */}
