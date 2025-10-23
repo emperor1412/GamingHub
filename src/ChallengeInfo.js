@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ChallengeInfo.css';
 import starletIcon from './images/starlet.png';
 import backIcon from './images/back.svg';
+import stepIcon from './images/step_icon.png';
 // import legIcon from './images/legIcon.png';
 
 const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
@@ -44,8 +45,8 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
                         <div className="info-challenge-name" style={{ fontSize: fontSize }}>{challenge.title.toUpperCase()}</div>
                     </div>
                     <div className="info-challenge-reward">
-                        <img src={starletIcon} alt="Starlet" className="info-starlet-icon" />
-                        <span className="info-reward-amount">{challenge.reward}</span>
+                        <img src={stepIcon} alt="Starlet" className="info-starlet-icon" />
+                        <span className="info-reward-amount">{challenge.stepsEst.toLocaleString()}</span>
                     </div>
                 </div>
 
