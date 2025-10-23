@@ -1144,43 +1144,33 @@ Response:
             <div className="scrollable-content">
                 {/* Premium Section - Top Row */}
                 <section className="tickets-section">
-                    <button 
-                        className={`mv_ticket-button premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`} 
-                        onClick={() => onClickPremium()}
-                        disabled={isCheckingPremiumStatus}
-                    >
+                    <button className="mv_ticket-button" onClick={() => setShowChallengesMenu(true)}>
                         <div className='mv_ticket-button-image-container'>
                             <img
-                                src={premium_mainview}
+                                src={challengesBg}
                                 alt="Premium Background"
                                 className="mv_ticket-button-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
+                            <div className='check-out-button large-banner'>RUNNING CHALLENGES</div>
                         </div>
                     </button>
                 </section>
 
-                {/* Daily Tasks and BANK STEPS - Second Row */}
+            
                 <section className="locked-sections">
-                    <button 
-                        className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
-                        onClick={() => dailyTaskStatus !== 1 && onClickDailyTasks()}
-                        disabled={dailyTaskStatus === 1}
-                    >
-                        <div className='locked-card-image-container'>
-                            <img
-                                src={dailyTasks}
-                                alt="Daily Tasks"
-                                className="locked-card-image minigames"
-                                style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
-                            /> 
-                            <div className='mv_ticket-button-container-border'></div>
-                            {/* <div className='check-out-button'>Daily Tasks</div> */}
-                            <div className='locked-card-text'></div>
-                        </div>
-                        {dailyTaskStatus === 1 && (
-                            <div className="sold-out-overlay">COMPLETED</div>
-                        )}
+                    <button className={`locked-card premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`}  
+                        onClick={() => onClickPremium()}
+                        disabled={isCheckingPremiumStatus}>
+                            <div className='locked-card-image-container'>
+                                <img
+                                    src={premium_mainview}
+                                    alt="Leaderboard Coming Soon"   
+                                    className="locked-card-image"
+                                />
+                                <div className='mv_ticket-button-container-border'></div>
+                                <div className='check-out-button align-center'>earn rewards<br></br> from playing</div>
+                            </div>
                     </button>
 
                     <button className="locked-card" onClick={() => setShowBankStepsView(true)}>
@@ -1194,17 +1184,37 @@ Response:
                             <div className='check-out-button'>BANK STEPS</div>
                         </div>
                     </button>
-
-                    {/* Challenges */}
-                    <button className="locked-card" onClick={() => setShowChallengesMenu(true)}>
+                    <button 
+                        className={`locked-card ${dailyTaskStatus === 1 ? 'sold-out' : ''}`} 
+                        onClick={() => dailyTaskStatus !== 1 && onClickDailyTasks()}
+                        disabled={dailyTaskStatus === 1}
+                    >
                         <div className='locked-card-image-container'>
                             <img
-                                src={challengesBg}
-                                alt="Leaderboard Coming Soon"   
+                                src={dailyTasks}
+                                alt="Daily Tasks"
+                                className="locked-card-image minigames"
+                                style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
+                            /> 
+                            <div className='mv_ticket-button-container-border'></div>
+                            <div className='check-out-button'>PLAY NOW!</div>
+                            <div className='locked-card-text'></div>
+                        </div>
+                        {dailyTaskStatus === 1 && (
+                            <div className="sold-out-overlay">COMPLETED</div>
+                        )}
+                    </button>
+
+                    <button className="locked-card" onClick={() => onClickOpenGame()}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={tadokami_mainview}
+                                alt="Tadokami"
                                 className="locked-card-image"
                             />
-                            <div className='ticket-button-container-border'></div>
-                            <div className='challenges-text'>CHALLENGES</div>
+                            <div className='mv_ticket-button-container-border'></div>
+                            <div className='check-out-button'>PLAY NOW!</div>
+                            <div className='locked-card-text'></div>
                         </div>
                     </button>
 
@@ -1222,19 +1232,6 @@ Response:
 
                 {/* Tadokami and Flipping Stars - Third Row with new images */}
                 <section className="locked-sections">
-                    <button className="locked-card" onClick={() => onClickOpenGame()}>
-                        <div className='locked-card-image-container'>
-                            <img
-                                src={tadokami_mainview}
-                                alt="Tadokami"
-                                className="locked-card-image"
-                            />
-                            <div className='mv_ticket-button-container-border'></div>
-                            {/* <div className='check-out-button'>TADOKAMI</div> */}
-                            <div className='locked-card-text'></div>
-                        </div>
-                    </button>
-
                     <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='locked-card-image-container'>
                             <img
@@ -1243,23 +1240,36 @@ Response:
                                 className="locked-card-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            {/* <div className='check-out-button'>FLIPPING STARS</div> */}
+                            <div className='check-out-button align-left'>GRAND JACKPOT<br></br> {totalFlips.toString().padStart(8, '0')}</div>
                             <div className='locked-card-text'></div>
                         </div>
-                        <div className="locked-card-flips">
+                        {/* <div className="locked-card-flips">
                             <span className="locked-card-flips-label">GLOBAL FLIPS</span>
                             <span className="locked-card-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
                         </div>
                         <div className="locked-card-jackpot">
                             <span className="locked-card-jackpot-label">GRAND JACKPOT</span>
                             <span className="locked-card-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
+                        </div> */}
+                    </button>
+
+                    <button className="locked-card" onClick={() => setShowTicketView(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={my_ticket}
+                                alt="Tadokami"
+                                className="locked-card-image"
+                            />
+                            <div className='mv_ticket-button-container-border'></div>
+                            <div className='check-out-button align-left'>Scratch tickets. earn rewards </div>
+                            <div className='locked-card-text'></div>
                         </div>
                     </button>
                 </section>
 
 
                 {/* Tickets underneath the games */}
-                <section className="tickets-section">
+                {/* <section className="tickets-section">
                     <button className="mv_ticket-button" onClick={() => setShowTicketView(true)}>
                         <div className='mv_ticket-button-image-container'>
                             <img
@@ -1275,7 +1285,7 @@ Response:
                             </div>
                         </div>
                     </button>
-                </section>
+                </section> */}
 
                 {/* Egglet Event Section - only shown if event is active */}
                 {eventActive && (
