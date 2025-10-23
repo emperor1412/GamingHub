@@ -93,7 +93,7 @@
 
 .stat-item-main-text {
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 16px;
     font-style: italic;
     font-weight: 800;
@@ -201,7 +201,7 @@
     width: 100%;
     text-align: center;
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 10px;
     font-weight: 800;
     line-height: normal;
@@ -227,7 +227,7 @@
 }
 
 .game-card-small-flips-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 9px;
     font-weight: 700;
     color: #000FEF;
@@ -236,7 +236,7 @@
 }
 
 .game-card-small-flips-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 9px;
     font-weight: 700;
     color: #FFF;
@@ -265,7 +265,7 @@
 }
 
 .game-card-small-jackpot-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 9px;
     font-weight: 700;
     color: #FF00F6;
@@ -274,7 +274,7 @@
 }
 
 .game-card-small-jackpot-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 9px;
     font-weight: 700;
     color: #FFF;
@@ -302,7 +302,7 @@
 }
 
 .locked-card-flips-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 7px;
     font-weight: 700;
     color: #000FEF;
@@ -311,7 +311,7 @@
 }
 
 .locked-card-flips-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 7px;
     font-weight: 700;
     color: #FFF;
@@ -340,7 +340,7 @@
 }
 
 .locked-card-jackpot-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 7px;
     font-weight: 700;
     color: #FF00F6;
@@ -349,7 +349,7 @@
 }
 
 .locked-card-jackpot-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 7px;
     font-weight: 700;
     color: #FFF;
@@ -391,7 +391,7 @@
     box-sizing: border-box;
 
     color: #83807F;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 14px;
     font-style: italic;
     font-weight: 800;
@@ -421,6 +421,7 @@
 
     border-radius: 16px;
     box-sizing: border-box;
+    margin-bottom: 5px;
 }
 
 .locked-card-image {
@@ -441,7 +442,7 @@
     position: absolute;
 
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 14px;
     font-style: italic;
     font-weight: 800;
@@ -472,7 +473,7 @@
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.8);
     color: #808080;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 12px;
     font-weight: bold;
     padding: 4px 8px;
@@ -510,7 +511,7 @@
 }
 
 .events-carousel {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: none;
     display: flex;
@@ -682,7 +683,7 @@
 }
 
 .ticket-total-flips-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 13px;
     font-weight: 700;
     color: #000FEF;
@@ -691,7 +692,7 @@
 }
 
 .ticket-total-flips-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 13px;
     font-weight: 700;
     color: #FFF;
@@ -719,7 +720,7 @@
 }
 
 .ticket-total-jackpot-label {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 13px;
     font-weight: 700;
     color: #FF00F6;
@@ -728,7 +729,7 @@
 }
 
 .ticket-total-jackpot-count {
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 13px;
     font-weight: 700;
     color: #FFF;
@@ -752,7 +753,7 @@
     right: 0;
     bottom: 0;
     border-radius: 16px;
-    border: 2px solid #0000FF;
+    border: 2px solid #000FEF;
     pointer-events: none;
 }
 
@@ -776,21 +777,10 @@
 }
 
 .event-card {
-    min-width: 100%;
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
-    user-select: none;
-    -webkit-user-drag: none;
-    touch-action: pan-x pan-y;
-    /* pointer-events: none; */
-}
-
-.event-card {
     position: relative;
     min-width: 100%;
     flex: 0 0 100%;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     border: none;
     padding: 0;
     cursor: pointer;
@@ -830,7 +820,7 @@
     text-align: left;
 
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 19px;
     font-style: italic;
     font-weight: 800;
@@ -846,7 +836,7 @@
     position: absolute;
 
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 14px;
     font-style: italic;
     font-weight: 400;
@@ -863,7 +853,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0000FF;
+    background: #000FEF;
     padding: 6px;
     border: none;
     border-radius: 0 0 13px 13px;
@@ -872,11 +862,49 @@
     text-align: center;
 
     color: #FFF;
-    font-family: "PP Neue Machina";
-    font-size: 12px;
-    font-weight: 800;
+    font-family: "PP Neue Machina Inktrap";
+    font-size: 12.5px;
+    font-weight: 700;
     line-height: normal;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    margin-bottom: -3px;
+}
+
+.check-out-button.align-left {
+    text-align: left;
+    justify-content: left;
+
+    /* padding: 10px; */
+    padding-left: 18.5px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    font-size: 12.5px;
+    margin-bottom: -3px;
+}
+
+.check-out-button.align-center {
+    justify-content: left;
+
+    text-align: left;
+    /* padding: 10px; */
+    padding-left: 28.5px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    font-size: 12.5px;
+    margin-bottom: -3px;
+}
+
+.check-out-button.large-banner {
+    text-align: left;
+    justify-content: left;
+    padding-left: 28.5px;
+    /* padding: 10px; */
+    letter-spacing: 0.5px;
+    line-height: 1;
+    font-size: 12.5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .check-out-button.ticket {
@@ -898,7 +926,7 @@
     transform: translateX(-50%);
     background: #000;
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 13.89px;
     font-weight: 700;
     text-transform: uppercase;
@@ -988,7 +1016,7 @@
     margin-left: 2px;
 
     color: #FFF;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-size: 10px;
     font-style: italic;
     font-weight: 800;
@@ -1074,7 +1102,7 @@
     color: #0000FF;
     letter-spacing: 0.5px;
     margin: 0;
-    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    font-family: "PP Neue Machina Inktrap", "Arial Black", sans-serif;
     text-transform: uppercase;
     text-align: left;
     line-height: 0.9;
@@ -1102,7 +1130,7 @@
     display: inline-block;
     padding: 1px 4px;
     text-transform: uppercase;
-    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    font-family: "PP Neue Machina Inktrap", "Arial Black", sans-serif;
     text-align: left;
 }
 
@@ -1118,7 +1146,7 @@
     border: 2px solid white;
     border-radius: 0;
     text-transform: uppercase;
-    font-family: "PP Neue Machina", "Arial Black", sans-serif;
+    font-family: "PP Neue Machina Inktrap", "Arial Black", sans-serif;
     z-index: 2;
 }
 
@@ -1236,7 +1264,7 @@
     color: white;
     font-size: 54.86px;
     font-weight: 700;
-    font-family: "PP Neue Machina", sans-serif;
+    font-family: "PP Neue Machina Inktrap", sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
