@@ -101,12 +101,22 @@ const ChallengeJoinConfirmation = ({
           onShowError();
         }
       } else {
-        // Other errors
+        // Other errors - show Telegram popup with backend error message
         console.error('Failed to join challenge:', result.error);
-        // You can show a generic error message here
+        await shared.showPopup({
+          type: 0, // Error type
+          title: 'Join Challenge Failed',
+          message: result.error || 'Failed to join challenge. Please try again.'
+        });
       }
     } catch (error) {
       console.error('Error joining challenge:', error);
+      // Show Telegram popup for unexpected errors
+      await shared.showPopup({
+        type: 0, // Error type
+        title: 'Join Challenge Failed',
+        message: 'An unexpected error occurred. Please try again.'
+      });
     } finally {
       setIsJoining(false);
     }
