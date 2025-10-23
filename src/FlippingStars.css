@@ -210,6 +210,10 @@ body::-webkit-scrollbar-track,
   text-transform: uppercase;
 }
 
+.fc_stat-item-main-text.right-avatar-text {
+  margin-left: 6px;
+}
+
 /* Sound Control Button */
 .fc_sound-control {
   position: absolute;
@@ -1250,6 +1254,14 @@ body::-webkit-scrollbar-track,
   position: relative;
   z-index: 1;
   letter-spacing: 0.1em;
+}
+
+.welcome-lfg-text {
+  font-size: 21px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: none;
+  letter-spacing: 0.05em;
 }
 
 .fc_flip-btn:hover {
