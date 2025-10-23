@@ -31,6 +31,7 @@ import eggletBackground from './images/Egglets_Background.png';
 import premium_mainview from './images/premium_mainview.png';
 import tadokami_mainview from './images/tadokami_mainview.png';
 import flippingstars_mainview from './images/flippingstars_mainview.png';
+import leaderboard_mainview from './images/leaderboard_mainview.png';
 
 import { popup, openLink } from '@telegram-apps/sdk';
 
@@ -49,7 +50,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, setShowLeaderboardGlobal, getProfileData}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
@@ -1232,6 +1233,19 @@ Response:
                     </button>
                 </section>
 
+                <section className="locked-sections">
+                    <button className="locked-card" onClick={() => setShowLeaderboardGlobal(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={leaderboard_mainview}
+                                alt="leaderboard"
+                                className="locked-card-image"
+                            />
+                            <div className='mv_ticket-button-container-border'></div>
+                            <div className='locked-card-text'></div>
+                        </div>
+                    </button>
+                </section>
 
                 {/* Tickets underneath the games */}
                 <section className="tickets-section">

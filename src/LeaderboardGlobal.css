@@ -1,0 +1,510 @@
+/* LeaderboardGlobal.css */
+.leaderboard-global {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Subtract header height (80px) and bottom nav height (80px) */
+    display: flex;
+    flex-direction: column;
+    max-width: 430px;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+/* Background Container - chỉ cho LeaderboardGlobal */
+.leaderboard-global .background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.leaderboard-global .background-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Content Styles */
+.leaderboard-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 60px 20px 60px 20px;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    z-index: 1;
+    
+    /* Hide scrollbars */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.leaderboard-content::-webkit-scrollbar {
+    display: none;
+}
+
+.leaderboard-global-title {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 91%;
+    letter-spacing: 0%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-word {
+    background-color: #0000FF;
+    color: white;
+    font-family: "PP Neue Machina";
+    font-weight: 700;
+    font-style: normal;
+    font-size: 15px;
+    line-height: 91%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: uppercase;
+    padding: 3px 12px 0px;
+    min-width: fit-content;
+}
+
+/* Loading Styles */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding-top: 80px;
+}
+
+.loading-text {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Podium Section */
+.podium-section {
+    margin-top: 60px;
+}
+
+.podium-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.podium-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    /* background: linear-gradient(180deg, #0000FF, #000000);
+    border-radius: 12px;
+    padding: 05px 05px; */
+}
+
+.podium-item.rank-1 {
+    order: 2;
+    transform: scale(1.1);
+}
+
+.podium-item.rank-2 {
+    order: 1;
+}
+
+.podium-item.rank-3 {
+    order: 3;
+}
+
+.rank-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 800;
+    color: #000;
+    z-index: 2;
+        /* background: linear-gradient(180deg, #0000FF, #000000);
+    border-radius: 12px;
+    padding: 05px 05px; */
+}
+
+.podium-item.rank-1 .rank-badge {
+    background: #FFD700;
+}
+
+.podium-item.rank-2 .rank-badge {
+    background: #C0C0C0;
+}
+
+.podium-item.rank-3 .rank-badge {
+    background: #CD7F32;
+}
+
+.podium-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 4px solid;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: absolute;
+    top: -40px;
+    z-index: 3;
+}
+
+.podium-item.rank-1 .podium-avatar {
+    width: 92px;
+    height: 92px;
+    border-color: #FFD700;
+}
+
+.podium-item.rank-2 .podium-avatar {
+    border-color: #C0C0C0;
+    top: -35px;
+}
+
+.podium-item.rank-3 .podium-avatar {
+    border-color: #CD7F32;
+    top: -35px;
+}
+
+.podium-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.podium-info {
+    text-align: center;
+    background: linear-gradient(180deg, #0000FF, #000000);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 100px;
+    min-width: 100px;
+}
+
+.podium-item.rank-1 .podium-info {
+    min-width: 120px;
+}
+
+.podium-item.rank-2 .podium-info {
+    min-height: 80px;
+}
+
+.podium-item.rank-3 .podium-info {
+    min-height: 80px;
+}
+
+.podium-username {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 80%;
+    letter-spacing: 0%;
+    margin-bottom: 5px;
+}
+
+.podium-steps {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 80%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rewards-button {
+    flex: 1;
+    background: linear-gradient(180deg, #FF00F6, #000000);
+    border: none;
+    border-radius: 12px;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.rewards-button:hover {
+    transform: scale(1.02);
+}
+
+.rewards-button span {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 96%;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 2px;
+}
+
+.star-icons {
+    color: #FFF;
+    font-size: 14px;
+}
+
+.season-button {
+    flex: 1;
+    background: linear-gradient(180deg, #000FEF, #000000);
+    border: none;
+    border-radius: 12px;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.season-button:hover {
+    transform: scale(1.02);
+}
+
+.season-button span {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 96%;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* Your Rank Section */
+.your-rank-section {
+    margin-bottom: 10px;
+}
+
+.section-title {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 80%;
+    letter-spacing: 0%;
+    margin: 10px 0 10px 0;
+    font-stretch: normal;
+    font-variant: normal;
+    font-style: normal;
+}
+
+.your-rank-card {
+    background: #000FEF;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rank-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rank-number {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.user-avatar {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.username {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.steps-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.steps-count {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+    margin-bottom: 1px;
+}
+
+.steps-label {
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+}
+
+/* Top 10 Section */
+.top-10-section {
+    margin-bottom: 30px;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-item {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    border-top: 1px solid #000FEF;
+}
+
+.item-rank {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700; 
+    min-width: 50px;
+}
+
+.item-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.item-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-username {
+    flex: 1;
+    color: #FFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.item-steps-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-steps-count {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+    margin-bottom: 1px;
+}
+
+.item-steps-label {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+    margin-bottom: 1px;
+}
+
+/* Bottom Navigation - giống FlippingStars */
+.fc_bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-around;
+    padding: 0px 0;
+    backdrop-filter: blur(10px);
+    touch-action: none;
+    z-index: 1000;
+    height: 80px;
+    pointer-events: auto;
+}
+
+.fc_bottom-nav button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.fc_bottom-nav button img {
+    width: 32px;
+    height: 32px;
+}
