@@ -1269,7 +1269,7 @@ Response:
                                 className="locked-card-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            <div className='check-out-button align-left'>Scratch tickets. earn rewards </div>
+                            <div className='check-out-button align-left'>Scratch tickets<br></br> earn rewards </div>
                             <div className='locked-card-text'></div>
                         </div>
                     </button>
