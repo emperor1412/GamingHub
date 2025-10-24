@@ -809,10 +809,24 @@ const bind_fslid = async () => {
           onClose={handleLeaderboardGlobalClose}
           setShowProfileView={setShowProfileView}
           setActiveTab={setActiveTab}
+          checkIn={checkIn}
+          checkInData={checkInData}
+          setShowCheckInAnimation={setShowCheckInAnimation}
         />
       )
       :
       (
+
+        // <div className="app-container">
+        // {showLeaderboardGlobal ? (
+        //   <LeaderboardGlobal 
+        //     onClose={handleLeaderboardGlobalClose}
+        //     setShowProfileView={setShowProfileView}
+        //     setActiveTab={setActiveTab}
+        //   />
+        // ) : (
+        //   renderActiveView()
+        // )}
         <div className="app-container">
           {renderActiveView()}
 

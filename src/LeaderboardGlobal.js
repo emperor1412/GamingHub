@@ -10,13 +10,17 @@ import Task_normal from './images/Task_normal.svg';
 import Friends_normal from './images/Friends_normal.svg';
 import Market_normal from './images/Market_normal.svg';
 import ID_normal from './images/ID_normal.svg';
+import spark from './images/Spark.png';
+import calendar from './images/calendar.svg';
+import calendar_before_checkin from './images/calendar_before_checkin.svg';
 
-const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab }) => {
+const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [userRank, setUserRank] = useState(null);
     const [loading, setLoading] = useState(true);
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
+    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
 
     // Setup profile data
     const setupProfileData = () => {
@@ -64,6 +68,20 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab }) => {
 
     const formatSteps = (steps) => {
         return steps.toLocaleString();
+    };
+
+    const onClickCheckIn = async () => {
+        if (checkIn) {
+            try {
+                const result = await checkIn();
+                console.log('Check-in result:', result);
+                if (result === 1) {
+                    setShowCheckInAnimation(true);
+                }
+            } catch (error) {
+                console.error('Check-in error:', error);
+            }
+        }
     };
 
     const getRankBorderColor = (rank) => {
@@ -132,11 +150,19 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab }) => {
                         <img src={starlet} alt="Starlets" />
                         <span className="stat-item-text">{starlets}</span>
                     </button>
-                    <div className="stat-item">
-                        <button className="stat-button" onClick={onClose}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                    <div className="stat-item-main">
+                        <button className="stat-button" onClick={() => onClickCheckIn()}>
+                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Check-in" />
+                            <div className="check-in-text">
+                                {showTextCheckIn ? (
+                                    <>
+                                        <span>CHECK-IN</span>
+                                        <span>TODAY</span>
+                                    </>
+                                ) : (
+                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
+                                )}
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -151,6 +177,11 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab }) => {
                 {/* Content */}
                 <div className="leaderboard-content">
                     <div className="leaderboard-global-title">
+                        {/* Corner borders for title */}
+                        <div className="leaderboard-corner leaderboard-top-left"></div>
+                        <div className="leaderboard-corner leaderboard-top-right"></div>
+                        <div className="leaderboard-corner leaderboard-bottom-left"></div>
+                        <div className="leaderboard-corner leaderboard-bottom-right"></div>
                         <div className="title-word">STEP</div>
                         <div className="title-word">LEADERBOARD</div>
                     </div>
@@ -207,6 +238,13 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab }) => {
                     {/* Action Buttons */}
                     <div className="action-buttons">
                         <button className="rewards-button">
+                            {/* Sparkle icons */}
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-top-left" />
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-top-right" />
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-left" />
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-right" />
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-top1" />
+                            <img src={spark} alt="sparkle" className="sparkle sparkle-top2" />
                             <span>VIEW RANK</span>
                             <span>REWARDS</span>
                         </button>

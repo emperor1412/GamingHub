@@ -1,4 +1,16 @@
 /* LeaderboardGlobal.css */
+
+/* Corner borders variables */
+:root {
+    --leaderboard-corner-size: 10px;
+    --leaderboard-corner-border-width: 1px;
+    --leaderboard-corner-color: #FFFFFF;
+    --leaderboard-corner-top-offset: -5px;
+    --leaderboard-corner-bottom-offset: -5px;
+    --leaderboard-corner-left-offset: 90px;
+    --leaderboard-corner-right-offset: 90px;
+}
+
 .leaderboard-global {
     position: relative;
     width: 100%;
@@ -56,10 +68,10 @@
     line-height: 91%;
     letter-spacing: 0%;
     margin-top: 10px;
-    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 .title-word {
@@ -76,6 +88,42 @@
     text-transform: uppercase;
     padding: 3px 12px 0px;
     min-width: fit-content;
+}
+
+/* Corner borders for leaderboard title */
+.leaderboard-corner {
+    position: absolute;
+    width: var(--leaderboard-corner-size);
+    height: var(--leaderboard-corner-size);
+    border: var(--leaderboard-corner-border-width) solid var(--leaderboard-corner-color);
+}
+
+.leaderboard-top-left {
+    top: var(--leaderboard-corner-top-offset);
+    left: var(--leaderboard-corner-left-offset);
+    border-right: none;
+    border-bottom: none;
+}
+
+.leaderboard-top-right {
+    top: var(--leaderboard-corner-top-offset);
+    right: var(--leaderboard-corner-right-offset);
+    border-left: none;
+    border-bottom: none;
+}
+
+.leaderboard-bottom-left {
+    bottom: var(--leaderboard-corner-bottom-offset);
+    left: var(--leaderboard-corner-left-offset);
+    border-right: none;
+    border-top: none;
+}
+
+.leaderboard-bottom-right {
+    bottom: var(--leaderboard-corner-bottom-offset);
+    right: var(--leaderboard-corner-right-offset);
+    border-left: none;
+    border-top: none;
 }
 
 /* Loading Styles */
@@ -96,7 +144,8 @@
 
 /* Podium Section */
 .podium-section {
-    margin-top: 60px;
+    padding-top: 80px;
+    background: radial-gradient(50% 50% at 50% 50%, #FF00F6 27.4%, #000000 100%);
 }
 
 .podium-container {
@@ -132,42 +181,46 @@
 
 .rank-badge {
     position: absolute;
-    top: -10px;
+    top: -52px;
     left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: "PP Neue Machina";
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 15px;
+    font-weight: 700;
     color: #000;
-    z-index: 2;
+    line-height: 80%;
+    letter-spacing: 0%;
+    z-index: 4;
         /* background: linear-gradient(180deg, #0000FF, #000000);
     border-radius: 12px;
     padding: 05px 05px; */
 }
 
 .podium-item.rank-1 .rank-badge {
-    background: #FFD700;
+    background: linear-gradient(219.78deg, #B07515 -5.86%, #E0BA5F 10.59%, #F5D77F 19.72%, #FFFFD7 41.65%, #F5D77F 59.92%, #B07515 83.67%, #E0BA5F 98.28%, #F5D77F 105.59%, #FFFFD7 129.34%, #F5D77F 147.61%, #B07515 176.84%);
 }
 
 .podium-item.rank-2 .rank-badge {
-    background: #C0C0C0;
+    background: linear-gradient(45deg, #FFFFFF 14.66%, #CBCBCB 25.97%, #9E9E9E 36.57%, #828282 45.05%, #787878 50%, #858585 55.65%, #AAAAAA 66.25%, #E5E5E5 79.68%, #FFFFFF 85.34%);
+    top: -45px;
 }
 
 .podium-item.rank-3 .rank-badge {
-    background: #CD7F32;
+    background: linear-gradient(45deg, #E8963F 14.64%, #BF6900 54.24%, #C8740D 63.44%, #DF9132 80.41%, #E89C3F 85.36%);
+    top: -45px;
 }
 
 .podium-avatar {
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    border: 4px solid;
+    border: 4px solid transparent;
     overflow: hidden;
     margin-bottom: 10px;
     position: absolute;
@@ -178,16 +231,19 @@
 .podium-item.rank-1 .podium-avatar {
     width: 92px;
     height: 92px;
-    border-color: #FFD700;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(90deg, #B07515 -1%, #E0BA5F 8.18%, #F5D77F 13.28%, #FFFFD7 25.52%, #F5D77F 35.72%, #B07515 48.98%, #E0BA5F 57.14%, #F5D77F 61.22%, #FFFFD7 74.48%, #F5D77F 84.68%, #B07515 101%) border-box;
 }
 
 .podium-item.rank-2 .podium-avatar {
-    border-color: #C0C0C0;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(90deg, #FFFFFF -1.52%, #CBCBCB 14.97%, #9E9E9E 30.43%, #828282 42.79%, #787878 50.01%, #858585 58.25%, #AAAAAA 73.71%, #E5E5E5 93.29%, #FFFFFF 101.54%) border-box;
     top: -35px;
 }
 
 .podium-item.rank-3 .podium-avatar {
-    border-color: #CD7F32;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(90deg, #E8963F -1.54%, #BF6900 56.17%, #C8740D 69.57%, #DF9132 94.3%, #E89C3F 101.52%) border-box;
     top: -35px;
 }
 
@@ -249,6 +305,8 @@
     flex-direction: row;
     gap: 10px;
     margin-bottom: 10px;
+    height: 45px;
+    min-width: 150px;
 }
 
 .rewards-button {
@@ -256,13 +314,71 @@
     background: linear-gradient(180deg, #FF00F6, #000000);
     border: none;
     border-radius: 12px;
-    padding: 15px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative;
+    height: 45px;
+    min-width: 150px;
+}
+
+/* Sparkle icons */
+.sparkle {
+    position: absolute;
+    width: 10px;
+    height: 12px;
+    animation: sparkleBlink 2s infinite;
+}
+
+.sparkle-top-left {
+    top: 8px;
+    left: 16px;
+    animation-delay: 0s;
+}
+
+.sparkle-top-right {
+    top: 8px;
+    right: 16px;
+    animation-delay: 0.5s;
+}
+
+.sparkle-bottom-left {
+    bottom: 8px;
+    left: 24px;
+    animation-delay: 1s;
+}
+
+.sparkle-bottom-right {
+    bottom: 8px;
+    right: 24px;
+    animation-delay: 1.5s;
+}
+
+.sparkle-top1 {
+    top: 0px;
+    right: 32px;
+    animation-delay: 0s;
+}
+
+.sparkle-top2 {
+    top: 0px;
+    left: 32px;
+    animation-delay: 0s;
+}
+
+/* Sparkle blink animation */
+@keyframes sparkleBlink {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
 }
 
 .rewards-button:hover {
@@ -291,7 +407,6 @@
     background: linear-gradient(180deg, #000FEF, #000000);
     border: none;
     border-radius: 12px;
-    padding: 15px 10px;
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -473,38 +588,3 @@
     margin-bottom: 1px;
 }
 
-/* Bottom Navigation - giống FlippingStars */
-.fc_bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 430px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-around;
-    padding: 0px 0;
-    backdrop-filter: blur(10px);
-    touch-action: none;
-    z-index: 1000;
-    height: 80px;
-    pointer-events: auto;
-}
-
-.fc_bottom-nav button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.fc_bottom-nav button img {
-    width: 32px;
-    height: 32px;
-}
