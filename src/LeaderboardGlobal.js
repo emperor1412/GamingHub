@@ -3,7 +3,6 @@ import './LeaderboardGlobal.css';
 import background from './images/background_2.png';
 import shared from './Shared';
 import ticketIcon from './images/ticket.svg';
-import starlet from './images/starlet.png';
 import premiumDiamond from './images/Premium_icon.png';
 import HomeIcon_normal from './images/Home_normal.svg';
 import Task_normal from './images/Task_normal.svg';
@@ -14,6 +13,9 @@ import spark from './images/Spark.png';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import RewardsPopup from './LeaderboardRewardsPopup';
+import starlet from './images/starlet.png';
+import km from './images/km.svg';
+import bcoin from './images/bCoin_icon.png';
 
 const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -23,6 +25,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
     const [ticket, setTicket] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [showRewardsPopup, setShowRewardsPopup] = useState(false);
+    const [isSeasonEnded, setIsSeasonEnded] = useState(true); // Biến để kiểm tra season đã kết thúc
 
     // Setup profile data
     const setupProfileData = () => {
@@ -184,9 +187,49 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                         <div className="leaderboard-corner leaderboard-top-right"></div>
                         <div className="leaderboard-corner leaderboard-bottom-left"></div>
                         <div className="leaderboard-corner leaderboard-bottom-right"></div>
-                        <div className="title-word">STEP</div>
-                        <div className="title-word">LEADERBOARD</div>
+                        {isSeasonEnded ? (
+                            <div className="title-word">SEASON ENDED</div>
+                        ) : (
+                            <>
+                                <div className="title-word">STEP</div>
+                                <div className="title-word">LEADERBOARD</div>
+                            </>
+                        )}
                     </div>
+
+                    {/* Your Rank - chỉ hiển thị khi season ended */}
+                    {isSeasonEnded && (
+                        <>
+                        <div className="next-season-content">
+                            <div className="next-season-text">
+                                NEXT SEASON BEGINS IN:
+                            </div>
+                            <div className="next-season-date">
+                                12/30/25 00:00 UTC
+                            </div>
+                        </div>
+                        <div className="your-rank-section your-rank-section-ended">
+                            <div className="section-title">YOUR RANK</div>
+                            <div className="your-rank-card your-rank-card-ended">
+                                <div className="rank-info">
+                                    <span className="rank-number">{userRank?.rank || 0}</span>
+                                    <div className="user-avatar">
+                                        <img 
+                                            src={shared.avatars[userRank?.avatar || 0]?.src} 
+                                            alt="Your Avatar" 
+                                        />
+                                    </div>
+                                    <span className="username">{userRank?.username || "PLAYER"}</span>
+                                </div>
+                                <div className="steps-info">
+                                    <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
+                                    <span className="steps-label">STEPS</span>
+                                </div>
+                            </div>
+                        </div>
+                        </>
+                    )}
+
                     {/* Top 3 Podium */}
                     <div className="podium-section">
                         <div className="podium-container">
@@ -239,42 +282,120 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
 
                     {/* Action Buttons */}
                     <div className="action-buttons">
-                        <button className="rewards-button" onClick={() => setShowRewardsPopup(true)}>
-                            {/* Sparkle icons */}
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-top-left" />
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-top-right" />
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-left" />
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-right" />
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-top1" />
-                            <img src={spark} alt="sparkle" className="sparkle sparkle-top2" />
-                            <span>VIEW RANK</span>
-                            <span>REWARDS</span>
-                        </button>
-                        <button className="season-button">
-                            <span>SEASON ENDS IN: 09/30/25 00:00 UTC</span>
-                        </button>
+                        {isSeasonEnded ? (
+                            <>
+                            {/* Season Ended Content - chia thành 3 phần match với top 3 */}
+                            <div className="season-ended-content">
+                                <div className="season-ended-item">
+                                    <div className="reward-row reward-row-top">
+                                        <div className="reward-icon">
+                                            <img src={starlet} alt="Star" />
+                                        </div>
+                                        <span className="reward-text">7</span>
+                                    </div>
+                                    <div className="reward-row-bottom-container">
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">15k</span>
+                                        </div>
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">7K</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="season-ended-item">
+                                    <div className="reward-row reward-row-top">
+                                        <div className="reward-icon">
+                                            <img src={starlet} alt="Star" />
+                                        </div>
+                                        <span className="reward-text">7</span>
+                                    </div>
+                                    <div className="reward-row-bottom-container">
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">15k</span>
+                                        </div>
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">7K</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="season-ended-item">
+                                    <div className="reward-row reward-row-top">
+                                        <div className="reward-icon">
+                                            <img src={starlet} alt="Star" />
+                                        </div>
+                                        <span className="reward-text">7</span>
+                                    </div>
+                                    <div className="reward-row-bottom-container">
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">15k</span>
+                                        </div>
+                                        <div className="reward-row reward-row-bottom">
+                                            <div className="reward-icon">
+                                                <img src={starlet} alt="Star" />
+                                            </div>
+                                            <span className="reward-text">7K</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </>
+                        ) : (
+                            <>
+                                <button className="rewards-button" onClick={() => setShowRewardsPopup(true)}>
+                                    {/* Sparkle icons */}
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-top-left" />
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-top-right" />
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-left" />
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-bottom-right" />
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-top1" />
+                                    <img src={spark} alt="sparkle" className="sparkle sparkle-top2" />
+                                    <span>VIEW RANK</span>
+                                    <span>REWARDS</span>
+                                </button>
+                                <button className="season-button">
+                                    <span>SEASON ENDS IN: 09/30/25 00:00 UTC</span>
+                                </button>
+                            </>
+                        )}
                     </div>
 
-                    {/* Your Rank */}
-                    <div className="your-rank-section">
-                        <div className="section-title">YOUR RANK</div>
-                        <div className="your-rank-card">
-                            <div className="rank-info">
-                                <span className="rank-number">{userRank?.rank || 0}</span>
-                                <div className="user-avatar">
-                                    <img 
-                                        src={shared.avatars[userRank?.avatar || 0]?.src} 
-                                        alt="Your Avatar" 
-                                    />
+                    {/* Your Rank - chỉ hiển thị khi season chưa ended */}
+                    {!isSeasonEnded && (
+                        <div className="your-rank-section">
+                            <div className="section-title">YOUR RANK</div>
+                            <div className="your-rank-card">
+                                <div className="rank-info">
+                                    <span className="rank-number">{userRank?.rank || 0}</span>
+                                    <div className="user-avatar">
+                                        <img 
+                                            src={shared.avatars[userRank?.avatar || 0]?.src} 
+                                            alt="Your Avatar" 
+                                        />
+                                    </div>
+                                    <span className="username">{userRank?.username || "PLAYER"}</span>
                                 </div>
-                                <span className="username">{userRank?.username || "PLAYER"}</span>
-                            </div>
-                            <div className="steps-info">
-                                <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
-                                <span className="steps-label">STEPS</span>
+                                <div className="steps-info">
+                                    <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
+                                    <span className="steps-label">STEPS</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Top 10 List */}
                     <div className="top-10-section">

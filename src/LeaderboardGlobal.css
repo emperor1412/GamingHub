@@ -152,7 +152,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 20px;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
@@ -304,7 +304,7 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     height: 45px;
     min-width: 150px;
 }
@@ -430,6 +430,113 @@
 /* Your Rank Section */
 .your-rank-section {
     margin-bottom: 10px;
+}
+
+/* Your Rank Section - Season Ended Style */
+.your-rank-section-ended {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    /* Bạn có thể thêm styling khác ở đây */
+}
+
+.your-rank-card-ended {
+    background: #000 !important; /* Ví dụ: đổi màu nền thành đỏ */
+    padding: 10px 20px; /* Ví dụ: padding lớn hơn */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #0000FF
+}
+
+.next-season-content {
+    margin-top: 20px;
+}
+
+/* Next Season Text */
+.next-season-text {
+    font-family: "PP Neue Machina";
+    font-weight: 700;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 80%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    color: #01FFD9;
+    margin-bottom: 5px;
+}
+
+.next-season-date {
+    font-family: "PP Neue Machina";
+    font-weight: 700;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 80%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    color: #01FFD9;
+}
+
+/* Season Ended Content - chia thành 3 phần */
+.season-ended-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.season-ended-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.reward-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.reward-row-top {
+    margin-bottom: 4px;
+}
+
+.reward-row-bottom-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.reward-row-bottom {
+    margin-bottom: 0;
+}
+
+.season-ended-item .reward-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.season-ended-item .reward-icon img {
+    width: 22px;
+    height: 22px;
+    /* filter: brightness(0) invert(1); Làm icon thành màu trắng */
+}
+
+.season-ended-item .reward-text {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 103%;
+    text-transform: uppercase;
+    letter-spacing: 0%;
 }
 
 .section-title {
