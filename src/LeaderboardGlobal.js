@@ -13,6 +13,7 @@ import ID_normal from './images/ID_normal.svg';
 import spark from './images/Spark.png';
 import calendar from './images/calendar.svg';
 import calendar_before_checkin from './images/calendar_before_checkin.svg';
+import RewardsPopup from './LeaderboardRewardsPopup';
 
 const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -21,6 +22,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
     const [starlets, setStarlets] = useState(0);
     const [ticket, setTicket] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
+    const [showRewardsPopup, setShowRewardsPopup] = useState(false);
 
     // Setup profile data
     const setupProfileData = () => {
@@ -237,7 +239,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
 
                     {/* Action Buttons */}
                     <div className="action-buttons">
-                        <button className="rewards-button">
+                        <button className="rewards-button" onClick={() => setShowRewardsPopup(true)}>
                             {/* Sparkle icons */}
                             <img src={spark} alt="sparkle" className="sparkle sparkle-top-left" />
                             <img src={spark} alt="sparkle" className="sparkle sparkle-top-right" />
@@ -335,6 +337,13 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                     <img src={ID_normal} alt="FSLID" />
                 </button>
             </nav>
+
+            {/* Rewards Popup */}
+            <RewardsPopup 
+                isOpen={showRewardsPopup}
+                onClose={() => setShowRewardsPopup(false)}
+                userRank={userRank}
+            />
         </>
     );
 };

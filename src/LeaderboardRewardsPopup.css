@@ -1,0 +1,373 @@
+/* LeaderboardRewardsPopup.css - Specific styles for LeaderboardRewardsPopup only */
+.leaderboard-rewards-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.leaderboard-rewards-popup {
+    min-width: 380px;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    padding: 100px 20px 20px 20px;
+}
+
+/* Header */
+.leaderboard-rewards-popup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px 40px 20px;
+    position: relative;
+}
+
+.leaderboard-rewards-title-container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leaderboard-rewards-title {
+    font-family: "PP Neue Machina";
+    font-size: 30.71px;
+    font-weight: 700;
+    line-height: 80%;
+    letter-spacing: 0%;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8px 16px;
+    background: #FF00F6;
+    position: relative; /* Added for corner positioning */
+}
+
+.leaderboard-rewards-title-text {
+    font-family: "PP Neue Machina";
+    font-size: 30.71px;
+    font-weight: 700;
+    line-height: 80%;
+    letter-spacing: 0%;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Corner borders for rewards title */
+.leaderboard-rewards-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #FFFFFF;
+}
+
+.leaderboard-rewards-top-left {
+    top: -10px;
+    left: -15px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.leaderboard-rewards-top-right {
+    top: -10px;
+    right: -15px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.leaderboard-rewards-bottom-left {
+    bottom: -10px;
+    left: -15px;
+    border-right: none;
+    border-top: none;
+}
+
+.leaderboard-rewards-bottom-right {
+    bottom: -10px;
+    right: -15px;
+    border-left: none;
+    border-top: none;
+}
+
+/* Tabs */
+.leaderboard-rewards-tabs {
+    display: flex;
+    margin: 10px auto; /* Căn giữa */
+    gap: 30px;
+    width: 90%; /* Giảm từ 100% xuống 60% */
+    justify-content: center; /* Căn giữa tabs */
+}
+
+.leaderboard-rewards-tab-wrapper {
+    flex: 1;
+    position: relative; /* Added for corner positioning */
+    display: flex; /* Đảm bảo button chiếm full width của wrapper */
+}
+
+.leaderboard-rewards-tab {
+    flex: 1; /* Chia đều không gian */
+    background: transparent;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    color: #FFFFFF;
+    font-family: "PP Neue Machina";
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 80%;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa nội dung trong tab */
+    gap: 8px;
+    transition: all 0.2s;
+    border: 0px;
+    min-width: 120px; /* Giảm từ 150px xuống 120px */
+    width: 100%; /* Đảm bảo button chiếm full width */
+}
+
+.leaderboard-rewards-tab.active {
+    background: #0000FF;
+    border-style: solid;
+}
+
+.tab-icon {
+    width: 26px;
+    height: 26px;
+    position: absolute; /* Đặt thành absolute để chỉnh vị trí tự do */
+    top: -10px;
+    right: 10px; /* Khoảng cách từ text đến icon */
+}
+
+.leaderboard-rewards-tab-wrapper {
+    flex: 1;
+    position: relative; /* Added for corner positioning */
+}
+
+/* Corner borders for each tab */
+.leaderboard-rewards-tab-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #FFFFFF;
+    pointer-events: none; /* Không ảnh hưởng đến click events */
+    z-index: 1; /* Đảm bảo corner ở trên button */
+}
+
+.leaderboard-rewards-tab-top-left {
+    top: -10px;
+    left: -5px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.leaderboard-rewards-tab-top-right {
+    top: -10px;
+    right: -5px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.leaderboard-rewards-tab-bottom-left {
+    bottom: -10px;
+    left: -5px;
+    border-right: none;
+    border-top: none;
+}
+
+.leaderboard-rewards-tab-bottom-right {
+    bottom: -10px;
+    right: -5px;
+    border-left: none;
+    border-top: none;
+}
+
+/* Your Rank Section */
+.leaderboard-rewards-your-rank-section {
+    margin: 20px 20px 5px 20px;
+}
+
+.leaderboard-rewards-section-title {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.leaderboard-rewards-your-rank-card {
+    background: #0000FF;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leaderboard-rewards-rank-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.leaderboard-rewards-rank-number {
+    color: #FFFFFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 30px;
+}
+
+.leaderboard-rewards-user-avatar {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.leaderboard-rewards-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.leaderboard-rewards-username {
+    color: #FFFFFF;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.leaderboard-rewards-steps-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.leaderboard-rewards-steps-count {
+    color: #FFFFFF;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+    margin-bottom: 1px;
+}
+
+.leaderboard-rewards-steps-label {
+    color: #FFFFFF;
+    font-family: "PP Neue Machina";
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 103%;
+    letter-spacing: 0%;
+}
+
+/* Ranks Section */
+.leaderboard-rewards-ranks-section {
+    margin: 5px 20px 20px 20px;
+    margin-bottom: 30px;
+}
+
+.leaderboard-rewards-ranks-list {
+    background: transparent;
+    border: 2px solid #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 300px;
+    overflow-y: auto;
+}
+
+.leaderboard-rewards-rank-reward-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 0.5px solid #000FEF;
+}
+
+.leaderboard-rewards-rank-reward-item:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-rewards-rank-label {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 14px;
+    font-weight: 700;
+    width: 100%;
+}
+
+.leaderboard-rewards-reward-icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.leaderboard-rewards-reward-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.leaderboard-rewards-reward-item.drink {
+    width: 40px; /* Cột drink nhỏ hơn */
+}
+
+.leaderboard-rewards-reward-item.star {
+    width: 80px; /* Cột star nhỏ hơn */
+}
+
+.leaderboard-rewards-reward-item.gallery {
+    width: 80px; /* Cột gallery nhỏ hơn */
+}
+
+.leaderboard-rewards-reward-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0; /* Không cho icon bị co lại */
+}
+
+.leaderboard-rewards-reward-amount {
+    color: #ffffff;
+    font-family: "PP Neue Machina";
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: left; /* Căn phải số */
+    min-width: 35px; /* Đảm bảo số có width tối thiểu để căn đều */
+    font-variant-numeric: tabular-nums; /* Sử dụng monospace numbers */
+}
+
+/* Scrollbar */
+.leaderboard-rewards-ranks-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaderboard-rewards-ranks-list::-webkit-scrollbar-track {
+    background: #F0F0F0;
+    border-radius: 3px;
+}
+
+.leaderboard-rewards-ranks-list::-webkit-scrollbar-thumb {
+    background: #CCCCCC;
+    border-radius: 3px;
+}
+
+.leaderboard-rewards-ranks-list::-webkit-scrollbar-thumb:hover {
+    background: #AAAAAA;
+}
