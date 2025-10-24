@@ -188,7 +188,8 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
             try {
                 // Call API to get challenge detail
                 const result = await shared.getChallengeDetail(apiItem.id);
-                
+                const challengeData = getChallengeDataById(apiItem.id, apiItem.type || 'weekly');
+
                 if (result.success) {
                     const challengeDetail = result.data;
                     
@@ -196,7 +197,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                     const challenge = {
                         id: challengeDetail.id,
                         title: (challengeDetail.name || '').trim(),
-                        shortTitle: (challengeDetail.name || '').trim(),
+                        shortTitle: (challengeData.shortTitle || '').trim(),
                         type: challengeType.toUpperCase(),
                         entryFee: challengeDetail.price,
                         reward: challengeDetail.price * 2, // Reward is double the entry fee
