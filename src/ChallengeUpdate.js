@@ -170,18 +170,23 @@ const ChallengeUpdate = ({
                 ></div>
               ))}
               {/* Step numbers positioned within progress bar */}
-              {stepSegments.map((step, index) => (
-                <span 
-                  key={index} 
-                  className="cu-step-number"
-                  style={{
-                    left: `${10 + (index * 20)}%`,
-                    transform: 'translateX(-50%)'
-                  }}
-                >
-                  {step.toLocaleString()}
-                </span>
-              ))}
+              {stepSegments.map((step, index) => {
+                const previousMilestone = index > 0 ? stepSegments[index - 1] : 0;
+                const isMilestoneReached = (currentSteps + currentSteps * 0.2) > previousMilestone;
+                return (
+                  <span 
+                    key={index} 
+                    className="cu-step-number"
+                    style={{
+                      left: `${10 + (index * 20)}%`,
+                      transform: 'translateX(-50%)',
+                      color: isMilestoneReached ? '#333333' : '#00F1FF'
+                    }}
+                  >
+                    {step.toLocaleString()}
+                  </span>
+                );
+              })}
             </div>
           </div>
 
