@@ -112,6 +112,7 @@
 .cs-status-main {
   padding: 0 10px;
   margin-bottom: 2px;
+  color: #01FFD9;
 }
 
 .cs-status-sub {
@@ -165,12 +166,27 @@
 .cs-status-description {
   text-align: center;
   max-width: 350px;
-  min-height: 200px;
   padding: 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+/* Missed Challenge Image */
+.cs-missed-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.cs-missed-image img {
+  width: 116px;
+  height: 116px;
+  object-fit: contain;
+  opacity: 0.8;
 }
 
 .cs-description-line {
