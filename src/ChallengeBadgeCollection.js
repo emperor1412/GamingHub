@@ -51,13 +51,24 @@ const ChallengeBadgeCollection = ({ onClose }) => {
             const challengeData = getChallengeDataById(apiChallenge.id, challengeType);
             const visualState = mapApiStateToVisualState(apiChallenge.state, apiChallenge.hasReward);
             
+            // Special handling for Badge Collection: Show ongoing badges as locked visually
+            // but keep the logic state as on-going for proper click behavior
+            let finalVisualType = visualState.visualType;
+            let finalLogicState = visualState.logicState;
+            
+            if (visualState.logicState === 'on-going') {
+                // In Badge Collection, show ongoing badges with locked visual but keep on-going logic
+                finalVisualType = 'locked';
+                finalLogicState = 'on-going'; // Keep original logic state for proper flow
+            }
+            
             if (challengeData) {
                 processedBadges.push({
                     id: apiChallenge.id,
                     title: challengeData.title,
                     shortTitle: challengeData.shortTitle,
-                    visualType: visualState.visualType,
-                    logicState: visualState.logicState,
+                    visualType: finalVisualType,
+                    logicState: finalLogicState,
                     img: getBadgeImage(apiChallenge.id),
                     type: challengeType,
                     trailName: 'INCA TRAIL' // Default trail name, can be from API
@@ -68,8 +79,8 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                     id: apiChallenge.id,
                     title: apiChallenge.name || 'Unknown Challenge',
                     shortTitle: apiChallenge.name || 'Unknown',
-                    visualType: visualState.visualType,
-                    logicState: visualState.logicState,
+                    visualType: finalVisualType,
+                    logicState: finalLogicState,
                     img: getBadgeImage(apiChallenge.id),
                     type: challengeType,
                     trailName: 'INCA TRAIL'
@@ -115,6 +126,101 @@ const ChallengeBadgeCollection = ({ onClose }) => {
         }
 
         // Handle routing based on visual type and logic state
+        // Special case: In Badge Collection, ongoing badges have visualType 'locked' but logicState 'on-going'
+        if (badge.visualType === 'locked' && badge.logicState === 'on-going') {
+            // Treat as ongoing challenge (same as unlocked + on-going)
+            try {
+                const result = await shared.getChallengeDetail(badge.id);
+                
+                if (result.success) {
+                    const challengeDetail = result.data;
+                    const challengeData = getChallengeDataById(badge.id, badge.type);
+                    
+                    // Combine API data with mock detail for missing fields
+                    const combinedChallengeData = {
+                        id: challengeDetail.id,
+                        title: (challengeDetail.name || (challengeData?.title) || '').trim(),
+                        shortTitle: (challengeData?.shortTitle) || (challengeDetail.name || '').trim(),
+                        type: badge.type?.toUpperCase() || "WEEKLY",
+                        entryFee: challengeDetail.price,
+                        reward: challengeDetail.price * 2, // Reward is double the entry fee
+                        stepsEst: challengeDetail.step,
+                        distanceKm: challengeData?.distanceKm,
+                        description: challengeData?.description,
+                        location: challengeData?.location,
+                        dateStart: challengeData?.dateStart,
+                        dateEnd: challengeData?.dateEnd,
+                        // API data
+                        state: challengeDetail.state,
+                        currentSteps: challengeDetail.currSteps,
+                        totalSteps: challengeDetail.step,
+                        startTime: challengeDetail.startTime,
+                        endTime: challengeDetail.endTime
+                    };
+                    
+                    setSelectedChallengeData(combinedChallengeData);
+                    
+                    // Determine which view to show based on API state (same logic as ChallengesMenu)
+                    if (challengeDetail.state === 10) {
+                        // State_Joining = 10 -> User has joined -> go to Challenge Update
+                        setShowChallengeUpdate(true);
+                    } else if (challengeDetail.state === 20) {
+                        // State_Expired = 20 -> Challenge expired
+                        console.log('Challenge expired');
+                        // Call API to get challenge detail for expired challenges
+                        const challengeData = getChallengeDataById(badge.id, badge.type);
+                        
+                        // Combine API data with mock detail for missing fields
+                        const combinedChallengeData = {
+                            id: challengeDetail.id,
+                            title: (challengeDetail.name || (challengeData?.title) || '').trim(),
+                            shortTitle: (challengeData?.shortTitle) || (challengeDetail.name || '').trim(),
+                            type: badge.type?.toUpperCase() || "WEEKLY",
+                            entryFee: challengeDetail.price,
+                            reward: challengeDetail.price * 2, // Reward is double the entry fee
+                            stepsEst: challengeDetail.step,
+                            distanceKm: challengeData?.distanceKm,
+                            description: challengeData?.description,
+                            location: challengeData?.location,
+                            dateStart: challengeData?.dateStart,
+                            dateEnd: challengeData?.dateEnd,
+                            // API data
+                            state: challengeDetail.state,
+                            currentSteps: challengeDetail.currSteps,
+                            totalSteps: challengeDetail.step,
+                            startTime: challengeDetail.startTime,
+                            endTime: challengeDetail.endTime,
+                            failDescription: challengeData?.failDescription || "Challenge expired."
+                        };
+                        
+                        setSelectedChallengeData(combinedChallengeData);
+                        setChallengeStatusType('missed');
+                        setShowChallengeStatus(true);
+                    } else if (challengeDetail.state === 30) {
+                        // State_Complete = 30 -> User completed challenge (can claim reward)
+                        console.log('Challenge completed - can claim reward');
+                        setShowChallengeClaimReward(true);
+                    } else if (challengeDetail.state === 40) {
+                        // State_RewardClaimed = 40 -> User claimed the reward
+                        console.log('Challenge completed and reward claimed');
+                        setShowChallengeBadgeDone(true);
+                    } else {
+                        // User hasn't joined -> show ChallengeInfo
+                        setShowChallengeInfo(true);
+                    }
+                } else {
+                    console.error('Failed to get challenge detail:', result.error);
+                    // Fallback to original behavior
+                    setSelectedBadge(badge);
+                }
+            } catch (error) {
+                console.error('Error fetching challenge detail:', error);
+                // Fallback to original behavior
+                setSelectedBadge(badge);
+            }
+            return;
+        }
+
         switch (badge.visualType) {
             case 'unlocked':
                 switch (badge.logicState) {
@@ -797,6 +903,11 @@ const ChallengeBadgeCollection = ({ onClose }) => {
                             {(() => {
                                 const visualType = selectedBadge.visualType;
                                 const logicState = selectedBadge.logicState;
+                                
+                                // Special case: In Badge Collection, ongoing badges show as locked visually
+                                if (visualType === 'locked' && logicState === 'on-going') {
+                                    return 'Challenge is currently in progress';
+                                }
                                 
                                 if (visualType === 'unlocked') {
                                     switch (logicState) {

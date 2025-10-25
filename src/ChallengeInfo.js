@@ -52,10 +52,9 @@ const ChallengeInfo = ({ challenge, onClose, onJoinChallenge }) => {
 
                 {/* Main Description */}
                 <div className="main-description">
-                    <div className="description-text">WALK THE</div>
-                    <div className="description-text">ANCIENT PATH TO</div>
-                    <div className="description-text">{challenge.shortTitle}</div>
-                    <div className="description-text">IN ONE {challenge.type}!</div>
+                    <div className="description-text">WALK THE PATH</div>
+                    <div className="description-text">TO {challenge.shortTitle}</div>
+                    <div className="description-text">IN ONE {challenge.type == 'WEEKLY' ? 'WEEK' : challenge.type == 'MONTHLY' ? 'MONTH' : 'YEAR'}!</div>
                 </div>
 
                 {/* Challenge End */}
