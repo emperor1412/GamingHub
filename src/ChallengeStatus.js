@@ -2,6 +2,7 @@ import React from 'react';
 import './ChallengeStatus.css';
 import starletIcon from './images/starlet.png';
 import backIcon from './images/back.svg';
+import missedImage from './images/challenge_sad.png';
 
 const ChallengeStatus = ({ 
   status = 'incomplete', // 'incomplete' or 'missed'
@@ -70,6 +71,13 @@ const ChallengeStatus = ({
               <span className="cs-status-sub">{isIncomplete ? 'INCOMPLETE' : 'MISSED'}</span>
             </div>
           </div>
+
+          {/* Missed Challenge Image */}
+          {!isIncomplete && (
+            <div className="cs-missed-image">
+              <img src={missedImage} alt="Challenge Missed" />
+            </div>
+          )}
 
           {/* Status Description */}
           <div className="cs-status-description">
