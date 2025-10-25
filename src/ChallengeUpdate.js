@@ -3,6 +3,7 @@ import './ChallengeUpdate.css';
 import backIcon from './images/back.svg';
 import shoe_image from './images/shoe_image.png';
 import ChallengeClaimReward from './ChallengeClaimReward';
+import ChallengeErrorPopup from './ChallengeErrorPopup';
 import shared from './Shared';
 
 const ChallengeUpdate = ({ 
@@ -13,6 +14,7 @@ const ChallengeUpdate = ({
   onDataRefresh
 }) => {
   const [showClaimReward, setShowClaimReward] = React.useState(false);
+  const [showErrorPopup, setShowErrorPopup] = React.useState(false);
   
   const {
     // API data
@@ -52,8 +54,13 @@ const ChallengeUpdate = ({
   const isChallengeCompleted = currentSteps >= totalSteps && totalSteps > 0;
 
   const handleDone = () => {
-    // Show ChallengeClaimReward instead of calling onDone directly
-    setShowClaimReward(true);
+    // Check if challenge is completed before showing claim reward
+    if (isChallengeCompleted) {
+      setShowClaimReward(true);
+    } else {
+      // Show error popup if challenge is not completed
+      setShowErrorPopup(true);
+    }
   };
 
   const handleClaimRewards = () => {
@@ -65,6 +72,10 @@ const ChallengeUpdate = ({
 
   const handleBackFromClaim = () => {
     setShowClaimReward(false);
+  };
+
+  const handleCloseErrorPopup = () => {
+    setShowErrorPopup(false);
   };
 
   const handleBack = () => {
@@ -196,15 +207,20 @@ const ChallengeUpdate = ({
           </div>
         </div>
 
-        {/* Done Button - Disabled when challenge not completed */}
+        {/* Done Button - Shows error popup when challenge not completed */}
         <button 
           className={`cu-done-button ${!isChallengeCompleted ? 'cu-done-button-disabled' : ''}`}
           onClick={handleDone}
-          disabled={!isChallengeCompleted}
         >
           DONE
         </button>
       </div>
+
+      {/* Error Popup */}
+      <ChallengeErrorPopup 
+        isOpen={showErrorPopup}
+        onClose={handleCloseErrorPopup}
+      />
     </div>
   );
 };
