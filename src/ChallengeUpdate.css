@@ -269,7 +269,7 @@
   transform: translateY(-50%);
   width: 2px;
   height: 60%;
-  background: #000;
+  background: white;
   z-index: 2;
 }
 

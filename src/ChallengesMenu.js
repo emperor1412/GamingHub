@@ -19,6 +19,8 @@ import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
 
+const WELCOME_FLAG_KEY = 'challengesWelcomeShown';
+
 const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
     const [showChallengeJoinConfirmation, setShowChallengeJoinConfirmation] = useState(false);
@@ -31,6 +33,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [isLoadingChallenges, setIsLoadingChallenges] = useState(false);
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
     const [hasApiError, setHasApiError] = useState(false); // Track API error state
+    const [showWelcome, setShowWelcome] = useState(false); // Welcome overlay state
 
     // Function to fetch challenge list
     const fetchChallengeList = async (depth = 0) => {
@@ -107,6 +110,34 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
             fetchChallengeList();
         }
     }, [onDataRefresh]);
+
+    // Show welcome overlay only once per app session
+    useEffect(() => {
+        try {
+            const shown = sessionStorage.getItem(WELCOME_FLAG_KEY);
+            if (!shown) {
+                setShowWelcome(true);
+                sessionStorage.setItem(WELCOME_FLAG_KEY, '1');
+            }
+        } catch (e) {
+            // Fallback if sessionStorage is unavailable
+            setShowWelcome(true);
+        }
+    }, []);
+
+    // Prevent body scroll when welcome overlay is shown
+    useEffect(() => {
+        if (showWelcome) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cleanup function to restore scroll when component unmounts
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [showWelcome]);
 
     const getApiChallengeByType = (typeInt) => {
         return apiChallenges.find(c => c.type === typeInt);
@@ -334,6 +365,10 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         setShowBadgeScreen(true);
     };
 
+    const handleWelcomeClose = () => {
+        setShowWelcome(false);
+    };
+
     // Function to handle data refresh from child components
     const handleDataRefresh = React.useCallback(() => {
         // Refresh challenge list data
@@ -459,6 +494,87 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
 
     return (
         <div className="challenges-menu">
+            {/* Welcome Overlay */}
+            {showWelcome && (
+                <div className="challenges-welcome-overlay">
+                    <div className="challenges-welcome-content">
+                        {/* Title Section */}
+                        <div className="welcome-header">
+                            <div className="challenges-title">
+                                <div className="title-border">
+                                    <div className="challenges-welcome-title-text">WELCOME TO CHALLENGES</div>
+                                    <div className="challenges-corner challenges-top-left"></div>
+                                    <div className="challenges-corner challenges-top-right"></div>
+                                    <div className="challenges-corner challenges-bottom-left"></div>
+                                    <div className="challenges-corner challenges-bottom-right"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Body Text Section */}
+                        <div className="challenges-welcome-body">
+                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                                TRAVEL ACROSS MOUNTAINS, COASTLINES, AND CITIES AS YOU TAKE ON EPIC TRAILS AND EARN UNIQUE BADGES FOR YOUR ACHIEVEMENTS.
+                            </div>
+                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                                WEEKLY, MONTHLY, AND YEARLY CHALLENGES AWAIT.
+                            </div>
+                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                                NON-PREMIUM MEMBERS CAN JOIN MONTHLY CHALLENGES ONCE THEY REACH LEVEL 10.
+                            </div>
+                            <div className="challenges-welcome-text challenges-welcome-text-cyan">
+                                PREMIUM MEMBERS UNLOCK ALL CHALLENGES AND COLLECT EVERY BADGE.
+                            </div>
+                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                                SPEND STARLETS TO ENTER — AND IF YOU FINISH THE CHALLENGE WITHIN THE SET TIMEFRAME, YOU'LL EARN DOUBLE YOUR STARLETS BACK.
+                            </div>
+                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                                READY TO START YOUR ADVENTURE?
+                            </div>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="challenges-welcome-cta-btn" onClick={handleWelcomeClose}>
+                            PROCEED TO CHALLENGES
+                        </button>
+                        
+                        {/* Bottom Navigation Bar */}
+                        <div className="challenges-welcome-bottom-nav">
+                            <div className="challenges-welcome-nav-icon challenges-welcome-nav-selected">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" stroke="#00FFFF" strokeWidth="2" fill="none"/>
+                                </svg>
+                            </div>
+                            <div className="challenges-welcome-nav-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" stroke="white" strokeWidth="2" fill="none"/>
+                                </svg>
+                            </div>
+                            <div className="challenges-welcome-nav-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                            <div className="challenges-welcome-nav-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V19C17 19.6 16.6 20 16 20H8C7.4 20 7 19.6 7 19V13M17 13H7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                            <div className="challenges-welcome-nav-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="white" strokeWidth="2"/>
+                                    <circle cx="12" cy="16" r="1" fill="white"/>
+                                    <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="white" strokeWidth="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Header */}
             <button className="challenges-back-button" onClick={onClose}>
                 <img src={backIcon} alt="Back" />
