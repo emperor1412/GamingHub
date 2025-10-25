@@ -220,6 +220,10 @@
   margin-bottom: 70px;
 }
 
+.cjc-challenge-goal.warning-steps-text {
+  margin-top: 20px;
+  margin-bottom: -15px;
+}
 /* Responsive Design */
 /* @media (max-width: 480px) {
   .cjc-main-content {

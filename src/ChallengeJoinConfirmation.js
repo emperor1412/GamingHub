@@ -197,9 +197,6 @@ const ChallengeJoinConfirmation = ({
         {/* Main Content */}
         <div className="cjc-main-content">
           {/* Challenge Goal */}
-          <div className="cjc-challenge-goal">
-            {steps.toLocaleString()} STEPS IN {days} DAYS!
-          </div>
 
           {/* Reward Information */}
           <div className="cjc-reward-info">
@@ -223,6 +220,10 @@ const ChallengeJoinConfirmation = ({
               alt="Right Image" 
               className="cjc-right-image"
             />
+          </div>
+
+          <div className="cjc-challenge-goal warning-steps-text">
+            {steps.toLocaleString()} STEPS IN {days} DAYS!
           </div>
 
           {/* Warning Section */}
