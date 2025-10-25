@@ -172,7 +172,7 @@ const ChallengeUpdate = ({
               {/* Step numbers positioned within progress bar */}
               {stepSegments.map((step, index) => {
                 const previousMilestone = index > 0 ? stepSegments[index - 1] : 0;
-                const isMilestoneReached = (currentSteps + currentSteps * 0.2) > previousMilestone;
+                const isMilestoneReached = currentSteps > previousMilestone * 1.1;
                 return (
                   <span 
                     key={index} 
