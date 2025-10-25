@@ -330,7 +330,7 @@
 .cu-done-button-disabled {
   background: #666666 !important;
   color: #999999 !important;
-  cursor: not-allowed !important;
+  cursor: pointer !important;
   opacity: 0.5;
 }
 

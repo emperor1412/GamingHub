@@ -1,0 +1,151 @@
+/* Challenge Error Popup Styles */
+:root {
+  --cep-corner-size: 20px;
+  --cep-corner-color: #00F1FF;
+  --cep-corner-border: 2px;
+  --cep-corner-offset: 0px;
+}
+
+.cep-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.cep-popup {
+  position: relative;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a2a 100%);
+  border: 4px solid #000FEF;
+  border-radius: 12px;
+  padding: 30px 25px 25px;
+  max-width: 320px;
+  text-align: center;
+  font-family: 'PP Neue Machina', sans-serif;
+}
+
+/* Corner Decorations */
+.cep-corner {
+  position: absolute;
+  width: var(--cep-corner-size);
+  height: var(--cep-corner-size);
+  z-index: 10;
+}
+
+.cep-top-left {
+  top: var(--cep-corner-offset);
+  left: var(--cep-corner-offset);
+  border-top: var(--cep-corner-border) solid var(--cep-corner-color);
+  border-left: var(--cep-corner-border) solid var(--cep-corner-color);
+}
+
+.cep-top-right {
+  top: var(--cep-corner-offset);
+  right: var(--cep-corner-offset);
+  border-top: var(--cep-corner-border) solid var(--cep-corner-color);
+  border-right: var(--cep-corner-border) solid var(--cep-corner-color);
+}
+
+.cep-bottom-left {
+  bottom: var(--cep-corner-offset);
+  left: var(--cep-corner-offset);
+  border-bottom: var(--cep-corner-border) solid var(--cep-corner-color);
+  border-left: var(--cep-corner-border) solid var(--cep-corner-color);
+}
+
+.cep-bottom-right {
+  bottom: var(--cep-corner-offset);
+  right: var(--cep-corner-offset);
+  border-bottom: var(--cep-corner-border) solid var(--cep-corner-color);
+  border-right: var(--cep-corner-border) solid var(--cep-corner-color);
+}
+
+/* Error Header */
+.cep-error-header {
+  margin-bottom: 20px;
+}
+
+.cep-error-text {
+  font-size: 32px;
+  font-weight: 700;
+  color: #FF0000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'PP Neue Machina', sans-serif;
+  /* Glitch effect */
+  position: relative;
+}
+
+.cep-error-text::before {
+  content: 'ERROR';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #FF0000;
+  opacity: 0.7;
+  animation: glitch 0.3s infinite;
+}
+
+
+
+/* Message Container */
+.cep-message-container {
+  margin-bottom: 25px;
+}
+
+.cep-message-line {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+  font-family: 'PP Neue Machina', sans-serif;
+  /* Glitch effect for some characters */
+  position: relative;
+}
+
+.cep-message-line:nth-child(odd) {
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* OK Button */
+.cep-ok-button {
+  background: #000FEF;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 6px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'PP Neue Machina', sans-serif;
+  letter-spacing: 1px;
+  width: 100%;
+  max-width: 200px;
+  margin-top: 40px;
+}
+
+.cep-ok-button:hover {
+  background: #003de6;
+  transform: translateY(-2px);
+}
+
+.cep-ok-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 241, 255, 0.3);
+}
+
+.cep-message-group {
+  margin-bottom: 25px;
+  margin-top: 25px;
+  line-height: 100%;
+}
