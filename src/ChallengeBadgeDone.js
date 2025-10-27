@@ -21,15 +21,7 @@ const ChallengeBadgeDone = ({
     challengeId = null
   } = challengeData;
   return (
-    console.log(`challengeData: ${challengeData.starletsReward}`),
-    console.log(`challengeData: ${challengeData.challengeId}`),
-    console.log(`challengeData: ${challengeData.challengeTitle}`),
-    console.log(`challengeData: ${challengeData.badgeName}`),
-    console.log(`challengeData: ${challengeData.stepsCompleted}`),
-    console.log(`challengeData: ${challengeData.distance}`),
-    console.log(`challengeData: ${challengeData.starletsReward}`),
-    console.log(`challengeData: ${challengeData.challengeEndDate}`),
-    console.log(`challengeData: ${challengeData.description}`),
+    console.log(`challengeData: ${challengeData.challengeId} ${challengeData.challengeTitle} ${challengeData.badgeName} ${challengeData.stepsCompleted} ${challengeData.distance} ${challengeData.starletsReward}`),
 
     <div className="cbd-container">
       {/* Background Pattern */}
