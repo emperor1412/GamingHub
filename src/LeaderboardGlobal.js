@@ -42,23 +42,27 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
 
     // Mock data for now - replace with actual API call
     const mockLeaderboardData = [
-        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0 },
-        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1 },
-        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2 },
-        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3 },
-        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4 },
-        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5 },
-        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6 },
-        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7 },
-        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8 },
-        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9 }
+        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] }
     ];
 
     const mockUserRank = {
         rank: 24,
         username: "FIRULAIS24",
         steps: 1203,
-        avatar: 0
+        avatar: 0,
+        rewards: [
+            { icon: starlet, amount: "15k" },
+            { icon: starlet, amount: "7K" }
+        ]
     };
 
     useEffect(() => {
@@ -220,6 +224,19 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         />
                                     </div>
                                     <span className="username">{userRank?.username || "PLAYER"}</span>
+                                    {/* Reward items for season ended */}
+                                    {userRank?.rewards && userRank.rewards.length > 0 && (
+                                        <div className="reward-row-bottom-container">
+                                            {userRank.rewards.map((reward, index) => (
+                                                <div key={index} className="reward-row reward-row-bottom">
+                                                    <div className="reward-icon">
+                                                        <img src={reward.icon} alt="Reward" />
+                                                    </div>
+                                                    <span className="reward-text">{reward.amount}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="steps-info">
                                     <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
@@ -411,6 +428,19 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         />
                                     </div> */}
                                     <div className="item-username">{player.username}</div>
+                                    {/* Rewards - chỉ hiển thị khi season ended */}
+                                    {isSeasonEnded && player?.rewards && player.rewards.length > 0 && (
+                                        <div className="reward-row-bottom-container">
+                                            {player.rewards.map((reward, rewardIndex) => (
+                                                <div key={rewardIndex} className="reward-row reward-row-bottom">
+                                                    <div className="reward-icon">
+                                                        <img src={reward.icon} alt="Reward" />
+                                                    </div>
+                                                    <span className="reward-text">{reward.amount}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                     <div className="item-steps-info">
                                         <span className="item-steps-count">{formatSteps(player.steps)}</span>
                                         <span className="item-steps-label">STEPS</span>

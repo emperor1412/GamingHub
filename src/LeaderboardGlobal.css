@@ -440,12 +440,41 @@
 }
 
 .your-rank-card-ended {
-    background: #000 !important; /* Ví dụ: đổi màu nền thành đỏ */
-    padding: 10px 20px; /* Ví dụ: padding lớn hơn */
+    background: #000 !important;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #0000FF
+    border: 1px solid #0000FF;
+}
+
+/* Reward items in your-rank-card-ended */
+.your-rank-card-ended .reward-row-bottom-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.your-rank-card-ended .reward-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.your-rank-card-ended .reward-icon img {
+    width: 22px;
+    height: 22px;
+}
+
+.your-rank-card-ended .reward-text {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 103%;
+    text-transform: uppercase;
+    letter-spacing: 0%;
 }
 
 .next-season-content {
@@ -481,14 +510,13 @@
 /* Season Ended Content - chia thành 3 phần */
 .season-ended-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 28px;
     width: 100%;
-    gap: 20px;
 }
 
 .season-ended-item {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -635,8 +663,37 @@
     padding: 6px 10px;
     display: flex;
     align-items: center;
-    gap: 35px;
+    gap: 10px;
     border-top: 1px solid #000FEF;
+}
+
+/* Rewards in leaderboard-item */
+.leaderboard-item .reward-row-bottom-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.leaderboard-item .reward-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.leaderboard-item .reward-icon img {
+    width: 22px;
+    height: 22px;
+}
+
+.leaderboard-item .reward-text {
+    color: #64FFCB;
+    font-family: "PP Neue Machina";
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 103%;
+    text-transform: uppercase;
+    letter-spacing: 0%;
 }
 
 .item-rank {
@@ -644,7 +701,7 @@
     font-family: "PP Neue Machina";
     font-size: 14px;
     font-weight: 700; 
-    min-width: 50px;
+    min-width: 25px;
 }
 
 .item-avatar {
