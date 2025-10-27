@@ -606,21 +606,43 @@
 .challenge-reward {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 3px;
 }
 
 .challenge-reward .reward-amount {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: white;
     line-height: 100%;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: "PP Neue Machina";
+    font-family: "PP Neue Machina Inktrap";
     font-style: normal;
 }
 
 .starlet-icon {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
+}
+
+.challenge-active {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.challenge-active .active-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #00FFFF;
+    line-height: 100%;
+    text-transform: uppercase;
+    font-family: "PP Neue Machina Inktrap";
+    font-style: normal;
+}
+
+.step-icon-active {
     width: 27px;
     height: 27px;
     object-fit: contain;

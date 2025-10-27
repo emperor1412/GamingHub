@@ -14,7 +14,8 @@ const ChallengeJoinConfirmation = ({
   onBack,
   onBackAfterJoin, // New prop for handling back after join
   onViewBadges,
-  onShowError
+  onShowError,
+  onDataRefresh
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -179,6 +180,7 @@ const ChallengeJoinConfirmation = ({
         onDone={handleDoneFromUpdate}
         onBack={handleBackFromUpdate}
         onViewBadges={onViewBadges}
+        onDataRefresh={onDataRefresh}
       />
     );
   }
