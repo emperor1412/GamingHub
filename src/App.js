@@ -59,6 +59,7 @@ import { analytics } from './Firebase';
 import Market from './Market';
 import FlippingStars from './FlippingStars';
 import LeaderboardGlobal from './LeaderboardGlobal';
+import LeaderboardIntroduce from './LeaderboardIntroduce';
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
   const [showLeaderboardGlobal, setShowLeaderboardGlobal] = useState(false);
+  const [isFSLIDConnected, setIsFSLIDConnected] = useState(false); // Check if FSL ID is connected
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
   
@@ -805,14 +807,26 @@ const bind_fslid = async () => {
       )
       : showLeaderboardGlobal ?
       (
-        <LeaderboardGlobal 
-          onClose={handleLeaderboardGlobalClose}
-          setShowProfileView={setShowProfileView}
-          setActiveTab={setActiveTab}
-          checkIn={checkIn}
-          checkInData={checkInData}
-          setShowCheckInAnimation={setShowCheckInAnimation}
-        />
+        isFSLIDConnected ? (
+          <LeaderboardGlobal 
+            onClose={handleLeaderboardGlobalClose}
+            setShowProfileView={setShowProfileView}
+            setActiveTab={setActiveTab}
+            checkIn={checkIn}
+            checkInData={checkInData}
+            setShowCheckInAnimation={setShowCheckInAnimation}
+          />
+        ) : (
+          <LeaderboardIntroduce 
+            onClose={handleLeaderboardGlobalClose}
+            setShowProfileView={setShowProfileView}
+            setActiveTab={setActiveTab}
+            checkIn={checkIn}
+            checkInData={checkInData}
+            setShowCheckInAnimation={setShowCheckInAnimation}
+            setIsFSLIDConnected={setIsFSLIDConnected}
+          />
+        )
       )
       :
       (
