@@ -8,7 +8,7 @@
     "stepsEst": 150000,
     "location": "Athens & Saronic Gulf, Greece",
     "blurb": "Coastal promenades plus island paths and marble ruins.",
-    "failBlurb": "Coastal promenades plus island paths and marble ruins.,Coastal winds, endless pavement, crumbling ruins.",
+    "failBlurb": "Coastal promenades plus island paths and marble ruins. Coastal winds, endless pavement, crumbling ruins.",
     "dateStart": "10/8/2025",
     "dateEnd": "11/7/2025"
   },
@@ -21,7 +21,7 @@
     "stepsEst": 168750,
     "location": "N. Portugal & Galicia, Spain",
     "blurb": "Atlantic boardwalks, fishing towns, pilgrim vibes.",
-    "failBlurb": "Atlantic boardwalks, fishing towns, pilgrim vibes.,Exposed boardwalks, tourist towns, weary pilgrims.",
+    "failBlurb": "Atlantic boardwalks, fishing towns, pilgrim vibes. Exposed boardwalks, tourist towns, weary pilgrims.",
     "dateStart": "11/8/2025",
     "dateEnd": "12/8/2025"
   },
@@ -34,7 +34,7 @@
     "stepsEst": 187500,
     "location": "Kansai, Japan",
     "blurb": "Temples, cedar paths, mountain monastery finish.",
-    "failBlurb": "Temples, cedar paths, mountain monastery finish.,Steep temple stairs, dark forests, exhausting climbs.",
+    "failBlurb": "Temples, cedar paths, mountain monastery finish. Steep temple stairs, dark forests, exhausting climbs.",
     "dateStart": "12/9/2025",
     "dateEnd": "1/8/2026"
   },
@@ -47,7 +47,7 @@
     "stepsEst": 175000,
     "location": "Western Cape, South Africa",
     "blurb": "Sea cliffs, fynbos, vineyard ridges.",
-    "failBlurb": "Sea cliffs, fynbos, vineyard ridges.,Harsh cliffs, thorny fynbos, draining vineyard slopes.",
+    "failBlurb": "Sea cliffs, fynbos, vineyard ridges. Harsh cliffs, thorny fynbos, draining vineyard slopes.",
     "dateStart": "1/9/2026",
     "dateEnd": "2/8/2026"
   },
@@ -60,7 +60,7 @@
     "stepsEst": 162500,
     "location": "Los Lagos (CL) & Neuquén (AR)",
     "blurb": "Forested lakes, hanging glaciers, wood bridges.",
-    "failBlurb": "Forested lakes, hanging glaciers, wood bridges.,Mosquito lakes, unstable glaciers, slick bridges.",
+    "failBlurb": "Forested lakes, hanging glaciers, wood bridges. Mosquito lakes, unstable glaciers, slick bridges.",
     "dateStart": "2/9/2026",
     "dateEnd": "3/11/2026"
   },
@@ -73,7 +73,7 @@
     "stepsEst": 181250,
     "location": "South Iceland",
     "blurb": "Skógafoss to black sand, lava fields, sea stacks.",
-    "failBlurb": "Skógafoss to black sand, lava fields, sea stacks.,Cold spray, endless black sand, sharp lava fields.",
+    "failBlurb": "Skógafoss to black sand, lava fields, sea stacks. Cold spray, endless black sand, sharp lava fields.",
     "dateStart": "3/12/2026",
     "dateEnd": "4/11/2026"
   },
@@ -86,7 +86,7 @@
     "stepsEst": 156250,
     "location": "Highlands, Scotland, UK",
     "blurb": "Glen paths, moor crossings, lochside lanes.",
-    "failBlurb": "Glen paths, moor crossings, lochside lanes.,Muddy glens, bleak moors, biting loch winds.",
+    "failBlurb": "Glen paths, moor crossings, lochside lanes. Muddy glens, bleak moors, biting loch winds.",
     "dateStart": "4/12/2026",
     "dateEnd": "5/12/2026"
   },
@@ -99,7 +99,7 @@
     "stepsEst": 187500,
     "location": "Colorado, USA",
     "blurb": "Pine, granite, alpine lakes, thin-air views.",
-    "failBlurb": "Pine, granite, alpine lakes, thin-air views.,Thin air, harsh granite, freezing alpine lakes.",
+    "failBlurb": "Pine, granite, alpine lakes, thin-air views. Thin air, harsh granite, freezing alpine lakes.",
     "dateStart": "5/13/2026",
     "dateEnd": "6/12/2026"
   },
@@ -112,7 +112,7 @@
     "stepsEst": 150000,
     "location": "South Island, New Zealand",
     "blurb": "River flats to tussock passes and swing bridges.",
-    "failBlurb": "River flats to tussock passes and swing bridges.,Flooded flats, endless tussock, swaying bridges.",
+    "failBlurb": "River flats to tussock passes and swing bridges. Flooded flats, endless tussock, swaying bridges.",
     "dateStart": "6/13/2026",
     "dateEnd": "7/13/2026"
   },
@@ -125,7 +125,7 @@
     "stepsEst": 175000,
     "location": "Wadi Rum & Petra region, Jordan",
     "blurb": "Canyons, dunes, and Nabatean stonework.",
-    "failBlurb": "Canyons, dunes, and Nabatean stonework.,Blistering canyons, choking dust, crumbling stone.",
+    "failBlurb": "Canyons, dunes, and Nabatean stonework. Blistering canyons, choking dust, crumbling stone.",
     "dateStart": "7/14/2026",
     "dateEnd": "8/13/2026"
   },
@@ -138,7 +138,7 @@
     "stepsEst": 187500,
     "location": "Vestland, Norway",
     "blurb": "Ferries, farms, fjord-balcony trails.",
-    "failBlurb": "Ferries, farms, fjord-balcony trails.,Swaying ferries, monotonous farms, crowded fjords.",
+    "failBlurb": "Ferries, farms, fjord-balcony trails. Swaying ferries, monotonous farms, crowded fjords.",
     "dateStart": "8/14/2026",
     "dateEnd": "9/13/2026"
   },
@@ -151,8 +151,8 @@
     "stepsEst": 168750,
     "location": "Lào Cai & Hà Giang, Vietnam",
     "blurb": "Rice terraces, ridgeline hamlets, cloud seas.",
-    "failBlurb": "Rice terraces, ridgeline hamlets, cloud seas.,Steep terraces, isolated hamlets, suffocating mists.",
-    "dateStart": "9/14/2026",
+    "failBlurb": "Rice terraces, ridgeline hamlets, cloud seas. Steep terraces, isolated hamlets, suffocating mists.",
+    "dateStart": "9/14/2026", 
     "dateEnd": "10/14/2026"
   }
 ]
