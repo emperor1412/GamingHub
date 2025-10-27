@@ -8,7 +8,7 @@
     "stepsEst": 1500000,
     "region": "Atlantic to Alps to Danube corridor",
     "blurb": "From Atlantic cliffs to Alpine cols to Central-Euro rivers.",
-    "failBlurb": "From Atlantic cliffs to Alpine cols to Central-Euro rivers.,Sheer drops, thin air, endless currents.",
+    "failBlurb": "From Atlantic cliffs to Alpine cols to Central-Euro rivers. Sheer drops, thin air, endless currents.",
     "dateStart": "10/8/2025",
     "dateEnd": "10/8/2026"
   },
@@ -21,7 +21,7 @@
     "stepsEst": 1250000,
     "region": "Kenya/Tanzania/Ethiopia region",
     "blurb": "Savanna to escarpments to volcanic fields, wildlife horizons.",
-    "failBlurb": "Savanna to escarpments to volcanic fields, wildlife horizons.,Scorching heat, steep walls, barren rock.",
+    "failBlurb": "Savanna to escarpments to volcanic fields, wildlife horizons. Scorching heat, steep walls, barren rock.",
     "dateStart": "10/9/2026",
     "dateEnd": "10/9/2027"
   },
@@ -34,7 +34,7 @@
     "stepsEst": 1875000,
     "region": "Pacific Rim (Andes–Japan arcs)",
     "blurb": "Volcano belts, rainforests, and island coasts stitched together.",
-    "failBlurb": "Volcano belts, rainforests, and island coasts stitched together.,Smoldering slopes, choking humidity, relentless waves.",
+    "failBlurb": "Volcano belts, rainforests, and island coasts stitched together. Smoldering slopes, choking humidity, relentless waves.",
     "dateStart": "10/10/2027",
     "dateEnd": "10/10/2028"
   }

@@ -6,6 +6,7 @@ import challenges_robot from './images/challenges_robot.png';
 import starlet from './images/starlet.png';
 import trophy_4 from './images/trophy_4.png';
 import backIcon from './images/back.svg';
+import { getBadgeImage } from './utils/badgeImageMapper';
 
 const ChallengeJoinConfirmation = ({ 
   challengeData, 
@@ -13,7 +14,8 @@ const ChallengeJoinConfirmation = ({
   onBack,
   onBackAfterJoin, // New prop for handling back after join
   onViewBadges,
-  onShowError
+  onShowError,
+  onDataRefresh
 }) => {
   const [showChallengeUpdate, setShowChallengeUpdate] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -178,6 +180,7 @@ const ChallengeJoinConfirmation = ({
         onDone={handleDoneFromUpdate}
         onBack={handleBackFromUpdate}
         onViewBadges={onViewBadges}
+        onDataRefresh={onDataRefresh}
       />
     );
   }
@@ -206,8 +209,8 @@ const ChallengeJoinConfirmation = ({
           {/* Central Graphic - 3 Images */}
           <div className="cjc-central-graphic">
             <img 
-              src={trophy_4} 
-              alt="Left Image" 
+              src={getBadgeImage(challengeId)} 
+              alt="Challenge Badge" 
               className="cjc-left-image"
             />
             <img 

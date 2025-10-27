@@ -3,6 +3,9 @@ import './ChallengesMenu.css';
 import robotCowboyChallenges from './images/challenges_robot_cowboy.png';
 import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
+import premiumIcon from './images/Premium_icon.png';
+import stepIcon from './images/step_icon.png';
+
 import { 
     getCurrentChallenge, 
     getUserData, 
@@ -302,6 +305,9 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         setShowChallengeUpdate(false);
         setSelectedChallenge(null);
         setSelectedChallengeType(null);
+        
+        // Refresh challenge list to update state
+        fetchChallengeList();
     };
 
     const handleBackFromUpdateAfterJoin = () => {
@@ -310,6 +316,9 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         setShowChallengeJoinConfirmation(false);
         setSelectedChallenge(null);
         setSelectedChallengeType(null);
+        
+        // Refresh challenge list to update state (show "Active" indicator)
+        fetchChallengeList();
     };
 
     const handleDoneFromUpdate = () => {
@@ -318,6 +327,9 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         setShowChallengeUpdate(false);
         setSelectedChallenge(null);
         setSelectedChallengeType(null);
+        
+        // Refresh challenge list to update state
+        fetchChallengeList();
     };
 
     const handleGoToMarket = () => {
@@ -345,6 +357,9 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
 
     const handleBackFromBadgeScreen = () => {
         setShowBadgeScreen(false);
+        
+        // Refresh challenge list to update state
+        fetchChallengeList();
     };
 
     const handleExplorerBadgesClick = () => {
@@ -353,6 +368,9 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
 
     const handleBackFromBadgeCollection = () => {
         setShowBadgeCollection(false);
+        
+        // Refresh challenge list to update state
+        fetchChallengeList();
     };
 
     const handleViewBadges = () => {
@@ -448,6 +466,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                 onBackAfterJoin={handleBackFromUpdateAfterJoin}
                 onViewBadges={handleViewBadges}
                 onShowError={handleShowError}
+                onDataRefresh={handleDataRefresh}
             />
         );
     }
@@ -516,19 +535,42 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             <div className="challenges-welcome-text challenges-welcome-text-white">
                                 TRAVEL ACROSS MOUNTAINS, COASTLINES, AND CITIES AS YOU TAKE ON EPIC TRAILS AND EARN UNIQUE BADGES FOR YOUR ACHIEVEMENTS.
                             </div>
-                            <div className="challenges-welcome-text challenges-welcome-text-white">
+                            <div className="challenges-welcome-text challenges-welcome-text-cyan">
                                 WEEKLY, MONTHLY, AND YEARLY CHALLENGES AWAIT.
                             </div>
-                            <div className="challenges-welcome-text challenges-welcome-text-white">
-                                NON-PREMIUM MEMBERS CAN JOIN MONTHLY CHALLENGES ONCE THEY REACH LEVEL 10.
+                            
+                            {/* Membership Boxes */}
+                            <div className="challenges-welcome-membership-box">
+                                <div className="challenges-welcome-box-left">
+                                    NON-PREMIUM MEMBERS
+                                </div>
+                                <div className="challenges-welcome-box-right">
+                                    CAN JOIN MONTHLY CHALLENGES ONCE THEY REACH LEVEL 10.
+                                </div>
                             </div>
+
+                            <div className="challenges-welcome-membership-box">
+                                <div className="challenges-welcome-box-left has-icon">
+                                    <img src={premiumIcon} alt="Premium" className="premium-icon" />
+                                    PREMIUM MEMBERS
+                                </div>
+                                <div className="challenges-welcome-box-right">
+                                    UNLOCK ALL CHALLENGES AND COLLECT EVERY BADGE.
+                                </div>
+                            </div>
+
+                            {/* Starlets Section */}
+                            <div className="challenges-welcome-starlets-section">
+                                <div className="challenges-welcome-starlets-icon">
+                                    <img alt="Starlets" src={starletIcon}/>
+                                    <div className="starlets-x2-badge">X2</div>
+                                </div>
+                                <div className="challenges-welcome-starlets-text">
+                                    <span>SPEND STARLETS TO ENTER - AND IF YOU FINISH THE CHALLENGE WITHIN THE SET TIMEFRAME, YOU'LL EARN DOUBLE YOUR STARLETS BACK.</span>
+                                </div>
+                            </div>
+
                             <div className="challenges-welcome-text challenges-welcome-text-cyan">
-                                PREMIUM MEMBERS UNLOCK ALL CHALLENGES AND COLLECT EVERY BADGE.
-                            </div>
-                            <div className="challenges-welcome-text challenges-welcome-text-white">
-                                SPEND STARLETS TO ENTER — AND IF YOU FINISH THE CHALLENGE WITHIN THE SET TIMEFRAME, YOU'LL EARN DOUBLE YOUR STARLETS BACK.
-                            </div>
-                            <div className="challenges-welcome-text challenges-welcome-text-white">
                                 READY TO START YOUR ADVENTURE?
                             </div>
                         </div>
@@ -605,6 +647,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             const weeklyState = getChallengeState('weekly');
                             const weeklyApi = getApiChallengeByType(1);
                             const weeklyChallenge = getCurrentChallengeFromApi('weekly');
+                            const weeklyChallengeState = weeklyApi ? challengeDetails[weeklyApi.id]?.state : null;
                             
                             if (weeklyState.isDisabled) {
                                 return (
@@ -619,7 +662,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         )}
                                     </div>
                                 );
-                            } else if (weeklyApi?.state === 40) {
+                            } else if (weeklyChallengeState === 40) {
                                 return (
                                     <div className="challenge-completed-overlay">
                                         <div className="completed-text">CHALLENGE HAS COMPLETED</div>
@@ -641,10 +684,19 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                             )}
                                         </div>
                                         {weeklyApi && (
-                                            <div className="challenge-reward">
-                                                <span className="reward-amount">{weeklyApi.price}</span>
-                                                <img src={starletIcon} alt="Starlet" className="starlet-icon" />
-                                            </div>
+                                            <>
+                                                {weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
+                                                    <div className="challenge-active">
+                                                        <span className="active-text">Active</span>
+                                                        <img src={stepIcon} alt="Step" className="step-icon-active" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount">{weeklyApi.price}</span>
+                                                        <img src={starletIcon} alt="Starlet" className="starlet-icon" />
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </>
                                 );
@@ -661,6 +713,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             const monthlyState = getChallengeState('monthly');
                             const monthlyApi = getApiChallengeByType(2);
                             const monthlyChallenge = getCurrentChallengeFromApi('monthly');
+                            const monthlyChallengeState = monthlyApi ? challengeDetails[monthlyApi.id]?.state : null;
                             
                             if (monthlyState.isDisabled) {
                                 return (
@@ -675,7 +728,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         )}
                                     </div>
                                 );
-                            } else if (monthlyApi?.state === 40) {
+                            } else if (monthlyChallengeState === 40) {
                                 return (
                                     <div className="challenge-completed-overlay">
                                         <div className="completed-text">CHALLENGE HAS COMPLETED</div>
@@ -697,10 +750,19 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                             )}
                                         </div>
                                         {monthlyApi && (
-                                            <div className="challenge-reward">
-                                                <span className="reward-amount">{monthlyApi.price}</span>
-                                                <img src={starletIcon} alt="Starlet" className="starlet-icon" />
-                                            </div>
+                                            <>
+                                                {monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
+                                                    <div className="challenge-active">
+                                                        <span className="active-text">Active</span>
+                                                        <img src={stepIcon} alt="Step" className="step-icon-active" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount">{monthlyApi.price}</span>
+                                                        <img src={starletIcon} alt="Starlet" className="starlet-icon" />
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </>
                                 );
@@ -717,6 +779,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             const yearlyState = getChallengeState('yearly');
                             const yearlyApi = getApiChallengeByType(3);
                             const yearlyChallenge = getCurrentChallengeFromApi('yearly');
+                            const yearlyChallengeState = yearlyApi ? challengeDetails[yearlyApi.id]?.state : null;
                             
                             if (yearlyState.isDisabled) {
                                 return (
@@ -731,7 +794,7 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         )}
                                     </div>
                                 );
-                            } else if (yearlyApi?.state === 40) {
+                            } else if (yearlyChallengeState === 40) {
                                 return (
                                     <div className="challenge-completed-overlay">
                                         <div className="completed-text">CHALLENGE HAS COMPLETED</div>
@@ -753,10 +816,19 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                             )}
                                         </div>
                                         {yearlyApi && (
-                                            <div className="challenge-reward">
-                                                <span className="reward-amount">{yearlyApi.price}</span>
-                                                <img src={starletIcon} alt="Starlet" className="starlet-icon" />
-                                            </div>
+                                            <>
+                                                {yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
+                                                    <div className="challenge-active">
+                                                        <span className="active-text">Active</span>
+                                                        <img src={stepIcon} alt="Step" className="step-icon-active" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount">{yearlyApi.price}</span>
+                                                        <img src={starletIcon} alt="Starlet" className="starlet-icon" />
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </>
                                 );
