@@ -1248,7 +1248,7 @@ Response:
                                 className="locked-card-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            <div className='check-out-button align-left'>GRAND JACKPOT<br></br> {totalFlips.toString().padStart(8, '0')}</div>
+                            <div className='check-out-button align-center'>GRAND JACKPOT<br></br> {totalFlips.toString().padStart(8, '0')}</div>
                             <div className='locked-card-text'></div>
                         </div>
                         {/* <div className="locked-card-flips">
@@ -1269,7 +1269,7 @@ Response:
                                 className="locked-card-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            <div className='check-out-button align-left'>Scratch tickets<br></br> earn rewards </div>
+                            <div className='check-out-button align-center'>Scratch tickets<br></br> earn rewards </div>
                             <div className='locked-card-text'></div>
                         </div>
                     </button>

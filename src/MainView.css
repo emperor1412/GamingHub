@@ -884,11 +884,10 @@
 }
 
 .check-out-button.align-center {
-    justify-content: left;
+    justify-content: center;
 
-    text-align: left;
+    text-align: center;
     /* padding: 10px; */
-    padding-left: 28.5px;
     letter-spacing: 0.5px;
     line-height: 1;
     font-size: 12.5px;
@@ -896,9 +895,8 @@
 }
 
 .check-out-button.large-banner {
-    text-align: left;
-    justify-content: left;
-    padding-left: 28.5px;
+    text-align: center;
+    justify-content: center;
     /* padding: 10px; */
     letter-spacing: 0.5px;
     line-height: 1;
