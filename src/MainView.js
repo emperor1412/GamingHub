@@ -41,6 +41,7 @@ import EggletEventPopup from './EggletEventPopup';
 import EggletEventPage from './EggletEventPage';
 import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
+import LeaderboardIntroduce from './LeaderboardIntroduce';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
 
@@ -50,7 +51,7 @@ let startDragX;
 let startDragTime;
 let scrollLeft;
 
-const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, setShowLeaderboardGlobal, getProfileData}) => {
+const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckInView, setShowProfileView, setShowTicketView, setShowBankStepsView, setShowFlippingStarsView, setShowLeaderboardGlobal, getProfileData, isFSLIDConnected, setIsFSLIDConnected}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [starlets, setStarlets] = useState(0);
@@ -65,6 +66,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showEggletPage, setShowEggletPage] = useState(false);
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
+    const [showLeaderboardIntroduce, setShowLeaderboardIntroduce] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
 
     // Fetch total flips from API
@@ -1242,7 +1244,13 @@ Response:
                 </section>
 
                 <section className="locked-sections">
-                    <button className="locked-card" onClick={() => setShowLeaderboardGlobal(true)}>
+                    <button className="locked-card" onClick={() => {
+                        if (!isFSLIDConnected) {
+                            setShowLeaderboardIntroduce(true);
+                        } else {
+                            setShowLeaderboardGlobal(true);
+                        }
+                    }}>
                         <div className='locked-card-image-container'>
                             <img
                                 src={leaderboard_mainview}
@@ -1395,6 +1403,18 @@ Response:
                     // Navigation will be handled by IntroducePremium component itself
                 }}
                 isFromProfile={false}
+            />
+
+            {/* Leaderboard Introduce Popup */}
+            <LeaderboardIntroduce 
+                isOpen={showLeaderboardIntroduce}
+                isFromProfile={false}
+                onClose={() => setShowLeaderboardIntroduce(false)}
+                setIsFSLIDConnected={() => {
+                    setIsFSLIDConnected(true);
+                    setShowLeaderboardIntroduce(false);
+                    setShowLeaderboardGlobal(true);
+                }}
             />
         </>
     );

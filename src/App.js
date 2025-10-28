@@ -628,6 +628,8 @@ const bind_fslid = async () => {
           setShowFlippingStarsView={setShowFlippingStarsView}
           setShowLeaderboardGlobal={setShowLeaderboardGlobal}
           getProfileData={getProfileData}
+          isFSLIDConnected={isFSLIDConnected}
+          setIsFSLIDConnected={setIsFSLIDConnected}
         />;      
       case 'tasks':
         return <Tasks 
@@ -805,28 +807,16 @@ const bind_fslid = async () => {
           userProfile={userProfile}
         />
       )
-      : showLeaderboardGlobal ?
+      : showLeaderboardGlobal && isFSLIDConnected ?
       (
-        isFSLIDConnected ? (
-          <LeaderboardGlobal 
-            onClose={handleLeaderboardGlobalClose}
-            setShowProfileView={setShowProfileView}
-            setActiveTab={setActiveTab}
-            checkIn={checkIn}
-            checkInData={checkInData}
-            setShowCheckInAnimation={setShowCheckInAnimation}
-          />
-        ) : (
-          <LeaderboardIntroduce 
-            onClose={handleLeaderboardGlobalClose}
-            setShowProfileView={setShowProfileView}
-            setActiveTab={setActiveTab}
-            checkIn={checkIn}
-            checkInData={checkInData}
-            setShowCheckInAnimation={setShowCheckInAnimation}
-            setIsFSLIDConnected={setIsFSLIDConnected}
-          />
-        )
+        <LeaderboardGlobal 
+          onClose={handleLeaderboardGlobalClose}
+          setShowProfileView={setShowProfileView}
+          setActiveTab={setActiveTab}
+          checkIn={checkIn}
+          checkInData={checkInData}
+          setShowCheckInAnimation={setShowCheckInAnimation}
+        />
       )
       :
       (
