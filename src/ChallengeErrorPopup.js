@@ -8,6 +8,9 @@ const ChallengeErrorPopup = ({ isOpen, onClose }) => {
   return (
     <div className="cep-overlay" onClick={onClose}>
       <div className="cep-popup" onClick={(e) => e.stopPropagation()}>
+        <div className="cep-message-image">
+          <img src={errorImage} alt="Error" />
+        </div>
         {/* Error Header */}
         <div className="cep-error-header">
           <span className="cep-error-text">CHALLENGE NOT COMPLETE</span>
@@ -15,17 +18,14 @@ const ChallengeErrorPopup = ({ isOpen, onClose }) => {
         
         {/* Main Message */}
         <div className="cep-message-container">
-          <div className="cep-message-image">
-            <img src={errorImage} alt="Error" />
-          </div>
           <div className="cep-message-group">
-            <div className="cep-message-line">YOU HAVEN'T </div>
-            <div className="cep-message-line">REACHED THE GOAL.</div>
+            <div className="cep-message-line">YOU HAVEN'T REACHED</div>
+            <div className="cep-message-line">THE GOAL.</div>
           </div>
           <div className="cep-message-group">
             <div className="cep-message-line">BANK YOUR LATEST</div>
-            <div className="cep-message-line">STEPS TO UPDATE</div>
-            <div className="cep-message-line">YOUR PROGRESS.</div>
+            <div className="cep-message-line">STEPS TO UPDATE YOUR</div>
+            <div className="cep-message-line">PROGRESS.</div>
           </div>
         </div>
         

@@ -8,7 +8,7 @@
 
 .cep-overlay {
   position: fixed;
-  top: -10px;
+  top: -20px;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -68,12 +68,13 @@
 
 /* Error Header */
 .cep-error-header {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
+  margin-bottom: 15px;
 }
 
 .cep-error-text {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
   color: #00F1FF;
   text-transform: uppercase;
@@ -89,7 +90,7 @@
 }
 
 .cep-message-line {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: #FFFFFF;
   text-transform: uppercase;
@@ -136,6 +137,8 @@
 }
 
 .cep-message-image {
+  margin-top: 20px;
+  margin-bottom: 20px;
   flex: 1;
 }
 
