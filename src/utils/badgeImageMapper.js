@@ -7,9 +7,19 @@ import Badge_1001 from '../images/Challenge badges/Weekly/Badge_1001.png';
 import Badge_1002 from '../images/Challenge badges/Weekly/Badge_1002.png';
 import Badge_1003 from '../images/Challenge badges/Weekly/Badge_1003.png';
 import Badge_1004 from '../images/Challenge badges/Weekly/Badge_1004.png';
+import Badge_1005 from '../images/Challenge badges/Weekly/Badge_1005.png';
+import Badge_1006 from '../images/Challenge badges/Weekly/Badge_1006.png';
+import Badge_1007 from '../images/Challenge badges/Weekly/Badge_1007.png';
+import Badge_1008 from '../images/Challenge badges/Weekly/Badge_1008.png';
+import Badge_1009 from '../images/Challenge badges/Weekly/Badge_1009.png';
+import Badge_1010 from '../images/Challenge badges/Weekly/Badge_1010.png';
+import Badge_1011 from '../images/Challenge badges/Weekly/Badge_1011.png';
+import Badge_1012 from '../images/Challenge badges/Weekly/Badge_1012.png';
 
 // Monthly badges
 import Badge_10001 from '../images/Challenge badges/Monthly/Badge_10001.png';
+import Badge_10002 from '../images/Challenge badges/Monthly/Badge_10002.png';
+import Badge_10003 from '../images/Challenge badges/Monthly/Badge_10003.png';
 
 // Yearly badges
 import Badge_100001 from '../images/Challenge badges/Yearly/Badge_100001.png';
@@ -27,9 +37,19 @@ const badgeImageMap = {
   1002: Badge_1002,
   1003: Badge_1003,
   1004: Badge_1004,
+  1005: Badge_1005,
+  1006: Badge_1006,
+  1007: Badge_1007,
+  1008: Badge_1008,
+  1009: Badge_1009,
+  1010: Badge_1010,
+  1011: Badge_1011,
+  1012: Badge_1012,
   
   // Monthly badges (10001-10012)
   10001: Badge_10001,
+  10002: Badge_10002,
+  10003: Badge_10003,
   
   // Yearly badges (100001-100003)
   100001: Badge_100001,
