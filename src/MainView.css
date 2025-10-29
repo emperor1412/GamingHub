@@ -869,6 +869,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     margin-bottom: -3px;
+    height: 24px;
 }
 
 .check-out-button.align-left {
@@ -901,8 +902,6 @@
     letter-spacing: 0.5px;
     line-height: 1;
     font-size: 12.5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 .check-out-button.ticket {

@@ -1193,7 +1193,7 @@ Response:
                             <img
                                 src={dailyTasks}
                                 alt="Daily Tasks"
-                                className="locked-card-image minigames"
+                                className="locked-card-image"
                                 style={{ opacity: dailyTaskStatus === 1 ? 0.5 : 1 }}
                             /> 
                             <div className='mv_ticket-button-container-border'></div>
