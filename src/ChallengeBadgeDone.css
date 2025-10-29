@@ -1,0 +1,400 @@
+/* Challenge Badge Done Styles */
+:root {
+  --cbd-corner-size: 35px;
+  --cbd-corner-color: #00F1FF;
+  --cbd-corner-border: 3px;
+  --cbd-corner-offset: -10px;
+}
+
+.cbd-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: 'PP Neue Machina', sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.cbd-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Back Button */
+.cbd-back-button {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  left: 20px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cbd-back-button:hover {
+  opacity: 0.7;
+}
+
+.cbd-back-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Close Button */
+.cbd-close-button {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -20px;
+  left: -20px;
+  z-index: 10;
+  background: #0000FF;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cbd-close-button:hover {
+  opacity: 0.8;
+}
+
+.cbd-close-icon {
+  color: #FFFFFF;
+  font-size: 35px;
+  font-weight: bold;
+  line-height: 1px;
+}
+
+/* Main Content */
+.cbd-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  padding: 80px 20px 130px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* Congratulations Section */
+.cbd-congratulations-section {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 70px;
+  padding: 25px 20px 130px;
+  box-sizing: border-box;
+  border: 3px solid #000FEF;
+}
+
+.cbd-title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cbd-main-title {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 30.1px;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: -1.1%;
+  text-transform: uppercase;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+.cbd-title-part-1 {
+  color: #01FFD9;
+  text-shadow: 0 0 10px rgba(0, 241, 255, 0.5);
+}
+
+.cbd-title-part-2 {
+  color: #01FFD9;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.cbd-title-part-3 {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 241, 255, 0.5);
+}
+
+.cbd-description {
+  font-size: 12.48px;
+  color: #ffffff;
+  line-height: 150%;
+  letter-spacing: -1.1%;
+  font-family: "Sora", sans-serif;
+  font-weight: 400;
+  opacity: 0.8;
+  padding: 3px 16px;
+}
+
+.cbd-badge-title {
+  background: #0000FF;
+  font-size: 18.03px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: -1%;
+  line-height: 112.00000000000001%;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 -40px;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Responsive font size for long text */
+@media (max-width: 400px) {
+  .cbd-badge-title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 350px) {
+  .cbd-badge-title {
+    font-size: 18.03px;
+  }
+}
+
+@media (max-width: 300px) {
+  .cbd-badge-title {
+    font-size: 12px;
+  }
+}
+
+/* Badge Container */
+.cbd-badge-container {
+  margin: 30px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.cbd-badge-image {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 265.8900146484375px;
+  height: 265.8900146484375px;
+  object-fit: contain;
+  animation: badgeGlow 2s ease-in-out infinite alternate;
+}
+/* 
+@keyframes badgeGlow {
+  0% {
+    filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.5));
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.8));
+    transform: scale(1.05);
+  }
+} */
+
+/* Stats Section */
+.cbd-stats-section {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+  padding: 5px 5px;
+  box-sizing: border-box;
+}
+
+.cbd-stats-grid {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.cbd-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cbd-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.cbd-distance-icon {
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cbd-starlets-icon {
+  color: white;
+}
+
+.cbd-starlet-image {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.cbd-km-image {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.cbd-stat-value {
+  font-size: 24.26px;
+  font-weight: 700;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.cbd-steps-completed {
+  font-size: 29.94px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0px;
+  line-height: 100%;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Corner Decorations */
+.cbd-corner {
+  position: absolute;
+  width: var(--cbd-corner-size);
+  height: var(--cbd-corner-size);
+  border: var(--cbd-corner-border) solid var(--cbd-corner-color);
+  z-index: 10;
+}
+
+.cbd-top-left {
+  top: var(--cbd-corner-offset);
+  left: var(--cbd-corner-offset);
+  border-right: none;
+  border-bottom: none;
+}
+
+.cbd-top-right {
+  top: var(--cbd-corner-offset);
+  right: var(--cbd-corner-offset);
+  border-left: none;
+  border-bottom: none;
+}
+
+.cbd-bottom-left {
+  bottom: var(--cbd-corner-offset);
+  left: var(--cbd-corner-offset);
+  border-right: none;
+  border-top: none;
+}
+
+.cbd-bottom-right {
+  bottom: var(--cbd-corner-offset);
+  right: var(--cbd-corner-offset);
+  border-left: none;
+  border-top: none;
+}
+
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .cbd-main-content {
+    padding: 50px 15px 80px;
+  }
+  
+  .cbd-congratulations-section {
+    padding: 20px 15px;
+  }
+  
+  .cbd-main-title {
+    font-size: 20px;
+  }
+  
+  .cbd-badge-image {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .cbd-stats-section {
+    padding: 15px;
+  }
+  
+  .cbd-stat-value {
+    font-size: 20px;
+  }
+  
+  .cbd-steps-completed {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cbd-main-title {
+    font-size: 18px;
+  }
+  
+  .cbd-badge-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .cbd-stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .cbd-starlet-image {
+    width: 20px;
+    height: 20px;
+  }
+} */

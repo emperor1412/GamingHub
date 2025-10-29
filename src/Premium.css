@@ -248,7 +248,7 @@ top: var(--premium-corner-offset);
   height: 100%;
   background: #00F1FF; /* Cyan fill */
   border-top-left-radius: 30px;
-border-bottom-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   transition: width 0.3s ease;
 }
 
