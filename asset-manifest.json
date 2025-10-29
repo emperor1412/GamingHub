@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.7ebc3c6b.css",
-    "main.js": "./static/js/main.ab079486.js",
+    "main.css": "./static/css/main.5313ff84.css",
+    "main.js": "./static/js/main.67589d94.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/trophy_4.png": "./static/media/trophy_4.21af4edb98bbc6a6820b.png",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
@@ -107,19 +107,29 @@
     "static/media/Sora-VariableFont_wght.ttf": "./static/media/Sora-VariableFont_wght.e56298aec2e944c699d8.ttf",
     "static/media/challenge_not_done.png": "./static/media/challenge_not_done.4fb76239b456ada3da61.png",
     "static/media/x-icon.svg": "./static/media/x-icon.699021517046322407f2ca01239e5315.svg",
+    "static/media/Badge_1007.png": "./static/media/Badge_1007.2fb823917c3c44df730f.png",
     "static/media/Premium_background_buy.png": "./static/media/Premium_background_buy.d2ed102f92144f9f6267.png",
     "static/media/Egglet_Image_1.png": "./static/media/Egglet_Image_1.c897b94fb142c796a62c.png",
+    "static/media/Badge_1008.png": "./static/media/Badge_1008.6b06eaffae695c27d3ae.png",
+    "static/media/Badge_1009.png": "./static/media/Badge_1009.caf9ad560d585af8abf5.png",
     "static/media/Head-Win.png": "./static/media/Head-Win.d096ea845c314ac3a52d.png",
     "static/media/Meet Marty 1.png": "./static/media/Meet Marty 1.8a2e058b9d0f0ebbffdc.png",
+    "static/media/Badge_10002.png": "./static/media/Badge_10002.bcfe483c8fa1d8602c58.png",
     "static/media/lv9.png": "./static/media/lv9.fad77bdea50dc60a77cf.png",
     "static/media/FSL Game Hub logo-02.png": "./static/media/FSL Game Hub logo-02.0a2d5d211aeae27aee7a.png",
+    "static/media/Badge_1005.png": "./static/media/Badge_1005.4af5cf627102774ed4b6.png",
     "static/media/Tail-Win.png": "./static/media/Tail-Win.337cd728db028f816575.png",
     "static/media/Badge_100001.png": "./static/media/Badge_100001.0c9beab5cc43e84cce3e.png",
+    "static/media/Badge_1012.png": "./static/media/Badge_1012.9fcdb7f060e070defacf.png",
     "static/media/icon_pop_freeze5.png": "./static/media/icon_pop_freeze5.79cfb05757a53ea1cbb4.png",
+    "static/media/Badge_1010.png": "./static/media/Badge_1010.ead0751bd6fb14dbfd74.png",
     "static/media/1463 FSL avatars_Tree.png": "./static/media/1463 FSL avatars_Tree.8a09ec9ba47fc8575213.png",
+    "static/media/Badge_10003.png": "./static/media/Badge_10003.355b2a5aa152d35965b5.png",
+    "static/media/Badge_1011.png": "./static/media/Badge_1011.aba8b72517b6e98b64c9.png",
     "static/media/lv7.png": "./static/media/lv7.a29a1dd4497390865a7c.png",
     "static/media/Tail-Lose.png": "./static/media/Tail-Lose.dcaeba6bf83e16339318.png",
     "static/media/1463 FSL avatars_Racoon.png": "./static/media/1463 FSL avatars_Racoon.b850b334c54812a565ae.png",
+    "static/media/Badge_1006.png": "./static/media/Badge_1006.cea309cda65bd2b9a234.png",
     "static/media/lv8.png": "./static/media/lv8.1291ef23720866f9eb8a.png",
     "static/media/lv0.png": "./static/media/lv0.ccec12e0db250b47bcfe.png",
     "static/media/1463 FSL avatars_PandaDJ.png": "./static/media/1463 FSL avatars_PandaDJ.d55135593c4bd67bb5d7.png",
@@ -258,12 +268,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.7ebc3c6b.css.map": "./static/css/main.7ebc3c6b.css.map",
-    "main.ab079486.js.map": "./static/js/main.ab079486.js.map",
+    "main.5313ff84.css.map": "./static/css/main.5313ff84.css.map",
+    "main.67589d94.js.map": "./static/js/main.67589d94.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7ebc3c6b.css",
-    "static/js/main.ab079486.js"
+    "static/css/main.5313ff84.css",
+    "static/js/main.67589d94.js"
   ]
 }
