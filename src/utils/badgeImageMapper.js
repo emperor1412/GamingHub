@@ -18,6 +18,8 @@ import Badge_1012 from '../images/Challenge badges/Weekly/Badge_1012.png';
 
 // Monthly badges
 import Badge_10001 from '../images/Challenge badges/Monthly/Badge_10001.png';
+import Badge_10002 from '../images/Challenge badges/Monthly/Badge_10002.png';
+import Badge_10003 from '../images/Challenge badges/Monthly/Badge_10003.png';
 
 // Yearly badges
 import Badge_100001 from '../images/Challenge badges/Yearly/Badge_100001.png';
@@ -46,6 +48,8 @@ const badgeImageMap = {
   
   // Monthly badges (10001-10012)
   10001: Badge_10001,
+  10002: Badge_10002,
+  10003: Badge_10003,
   
   // Yearly badges (100001-100003)
   100001: Badge_100001,

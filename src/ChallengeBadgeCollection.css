@@ -307,11 +307,6 @@
     }
 }
 
-/* Badge States */
-.challenge-badge-unlocked .challenge-badge-icon img {
-    filter: brightness(1.2) saturate(1.5);
-}
-
 /* Locked badge state - make it dimmed */
 .challenge-badge-locked img {
     opacity: 0.3;
