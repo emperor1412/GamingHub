@@ -2,43 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './LeaderboardGlobal.css';
 import background from './images/background_2.png';
 import shared from './Shared';
-import ticketIcon from './images/ticket.svg';
-import premiumDiamond from './images/Premium_icon.png';
-import HomeIcon_normal from './images/Home_normal.svg';
-import Task_normal from './images/Task_normal.svg';
-import Friends_normal from './images/Friends_normal.svg';
-import Market_normal from './images/Market_normal.svg';
-import ID_normal from './images/ID_normal.svg';
 import spark from './images/Spark.png';
-import calendar from './images/calendar.svg';
-import calendar_before_checkin from './images/calendar_before_checkin.svg';
 import RewardsPopup from './LeaderboardRewardsPopup';
 import starlet from './images/starlet.png';
-import km from './images/km.svg';
-import bcoin from './images/bCoin_icon.png';
 
-const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation }) => {
+const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation, isOpen = true, isFromProfile = false }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [userRank, setUserRank] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [starlets, setStarlets] = useState(0);
-    const [ticket, setTicket] = useState(0);
-    const [showTextCheckIn, setShowTextCheckIn] = useState(false);
     const [showRewardsPopup, setShowRewardsPopup] = useState(false);
     const [isSeasonEnded, setIsSeasonEnded] = useState(true); // Biến để kiểm tra season đã kết thúc
-
-    // Setup profile data
-    const setupProfileData = () => {
-        const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020);
-        if (userStarlets) {
-            setStarlets(userStarlets.num);
-        }
-
-        const userTicket = shared.userProfile?.UserToken?.find(token => token.prop_id === 10010);
-        if (userTicket) {
-            setTicket(userTicket.num);
-        }
-    };
 
     // Mock data for now - replace with actual API call
     const mockLeaderboardData = [
@@ -66,7 +39,6 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
     };
 
     useEffect(() => {
-        setupProfileData();
         // Simulate API call
         setTimeout(() => {
             setLeaderboardData(mockLeaderboardData);
@@ -79,46 +51,20 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
         return steps.toLocaleString();
     };
 
-    const onClickCheckIn = async () => {
-        if (checkIn) {
-            try {
-                const result = await checkIn();
-                console.log('Check-in result:', result);
-                if (result === 1) {
-                    setShowCheckInAnimation(true);
-                }
-            } catch (error) {
-                console.error('Check-in error:', error);
-            }
-        }
-    };
-
-    const getRankBorderColor = (rank) => {
-        switch (rank) {
-            case 1: return '#FFD700'; // Gold
-            case 2: return '#C0C0C0'; // Silver
-            case 3: return '#CD7F32'; // Bronze
-            default: return '#464646';
-        }
-    };
-
-    const getRankBackgroundGradient = (rank) => {
-        switch (rank) {
-            case 1: return 'linear-gradient(135deg, #FFD700, #FFA500)';
-            case 2: return 'linear-gradient(135deg, #C0C0C0, #A0A0A0)';
-            case 3: return 'linear-gradient(135deg, #CD7F32, #B8860B)';
-            default: return 'linear-gradient(135deg, #464646, #2A2A2A)';
-        }
-    };
+    if (!isOpen) return null;
 
     if (loading) {
         return (
-            <div className="leaderboard-global">
-                <div className="background-container">
-                    <img src={background} alt="background" />
-                </div>
-                <div className="loading-container">
-                    <div className="loading-text">Loading...</div>
+            <div className={`leaderboard-popup-overlay ${isFromProfile ? 'fullscreen' : 'mainview'}`}>
+                <div className="leaderboard-popup-container">
+                    <div className="leaderboard-global">
+                        <div className="background-container">
+                            <img src={background} alt="background" />
+                        </div>
+                        <div className="loading-container">
+                            <div className="loading-text">Loading...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -126,85 +72,36 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
 
     return (
         <>
-            <header className="stats-header">
-                <div className="profile-pic-container">
-                    <button 
-                        className="profile-pic"
-                        onClick={() => setShowProfileView(true)}
-                    >
-                        <img 
-                            src={shared.avatars[shared.userProfile ? shared.userProfile.pictureIndex : 0]?.src} 
-                            alt="Profile" 
-                        />
-                    </button>
-                    {/* Premium icon overlay */}
-                    {shared.isPremiumMember && (
-                        <div className="premium-icon-overlay">
-                            <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+            <div className={`leaderboard-popup-overlay ${isFromProfile ? 'fullscreen' : 'mainview'}`}>
+                <div className="leaderboard-popup-container">
+                    <div className="leaderboard-global">
+                        {/* Background */}
+                        <div className="background-container">
+                            <img src={background} alt="background" />
                         </div>
-                    )}
-                </div>
-                <div className="stats">
-                    <button 
-                        className="stat-item"
-                        onClick={() => setShowProfileView(true)}
-                    >
-                        <img src={ticketIcon} alt="Tickets" />
-                        <span className="stat-item-text">{ticket}</span>
-                    </button>
-                    <button 
-                        className="stat-item"
-                        onClick={() => setShowProfileView(true)}
-                    >
-                        <img src={starlet} alt="Starlets" />
-                        <span className="stat-item-text">{starlets}</span>
-                    </button>
-                    <div className="stat-item-main">
-                        <button className="stat-button" onClick={() => onClickCheckIn()}>
-                            <img src={showTextCheckIn ? calendar_before_checkin : calendar} alt="Check-in" />
-                            <div className="check-in-text">
-                                {showTextCheckIn ? (
-                                    <>
-                                        <span>CHECK-IN</span>
-                                        <span>TODAY</span>
-                                    </>
-                                ) : (
-                                    <span className='stat-item-main-text'>{checkInData != null ? checkInData.streakDay : "0"}</span>
-                                )}
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </header>
 
-            <div className="leaderboard-global">
-                {/* Background */}
-                <div className="background-container">
-                    <img src={background} alt="background" />
-                </div>
-
-                {/* Content */}
-                <div className="leaderboard-content">
-                    <div className="leaderboard-global-title">
+                        {/* Content */}
+                        <div className="leaderboard-content">
+                            <div className="leaderboard-global-title">
                         {/* Corner borders for title */}
                         <div className="leaderboard-corner leaderboard-top-left"></div>
                         <div className="leaderboard-corner leaderboard-top-right"></div>
                         <div className="leaderboard-corner leaderboard-bottom-left"></div>
                         <div className="leaderboard-corner leaderboard-bottom-right"></div>
-                        {isSeasonEnded ? (
-                            <div className="title-word">SEASON ENDED</div>
-                        ) : (
-                            <>
-                                <div className="title-word">STEP</div>
-                                <div className="title-word">LEADERBOARD</div>
-                            </>
-                        )}
-                    </div>
+                                {isSeasonEnded ? (
+                                    <div className="title-word">SEASON ENDED</div>
+                                ) : (
+                                    <>
+                                        <div className="title-word">STEP</div>
+                                        <div className="title-word">LEADERBOARD</div>
+                                    </>
+                                )}
+                            </div>
 
-                    {/* Your Rank - chỉ hiển thị khi season ended */}
-                    {isSeasonEnded && (
-                        <>
-                        <div className="next-season-content">
+                            {/* Your Rank - chỉ hiển thị khi season ended */}
+                            {isSeasonEnded && (
+                                <>
+                                <div className="next-season-content">
                             <div className="next-season-text">
                                 NEXT SEASON BEGINS IN:
                             </div>
@@ -244,11 +141,11 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                 </div>
                             </div>
                         </div>
-                        </>
-                    )}
+                                </>
+                            )}
 
-                    {/* Top 3 Podium */}
-                    <div className="podium-section">
+                            {/* Top 3 Podium */}
+                            <div className="podium-section">
                         <div className="podium-container">
                             {/* Rank 2 */}
                             <div className="podium-item rank-2">
@@ -450,44 +347,9 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                         </div>
                     </div>
                 </div>
+                </div>
+                </div>
             </div>
-
-            {/* Bottom nav */}
-            <nav className="fc_bottom-nav">
-                <button onClick={() => {
-                    if (onClose) onClose();
-                    if (setActiveTab) setActiveTab('home');
-                }}>
-                    <img src={HomeIcon_normal} alt="Home" />
-                </button>
-                <button onClick={() => {
-                    if (onClose) onClose();
-                    if (setActiveTab) setActiveTab('tasks');
-                }}>
-                    <img src={Task_normal} alt="Tasks" />
-                </button>
-                <button onClick={() => {
-                    if (onClose) onClose();
-                    if (setActiveTab) setActiveTab('frens');
-                }}>
-                    <img src={Friends_normal} alt="Friends" />
-                </button>
-                <button onClick={() => {
-                    if (onClose) onClose();
-                    if (setActiveTab) {
-                        shared.setInitialMarketTab('telegram');
-                        setActiveTab('market');
-                    }
-                }}>
-                    <img src={Market_normal} alt="Market" />
-                </button>
-                <button onClick={() => {
-                    if (onClose) onClose();
-                    if (setActiveTab) setActiveTab('fslid');
-                }}>
-                    <img src={ID_normal} alt="FSLID" />
-                </button>
-            </nav>
 
             {/* Rewards Popup */}
             <RewardsPopup 

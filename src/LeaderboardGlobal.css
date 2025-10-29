@@ -11,16 +11,68 @@
     --leaderboard-corner-right-offset: 90px;
 }
 
+/* Popup Overlay - giống IntroducePremium */
+.leaderboard-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Full screen variant when opened from Profile (no bottom bar) */
+.leaderboard-popup-overlay.fullscreen {
+    top: 60px; /* Dành chỗ cho top-bar */
+    bottom: 0;
+}
+
+.leaderboard-popup-overlay.fullscreen .leaderboard-popup-container {
+    margin-bottom: 40px;
+}
+
+/* MainView variant (with header and bottom bar) */
+.leaderboard-popup-overlay.mainview {
+    top: 60px;
+    bottom: 80px;
+    align-items: flex-start;
+}
+
+.leaderboard-popup-container {
+    display: flex;
+    flex-direction: column;
+    font-family: "PP Neue Machina", sans-serif;
+    max-width: 430px;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1001;
+    margin-top: 0;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
 .leaderboard-global {
     position: relative;
     width: 100%;
-    height: 100%; /* Subtract header height (80px) and bottom nav height (80px) */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    max-width: 430px;
+    max-width: 100%;
     margin: 0 auto;
     overflow: hidden;
     background-color: transparent;
+    box-sizing: border-box;
 }
 
 /* Background Container - chỉ cho LeaderboardGlobal */
@@ -44,10 +96,12 @@
 .leaderboard-content {
     flex: 1;
     overflow-y: auto;
-    padding: 60px 20px 60px 20px;
+    padding: 0px 20px 0px 20px;
     -webkit-overflow-scrolling: touch;
     position: relative;
     z-index: 1;
+    max-width: 100%;
+    box-sizing: border-box;
     
     /* Hide scrollbars */
     scrollbar-width: none;
@@ -131,8 +185,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    padding-top: 80px;
+    height: 100%;
+    padding-top: 0;
 }
 
 .loading-text {
@@ -750,5 +804,15 @@
     line-height: 103%;
     letter-spacing: 0%;
     margin-bottom: 1px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 

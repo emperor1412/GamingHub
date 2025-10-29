@@ -42,6 +42,7 @@ import EggletEventPage from './EggletEventPage';
 import IntroducePremium from './IntroducePremium';
 import Premium from './Premium';
 import LeaderboardIntroduce from './LeaderboardIntroduce';
+import LeaderboardGlobal from './LeaderboardGlobal';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
 
@@ -67,6 +68,7 @@ const MainView = ({ checkInData, setShowCheckInAnimation, checkIn, setShowCheckI
     const [showIntroducePremium, setShowIntroducePremium] = useState(false);
     const [showPremium, setShowPremium] = useState(false);
     const [showLeaderboardIntroduce, setShowLeaderboardIntroduce] = useState(false);
+    const [showLeaderboardGlobal, setShowLeaderboardGlobalLocal] = useState(false);
     const [isCheckingPremiumStatus, setIsCheckingPremiumStatus] = useState(true);
 
     // Fetch total flips from API
@@ -1248,7 +1250,10 @@ Response:
                         if (!isFSLIDConnected) {
                             setShowLeaderboardIntroduce(true);
                         } else {
-                            setShowLeaderboardGlobal(true);
+                            setShowLeaderboardGlobalLocal(true);
+                            if (setShowLeaderboardGlobal) {
+                                setShowLeaderboardGlobal(true);
+                            }
                         }
                     }}>
                         <div className='locked-card-image-container'>
@@ -1413,8 +1418,27 @@ Response:
                 setIsFSLIDConnected={() => {
                     setIsFSLIDConnected(true);
                     setShowLeaderboardIntroduce(false);
-                    setShowLeaderboardGlobal(true);
+                    setShowLeaderboardGlobalLocal(true);
+                    if (setShowLeaderboardGlobal) {
+                        setShowLeaderboardGlobal(true);
+                    }
                 }}
+            />
+
+            {/* Leaderboard Global Popup */}
+            <LeaderboardGlobal 
+                isOpen={showLeaderboardGlobal}
+                isFromProfile={false}
+                onClose={() => {
+                    setShowLeaderboardGlobalLocal(false);
+                    if (setShowLeaderboardGlobal) {
+                        setShowLeaderboardGlobal(false);
+                    }
+                }}
+                setShowProfileView={setShowProfileView}
+                checkIn={checkIn}
+                checkInData={checkInData}
+                setShowCheckInAnimation={setShowCheckInAnimation}
             />
         </>
     );

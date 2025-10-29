@@ -807,17 +807,6 @@ const bind_fslid = async () => {
           userProfile={userProfile}
         />
       )
-      : showLeaderboardGlobal && isFSLIDConnected ?
-      (
-        <LeaderboardGlobal 
-          onClose={handleLeaderboardGlobalClose}
-          setShowProfileView={setShowProfileView}
-          setActiveTab={setActiveTab}
-          checkIn={checkIn}
-          checkInData={checkInData}
-          setShowCheckInAnimation={setShowCheckInAnimation}
-        />
-      )
       :
       (
 
