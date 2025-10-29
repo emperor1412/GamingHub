@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.e056db4b.css",
-    "main.js": "./static/js/main.d8144aa0.js",
+    "main.css": "./static/css/main.7ebc3c6b.css",
+    "main.js": "./static/js/main.ab079486.js",
     "static/js/453.589b9bb9.chunk.js": "./static/js/453.589b9bb9.chunk.js",
     "static/media/trophy_4.png": "./static/media/trophy_4.21af4edb98bbc6a6820b.png",
     "static/media/Bulk_Scratch_Ticket.gif": "./static/media/Bulk_Scratch_Ticket.27839f57b9a144e4affa.gif",
@@ -258,12 +258,12 @@
     "static/media/selected_avatar.svg": "./static/media/selected_avatar.2c6ded1927431459d423fb3c02651cb8.svg",
     "static/media/circle_dotted.svg": "./static/media/circle_dotted.158f789cd2a728046938f0b8826c00e5.svg",
     "static/media/circle.svg": "./static/media/circle.33affa4dee55de7c7ea5f575dc6c5ac0.svg",
-    "main.e056db4b.css.map": "./static/css/main.e056db4b.css.map",
-    "main.d8144aa0.js.map": "./static/js/main.d8144aa0.js.map",
+    "main.7ebc3c6b.css.map": "./static/css/main.7ebc3c6b.css.map",
+    "main.ab079486.js.map": "./static/js/main.ab079486.js.map",
     "453.589b9bb9.chunk.js.map": "./static/js/453.589b9bb9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e056db4b.css",
-    "static/js/main.d8144aa0.js"
+    "static/css/main.7ebc3c6b.css",
+    "static/js/main.ab079486.js"
   ]
 }
