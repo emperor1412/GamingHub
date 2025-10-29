@@ -1,0 +1,770 @@
+/* Challenge Badge Screen Styles */
+:root {
+  --cbs-corner-size: 25px;
+  --cbs-corner-color: #00F1FF;
+  --cbs-corner-border: 3px;
+  --cbs-corner-offset-top: -20px;
+  --cbs-corner-offset-bottom: -20px;
+  --cbs-corner-offset-left: -10px;
+  --cbs-corner-offset-right: -10px;
+  --cbs-corner-offset-top-weekly:  -10px;
+  --cbs-corner-offset-bottom-weekly: -10px;
+  --cbs-corner-offset-left-weekly: -10px;
+  --cbs-corner-offset-right-weekly: -10px;
+}
+
+.challenge-badge-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'PP Neue Machina', sans-serif;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Background Pattern */
+.cbs-background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+}
+
+/* Main Content */
+.cbs-main-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+    padding: 80px 20px 100px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    max-width: 430px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.cbs-header-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.cbs-header-brackets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cbs-bracket {
+    position: absolute;
+    width: var(--cbs-corner-size);
+    height: var(--cbs-corner-size);
+    border: var(--cbs-corner-border) solid var(--cbs-corner-color);
+}
+
+.cbs-bracket-tl {
+    top: var(--cbs-corner-offset-top);
+    left: var(--cbs-corner-offset-left);
+    border-right: none;
+    border-bottom: none;
+}
+
+.cbs-bracket-br {
+    bottom: var(--cbs-corner-offset-bottom);
+    right: var(--cbs-corner-offset-right);
+    border-left: none;
+    border-top: none;
+}
+
+.cbs-title-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0;
+}
+
+.cbs-title {
+    font-size: 32.52px;
+    font-weight: 700;
+    line-height: 89%;
+    letter-spacing: -2.2%;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 5px;
+}
+
+.cbs-subtitle {
+    font-size: 16.23px;
+    font-weight: 700;
+    color: #01FFD9;
+    text-transform: uppercase;
+    letter-spacing: -1.1%;
+    line-height: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.cbs-robot-character {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+}
+
+.cbs-robot-image {
+    width: 134px;
+    height: 134px;
+    object-fit: contain;
+}
+
+/* Summary Cards */
+.cbs-summary-cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.cbs-summary-card {
+    flex: 1;
+    background: #0000FF;
+    border-radius: 12px;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.cbs-summary-card-clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    background: #DC00D5;
+}
+
+.cbs-summary-card-clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 241, 255, 0.3);
+    background: #DC00D5;
+}
+
+.cbs-summary-card-clickable:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 241, 255, 0.2);
+}
+
+.cbs-card-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    justify-content: flex-start;
+    padding-top: 0;
+}
+
+.cbs-card-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.cbs-card-header {
+    margin-bottom: 5px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #FFFFFF;
+    width: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3px;
+}
+
+.cbs-card-number {
+    color: #FFFFFF;
+    font-size: 13.83px;
+    font-weight: 700;
+    font-family: 'PP Neue Machina', sans-serif;
+    line-height: 13.12px;
+    letter-spacing: 0px;
+}
+
+.cbs-card-title {
+    font-size: 13.83px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    margin-bottom: 0;
+    line-height: 13.12px;
+    font-family: 'PP Neue Machina', sans-serif;
+}
+
+.cbs-card-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cbs-starlet-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.cbs-badge-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.cbs-badge-image-explorer {
+    transform: scale(1.5);
+}
+
+.cbs-badge-image-starlets {
+    transform: scale(1);
+}
+
+/* Weekly Section */
+.cbs-weekly-section {
+    margin-bottom: 40px;
+}
+
+.cbs-weekly-header {
+    position: relative;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.cbs-weekly-brackets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cbs-weekly-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: left;
+    margin: 0;
+}
+
+/* Badges Container */
+.cbs-badges-container {
+    position: relative;
+    border-radius: 12px;
+    padding: 0px 10px;
+}
+
+.cbs-corner {
+    position: absolute;
+    width: var(--cbs-corner-size);
+    height: var(--cbs-corner-size);
+    border: var(--cbs-corner-border) solid var(--cbs-corner-color);
+}
+
+.cbs-top-left {
+    top: var(--cbs-corner-offset-top-weekly);
+    left: var(--cbs-corner-offset-left-weekly);
+    border-right: none;
+    border-bottom: none;
+}
+
+.cbs-top-right {
+    top: var(--cbs-corner-offset-top-weekly);
+    right: var(--cbs-corner-offset-right-weekly);
+    border-left: none;
+    border-bottom: none;
+}
+
+.cbs-bottom-left {
+    bottom: var(--cbs-corner-offset-bottom-weekly);
+    left: var(--cbs-corner-offset-left-weekly);
+    border-right: none;
+    border-top: none;
+}
+
+.cbs-bottom-right {
+    bottom: var(--cbs-corner-offset-bottom-weekly);
+    right: var(--cbs-corner-offset-right-weekly);
+    border-left: none;
+    border-top: none;
+}
+
+/* Badges Grid */
+.cbs-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    justify-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+/* Weekly badges special layout - 4 badges: 3 on top row, 1 centered on bottom row */
+.cbs-weekly-section .cbs-badges-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+}
+
+.cbs-weekly-section .cbs-badge-item:nth-child(4) {
+    grid-column: 2; /* Center the 4th badge */
+    grid-row: 2;
+}
+
+.cbs-badge-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    width: 104px;
+    max-height: 140px;
+    transition: transform 0.2s ease;
+}
+
+.cbs-badge-item:hover {
+    transform: scale(1.05);
+}
+
+/* Unknown badges - not clickable but keep hover effect */
+.cbs-badge-item.cbs-badge-unknown {
+    cursor: default;
+}
+
+.cbs-badge-item.cbs-badge-unknown:hover {
+    transform: scale(1.05);
+}
+
+.cbs-badge-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.cbs-badge-icon {
+    width: 104px;
+    height: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cbs-badge-icon img {
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+    transform: scale(1.2);
+}
+
+/* Locked badge state - make it dimmed */
+.cbs-badge-locked img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
+/* Unknown/upcoming badge state - make it dimmed */
+.cbs-badge-unknown img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
+/* Responsive cho badges container - chỉ giảm size khi cần */
+@media (max-width: 420px) {
+    .cbs-badge-item {
+        width: 90px;
+    }
+    
+    .cbs-badge-icon {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 90px;
+        height: 90px;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 380px) {
+    .cbs-badge-item {
+        width: 80px;
+    }
+    
+    .cbs-badge-icon {
+        width: 80px;
+        height: 80px;
+        top: 5px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 80px;
+        height: 80px;
+        transform: scale(1.0);
+    }
+}
+
+@media (max-width: 300px) {
+    .cbs-badge-item {
+        width: 70px;
+    }
+    
+    .cbs-badge-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .cbs-badge-icon img {
+        width: 70px;
+        height: 70px;
+        transform: scale(0.9);
+    }
+}
+
+.cbs-badge-status-icon {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #FFFFFF;
+    z-index: 2;
+}
+
+.cbs-badge-locked-icon {
+    top: 20%;
+    left: 10%;
+}
+
+.cbs-badge-unknown-icon {
+    top: 40%;
+}
+
+.cbs-badge-locked-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.cbs-badge-unknown-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cbs-badge-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.cbs-badge-green {
+    background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    border-color: #81C784;
+}
+
+.cbs-badge-silver {
+    background: linear-gradient(135deg, #9E9E9E 0%, #BDBDBD 100%);
+    border-color: #757575;
+}
+
+.cbs-badge-blue {
+    background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%);
+    border-color: #64B5F6;
+}
+
+/* .cbs-badge-unlocked {
+    opacity: 1;
+}
+
+.cbs-badge-locked {
+    opacity: 0.6;
+}
+
+.cbs-badge-unknown {
+    opacity: 0.8;
+} */
+
+.cbs-lock-icon {
+    font-size: 24px;
+    color: #757575;
+}
+
+.cbs-question-icon {
+    font-size: 32px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cbs-badge-symbol {
+    width: 30px;
+    height: 30px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    position: relative;
+}
+
+.cbs-badge-ring-text {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.cbs-ring-top {
+    position: absolute;
+    top: 5px;
+    line-height: 1;
+}
+
+.cbs-ring-bottom {
+    position: absolute;
+    bottom: 5px;
+    line-height: 1;
+}
+
+.cbs-badge-name {
+    font-family: 'PP Neue Machina', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 0px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+    .cbs-main-content {
+        padding: 50px 15px 30px;
+    }
+    
+    .cbs-title {
+        font-size: 24px;
+    }
+    
+    .cbs-summary-cards {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .cbs-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .cbs-badge-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cbs-badge-symbol {
+        width: 20px;
+        height: 20px;
+    }
+} */
+
+/* Status Modal Styles */
+.cbs-status-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.cbs-status-content {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    border: 2px solid #00F1FF;
+}
+
+.cbs-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cbs-status-header h3 {
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.cbs-close-btn {
+    background: none;
+    border: none;
+    color: #00F1FF;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cbs-status-display {
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cbs-status-description {
+    color: #CCCCCC;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Loading and Error States */
+.cbs-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    gap: 20px;
+}
+
+.cbs-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 241, 255, 0.3);
+    border-top: 4px solid #00F1FF;
+    border-radius: 50%;
+    animation: cbs-spin 1s linear infinite;
+}
+
+@keyframes cbs-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.cbs-loading-text {
+    color: #00F1FF;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.cbs-error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    gap: 20px;
+    text-align: center;
+}
+
+.cbs-error-text {
+    color: #FF4444;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.cbs-error-details {
+    color: #FFFFFF;
+    font-size: 14px;
+    opacity: 0.8;
+    max-width: 300px;
+}
+
+.cbs-retry-button {
+    background: linear-gradient(135deg, #00F1FF, #0099CC);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cbs-retry-button:hover {
+    background: linear-gradient(135deg, #00CCFF, #0088BB);
+    transform: translateY(-2px);
+}

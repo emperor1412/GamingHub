@@ -754,6 +754,274 @@ data object
         return false;
     },
 
+    // API function to get challenges for badge view
+    getChallengesBadgeView: async (depth = 0) => {
+        if (depth > 3) {
+            console.error('getChallengesBadgeView failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching challenges badge view...');
+            
+            const response = await fetch(`${shared.server_url}/api/app/challengesBadgeView?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getChallengesBadgeView Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getChallengesBadgeView Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getChallengesBadgeView: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getChallengesBadgeView: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result) {
+                        return await shared.getChallengesBadgeView(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getChallengesBadgeView error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getChallengesBadgeView Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getChallengesBadgeView error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
+    // API function to get challenge detail
+    getChallengeDetail: async (challengeId, depth = 0) => {
+        if (depth > 3) {
+            console.error('getChallengeDetail failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching challenge detail for ID:', challengeId);
+            
+            const response = await fetch(`${shared.server_url}/api/app/challengeDetail?token=${shared.loginData.token}&challengeId=${challengeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getChallengeDetail Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getChallengeDetail Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getChallengeDetail: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getChallengeDetail: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result) {
+                        return await shared.getChallengeDetail(challengeId, depth + 1);
+                    }
+                }
+                else {
+                    console.log('getChallengeDetail error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getChallengeDetail Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getChallengeDetail error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
+    // API function to join challenge
+    joinChallenge: async (challengeId, depth = 0) => {
+        if (depth > 3) {
+            console.error('joinChallenge failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Joining challenge with ID:', challengeId);
+            
+            const response = await fetch(`${shared.server_url}/api/app/joinChallenge?token=${shared.loginData.token}&challengeId=${challengeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('joinChallenge Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('joinChallenge Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('joinChallenge: success');
+                    return {
+                        success: true,
+                        data: data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('joinChallenge: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result) {
+                        return await shared.joinChallenge(challengeId, depth + 1);
+                    }
+                }
+                else if (data.code === 210001) {
+                    console.log('joinChallenge: not enough starlets');
+                    return {
+                        success: false,
+                        error: 'not_enough_starlets',
+                        message: data.msg || 'Not enough starlets'
+                    };
+                }
+                else {
+                    console.log('joinChallenge error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('joinChallenge Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('joinChallenge error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
+    // API function to complete challenge
+    completeChallenge: async (challengeId, depth = 0) => {
+        if (depth > 3) {
+            console.error('completeChallenge failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Completing challenge with ID:', challengeId);
+            
+            const response = await fetch(`${shared.server_url}/api/app/completeChallenge?token=${shared.loginData.token}&challengeId=${challengeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('completeChallenge Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('completeChallenge Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('completeChallenge: success');
+                    return {
+                        success: true,
+                        data: data.data // This will be the starlets reward amount
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('completeChallenge: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result) {
+                        return await shared.completeChallenge(challengeId, depth + 1);
+                    }
+                }
+                else {
+                    console.log('completeChallenge error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('completeChallenge Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('completeChallenge error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
     // New function to handle coin flip game
     flipCoin: async (isHeads, betAmount, allin = false, depth = 0) => {
         if (depth > 3) {
@@ -956,6 +1224,136 @@ data object
                 success: false,
                 error: error.message,
                 data: null
+            };
+        }
+    },
+
+    // API function to get badges earned (all challenges in Badge Collection view)
+    getBadgesEarned: async (depth = 0) => {
+        if (depth > 3) {
+            console.error('getBadgesEarned failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching badges earned...');
+            
+            const response = await fetch(`${shared.server_url}/api/app/badgesEarned?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getBadgesEarned Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getBadgesEarned Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getBadgesEarned: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getBadgesEarned: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return await shared.getBadgesEarned(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getBadgesEarned error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getBadgesEarned Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getBadgesEarned error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
+            };
+        }
+    },
+
+    // API function to get challenge earned data (starlets and badges earned)
+    getChallengeEarned: async (depth = 0) => {
+        if (depth > 3) {
+            console.error('getChallengeEarned failed after 3 attempts');
+            return {
+                success: false,
+                error: 'Failed after 3 attempts'
+            };
+        }
+
+        try {
+            console.log('Fetching challenge earned data...');
+            
+            const response = await fetch(`${shared.server_url}/api/app/challengeEarned?token=${shared.loginData.token}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log('getChallengeEarned Response:', response);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('getChallengeEarned Data:', data);
+                
+                if (data.code === 0) {
+                    console.log('getChallengeEarned: success');
+                    return {
+                        success: true,
+                        data: data.data
+                    };
+                }
+                else if (data.code === 102001 || data.code === 102002) {
+                    console.log('getChallengeEarned: login again');
+                    const result = await shared.login(shared.initData);
+                    if (result.success) {
+                        return await shared.getChallengeEarned(depth + 1);
+                    }
+                }
+                else {
+                    console.log('getChallengeEarned error:', data);
+                    return {
+                        success: false,
+                        error: data.msg || 'Unknown error'
+                    };
+                }
+            }
+            else {
+                console.log('getChallengeEarned Response not ok:', response);
+                return {
+                    success: false,
+                    error: 'Network error'
+                };
+            }
+        }
+        catch (e) {
+            console.error('getChallengeEarned error:', e);
+            return {
+                success: false,
+                error: e.message || 'Network error'
             };
         }
     },
