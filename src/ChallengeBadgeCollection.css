@@ -1,0 +1,441 @@
+/* Challenge Badge Collection Styles */
+:root {
+  --challenge-badge-collection-corner-size: 25px;
+  --challenge-badge-collection-corner-color: #00F1FF;
+  --challenge-badge-collection-corner-border: 3px;
+  --challenge-badge-collection-corner-offset: -10px;
+}
+
+.challenge-badge-collection {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('./images/background_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'PP Neue Machina', sans-serif;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Background Pattern */
+.challenge-badge-collection-background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+}
+
+/* Main Content */
+.challenge-badge-collection-main-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+    padding: 80px 20px 100px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    max-width: 430px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.challenge-badge-collection-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.challenge-badge-collection-title {
+    position: relative;
+}
+
+.challenge-badge-collection-title-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.challenge-badge-collection-title-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.badge-text {
+    font-family: 'PP Neue Machina', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 40.97px;
+    line-height: 100%;
+    letter-spacing: -2.2%;
+    text-align: center;
+    color: #01FFD9;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.collection-text {
+    font-family: 'PP Neue Machina', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 40.97px;
+    line-height: 100%;
+    letter-spacing: -2.2%;
+    text-align: center;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+/* Corner Brackets */
+.challenge-badge-collection-corner {
+    position: absolute;
+    width: var(--challenge-badge-collection-corner-size);
+    height: var(--challenge-badge-collection-corner-size);
+    border: var(--challenge-badge-collection-corner-border) solid var(--challenge-badge-collection-corner-color);
+}
+
+.challenge-badge-collection-top-left {
+    top: -20px;
+    left: -10px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.challenge-badge-collection-top-right {
+    top: -20px;
+    right: -10px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.challenge-badge-collection-bottom-left {
+    bottom: -20px;
+    left: -10px;
+    border-right: none;
+    border-top: none;
+}
+
+.challenge-badge-collection-bottom-right {
+    bottom: -20px;
+    right: -10px;
+    border-left: none;
+    border-top: none;
+}
+
+/* Badges Grid */
+.challenge-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 400px;
+    width: 100%;
+    margin: 40px auto 0;
+    justify-items: center;
+}
+
+/* Badge Item */
+.challenge-badge-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    width: 104px;
+    max-height: 140px;
+    transition: transform 0.2s ease;
+}
+
+.challenge-badge-item:hover {
+    transform: scale(1.05);
+}
+
+/* Unknown badges - not clickable but keep hover effect */
+.challenge-badge-item.challenge-badge-unknown {
+    cursor: default;
+}
+
+.challenge-badge-item.challenge-badge-unknown:hover {
+    transform: scale(1.05);
+}
+
+.challenge-badge-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.challenge-badge-icon {
+    width: 104px;
+    height: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.challenge-badge-icon img {
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+    transform: scale(1.2);
+}
+
+.challenge-badge-status-icon {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #FFFFFF;
+    z-index: 2;
+}
+
+.challenge-badge-locked-icon {
+    top: 20%;
+    left: 10%;
+}
+
+.challenge-badge-unknown-icon {
+    top: 40%;
+}
+
+.challenge-badge-locked-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.challenge-badge-unknown-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Badge Name */
+.challenge-badge-name {
+    font-family: 'PP Neue Machina', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 0px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+/* Responsive cho badges container - chỉ giảm size khi cần */
+@media (max-width: 420px) {
+    .challenge-badge-item {
+        width: 90px;
+    }
+    
+    .challenge-badge-icon {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .challenge-badge-icon img {
+        width: 90px;
+        height: 90px;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 380px) {
+    .challenge-badge-item {
+        width: 80px;
+    }
+    
+    .challenge-badge-icon {
+        width: 80px;
+        height: 80px;
+        top: 5px;
+    }
+    
+    .challenge-badge-icon img {
+        width: 80px;
+        height: 80px;
+        transform: scale(1.0);
+    }
+}
+
+@media (max-width: 300px) {
+    .challenge-badge-item {
+        width: 70px;
+    }
+    
+    .challenge-badge-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .challenge-badge-icon img {
+        width: 70px;
+        height: 70px;
+        transform: scale(0.9);
+    }
+}
+
+/* Locked badge state - make it dimmed */
+.challenge-badge-locked img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
+/* Unknown/upcoming badge state - make it dimmed */
+.challenge-badge-unknown img {
+    opacity: 0.3;
+    filter: grayscale(0.5);
+}
+
+/* Status Modal */
+.challenge-badge-status-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.challenge-badge-status-content {
+    background: #1a1a1a;
+    border: 2px solid var(--challenge-badge-collection-corner-color);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 300px;
+    width: 90%;
+    position: relative;
+}
+
+.challenge-badge-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.challenge-badge-status-header h3 {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+}
+
+.challenge-badge-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.challenge-badge-status-display {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.challenge-badge-status-description {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+    .challenge-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .challenge-badge-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .challenge-badge-title {
+        font-size: 9px;
+    }
+    
+    .challenge-badge-subtitle {
+        font-size: 7px;
+    }
+    
+    .challenge-badge-trail-name {
+        font-size: 7px;
+    }
+    
+    .badge-text {
+        font-size: 28px;
+    }
+    
+    .collection-text {
+        font-size: 28px;
+    }
+} */
+
+/* @media (max-width: 360px) {
+    .challenge-badges-grid {
+        gap: 10px;
+    }
+    
+    .challenge-badge-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .challenge-badge-title {
+        font-size: 8px;
+    }
+    
+    .challenge-badge-subtitle {
+        font-size: 6px;
+    }
+    
+    .challenge-badge-trail-name {
+        font-size: 6px;
+    }
+} */

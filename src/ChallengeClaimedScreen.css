@@ -1,0 +1,283 @@
+/* Challenge Claimed Screen Styles */
+:root {
+  --ccs-corner-size: 25px;
+  --ccs-corner-color: #00F1FF;
+  --ccs-corner-border: 3px;
+  --ccs-corner-offset: -7px;
+}
+
+.ccs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/background_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-family: "PP Neue Machina", sans-serif;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Background Pattern */
+.ccs-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40px 40px, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+/* Large Background Text */
+/* .ccs-container::before {
+  content: "REWARDS";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  font-weight: 900;
+  color: rgba(0, 241, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 20px;
+  z-index: 1;
+  pointer-events: none;
+} */
+
+/* Main Content */
+.ccs-main-content {
+  position: relative;
+  z-index: 5;
+  padding: 50px 20px 50px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 430px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* YOU'VE RECEIVED Section */
+.ccs-received-section {
+  margin-bottom: 30px;
+}
+
+.ccs-received-box {
+  padding: 2px 15px;
+  color: #00F1FF;
+  font-size: 24.75px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "PP Neue Machina", sans-serif;
+  background: #0000FF;
+}
+
+/* Reward Details */
+.ccs-reward-details {
+  position: relative;
+  padding: 20px;
+  background-image: url('./images/doodle_extra.png');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 318px;
+}
+
+.ccs-reward-text {
+  font-size: 30.34px;
+  font-weight: 700;
+  line-height: 100%;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0%;
+  font-family: "PP Neue Machina", sans-serif;
+}
+
+/* Corner Brackets */
+.ccs-corner {
+  position: absolute;
+  width: var(--ccs-corner-size);
+  height: var(--ccs-corner-size);
+  border: var(--ccs-corner-border) solid var(--ccs-corner-color);
+  pointer-events: none;
+}
+
+.ccs-corner.ccs-top-left {
+  top: var(--ccs-corner-offset);
+  left: var(--ccs-corner-offset);
+  border-right: none;
+  border-bottom: none;
+}
+
+.ccs-corner.ccs-top-right {
+  top: var(--ccs-corner-offset);
+  right: var(--ccs-corner-offset);
+  border-left: none;
+  border-bottom: none;
+}
+
+.ccs-corner.ccs-bottom-left {
+  bottom: var(--ccs-corner-offset);
+  left: var(--ccs-corner-offset);
+  border-right: none;
+  border-top: none;
+}
+
+.ccs-corner.ccs-bottom-right {
+  bottom: var(--ccs-corner-offset);
+  right: var(--ccs-corner-offset);
+  border-left: none;
+  border-top: none;
+}
+
+/* Central Badge */
+.ccs-badge-container {
+  position: relative;
+  background-image: url('./images/bg-claimscreen.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.ccs-badge-image {
+  width: 330px;
+  height: 330px;
+  object-fit: contain;
+  /* filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.5)); */
+}
+
+/* Floating Stars */
+.ccs-floating-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ccs-star {
+  position: absolute;
+  opacity: 0.8;
+  animation: ccs-float 3s ease-in-out infinite;
+}
+
+.ccs-star.s1 {
+  width: 62px;
+  height: 62px;
+  top: 30%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.ccs-star.s2 {
+  width: 42px;
+  height: 42px;
+  top: 32%;
+  right: 20%;
+  animation-delay: 0.5s;
+}
+
+.ccs-star.s3 {
+  width: 44px;
+  height: 44px;
+  top: 67%;
+  left: 20%;
+  animation-delay: 1s;
+}
+
+.ccs-star.s4 {
+  width: 62px;
+  height: 62px;
+  top: 65%;
+  right: 15%;
+  animation-delay: 1.5s;
+}
+
+.ccs-star.s5 {
+  width: 28px;
+  height: 28px;
+  top: 42%;
+  left: 10%;
+  animation-delay: 2s;
+}
+
+.ccs-star.s6 {
+  width: 28px;
+  height: 28px;
+  top: 50%;
+  right: 15%;
+  animation-delay: 2.5s;
+}
+
+@keyframes ccs-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* VIEW BADGES Button */
+.ccs-view-badges-button {
+  background: transparent;
+  border: 2px solid #00F1FF;
+  border-radius: 30px;
+  color: #00F1FF;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 15px 10px;
+  width: 308px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "PP Neue Machina", sans-serif;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  line-height: 100%;
+}
+
+.ccs-view-badges-button:hover {
+  background: rgba(0, 241, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 241, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+
+/* Responsive Design */
+/* @media (max-width: 480px) {
+  .ccs-main-content {
+    padding: 40px 15px 80px;
+  }
+  
+  .ccs-badge-image {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .ccs-reward-text {
+    font-size: 20px;
+  }
+  
+  .ccs-received-box {
+    font-size: 16px;
+  }
+} */

@@ -1,0 +1,94 @@
+ID,Type,Title,Short Title,Distance_km,Steps_est,Location,Blurb,Success blurb,Fail Blurb,Date Start,Date End
+1001,Weekly,Mount Olympus Trek,Olympus,20,25000,"Olympus NP, Greece",Forested switchbacks into myth country and big Aegean views.,You power through shaded climbs and are rewarded with sweeping Aegean horizons.,The heat and endless switchbacks leave you wilted before the views appear.,10/8/2025,10/15/2025
+1002,Weekly,Trolltunga Out-and-Back,Trolltunga,27,33750,"Hordaland, Norway","Alpine lakes, granite slabs, and that iconic cliff finale.","Clear skies make the lakes sparkle, and the final cliff push feels epic.","Clouds roll in, hiding the lakes and turning the slab scramble into a trudge.",10/16/2025,10/23/2025
+1003,Weekly,Cinque Terre Classic Segment,Cinque,24,30000,"Liguria, Italy",Clifftop paths linking five candy-colored villages.,Every turn brings a postcard view of pastel towns above the sea.,The crowds and steep steps make you wish for an easier route between villages.,10/24/2025,10/31/2025
+1004,Weekly,Table Mountain Panorama Loop,Panorama,26,32500,"Cape Town, South Africa",Contour paths & ridges with oceans-on-both-sides moments.,"The ridge feels like flying, with water glittering on both horizons.","Fog swallows the ridges, leaving nothing but wet boots and gray air.",11/1/2025,11/8/2025
+1005,Weekly,Arthur’s Seat & Coast Loop,Arthurseat,21,26250,"Edinburgh, Scotland, UK","Volcano cone, Salisbury Crags, and Firth of Forth breezes.",You crest the cone with wind in your hair and the whole city below.,Rain slicks the crags and the “view” is a wall of mist.,11/9/2025,11/16/2025
+1006,Weekly,Mount Takao & Jimba Ridge,Jimba,23,28750,"Tokyo Prefecture, Japan","Cedar forests, shrine gates, and Fuji peeks on a clear day.",Mt. Fuji floats above shrine gates like a perfect painting.,"Haze smothers Fuji, leaving only a sweaty trudge through forest.",11/17/2025,11/24/2025
+1007,Weekly,Dragon’s Back & Shek O Loop,Dragonback,22,27500,"Hong Kong SAR, China","Wavy ridgeline, beaches below, city skyline behind.",The ridgeline rolls like a dragon with sand and skyscrapers shining.,Smog and heat turn the ridge into a slog with no reward.,11/25/2025,12/2/2025
+1008,Weekly,Yosemite Valley Rim Sampler,Yosemite,28,35000,"California, USA","Granite domes, pine scent, and waterfall lookouts.",Granite walls glow gold at sunset and the waterfalls thunder beside you.,"Trails close, waterfalls trickle, and the domes sit in haze.",12/3/2025,12/10/2025
+1009,Weekly,Banff Lakeshore & Lookouts,Banff,25,31250,"Alberta, Canada",Turquoise lakes & larch viewpoints in one tidy package.,Larches blaze gold above neon-blue lakes in crisp mountain air.,"The larches are bare, and the lakes sit dull under clouds.",12/11/2025,12/18/2025
+1010,Weekly,Patagonia Laguna Capri Circuit,Capri,20,25000,"Santa Cruz, Argentina",Fitz Roy reflections and lenga forests.,"Fitz Roy pierces a blue sky, mirrored in perfect still water.","Clouds cloak the peak, and the “reflection” is just ripples.",12/19/2025,12/26/2025
+1011,Weekly,Aoraki Hooker & Sealy Combo,Aoraki,29,36250,"Canterbury, New Zealand",Stair master steps to huge glacier-and-peak panoramas.,You crest the final step and glaciers spill out in every direction.,"Endless stairs leave you breathless, only to find the peaks hidden.",12/27/2025,1/3/2026
+1012,Weekly,Madeira Levadas Duo,Levadas,26,32500,"Madeira, Portugal",Narrow canal paths through laurel forest and tunnels.,Cool green tunnels lead you along dreamy canals with birdsong.,Slippery stones and endless mud turn the canal path into a crawl.,1/4/2026,1/11/2026
+1013,Weekly,Camí de Cavalls Segment,Cavalls,23,28750,"Menorca, Spain","Wild coves, scrub pine, and old watchtowers.","Each cove feels like a secret, watched over by ancient towers.","The coves are crowded, and the towers crumbled beyond charm.",1/12/2026,1/19/2026
+1014,Weekly,Causeway Coast Day Route,Causeway,24,30000,"County Antrim, Northern Ireland, UK","Sea arches, basalt cliffs, and ruinous castles.","The coast delivers drama—arches, black rock, and castle silhouettes.",The weather howls and you barely glimpse ruins through rain.,1/20/2026,1/27/2026
+1015,Weekly,Ring of Kerry Coastal Segment,Kerry,25,31250,"County Kerry, Ireland","Sheep-dotted lanes, Atlantic swells, mountain backdrops.",Sheep wander lanes as waves crash and mountains glow beyond.,Cold wind and rain turn lanes into bogs with invisible views.,1/28/2026,2/4/2026
+1016,Weekly,Petra Backdoor & High Place,Petra,22,27500,"Wadi Musa, Jordan",Sandstone stairways into temples and tombs.,You descend carved steps into chambers glowing with history.,"The heat, dust, and tour groups drain all sense of wonder.",2/5/2026,2/12/2026
+1017,Weekly,Wadi Rum Sandstone Circuit,Wadirum,27,33750,"Wadi Rum, Jordan","Rust-red dunes, rock bridges, Bedouin tea stops.","You crest a dune at sunset, sip tea, and watch the desert burn orange.","The sandstorm stings, the bridges bake, and no tea in sight.",2/13/2026,2/20/2026
+1018,Weekly,Lycian Way Blue Bays Day,Lycian,24,30000,"Antalya Province, Türkiye",Piney traverses above neon-blue coves and ruins.,Pines frame turquoise water and crumbling stone in perfect harmony.,"The coves are choked with boats, the ruins roped off.",2/21/2026,2/28/2026
+1019,Weekly,Kumano Kodo Nakahechi Day,Kumano,23,28750,"Wakayama, Japan","Mossy pilgrim stones, shrines, and cedar corridors.",Mossy lanterns guide you through hushed cedar avenues to shrines.,"Crowds clog the path, and rain turns mossy steps into slides.",3/1/2026,3/8/2026
+1020,Weekly,Jeju Olle Route Mix,Jeju,28,35000,"Jeju-do, South Korea","Lava coastline, tangerine farms, sea stacks.",Waves hammer black rock as you snack on sweet mandarins.,"Rain flattens the coast, and farms offer only closed gates.",3/9/2026,3/16/2026
+1021,Weekly,Great Ocean Walk Day 2–3,Oceanwalk,26,32500,"Victoria, Australia",Cliff paths and surf thundering below.,Waves explode beneath you while seabirds wheel overhead.,"Fog blocks the ocean, leaving only slippery cliffs and fear.",3/17/2026,3/24/2026
+1022,Weekly,Larapinta Ridge Sampler,Larapinta,29,36250,"Northern Territory, Australia","Desert ridges, ochre gorges, big Outback skies.",The ridges glow at sunset under endless desert sky.,Heat haze and flies steal all joy from the ochre canyons.,3/25/2026,4/1/2026
+1023,Weekly,Annapurna Poon Hill Short,Poonhill,24,30000,"Gandaki, Nepal","Stone steps, rhododendron forests, sunrise on giants.","At dawn, rhododendrons frame snowy peaks blazing pink.",Clouds smother sunrise and the steps feel never-ending.,4/2/2026,4/9/2026
+1024,Weekly,Langtang Valley Day Push,Langtang,20,25000,"Bagmati, Nepal","Mani walls, yak pastures, glacier-spill views.",Yaks graze below walls as white glaciers pour down the peaks.,"The altitude pounds, the walls feel endless, and no glacier reveals itself.",4/10/2026,4/17/2026
+1025,Weekly,Drakensberg Amphitheatre Loop,Drakensberg,28,35000,"KwaZulu-Natal, South Africa",Escarpment rim drama and thundering Tugela.,The rim yawns wide and Tugela Falls drops like silver thread.,Mist hides the rim and the falls vanish into the void.,4/18/2026,4/25/2026
+1026,Weekly,Sossusvlei Dunes Circuit,Sossusvlei,22,27500,"Namib Desert, Namibia",Big Daddy dune climbs and bleached Deadvlei pans.,"You crest Big Daddy, slide down to a ghostly white pan of skeleton trees.","Heat shimmers, sand burns, and the pan feels lifeless and flat.",4/26/2026,5/3/2026
+1027,Weekly,Simien Highlands Escarpment,Simien,25,31250,"Amhara, Ethiopia","Gelada troops, knife-edge cliffs, cloud oceans.",Baboons chatter on cliffs while clouds billow like seas below.,"The geladas hide, and clouds block every view.",5/4/2026,5/11/2026
+1028,Weekly,Atlas Imlil & Tizi n’Tamaterte,Tamaterte,21,26250,"High Atlas, Morocco","Berber villages, walnut groves, snowy crests.",Villages glow red against snow peaks and walnut orchards.,"Smog, dust, and closed passes ruin the mountain magic.",5/12/2026,5/19/2026
+1029,Weekly,Zion West Rim Highlights,Zion,27,33750,"Utah, USA",Slickrock mesas and slot-rim vistas.,The slickrock glows gold and every rim frames a perfect canyon.,Blistering heat and closed slots make the mesas feel barren.,5/20/2026,5/27/2026
+1030,Weekly,Grand Canyon South Rim Traverse,Canyon,30,37500,"Arizona, USA",Rim-to-rim-style lookouts without the full plunge.,Lookouts give full canyon drama with a fraction of the effort.,"The viewpoints are packed, and haze dulls the canyon depths.",5/28/2026,6/4/2026
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,Tamaterte,,,,,,,,
+,,,,,,,,,,,
+,,,Zion,,,,,,,,
+,,,,,,,,,,,
+,,,Canyon,,,,,,,,

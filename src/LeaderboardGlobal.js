@@ -11,7 +11,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
     const [userRank, setUserRank] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showRewardsPopup, setShowRewardsPopup] = useState(false);
-    const [isSeasonEnded, setIsSeasonEnded] = useState(true); // Biến để kiểm tra season đã kết thúc
+    const [isSeasonEnded, setIsSeasonEnded] = useState(false); // Biến để kiểm tra season đã kết thúc
 
     // Mock data for now - replace with actual API call
     const mockLeaderboardData = [
