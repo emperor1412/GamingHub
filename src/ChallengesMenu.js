@@ -5,6 +5,7 @@ import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
 import premiumIcon from './images/Premium_icon.png';
 import stepIcon from './images/step_icon.png';
+import lockIconChallenge from './images/lock_icon_challenge.png';
 
 import { 
     getCurrentChallenge, 
@@ -21,8 +22,10 @@ import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
+import { popup } from '@telegram-apps/sdk';
 
 const WELCOME_FLAG_KEY = 'challengesWelcomeShown';
+const CHALLENGE_START_DATE_UTC = new Date('2025-11-03T00:00:00Z'); // November 3, 2025 0:00 UTC
 
 const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -37,6 +40,63 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
     const [hasApiError, setHasApiError] = useState(false); // Track API error state
     const [showWelcome, setShowWelcome] = useState(false); // Welcome overlay state
+    const [isBeforeStartDate, setIsBeforeStartDate] = useState(false); // Track if before Nov 3, 2025
+
+    // Function to check if current date is before Nov 3, 2025 0:00 UTC
+    const checkIfBeforeStartDate = () => {
+        const now = new Date();
+        return now < CHALLENGE_START_DATE_UTC;
+    };
+
+    // Function to fetch challenges from badge view API (for before start date)
+    const fetchChallengesFromBadgeView = async () => {
+        try {
+            setIsLoadingChallenges(true);
+            const result = await shared.getBadgesEarned();
+            
+            if (result.success && result.data) {
+                // Filter challenges with state = 0 and map them to apiChallenges format
+                const upcomingChallenges = result.data
+                    .filter(challenge => challenge.state === 0)
+                    .map(challenge => ({
+                        id: challenge.id,
+                        name: challenge.name,
+                        type: challenge.type,
+                        price: challenge.price,
+                        step: challenge.step,
+                        state: 0,
+                        startTime: challenge.startTime,
+                        endTime: challenge.endTime
+                    }));
+                
+                setApiChallenges(upcomingChallenges);
+                console.log('[badge view challenges]', upcomingChallenges);
+                
+                // Set challenge details with state 0
+                const detailsMap = {};
+                upcomingChallenges.forEach(challenge => {
+                    detailsMap[challenge.id] = {
+                        id: challenge.id,
+                        name: challenge.name,
+                        state: 0,
+                        price: challenge.price,
+                        step: challenge.step,
+                        startTime: challenge.startTime,
+                        endTime: challenge.endTime
+                    };
+                });
+                setChallengeDetails(detailsMap);
+            } else {
+                console.error('Failed to fetch badge view challenges:', result.error);
+                setHasApiError(true);
+            }
+        } catch (e) {
+            console.error('[badge view] error', e);
+            setHasApiError(true);
+        } finally {
+            setIsLoadingChallenges(false);
+        }
+    };
 
     // Function to fetch challenge list
     const fetchChallengeList = async (depth = 0) => {
@@ -102,15 +162,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         }
     };
 
-    // Fetch 3 challenges from backend (challengeList)
+    // Fetch 3 challenges from backend (challengeList or badge view depending on date)
     useEffect(() => {
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+        
+        if (beforeStartDate) {
+            // Before Nov 3, 2025 - fetch from badge view
+            fetchChallengesFromBadgeView();
+        } else {
+            // After Nov 3, 2025 - use regular challenge list
+            fetchChallengeList();
+        }
     }, []);
 
     // Listen for data refresh requests
     useEffect(() => {
         if (onDataRefresh) {
-            fetchChallengeList();
+            const beforeStartDate = checkIfBeforeStartDate();
+            if (beforeStartDate) {
+                fetchChallengesFromBadgeView();
+            } else {
+                fetchChallengeList();
+            }
         }
     }, [onDataRefresh]);
 
@@ -173,6 +247,16 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         }
     };
 
+    // Helper function to calculate days until start date
+    const getDaysUntilStart = (startTime) => {
+        if (!startTime) return 0;
+        const start = new Date(startTime * 1000); // Convert Unix timestamp to JS date
+        const now = new Date();
+        const diffTime = start - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return Math.max(0, diffDays);
+    };
+
     // Helper function to check challenge conditions
     const getChallengeState = (challengeType) => {
         const challenge = getCurrentChallengeFromApi(challengeType);
@@ -208,7 +292,28 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         return { isDisabled, disabledReason, subReason };
     };
 
+    const handleNotReadyChallengeClick = async () => {
+        try {
+            await popup.open({
+                title: 'Event not started',
+                message: `Challenges open Monday! \nStock up on Starlets, lace up, and get ready to bank your steps!`,
+                buttons: [{ id: 'ok', type: 'default', text: 'OK' }],
+            });
+        } catch (error) {
+            console.error('Error showing popup:', error);
+        }
+    };
+
     const handleChallengeClick = async (challengeType) => {
+
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+
+        if (beforeStartDate) {
+            await handleNotReadyChallengeClick();
+            return;
+        }
+
         const state = getChallengeState(challengeType);
         const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
         
@@ -358,8 +463,16 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const handleBackFromBadgeScreen = () => {
         setShowBadgeScreen(false);
         
-        // Refresh challenge list to update state
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+        
+        if (beforeStartDate) {
+            // Before Nov 3, 2025 - fetch from badge view
+            fetchChallengesFromBadgeView();
+        } else {
+            // After Nov 3, 2025 - use regular challenge list
+            fetchChallengeList();
+        }
     };
 
     const handleExplorerBadgesClick = () => {
@@ -390,7 +503,12 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     // Function to handle data refresh from child components
     const handleDataRefresh = React.useCallback(() => {
         // Refresh challenge list data
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        if (beforeStartDate) {
+            fetchChallengesFromBadgeView();
+        } else {
+            fetchChallengeList();
+        }
     }, []); // Empty dependency array to prevent recreation
 
     // Show BadgeCollection if user clicked Explorer Badges
@@ -685,7 +803,12 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         </div>
                                         {weeklyApi && (
                                             <>
-                                                {weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
@@ -751,7 +874,12 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         </div>
                                         {monthlyApi && (
                                             <>
-                                                {monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
@@ -817,7 +945,12 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                         </div>
                                         {yearlyApi && (
                                             <>
-                                                {yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
