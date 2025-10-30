@@ -21,6 +21,7 @@ import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
+import lockIcon from './images/lock_icon_challenge.png';
 
 const WELCOME_FLAG_KEY = 'challengesWelcomeShown';
 
@@ -37,6 +38,8 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
     const [hasApiError, setHasApiError] = useState(false); // Track API error state
     const [showWelcome, setShowWelcome] = useState(false); // Welcome overlay state
+    const [incomingByType, setIncomingByType] = useState({}); // Incoming challenge (state 0) by type
+    const [incomingDetails, setIncomingDetails] = useState({}); // Detail map for incoming challenges
 
     // Function to fetch challenge list
     const fetchChallengeList = async (depth = 0) => {
@@ -80,6 +83,47 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                 });
                 setChallengeDetails(detailsMap);
                 console.log('[challengeDetails]', detailsMap);
+
+                // Fetch incoming challenges for badge view (state 0)
+                try {
+                    const badgeView = await shared.getChallengesBadgeView();
+                    if (badgeView.success && Array.isArray(badgeView.data)) {
+                        const incomingMap = {};
+                        badgeView.data.forEach(item => {
+                            if (item && item.state === 0 && (item.type === 1 || item.type === 2 || item.type === 3)) {
+                                // Only keep first incoming per type if multiple
+                                if (!incomingMap[item.type]) {
+                                    incomingMap[item.type] = item;
+                                }
+                            }
+                        });
+                        setIncomingByType(incomingMap);
+                        console.log('[incomingByType]', incomingMap);
+
+                        // Fetch details for incoming challenges to get startTime
+                        const incomingIds = Object.values(incomingMap).map(i => i.id);
+                        if (incomingIds.length > 0) {
+                            const incomingDetailPromises = incomingIds.map(async (id) => {
+                                try {
+                                    const res = await shared.getChallengeDetail(id);
+                                    if (res.success) {
+                                        return { id, detail: res.data };
+                                    }
+                                } catch (e) {
+                                    console.error('Error fetching incoming detail', id, e);
+                                }
+                                return null;
+                            });
+                            const incomingDetailResults = await Promise.all(incomingDetailPromises);
+                            const incDetailsMap = {};
+                            incomingDetailResults.forEach(r => { if (r) { incDetailsMap[r.id] = r.detail; }});
+                            setIncomingDetails(incDetailsMap);
+                            console.log('[incomingDetails]', incDetailsMap);
+                        }
+                    }
+                } catch (e) {
+                    console.error('[badgeView] error', e);
+                }
             } else if (json.code === 102001 || json.code === 102002) {
                 console.log('[challengeList] token expired, attempting to re-login');
                 const result = await shared.login(shared.initData);
@@ -153,6 +197,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
             case 'yearly': return 3;
             default: return 0;
         }
+    };
+
+    const hasIncomingForType = (typeInt) => {
+        return Boolean(incomingByType[typeInt]);
+    };
+
+    const getIncomingStartLabel = (typeInt) => {
+        const inc = incomingByType[typeInt];
+        if (!inc) return 'START SOON';
+        const detail = incomingDetails[inc.id];
+        const start = detail?.startTime;
+        if (!start) return 'START SOON';
+        let ms = Number(start);
+        if (ms < 1e12) ms = ms * 1000; // seconds -> ms
+        const d = new Date(ms);
+        const weekdaysAbbr = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+        const day = weekdaysAbbr[d.getDay()] || '';
+        return `STARTS ${day}`;
+    };
+
+    const getIncomingName = (typeInt) => {
+        const inc = incomingByType[typeInt];
+        return (inc?.name || '').toUpperCase();
     };
 
     // Helper function to get current challenge from API mock (only if no API error)
@@ -679,20 +746,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(weeklyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
+                                            ) : hasIncomingForType(1) ? (
+                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(1)) }}>
+                                                    {getIncomingName(1)}
+                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {weeklyApi && (
+                                        {(weeklyApi || hasIncomingForType(1)) && (
                                             <>
                                                 {weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
+                                                ) : hasIncomingForType(1) ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(1)}</span>
+                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
+                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{weeklyApi.price}</span>
+                                                        <span className="reward-amount">{weeklyApi?.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
@@ -745,20 +821,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(monthlyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
+                                            ) : hasIncomingForType(2) ? (
+                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(2)) }}>
+                                                    {getIncomingName(2)}
+                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {monthlyApi && (
+                                        {(monthlyApi || hasIncomingForType(2)) && (
                                             <>
                                                 {monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
+                                                ) : hasIncomingForType(2) ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(2)}</span>
+                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
+                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{monthlyApi.price}</span>
+                                                        <span className="reward-amount">{monthlyApi?.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
@@ -811,20 +896,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(yearlyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
+                                            ) : hasIncomingForType(3) ? (
+                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(3)) }}>
+                                                    {getIncomingName(3)}
+                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {yearlyApi && (
+                                        {(yearlyApi || hasIncomingForType(3)) && (
                                             <>
                                                 {yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
+                                                ) : hasIncomingForType(3) ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(3)}</span>
+                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
+                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{yearlyApi.price}</span>
+                                                        <span className="reward-amount">{yearlyApi?.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
