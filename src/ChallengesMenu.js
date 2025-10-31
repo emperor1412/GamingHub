@@ -698,6 +698,30 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             PROCEED TO CHALLENGES
                         </button>
                         
+                        {/* Premium Button - Only for non-premium users */}
+                        {!shared.isPremiumMember && (
+                            <button 
+                                className="challenges-welcome-premium-btn" 
+                                onClick={() => {
+                                    handleWelcomeClose();
+                                    // Navigate to Premium or Market
+                                    if (shared.setView) {
+                                        shared.setView('premium');
+                                    } else if (shared.setActiveTab) {
+                                        shared.setActiveTab('market');
+                                    }
+                                }}
+                            >
+                                <div className="premium-btn-content">
+                                    <img src={premiumIcon} alt="Premium" className="premium-btn-icon" />
+                                    <div className="premium-btn-main">
+                                        <span className="premium-btn-text-large">UPGRADE TO</span>
+                                        <span className="premium-btn-text-large">PREMIUM MEMBERSHIP</span>
+                                    </div>
+                                </div>
+                            </button>
+                        )}
+                        
                         {/* Bottom Navigation Bar */}
                         <div className="challenges-welcome-bottom-nav">
                             <div className="challenges-welcome-nav-icon challenges-welcome-nav-selected">
