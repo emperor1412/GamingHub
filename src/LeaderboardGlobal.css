@@ -7,8 +7,8 @@
     --leaderboard-corner-color: #FFFFFF;
     --leaderboard-corner-top-offset: -5px;
     --leaderboard-corner-bottom-offset: -5px;
-    --leaderboard-corner-left-offset: 90px;
-    --leaderboard-corner-right-offset: 90px;
+    --leaderboard-corner-left-offset: 100px;
+    --leaderboard-corner-right-offset: 100px;
 }
 
 /* Popup Overlay - giống IntroducePremium */
@@ -142,6 +142,10 @@
     text-transform: uppercase;
     padding: 3px 12px 0px;
     min-width: fit-content;
+}
+
+.title-word.ended-word {
+    padding: 3px 50px 0px;
 }
 
 /* Corner borders for leaderboard title */

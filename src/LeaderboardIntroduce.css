@@ -131,6 +131,10 @@
     text-transform: uppercase;
     padding: 3px 12px 0px;
     position: relative;
+    background-image: url('./images/doodle_extra.png');
+    background-size: 303px 60px;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Steps Section */
