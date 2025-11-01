@@ -275,14 +275,14 @@
 }
 
 .podium-avatar {
+    position: absolute;
+    top: -40px;
     width: 70px;
     height: 70px;
     border-radius: 50%;
     border: 4px solid transparent;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 10px;
-    position: absolute;
-    top: -40px;
     z-index: 3;
 }
 
@@ -309,6 +309,23 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
+}
+
+.premium-icon-overlay-podium {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 25px;
+    height: 25px;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.premium-icon-podium {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .podium-info {
@@ -661,16 +678,34 @@
 }
 
 .user-avatar {
+    position: relative;
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .user-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
+}
+
+.premium-icon-overlay-your-rank {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.premium-icon-your-rank {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .username {
@@ -775,13 +810,35 @@
     object-fit: cover;
 }
 
-.item-username {
+.item-username-wrapper {
+    position: relative;
     flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.item-username {
     color: #FFF;
     font-family: "PP Neue Machina";
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
+}
+
+.premium-icon-overlay-top10 {
+    position: absolute;
+    top: -6px;
+    left: -15px;
+    width: 17px;
+    height: 17px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.premium-icon-top10 {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .item-steps-info {

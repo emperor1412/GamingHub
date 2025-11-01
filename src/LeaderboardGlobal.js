@@ -5,6 +5,7 @@ import shared from './Shared';
 import spark from './images/Spark.png';
 import RewardsPopup from './LeaderboardRewardsPopup';
 import starlet from './images/starlet.png';
+import premiumDiamond from './images/Premium_icon.png';
 
 const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation, isOpen = true, isFromProfile = false }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -15,16 +16,16 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
 
     // Mock data for now - replace with actual API call
     const mockLeaderboardData = [
-        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] }
+        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
+        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] }
     ];
 
     const mockUserRank = {
@@ -83,11 +84,11 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                         {/* Content */}
                         <div className="leaderboard-content">
                             <div className="leaderboard-global-title">
-                        {/* Corner borders for title */}
-                        <div className="leaderboard-corner leaderboard-top-left"></div>
-                        <div className="leaderboard-corner leaderboard-top-right"></div>
-                        <div className="leaderboard-corner leaderboard-bottom-left"></div>
-                        <div className="leaderboard-corner leaderboard-bottom-right"></div>
+                                {/* Corner borders for title */}
+                                <div className="leaderboard-corner leaderboard-top-left"></div>
+                                <div className="leaderboard-corner leaderboard-top-right"></div>
+                                <div className="leaderboard-corner leaderboard-bottom-left"></div>
+                                <div className="leaderboard-corner leaderboard-bottom-right"></div>
                                 {isSeasonEnded ? (
                                     <>
                                         <div className="title-word">SEASON</div>
@@ -104,46 +105,52 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                             {/* Your Rank - chỉ hiển thị khi season ended */}
                             {isSeasonEnded && (
                                 <>
-                                <div className="next-season-content">
-                            <div className="next-season-text">
-                                NEXT SEASON BEGINS IN:
+                            <div className="next-season-content">
+                                <div className="next-season-text">
+                                    NEXT SEASON BEGINS IN:
+                                </div>
+                                <div className="next-season-date">
+                                    12/30/25 00:00 UTC
+                                </div>
                             </div>
-                            <div className="next-season-date">
-                                12/30/25 00:00 UTC
-                            </div>
-                        </div>
-                        <div className="your-rank-section your-rank-section-ended">
-                            <div className="section-title">YOUR RANK</div>
-                            <div className="your-rank-card your-rank-card-ended">
-                                <div className="rank-info">
-                                    <span className="rank-number">{userRank?.rank || 0}</span>
-                                    <div className="user-avatar">
-                                        <img 
-                                            src={shared.avatars[userRank?.avatar || 0]?.src} 
-                                            alt="Your Avatar" 
-                                        />
-                                    </div>
-                                    <span className="username">{userRank?.username || "PLAYER"}</span>
-                                    {/* Reward items for season ended */}
-                                    {userRank?.rewards && userRank.rewards.length > 0 && (
-                                        <div className="reward-row-bottom-container">
-                                            {userRank.rewards.map((reward, index) => (
-                                                <div key={index} className="reward-row reward-row-bottom">
-                                                    <div className="reward-icon">
-                                                        <img src={reward.icon} alt="Reward" />
-                                                    </div>
-                                                    <span className="reward-text">{reward.amount}</span>
+                            <div className="your-rank-section your-rank-section-ended">
+                                <div className="section-title">YOUR RANK</div>
+                                <div className="your-rank-card your-rank-card-ended">
+                                    <div className="rank-info">
+                                        <span className="rank-number">{userRank?.rank || 0}</span>
+                                        <div className="user-avatar">
+                                            <img 
+                                                src={shared.avatars[userRank?.avatar || 0]?.src} 
+                                                alt="Your Avatar" 
+                                            />
+                                            {/* Premium icon overlay */}
+                                            {shared.isPremiumMember && (
+                                                <div className="premium-icon-overlay-your-rank">
+                                                    <img src={premiumDiamond} alt="Premium" className="premium-icon-your-rank" />
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                                <div className="steps-info">
-                                    <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
-                                    <span className="steps-label">STEPS</span>
+                                        <span className="username">{userRank?.username || "PLAYER"}</span>
+                                        {/* Reward items for season ended */}
+                                        {userRank?.rewards && userRank.rewards.length > 0 && (
+                                            <div className="reward-row-bottom-container">
+                                                {userRank.rewards.map((reward, index) => (
+                                                    <div key={index} className="reward-row reward-row-bottom">
+                                                        <div className="reward-icon">
+                                                            <img src={reward.icon} alt="Reward" />
+                                                        </div>
+                                                        <span className="reward-text">{reward.amount}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="steps-info">
+                                        <span className="steps-count">{formatSteps(userRank?.steps || 0)}</span>
+                                        <span className="steps-label">STEPS</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                                 </>
                             )}
 
@@ -158,6 +165,12 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         src={shared.avatars[leaderboardData[1]?.avatar || 0]?.src} 
                                         alt="Rank 2" 
                                     />
+                                    {/* Premium icon overlay */}
+                                    {leaderboardData[1]?.isPremium && (
+                                        <div className="premium-icon-overlay-podium">
+                                            <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="podium-info">
                                     <div className="podium-username">{leaderboardData[1]?.username || "PLAYER"}</div>
@@ -173,6 +186,12 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         src={shared.avatars[leaderboardData[0]?.avatar || 0]?.src} 
                                         alt="Rank 1" 
                                     />
+                                    {/* Premium icon overlay */}
+                                    {leaderboardData[0]?.isPremium && (
+                                        <div className="premium-icon-overlay-podium">
+                                            <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="podium-info">
                                     <div className="podium-username">{leaderboardData[0]?.username || "PLAYER"}</div>
@@ -188,6 +207,12 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         src={shared.avatars[leaderboardData[2]?.avatar || 0]?.src} 
                                         alt="Rank 3" 
                                     />
+                                    {/* Premium icon overlay */}
+                                    {leaderboardData[2]?.isPremium && (
+                                        <div className="premium-icon-overlay-podium">
+                                            <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="podium-info">
                                     <div className="podium-username">{leaderboardData[2]?.username || "PLAYER"}</div>
@@ -303,6 +328,12 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                             src={shared.avatars[userRank?.avatar || 0]?.src} 
                                             alt="Your Avatar" 
                                         />
+                                        {/* Premium icon overlay */}
+                                        {shared.isPremiumMember && (
+                                            <div className="premium-icon-overlay">
+                                                <img src={premiumDiamond} alt="Premium" className="premium-icon" />
+                                            </div>
+                                        )}
                                     </div>
                                     <span className="username">{userRank?.username || "PLAYER"}</span>
                                 </div>
@@ -327,7 +358,15 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                             alt="Avatar" 
                                         />
                                     </div> */}
-                                    <div className="item-username">{player.username}</div>
+                                    <div className="item-username-wrapper">
+                                        <div className="item-username">{player.username}</div>
+                                        {/* Premium icon overlay */}
+                                        {player?.isPremium && (
+                                            <div className="premium-icon-overlay-top10">
+                                                <img src={premiumDiamond} alt="Premium" className="premium-icon-top10" />
+                                            </div>
+                                        )}
+                                    </div>
                                     {/* Rewards - chỉ hiển thị khi season ended */}
                                     {isSeasonEnded && player?.rewards && player.rewards.length > 0 && (
                                         <div className="reward-row-bottom-container">
