@@ -278,12 +278,12 @@
     border-radius: 45px;
     padding: 6px 4px;
     font-family: "PP Neue Machina Inktrap", monospace;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 75%;
+    width: 80%;
     margin: 0 auto;
     margin-top: 20px;
     display: block;
@@ -298,6 +298,82 @@
 
 .challenges-welcome-cta-btn:active {
     transform: translateY(0);
+}
+
+/* Premium Button - Only for non-premium users */
+.challenges-welcome-premium-btn {
+    background: #0000FF;
+    border: none;
+    border-radius: 45px;
+    padding: 6px 4px;
+    font-family: "PP Neue Machina Inktrap", monospace;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: visible;
+}
+
+.challenges-welcome-premium-btn:hover {
+    background: #0000FF;
+    transform: translateY(-2px);
+}
+
+.challenges-welcome-premium-btn:active {
+    transform: translateY(0);
+}
+
+.premium-btn-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.premium-btn-text-small {
+    font-family: "PP Neue Machina Inktrap", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+
+.premium-btn-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.premium-btn-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    position: absolute;
+    left: -10px;
+    top: -7px;
+    z-index: 9999;
+    filter: none;
+}
+
+.premium-btn-text-large {
+    font-family: "PP Neue Machina", monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
 }
 
 /* Bottom Navigation Bar */
@@ -503,7 +579,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2px 6px 2px 10px;
+    padding: 2px 8px 2px 8px;
     background: rgba(0, 0, 0, 0.3);
     border: 3px solid #0000FF;
     border-radius: 12px;
@@ -620,7 +696,7 @@
     font-style: normal;
 }
 
-.reward-amount.start-soon {
+.reward-amount.challenge-start-date {
     font-size: 12.5px;
     color: #01FFD9;
 }

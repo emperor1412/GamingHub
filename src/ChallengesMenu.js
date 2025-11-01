@@ -5,6 +5,7 @@ import backIcon from './images/back.svg';
 import starletIcon from './images/starlet.png';
 import premiumIcon from './images/Premium_icon.png';
 import stepIcon from './images/step_icon.png';
+import lockIconChallenge from './images/lock_icon_challenge.png';
 
 import { 
     getCurrentChallenge, 
@@ -21,9 +22,10 @@ import ChallengeError from './ChallengeError';
 import ChallengeBadgeScreen from './ChallengeBadgeScreen';
 import ChallengeBadgeCollection from './ChallengeBadgeCollection';
 import shared from './Shared';
-import lockIcon from './images/lock_icon_challenge.png';
+import { popup } from '@telegram-apps/sdk';
 
 const WELCOME_FLAG_KEY = 'challengesWelcomeShown';
+const CHALLENGE_START_DATE_UTC = new Date('2025-11-03T00:00:00Z'); // November 3, 2025 0:00 UTC
 
 const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [selectedChallenge, setSelectedChallenge] = useState(null);
@@ -38,8 +40,63 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const [challengeDetails, setChallengeDetails] = useState({}); // Cache for challenge details
     const [hasApiError, setHasApiError] = useState(false); // Track API error state
     const [showWelcome, setShowWelcome] = useState(false); // Welcome overlay state
-    const [incomingByType, setIncomingByType] = useState({}); // Incoming challenge (state 0) by type
-    const [incomingDetails, setIncomingDetails] = useState({}); // Detail map for incoming challenges
+    const [isBeforeStartDate, setIsBeforeStartDate] = useState(false); // Track if before Nov 3, 2025
+
+    // Function to check if current date is before Nov 3, 2025 0:00 UTC
+    const checkIfBeforeStartDate = () => {
+        const now = new Date();
+        return now < CHALLENGE_START_DATE_UTC;
+    };
+
+    // Function to fetch challenges from badge view API (for before start date)
+    const fetchChallengesFromBadgeView = async () => {
+        try {
+            setIsLoadingChallenges(true);
+            const result = await shared.getBadgesEarned();
+            
+            if (result.success && result.data) {
+                // Filter challenges with state = 0 and map them to apiChallenges format
+                const upcomingChallenges = result.data
+                    .filter(challenge => challenge.state === 0)
+                    .map(challenge => ({
+                        id: challenge.id,
+                        name: challenge.name,
+                        type: challenge.type,
+                        price: challenge.price,
+                        step: challenge.step,
+                        state: 0,
+                        startTime: challenge.startTime,
+                        endTime: challenge.endTime
+                    }));
+                
+                setApiChallenges(upcomingChallenges);
+                console.log('[badge view challenges]', upcomingChallenges);
+                
+                // Set challenge details with state 0
+                const detailsMap = {};
+                upcomingChallenges.forEach(challenge => {
+                    detailsMap[challenge.id] = {
+                        id: challenge.id,
+                        name: challenge.name,
+                        state: 0,
+                        price: challenge.price,
+                        step: challenge.step,
+                        startTime: challenge.startTime,
+                        endTime: challenge.endTime
+                    };
+                });
+                setChallengeDetails(detailsMap);
+            } else {
+                console.error('Failed to fetch badge view challenges:', result.error);
+                setHasApiError(true);
+            }
+        } catch (e) {
+            console.error('[badge view] error', e);
+            setHasApiError(true);
+        } finally {
+            setIsLoadingChallenges(false);
+        }
+    };
 
     // Function to fetch challenge list
     const fetchChallengeList = async (depth = 0) => {
@@ -83,47 +140,6 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                 });
                 setChallengeDetails(detailsMap);
                 console.log('[challengeDetails]', detailsMap);
-
-                // Fetch incoming challenges for badge view (state 0)
-                try {
-                    const badgeView = await shared.getChallengesBadgeView();
-                    if (badgeView.success && Array.isArray(badgeView.data)) {
-                        const incomingMap = {};
-                        badgeView.data.forEach(item => {
-                            if (item && item.state === 0 && (item.type === 1 || item.type === 2 || item.type === 3)) {
-                                // Only keep first incoming per type if multiple
-                                if (!incomingMap[item.type]) {
-                                    incomingMap[item.type] = item;
-                                }
-                            }
-                        });
-                        setIncomingByType(incomingMap);
-                        console.log('[incomingByType]', incomingMap);
-
-                        // Fetch details for incoming challenges to get startTime
-                        const incomingIds = Object.values(incomingMap).map(i => i.id);
-                        if (incomingIds.length > 0) {
-                            const incomingDetailPromises = incomingIds.map(async (id) => {
-                                try {
-                                    const res = await shared.getChallengeDetail(id);
-                                    if (res.success) {
-                                        return { id, detail: res.data };
-                                    }
-                                } catch (e) {
-                                    console.error('Error fetching incoming detail', id, e);
-                                }
-                                return null;
-                            });
-                            const incomingDetailResults = await Promise.all(incomingDetailPromises);
-                            const incDetailsMap = {};
-                            incomingDetailResults.forEach(r => { if (r) { incDetailsMap[r.id] = r.detail; }});
-                            setIncomingDetails(incDetailsMap);
-                            console.log('[incomingDetails]', incDetailsMap);
-                        }
-                    }
-                } catch (e) {
-                    console.error('[badgeView] error', e);
-                }
             } else if (json.code === 102001 || json.code === 102002) {
                 console.log('[challengeList] token expired, attempting to re-login');
                 const result = await shared.login(shared.initData);
@@ -146,15 +162,29 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         }
     };
 
-    // Fetch 3 challenges from backend (challengeList)
+    // Fetch 3 challenges from backend (challengeList or badge view depending on date)
     useEffect(() => {
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+        
+        if (beforeStartDate) {
+            // Before Nov 3, 2025 - fetch from badge view
+            fetchChallengesFromBadgeView();
+        } else {
+            // After Nov 3, 2025 - use regular challenge list
+            fetchChallengeList();
+        }
     }, []);
 
     // Listen for data refresh requests
     useEffect(() => {
         if (onDataRefresh) {
-            fetchChallengeList();
+            const beforeStartDate = checkIfBeforeStartDate();
+            if (beforeStartDate) {
+                fetchChallengesFromBadgeView();
+            } else {
+                fetchChallengeList();
+            }
         }
     }, [onDataRefresh]);
 
@@ -199,29 +229,6 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         }
     };
 
-    const hasIncomingForType = (typeInt) => {
-        return Boolean(incomingByType[typeInt]);
-    };
-
-    const getIncomingStartLabel = (typeInt) => {
-        const inc = incomingByType[typeInt];
-        if (!inc) return 'START SOON';
-        const detail = incomingDetails[inc.id];
-        const start = detail?.startTime;
-        if (!start) return 'START SOON';
-        let ms = Number(start);
-        if (ms < 1e12) ms = ms * 1000; // seconds -> ms
-        const d = new Date(ms);
-        const weekdaysAbbr = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-        const day = weekdaysAbbr[d.getDay()] || '';
-        return `STARTS ${day}`;
-    };
-
-    const getIncomingName = (typeInt) => {
-        const inc = incomingByType[typeInt];
-        return (inc?.name || '').toUpperCase();
-    };
-
     // Helper function to get current challenge from API mock (only if no API error)
     const getCurrentChallengeFromApi = (challengeType) => {
         // Removed mock data fallback - only use real API data
@@ -238,6 +245,16 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         } else {
             return '14px';
         }
+    };
+
+    // Helper function to calculate days until start date
+    const getDaysUntilStart = (startTime) => {
+        if (!startTime) return 0;
+        const start = new Date(startTime * 1000); // Convert Unix timestamp to JS date
+        const now = new Date();
+        const diffTime = start - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return Math.max(0, diffDays);
     };
 
     // Helper function to check challenge conditions
@@ -275,7 +292,28 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
         return { isDisabled, disabledReason, subReason };
     };
 
+    const handleNotReadyChallengeClick = async () => {
+        try {
+            await popup.open({
+                title: 'Event not started',
+                message: `Challenges open Monday! \nStock up on Starlets, lace up, and get ready to bank your steps!`,
+                buttons: [{ id: 'ok', type: 'default', text: 'OK' }],
+            });
+        } catch (error) {
+            console.error('Error showing popup:', error);
+        }
+    };
+
     const handleChallengeClick = async (challengeType) => {
+
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+
+        if (beforeStartDate) {
+            await handleNotReadyChallengeClick();
+            return;
+        }
+
         const state = getChallengeState(challengeType);
         const apiItem = getApiChallengeByType(mapTypeStringToInt(challengeType));
         
@@ -425,8 +463,16 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     const handleBackFromBadgeScreen = () => {
         setShowBadgeScreen(false);
         
-        // Refresh challenge list to update state
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        setIsBeforeStartDate(beforeStartDate);
+        
+        if (beforeStartDate) {
+            // Before Nov 3, 2025 - fetch from badge view
+            fetchChallengesFromBadgeView();
+        } else {
+            // After Nov 3, 2025 - use regular challenge list
+            fetchChallengeList();
+        }
     };
 
     const handleExplorerBadgesClick = () => {
@@ -457,7 +503,12 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
     // Function to handle data refresh from child components
     const handleDataRefresh = React.useCallback(() => {
         // Refresh challenge list data
-        fetchChallengeList();
+        const beforeStartDate = checkIfBeforeStartDate();
+        if (beforeStartDate) {
+            fetchChallengesFromBadgeView();
+        } else {
+            fetchChallengeList();
+        }
     }, []); // Empty dependency array to prevent recreation
 
     // Show BadgeCollection if user clicked Explorer Badges
@@ -647,6 +698,30 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                             PROCEED TO CHALLENGES
                         </button>
                         
+                        {/* Premium Button - Only for non-premium users */}
+                        {!shared.isPremiumMember && (
+                            <button 
+                                className="challenges-welcome-premium-btn" 
+                                onClick={() => {
+                                    handleWelcomeClose();
+                                    // Navigate to Premium or Market
+                                    if (shared.setView) {
+                                        shared.setView('premium');
+                                    } else if (shared.setActiveTab) {
+                                        shared.setActiveTab('market');
+                                    }
+                                }}
+                            >
+                                <div className="premium-btn-content">
+                                    <img src={premiumIcon} alt="Premium" className="premium-btn-icon" />
+                                    <div className="premium-btn-main">
+                                        <span className="premium-btn-text-large">UPGRADE TO</span>
+                                        <span className="premium-btn-text-large">PREMIUM MEMBERSHIP</span>
+                                    </div>
+                                </div>
+                            </button>
+                        )}
+                        
                         {/* Bottom Navigation Bar */}
                         <div className="challenges-welcome-bottom-nav">
                             <div className="challenges-welcome-nav-icon challenges-welcome-nav-selected">
@@ -746,29 +821,25 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(weeklyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
-                                            ) : hasIncomingForType(1) ? (
-                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(1)) }}>
-                                                    {getIncomingName(1)}
-                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {(weeklyApi || hasIncomingForType(1)) && (
+                                        {weeklyApi && (
                                             <>
-                                                {weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : weeklyChallengeState === 10 || weeklyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
-                                                ) : hasIncomingForType(1) ? (
-                                                    <div className="challenge-reward">
-                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(1)}</span>
-                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
-                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{weeklyApi?.price}</span>
+                                                        <span className="reward-amount">{weeklyApi.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
@@ -821,29 +892,25 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(monthlyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
-                                            ) : hasIncomingForType(2) ? (
-                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(2)) }}>
-                                                    {getIncomingName(2)}
-                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {(monthlyApi || hasIncomingForType(2)) && (
+                                        {monthlyApi && (
                                             <>
-                                                {monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : monthlyChallengeState === 10 || monthlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
-                                                ) : hasIncomingForType(2) ? (
-                                                    <div className="challenge-reward">
-                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(2)}</span>
-                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
-                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{monthlyApi?.price}</span>
+                                                        <span className="reward-amount">{monthlyApi.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
@@ -896,29 +963,25 @@ const ChallengesMenu = ({ onClose, onDataRefresh }) => {
                                                         {(yearlyApi.name || '').toUpperCase()}
                                                     </div>
                                                 </>
-                                            ) : hasIncomingForType(3) ? (
-                                                <div className="challenge-name" style={{ fontSize: getFontSizeByTextLength(getIncomingName(3)) }}>
-                                                    {getIncomingName(3)}
-                                                </div>
                                             ) : (
                                                 <div className="challenge-name">NO CHALLENGE AVAILABLE</div>
                                             )}
                                         </div>
-                                        {(yearlyApi || hasIncomingForType(3)) && (
+                                        {yearlyApi && (
                                             <>
-                                                {yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
+                                                {isBeforeStartDate ? (
+                                                    <div className="challenge-reward">
+                                                        <span className="reward-amount challenge-start-date">STARTS MON</span>
+                                                        <img src={lockIconChallenge} alt="Locked" className="starlet-icon" />
+                                                    </div>
+                                                ) : yearlyChallengeState === 10 || yearlyChallengeState === 30 ? (
                                                     <div className="challenge-active">
                                                         <span className="active-text">Active</span>
                                                         <img src={stepIcon} alt="Step" className="step-icon-active" />
                                                     </div>
-                                                ) : hasIncomingForType(3) ? (
-                                                    <div className="challenge-reward">
-                                                        <span className="reward-amount start-soon">{getIncomingStartLabel(3)}</span>
-                                                        <img src={lockIcon} alt="Locked" className="starlet-icon" />
-                                                    </div>
                                                 ) : (
                                                     <div className="challenge-reward">
-                                                        <span className="reward-amount">{yearlyApi?.price}</span>
+                                                        <span className="reward-amount">{yearlyApi.price}</span>
                                                         <img src={starletIcon} alt="Starlet" className="starlet-icon" />
                                                     </div>
                                                 )}
