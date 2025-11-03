@@ -138,6 +138,11 @@
     margin-bottom: 14px;
 }
 
+/* Challenge button small - same size as other locked cards */
+.challenge-button-small {
+    /* Inherits from .locked-card */
+}
+
 /* Games Row - Third Row with smaller thumbnails */
 .games-row {
     display: grid;

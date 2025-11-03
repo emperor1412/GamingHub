@@ -15,7 +15,7 @@ import calendar_before_checkin from './images/calendar.png';
 import eventSnoopDogg from './images/snoop_dogg_raffle.svg';
 // import eventSnoopDogg from './images/snoop_dogg_raffle.png';
 import './MainView.css';
-import my_ticket from './images/my_ticket.png';
+import my_ticket from './images/tickets_mainview.png';
 import flipping_stars from './images/FlippingStarBanner.png';
 // import LFGO from './images/LFGO.svg';
 import LFGO from './images/LFGO.png';
@@ -45,7 +45,7 @@ import LeaderboardIntroduce from './LeaderboardIntroduce';
 import LeaderboardGlobal from './LeaderboardGlobal';
 import premiumBg from './images/Premium_background_buy.png';
 import premiumDiamond from './images/Premium_icon.png';
-import challengesBg from './images/challenges_bg.png';
+import challengesBg from './images/challenges_mainview.png';
 import ChallengesMenu from './ChallengesMenu';
 
 let isMouseDown = false;
@@ -1155,23 +1155,44 @@ Response:
             </header>
 
             <div className="scrollable-content">
-                {/* Premium Section - Top Row */}
+                {/* Leaderboard Section - Top Row */}
                 <section className="tickets-section">
-                    <button className="mv_ticket-button" onClick={() => setShowChallengesMenu(true)}>
+                    <button className="mv_ticket-button" onClick={() => {
+                        if (!isFSLIDConnected) {
+                            setShowLeaderboardIntroduce(true);
+                        } else {
+                            setShowLeaderboardGlobalLocal(true);
+                            if (setShowLeaderboardGlobal) {
+                                setShowLeaderboardGlobal(true);
+                            }
+                        }
+                    }}>
                         <div className='mv_ticket-button-image-container'>
                             <img
-                                src={challengesBg}
-                                alt="Premium Background"
+                                src={leaderboard_mainview}
+                                alt="Leaderboard"
                                 className="mv_ticket-button-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            <div className='check-out-button large-banner'>RUNNING CHALLENGES</div>
+                            <div className='check-out-button large-banner'>SEE WHERE YOU STAND</div>
                         </div>
                     </button>
                 </section>
 
             
                 <section className="locked-sections">
+                    <button className="locked-card challenge-button-small" onClick={() => setShowChallengesMenu(true)}>
+                        <div className='locked-card-image-container'>
+                            <img
+                                src={challengesBg}
+                                alt="Challenges"
+                                className="locked-card-image"
+                            />
+                            <div className='mv_ticket-button-container-border'></div>
+                            <div className='check-out-button align-center'>Running<br></br> Challenges</div>
+                        </div>
+                    </button>
+
                     <button className={`locked-card premium-button ${isCheckingPremiumStatus ? 'disabled' : ''}`}  
                         onClick={() => onClickPremium()}
                         disabled={isCheckingPremiumStatus}>
@@ -1217,7 +1238,10 @@ Response:
                             <div className="sold-out-overlay">COMPLETED</div>
                         )}
                     </button>
+                </section>
 
+                {/* Flipping Stars and Tadokami - Same Row */}
+                <section className="locked-sections">
                     <button className="locked-card" onClick={() => onClickOpenGame()}>
                         <div className='locked-card-image-container'>
                             <img
@@ -1231,20 +1255,6 @@ Response:
                         </div>
                     </button>
 
-                    {/* <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
-                        <div className='locked-card-image-container'>
-                            <div className="flipping-stars-card-bg">
-                                <div className="flipping-stars-title">FLIPPING STARS</div>
-                                <div className="flipping-stars-subtitle">Flip coins & win rewards!</div>
-                            </div>
-                            <div className='ticket-button-container-border'></div>
-                            <div className='check-out-button'>PLAY NOW</div>
-                        </div>
-                    </button> */}
-                </section>
-
-                {/* Tadokami and Flipping Stars - Third Row with new images */}
-                <section className="locked-sections">
                     <button className="locked-card" onClick={() => setShowFlippingStarsView(true)}>
                         <div className='locked-card-image-container'>
                             <img
@@ -1256,49 +1266,20 @@ Response:
                             <div className='check-out-button align-center'>GRAND JACKPOT<br></br> {totalFlips.toString().padStart(8, '0')}</div>
                             <div className='locked-card-text'></div>
                         </div>
-                        {/* <div className="locked-card-flips">
-                            <span className="locked-card-flips-label">GLOBAL FLIPS</span>
-                            <span className="locked-card-flips-count">{totalFlips.toString().padStart(8, '0')}</span>
-                        </div>
-                        <div className="locked-card-jackpot">
-                            <span className="locked-card-jackpot-label">GRAND JACKPOT</span>
-                            <span className="locked-card-jackpot-count">{jackpotValue.toString().padStart(8, '0')}</span>
-                        </div> */}
-                    </button>
-
-                    <button className="locked-card" onClick={() => setShowTicketView(true)}>
-                        <div className='locked-card-image-container'>
-                            <img
-                                src={my_ticket}
-                                alt="Tadokami"
-                                className="locked-card-image"
-                            />
-                            <div className='mv_ticket-button-container-border'></div>
-                            <div className='check-out-button align-center'>Scratch tickets<br></br> earn rewards </div>
-                            <div className='locked-card-text'></div>
-                        </div>
                     </button>
                 </section>
 
-                <section className="locked-sections">
-                    <button className="locked-card" onClick={() => {
-                        if (!isFSLIDConnected) {
-                            setShowLeaderboardIntroduce(true);
-                        } else {
-                            setShowLeaderboardGlobalLocal(true);
-                            if (setShowLeaderboardGlobal) {
-                                setShowLeaderboardGlobal(true);
-                            }
-                        }
-                    }}>
-                        <div className='locked-card-image-container'>
+                {/* My Tickets - Full Width Bottom */}
+                <section className="tickets-section">
+                    <button className="mv_ticket-button" onClick={() => setShowTicketView(true)}>
+                        <div className='mv_ticket-button-image-container'>
                             <img
-                                src={leaderboard_mainview}
-                                alt="leaderboard"
-                                className="locked-card-image"
+                                src={my_ticket}
+                                alt="My Tickets"
+                                className="mv_ticket-button-image"
                             />
                             <div className='mv_ticket-button-container-border'></div>
-                            <div className='locked-card-text'></div>
+                            <div className='check-out-button large-banner'>Scratch tickets. earn rewards</div>
                         </div>
                     </button>
                 </section>
