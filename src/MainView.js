@@ -1420,7 +1420,15 @@ Response:
 
             {/* Challenges Menu */}
             {showChallengesMenu && (
-                <ChallengesMenu onClose={() => setShowChallengesMenu(false)} />
+                <ChallengesMenu 
+                    onClose={async () => {
+                        setShowChallengesMenu(false);
+                        // Refresh all data when closing challenges menu to match Market → MainView behavior
+                        await getProfileData();
+                        await checkPremiumStatus();
+                        await fetchTotalFlips();
+                    }} 
+                />
             )}
         </>
     );
