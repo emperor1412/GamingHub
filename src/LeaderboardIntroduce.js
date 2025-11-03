@@ -9,7 +9,7 @@ const LeaderboardIntroduce = ({ onClose, setIsFSLIDConnected, isOpen = true, isF
     const handleConnectFSLID = () => {
         console.log('Connect FSL ID clicked');
         if (setIsFSLIDConnected) {
-            setIsFSLIDConnected(true);
+            setIsFSLIDConnected();
         }
     };
 

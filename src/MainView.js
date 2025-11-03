@@ -1158,7 +1158,7 @@ Response:
                 {/* Leaderboard Section - Top Row */}
                 <section className="tickets-section">
                     <button className="mv_ticket-button" onClick={() => {
-                        if (!isFSLIDConnected) {
+                        if (shared.userProfile?.fslId === 0) {
                             setShowLeaderboardIntroduce(true);
                         } else {
                             setShowLeaderboardGlobalLocal(true);
@@ -1436,11 +1436,11 @@ Response:
                 isFromProfile={false}
                 onClose={() => setShowLeaderboardIntroduce(false)}
                 setIsFSLIDConnected={() => {
-                    setIsFSLIDConnected(true);
+                    // Close LeaderboardIntroduce
                     setShowLeaderboardIntroduce(false);
-                    setShowLeaderboardGlobalLocal(true);
-                    if (setShowLeaderboardGlobal) {
-                        setShowLeaderboardGlobal(true);
+                    // Navigate to FSLID tab (similar to BankSteps)
+                    if (shared.setActiveTab) {
+                        shared.setActiveTab('fslid');
                     }
                 }}
             />
