@@ -99,6 +99,59 @@
     border-top: none;
 }
 
+/* Sparkle icons */
+.leaderboard-rewards-sparkle {
+    position: absolute;
+    width: 10px;
+    height: 12px;
+    animation: leaderboard-rewards-sparkleBlink 2s infinite;
+}
+
+.leaderboard-rewards-sparkle-top-right {
+    bottom: -10px;
+    right: 25px;
+
+    animation-delay: 0.5s;
+}
+
+.leaderboard-rewards-sparkle-bottom-left {
+    bottom: 8px;
+    left: 24px;
+    animation-delay: 1s;
+}
+
+.leaderboard-rewards-sparkle-bottom-right {
+    bottom: -10px;
+    right: 40px;
+    animation-delay: 1.5s;
+}
+
+.leaderboard-rewards-sparkle-top1 {
+    top: -10px;
+    right: 25px;
+    width: 30px;
+    height: 30px;
+    animation-delay: 0s;
+}
+
+.leaderboard-rewards-sparkle-top2 {
+    top: 0px;
+    left: 32px;
+    animation-delay: 0s;
+}
+
+/* Sparkle blink animation */
+@keyframes leaderboard-rewards-sparkleBlink {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
 /* Tabs */
 .leaderboard-rewards-tabs {
     display: flex;
@@ -295,7 +348,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 6px 0;
     border-top: 0.5px solid #000FEF;
 }
 
@@ -323,15 +376,15 @@
     gap: 4px;
 }
 
-.leaderboard-rewards-reward-item.drink {
+.leaderboard-rewards-reward-item.sneaker {
     width: 40px; /* Cột drink nhỏ hơn */
 }
 
-.leaderboard-rewards-reward-item.star {
+.leaderboard-rewards-reward-item.starlet {
     width: 80px; /* Cột star nhỏ hơn */
 }
 
-.leaderboard-rewards-reward-item.gallery {
+.leaderboard-rewards-reward-item.bcoin {
     width: 80px; /* Cột gallery nhỏ hơn */
 }
 

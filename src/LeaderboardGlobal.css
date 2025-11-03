@@ -291,18 +291,21 @@
     height: 92px;
     background: linear-gradient(white, white) padding-box,
                 linear-gradient(90deg, #B07515 -1%, #E0BA5F 8.18%, #F5D77F 13.28%, #FFFFD7 25.52%, #F5D77F 35.72%, #B07515 48.98%, #E0BA5F 57.14%, #F5D77F 61.22%, #FFFFD7 74.48%, #F5D77F 84.68%, #B07515 101%) border-box;
+    box-shadow: 0 0 0 2px #000FEF;
 }
 
 .podium-item.rank-2 .podium-avatar {
     background: linear-gradient(white, white) padding-box,
                 linear-gradient(90deg, #FFFFFF -1.52%, #CBCBCB 14.97%, #9E9E9E 30.43%, #828282 42.79%, #787878 50.01%, #858585 58.25%, #AAAAAA 73.71%, #E5E5E5 93.29%, #FFFFFF 101.54%) border-box;
     top: -35px;
+    box-shadow: 0 0 0 2px #000FEF;
 }
 
 .podium-item.rank-3 .podium-avatar {
     background: linear-gradient(white, white) padding-box,
                 linear-gradient(90deg, #E8963F -1.54%, #BF6900 56.17%, #C8740D 69.57%, #DF9132 94.3%, #E89C3F 101.52%) border-box;
     top: -35px;
+    box-shadow: 0 0 0 2px #000FEF;
 }
 
 .podium-avatar img {
@@ -632,6 +635,12 @@
     /* filter: brightness(0) invert(1); Làm icon thành màu trắng */
 }
 
+.season-ended-item .reward-icon.sneaker-icon img {
+    width: 32px;
+    height: 19px;
+    margin-right: 10px;
+}
+
 .season-ended-item .reward-text {
     color: #64FFCB;
     font-family: "PP Neue Machina";
@@ -642,10 +651,13 @@
     letter-spacing: 0%;
 }
 
-.section-title {
+.leaderboard-content .section-title,
+.your-rank-section .section-title,
+.your-rank-section-ended .section-title,
+.top-10-section .section-title {
     color: #FFF;
     font-family: "PP Neue Machina";
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     line-height: 80%;
@@ -778,6 +790,11 @@
     width: 22px;
     height: 22px;
 }
+
+.leaderboard-item.sneaker-icon {
+    width: 32px !important;
+    height: 19px !important;
+}       
 
 .leaderboard-item .reward-text {
     color: #64FFCB;

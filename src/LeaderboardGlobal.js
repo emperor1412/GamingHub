@@ -6,26 +6,28 @@ import spark from './images/Spark.png';
 import RewardsPopup from './LeaderboardRewardsPopup';
 import starlet from './images/starlet.png';
 import premiumDiamond from './images/Premium_icon.png';
+import sneakerIcon from './images/shoe_image.png';
+import bCoin from './images/bCoin_icon.png';
 
 const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn, checkInData, setShowCheckInAnimation, isOpen = true, isFromProfile = false }) => {
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [userRank, setUserRank] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showRewardsPopup, setShowRewardsPopup] = useState(false);
-    const [isSeasonEnded, setIsSeasonEnded] = useState(true); // Biến để kiểm tra season đã kết thúc
+    const [isSeasonEnded, setIsSeasonEnded] = useState(false); // Biến để kiểm tra season đã kết thúc
 
     // Mock data for now - replace with actual API call
     const mockLeaderboardData = [
-        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] },
-        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: starlet, amount: "7K" }] }
+        { rank: 1, username: "FIRULAIS", steps: 10000, avatar: 0, isPremium: true, rewards: [{ icon: sneakerIcon, amount: "1" }, { icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 2, username: "FIRULAIS 2", steps: 2200, avatar: 1, isPremium: true, rewards: [{ icon: sneakerIcon, amount: "1" }, { icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 3, username: "FIRULAIS 3", steps: 2200, avatar: 2, isPremium: false, rewards: [{ icon: sneakerIcon, amount: "1" }, { icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 4, username: "FIRELAUNCHER", steps: 1203, avatar: 3, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 5, username: "LOUROTRAIL", steps: 1203, avatar: 4, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 6, username: "LUCAS_STEPN", steps: 1203, avatar: 5, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 7, username: "MISHAFYI", steps: 1203, avatar: 6, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 8, username: "PLAYER8", steps: 1203, avatar: 7, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 9, username: "PLAYER9", steps: 1203, avatar: 8, isPremium: false, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] },
+        { rank: 10, username: "PLAYER10", steps: 1203, avatar: 9, isPremium: true, rewards: [{ icon: starlet, amount: "15k" }, { icon: bCoin, amount: "7k" }] }
     ];
 
     const mockUserRank = {
@@ -35,7 +37,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
         avatar: 0,
         rewards: [
             { icon: starlet, amount: "15k" },
-            { icon: starlet, amount: "7K" }
+            { icon: bCoin, amount: "7k" }
         ]
     };
 
@@ -124,7 +126,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                                 alt="Your Avatar" 
                                             />
                                             {/* Premium icon overlay */}
-                                            {shared.isPremiumMember && (
+                                            {isSeasonEnded && shared.isPremiumMember && (
                                                 <div className="premium-icon-overlay-your-rank">
                                                     <img src={premiumDiamond} alt="Premium" className="premium-icon-your-rank" />
                                                 </div>
@@ -139,7 +141,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                                         <div className="reward-icon">
                                                             <img src={reward.icon} alt="Reward" />
                                                         </div>
-                                                        <span className="reward-text">{reward.amount}</span>
+                                                        {reward.amount && <span className="reward-text">{reward.amount}</span>}
                                                     </div>
                                                 ))}
                                             </div>
@@ -166,7 +168,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         alt="Rank 2" 
                                     />
                                     {/* Premium icon overlay */}
-                                    {leaderboardData[1]?.isPremium && (
+                                    {isSeasonEnded && leaderboardData[1]?.isPremium && (
                                         <div className="premium-icon-overlay-podium">
                                             <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
                                         </div>
@@ -187,7 +189,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         alt="Rank 1" 
                                     />
                                     {/* Premium icon overlay */}
-                                    {leaderboardData[0]?.isPremium && (
+                                    {isSeasonEnded && leaderboardData[0]?.isPremium && (
                                         <div className="premium-icon-overlay-podium">
                                             <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
                                         </div>
@@ -208,7 +210,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                         alt="Rank 3" 
                                     />
                                     {/* Premium icon overlay */}
-                                    {leaderboardData[2]?.isPremium && (
+                                    {isSeasonEnded && leaderboardData[2]?.isPremium && (
                                         <div className="premium-icon-overlay-podium">
                                             <img src={premiumDiamond} alt="Premium" className="premium-icon-podium" />
                                         </div>
@@ -228,72 +230,37 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                             <>
                             {/* Season Ended Content - chia thành 3 phần match với top 3 */}
                             <div className="season-ended-content">
-                                <div className="season-ended-item">
-                                    <div className="reward-row reward-row-top">
-                                        <div className="reward-icon">
-                                            <img src={starlet} alt="Star" />
+                                {leaderboardData.slice(0, 3).map((player, index) => {
+                                    // Tìm sneaker reward (reward đầu tiên có sneakerIcon)
+                                    const sneakerReward = player.rewards?.find(r => r.icon === sneakerIcon);
+                                    // Các rewards còn lại (không phải sneaker)
+                                    const otherRewards = player.rewards?.filter(r => r.icon !== sneakerIcon) || [];
+                                    
+                                    return (
+                                        <div key={player.rank || index} className="season-ended-item">
+                                            {sneakerReward && (
+                                                <div className="reward-row reward-row-top">
+                                                    <div className="reward-icon sneaker-icon">
+                                                        <img src={sneakerReward.icon} alt="Sneaker" />
+                                                    </div>
+                                                    {sneakerReward.amount && <span className="reward-text">{sneakerReward.amount}</span>}
+                                                </div>
+                                            )}
+                                            {otherRewards.length > 0 && (
+                                                <div className="reward-row-bottom-container">
+                                                    {otherRewards.map((reward, rewardIndex) => (
+                                                        <div key={rewardIndex} className="reward-row reward-row-bottom">
+                                                            <div className="reward-icon">
+                                                                <img src={reward.icon} alt="Reward" />
+                                                            </div>
+                                                            {reward.amount && <span className="reward-text">{reward.amount}</span>}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                        <span className="reward-text">7</span>
-                                    </div>
-                                    <div className="reward-row-bottom-container">
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">15k</span>
-                                        </div>
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">7K</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="season-ended-item">
-                                    <div className="reward-row reward-row-top">
-                                        <div className="reward-icon">
-                                            <img src={starlet} alt="Star" />
-                                        </div>
-                                        <span className="reward-text">7</span>
-                                    </div>
-                                    <div className="reward-row-bottom-container">
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">15k</span>
-                                        </div>
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">7K</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="season-ended-item">
-                                    <div className="reward-row reward-row-top">
-                                        <div className="reward-icon">
-                                            <img src={starlet} alt="Star" />
-                                        </div>
-                                        <span className="reward-text">7</span>
-                                    </div>
-                                    <div className="reward-row-bottom-container">
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">15k</span>
-                                        </div>
-                                        <div className="reward-row reward-row-bottom">
-                                            <div className="reward-icon">
-                                                <img src={starlet} alt="Star" />
-                                            </div>
-                                            <span className="reward-text">7K</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                    );
+                                })}
                             </div>
                             </>
                         ) : (
@@ -309,7 +276,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                     <span>VIEW RANK</span>
                                     <span>REWARDS</span>
                                 </button>
-                                <button className="season-button">
+                                <button className="season-button" onClick={() => setIsSeasonEnded(true)}>
                                     <span>SEASON ENDS IN: 09/30/25 00:00 UTC</span>
                                 </button>
                             </>
@@ -329,7 +296,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                             alt="Your Avatar" 
                                         />
                                         {/* Premium icon overlay */}
-                                        {shared.isPremiumMember && (
+                                        {isSeasonEnded && shared.isPremiumMember && (
                                             <div className="premium-icon-overlay">
                                                 <img src={premiumDiamond} alt="Premium" className="premium-icon" />
                                             </div>
@@ -361,7 +328,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                     <div className="item-username-wrapper">
                                         <div className="item-username">{player.username}</div>
                                         {/* Premium icon overlay */}
-                                        {player?.isPremium && (
+                                        {isSeasonEnded && player?.isPremium && (
                                             <div className="premium-icon-overlay-top10">
                                                 <img src={premiumDiamond} alt="Premium" className="premium-icon-top10" />
                                             </div>
@@ -375,7 +342,7 @@ const LeaderboardGlobal = ({ onClose, setShowProfileView, setActiveTab, checkIn,
                                                     <div className="reward-icon">
                                                         <img src={reward.icon} alt="Reward" />
                                                     </div>
-                                                    <span className="reward-text">{reward.amount}</span>
+                                                    {reward.amount && <span className="reward-text">{reward.amount}</span>}
                                                 </div>
                                             ))}
                                         </div>

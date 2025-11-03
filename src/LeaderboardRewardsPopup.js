@@ -3,8 +3,9 @@ import './LeaderboardRewardsPopup.css';
 import shared from './Shared';
 import back from './images/back.svg';
 import starlet from './images/starlet.png';
-import km from './images/km.svg';
+import sneakerIcon from './images/stepn-sneaker-icons.png';
 import bcoin from './images/bCoin_icon.png';
+import spark from './images/Spark.png';
 
 const LeaderboardRewardsPopup = ({ isOpen, onClose, userRank }) => {
     const [activeTab, setActiveTab] = useState('premium');
@@ -13,29 +14,29 @@ const LeaderboardRewardsPopup = ({ isOpen, onClose, userRank }) => {
 
     // Mock rewards data
     const premiumRewards = [
-        { rank: 1, drink: 1, star: 15000, gallery: 22500 },
-        { rank: 2, drink: 1, star: 10500, gallery: 21000 },
-        { rank: 3, drink: 1, star: 9000, gallery: 19500 },
-        { rank: 4, star: 9000, gallery: 18000 },
-        { rank: "5-10", star: 7500, gallery: 15000 },
-        { rank: "11-50", star: 1500, gallery: 7500 },
-        { rank: "TOP 1%", gallery: 1500 },
-        { rank: "TOP 20%", gallery: 1200 },
-        { rank: "TOP 50%", gallery: 750 },
-        { rank: "UNRANKED (UR)", gallery: 150 }
+        { rank: 1, sneaker: 1, starlet: 15000, bcoin: 22500 },
+        { rank: 2, sneaker: 1, starlet: 10500, bcoin: 21000 },
+        { rank: 3, sneaker: 1, starlet: 9000, bcoin: 19500 },
+        { rank: 4, starlet: 9000, bcoin: 18000 },
+        { rank: "5-10", starlet: 7500, bcoin: 15000 },
+        { rank: "11-50", starlet: 1500, bcoin: 7500 },
+        { rank: "TOP 1%", bcoin: 1500 },
+        { rank: "TOP 20%", bcoin: 1200 },
+        { rank: "TOP 50%", bcoin: 750 },
+        { rank: "UNRANKED (UR)", bcoin: 150 }
     ];
 
     const regularRewards = [
-        { rank: 1, star: 10000, gallery: 15000 },
-        { rank: 2, star: 7000, gallery: 14000 },
-        { rank: 3, star: 6000, gallery: 13000 },
-        { rank: 4, star: 6000, gallery: 12000 },
-        { rank: "5-10", star: 5000, gallery: 10000 },
-        { rank: "11-50", star: 1000, gallery: 5000 },
-        { rank: "TOP 1%", gallery: 1000 },
-        { rank: "TOP 20%", gallery: 800 },
-        { rank: "TOP 50%", gallery: 500 },
-        { rank: "UNRANKED (UR)", gallery: 100 }
+        { rank: 1, sneaker: 1, starlet: 10000, bcoin: 15000 },
+        { rank: 2, sneaker: 1, starlet: 7000, bcoin: 14000 },
+        { rank: 3, sneaker: 1, starlet: 6000, bcoin: 13000 },
+        { rank: 4, starlet: 6000, bcoin: 12000 },
+        { rank: "5-10", starlet: 5000, bcoin: 10000 },
+        { rank: "11-50", starlet: 1000, bcoin: 5000 },
+        { rank: "TOP 1%", bcoin: 1000 },
+        { rank: "TOP 20%", bcoin: 800 },
+        { rank: "TOP 50%", bcoin: 500 },
+        { rank: "UNRANKED (UR)", bcoin: 100 }
     ];
 
     const currentRewards = activeTab === 'premium' ? premiumRewards : regularRewards;
@@ -57,6 +58,12 @@ const LeaderboardRewardsPopup = ({ isOpen, onClose, userRank }) => {
                             <div className="leaderboard-rewards-corner leaderboard-rewards-bottom-right"></div>
                             <div className="leaderboard-rewards-title-text">REWARDS</div>
                         </div>
+                        {/* Sparkle icons */}
+                            <img src={spark} alt="sparkle" className="leaderboard-rewards-sparkle leaderboard-rewards-sparkle-top-right" />
+                            <img src={spark} alt="sparkle" className="leaderboard-rewards-sparkle leaderboard-rewards-sparkle-bottom-left" />
+                            <img src={spark} alt="sparkle" className="leaderboard-rewards-sparkle leaderboard-rewards-sparkle-bottom-right" />
+                            <img src={spark} alt="sparkle" className="leaderboard-rewards-sparkle leaderboard-rewards-sparkle-top1" />
+                            <img src={spark} alt="sparkle" className="leaderboard-rewards-sparkle leaderboard-rewards-sparkle-top2" />
                     </div>
                 </div>
 
@@ -123,22 +130,22 @@ const LeaderboardRewardsPopup = ({ isOpen, onClose, userRank }) => {
                             <div key={index} className="leaderboard-rewards-rank-reward-item">
                                 <div className="leaderboard-rewards-rank-label">{reward.rank}</div>
                                 <div className="leaderboard-rewards-reward-icons">
-                                    {reward.drink && (
-                                        <div className="leaderboard-rewards-reward-item drink">
-                                            <img src={km} alt="Drink" className="leaderboard-rewards-reward-icon" />
-                                            <span className="leaderboard-rewards-reward-amount">{reward.drink}</span>
+                                    {reward.sneaker && (
+                                        <div className="leaderboard-rewards-reward-item sneaker">
+                                            <img src={sneakerIcon} alt="Sneaker" className="leaderboard-rewards-reward-icon" />
+                                            <span className="leaderboard-rewards-reward-amount">{reward.sneaker}</span>
                                         </div>
                                     )}
-                                    {reward.star && (
-                                        <div className="leaderboard-rewards-reward-item star">
-                                            <img src={starlet} alt="Star" className="leaderboard-rewards-reward-icon" />
-                                            <span className="leaderboard-rewards-reward-amount">{reward.star}</span>
+                                    {reward.starlet && (
+                                        <div className="leaderboard-rewards-reward-item starlet">
+                                            <img src={starlet} alt="Starlet" className="leaderboard-rewards-reward-icon" />
+                                            <span className="leaderboard-rewards-reward-amount">{reward.starlet}</span>
                                         </div>
                                     )}
-                                    {reward.gallery && (
-                                        <div className="leaderboard-rewards-reward-item gallery">
-                                            <img src={bcoin} alt="Gallery" className="leaderboard-rewards-reward-icon" />
-                                            <span className="leaderboard-rewards-reward-amount">{reward.gallery}</span>
+                                    {reward.bcoin && (
+                                        <div className="leaderboard-rewards-reward-item bcoin">
+                                            <img src={bcoin} alt="BCoin" className="leaderboard-rewards-reward-icon" />
+                                            <span className="leaderboard-rewards-reward-amount">{reward.bcoin}</span>
                                         </div>
                                     )}
                                 </div>
