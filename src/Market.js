@@ -1397,10 +1397,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             //   isDisabled = true;
                             //   disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
                             // }
-                            // 5. Check if can buy from API
+                            // 5. Check if can buy from API (out of stock)
                             else if (monthlyPremium && !monthlyPremium.canBuy) {
                               isDisabled = true;
-                              disabledReason = 'NOT AVAILABLE';
+                              disabledReason = 'OUT OF STOCK';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1429,9 +1429,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                     {/* Text Section */}
                                     <div className="mk-market-ticket-info">
                                       <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount">MONTHLY</div>
-                                        <div className="mk-market-ticket-label">PREMIUM</div>
-                                        <div className="mk-market-ticket-label">MEMBERSHIP</div>
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>MONTHLY</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
                                       </div>
                                     </div>
                                     
@@ -1443,6 +1443,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                           src={premiumIcon} 
                                           alt="Premium Diamond" 
                                           className="mk-premium-diamond-img"
+                                          style={{ opacity: isAvailable ? 1 : 0.5 }}
                                         />
                                       </div>
                                     </div>
@@ -1502,10 +1503,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                             //   isDisabled = true;
                             //   disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
                             // }
-                            // 5. Check if can buy from API
+                            // 5. Check if can buy from API (out of stock)
                             else if (yearlyPremium && !yearlyPremium.canBuy) {
                               isDisabled = true;
-                              disabledReason = 'NOT AVAILABLE';
+                              disabledReason = 'OUT OF STOCK';
                             }
                             
                             const isAvailable = !isDisabled;
@@ -1534,9 +1535,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                     {/* Text Section */}
                                     <div className="mk-market-ticket-info">
                                       <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount">YEARLY</div>
-                                        <div className="mk-market-ticket-label">PREMIUM</div>
-                                        <div className="mk-market-ticket-label">MEMBERSHIP</div>
+                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>YEARLY</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
+                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
                                       </div>
                                     </div>
                                     
@@ -1548,6 +1549,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                           src={premiumIcon} 
                                           alt="Premium Diamond" 
                                           className="mk-premium-diamond-img"
+                                          style={{ opacity: isAvailable ? 1 : 0.5 }}
                                         />
                                       </div>
                                     </div>

@@ -50,7 +50,8 @@ import lock_icon from "./images/lock_trophy.png";
 import freezeBG from './images/FreezeStreaksBG.png';
 import freezeText from './images/FreezeStreaksText.png';
 
-import loading_background from "./images/FSLGameHub_halloween_1586_1@2x.png";
+import loading_background from "./images/GamesHubLoading.png";
+// import loading_background from "./images/FSLGameHub_halloween_1586_1@2x.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 // import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
 
@@ -58,6 +59,7 @@ import { init, initData, miniApp, viewport, swipeBehavior, closingBehavior, retr
 import { analytics } from './Firebase';
 import Market from './Market';
 import FlippingStars from './FlippingStars';
+import LeaderboardGlobal from './LeaderboardGlobal';
 
 
 function App() {
@@ -88,6 +90,7 @@ function App() {
   const [buildVersion, setBuildVersion] = useState('');
   const [showBankStepsView, setShowBankStepsView] = useState(false);
   const [showFlippingStarsView, setShowFlippingStarsView] = useState(false);
+  const [showLeaderboardGlobal, setShowLeaderboardGlobal] = useState(false);
   const [previousTab, setPreviousTab] = useState(null);
   const [dataRefreshTrigger, setDataRefreshTrigger] = useState(0);
   
@@ -584,6 +587,12 @@ const bind_fslid = async () => {
     setActiveTab('home');
   };
 
+  const handleLeaderboardGlobalClose = () => {
+    handleOverlayClose('leaderboardglobal');
+    setShowLeaderboardGlobal(false);
+    setActiveTab('home');
+  };
+
   // Freeze streak status popup handlers
   const handleFreezeStreakStatusClose = () => {
     console.log('Freeze streak popup closed, showing CheckIn view');
@@ -616,6 +625,7 @@ const bind_fslid = async () => {
           setShowTicketView={setShowTicketView}
           setShowBankStepsView={setShowBankStepsView}
           setShowFlippingStarsView={setShowFlippingStarsView}
+          setShowLeaderboardGlobal={setShowLeaderboardGlobal}
           getProfileData={getProfileData}
         />;      
       case 'tasks':
@@ -792,6 +802,14 @@ const bind_fslid = async () => {
           setShowProfileView={setShowProfileView}
           setActiveTab={setActiveTab}
           userProfile={userProfile}
+        />
+      )
+      : showLeaderboardGlobal ?
+      (
+        <LeaderboardGlobal 
+          onClose={handleLeaderboardGlobalClose}
+          setShowProfileView={setShowProfileView}
+          setActiveTab={setActiveTab}
         />
       )
       :
