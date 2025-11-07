@@ -45,7 +45,6 @@ import avatar29 from './images/Avatars/1463 FSL avatars_Skelly.png';
 import avatar30 from './images/Avatars/1463 FSL avatars_Surfshark.png';
 import avatar31 from './images/Avatars/1463 FSL avatars_Tree.png';
 import { popup } from '@telegram-apps/sdk';
-import { type } from '@testing-library/user-event/dist/type';
 import FSLAuthorization from 'fsl-authorization';
 
 import single_star from './images/single_star.svg';
