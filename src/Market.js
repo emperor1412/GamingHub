@@ -111,6 +111,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   
   // Premium membership status
   const [premiumType, setPremiumType] = useState(null); // null, 1 (monthly), or 2 (yearly)
+  const [premiumEndTime, setPremiumEndTime] = useState(0); // Premium membership end time
+  
+  // Track if membership pricing API failed
+  const [membershipPricingError, setMembershipPricingError] = useState(false);
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -168,7 +172,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
-  // Function to fetch premium membership type
+  // Function to fetch premium membership type and endTime
   const fetchPremiumType = async () => {
     try {
       if (!shared.loginData?.token) {
@@ -184,7 +188,9 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         if (data.code === 0 && data.data) {
           const premiumData = data.data;
           setPremiumType(premiumData.type || null);
+          setPremiumEndTime(premiumData.endTime || 0);
           console.log('Premium type updated:', premiumData.type);
+          console.log('Premium endTime updated:', premiumData.endTime);
         }
       }
     } catch (error) {
@@ -197,6 +203,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     try {
       if (!shared.loginData?.token) {
         console.log('No login token available for membership pricing API');
+        setMembershipPricingError(true);
         return;
       }
       
@@ -216,6 +223,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
             membershipMonthlyPrice: data.data.membershipMonthlyPrice,
             membershipYearlyPrice: data.data.membershipYearlyPrice
           });
+          setMembershipPricingError(false); // API success
           
           console.log('✅ Membership pricing data set:', {
             monthlyPrice: data.data.membershipMonthlyPrice,
@@ -236,16 +244,26 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 membershipMonthlyPrice: retryData.data.membershipMonthlyPrice,
                 membershipYearlyPrice: retryData.data.membershipYearlyPrice
               });
+              setMembershipPricingError(false); // Retry success
+            } else {
+              console.error('Retry failed with code:', retryData.code);
+              setMembershipPricingError(true); // Retry failed
             }
+          } else {
+            console.error('Token refresh failed');
+            setMembershipPricingError(true); // Token refresh failed
           }
         } else {
           console.log('Unexpected membershipBuyData API response format:', data);
+          setMembershipPricingError(true); // Unexpected response
         }
       } else {
         console.error('MembershipBuyData API response not ok:', response.status);
+        setMembershipPricingError(true); // API response not ok
       }
     } catch (error) {
       console.error('Error fetching membership pricing:', error);
+      setMembershipPricingError(true); // Catch any errors
     }
   };
 
@@ -371,6 +389,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       // This ensures all data is up-to-date after any purchases or actions
       refreshUserProfile();
       refreshMarketContent();
+      fetchPremiumType(); // Refresh premium status
     }
   }, [showBuyView]);
 
@@ -905,6 +924,8 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     } else {
       // For regular purchases, refresh market content to update availability
       await refreshMarketContent();
+      // Refresh premium type to update membership status after purchase
+      await fetchPremiumType();
     }
   };
 
@@ -1594,7 +1615,12 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 let isDisabled = false;
                                 let disabledReason = '';
                                 
-                                if (!hasFSLID) {
+                                // 0. API Error - show OUT OF STOCK
+                                if (membershipPricingError) {
+                                  isDisabled = true;
+                                  disabledReason = 'OUT OF STOCK';
+                                }
+                                else if (!hasFSLID) {
                                   isDisabled = true;
                                   disabledReason = 'FSL ID NOT CONNECTED';
                                 }
@@ -1609,6 +1635,18 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 else if (premiumType === 2) {
                                   isDisabled = true;
                                   disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
+                                }
+                                // NEW: Check if can renew (only allow if <= 2 days remaining)
+                                else if (premiumType === 1 && premiumEndTime > 0) {
+                                  const now = Date.now();
+                                  const remaining = premiumEndTime - now;
+                                  const twoDays = 2 * 24 * 60 * 60 * 1000;
+                                  
+                                  if (remaining > twoDays) {
+                                    isDisabled = true;
+                                    const daysLeft = Math.ceil(remaining / (24 * 60 * 60 * 1000));
+                                    disabledReason = `NOT AVAILABLE`;
+                                  }
                                 }
                                 else if (monthlyPrice && userStarlets < monthlyPrice) {
                                   isDisabled = true;
@@ -1679,10 +1717,17 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
                                 const isConnectedBankSteps = true;
                                 
-                                let isDisabled = false;
-                                let disabledReason = '';
+                                // YEARLY MEMBERSHIP: Always OUT OF STOCK
+                                let isDisabled = true;
+                                let disabledReason = 'OUT OF STOCK';
                                 
-                                if (!hasFSLID) {
+                                /* COMMENTED OUT - All checks disabled for Yearly membership
+                                // 0. API Error - show OUT OF STOCK
+                                if (membershipPricingError) {
+                                  isDisabled = true;
+                                  disabledReason = 'OUT OF STOCK';
+                                }
+                                else if (!hasFSLID) {
                                   isDisabled = true;
                                   disabledReason = 'FSL ID NOT CONNECTED';
                                 }
@@ -1694,10 +1739,23 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                   isDisabled = true;
                                   disabledReason = 'BANK STEPS NOT CONNECTED';
                                 }
+                                // NEW: Check if can renew (only allow if <= 2 days remaining)
+                                else if (premiumType === 2 && premiumEndTime > 0) {
+                                  const now = Date.now();
+                                  const remaining = premiumEndTime - now;
+                                  const twoDays = 2 * 24 * 60 * 60 * 1000;
+                                  
+                                  if (remaining > twoDays) {
+                                    isDisabled = true;
+                                    const daysLeft = Math.ceil(remaining / (24 * 60 * 60 * 1000));
+                                    disabledReason = `NOT AVAILABLE`;
+                                  }
+                                }
                                 else if (yearlyPrice && userStarlets < yearlyPrice) {
                                   isDisabled = true;
                                   disabledReason = yearlyPrice.toLocaleString() + ' STARLETS';
                                 }
+                                */
                                 
                                 const isAvailable = !isDisabled;
                                 
