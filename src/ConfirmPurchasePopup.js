@@ -97,10 +97,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     setIsProcessing(true);
     try {
       let result;
-      if (isPremium) {
-        console.log('Making premium membership purchase using Starlets...');
+      // Premium membership is now a starlet product - use buyStarletProduct API
+      if (isPremium && isStarletProduct) {
+        console.log('Making premium membership purchase as starlet product...');
         
-        // NEW FLOW: Pay with Starlets directly
         // Check if user has enough starlets
         const currentStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
         
@@ -110,10 +110,10 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           return;
         }
         
-        // Call new API to purchase premium with starlets
-        console.log('Calling buyMembership API with type:', productId);
+        // Call buyStarletProduct API with premium membership product ID
+        console.log('Calling buyStarletProduct API with productId:', productId);
         const response = await fetch(
-          `${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, 
+          `${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, 
           { 
             method: 'POST',
             headers: {
@@ -123,7 +123,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
         );
         
         const data = await response.json();
-        console.log('buyMembership API response:', data);
+        console.log('buyStarletProduct API response:', data);
         
         if (data.code === 0) {
           // Success - refresh profile to update starlets and premium status
@@ -134,10 +134,11 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
             status: "paid",
             amount: amount,
             isPremium: true,
+            isStarletProduct: true,
             membershipType: productId
           };
         } else if (data.code === 214003) {
-          // VIP already exists error - same error handling as before
+          // VIP already exists error
           console.log('VIP already exists error detected, calling parent error handler');
           setIsProcessing(false);
           if (onPurchaseError) {
@@ -163,7 +164,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           if (loginResult.success) {
             // Retry the purchase after login
             const retryResponse = await fetch(
-              `${shared.server_url}/api/app/buyMembership?token=${shared.loginData.token}&type=${productId}`, 
+              `${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, 
               { 
                 method: 'POST',
                 headers: {
@@ -178,6 +179,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                 status: "paid",
                 amount: amount,
                 isPremium: true,
+                isStarletProduct: true,
                 membershipType: productId
               };
             } else {
