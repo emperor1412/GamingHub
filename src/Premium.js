@@ -443,7 +443,7 @@ const Premium = ({ isOpen, onClose = 0, onNavigateToMarket }) => {
     } else if (typeof shared.setActiveTab === 'function') {
       console.log('Using shared.setActiveTab fallback');
       // Fallback to shared method for backward compatibility
-      shared.setInitialMarketTab('telegram'); // Open telegram packages tab
+      shared.setInitialMarketTab('starlet'); // Open telegram packages tab
       shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     } else {
