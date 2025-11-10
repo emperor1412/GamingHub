@@ -227,7 +227,7 @@ const Buy = ({
               className="bmk-payment-button bmk-stars-button"
               onClick={() => handlePaymentMethodPremium()}
               >
-              PAY WITH {selectedPurchase?.stars} STARS
+              PAY WITH {selectedPurchase?.amount} STARLETS
               </button>
             </div>
           </>

@@ -3,7 +3,7 @@ import './IntroducePremium.css';
 import background from './images/background_2.png';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
-import telegram_premium from './images/Telegram_Premium.png';
+// import telegram_premium from './images/Telegram_Premium.png'; // OLD: Telegram Stars icon
 import sneaker from './images/banking_step_icon.png';
 import badges from './images/stepBoost_trophy_unlocked.png';
 import shared from './Shared';
@@ -18,7 +18,65 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
     membershipYearlyPrice: 1000
   });
 
-  // Fetch membership pricing data from buyOptions API (same as Market.js)
+  // NEW: Fetch membership pricing data from /app/membershipBuyData API (using Starlets)
+  const fetchMembershipPricing = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for membership pricing API');
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`;
+      console.log('Fetching membership pricing from membershipBuyData:', url);
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('MembershipBuyData API response:', data);
+        
+        if (data.code === 0 && data.data) {
+          setMembershipData({
+            typeMonthly: data.data.type_monthly,
+            typeYearly: data.data.type_yearLy,
+            membershipMonthlyPrice: data.data.membershipMonthlyPrice,
+            membershipYearlyPrice: data.data.membershipYearlyPrice
+          });
+          
+          console.log('✅ Membership pricing data set from membershipBuyData:', {
+            monthlyPrice: data.data.membershipMonthlyPrice,
+            yearlyPrice: data.data.membershipYearlyPrice
+          });
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            // Retry the fetch after login
+            const retryResponse = await fetch(`${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && retryData.data) {
+              setMembershipData({
+                typeMonthly: retryData.data.type_monthly,
+                typeYearly: retryData.data.type_yearLy,
+                membershipMonthlyPrice: retryData.data.membershipMonthlyPrice,
+                membershipYearlyPrice: retryData.data.membershipYearlyPrice
+              });
+            }
+          }
+        } else {
+          console.log('Unexpected membershipBuyData API response format:', data);
+        }
+      } else {
+        console.error('MembershipBuyData API response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching membership pricing:', error);
+    }
+  };
+  
+  // OLD FLOW: Using Telegram Stars via buyOptions API (COMMENTED OUT)
+  /*
   const fetchMembershipPricing = async () => {
     try {
       if (!shared.loginData?.token) {
@@ -87,6 +145,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
       console.error('Error fetching membership pricing:', error);
     }
   };
+  */
 
   // Fetch pricing data when component mounts
   useEffect(() => {
@@ -167,7 +226,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipYearlyPrice.toLocaleString()}</span>
-                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
               <div className="ip-subscription-item ip-monthly-item">
@@ -181,7 +240,7 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                 </span>
                 <div className="ip-plan-price-container">
                   <span className="ip-plan-price">{membershipData.membershipMonthlyPrice.toLocaleString()}</span>
-                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
             </div>

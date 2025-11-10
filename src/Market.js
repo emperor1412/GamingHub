@@ -111,6 +111,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
   
   // Premium membership status
   const [premiumType, setPremiumType] = useState(null); // null, 1 (monthly), or 2 (yearly)
+  const [premiumEndTime, setPremiumEndTime] = useState(0); // Premium membership end time
+  
+  // Track if membership pricing API failed
+  const [membershipPricingError, setMembershipPricingError] = useState(false);
   
   // Category expansion states
   const [standardPackExpanded, setStandardPackExpanded] = useState(true);
@@ -168,7 +172,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   };
 
-  // Function to fetch premium membership type
+  // Function to fetch premium membership type and endTime
   const fetchPremiumType = async () => {
     try {
       if (!shared.loginData?.token) {
@@ -184,11 +188,82 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
         if (data.code === 0 && data.data) {
           const premiumData = data.data;
           setPremiumType(premiumData.type || null);
+          setPremiumEndTime(premiumData.endTime || 0);
           console.log('Premium type updated:', premiumData.type);
+          console.log('Premium endTime updated:', premiumData.endTime);
         }
       }
     } catch (error) {
       console.error('Error fetching premium type:', error);
+    }
+  };
+
+  // NEW: Function to fetch membership pricing from /app/membershipBuyData API
+  const fetchMembershipPricing = async () => {
+    try {
+      if (!shared.loginData?.token) {
+        console.log('No login token available for membership pricing API');
+        setMembershipPricingError(true);
+        return;
+      }
+      
+      const url = `${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`;
+      console.log('Fetching membership pricing from:', url);
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('MembershipBuyData API response:', data);
+        
+        if (data.code === 0 && data.data) {
+          setMembershipData({
+            typeMonthly: data.data.type_monthly,
+            typeYearly: data.data.type_yearLy,
+            membershipMonthlyPrice: data.data.membershipMonthlyPrice,
+            membershipYearlyPrice: data.data.membershipYearlyPrice
+          });
+          setMembershipPricingError(false); // API success
+          
+          console.log('✅ Membership pricing data set:', {
+            monthlyPrice: data.data.membershipMonthlyPrice,
+            yearlyPrice: data.data.membershipYearlyPrice
+          });
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const result = await shared.login(shared.initData);
+          if (result.success) {
+            // Retry the fetch after login
+            const retryResponse = await fetch(`${shared.server_url}/api/app/membershipBuyData?token=${shared.loginData.token}`);
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0 && retryData.data) {
+              setMembershipData({
+                typeMonthly: retryData.data.type_monthly,
+                typeYearly: retryData.data.type_yearLy,
+                membershipMonthlyPrice: retryData.data.membershipMonthlyPrice,
+                membershipYearlyPrice: retryData.data.membershipYearlyPrice
+              });
+              setMembershipPricingError(false); // Retry success
+            } else {
+              console.error('Retry failed with code:', retryData.code);
+              setMembershipPricingError(true); // Retry failed
+            }
+          } else {
+            console.error('Token refresh failed');
+            setMembershipPricingError(true); // Token refresh failed
+          }
+        } else {
+          console.log('Unexpected membershipBuyData API response format:', data);
+          setMembershipPricingError(true); // Unexpected response
+        }
+      } else {
+        console.error('MembershipBuyData API response not ok:', response.status);
+        setMembershipPricingError(true); // API response not ok
+      }
+    } catch (error) {
+      console.error('Error fetching membership pricing:', error);
+      setMembershipPricingError(true); // Catch any errors
     }
   };
 
@@ -215,9 +290,10 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     }
   }, [buyOptions, starletProducts]); // Trigger when data is loaded
 
-  // Fetch premium type on component mount
+  // Fetch premium type and membership pricing on component mount
   useEffect(() => {
     fetchPremiumType();
+    fetchMembershipPricing(); // NEW: Fetch membership pricing
   }, []);
 
   // Add body class to prevent iOS overscrolling
@@ -313,6 +389,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       // This ensures all data is up-to-date after any purchases or actions
       refreshUserProfile();
       refreshMarketContent();
+      fetchPremiumType(); // Refresh premium status
     }
   }, [showBuyView]);
 
@@ -847,10 +924,35 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
     } else {
       // For regular purchases, refresh market content to update availability
       await refreshMarketContent();
+      // Refresh premium type to update membership status after purchase
+      await fetchPremiumType();
     }
   };
 
   const handlePurchasePremium = (type = 'monthly') => {
+    // NEW: Use membershipData from /app/membershipBuyData API for Starlets payment
+    const price = type === 'monthly' ? membershipData.membershipMonthlyPrice : membershipData.membershipYearlyPrice;
+    const membershipType = type === 'monthly' ? membershipData.typeMonthly : membershipData.typeYearly;
+    
+    console.log(`🛒 Premium purchase initiated:`, {
+      type: type,
+      price: price,
+      membershipType: membershipType
+    });
+    
+    setSelectedPurchase({
+      amount: price,              // Starlets amount
+      stars: 0,                   // No telegram stars (changed from old flow)
+      productId: membershipType,  // 1 for monthly, 2 for yearly
+      productName: `Premium Membership ${type === 'monthly' ? 'Monthly' : 'Yearly'}`,
+      isStarletProduct: false,    // Premium is not a starlet product
+      isPremium: true,
+      optionId: membershipType    // Use membershipType as optionId
+    });
+    setShowBuyView(true);
+    
+    // OLD FLOW: Using Telegram Stars via buyOptions API (COMMENTED OUT)
+    /*
     // Get premium options from buyOptions API
     const monthlyPremium = buyOptions.find(option => option.id === 4001);
     const yearlyPremium = buyOptions.find(option => option.id === 4002);
@@ -873,6 +975,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
       optionId: premiumOption.id      // Use the actual option ID from API
     });
     setShowBuyView(true);
+    */
   };
 
   // Function to handle purchase error (VIP already exists)
@@ -1328,251 +1431,6 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 {/* Show content based on active tab */}
                 {activeTab === 'telegram' && (
                   <>
-                    {/* Premium Membership Section */}
-                    {(() => {
-                      // Get premium options from buyOptions API
-                      const monthlyPremium = buyOptions.find(option => option.id === 4001);
-                      const yearlyPremium = buyOptions.find(option => option.id === 4002);
-                      
-                      // Only show premium section if at least one premium option exists
-                      if (!monthlyPremium && !yearlyPremium) {
-                        return null;
-                      }
-                      
-                      return (
-                        <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
-                      <div 
-                        className="mk-section-header"
-                        onClick={() => setPremiumExpanded(!premiumExpanded)}
-                      >
-                        <div className="mk-corner mk-top-left"></div>
-                        <div className="mk-corner mk-top-right"></div>
-
-                        <div 
-                          className="mk-section-title-container"
-                          style={{ backgroundColor: '#ff00f6' }} // #FFD700 is the color of the premium membership section, #ff00f6 is the color of the premium membership section
-                        >
-                          <span className="mk-section-title">PREMIUM MEMBERSHIP</span>
-                          <img src={arrow_2} className={`mk-section-arrow ${premiumExpanded ? 'expanded' : ''}`} alt="arrow" />
-                        </div>
-                      </div>
-                      <div className={`mk-section-content ${premiumExpanded ? 'expanded' : ''}`}>
-                        <div className="mk-corner mk-bottom-left"></div>
-                        <div className="mk-corner mk-bottom-right"></div>
-
-                        <div className="mk-starlet-grid">
-                          {/* Monthly Premium Membership */}
-                          {(() => {
-                            const hasFSLID = !!shared.userProfile?.fslId;
-                            const userLevel = shared.userProfile?.level || 0;
-                            const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
-                            const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
-                            
-                            // Check conditions for Premium Membership
-                            let isDisabled = false;
-                            let disabledReason = '';
-                            
-                            // *. FSL ID not connected
-                            if (!hasFSLID) {
-                              isDisabled = true;
-                              disabledReason = 'FSL ID NOT CONNECTED';
-                            }
-                            // 1. Level requirement (Level 1 for Premium Membership)
-                            else if (userLevel < 1) {
-                              isDisabled = true;
-                              disabledReason = 'LEVEL 1 REQUIRED';
-                            }
-                            // 2. Bank Steps Not Connected
-                            else if (!isConnectedBankSteps) {
-                              isDisabled = true;
-                              disabledReason = 'BANK STEPS NOT CONNECTED';
-                            }
-                            // 3. Already have yearly membership (disable monthly)
-                            else if (premiumType === 2) {
-                              isDisabled = true;
-                              disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
-                            }
-                            // 4. Not enough starlets (use API data)
-                            // else if (monthlyPremium && userStarlets < monthlyPremium.starlet) {
-                            //   isDisabled = true;
-                            //   disabledReason = monthlyPremium.starlet.toLocaleString() + ' STARLETS';
-                            // }
-                            // 5. Check if can buy from API (out of stock)
-                            else if (monthlyPremium && !monthlyPremium.canBuy) {
-                              isDisabled = true;
-                              disabledReason = 'OUT OF STOCK';
-                            }
-                            
-                            const isAvailable = !isDisabled;
-                            
-                            return (
-                              <button 
-                                key="premium-monthly"
-                                className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
-                                onClick={() => {
-                                  if (isAvailable) {
-                                    handlePurchasePremium('monthly');
-                                  }
-                                }}
-                                disabled={!isAvailable}
-                              >
-                                <div 
-                                  className="mk-market-ticket-button-image-container"
-                                  style={{
-                                    backgroundImage: `url(${premiumBg})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat'
-                                  }}
-                                >
-                                  <div className="mk-market-ticket-content">
-                                    {/* Text Section */}
-                                    <div className="mk-market-ticket-info">
-                                      <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>MONTHLY</div>
-                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
-                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
-                                      </div>
-                                    </div>
-                                    
-                                    {/* Diamond Section */}
-                                    <div className="mk-market-ticket-icon">
-                                      <div className="mk-premium-diamond-bg">
-                                        {/* Diamond Image */}
-                                        <img 
-                                          src={premiumIcon} 
-                                          alt="Premium Diamond" 
-                                          className="mk-premium-diamond-img"
-                                          style={{ opacity: isAvailable ? 1 : 0.5 }}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Price Section */}
-                                  <div className={`mk-market-ticket-price ${disabledReason === 'YEARLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
-                                    {isAvailable ? (
-                                      <div>
-                                        <div>{monthlyPremium ? monthlyPremium.stars : 9999} TELEGRAM STARS</div>
-                                        {/* <div style={{ fontSize: '0.8em', opacity: 0.8 }}>
-                                          {monthlyPremium ? monthlyPremium.stars : 1} TELEGRAM STARS
-                                        </div> */}
-                                      </div>
-                                    ) : (
-                                      <span>{disabledReason}</span>
-                                    )}
-                                  </div>
-                                </div>
-                              </button>
-                            );
-                          })()}
-                          
-                          {/* Yearly Premium Membership */}
-                          {(() => {
-                            const hasFSLID = !!shared.userProfile?.fslId;
-                            const userLevel = shared.userProfile?.level || 0;
-                            const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
-                            const isConnectedBankSteps = true; // TODO: Change to true when Bank Steps is connected  
-                            
-                            // Check conditions for Premium Membership
-                            let isDisabled = false;
-                            let disabledReason = '';
-                            
-                            // *. FSL ID not connected
-                            if (!hasFSLID) {
-                              isDisabled = true;
-                              disabledReason = 'FSL ID NOT CONNECTED';
-                            }
-                            // 1. Level requirement (Level 1 for Premium Membership)
-                            else if (userLevel < 1) {
-                              isDisabled = true;
-                              disabledReason = 'LEVEL 1 REQUIRED';
-                            }
-                            // 2. Bank Steps Not Connected
-                            else if (!isConnectedBankSteps) {
-                              isDisabled = true;
-                              disabledReason = 'BANK STEPS NOT CONNECTED';
-                            }
-                            // 3. Already have monthly membership (disable yearly)
-                            // else if (premiumType === 1) {
-                            //   isDisabled = true;
-                            //   disabledReason = 'MONTHLY MEMBERSHIP ACTIVE';
-                            // }
-                            // 4. Not enough starlets (use API data)
-                            // else if (yearlyPremium && userStarlets < yearlyPremium.starlet) {
-                            //   isDisabled = true;
-                            //   disabledReason = yearlyPremium.starlet.toLocaleString() + ' STARLETS';
-                            // }
-                            // 5. Check if can buy from API (out of stock)
-                            else if (yearlyPremium && !yearlyPremium.canBuy) {
-                              isDisabled = true;
-                              disabledReason = 'OUT OF STOCK';
-                            }
-                            
-                            const isAvailable = !isDisabled;
-                            
-                            return (
-                              <button 
-                                key="premium-yearly"
-                                className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
-                                onClick={() => {
-                                  if (isAvailable) {
-                                    handlePurchasePremium('yearly');
-                                  }
-                                }}
-                                disabled={!isAvailable}
-                              >
-                                <div 
-                                  className="mk-market-ticket-button-image-container"
-                                  style={{
-                                    backgroundImage: `url(${premiumBg})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat'
-                                  }}
-                                >
-                                  <div className="mk-market-ticket-content">
-                                    {/* Text Section */}
-                                    <div className="mk-market-ticket-info">
-                                      <div className="mk-market-ticket-text">
-                                        <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>YEARLY</div>
-                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
-                                        <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
-                                      </div>
-                                    </div>
-                                    
-                                    {/* Diamond Section */}
-                                    <div className="mk-market-ticket-icon">
-                                      <div className="mk-premium-diamond-bg">
-                                        {/* Diamond Image */}
-                                        <img 
-                                          src={premiumIcon} 
-                                          alt="Premium Diamond" 
-                                          className="mk-premium-diamond-img"
-                                          style={{ opacity: isAvailable ? 1 : 0.5 }}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Price Section */}
-                                  <div className={`mk-market-ticket-price ${disabledReason === 'MONTHLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
-                                    {isAvailable ? (
-                                      <span>{yearlyPremium ? yearlyPremium.stars : 9999} TELEGRAM STARS</span>
-                                    ) : (
-                                      <span>{disabledReason}</span>
-                                    )}
-                                  </div>
-                                </div>
-                              </button>
-                            );
-                          })()}
-                        </div>
-                      </div>
-                    </div>
-                      );
-                    })()}
-
                     {/* Render each category in order */}
                     {categoryOrder.map((type) => {
                       const categoryInfo = getCategoryInfo(type);
@@ -1713,6 +1571,251 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                 
                 {activeTab === 'starlet' && (
                   <div className="mk-starlet-products-container">
+
+                    {/* Premium Membership Section */}
+                    {(() => {
+                      // NEW: Use membershipData from /app/membershipBuyData API
+                      const monthlyPrice = membershipData.membershipMonthlyPrice;
+                      const yearlyPrice = membershipData.membershipYearlyPrice;
+                      
+                      // Only show premium section if pricing data exists
+                      if (!monthlyPrice && !yearlyPrice) {
+                        return null;
+                      }
+                      
+                      return (
+                        <div className="mk-market-section" ref={el => categoryRefs.current['premium-membership'] = el}>
+                          <div 
+                            className="mk-section-header"
+                            onClick={() => setPremiumExpanded(!premiumExpanded)}
+                          >
+                            <div className="mk-corner mk-top-left"></div>
+                            <div className="mk-corner mk-top-right"></div>
+
+                            <div 
+                              className="mk-section-title-container"
+                              style={{ backgroundColor: '#ff00f6' }}
+                            >
+                              <span className="mk-section-title">PREMIUM MEMBERSHIP</span>
+                              <img src={arrow_2} className={`mk-section-arrow ${premiumExpanded ? 'expanded' : ''}`} alt="arrow" />
+                            </div>
+                          </div>
+                          <div className={`mk-section-content ${premiumExpanded ? 'expanded' : ''}`}>
+                            <div className="mk-corner mk-bottom-left"></div>
+                            <div className="mk-corner mk-bottom-right"></div>
+
+                            <div className="mk-starlet-grid">
+                              {/* Monthly Premium Membership */}
+                              {(() => {
+                                const hasFSLID = !!shared.userProfile?.fslId;
+                                const userLevel = shared.userProfile?.level || 0;
+                                const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                                const isConnectedBankSteps = true;
+                                
+                                let isDisabled = false;
+                                let disabledReason = '';
+                                
+                                // 0. API Error - show OUT OF STOCK
+                                if (membershipPricingError) {
+                                  isDisabled = true;
+                                  disabledReason = 'OUT OF STOCK';
+                                }
+                                else if (!hasFSLID) {
+                                  isDisabled = true;
+                                  disabledReason = 'FSL ID NOT CONNECTED';
+                                }
+                                else if (userLevel < 1) {
+                                  isDisabled = true;
+                                  disabledReason = 'LEVEL 1 REQUIRED';
+                                }
+                                else if (!isConnectedBankSteps) {
+                                  isDisabled = true;
+                                  disabledReason = 'BANK STEPS NOT CONNECTED';
+                                }
+                                else if (premiumType === 2) {
+                                  isDisabled = true;
+                                  disabledReason = 'YEARLY MEMBERSHIP ACTIVE';
+                                }
+                                // NEW: Check if can renew (only allow if <= 2 days remaining)
+                                else if (premiumType === 1 && premiumEndTime > 0) {
+                                  const now = Date.now();
+                                  const remaining = premiumEndTime - now;
+                                  const twoDays = 2 * 24 * 60 * 60 * 1000;
+                                  
+                                  if (remaining > twoDays) {
+                                    isDisabled = true;
+                                    const daysLeft = Math.ceil(remaining / (24 * 60 * 60 * 1000));
+                                    disabledReason = `NOT AVAILABLE`;
+                                  }
+                                }
+                                else if (monthlyPrice && userStarlets < monthlyPrice) {
+                                  isDisabled = true;
+                                  disabledReason = monthlyPrice.toLocaleString() + ' STARLETS';
+                                }
+                                
+                                const isAvailable = !isDisabled;
+                                
+                                return (
+                                  <button 
+                                    key="premium-monthly"
+                                    className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
+                                    onClick={() => {
+                                      if (isAvailable) {
+                                        handlePurchasePremium('monthly');
+                                      }
+                                    }}
+                                    disabled={!isAvailable}
+                                  >
+                                    <div 
+                                      className="mk-market-ticket-button-image-container"
+                                      style={{
+                                        backgroundImage: `url(${premiumBg})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        backgroundRepeat: 'no-repeat'
+                                      }}
+                                    >
+                                      <div className="mk-market-ticket-content">
+                                        <div className="mk-market-ticket-info">
+                                          <div className="mk-market-ticket-text">
+                                            <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>MONTHLY</div>
+                                            <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
+                                            <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div className="mk-market-ticket-icon">
+                                          <div className="mk-premium-diamond-bg">
+                                            <img 
+                                              src={premiumIcon} 
+                                              alt="Premium Diamond" 
+                                              className="mk-premium-diamond-img"
+                                              style={{ opacity: isAvailable ? 1 : 0.5 }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <div className={`mk-market-ticket-price ${disabledReason === 'YEARLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
+                                        {isAvailable ? (
+                                          <div>
+                                            <div>{monthlyPrice ? monthlyPrice.toLocaleString() : 100} STARLETS</div>
+                                          </div>
+                                        ) : (
+                                          <span>{disabledReason}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </button>
+                                );
+                              })()}
+                              
+                              {/* Yearly Premium Membership */}
+                              {(() => {
+                                const hasFSLID = !!shared.userProfile?.fslId;
+                                const userLevel = shared.userProfile?.level || 0;
+                                const userStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+                                const isConnectedBankSteps = true;
+                                
+                                // YEARLY MEMBERSHIP: Always OUT OF STOCK
+                                let isDisabled = true;
+                                let disabledReason = 'OUT OF STOCK';
+                                
+                                /* COMMENTED OUT - All checks disabled for Yearly membership
+                                // 0. API Error - show OUT OF STOCK
+                                if (membershipPricingError) {
+                                  isDisabled = true;
+                                  disabledReason = 'OUT OF STOCK';
+                                }
+                                else if (!hasFSLID) {
+                                  isDisabled = true;
+                                  disabledReason = 'FSL ID NOT CONNECTED';
+                                }
+                                else if (userLevel < 1) {
+                                  isDisabled = true;
+                                  disabledReason = 'LEVEL 1 REQUIRED';
+                                }
+                                else if (!isConnectedBankSteps) {
+                                  isDisabled = true;
+                                  disabledReason = 'BANK STEPS NOT CONNECTED';
+                                }
+                                // NEW: Check if can renew (only allow if <= 2 days remaining)
+                                else if (premiumType === 2 && premiumEndTime > 0) {
+                                  const now = Date.now();
+                                  const remaining = premiumEndTime - now;
+                                  const twoDays = 2 * 24 * 60 * 60 * 1000;
+                                  
+                                  if (remaining > twoDays) {
+                                    isDisabled = true;
+                                    const daysLeft = Math.ceil(remaining / (24 * 60 * 60 * 1000));
+                                    disabledReason = `NOT AVAILABLE`;
+                                  }
+                                }
+                                else if (yearlyPrice && userStarlets < yearlyPrice) {
+                                  isDisabled = true;
+                                  disabledReason = yearlyPrice.toLocaleString() + ' STARLETS';
+                                }
+                                */
+                                
+                                const isAvailable = !isDisabled;
+                                
+                                return (
+                                  <button 
+                                    key="premium-yearly"
+                                    className={`mk-market-ticket-button mk-premium-membership-product ${!isAvailable ? 'sold-out' : ''}`}
+                                    onClick={() => {
+                                      if (isAvailable) {
+                                        handlePurchasePremium('yearly');
+                                      }
+                                    }}
+                                    disabled={!isAvailable}
+                                  >
+                                    <div 
+                                      className="mk-market-ticket-button-image-container"
+                                      style={{
+                                        backgroundImage: `url(${premiumBg})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        backgroundRepeat: 'no-repeat'
+                                      }}
+                                    >
+                                      <div className="mk-market-ticket-content">
+                                        <div className="mk-market-ticket-info">
+                                          <div className="mk-market-ticket-text">
+                                            <div className="mk-market-ticket-amount" style={{ opacity: isAvailable ? 1 : 0.5 }}>YEARLY</div>
+                                            <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>PREMIUM</div>
+                                            <div className="mk-market-ticket-label" style={{ opacity: isAvailable ? 1 : 0.5 }}>MEMBERSHIP</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div className="mk-market-ticket-icon">
+                                          <div className="mk-premium-diamond-bg">
+                                            <img 
+                                              src={premiumIcon} 
+                                              alt="Premium Diamond" 
+                                              className="mk-premium-diamond-img"
+                                              style={{ opacity: isAvailable ? 1 : 0.5 }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <div className={`mk-market-ticket-price ${disabledReason === 'MONTHLY MEMBERSHIP ACTIVE' ? 'yearly-membership-active' : ''}`}>
+                                        {isAvailable ? (
+                                          <span>{yearlyPrice ? yearlyPrice.toLocaleString() : 1000} STARLETS</span>
+                                        ) : (
+                                          <span>{disabledReason}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </button>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
 
                     {/* Freeze Streak Section */}
                     <div className="mk-market-section" ref={el => categoryRefs.current['freeze-streak'] = el}>
