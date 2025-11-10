@@ -51,6 +51,7 @@ import freezeBG from './images/FreezeStreaksBG.png';
 import freezeText from './images/FreezeStreaksText.png';
 
 import loading_background from "./images/GamesHubLoading.png";
+import loading_background_2 from "./images/GamesHubLoading_2.png";
 // import loading_background from "./images/FSLGameHub_halloween_1586_1@2x.png";
 // import loading_background_valentine from "./images/GH Valentines Day Post 450-02.png";
 // import loading_background_patrick_daysfrom "./images/PatrickDay-AllBrands600-16-9.png";
@@ -291,7 +292,7 @@ const bind_fslid = async () => {
     } catch (error) {
         console.error('Initialization error:', error);
     } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
         initRef.current = false;
     }
 };
@@ -682,7 +683,7 @@ const bind_fslid = async () => {
       </div>
       {(isLoading || !resourcesLoaded) ? (
         <>
-          <img src={loading_background} alt="Loading" className="loading-background" />
+          <img src={loading_background_2} alt="Loading" className="loading-background" />
           {/* <div className="loading">Loading...</div> */}
         </>
       ) 
