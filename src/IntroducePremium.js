@@ -3,22 +3,18 @@ import './IntroducePremium.css';
 import background from './images/background_2.png';
 import premiumDiamond from './images/Premium_icon.png';
 import starlet from './images/starlet.png';
-import telegram_premium from './images/Telegram_Premium.png';
+// import telegram_premium from './images/Telegram_Premium.png'; // OLD: Telegram Stars icon
 import sneaker from './images/banking_step_icon.png';
 import badges from './images/stepBoost_trophy_unlocked.png';
 import shared from './Shared';
 
 
 const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false, onNavigateToMarket }) => {
-  // Premium membership pricing data - using same approach as Market.js
-  const [membershipData, setMembershipData] = useState({
-    typeMonthly: 1,
-    typeYearly: 2,
-    membershipMonthlyPrice: 100,
-    membershipYearlyPrice: 1000
-  });
+  // Premium membership pricing - fetched from starletProducts
+  const [monthlyPrice, setMonthlyPrice] = useState(100);
+  const [yearlyPrice, setYearlyPrice] = useState(1000);
 
-  // Fetch membership pricing data from buyOptions API (same as Market.js)
+  // Fetch membership pricing from starletProducts API
   const fetchMembershipPricing = async () => {
     try {
       if (!shared.loginData?.token) {
@@ -26,62 +22,56 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
         return;
       }
       
-      const url = `${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`;
-      console.log('Fetching membership pricing from buyOptions:', url);
+      const url = `${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`;
+      console.log('Fetching starlet products for membership pricing:', url);
       
       const response = await fetch(url);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('BuyOptions API response:', data);
+        console.log('StarletProducts API response:', data);
         
         if (data.code === 0 && Array.isArray(data.data)) {
-          // Find premium options from buyOptions (same as Market.js)
-          const monthlyPremium = data.data.find(option => option.id === 4001);
-          const yearlyPremium = data.data.find(option => option.id === 4002);
+          // Find membership products
+          const monthlyMembership = data.data.find(p => p.prop === 80010);
+          const yearlyMembership = data.data.find(p => p.prop === 80020);
           
-          if (monthlyPremium && yearlyPremium) {
-            setMembershipData({
-              typeMonthly: 1,
-              typeYearly: 2,
-              membershipMonthlyPrice: monthlyPremium.stars || 100,
-              membershipYearlyPrice: yearlyPremium.stars || 1000
-            });
-            
-            console.log('✅ Membership pricing data set from buyOptions:', {
-              monthlyPrice: monthlyPremium.stars,
-              yearlyPrice: yearlyPremium.stars
-            });
-          } else {
-            console.log('Premium options not found in buyOptions');
+          if (monthlyMembership) {
+            setMonthlyPrice(monthlyMembership.starlet);
           }
+          if (yearlyMembership) {
+            setYearlyPrice(yearlyMembership.starlet);
+          }
+          
+          console.log('✅ Membership pricing from starletProducts:', {
+            monthlyPrice: monthlyMembership?.starlet,
+            yearlyPrice: yearlyMembership?.starlet
+          });
         } else if (data.code === 102002 || data.code === 102001) {
-          // Token expired, attempt to refresh (same as Market.js)
+          // Token expired, attempt to refresh
           console.log('Token expired, attempting to refresh...');
           const result = await shared.login(shared.initData);
           if (result.success) {
             // Retry the fetch after login
-            const retryResponse = await fetch(`${shared.server_url}/api/app/buyOptions?token=${shared.loginData.token}`);
+            const retryResponse = await fetch(`${shared.server_url}/api/app/starletProducts?token=${shared.loginData.token}`);
             const retryData = await retryResponse.json();
             if (retryData.code === 0 && Array.isArray(retryData.data)) {
-              const monthlyPremium = retryData.data.find(option => option.id === 4001);
-              const yearlyPremium = retryData.data.find(option => option.id === 4002);
+              const monthlyMembership = retryData.data.find(p => p.prop === 80010);
+              const yearlyMembership = retryData.data.find(p => p.prop === 80020);
               
-              if (monthlyPremium && yearlyPremium) {
-                setMembershipData({
-                  typeMonthly: 1,
-                  typeYearly: 2,
-                  membershipMonthlyPrice: monthlyPremium.stars || 100,
-                  membershipYearlyPrice: yearlyPremium.stars || 1000
-                });
+              if (monthlyMembership) {
+                setMonthlyPrice(monthlyMembership.starlet);
+              }
+              if (yearlyMembership) {
+                setYearlyPrice(yearlyMembership.starlet);
               }
             }
           }
         } else {
-          console.log('Unexpected buyOptions API response format:', data);
+          console.log('Unexpected starletProducts API response format:', data);
         }
       } else {
-        console.error('BuyOptions API response not ok:', response.status);
+        console.error('StarletProducts API response not ok:', response.status);
       }
     } catch (error) {
       console.error('Error fetching membership pricing:', error);
@@ -102,13 +92,13 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
       onSelectPlan('yearly');
     }
     
-    // Navigate to market
+    // Navigate to market - premium membership is now in starlet tab
     if (isFromProfile && onNavigateToMarket) {
       // Use the navigation prop passed from Profile component
       onNavigateToMarket();
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
-      shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketTab('starlet'); // Changed from 'telegram' to 'starlet'
       shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     }
@@ -119,13 +109,13 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
       onSelectPlan('monthly');
     }
     
-    // Navigate to market
+    // Navigate to market - premium membership is now in starlet tab
     if (isFromProfile && onNavigateToMarket) {
       // Use the navigation prop passed from Profile component
       onNavigateToMarket();
     } else if (typeof shared.setActiveTab === 'function') {
       // Fallback to shared method for MainView context
-      shared.setInitialMarketTab('telegram');
+      shared.setInitialMarketTab('starlet'); // Changed from 'telegram' to 'starlet'
       shared.setInitialMarketCategory('premium-membership');
       shared.setActiveTab('market');
     }
@@ -166,8 +156,8 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                   YEARLY
                 </span>
                 <div className="ip-plan-price-container">
-                  <span className="ip-plan-price">{membershipData.membershipYearlyPrice.toLocaleString()}</span>
-                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <span className="ip-plan-price">{yearlyPrice.toLocaleString()}</span>
+                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
               <div className="ip-subscription-item ip-monthly-item">
@@ -180,8 +170,8 @@ const IntroducePremium = ({ isOpen, onClose, onSelectPlan, isFromProfile = false
                   MONTHLY
                 </span>
                 <div className="ip-plan-price-container">
-                  <span className="ip-plan-price">{membershipData.membershipMonthlyPrice.toLocaleString()}</span>
-                  <img src={telegram_premium} alt="Starlet" className="ip-plan-starlet-icon" />
+                  <span className="ip-plan-price">{monthlyPrice.toLocaleString()}</span>
+                  <img src={starlet} alt="Starlet" className="ip-plan-starlet-icon" />
                 </div>
               </div>
             </div>

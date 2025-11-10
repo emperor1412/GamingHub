@@ -97,7 +97,106 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
     setIsProcessing(true);
     try {
       let result;
-      if (isPremium) {
+      // Premium membership is now a starlet product - use buyStarletProduct API
+      if (isPremium && isStarletProduct) {
+        console.log('Making premium membership purchase as starlet product...');
+        
+        // Check if user has enough starlets
+        const currentStarlets = shared.userProfile?.UserToken?.find(token => token.prop_id === 10020)?.num || 0;
+        
+        if (currentStarlets < amount) {
+          console.log('Not enough starlets:', { current: currentStarlets, required: amount });
+          await showError('Not enough starlets. Please buy more starlets first.');
+          return;
+        }
+        
+        // Call buyStarletProduct API with premium membership product ID
+        console.log('Calling buyStarletProduct API with productId:', productId);
+        const response = await fetch(
+          `${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, 
+          { 
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        
+        const data = await response.json();
+        console.log('buyStarletProduct API response:', data);
+        
+        if (data.code === 0) {
+          // Success - refresh profile to update starlets and premium status
+          console.log('Premium purchase successful, refreshing profile...');
+          await shared.getProfileWithRetry();
+          
+          result = {
+            status: "paid",
+            amount: amount,
+            isPremium: true,
+            isStarletProduct: true,
+            membershipType: productId
+          };
+        } else if (data.code === 214003) {
+          // VIP already exists error
+          console.log('VIP already exists error detected, calling parent error handler');
+          setIsProcessing(false);
+          if (onPurchaseError) {
+            console.log('Calling onPurchaseError callback');
+            onPurchaseError();
+          }
+          setTimeout(() => {
+            onClose();
+            if (setShowBuyView) {
+              setShowBuyView(false);
+            }
+          }, 100);
+          return;
+        } else if (data.code === 213001) {
+          // Not enough starlets error
+          console.log('Not enough starlets error from API');
+          await showError('Not enough starlets. Please buy more starlets first.');
+          return;
+        } else if (data.code === 102002 || data.code === 102001) {
+          // Token expired, attempt to refresh
+          console.log('Token expired, attempting to refresh...');
+          const loginResult = await shared.login(shared.initData);
+          if (loginResult.success) {
+            // Retry the purchase after login
+            const retryResponse = await fetch(
+              `${shared.server_url}/api/app/buyStarletProduct?token=${shared.loginData.token}&productId=${productId}`, 
+              { 
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }
+            );
+            const retryData = await retryResponse.json();
+            if (retryData.code === 0) {
+              await shared.getProfileWithRetry();
+              result = {
+                status: "paid",
+                amount: amount,
+                isPremium: true,
+                isStarletProduct: true,
+                membershipType: productId
+              };
+            } else {
+              console.log('Retry failed:', retryData);
+              await showError(retryData.msg || 'Payment failed. Please try again.');
+              return;
+            }
+          } else {
+            await showError('Session expired. Please try again.');
+            return;
+          }
+        } else {
+          throw new Error(data.msg || 'Purchase failed');
+        }
+        
+        // OLD FLOW: Using Telegram Stars (COMMENTED OUT - kept for reference)
+        /*
         console.log('Making premium membership purchase using Telegram Stars...');
         // Handle premium membership purchase using Telegram Stars
         const premiumOptionId = productId === 1 ? 4001 : 4002; // 1 = monthly (4001), 2 = yearly (4002)
@@ -158,6 +257,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
           // Re-throw error if it's not the specific case we're handling
           throw purchaseError;
         }
+        */
       } else if (isStarletProduct && productId) {
         console.log('Making starlet product purchase API call...');
         // Handle starlet product purchase
@@ -431,7 +531,7 @@ const ConfirmPurchasePopup = ({ isOpen, onClose, amount, stars, optionId, produc
                           <br />
                           IN FSL GAME HUB
                           <br />
-                          FOR <span className="highlight-value">{stars} TELEGRAM STARS</span>?
+                          FOR <span className="highlight-value">{amount} STARLETS</span>?
                         </>
                       ) : isStarletProduct ? (
                         <>
