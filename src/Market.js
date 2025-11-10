@@ -1521,7 +1521,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 // 0. Product state check (from API)
                                 if (monthlyMembership.state !== 0) {
                                   isDisabled = true;
-                                  disabledReason = 'OUT OF STOCK';
+                                  disabledReason = 'NOT AVAILABLE';
                                 }
                                 else if (!hasFSLID) {
                                   isDisabled = true;
@@ -1626,7 +1626,7 @@ const Market = ({ showFSLIDScreen, setShowProfileView, initialTab = 'telegram' }
                                 // 0. Product state check (from API)
                                 if (yearlyMembership.state !== 0) {
                                   isDisabled = true;
-                                  disabledReason = 'OUT OF STOCK';
+                                  disabledReason = 'NOT AVAILABLE';
                                 }
                                 else if (!hasFSLID) {
                                   isDisabled = true;
